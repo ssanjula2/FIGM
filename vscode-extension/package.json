@@ -38,7 +38,7 @@
     "onLanguage:vue",
     "onLanguage:html"
   ],
-  "main": "./out/src/extension.js",
+  "main": "./out/vscode-extension/src/extension.js",
   "contributes": {
     "commands": [
       {
