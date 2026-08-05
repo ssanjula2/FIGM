@@ -522,8 +522,8 @@
       "id": "usr_1785859372426_1cajw",
       "apiKey": "figm_key_1785859372426_zxtv2x4j",
       "createdAt": "2026-08-04T16:02:52.426Z",
-      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NTg1OTM3MjQyNl8xY2FqdyIsImVtYWlsIjoiYWRtaW5AZmlnbS5pbyIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg1OTE5NTcyLCJleHAiOjE3ODY1MjQzNzJ9.3f8TB2F0WQOWsKntwGO1qmy9R78DtY_8OzpfFzAhvRg",
-      "lastLoginAt": "2026-08-05T08:46:12.795Z"
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NTg1OTM3MjQyNl8xY2FqdyIsImVtYWlsIjoiYWRtaW5AZmlnbS5pbyIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg1OTQ0Nzk0LCJleHAiOjE3ODY1NDk1OTR9.1AA4dyYr6LP9VVc-4LDzqLmhZPkOZ-TSZcNmuknhnQU",
+      "lastLoginAt": "2026-08-05T15:46:34.226Z"
     },
     {
       "email": "usera@test.com",
@@ -2873,7 +2873,7 @@
       "ruleCount": 1,
       "aiFixCount": 1,
       "diagnostics": [],
-      "isFavorite": true,
+      "isFavorite": false,
       "id": "scan_1785920084976_47in9",
       "createdAt": "2026-08-05T08:54:44.976Z"
     },
@@ -2933,7 +2933,7 @@
       "ruleCount": 1,
       "aiFixCount": 1,
       "diagnostics": [],
-      "isFavorite": true,
+      "isFavorite": false,
       "id": "scan_1785920271680_hajm1",
       "createdAt": "2026-08-05T08:57:51.680Z"
     },
@@ -2993,7 +2993,7 @@
       "ruleCount": 1,
       "aiFixCount": 1,
       "diagnostics": [],
-      "isFavorite": true,
+      "isFavorite": false,
       "id": "scan_1785942414291_i4ksk",
       "createdAt": "2026-08-05T15:06:54.291Z"
     },
@@ -3018,6 +3018,974 @@
       ],
       "id": "scan_1785942414297_8zauw",
       "createdAt": "2026-08-05T15:06:54.297Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 0.79,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785944664426_1bkel",
+      "createdAt": "2026-08-05T15:44:24.426Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 0.82,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785944664432_ifrw2",
+      "createdAt": "2026-08-05T15:44:24.432Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "REACT_JSX",
+      "qualityScore": 94,
+      "scanTimeMs": 4.88,
+      "memoryUsageMb": 2.65,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-04",
+          "ruleName": "Static Imports in Deferred Execution Paths",
+          "domain": "PERFORMANCE",
+          "concern": "BUNDLE_SIZE",
+          "severity": "MEDIUM",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 54
+            }
+          },
+          "offendingCodeSnippet": "import { IStorageProvider } from './storage-provider';",
+          "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+          "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 88,
+          "evidence": "AST Node: [ImportDeclaration] at line 1"
+        },
+        {
+          "ruleId": "FIGM-PERF-04",
+          "ruleName": "Static Imports in Deferred Execution Paths",
+          "domain": "PERFORMANCE",
+          "concern": "BUNDLE_SIZE",
+          "severity": "MEDIUM",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 2,
+              "column": 0
+            },
+            "end": {
+              "line": 2,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "import { JsonStorageProvider } from './json-storage-provider';",
+          "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+          "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 88,
+          "evidence": "AST Node: [ImportDeclaration] at line 2"
+        },
+        {
+          "ruleId": "FIGM-PERF-04",
+          "ruleName": "Static Imports in Deferred Execution Paths",
+          "domain": "PERFORMANCE",
+          "concern": "BUNDLE_SIZE",
+          "severity": "MEDIUM",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 3,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 8
+            }
+          },
+          "offendingCodeSnippet": "import {",
+          "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+          "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 88,
+          "evidence": "AST Node: [ImportDeclaration] at line 3"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785944678623_d3dls",
+      "createdAt": "2026-08-05T15:44:38.623Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 0.78,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785944699845_c5k6p",
+      "createdAt": "2026-08-05T15:44:59.845Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 0.82,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785944699849_b66vq",
+      "createdAt": "2026-08-05T15:44:59.849Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 0.75,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785944701730_ii85r",
+      "createdAt": "2026-08-05T15:45:01.730Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 0.78,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785944703340_4l9tr",
+      "createdAt": "2026-08-05T15:45:03.340Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 0.81,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785945776797_tq9tl",
+      "createdAt": "2026-08-05T16:02:56.797Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 0.77,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785945776802_7tby5",
+      "createdAt": "2026-08-05T16:02:56.802Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 1.95,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785945790252_ocdlc",
+      "createdAt": "2026-08-05T16:03:10.252Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 0.95,
+      "memoryUsageMb": 0.38,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785945790259_fz131",
+      "createdAt": "2026-08-05T16:03:10.259Z"
     }
   ],
   "notifications": [
@@ -3643,6 +4611,26 @@
       "status": "SUCCESS",
       "id": "log_1785942336195_zri8t",
       "createdAt": "2026-08-05T15:05:36.195Z"
+    },
+    {
+      "action": "LOGIN",
+      "userId": "usr_1785859372426_1cajw",
+      "email": "admin@figm.io",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1785944786230_qkk6o",
+      "createdAt": "2026-08-05T15:46:26.230Z"
+    },
+    {
+      "action": "LOGIN",
+      "userId": "usr_1785859372426_1cajw",
+      "email": "admin@figm.io",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1785944794230_xqvpe",
+      "createdAt": "2026-08-05T15:46:34.230Z"
     }
   ]
 }
