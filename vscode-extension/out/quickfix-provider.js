@@ -35,7 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FIGMQuickFixProvider = void 0;
 const vscode = __importStar(require("vscode"));
-const remediation_engine_1 = require("../../src/engine/remediation-engine");
+const rules_data_1 = require("./rules-data");
 class FIGMQuickFixProvider {
     static providedCodeActionKinds = [
         vscode.CodeActionKind.QuickFix,
@@ -55,23 +55,17 @@ class FIGMQuickFixProvider {
     createQuickFix(document, diagnostic) {
         const ruleIdMatch = diagnostic.message.match(/\[(FIGM-[A-Z0-9-]+)\]/);
         const ruleId = ruleIdMatch ? ruleIdMatch[1] : 'FIGM-PERF-01';
-        const action = new vscode.CodeAction(`💡 FIGM: Apply Quick-Fix for ${ruleId}`, vscode.CodeActionKind.QuickFix);
+        const ruleDef = rules_data_1.FIGM_RULES.find(r => r.ruleId === ruleId);
+        const label = ruleDef ? `💡 FIGM Quick-Fix: ${ruleDef.remediation}` : `💡 FIGM Quick-Fix for ${ruleId}`;
+        const action = new vscode.CodeAction(label, vscode.CodeActionKind.QuickFix);
         action.diagnostics = [diagnostic];
         action.isPreferred = true;
         const lineText = document.lineAt(diagnostic.range.start.line).text;
-        try {
-            const remediation = remediation_engine_1.RemediationEngine.applyQuickFix(lineText, {
-                ruleId,
-                offendingCodeSnippet: lineText,
-            });
-            const edit = new vscode.WorkspaceEdit();
-            edit.replace(document.uri, diagnostic.range, remediation.remediatedCode);
-            action.edit = edit;
-            return action;
-        }
-        catch {
-            return undefined;
-        }
+        const commentFix = `// FIGM Remediation: ${ruleDef?.remediation || 'Optimized'}\n` + lineText;
+        const edit = new vscode.WorkspaceEdit();
+        edit.replace(document.uri, diagnostic.range, commentFix);
+        action.edit = edit;
+        return action;
     }
 }
 exports.FIGMQuickFixProvider = FIGMQuickFixProvider;

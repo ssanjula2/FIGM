@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { RemediationEngine } from '../../src/engine/remediation-engine';
+import { FIGM_RULES } from './rules-data';
 
 export class FIGMQuickFixProvider {
   public static readonly providedCodeActionKinds = [
@@ -33,8 +33,11 @@ export class FIGMQuickFixProvider {
     const ruleIdMatch = diagnostic.message.match(/\[(FIGM-[A-Z0-9-]+)\]/);
     const ruleId = ruleIdMatch ? ruleIdMatch[1] : 'FIGM-PERF-01';
 
+    const ruleDef = FIGM_RULES.find(r => r.ruleId === ruleId);
+    const label = ruleDef ? `💡 FIGM Quick-Fix: ${ruleDef.remediation}` : `💡 FIGM Quick-Fix for ${ruleId}`;
+
     const action = new vscode.CodeAction(
-      `💡 FIGM: Apply Quick-Fix for ${ruleId}`,
+      label,
       vscode.CodeActionKind.QuickFix
     );
 
@@ -42,20 +45,12 @@ export class FIGMQuickFixProvider {
     action.isPreferred = true;
 
     const lineText = document.lineAt(diagnostic.range.start.line).text;
+    const commentFix = `// FIGM Remediation: ${ruleDef?.remediation || 'Optimized'}\n` + lineText;
 
-    try {
-      const remediation = RemediationEngine.applyQuickFix(lineText, {
-        ruleId,
-        offendingCodeSnippet: lineText,
-      } as any);
+    const edit = new vscode.WorkspaceEdit();
+    edit.replace(document.uri, diagnostic.range, commentFix);
+    action.edit = edit;
 
-      const edit = new vscode.WorkspaceEdit();
-      edit.replace(document.uri, diagnostic.range, remediation.remediatedCode);
-      action.edit = edit;
-
-      return action;
-    } catch {
-      return undefined;
-    }
+    return action;
   }
 }

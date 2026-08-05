@@ -13,7 +13,7 @@ export function registerFIGMCommands(
       const res = await diagnosticsManager.analyzeDocument(editor.document);
       if (res) {
         vscode.window.showInformationMessage(
-          `FIGM Inspection: Quality Score ${res.qualityScore}% (${res.scanResult.diagnostics.length} issues found).`
+          `FIGM Inspection: Quality Score ${res.qualityScore}% (${res.totalIssues} issues found).`
         );
       }
     } else {
@@ -43,7 +43,7 @@ export function registerFIGMCommands(
           const res = await diagnosticsManager.analyzeDocument(doc);
           if (res) {
             totalScanned++;
-            totalIssues += res.scanResult.diagnostics.length;
+            totalIssues += res.totalIssues;
           }
           progress.report({ increment, message: vscode.workspace.asRelativePath(file) });
         }

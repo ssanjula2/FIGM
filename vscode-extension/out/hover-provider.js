@@ -35,20 +35,18 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FIGMHoverProvider = void 0;
 const vscode = __importStar(require("vscode"));
-const four_layer_meta_model_1 = require("../../src/matrix/four-layer-meta-model");
+const rules_data_1 = require("./rules-data");
 class FIGMHoverProvider {
     provideHover(document, position, _token) {
         const range = document.getWordRangeAtPosition(position);
         const lineText = document.lineAt(position.line).text;
-        for (const mapping of four_layer_meta_model_1.FOUR_LAYER_MAPPINGS) {
-            const rule = mapping.rule;
+        for (const rule of rules_data_1.FIGM_RULES) {
             if (lineText.includes(rule.ruleId) || lineText.includes(rule.ruleName)) {
                 const markdown = new vscode.MarkdownString();
                 markdown.isTrusted = true;
-                markdown.supportHtml = true;
                 markdown.appendMarkdown(`### 🛡️ **[${rule.ruleId}] ${rule.ruleName}**\n\n`);
-                markdown.appendMarkdown(`**Domain**: \`${mapping.domain}\` | **Severity**: \`${rule.severity}\`\n\n`);
-                markdown.appendMarkdown(`**Concern**: \`${mapping.concern}\`\n\n`);
+                markdown.appendMarkdown(`**Domain**: \`${rule.domain}\` | **Severity**: \`${rule.severity}\`\n\n`);
+                markdown.appendMarkdown(`**Concern**: \`${rule.concern}\`\n\n`);
                 markdown.appendMarkdown(`**Description**: ${rule.description}\n\n`);
                 markdown.appendMarkdown(`---\n\n`);
                 markdown.appendMarkdown(`**Remediation Guidance**:\n${rule.remediation}\n\n`);

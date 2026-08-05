@@ -65,9 +65,7 @@ function activate(context) {
         { scheme: 'file', language: 'typescript' },
         { scheme: 'file', language: 'typescriptreact' },
         { scheme: 'file', language: 'vue' },
-    ], new quickfix_provider_1.FIGMQuickFixProvider(), {
-        providedCodeActionKinds: quickfix_provider_1.FIGMQuickFixProvider.providedCodeActionKinds,
-    });
+    ], new quickfix_provider_1.FIGMQuickFixProvider());
     // Register Extension Commands
     (0, commands_1.registerFIGMCommands)(context, diagnosticsManager, outputChannel);
     // Trigger analysis on active editor change

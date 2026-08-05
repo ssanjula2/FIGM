@@ -4,6 +4,7 @@
     "moduleResolution": "node",
     "target": "ES2022",
     "outDir": "out",
+    "rootDir": "src",
     "lib": ["ES2022"],
     "sourceMap": true,
     "strict": false,
@@ -12,9 +13,6 @@
     "noEmitOnError": false
   },
   "include": [
-    "src/**/*",
-    "../src/engine/rule-execution-engine.ts",
-    "../src/engine/remediation-engine.ts",
-    "../src/matrix/four-layer-meta-model.ts"
+    "src/**/*"
   ]
 }

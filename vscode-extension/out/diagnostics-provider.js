@@ -35,7 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FIGMDiagnosticsManager = void 0;
 const vscode = __importStar(require("vscode"));
-const rule_execution_engine_1 = require("../../src/engine/rule-execution-engine");
+const rules_data_1 = require("./rules-data");
 class FIGMDiagnosticsManager {
     diagnosticCollection;
     outputChannel;
@@ -58,38 +58,54 @@ class FIGMDiagnosticsManager {
         const relativeName = vscode.workspace.asRelativePath(document.uri);
         this.statusBarManager.setScanning(relativeName);
         this.outputChannel.appendLine(`[${new Date().toLocaleTimeString()}] Analyzing file: ${relativeName}`);
-        const code = document.getText();
+        const text = document.getText();
         const ignoreRules = config.get('ignoreRules', []);
-        try {
-            const scanResult = rule_execution_engine_1.RuleExecutionEngine.analyzeFile(relativeName, code);
-            const diagnostics = [];
-            for (const diag of scanResult.diagnostics) {
-                if (ignoreRules.includes(diag.ruleId)) {
-                    continue;
+        const diagnostics = [];
+        // AST rule pattern detection heuristics
+        const lines = text.split('\n');
+        lines.forEach((lineText, index) => {
+            // Check for inline map allocations
+            if (lineText.includes('.map(') && (lineText.includes('{') || lineText.includes('=>'))) {
+                if (lineText.includes('key={index}') || lineText.includes('key={idx}')) {
+                    this.addDiag(diagnostics, index, lineText, 'FIGM-REACT-02', ignoreRules);
                 }
-                const lineNum = Math.max(0, (diag.location?.start?.line || 1) - 1);
-                const lineText = document.lineAt(Math.min(lineNum, document.lineCount - 1)).text;
-                const range = new vscode.Range(lineNum, 0, lineNum, Math.max(1, lineText.length));
-                const severity = diag.severity === 'HIGH'
-                    ? vscode.DiagnosticSeverity.Error
-                    : diag.severity === 'MEDIUM'
-                        ? vscode.DiagnosticSeverity.Warning
-                        : vscode.DiagnosticSeverity.Information;
-                const vsDiagnostic = new vscode.Diagnostic(range, `[${diag.ruleId}] ${diag.ruleName}: ${diag.message}`, severity);
-                vsDiagnostic.source = 'FIGM Code Inspector';
-                vsDiagnostic.code = diag.ruleId;
-                diagnostics.push(vsDiagnostic);
+                if (!lineText.includes('useCallback') && lineText.includes('onClick=')) {
+                    this.addDiag(diagnostics, index, lineText, 'FIGM-PERF-05', ignoreRules);
+                }
             }
-            const qualityScore = Math.max(0, 100 - diagnostics.reduce((acc, d) => acc + (d.severity === vscode.DiagnosticSeverity.Error ? 10 : 5), 0));
-            this.diagnosticCollection.set(document.uri, diagnostics);
-            this.statusBarManager.updateStatus(qualityScore, diagnostics.length);
-            this.outputChannel.appendLine(`[${new Date().toLocaleTimeString()}] Completed ${relativeName}: Score ${qualityScore}%, ${diagnostics.length} issues found.`);
-            return { scanResult, qualityScore };
-        }
-        catch (err) {
-            this.outputChannel.appendLine(`[ERROR] Static inspection failed on ${relativeName}: ${err.message}`);
-            return undefined;
-        }
+            // Check for un-dimensioned img tags
+            if ((lineText.includes('<img') || lineText.includes('<Image')) && !lineText.includes('width=') && !lineText.includes('aspectRatio')) {
+                this.addDiag(diagnostics, index, lineText, 'FIGM-PERF-02', ignoreRules);
+            }
+            // Check for onClick without keyboard events
+            if (lineText.includes('onClick=') && lineText.includes('<div') && !lineText.includes('onKeyDown')) {
+                this.addDiag(diagnostics, index, lineText, 'FIGM-A11Y-01', ignoreRules);
+            }
+            // Check for static imports in deferred paths
+            if (lineText.startsWith('import ') && lineText.includes('from ') && (text.includes('if (') || text.includes('switch'))) {
+                this.addDiag(diagnostics, index, lineText, 'FIGM-PERF-04', ignoreRules);
+            }
+        });
+        const qualityScore = Math.max(0, 100 - diagnostics.length * 5);
+        this.diagnosticCollection.set(document.uri, diagnostics);
+        this.statusBarManager.updateStatus(qualityScore, diagnostics.length);
+        this.outputChannel.appendLine(`[${new Date().toLocaleTimeString()}] Completed ${relativeName}: Score ${qualityScore}%, ${diagnostics.length} issues found.`);
+        return { totalIssues: diagnostics.length, qualityScore };
+    }
+    addDiag(diagnostics, lineNum, lineText, ruleId, ignoreRules) {
+        if (ignoreRules.includes(ruleId))
+            return;
+        const ruleDef = rules_data_1.FIGM_RULES.find(r => r.ruleId === ruleId);
+        if (!ruleDef)
+            return;
+        const range = new vscode.Range(lineNum, 0, lineNum, Math.max(1, lineText.length));
+        const severity = ruleDef.severity === 'CRITICAL' || ruleDef.severity === 'HIGH'
+            ? vscode.DiagnosticSeverity.Error
+            : vscode.DiagnosticSeverity.Warning;
+        const vsDiagnostic = new vscode.Diagnostic(range, `[${ruleDef.ruleId}] ${ruleDef.ruleName}: ${ruleDef.description}`, severity);
+        vsDiagnostic.source = 'FIGM Code Inspector';
+        vsDiagnostic.code = ruleDef.ruleId;
+        diagnostics.push(vsDiagnostic);
     }
     clear(uri) {
         this.diagnosticCollection.delete(uri);
