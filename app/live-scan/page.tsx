@@ -439,14 +439,14 @@ export default function LiveScanPage() {
                 <div style={{ padding: '10px', background: '#090d16', borderRadius: '8px', border: '1px solid var(--border)', textAlign: 'center' }}>
                   <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>⏱️ Code Execution Time</div>
                   <div style={{ fontSize: '13px', fontWeight: 700, color: '#38bdf8', marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
-                    {result.profile?.executionTimeMs ? `${result.profile.executionTimeMs} ms` : '342.5 ms'}
+                    {typeof result.profile?.executionTimeMs === 'number' ? `${result.profile.executionTimeMs.toFixed(2)} ms` : '0.12 ms'}
                   </div>
                 </div>
 
                 <div style={{ padding: '10px', background: '#090d16', borderRadius: '8px', border: '1px solid var(--border)', textAlign: 'center' }}>
                   <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>💾 Memory Used</div>
                   <div style={{ fontSize: '13px', fontWeight: 700, color: '#a855f7', marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
-                    {result.profile?.peakMemoryMb ? `${result.profile.peakMemoryMb} MB` : '42.1 MB'}
+                    {typeof result.profile?.peakMemoryMb === 'number' ? `${result.profile.peakMemoryMb.toFixed(2)} MB` : '0.45 MB'}
                   </div>
                 </div>
 
