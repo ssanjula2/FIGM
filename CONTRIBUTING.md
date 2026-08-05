@@ -1,3 +1,4 @@
+
 # Contributing to FIGM Code Inspector
 
 Thank you for contributing to the FIGM Code Inspector project.
