@@ -1,0 +1,134 @@
+% Chapter 4: Implementation & Static Detection Engine
+\chapter{Implementation \& Detection Predicate Engine}
+\label{ch:implementation}
+
+\section{Static Rule Execution Engine}
+The FIGM static analysis engine executes unified AST traversal, matching extracted Abstract Language Primitives (ALPs) against formal boolean predicates.
+
+\subsection{Formal Predicate for FIGM-PERF-01}
+\begin{equation}
+P_PERF_01(n) \iff (type(n) \in {ObjectExpression, ArrayExpression, ArrowFunctionExpression}) \land \exists a \in Ancestors(n): (Scope(a) \in {LOOP, RENDER}) \land \neg UsesLoopVar(n, a)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-PERF-02}
+\begin{equation}
+P_PERF_02(n) \iff IsVisualElement(n) \land \neg (HasAttr(n, "width") \land HasAttr(n, "height")) \land \neg HasStyle(n, "aspectRatio")
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-PERF-03}
+\begin{equation}
+P_PERF_03(n) \iff IsListenerRegistration(n) \land \neg \exists d \in TeardownScope(Scope(n)): IsPairedRemoval(n, d)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-PERF-04}
+\begin{equation}
+P_PERF_04(n) \iff (type(n) == ImportDeclaration) \land \exists c \in N: (IsConditionalScope(c) \land ReferencesModule(c, n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-PERF-05}
+\begin{equation}
+P_PERF_05(n) \iff IsInlineCallback(n) \land Scope(n) \in {LOOP, RENDER}
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-PERF-06}
+\begin{equation}
+P_PERF_06(n) \iff IsSynchronousStorageAccess(n) \land Scope(n) \in {LOOP, RENDER}
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-A11Y-01}
+\begin{equation}
+P_A11Y_01(n) \iff (IsNonInteractiveElement(n) \land HasPointerHandler(n)) \land \neg (HasKeyboardHandler(n) \land HasTabIndex(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-A11Y-02}
+\begin{equation}
+P_A11Y_02(n) \iff IsCustomControl(n) \land \neg (HasAttr(n, "role") \land (HasAttr(n, "aria-label") \lor HasAttr(n, "aria-labelledby")))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-A11Y-03}
+\begin{equation}
+P_A11Y_03(n) \iff IsDynamicStatusContainer(n) \land \neg (HasAttr(n, "aria-live") \lor Role(n) \in {"status", "alert"})
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-A11Y-04}
+\begin{equation}
+P_A11Y_04(n) \iff IsOverlayOrModal(n) \land \neg (HasFocusTrap(n) \land RestoresFocusOnUnmount(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-A11Y-05}
+\begin{equation}
+P_A11Y_05(n) \iff IsFormInput(n) \land \neg (HasLabelAssociation(n) \lor HasAriaLabel(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-A11Y-06}
+\begin{equation}
+P_A11Y_06(n) \iff HasTabIndex(n) \land TabIndexValue(n) > 0
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-01}
+\begin{equation}
+P_NEXT_01(n) \iff IsReactClientHook(n) \land \neg HasUseClientDirective(File(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-02}
+\begin{equation}
+P_NEXT_02(n) \iff IsHeavyModuleImport(n) \land \neg IsDynamicImport(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-03}
+\begin{equation}
+P_NEXT_03(n) \iff IsAppRouterPage(File(n)) \land \neg HasRevalidateExport(File(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-04}
+\begin{equation}
+P_NEXT_04(n) \iff IsExternalFontLink(n) \land \neg IsNextFontImport(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-01}
+\begin{equation}
+P_REACT_01(n) \iff IsDerivedStateComputation(n) \land \neg WrappedInUseMemo(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-02}
+\begin{equation}
+P_REACT_02(n) \iff IsListItem(n) \land KeyPropValue(n) == ArrayIndex(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-03}
+\begin{equation}
+P_REACT_03(n) \iff IsDirectStateMutation(n) \land \neg UsesStateSetter(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-04}
+\begin{equation}
+P_REACT_04(n) \iff IsChildCallbackProp(n) \land \neg WrappedInUseCallback(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-01}
+\begin{equation}
+P_ANG_01(n) \iff IsRxJSSubscription(n) \land \neg HasUnsubscribeOrTakeUntil(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-02}
+\begin{equation}
+P_ANG_02(n) \iff IsAngularComponent(n) \land \neg StrategyEqualsOnPush(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-03}
+\begin{equation}
+P_ANG_03(n) \iff IsNgForDirective(n) \land \neg HasTrackBy(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-04}
+\begin{equation}
+P_ANG_04(n) \iff IsTemplateInterpolation(n) \land ContainsMethodCall(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-05}
+\begin{equation}
+P_ANG_05(n) \iff IsNativeElementAccess(n) \land \neg UsesRenderer2(n)
+\end{equation}
+
+\section{Resilient Source Parsing \& Diagnostics}
+The engine handles malformed syntax gracefully, isolating parse errors per component file and returning structured diagnostic reports annotated with WCAG 2.2 and ISO 25010 standard references.

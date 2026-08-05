@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "buildCommand": "npx prisma generate && next build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["sfo1"],
+  "env": {
+    "STORAGE_PROVIDER": "supabase"
+  }
+}

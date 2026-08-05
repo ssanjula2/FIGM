@@ -1,0 +1,667 @@
+{
+  "summary": {
+    "scannedFiles": 4,
+    "totalDiagnostics": 7,
+    "criticalCount": 3,
+    "highCount": 4,
+    "mediumCount": 0,
+    "lowCount": 0,
+    "totalPrimitivesExtracted": 10,
+    "scanTimestamp": "2026-07-29T08:06:11.280Z"
+  },
+  "fileResults": [
+    {
+      "filePath": "src\\DataGrid.vue",
+      "framework": "VUE_SFC",
+      "totalErrors": 1,
+      "totalWarnings": 0,
+      "extractedALPsCount": 1,
+      "parseErrors": [],
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "src\\DataGrid.vue",
+          "location": {
+            "start": {
+              "line": 7,
+              "column": 6
+            },
+            "end": {
+              "line": 7,
+              "column": 41
+            }
+          },
+          "offendingCodeSnippet": "<img :src=\"item.icon\" alt=\"Icon\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010"
+        }
+      ],
+      "primitives": [
+        {
+          "primitiveId": "ALP-LAYOUT-ELEMENT",
+          "primitiveName": "Un-dimensioned Layout Element Primitive",
+          "normalizedASTNode": {
+            "type": "VElement",
+            "name": "img",
+            "attributes": {
+              "codeSnippet": "<img :src=\"item.icon\" alt=\"Icon\" />",
+              "src": "item.icon"
+            },
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 6
+              },
+              "end": {
+                "line": 7,
+                "column": 41
+              }
+            },
+            "children": [],
+            "scopeType": "GLOBAL"
+          },
+          "framework": "VUE_SFC",
+          "extractedAttributes": {
+            "codeSnippet": "<img :src=\"item.icon\" alt=\"Icon\" />",
+            "src": "item.icon"
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "src\\ReportGenerator.js",
+      "framework": "GENERIC_ESTREE",
+      "totalErrors": 0,
+      "totalWarnings": 0,
+      "extractedALPsCount": 1,
+      "parseErrors": [],
+      "diagnostics": [],
+      "primitives": [
+        {
+          "primitiveId": "ALP-STATIC-IMPORT",
+          "primitiveName": "Top-Level Synchronous Module Import Primitive",
+          "normalizedASTNode": {
+            "type": "ImportDeclaration",
+            "name": "heavy-pdf-export-lib",
+            "attributes": {
+              "codeSnippet": "import HeavyPdfExport from 'heavy-pdf-export-lib';",
+              "referencedInConditional": false
+            },
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 0
+              },
+              "end": {
+                "line": 2,
+                "column": 50
+              }
+            },
+            "children": [],
+            "scopeType": "GLOBAL"
+          },
+          "framework": "GENERIC_ESTREE",
+          "extractedAttributes": {
+            "codeSnippet": "import HeavyPdfExport from 'heavy-pdf-export-lib';",
+            "referencedInConditional": false
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "src\\SearchPanel.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "totalErrors": 2,
+      "totalWarnings": 0,
+      "extractedALPsCount": 3,
+      "parseErrors": [],
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-A11Y-03",
+          "ruleName": "ARIA Live Announcer for Dynamic Mutations",
+          "domain": "ACCESSIBILITY",
+          "concern": "STATUS_MESSAGES",
+          "severity": "HIGH",
+          "filePath": "src\\SearchPanel.component.ts",
+          "location": {
+            "start": {
+              "line": 9,
+              "column": 6
+            },
+            "end": {
+              "line": 9,
+              "column": 45
+            }
+          },
+          "offendingCodeSnippet": "<div id=\"status\" class=\"status-banner\">",
+          "message": "Dynamic status or result container receives async mutations without aria-live region announcer.",
+          "remediation": "Add role=\"status\" or aria-live=\"polite\" (or \"assertive\" for critical alerts) to dynamic output containers.",
+          "standardReference": "WCAG 2.2"
+        },
+        {
+          "ruleId": "FIGM-PERF-03",
+          "ruleName": "Unbounded Event Listener Disposal",
+          "domain": "PERFORMANCE",
+          "concern": "ASYNC_LEAKS",
+          "severity": "CRITICAL",
+          "filePath": "src\\SearchPanel.component.ts",
+          "location": {
+            "start": {
+              "line": 20,
+              "column": 11
+            },
+            "end": {
+              "line": 20,
+              "column": 57
+            }
+          },
+          "offendingCodeSnippet": "window.addEventListener('resize', this.handleResize);",
+          "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+          "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+          "standardReference": "ISO 25010"
+        }
+      ],
+      "primitives": [
+        {
+          "primitiveId": "ALP-STATIC-IMPORT",
+          "primitiveName": "Top-Level Synchronous Module Import Primitive",
+          "normalizedASTNode": {
+            "type": "ImportDeclaration",
+            "name": "@angular/core",
+            "attributes": {
+              "codeSnippet": "import { Component, OnInit } from '@angular/core';",
+              "referencedInConditional": false
+            },
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 50
+              }
+            },
+            "children": [],
+            "scopeType": "GLOBAL"
+          },
+          "framework": "ANGULAR_TEMPLATE",
+          "extractedAttributes": {
+            "codeSnippet": "import { Component, OnInit } from '@angular/core';",
+            "referencedInConditional": false
+          }
+        },
+        {
+          "primitiveId": "ALP-LIVE-REGION",
+          "primitiveName": "Asynchronous DOM Mutation Announcer Primitive",
+          "normalizedASTNode": {
+            "type": "JSXElement",
+            "name": "div",
+            "attributes": {
+              "codeSnippet": "<div id=\"status\" class=\"status-banner\">",
+              "isDynamicMutation": true
+            },
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 6
+              },
+              "end": {
+                "line": 9,
+                "column": 45
+              }
+            },
+            "children": [],
+            "scopeType": "GLOBAL"
+          },
+          "framework": "ANGULAR_TEMPLATE",
+          "extractedAttributes": {
+            "codeSnippet": "<div id=\"status\" class=\"status-banner\">",
+            "isDynamicMutation": true
+          }
+        },
+        {
+          "primitiveId": "ALP-ASYNC-DISPOSAL",
+          "primitiveName": "Asynchronous Target Listener Registration Primitive",
+          "normalizedASTNode": {
+            "type": "CallExpression",
+            "name": "addEventListener",
+            "attributes": {
+              "method": "addEventListener",
+              "hasPairedRemoval": false,
+              "codeSnippet": "window.addEventListener('resize', this.handleResize);"
+            },
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 11
+              },
+              "end": {
+                "line": 20,
+                "column": 57
+              }
+            },
+            "children": [],
+            "scopeType": "GLOBAL"
+          },
+          "framework": "ANGULAR_TEMPLATE",
+          "extractedAttributes": {
+            "method": "addEventListener",
+            "hasPairedRemoval": false,
+            "codeSnippet": "window.addEventListener('resize', this.handleResize);"
+          }
+        }
+      ]
+    },
+    {
+      "filePath": "src\\UserProfile.jsx",
+      "framework": "REACT_JSX",
+      "totalErrors": 4,
+      "totalWarnings": 0,
+      "extractedALPsCount": 5,
+      "parseErrors": [],
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "src\\UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 9,
+              "column": 6
+            },
+            "end": {
+              "line": 9,
+              "column": 50
+            }
+          },
+          "offendingCodeSnippet": "<img src={user.avatarUrl} alt={user.name} />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "src\\UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 12,
+              "column": 6
+            },
+            "end": {
+              "line": 12,
+              "column": 69
+            }
+          },
+          "offendingCodeSnippet": "<div onClick={() => setIsOpen(!isOpen)} className=\"toggle-btn\">",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler for Enter and Space keys.",
+          "standardReference": "WCAG 2.2"
+        },
+        {
+          "ruleId": "FIGM-A11Y-02",
+          "ruleName": "Accessible Name and Role for Custom UI Controls",
+          "domain": "ACCESSIBILITY",
+          "concern": "NAME_ROLE_VALUE",
+          "severity": "HIGH",
+          "filePath": "src\\UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 18,
+              "column": 8
+            },
+            "end": {
+              "line": 18,
+              "column": 79
+            }
+          },
+          "offendingCodeSnippet": "<Modal isOpen={isOpen} role=\"dialog\" aria-label=\"User Profile Details\">",
+          "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+          "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+          "standardReference": "WCAG 2.2"
+        },
+        {
+          "ruleId": "FIGM-A11Y-04",
+          "ruleName": "Dynamic Focus Containment and Traversal",
+          "domain": "ACCESSIBILITY",
+          "concern": "FOCUS_ORDER",
+          "severity": "CRITICAL",
+          "filePath": "src\\UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 18,
+              "column": 8
+            },
+            "end": {
+              "line": 18,
+              "column": 79
+            }
+          },
+          "offendingCodeSnippet": "<Modal isOpen={isOpen} role=\"dialog\" aria-label=\"User Profile Details\">",
+          "message": "Modal or dynamic overlay component unmounts without programmatically restoring focus.",
+          "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically upon unmount.",
+          "standardReference": "WCAG 2.2"
+        }
+      ],
+      "primitives": [
+        {
+          "primitiveId": "ALP-STATIC-IMPORT",
+          "primitiveName": "Top-Level Synchronous Module Import Primitive",
+          "normalizedASTNode": {
+            "type": "ImportDeclaration",
+            "name": "react",
+            "attributes": {
+              "codeSnippet": "import React, { useState } from 'react';",
+              "referencedInConditional": false
+            },
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 40
+              }
+            },
+            "children": [],
+            "scopeType": "GLOBAL"
+          },
+          "framework": "REACT_JSX",
+          "extractedAttributes": {
+            "codeSnippet": "import React, { useState } from 'react';",
+            "referencedInConditional": false
+          }
+        },
+        {
+          "primitiveId": "ALP-LAYOUT-ELEMENT",
+          "primitiveName": "Un-dimensioned Layout Element Primitive",
+          "normalizedASTNode": {
+            "type": "JSXElement",
+            "name": "img",
+            "attributes": {
+              "codeSnippet": "<img src={user.avatarUrl} alt={user.name} />",
+              "src": ""
+            },
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 6
+              },
+              "end": {
+                "line": 9,
+                "column": 50
+              }
+            },
+            "children": [],
+            "scopeType": "RENDER"
+          },
+          "framework": "REACT_JSX",
+          "extractedAttributes": {
+            "codeSnippet": "<img src={user.avatarUrl} alt={user.name} />",
+            "src": ""
+          }
+        },
+        {
+          "primitiveId": "ALP-EVENT-KEYBOARD",
+          "primitiveName": "Pointer Event Binding without Keyboard Event Primitive",
+          "normalizedASTNode": {
+            "type": "JSXElement",
+            "name": "div",
+            "attributes": {
+              "codeSnippet": "<div onClick={() => setIsOpen(!isOpen)} className=\"toggle-btn\">",
+              "onClick": "handler"
+            },
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 6
+              },
+              "end": {
+                "line": 12,
+                "column": 69
+              }
+            },
+            "children": [],
+            "scopeType": "RENDER"
+          },
+          "framework": "REACT_JSX",
+          "extractedAttributes": {
+            "codeSnippet": "<div onClick={() => setIsOpen(!isOpen)} className=\"toggle-btn\">",
+            "onClick": "handler"
+          }
+        },
+        {
+          "primitiveId": "ALP-ARIA-NAMING",
+          "primitiveName": "Custom Interactive Component Declaration Primitive",
+          "normalizedASTNode": {
+            "type": "JSXElement",
+            "name": "Modal",
+            "attributes": {
+              "codeSnippet": "<Modal isOpen={isOpen} role=\"dialog\" aria-label=\"User Profile Details\">",
+              "isOverlay": true,
+              "restoresFocusOnUnmount": false
+            },
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 8
+              },
+              "end": {
+                "line": 18,
+                "column": 79
+              }
+            },
+            "children": [],
+            "scopeType": "RENDER"
+          },
+          "framework": "REACT_JSX",
+          "extractedAttributes": {
+            "codeSnippet": "<Modal isOpen={isOpen} role=\"dialog\" aria-label=\"User Profile Details\">",
+            "isOverlay": true,
+            "restoresFocusOnUnmount": false
+          }
+        },
+        {
+          "primitiveId": "ALP-FOCUS-TRAVERSAL",
+          "primitiveName": "Dynamic Element Focus Traversal Primitive",
+          "normalizedASTNode": {
+            "type": "JSXElement",
+            "name": "Modal",
+            "attributes": {
+              "codeSnippet": "<Modal isOpen={isOpen} role=\"dialog\" aria-label=\"User Profile Details\">",
+              "isOverlay": true,
+              "restoresFocusOnUnmount": false
+            },
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 8
+              },
+              "end": {
+                "line": 18,
+                "column": 79
+              }
+            },
+            "children": [],
+            "scopeType": "RENDER"
+          },
+          "framework": "REACT_JSX",
+          "extractedAttributes": {
+            "codeSnippet": "<Modal isOpen={isOpen} role=\"dialog\" aria-label=\"User Profile Details\">",
+            "isOverlay": true,
+            "restoresFocusOnUnmount": false
+          }
+        }
+      ]
+    }
+  ],
+  "allDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src\\DataGrid.vue",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 6
+        },
+        "end": {
+          "line": 7,
+          "column": 41
+        }
+      },
+      "offendingCodeSnippet": "<img :src=\"item.icon\" alt=\"Icon\" />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO 25010"
+    },
+    {
+      "ruleId": "FIGM-A11Y-03",
+      "ruleName": "ARIA Live Announcer for Dynamic Mutations",
+      "domain": "ACCESSIBILITY",
+      "concern": "STATUS_MESSAGES",
+      "severity": "HIGH",
+      "filePath": "src\\SearchPanel.component.ts",
+      "location": {
+        "start": {
+          "line": 9,
+          "column": 6
+        },
+        "end": {
+          "line": 9,
+          "column": 45
+        }
+      },
+      "offendingCodeSnippet": "<div id=\"status\" class=\"status-banner\">",
+      "message": "Dynamic status or result container receives async mutations without aria-live region announcer.",
+      "remediation": "Add role=\"status\" or aria-live=\"polite\" (or \"assertive\" for critical alerts) to dynamic output containers.",
+      "standardReference": "WCAG 2.2"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src\\SearchPanel.component.ts",
+      "location": {
+        "start": {
+          "line": 20,
+          "column": 11
+        },
+        "end": {
+          "line": 20,
+          "column": 57
+        }
+      },
+      "offendingCodeSnippet": "window.addEventListener('resize', this.handleResize);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO 25010"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src\\UserProfile.jsx",
+      "location": {
+        "start": {
+          "line": 9,
+          "column": 6
+        },
+        "end": {
+          "line": 9,
+          "column": 50
+        }
+      },
+      "offendingCodeSnippet": "<img src={user.avatarUrl} alt={user.name} />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO 25010"
+    },
+    {
+      "ruleId": "FIGM-A11Y-01",
+      "ruleName": "Keyboard Event Parity on Pointer Handlers",
+      "domain": "ACCESSIBILITY",
+      "concern": "KEYBOARD_ACCESSIBILITY",
+      "severity": "CRITICAL",
+      "filePath": "src\\UserProfile.jsx",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 6
+        },
+        "end": {
+          "line": 12,
+          "column": 69
+        }
+      },
+      "offendingCodeSnippet": "<div onClick={() => setIsOpen(!isOpen)} className=\"toggle-btn\">",
+      "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+      "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler for Enter and Space keys.",
+      "standardReference": "WCAG 2.2"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "src\\UserProfile.jsx",
+      "location": {
+        "start": {
+          "line": 18,
+          "column": 8
+        },
+        "end": {
+          "line": 18,
+          "column": 79
+        }
+      },
+      "offendingCodeSnippet": "<Modal isOpen={isOpen} role=\"dialog\" aria-label=\"User Profile Details\">",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2"
+    },
+    {
+      "ruleId": "FIGM-A11Y-04",
+      "ruleName": "Dynamic Focus Containment and Traversal",
+      "domain": "ACCESSIBILITY",
+      "concern": "FOCUS_ORDER",
+      "severity": "CRITICAL",
+      "filePath": "src\\UserProfile.jsx",
+      "location": {
+        "start": {
+          "line": 18,
+          "column": 8
+        },
+        "end": {
+          "line": 18,
+          "column": 79
+        }
+      },
+      "offendingCodeSnippet": "<Modal isOpen={isOpen} role=\"dialog\" aria-label=\"User Profile Details\">",
+      "message": "Modal or dynamic overlay component unmounts without programmatically restoring focus.",
+      "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically upon unmount.",
+      "standardReference": "WCAG 2.2"
+    }
+  ]
+}

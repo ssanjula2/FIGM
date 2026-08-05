@@ -1,0 +1,94 @@
+import { NextResponse } from 'next/server';
+import { verifyRefreshToken, signJWT, signRefreshToken } from '../../../../src/auth/auth-service';
+import { UserDB } from '../../../../src/auth/user-db';
+import { AuditLogger } from '../../../../src/auth/audit-logger';
+
+export async function POST(request: Request) {
+  const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+  const userAgent = request.headers.get('user-agent') || 'unknown';
+
+  try {
+    let token: string | undefined;
+
+    // Check body or cookie for refresh token
+    const cookieHeader = request.headers.get('cookie') || '';
+    const match = cookieHeader.match(/figm_refresh_token=([^;]+)/);
+    if (match) {
+      token = match[1];
+    }
+
+    if (!token) {
+      try {
+        const body = await request.json();
+        token = body.refreshToken;
+      } catch {
+        // Body reading fallback
+      }
+    }
+
+    if (!token) {
+      AuditLogger.logEvent('REFRESH_TOKEN', { ipAddress: ip, userAgent, status: 'FAILURE', details: 'Missing refresh token' });
+      return NextResponse.json(
+        { error: 'Refresh token is required', code: 'MISSING_REFRESH_TOKEN' },
+        { status: 400 }
+      );
+    }
+
+    const payload = verifyRefreshToken(token);
+    if (!payload) {
+      AuditLogger.logEvent('REFRESH_TOKEN', { ipAddress: ip, userAgent, status: 'FAILURE', details: 'Invalid or expired refresh token' });
+      return NextResponse.json(
+        { error: 'Invalid or expired refresh token', code: 'INVALID_REFRESH_TOKEN' },
+        { status: 401 }
+      );
+    }
+
+    const user = UserDB.findUserById(payload.userId);
+    if (!user || user.refreshToken !== token) {
+      AuditLogger.logEvent('REFRESH_TOKEN', { userId: payload.userId, email: payload.email, ipAddress: ip, userAgent, status: 'FAILURE', details: 'Token revoked or user mismatch' });
+      return NextResponse.json(
+        { error: 'Refresh token has been revoked', code: 'TOKEN_REVOKED' },
+        { status: 401 }
+      );
+    }
+
+    const userPayload = {
+      userId: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role || 'DEVELOPER',
+    };
+
+    const newAccessToken = signJWT(userPayload, 3600);
+    const newRefreshToken = signRefreshToken(userPayload, 604800);
+
+    UserDB.updateUser(user.id, { refreshToken: newRefreshToken });
+    AuditLogger.logEvent('REFRESH_TOKEN', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
+
+    const response = NextResponse.json({
+      message: 'Token refreshed successfully',
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      user: userPayload,
+    });
+
+    response.cookies.set('figm_token', newAccessToken, {
+      httpOnly: true,
+      path: '/',
+      maxAge: 3600,
+      sameSite: 'lax',
+    });
+
+    response.cookies.set('figm_refresh_token', newRefreshToken, {
+      httpOnly: true,
+      path: '/',
+      maxAge: 604800,
+      sameSite: 'lax',
+    });
+
+    return response;
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Token refresh failed';
+    return NextResponse.json({ error: message, code: 'SERVER_ERROR' }, { status: 500 });
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "figm-model",
+  "version": "1.0.0",
+  "description": "Framework-Independent Guideline Model (FIGM) - Phase 1 Conceptual Artifacts & Specification",
+  "main": "dist/src/index.js",
+  "bin": {
+    "figm-analyze": "./bin/figm-analyze.js"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "clean": "node -e \"fs.rmSync('.next', { recursive: true, force: true })\"",
+    "build": "npx tsc",
+    "build:ui": "next build",
+    "start": "next start",
+    "test": "node --import tsx --test --test-concurrency=1 tests/guideline-filtering.test.ts tests/ast-detection.test.ts tests/validation-engine.test.ts tests/evaluation-runner.test.ts tests/cli-analyzer.test.ts tests/auth-isolation.test.ts tests/research-gap-eval.test.ts tests/ai-remediation.test.ts tests/ast-detection-rules.test.ts tests/functional-validation.test.ts tests/auth-production.test.ts tests/dashboard-analytics.test.ts tests/saas-projects-workspace.test.ts tests/saas-scan-history-export.test.ts tests/saas-user-notifications-settings.test.ts tests/saas-search-admin.test.ts tests/supabase-storage-provider.test.ts tests/json-migration.test.ts tests/realtime-storage.test.ts",
+    "migrate-json-to-supabase": "node --import tsx scripts/migrate-json-to-supabase.ts",
+    "generate-spec": "node --import tsx src/matrix/export-spec.ts",
+    "analyze": "node --import tsx src/cli/figm-analyze.ts",
+    "eval": "node --import tsx src/eval/evaluation-runner.ts",
+    "export-docs": "node --import tsx src/docs/dissertation-exporter.ts",
+    "ci:scan": "node --import tsx scripts/ci-figm-scan.ts",
+    "ui": "next dev"
+  },
+  "keywords": [
+    "figm",
+    "static-analysis",
+    "spa-quality",
+    "accessibility",
+    "performance",
+    "wcag"
+  ],
+  "author": "Lead Software Architect & Static Analysis Engineer",
+  "license": "MIT",
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "@supabase/supabase-js": "^2.39.0",
+    "lucide-react": "^0.300.0",
+    "next": "^14.1.0",
+    "pg": "^8.22.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@prisma/config": "^7.9.1",
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

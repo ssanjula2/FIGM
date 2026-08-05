@@ -1,0 +1,123 @@
+'use client';
+
+import React from 'react';
+import { useNotifications } from '../../src/hooks/useNotifications';
+
+export default function NotificationsPage() {
+  const { notifications, unreadCount, loading, markAsRead, markAllAsRead, clearAll } = useNotifications();
+
+  const typeIcons: Record<string, string> = {
+    SCAN_SUCCESS: '⚡',
+    SCAN_FAILED: '❌',
+    AI_FINISHED: '🤖',
+    EXPORT_FINISHED: '📄',
+    SECURITY_ALERT: '🛡️',
+  };
+
+  return (
+    <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
+        <div>
+          <div style={{ fontSize: '12px', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
+            Real-Time Activity Feed
+          </div>
+          <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', margin: 0, letterSpacing: '-0.5px' }}>
+            Notification Center
+          </h1>
+          <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '6px', margin: 0 }}>
+            System events, scan achievements, AI remediation completion, and security alerts.
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', gap: '12px' }}>
+          {unreadCount > 0 && (
+            <button
+              onClick={markAllAsRead}
+              style={{
+                padding: '9px 16px',
+                borderRadius: '8px',
+                background: 'rgba(56, 189, 248, 0.15)',
+                border: '1px solid rgba(56, 189, 248, 0.3)',
+                color: '#38bdf8',
+                fontWeight: 700,
+                fontSize: '13px',
+                cursor: 'pointer',
+              }}
+            >
+              ✓ Mark All Read ({unreadCount})
+            </button>
+          )}
+
+          <button
+            onClick={clearAll}
+            style={{
+              padding: '9px 16px',
+              borderRadius: '8px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: '#94a3b8',
+              fontWeight: 600,
+              fontSize: '13px',
+              cursor: 'pointer',
+            }}
+          >
+            🗑️ Clear History
+          </button>
+        </div>
+      </div>
+
+      {loading && (
+        <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+          Loading notification feed...
+        </div>
+      )}
+
+      {!loading && notifications.length === 0 && (
+        <div style={{ padding: '60px', textAlign: 'center', background: 'rgba(15, 23, 42, 0.4)', borderRadius: '16px', border: '1px border-dashed rgba(255, 255, 255, 0.1)' }}>
+          <div style={{ fontSize: '40px', marginBottom: '12px' }}>🔔</div>
+          <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>No Notifications</h3>
+          <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '6px' }}>Your notification feed is empty.</p>
+        </div>
+      )}
+
+      {!loading && notifications.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {notifications.map((n) => (
+            <div
+              key={n.id}
+              onClick={() => markAsRead(n.id)}
+              style={{
+                background: n.read ? 'rgba(15, 23, 42, 0.4)' : 'rgba(15, 23, 42, 0.85)',
+                backdropFilter: 'blur(16px)',
+                border: n.read ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(56, 189, 248, 0.3)',
+                borderRadius: '14px',
+                padding: '18px 24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{ fontSize: '24px' }}>{typeIcons[n.type] || '🔔'}</div>
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: n.read ? 600 : 800, color: n.read ? '#cbd5e1' : '#f8fafc' }}>
+                    {n.title} {!n.read && <span style={{ color: '#38bdf8', fontSize: '10px', marginLeft: '6px' }}>● NEW</span>}
+                  </div>
+                  <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '4px' }}>{n.message}</div>
+                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>{new Date(n.createdAt).toLocaleString()}</div>
+                </div>
+              </div>
+
+              {!n.read && (
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8' }} />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

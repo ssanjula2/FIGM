@@ -1,0 +1,31 @@
+# =============================================================================
+# Supabase Project Local & Production Configuration
+# =============================================================================
+project_id = "figm-code-inspector-saas"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql"]
+extra_search_path = ["public"]
+
+[db]
+port = 54322
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://figm-code-inspector.vercel.app"]
+jwt_expiry = 3600
+enable_signup = true
+
+[realtime]
+enabled = true
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"

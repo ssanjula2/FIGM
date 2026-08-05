@@ -1,0 +1,104 @@
+name: FIGM DevSecOps Enterprise Quality & Security Inspection
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  statuses: write
+
+jobs:
+  devsecops-inspection:
+    name: FIGM Static Analysis & Quality Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🟢 Setup Node.js 20.x Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: ⚙️ Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/postgres' }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL || 'postgresql://postgres:postgres@localhost:5432/postgres' }}
+
+      - name: 🛠️ Compile & Build TypeScript Project
+        run: npm run build
+
+      - name: 🧪 Execute Automated Unit & Integration Tests
+        run: npm test
+
+      - name: ⚡ Execute FIGM AST Static Analysis Engine
+        id: figm_scan
+        run: npm run ci:scan
+        env:
+          NODE_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: 📤 Upload CI Audit Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: figm-devsecops-reports
+          path: |
+            figm-ci-report.json
+            figm-ci-report.md
+          retention-days: 30
+
+      - name: 💬 Post Pull Request DevSecOps Summary Comment
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const mdPath = path.join(process.cwd(), 'figm-ci-report.md');
+            
+            if (fs.existsSync(mdPath)) {
+              const body = fs.readFileSync(mdPath, 'utf8');
+              const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+              });
+              
+              const botComment = comments.find(c => c.user.type === 'Bot' && c.body.includes('FIGM DevSecOps Inspection Report'));
+              
+              if (botComment) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: body
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: body
+                });
+              }
+            }

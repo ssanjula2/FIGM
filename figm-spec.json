@@ -1,0 +1,614 @@
+{
+  "meta": {
+    "title": "Framework-Independent Guideline Model (FIGM) Master Specification",
+    "version": "2.0.0",
+    "description": "Formal 4-Layer Meta-Model & AST Detection Specification Matrix mapping SPA Quality Domains to Formal Mathematical Predicates, Abstract Language Primitives, and Universal AST Query Templates.",
+    "framework": "FIGM-Core-v2",
+    "generatedAt": "2026-07-29T08:05:01.835Z",
+    "totalCoreRules": 8
+  },
+  "taxonomies": {
+    "domains": [
+      {
+        "id": "PERFORMANCE",
+        "name": "Performance Efficiency Domain",
+        "description": "Optimizing SPA runtime execution speed, memory footprint, bundle delivery, and visual layout stability.",
+        "concerns": [
+          {
+            "id": "INVARIANT_ALLOCATIONS",
+            "name": "Invariant Allocations",
+            "description": "Eliminating duplicate object/closure instantiations in high-frequency loops and render scopes.",
+            "standardRef": "ISO 25010 Time Behaviour"
+          },
+          {
+            "id": "LAYOUT_INSTABILITY",
+            "name": "Layout Instability",
+            "description": "Preventing Cumulative Layout Shift (CLS) from un-dimensioned dynamic content.",
+            "standardRef": "ISO 25010 Usability / Time Behaviour"
+          },
+          {
+            "id": "ASYNC_LEAKS",
+            "name": "Asynchronous Leaks",
+            "description": "Preventing heap memory expansion caused by un-disposed event listeners and subscriptions.",
+            "standardRef": "ISO 25010 Resource Utilization"
+          },
+          {
+            "id": "BUNDLE_SIZE",
+            "name": "Bundle Size Optimization",
+            "description": "De-duplicating initial payload assets and enforcing lazy module loading boundaries.",
+            "standardRef": "ISO 25010 Resource Utilization"
+          }
+        ]
+      },
+      {
+        "id": "ACCESSIBILITY",
+        "name": "Accessibility Domain",
+        "description": "Ensuring SPA interfaces comply with normative WCAG 2.2 Success Criteria for assistive technology users.",
+        "concerns": [
+          {
+            "id": "KEYBOARD_ACCESSIBILITY",
+            "name": "Keyboard Accessibility",
+            "description": "Ensuring all interactive UI elements can be operated via keyboard input.",
+            "standardRef": "WCAG 2.2 SC 2.1.1 (Level A)"
+          },
+          {
+            "id": "NAME_ROLE_VALUE",
+            "name": "Name, Role, Value",
+            "description": "Exposing accessible roles and labels on custom interactive components.",
+            "standardRef": "WCAG 2.2 SC 4.1.2 (Level A)"
+          },
+          {
+            "id": "STATUS_MESSAGES",
+            "name": "Status Messages",
+            "description": "Announcing dynamic state changes to screen readers without page reloads.",
+            "standardRef": "WCAG 2.2 SC 4.1.3 (Level AA)"
+          },
+          {
+            "id": "FOCUS_ORDER",
+            "name": "Focus Order & Containment",
+            "description": "Preserving logical keyboard focus traversal during dynamic DOM updates.",
+            "standardRef": "WCAG 2.2 SC 2.4.3 (Level A)"
+          }
+        ]
+      }
+    ]
+  },
+  "abstractLanguagePrimitives": [
+    {
+      "id": "ALP-LOOP-ALLOC",
+      "name": "Loop Scope Object Allocation Primitive",
+      "description": "Abstract syntax representation of object literal or closure instantiations bounded within repetitive loop or render iteration AST blocks.",
+      "astNodeType": [
+        "ForStatement",
+        "WhileStatement",
+        "DoWhileStatement",
+        "CallExpression[callee.name=\"map|forEach|reduce|filter\"]",
+        "JSXElement"
+      ],
+      "semanticConstraint": "Instantiation of non-primitive values within cyclic control structures or render loops without hoisting outer reference."
+    },
+    {
+      "id": "ALP-LAYOUT-ELEMENT",
+      "name": "Un-dimensioned Layout Element Primitive",
+      "description": "Abstract syntax representation of visual media or structural container elements missing explicit aspect-ratio or dimension declarations.",
+      "astNodeType": [
+        "JSXElement[name=\"img|video|iframe|embed\"]",
+        "CallExpression[callee.name=\"createElement\"]",
+        "HTMLImageElement"
+      ],
+      "semanticConstraint": "AST node definition lacking width, height, aspect-ratio, or structural CSS dimension properties."
+    },
+    {
+      "id": "ALP-ASYNC-DISPOSAL",
+      "name": "Asynchronous Target Listener Registration Primitive",
+      "description": "Abstract syntax representation of long-lived event listeners or observable stream subscriptions bound inside scope lifecycle routines.",
+      "astNodeType": [
+        "CallExpression[callee.property.name=\"addEventListener|subscribe|setInterval\"]"
+      ],
+      "semanticConstraint": "Event/stream registration missing a paired removeEventListener/unsubscribe invocation in teardown/unmount AST scope."
+    },
+    {
+      "id": "ALP-STATIC-IMPORT",
+      "name": "Top-Level Synchronous Module Import Primitive",
+      "description": "Abstract syntax representation of static module import statements bringing heavy dependencies into the main evaluation graph.",
+      "astNodeType": [
+        "ImportDeclaration",
+        "CallExpression[callee.name=\"require\"]"
+      ],
+      "semanticConstraint": "Synchronous import statement referencing non-critical or conditionally executed module targets."
+    },
+    {
+      "id": "ALP-EVENT-KEYBOARD",
+      "name": "Pointer Event Binding without Keyboard Event Primitive",
+      "description": "Abstract syntax representation of pointer click listeners attached to AST nodes.",
+      "astNodeType": [
+        "JSXAttribute[name=\"onClick|onMouseDown|onPointerDown\"]",
+        "CallExpression[callee.property.name=\"addEventListener\"]"
+      ],
+      "semanticConstraint": "Pointer event listener attached to non-native interactive element AST node without corresponding onKeyDown/onKeyPress or tabindex."
+    },
+    {
+      "id": "ALP-ARIA-NAMING",
+      "name": "Custom Interactive Component Declaration Primitive",
+      "description": "Abstract syntax representation of user-defined interactive component or element AST nodes.",
+      "astNodeType": [
+        "JSXElement",
+        "CallExpression[callee.name=\"h|createElement\"]"
+      ],
+      "semanticConstraint": "Custom interactive component node lacking explicit role, aria-label, or aria-labelledby attributes."
+    },
+    {
+      "id": "ALP-LIVE-REGION",
+      "name": "Asynchronous DOM Mutation Announcer Primitive",
+      "description": "Abstract syntax representation of dynamically injected or updated DOM container AST nodes.",
+      "astNodeType": [
+        "JSXElement",
+        "CallExpression[callee.property.name=\"appendChild|insertBefore|setAttribute\"]"
+      ],
+      "semanticConstraint": "Dynamic status or feedback container mutation missing aria-live=\"polite|assertive\" or role=\"status|alert\"."
+    },
+    {
+      "id": "ALP-FOCUS-TRAVERSAL",
+      "name": "Dynamic Element Focus Traversal Primitive",
+      "description": "Abstract syntax representation of dynamic DOM node insertions, removals, or focus target mutations.",
+      "astNodeType": [
+        "JSXElement[name=\"Modal|Dialog|Overlay|Drawer\"]",
+        "CallExpression[callee.property.name=\"focus\"]"
+      ],
+      "semanticConstraint": "Modal or route transition unmounting currently focused element without explicit programmatic focus redirection."
+    }
+  ],
+  "universalASTQueryTemplates": [
+    {
+      "alpId": "ALP-LOOP-ALLOC",
+      "selectorString": "CallExpression[callee.property.name=\"map|forEach|reduce|filter\"] > ArrowFunctionExpression ObjectExpression",
+      "targetFrameworks": [
+        "GENERIC_ESTREE",
+        "REACT_JSX"
+      ],
+      "nodeTypes": [
+        "ObjectExpression",
+        "ArrayExpression",
+        "ArrowFunctionExpression"
+      ],
+      "attributeRequirements": {
+        "scopeType": "LOOP"
+      }
+    },
+    {
+      "alpId": "ALP-LAYOUT-ELEMENT",
+      "selectorString": "JSXElement[openingElement.name.name=\"img|video|iframe\"]:not([width]):not([height])",
+      "targetFrameworks": [
+        "REACT_JSX",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE"
+      ],
+      "nodeTypes": [
+        "JSXElement",
+        "VElement",
+        "Element$1"
+      ],
+      "attributeRequirements": {
+        "missingAttributes": [
+          "width",
+          "height"
+        ]
+      }
+    },
+    {
+      "alpId": "ALP-ASYNC-DISPOSAL",
+      "selectorString": "CallExpression[callee.property.name=\"addEventListener\"]",
+      "targetFrameworks": [
+        "GENERIC_ESTREE",
+        "REACT_JSX",
+        "VUE_SFC"
+      ],
+      "nodeTypes": [
+        "CallExpression"
+      ],
+      "attributeRequirements": {
+        "requiresDisposalPair": true
+      }
+    },
+    {
+      "alpId": "ALP-STATIC-IMPORT",
+      "selectorString": "ImportDeclaration",
+      "targetFrameworks": [
+        "GENERIC_ESTREE",
+        "REACT_JSX",
+        "VUE_SFC"
+      ],
+      "nodeTypes": [
+        "ImportDeclaration"
+      ],
+      "attributeRequirements": {
+        "referencedInConditional": true
+      }
+    },
+    {
+      "alpId": "ALP-EVENT-KEYBOARD",
+      "selectorString": "JSXElement[openingElement.name.name=\"div|span|section\"][onClick]:not([onKeyDown])",
+      "targetFrameworks": [
+        "REACT_JSX",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE"
+      ],
+      "nodeTypes": [
+        "JSXElement",
+        "VElement",
+        "Element$1"
+      ],
+      "attributeRequirements": {
+        "hasPointerListener": true,
+        "missingKeyboardListener": true
+      }
+    },
+    {
+      "alpId": "ALP-ARIA-NAMING",
+      "selectorString": "JSXElement[openingElement.name.name=/^[A-Z]/]:not([role]):not([aria-label]):not([aria-labelledby])",
+      "targetFrameworks": [
+        "REACT_JSX",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE"
+      ],
+      "nodeTypes": [
+        "JSXElement",
+        "VElement",
+        "Element$1"
+      ],
+      "attributeRequirements": {
+        "missingRole": true,
+        "missingAccessibleName": true
+      }
+    },
+    {
+      "alpId": "ALP-LIVE-REGION",
+      "selectorString": "JSXElement[openingElement.name.name=\"div|span\"][isDynamicMutation]:not([aria-live]):not([role=\"status|alert\"])",
+      "targetFrameworks": [
+        "REACT_JSX",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE"
+      ],
+      "nodeTypes": [
+        "JSXElement",
+        "VElement",
+        "Element$1"
+      ],
+      "attributeRequirements": {
+        "isDynamicMutation": true,
+        "missingLiveRegion": true
+      }
+    },
+    {
+      "alpId": "ALP-FOCUS-TRAVERSAL",
+      "selectorString": "JSXElement[openingElement.name.name=\"Modal|Dialog|Overlay\"]:not([trapFocus])",
+      "targetFrameworks": [
+        "REACT_JSX",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE"
+      ],
+      "nodeTypes": [
+        "JSXElement",
+        "VElement",
+        "Element$1"
+      ],
+      "attributeRequirements": {
+        "isOverlay": true,
+        "missingFocusContainment": true
+      }
+    }
+  ],
+  "frameworkASTTranslations": [
+    {
+      "framework": "REACT_JSX",
+      "nativeNodeType": "JSXElement",
+      "targetALPId": "ALP-EVENT-KEYBOARD",
+      "attributeMapping": {
+        "clickListener": "onClick",
+        "keyboardListener": "onKeyDown",
+        "tabIndex": "tabIndex"
+      },
+      "elementNameExtractor": "node.openingElement.name.name",
+      "listenerExtractor": "node.openingElement.attributes"
+    },
+    {
+      "framework": "REACT_JSX",
+      "nativeNodeType": "JSXElement",
+      "targetALPId": "ALP-LAYOUT-ELEMENT",
+      "attributeMapping": {
+        "width": "width",
+        "height": "height",
+        "style": "style"
+      },
+      "elementNameExtractor": "node.openingElement.name.name",
+      "listenerExtractor": "node.openingElement.attributes"
+    },
+    {
+      "framework": "VUE_SFC",
+      "nativeNodeType": "VElement",
+      "targetALPId": "ALP-EVENT-KEYBOARD",
+      "attributeMapping": {
+        "clickListener": "v-on:click",
+        "keyboardListener": "v-on:keydown",
+        "tabIndex": "tabindex"
+      },
+      "elementNameExtractor": "node.name",
+      "listenerExtractor": "node.directives"
+    },
+    {
+      "framework": "VUE_SFC",
+      "nativeNodeType": "VElement",
+      "targetALPId": "ALP-LAYOUT-ELEMENT",
+      "attributeMapping": {
+        "width": "width",
+        "height": "height",
+        "style": "style"
+      },
+      "elementNameExtractor": "node.name",
+      "listenerExtractor": "node.startTag.attributes"
+    },
+    {
+      "framework": "ANGULAR_TEMPLATE",
+      "nativeNodeType": "Element$1",
+      "targetALPId": "ALP-EVENT-KEYBOARD",
+      "attributeMapping": {
+        "clickListener": "(click)",
+        "keyboardListener": "(keydown)",
+        "tabIndex": "tabindex"
+      },
+      "elementNameExtractor": "node.name",
+      "listenerExtractor": "node.outputs"
+    },
+    {
+      "framework": "GENERIC_ESTREE",
+      "nativeNodeType": "CallExpression",
+      "targetALPId": "ALP-ASYNC-DISPOSAL",
+      "attributeMapping": {
+        "method": "callee.property.name"
+      },
+      "elementNameExtractor": "node.callee.name",
+      "listenerExtractor": "node.arguments"
+    }
+  ],
+  "rules": [
+    {
+      "id": "FIGM-PERF-01",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "alpId": "ALP-LOOP-ALLOC",
+      "name": "Invariant Object Allocation in Iteration Scopes",
+      "severity": "HIGH",
+      "description": "Objects, arrays, functions, or regex literals must not be instantiated inside loops or render iteration routines.",
+      "formalMathematicalPredicate": "P_PERF_01(n) <=> (type(n) in {ObjectExpression, ArrayExpression, ArrowFunctionExpression}) AND exists a in Ancestors(n): (Scope(a) in {LOOP, RENDER}) AND NOT UsesLoopVar(n, a)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - INVARIANT_ALLOCATIONS",
+        "title": "ISO 25010 Quality Model for INVARIANT_ALLOCATIONS"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "ForStatement",
+          "WhileStatement",
+          "DoWhileStatement",
+          "CallExpression[callee.name=\"map|forEach|reduce|filter\"]",
+          "JSXElement"
+        ],
+        "universalASTSelector": "CallExpression[callee.property.name=\"map|forEach|reduce|filter\"] > ArrowFunctionExpression ObjectExpression",
+        "scopeRequirements": "Instantiation of non-primitive values within cyclic control structures or render loops without hoisting outer reference.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "function renderList(items) {\n  return items.map(item => {\n    const config = { theme: 'dark', padding: 10 }; // Non-compliant: allocated every iteration\n    return transform(item, config);\n  });\n}",
+        "compliant": "const DEFAULT_CONFIG = Object.freeze({ theme: 'dark', padding: 10 }); // Compliant: hoisted invariant\nfunction renderList(items) {\n  return items.map(item => transform(item, DEFAULT_CONFIG));\n}"
+      },
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations."
+    },
+    {
+      "id": "FIGM-PERF-02",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "alpId": "ALP-LAYOUT-ELEMENT",
+      "name": "Un-dimensioned Dynamic Layout Elements",
+      "severity": "HIGH",
+      "description": "Dynamic media and layout container elements must include explicit dimensions or aspect-ratio attributes.",
+      "formalMathematicalPredicate": "P_PERF_02(n) <=> IsVisualElement(n) AND NOT (HasAttr(n, \"width\") AND HasAttr(n, \"height\")) AND NOT HasStyle(n, \"aspectRatio\")",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - LAYOUT_INSTABILITY",
+        "title": "ISO 25010 Quality Model for LAYOUT_INSTABILITY"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXElement[name=\"img|video|iframe|embed\"]",
+          "CallExpression[callee.name=\"createElement\"]",
+          "HTMLImageElement"
+        ],
+        "universalASTSelector": "JSXElement[openingElement.name.name=\"img|video|iframe\"]:not([width]):not([height])",
+        "scopeRequirements": "AST node definition lacking width, height, aspect-ratio, or structural CSS dimension properties.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "<img src={userAvatarUrl} alt=\"User Avatar\" className=\"avatar\" /> // Non-compliant: missing width/height attributes",
+        "compliant": "<img src={userAvatarUrl} alt=\"User Avatar\" width={48} height={48} style={{ aspectRatio: '1/1' }} className=\"avatar\" />"
+      },
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements."
+    },
+    {
+      "id": "FIGM-PERF-03",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "alpId": "ALP-ASYNC-DISPOSAL",
+      "name": "Unbounded Event Listener Disposal",
+      "severity": "CRITICAL",
+      "description": "Target event listeners registered within component lifecycle scopes must have corresponding disposal handlers.",
+      "formalMathematicalPredicate": "P_PERF_03(n) <=> IsListenerRegistration(n) AND NOT exists d in TeardownScope(Scope(n)): IsPairedRemoval(n, d)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - ASYNC_LEAKS",
+        "title": "ISO 25010 Quality Model for ASYNC_LEAKS"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "CallExpression[callee.property.name=\"addEventListener|subscribe|setInterval\"]"
+        ],
+        "universalASTSelector": "CallExpression[callee.property.name=\"addEventListener\"]",
+        "scopeRequirements": "Event/stream registration missing a paired removeEventListener/unsubscribe invocation in teardown/unmount AST scope.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "function setupResize() {\n  window.addEventListener('resize', handleResize); // Non-compliant: missing teardown\n}",
+        "compliant": "function setupResize() {\n  window.addEventListener('resize', handleResize);\n  return () => window.removeEventListener('resize', handleResize); // Compliant: disposal returned\n}"
+      },
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine."
+    },
+    {
+      "id": "FIGM-PERF-04",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "alpId": "ALP-STATIC-IMPORT",
+      "name": "Static Imports in Deferred Execution Paths",
+      "severity": "MEDIUM",
+      "description": "Modules used only in conditional or deferred execution branches must be dynamically imported.",
+      "formalMathematicalPredicate": "P_PERF_04(n) <=> (type(n) == ImportDeclaration) AND exists c in N: (IsConditionalScope(c) AND ReferencesModule(c, n))",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - BUNDLE_SIZE",
+        "title": "ISO 25010 Quality Model for BUNDLE_SIZE"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "ImportDeclaration",
+          "CallExpression[callee.name=\"require\"]"
+        ],
+        "universalASTSelector": "ImportDeclaration",
+        "scopeRequirements": "Synchronous import statement referencing non-critical or conditionally executed module targets.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "import HeavyChart from 'heavy-chart-library'; // Non-compliant: top-level static import\nfunction showReport(shouldDisplay) {\n  if (shouldDisplay) HeavyChart.render();\n}",
+        "compliant": "async function showReport(shouldDisplay) {\n  if (shouldDisplay) {\n    const { default: HeavyChart } = await import('heavy-chart-library'); // Compliant: lazy load\n    HeavyChart.render();\n  }\n}"
+      },
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths."
+    },
+    {
+      "id": "FIGM-A11Y-01",
+      "domain": "ACCESSIBILITY",
+      "concern": "KEYBOARD_ACCESSIBILITY",
+      "alpId": "ALP-EVENT-KEYBOARD",
+      "name": "Keyboard Event Parity on Pointer Handlers",
+      "severity": "CRITICAL",
+      "description": "Non-interactive elements with pointer click listeners must provide keyboard listeners (onKeyDown/onKeyPress) and focusability.",
+      "formalMathematicalPredicate": "P_A11Y_01(n) <=> (IsNonInteractiveElement(n) AND HasPointerHandler(n)) AND NOT (HasKeyboardHandler(n) AND HasTabIndex(n))",
+      "standardTraceability": {
+        "standard": "WCAG_2_2",
+        "clause": "SC 2.1.1",
+        "title": "KEYBOARD_ACCESSIBILITY",
+        "level": "A"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXAttribute[name=\"onClick|onMouseDown|onPointerDown\"]",
+          "CallExpression[callee.property.name=\"addEventListener\"]"
+        ],
+        "universalASTSelector": "JSXElement[openingElement.name.name=\"div|span|section\"][onClick]:not([onKeyDown])",
+        "scopeRequirements": "Pointer event listener attached to non-native interactive element AST node without corresponding onKeyDown/onKeyPress or tabindex.",
+        "evaluatorType": "CFG_REACHABILITY"
+      },
+      "examples": {
+        "nonCompliant": "<div onClick={togglePanel}>Toggle Panel</div> // Non-compliant: non-interactive div with click only",
+        "compliant": "<button type=\"button\" onClick={togglePanel}>Toggle Panel</button> // Compliant: native button with built-in keyboard support"
+      },
+      "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler for Enter and Space keys."
+    },
+    {
+      "id": "FIGM-A11Y-02",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "alpId": "ALP-ARIA-NAMING",
+      "name": "Accessible Name and Role for Custom UI Controls",
+      "severity": "HIGH",
+      "description": "Custom UI controls must explicitly define an ARIA role and an accessible name (aria-label or aria-labelledby).",
+      "formalMathematicalPredicate": "P_A11Y_02(n) <=> IsCustomControl(n) AND NOT (HasAttr(n, \"role\") AND (HasAttr(n, \"aria-label\") OR HasAttr(n, \"aria-labelledby\")))",
+      "standardTraceability": {
+        "standard": "WCAG_2_2",
+        "clause": "SC 4.1.2",
+        "title": "NAME_ROLE_VALUE",
+        "level": "A"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXElement",
+          "CallExpression[callee.name=\"h|createElement\"]"
+        ],
+        "universalASTSelector": "JSXElement[openingElement.name.name=/^[A-Z]/]:not([role]):not([aria-label]):not([aria-labelledby])",
+        "scopeRequirements": "Custom interactive component node lacking explicit role, aria-label, or aria-labelledby attributes.",
+        "evaluatorType": "CFG_REACHABILITY"
+      },
+      "examples": {
+        "nonCompliant": "<div tabindex=\"0\" onClick={handleSelect}>Custom Select</div> // Non-compliant: missing role and ARIA label",
+        "compliant": "<div role=\"combobox\" aria-label=\"Choose Option\" aria-expanded={isOpen} tabindex=\"0\" onClick={handleSelect}>Custom Select</div>"
+      },
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby."
+    },
+    {
+      "id": "FIGM-A11Y-03",
+      "domain": "ACCESSIBILITY",
+      "concern": "STATUS_MESSAGES",
+      "alpId": "ALP-LIVE-REGION",
+      "name": "ARIA Live Announcer for Dynamic Mutations",
+      "severity": "HIGH",
+      "description": "Containers populated with dynamic status messages or asynchronous feedback must possess ARIA live attributes.",
+      "formalMathematicalPredicate": "P_A11Y_03(n) <=> IsDynamicStatusContainer(n) AND NOT (HasAttr(n, \"aria-live\") OR Role(n) in {\"status\", \"alert\"})",
+      "standardTraceability": {
+        "standard": "WCAG_2_2",
+        "clause": "SC 4.1.3",
+        "title": "STATUS_MESSAGES",
+        "level": "AA"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXElement",
+          "CallExpression[callee.property.name=\"appendChild|insertBefore|setAttribute\"]"
+        ],
+        "universalASTSelector": "JSXElement[openingElement.name.name=\"div|span\"][isDynamicMutation]:not([aria-live]):not([role=\"status|alert\"])",
+        "scopeRequirements": "Dynamic status or feedback container mutation missing aria-live=\"polite|assertive\" or role=\"status|alert\".",
+        "evaluatorType": "CFG_REACHABILITY"
+      },
+      "examples": {
+        "nonCompliant": "<div className=\"status-banner\">{statusText}</div> // Non-compliant: dynamic status without live region",
+        "compliant": "<div className=\"status-banner\" role=\"status\" aria-live=\"polite\">{statusText}</div> // Compliant: ARIA live region"
+      },
+      "remediation": "Add role=\"status\" or aria-live=\"polite\" (or \"assertive\" for critical alerts) to dynamic output containers."
+    },
+    {
+      "id": "FIGM-A11Y-04",
+      "domain": "ACCESSIBILITY",
+      "concern": "FOCUS_ORDER",
+      "alpId": "ALP-FOCUS-TRAVERSAL",
+      "name": "Dynamic Focus Containment and Traversal",
+      "severity": "CRITICAL",
+      "description": "Modal overlays and dynamic DOM insertions must trap keyboard focus and restore focus to trigger element upon exit.",
+      "formalMathematicalPredicate": "P_A11Y_04(n) <=> IsOverlayOrModal(n) AND NOT (HasFocusTrap(n) AND RestoresFocusOnUnmount(n))",
+      "standardTraceability": {
+        "standard": "WCAG_2_2",
+        "clause": "SC 2.4.3",
+        "title": "FOCUS_ORDER",
+        "level": "A"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXElement[name=\"Modal|Dialog|Overlay|Drawer\"]",
+          "CallExpression[callee.property.name=\"focus\"]"
+        ],
+        "universalASTSelector": "JSXElement[openingElement.name.name=\"Modal|Dialog|Overlay\"]:not([trapFocus])",
+        "scopeRequirements": "Modal or route transition unmounting currently focused element without explicit programmatic focus redirection.",
+        "evaluatorType": "CFG_REACHABILITY"
+      },
+      "examples": {
+        "nonCompliant": "function closeModal() {\n  setIsModalOpen(false); // Non-compliant: modal closes without refocusing trigger element\n}",
+        "compliant": "function closeModal() {\n  setIsModalOpen(false);\n  triggerElementRef.current?.focus(); // Compliant: restores focus to trigger element\n}"
+      },
+      "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically upon unmount."
+    }
+  ]
+}

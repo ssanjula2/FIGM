@@ -1,0 +1,52 @@
+% Chapter 3: System Architecture & Meta-Model
+\chapter{System Architecture \& Framework-Independent Meta-Model}
+\label{ch:architecture}
+
+\section{The 4-Layer Hierarchy}
+The Framework-Independent Guideline Model (FIGM) establishes a 4-layer hierarchical abstraction architecture:
+\begin{equation}
+\text{Quality Domain (Layer 1)} \longrightarrow \text{Architectural Concern (Layer 2)} \longrightarrow \text{Abstract Language Primitive (Layer 3)} \longrightarrow \text{Guideline Rule (Layer 4)}
+\end{equation}
+
+\section{Abstract Language Primitives (ALPs)}
+Table~\ref{tab:figm_alps} details the 8 core Abstract Language Primitives (ALPs) spanning AST constructs across React, Angular, Vue, and Svelte single-page application paradigms.
+
+\begin{table}[htbp]
+\centering
+\caption{FIGM Core Abstract Language Primitives (ALPs)}
+\label{tab:figm_alps}
+\begin{tabular}{lll}
+\toprule
+\textbf{ALP ID} & \textbf{Primitive Name} & \textbf{Target AST Constructs} \\
+\midrule
+ALP-LOOP-ALLOC & Loop Scope Object Allocation Primitive & ForStatement, WhileStatement \\
+ALP-LAYOUT-ELEMENT & Un-dimensioned Layout Element Primitive & JSXElement[name="img|video|iframe|embed"], CallExpression[callee.name="createElement"] \\
+ALP-ASYNC-DISPOSAL & Asynchronous Target Listener Registration Primitive & CallExpression[callee.property.name="addEventListener|subscribe|setInterval"] \\
+ALP-STATIC-IMPORT & Top-Level Synchronous Module Import Primitive & ImportDeclaration, CallExpression[callee.name="require"] \\
+ALP-INLINE-CALLBACK & Inline Callback Declaration Primitive & ArrowFunctionExpression, FunctionExpression \\
+ALP-STORAGE-LOOP & Synchronous Storage Access Loop Primitive & CallExpression[callee.object.name="localStorage|sessionStorage"] \\
+ALP-EVENT-KEYBOARD & Pointer Event Binding without Keyboard Event Primitive & JSXAttribute[name="onClick|onMouseDown|onPointerDown"], CallExpression[callee.property.name="addEventListener"] \\
+ALP-ARIA-NAMING & Custom Interactive Component Declaration Primitive & JSXElement, CallExpression[callee.name="h|createElement"] \\
+ALP-LIVE-REGION & Asynchronous DOM Mutation Announcer Primitive & JSXElement, CallExpression[callee.property.name="appendChild|insertBefore|setAttribute"] \\
+ALP-FOCUS-TRAVERSAL & Dynamic Element Focus Traversal Primitive & JSXElement[name="Modal|Dialog|Overlay|Drawer"], CallExpression[callee.property.name="focus"] \\
+ALP-INPUT-LABEL & Form Input Control Label Association Primitive & JSXElement[name="input|textarea|select"] \\
+ALP-POSITIVE-TABINDEX & Positive TabIndex Focus Navigation Order Primitive & JSXAttribute[name="tabIndex|tabindex"] \\
+ALP-NEXT-CLIENT-HOOK & Client Hook Invocation Without Directive Primitive & CallExpression[callee.name="useState|useEffect|useContext|useRef"] \\
+ALP-NEXT-DYNAMIC & Heavy Component Load Primitive & ImportDeclaration \\
+ALP-NEXT-REVALIDATE & Route Segment Revalidation Config Primitive & ExportNamedDeclaration \\
+ALP-NEXT-FONT & External Font Loading Primitive & JSXElement[name="link"] \\
+ALP-REACT-USEMEMO & Derived Computation In Render Primitive & CallExpression[callee.property.name="sort|filter|reduce"] \\
+ALP-REACT-KEY-INDEX & Array Index Key Assignment Primitive & JSXAttribute[name="key"] \\
+ALP-REACT-MUTATION & Direct React State Mutation Primitive & ExpressionStatement \\
+ALP-REACT-USECALLBACK & Inline Prop Function Primitive & JSXAttribute[name="onClick|onChange"] \\
+ALP-ANG-UNSUBSCRIBE & Angular Unsubscribed Observable Primitive & CallExpression[callee.property.name="subscribe"] \\
+ALP-ANG-ONPUSH & Angular Component Change Detection Primitive & ClassDeclaration \\
+ALP-ANG-TRACKBY & Angular *ngFor Directive Primitive & JSXAttribute[name="*ngFor"] \\
+ALP-ANG-TEMPLATE-FN & Angular Template Function Invocation Primitive & Interpolation \\
+ALP-ANG-RENDERER2 & Angular Direct DOM Access Primitive & MemberExpression \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{AST Normalization Protocol}
+FIGM parses framework templates into unified ESTree-compatible nodes via resilient source parsing, converting JSX, Vue SFC templates, and Angular template expressions into normalized AST nodes for static evaluation.

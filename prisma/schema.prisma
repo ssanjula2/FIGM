@@ -1,0 +1,259 @@
+// =============================================================================
+// Framework-Independent Guideline Model (FIGM)
+// Prisma Schema for Supabase PostgreSQL Production SaaS Platform
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  DEVELOPER
+  AUDITOR
+}
+
+enum ProjectStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum NotificationType {
+  SCAN_SUCCESS
+  SCAN_FAILED
+  AI_FINISHED
+  EXPORT_FINISHED
+  SECURITY_ALERT
+}
+
+enum AuditAction {
+  REGISTER
+  LOGIN
+  LOGOUT
+  REFRESH_TOKEN
+  FORGOT_PASSWORD
+  RESET_PASSWORD
+  ACCESS_DENIED
+  CREATE_PROJECT
+  DELETE_PROJECT
+  SCAN_RUN
+}
+
+enum ExportFormat {
+  PDF
+  JSON
+  CSV
+  MARKDOWN
+}
+
+model User {
+  id               String      @id @default(uuid())
+  email            String      @unique
+  passwordHash     String      @map("password_hash")
+  fullName         String      @map("full_name")
+  role             UserRole    @default(DEVELOPER)
+  resetToken       String?     @map("reset_token")
+  resetTokenExpiry DateTime?   @map("reset_token_expiry")
+  refreshToken     String?     @map("refresh_token")
+  apiKey           String?     @unique @map("api_key")
+  avatarUrl        String?     @map("avatar_url")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+  lastLoginAt      DateTime?   @map("last_login_at")
+
+  projects            Project[]
+  scanReports         ScanReport[]
+  notifications       Notification[]
+  auditLogs           AuditLog[]
+  settings            Settings?
+  apiKeys             ApiKey[]
+  savedReports        SavedReport[]
+  researchEvaluations ResearchEvaluation[]
+  aiHistories         AiHistory[]
+  exportHistories     ExportHistory[]
+
+  @@map("users")
+}
+
+model Project {
+  id           String        @id @default(uuid())
+  userId       String        @map("user_id")
+  name         String
+  description  String        @default("")
+  framework    String        @default("React")
+  repoUrl      String        @default("") @map("repo_url")
+  status       ProjectStatus @default(ACTIVE)
+  qualityScore Int           @default(100) @map("quality_score")
+  totalScans   Int           @default(0) @map("total_scans")
+  lastScanAt   DateTime?     @map("last_scan_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scanReports ScanReport[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("projects")
+}
+
+model ScanReport {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  projectId     String?  @map("project_id")
+  fileName      String   @map("file_name")
+  framework     String   @default("React")
+  repositoryUrl String   @default("Local Repository") @map("repository_url")
+  scanTimeMs    Float    @default(0.0) @map("scan_time_ms")
+  memoryUsageMb Float    @default(0.0) @map("memory_usage_mb")
+  qualityScore  Int      @default(100) @map("quality_score")
+  ruleCount     Int      @default(0) @map("rule_count")
+  aiFixCount    Int      @default(0) @map("ai_fix_count")
+  diagnostics   Json     @default("[]")
+  isFavorite    Boolean  @default(false) @map("is_favorite")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project      Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  savedReports SavedReport[]
+  aiHistories  AiHistory[]
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([createdAt(sort: Desc)])
+  @@map("scan_reports")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String           @map("user_id")
+  type      NotificationType
+  title     String
+  message   String
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([read])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String      @id @default(uuid())
+  userId    String?     @map("user_id")
+  email     String?
+  action    AuditAction
+  ipAddress String      @map("ip_address")
+  userAgent String      @map("user_agent")
+  status    String      @default("SUCCESS")
+  details   String?
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
+
+model Settings {
+  id           String   @id @default(uuid())
+  userId       String   @unique @map("user_id")
+  theme        String   @default("dark")
+  autoSave     Boolean  @default(true) @map("auto_save")
+  autoScan     Boolean  @default(true) @map("auto_scan")
+  aiModel      String   @default("gemini-2.5-flash") @map("ai_model")
+  exportFormat String   @default("PDF") @map("export_format")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("settings")
+}
+
+model ApiKey {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  key       String    @unique
+  name      String    @default("Default API Key")
+  lastUsed  DateTime? @map("last_used")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("api_keys")
+}
+
+model SavedReport {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  scanReportId String   @map("scan_report_id")
+  notes        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scanReport ScanReport @relation(fields: [scanReportId], references: [id], onDelete: Cascade)
+
+  @@map("saved_reports")
+}
+
+model ResearchEvaluation {
+  id             String   @id @default(uuid())
+  userId         String?  @map("user_id")
+  datasetName    String   @map("dataset_name")
+  sampleCount    Int      @map("sample_count")
+  precisionScore Float    @map("precision_score")
+  recallScore    Float    @map("recall_score")
+  f1Score        Float    @map("f1_score")
+  accuracyScore  Float    @map("accuracy_score")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("research_evaluations")
+}
+
+model FrameworkBenchmark {
+  id             String   @id @default(uuid())
+  framework      String
+  sampleCount    Int      @map("sample_count")
+  avgLatencyMs   Float    @map("avg_latency_ms")
+  avgMemoryMb    Float    @map("avg_memory_mb")
+  avgScore       Float    @map("avg_score")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("framework_benchmarks")
+}
+
+model AiHistory {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  scanReportId  String?  @map("scan_report_id")
+  ruleId        String   @map("rule_id")
+  patchContent  String   @map("patch_content")
+  applied       Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scanReport ScanReport? @relation(fields: [scanReportId], references: [id], onDelete: SetNull)
+
+  @@map("ai_history")
+}
+
+model ExportHistory {
+  id        String       @id @default(uuid())
+  userId    String       @map("user_id")
+  fileName  String       @map("file_name")
+  format    ExportFormat
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("export_history")
+}
