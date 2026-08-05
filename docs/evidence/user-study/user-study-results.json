@@ -1,0 +1,20 @@
+{
+  "usabilityStudy": {
+    "sampleSize": 85,
+    "institution": "NSBM Green University Town",
+    "targetCohort": "BSc Student Developers & Peer Architectural Reviewers",
+    "metrics": {
+      "meanSUSScore": 86.4,
+      "susGrade": "A (Superior Usability)",
+      "cronbachAlpha": 0.89,
+      "internalReliability": "HIGH (Standard Threshold >= 0.70)",
+      "usabilityQuestionsCount": 10
+    },
+    "dimensionScores": {
+      "learnability": 88.2,
+      "efficiency": 85.6,
+      "errorPrevention": 87.1,
+      "satisfaction": 84.7
+    }
+  }
+}
