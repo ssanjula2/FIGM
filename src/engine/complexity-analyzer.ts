@@ -53,6 +53,14 @@ export class ComplexityAnalyzer {
         cognitiveScore += 1 + Math.max(0, depth - 1);
       }
 
+      const snippet = node.attributes?.codeSnippet || node.name || '';
+      if (typeof snippet === 'string') {
+        if (snippet.includes('if (') || snippet.includes('else if') || snippet.includes('switch') || snippet.includes('for (') || snippet.includes('while (')) {
+          decisionPoints++;
+          cognitiveScore += 1;
+        }
+      }
+
       if (type === 'LogicalExpression' && (node.operator === '&&' || node.operator === '||' || node.operator === '??')) {
         decisionPoints++;
         cognitiveScore++;
@@ -74,7 +82,7 @@ export class ComplexityAnalyzer {
       }
     };
 
-    traverse(ast, 0);
+    traverse(ast.program || ast, 0);
 
     const cyclomaticComplexity = decisionPoints + 1;
 
