@@ -50,6 +50,23 @@ export class SearchPanelComponent {
   onSearch() {}
 }`;
 
+const SAMPLE_VUE_CODE = `<template>
+  <div className="vue-profile">
+    <!-- Issue 1: Image missing width and height attributes -->
+    <img src="/assets/avatar.png" alt="User Avatar" />
+
+    <!-- Issue 2: Clickable div missing keyboard listener -->
+    <div className="action-btn" @click="handleSave">
+      <span>Save User Settings</span>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+const handleSave = () => { console.log('Saved'); };
+</script>`;
+
 const SAMPLE_NEXTJS_CODE = `import Image from 'next/image';
 
 export default function DashboardPage({ data }) {
@@ -308,6 +325,13 @@ export default function LiveScanPage() {
                 style={{ padding: '4px 10px', fontSize: '11px', color: '#ef4444' }}
               >
                 Angular
+              </button>
+              <button
+                onClick={() => loadPreset(SAMPLE_VUE_CODE, 'UserProfile.vue')}
+                className="btn-secondary"
+                style={{ padding: '4px 10px', fontSize: '11px', color: '#10b981' }}
+              >
+                Vue
               </button>
             </div>
           </div>

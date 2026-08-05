@@ -2,7 +2,7 @@
 
 **System Name**: Framework-Independent Guideline Model (FIGM) Code Inspector  
 **Evaluator**: Independent Software Verification Engineer  
-**Timestamp**: 2026-08-05T08:56:32.851Z  
+**Timestamp**: 2026-08-05T15:05:37.651Z  
 **Total Rules Evaluated**: 25 / 23 (100% Coverage)  
 
 ---
@@ -25,15 +25,15 @@
 
 | Rule ID | Rule Name | Target Framework | Sample A (Violation) | Sample B (Clean) | Verification | Confidence | AI Fix Valid | Execution Time |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `FIGM-PERF-01` | Invariant Object Allocation in Iteration Scopes | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 95% | ✅ Valid | 2.48 ms |
-| `FIGM-PERF-02` | Un-dimensioned Dynamic Layout Elements | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 0.29 ms |
-| `FIGM-PERF-03` | Unbounded Event Listener Disposal | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 98% | ✅ Valid | 0.27 ms |
+| `FIGM-PERF-01` | Invariant Object Allocation in Iteration Scopes | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 95% | ✅ Valid | 1.84 ms |
+| `FIGM-PERF-02` | Un-dimensioned Dynamic Layout Elements | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 0.25 ms |
+| `FIGM-PERF-03` | Unbounded Event Listener Disposal | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 98% | ✅ Valid | 0.26 ms |
 | `FIGM-PERF-04` | Static Imports in Deferred Execution Paths | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 88% | ✅ Valid | 0.15 ms |
-| `FIGM-PERF-05` | Inline Anonymous Callbacks in Render Loops | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 85% | ❌ Failed | 0.2 ms |
-| `FIGM-PERF-06` | Synchronous Web Storage Access in Loop Scope | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 90% | ❌ Failed | 0.13 ms |
+| `FIGM-PERF-05` | Inline Anonymous Callbacks in Render Loops | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 85% | ❌ Failed | 0.18 ms |
+| `FIGM-PERF-06` | Synchronous Web Storage Access in Loop Scope | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 90% | ❌ Failed | 0.12 ms |
 | `FIGM-A11Y-01` | Keyboard Event Parity on Pointer Handlers | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 96% | ✅ Valid | 0.1 ms |
-| `FIGM-A11Y-02` | Accessible Name and Role for Custom Controls | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 94% | ✅ Valid | 0.13 ms |
-| `FIGM-A11Y-03` | ARIA Live Announcer for Dynamic Mutations | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 91% | ✅ Valid | 0.17 ms |
+| `FIGM-A11Y-02` | Accessible Name and Role for Custom Controls | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 94% | ✅ Valid | 0.12 ms |
+| `FIGM-A11Y-03` | ARIA Live Announcer for Dynamic Mutations | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 91% | ✅ Valid | 0.16 ms |
 | `FIGM-A11Y-04` | Dynamic Focus Containment and Traversal | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 94% | ✅ Valid | 0.1 ms |
 | `FIGM-A11Y-05` | Form Input Control Label Association | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 97% | ❌ Failed | 0.1 ms |
 | `FIGM-A11Y-06` | Avoid Positive TabIndex Values (>0) | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 93% | ❌ Failed | 0.1 ms |
