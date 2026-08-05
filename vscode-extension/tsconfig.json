@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "outDir": "out",
+    "lib": ["ES2022"],
+    "sourceMap": true,
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmitOnError": false
+  },
+  "include": [
+    "src/**/*",
+    "../src/engine/rule-execution-engine.ts",
+    "../src/engine/remediation-engine.ts",
+    "../src/matrix/four-layer-meta-model.ts"
+  ]
+}

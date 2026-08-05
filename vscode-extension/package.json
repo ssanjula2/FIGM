@@ -1,0 +1,115 @@
+{
+  "name": "figm-code-inspector",
+  "displayName": "FIGM Code Inspector — AST Quality & Accessibility Engine",
+  "description": "Framework-Independent static analysis, WCAG 2.2 accessibility mapping, and AI remediation for React, Next.js, Angular, and Vue.",
+  "version": "1.0.0",
+  "publisher": "figm-inspector",
+  "icon": "assets/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages",
+    "Testing",
+    "Other"
+  ],
+  "keywords": [
+    "figm",
+    "linter",
+    "wcag",
+    "accessibility",
+    "performance",
+    "ast",
+    "react",
+    "angular",
+    "vue",
+    "nextjs"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
+    "onLanguage:vue",
+    "onLanguage:html"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "figm.scanCurrentFile",
+        "title": "FIGM: Scan Current File",
+        "category": "FIGM Code Inspector",
+        "icon": "$(search)"
+      },
+      {
+        "command": "figm.scanWorkspace",
+        "title": "FIGM: Scan Entire Workspace",
+        "category": "FIGM Code Inspector",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "figm.fixAll",
+        "title": "FIGM: Apply Auto-Fixes to File",
+        "category": "FIGM Code Inspector",
+        "icon": "$(wand)"
+      },
+      {
+        "command": "figm.openOutputChannel",
+        "title": "FIGM: Show Inspection Output Logs",
+        "category": "FIGM Code Inspector",
+        "icon": "$(output)"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "FIGM Code Inspector Configuration",
+      "properties": {
+        "figm.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable FIGM Code Inspector live analysis."
+        },
+        "figm.scanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Trigger AST static inspection automatically whenever a file is saved."
+        },
+        "figm.scanOnType": {
+          "type": "boolean",
+          "default": true,
+          "description": "Trigger real-time background inspection while typing (with 300ms debounce)."
+        },
+        "figm.ignoreRules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Array of FIGM Rule IDs to ignore during static analysis (e.g. ['FIGM-PERF-05'])."
+        },
+        "figm.severityThreshold": {
+          "type": "string",
+          "enum": [
+            "ALL",
+            "HIGH_ONLY",
+            "MEDIUM_AND_ABOVE"
+          ],
+          "default": "ALL",
+          "description": "Minimum severity level to display in VS Code Problems Panel."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.3"
+  }
+}
