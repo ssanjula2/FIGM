@@ -146,17 +146,23 @@ export function runCLI(args: string[]): number {
   return 0;
 }
 
-function collectFiles(dir: string, fileList: string[], ignorePatterns: string[]) {
-  const items = fs.readdirSync(dir, { withFileTypes: true });
+function collectFiles(targetPath: string, fileList: string[], ignorePatterns: string[]) {
+  if (!fs.existsSync(targetPath)) return;
+  const stat = fs.statSync(targetPath);
+  if (stat.isFile()) {
+    fileList.push(targetPath);
+    return;
+  }
+  const items = fs.readdirSync(targetPath, { withFileTypes: true });
   for (const item of items) {
     if (item.isDirectory()) {
       if (!ignorePatterns.includes(item.name)) {
-        collectFiles(path.join(dir, item.name), fileList, ignorePatterns);
+        collectFiles(path.join(targetPath, item.name), fileList, ignorePatterns);
       }
     } else if (item.isFile()) {
       const ext = path.extname(item.name).toLowerCase();
       if (['.js', '.ts', '.jsx', '.tsx', '.vue', '.svelte'].includes(ext)) {
-        fileList.push(path.join(dir, item.name));
+        fileList.push(path.join(targetPath, item.name));
       }
     }
   }

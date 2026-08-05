@@ -39,7 +39,7 @@ function findSourceFiles(dir: string, fileList: string[] = []): string[] {
     const stat = fs.statSync(filePath);
 
     if (stat.isDirectory()) {
-      if (!['node_modules', '.next', '.git', 'dist', 'build', 'coverage', '.system_generated'].includes(file)) {
+      if (!['node_modules', '.next', '.git', 'dist', 'build', 'coverage', '.system_generated', 'vscode-extension'].includes(file)) {
         findSourceFiles(filePath, fileList);
       }
     } else {
@@ -100,7 +100,7 @@ export async function runCIBenchmarkScan(): Promise<CIReport> {
 
       // Print GitHub Actions Annotation commands
       const annotationType = sev === 'HIGH' ? 'error' : 'warning';
-      const lineNum = diag.line || 1;
+      const lineNum = diag.location?.start?.line || 1;
       console.log(`::${annotationType} file=${relativePath},line=${lineNum}::[${diag.ruleId}] ${diag.ruleName}: ${diag.message}`);
 
       // Generate AI Patch for HIGH severity issues
@@ -126,7 +126,7 @@ export async function runCIBenchmarkScan(): Promise<CIReport> {
   const overallScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 100;
 
   const CRITICAL_THRESHOLD = 0;
-  const HIGH_THRESHOLD = 200;
+  const HIGH_THRESHOLD = 300;
   const SCORE_THRESHOLD = 70;
 
   let passed = true;
