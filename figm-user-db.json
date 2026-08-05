@@ -2534,6 +2534,15 @@
       "id": "notif_1785857465412_dg8z7",
       "read": true,
       "createdAt": "2026-08-04T15:31:05.412Z"
+    },
+    {
+      "userId": "usr_anonymous",
+      "type": "EXPORT_FINISHED",
+      "title": "Export Ready",
+      "message": "Report for StoreProductList.vue exported as PDF",
+      "id": "notif_1785919124793_l05rl",
+      "read": true,
+      "createdAt": "2026-08-05T08:38:44.793Z"
     }
   ],
   "settings": [

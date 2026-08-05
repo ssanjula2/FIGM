@@ -5,11 +5,19 @@ import Link from 'next/link';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { useGlobalSearch } from '../src/hooks/useGlobalSearch';
 
+import { useScans } from '../src/hooks/useScans';
+
 export default function HeaderBar() {
   const [framework, setFramework] = useState('Next.js');
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
   const { isOpen: isSearchOpen, setIsOpen: setIsSearchOpen, query, setQuery, results, loading: searchLoading } = useGlobalSearch();
+  const { records } = useScans();
+
+  const dynamicScore = records.length > 0
+    ? Math.round(records.reduce((acc, s) => acc + (s.qualityScore || 90), 0) / records.length)
+    : 90;
+  const passed = dynamicScore >= 70;
 
   return (
     <>
@@ -58,19 +66,19 @@ export default function HeaderBar() {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: 'rgba(16, 185, 129, 0.12)',
-              border: '1px solid rgba(16, 185, 129, 0.35)',
+              background: passed ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+              border: passed ? '1px solid rgba(16, 185, 129, 0.35)' : '1px solid rgba(239, 68, 68, 0.35)',
               padding: '6px 14px',
               borderRadius: '20px',
               fontSize: '12px',
               fontWeight: 700,
-              color: '#34d399',
-              boxShadow: '0 0 16px rgba(16, 185, 129, 0.2)',
+              color: passed ? '#34d399' : '#f87171',
+              boxShadow: passed ? '0 0 16px rgba(16, 185, 129, 0.2)' : '0 0 16px rgba(239, 68, 68, 0.2)',
               transition: 'all 0.2s ease',
             }}
           >
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34d399', boxShadow: '0 0 10px #34d399' }}></span>
-            <span>🛡️ FIGM Score: <b>90% (PASSED ✅)</b></span>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: passed ? '#34d399' : '#f87171', boxShadow: passed ? '0 0 10px #34d399' : '0 0 10px #f87171' }}></span>
+            <span>🛡️ FIGM Score: <b>{dynamicScore}% ({passed ? 'PASSED ✅' : 'FAILED ❌'})</b></span>
           </Link>
 
           {/* Framework Selector */}
