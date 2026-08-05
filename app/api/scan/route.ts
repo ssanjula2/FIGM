@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { RuleExecutionEngine } from '../../../src/engine/rule-execution-engine';
 import { AIRemediationPipeline } from '../../../src/ai/ai-remediation-pipeline';
+import { ScanRepository } from '../../../src/engine/scan-repository';
 
 export async function POST(request: Request) {
   try {
@@ -21,6 +22,27 @@ export async function POST(request: Request) {
 
     // Standard Scan Request
     const scanResult = RuleExecutionEngine.analyzeFile(targetFile, code);
+
+    // Save scan record into Database for Scan History & Audit Trail
+    try {
+      const qualityScore = Math.max(0, 100 - (scanResult.totalErrors * 5 + scanResult.totalWarnings * 2));
+      ScanRepository.createScanRecord({
+        userId: 'usr_developer_default',
+        projectId: 'prj_default_spa',
+        fileName: targetFile,
+        framework: scanResult.framework,
+        qualityScore,
+        scanTimeMs: scanResult.profile?.executionTimeMs || 0.12,
+        memoryUsageMb: scanResult.profile?.peakMemoryMb || 0.45,
+        ruleCount: scanResult.diagnostics.length,
+        aiFixCount: 0,
+        diagnostics: scanResult.diagnostics as any,
+        isFavorite: false,
+      });
+    } catch {
+      // Ignored if background persistence fails
+    }
+
     return NextResponse.json(scanResult);
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Scan execution failed' }, { status: 500 });
