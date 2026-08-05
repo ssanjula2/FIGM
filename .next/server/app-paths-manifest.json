@@ -1,10 +1,13 @@
 {
-  "/page": "app/page.js",
-  "/history/page": "app/history/page.js",
-  "/projects/page": "app/projects/page.js",
-  "/reports/[id]/page": "app/reports/[id]/page.js",
-  "/live-scan/page": "app/live-scan/page.js",
   "/api/notifications/route": "app/api/notifications/route.js",
-  "/api/scans/route": "app/api/scans/route.js",
-  "/api/scan/route": "app/api/scan/route.js"
+  "/guidelines/page": "app/guidelines/page.js",
+  "/auth/login/page": "app/auth/login/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/admin/users/route": "app/api/admin/users/route.js",
+  "/api/admin/system/route": "app/api/admin/system/route.js",
+  "/performance/page": "app/performance/page.js",
+  "/history/page": "app/history/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/api/settings/route": "app/api/settings/route.js",
+  "/api/profile/route": "app/api/profile/route.js"
 }
