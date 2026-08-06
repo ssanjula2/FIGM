@@ -126,8 +126,8 @@ interface ScanResultResponse {
 }
 
 export default function LiveScanPage() {
-  const [code, setCode] = useState<string>(SAMPLE_NEXTJS_CODE);
-  const [fileName, setFileName] = useState<string>('DashboardPage.tsx');
+  const [code, setCode] = useState<string>('');
+  const [fileName, setFileName] = useState<string>('Component.tsx');
   const [scanning, setScanning] = useState<boolean>(false);
   const [result, setResult] = useState<ScanResultResponse | null>(null);
   const [lastFixApplied, setLastFixApplied] = useState<string | null>(null);
@@ -136,11 +136,6 @@ export default function LiveScanPage() {
 
   const editorRef = useRef<any>(null);
   const monaco = useMonaco();
-
-  // Run initial scan automatically on mount
-  useEffect(() => {
-    handleScan(SAMPLE_NEXTJS_CODE, 'DashboardPage.tsx');
-  }, []);
 
   // Update Monaco markers whenever scan results change
   useEffect(() => {
