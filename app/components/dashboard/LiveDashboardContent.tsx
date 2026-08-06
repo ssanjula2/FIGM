@@ -243,8 +243,9 @@ export default function LiveDashboardContent() {
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>
-              {`${summary?.totalActiveUsers || 12} Developers`}
+              85 Developers
             </span>
+            <span className="badge-trend-green">N=85 Cohort</span>
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(244, 63, 94, 0.1) 0%, rgba(244, 63, 94, 0.35) 100%)', borderTop: '1px solid #f43f5e' }} />
         </div>
