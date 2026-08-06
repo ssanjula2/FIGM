@@ -3,7 +3,7 @@
  * Dynamic Analysis Engine - Micro-Benchmarking, Memory Profiling & Sandboxing
  */
 
-import { performance } from 'node:perf_hooks';
+const perf = typeof globalThis !== 'undefined' && globalThis.performance ? globalThis.performance : { now: () => Date.now() };
 
 export interface DynamicProfileMetrics {
   executionTimeMs: number;

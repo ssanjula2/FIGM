@@ -5,14 +5,14 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DynamicProfiler = void 0;
-const node_perf_hooks_1 = require("node:perf_hooks");
+const perf = typeof globalThis !== 'undefined' && globalThis.performance ? globalThis.performance : { now: () => Date.now() };
 class DynamicProfiler {
     /**
      * Executes a code snippet or function within a sandboxed performance profiling harness
      */
     static profileExecution(code) {
         const startMemory = process.memoryUsage().heapUsed;
-        const startTime = node_perf_hooks_1.performance.now();
+        const startTime = perf.now();
         let hasRuntimeError = false;
         let runtimeErrorDetails = undefined;
         try {
