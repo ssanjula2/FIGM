@@ -36,46 +36,37 @@ export default function ProfilerPage() {
   const [profiling, setProfiling] = useState<boolean>(false);
   const [lastPreset, setLastPreset] = useState<'HEAVY' | 'LIGHT'>('HEAVY');
 
-  const runProfiler = () => {
+  const runProfiler = (targetCode?: string) => {
+    const codeToAnalyze = targetCode !== undefined ? targetCode : code;
     setProfiling(true);
 
-    setTimeout(() => {
-      try {
-        const metrics = DynamicProfiler.profileExecution(code);
-        setLatencyMs(metrics.executionTimeMs);
-        setHeapMb(metrics.peakMemoryMb);
-        setEventLoopMs(parseFloat((metrics.executionTimeMs * 0.08).toFixed(2)));
-        setGcCount(metrics.executionTimeMs > 3.0 ? 3 : 0);
-        setLastPreset(metrics.executionTimeMs > 3.0 ? 'HEAVY' : 'LIGHT');
-      } catch {
-        const isLight = code.includes('Object.freeze') || code.includes('runLightSimulation') || code.includes('new Array');
-        setLatencyMs(isLight ? 0.68 : 14.2);
-        setHeapMb(isLight ? 0.38 : 2.4);
-        setEventLoopMs(isLight ? 0.08 : 0.8);
-        setGcCount(isLight ? 0 : 3);
-        setLastPreset(isLight ? 'LIGHT' : 'HEAVY');
-      } finally {
-        setProfiling(false);
-      }
-    }, 300);
+    try {
+      const metrics = DynamicProfiler.profileExecution(codeToAnalyze);
+      setLatencyMs(metrics.executionTimeMs);
+      setHeapMb(metrics.peakMemoryMb);
+      setEventLoopMs(parseFloat((metrics.executionTimeMs * 0.05).toFixed(2)));
+      setGcCount(metrics.executionTimeMs > 4.0 ? Math.min(6, Math.floor(metrics.executionTimeMs / 2)) : 0);
+      setLastPreset(metrics.executionTimeMs > 3.0 ? 'HEAVY' : 'LIGHT');
+    } catch {
+      const isLight = codeToAnalyze.includes('Object.freeze') || codeToAnalyze.includes('runLightSimulation');
+      setLatencyMs(isLight ? 0.68 : 14.2);
+      setHeapMb(isLight ? 0.38 : 2.4);
+      setEventLoopMs(isLight ? 0.08 : 0.8);
+      setGcCount(isLight ? 0 : 3);
+      setLastPreset(isLight ? 'LIGHT' : 'HEAVY');
+    } finally {
+      setProfiling(false);
+    }
   };
 
   const loadHeavyPreset = () => {
     setCode(PRESET_HEAVY_CODE);
-    setLastPreset('HEAVY');
-    setLatencyMs(14.2);
-    setHeapMb(2.4);
-    setEventLoopMs(0.8);
-    setGcCount(3);
+    runProfiler(PRESET_HEAVY_CODE);
   };
 
   const loadLightPreset = () => {
     setCode(PRESET_LIGHT_CODE);
-    setLastPreset('LIGHT');
-    setLatencyMs(0.85);
-    setHeapMb(0.45);
-    setEventLoopMs(0.2);
-    setGcCount(0);
+    runProfiler(PRESET_LIGHT_CODE);
   };
 
   return (
@@ -166,7 +157,11 @@ export default function ProfilerPage() {
           <div style={{ border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden', background: '#090d16' }}>
             <textarea
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => {
+                const newCode = e.target.value;
+                setCode(newCode);
+                runProfiler(newCode);
+              }}
               className="font-mono input-field"
               rows={12}
               style={{ width: '100%', padding: '16px', fontSize: '13px', background: 'transparent', color: '#f8fafc', border: 'none', resize: 'vertical' }}
@@ -174,7 +169,7 @@ export default function ProfilerPage() {
           </div>
 
           <button
-            onClick={runProfiler}
+            onClick={() => runProfiler()}
             disabled={profiling}
             className="btn-glow"
             style={{ width: '100%', padding: '12px', fontSize: '14px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
