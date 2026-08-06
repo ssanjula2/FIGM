@@ -239,11 +239,11 @@ export default function LiveDashboardContent() {
         {/* Card 5: Avg Scan Speed / Users */}
         <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #f43f5e' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            Active Users
+            Active Developers
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>
-              {`${summary?.totalActiveUsers || 12} Users`}
+              {`${summary?.totalActiveUsers || 12} Developers`}
             </span>
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(244, 63, 94, 0.1) 0%, rgba(244, 63, 94, 0.35) 100%)', borderTop: '1px solid #f43f5e' }} />
