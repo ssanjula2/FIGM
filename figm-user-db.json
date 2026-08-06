@@ -773,7 +773,8 @@
       "id": "usr_1786011916744_555od",
       "apiKey": "figm_key_1786011916744_mcs1dqk0",
       "createdAt": "2026-08-06T10:25:16.744Z",
-      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxMTkxNjc0NF81NTVvZCIsImVtYWlsIjoiYWRtaW5AZmlnbS5pbyIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg2MDExOTE2LCJleHAiOjE3ODY2MTY3MTZ9.3KqkqOJ6rvJuytA90K7pGbl1NCTs_hQsdCUH91IcMTk"
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxMTkxNjc0NF81NTVvZCIsImVtYWlsIjoiYWRtaW5AZmlnbS5pbyIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg2MDEzMDUzLCJleHAiOjE3ODY2MTc4NTN9.Kix-0VY_85UI1CjmB_7kL7fMB1Da8oR3aTpu11ARZG8",
+      "lastLoginAt": "2026-08-06T10:44:13.722Z"
     },
     {
       "email": "shehansanjula73@gmail.com",
@@ -785,6 +786,17 @@
       "createdAt": "2026-08-06T10:26:27.323Z",
       "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxMTk4NzMyM18wMTAyYSIsImVtYWlsIjoic2hlaGFuc2FuanVsYTczQGdtYWlsLmNvbSIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg2MDEyMDk5LCJleHAiOjE3ODY2MTY4OTl9.4OWGkf8BVIAvSnCIKf_Wed2vWswZIeEYs3FK7bSzO1w",
       "lastLoginAt": "2026-08-06T10:28:19.209Z"
+    },
+    {
+      "email": "methminipabasara9@gmail.com",
+      "passwordHash": "ac46aa75b4ef600ab03ceeb7bd693268:0a8651e67e48f75c2f6a90aa7a357fd3b99ce184d82578b79d4a86aa5c1dd666185e252d3ca1cf0d7d22e55371329583aa37b6db5ed6858debd3ee99a8951d5a",
+      "fullName": "sanjula",
+      "role": "DEVELOPER",
+      "id": "usr_1786012838554_4ej97",
+      "apiKey": "figm_key_1786012838554_ckxzm1lu",
+      "createdAt": "2026-08-06T10:40:38.554Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxMjgzODU1NF80ZWo5NyIsImVtYWlsIjoibWV0aG1pbmlwYWJhc2FyYTlAZ21haWwuY29tIiwia2luZCI6InJlZnJlc2giLCJpYXQiOjE3ODYwMTI5MTcsImV4cCI6MTc4NjYxNzcxN30.BC3eDOwsobNettPAyheE84Mbf7iaPVmB2cQLAY5uM2Y",
+      "lastLoginAt": "2026-08-06T10:41:57.669Z"
     }
   ],
   "submissions": [],
@@ -6128,6 +6140,66 @@
       "status": "SUCCESS",
       "id": "log_1786012099214_06xew",
       "createdAt": "2026-08-06T10:28:19.214Z"
+    },
+    {
+      "action": "REGISTER",
+      "email": "methminipabasara9@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "FAILURE",
+      "details": "Password must contain at least one uppercase letter",
+      "id": "log_1786012819320_lt071",
+      "createdAt": "2026-08-06T10:40:19.320Z"
+    },
+    {
+      "action": "REGISTER",
+      "email": "methminipabasara9@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "FAILURE",
+      "details": "Password must contain at least one uppercase letter",
+      "id": "log_1786012824972_lbmdq",
+      "createdAt": "2026-08-06T10:40:24.972Z"
+    },
+    {
+      "action": "REGISTER",
+      "email": "methminipabasara9@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "FAILURE",
+      "details": "Password must contain at least one uppercase letter",
+      "id": "log_1786012826042_vpx45",
+      "createdAt": "2026-08-06T10:40:26.042Z"
+    },
+    {
+      "action": "REGISTER",
+      "userId": "usr_1786012838554_4ej97",
+      "email": "methminipabasara9@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1786012838562_ycsxe",
+      "createdAt": "2026-08-06T10:40:38.562Z"
+    },
+    {
+      "action": "LOGIN",
+      "userId": "usr_1786012838554_4ej97",
+      "email": "methminipabasara9@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1786012917674_z6hbw",
+      "createdAt": "2026-08-06T10:41:57.674Z"
+    },
+    {
+      "action": "LOGIN",
+      "userId": "usr_1786011916744_555od",
+      "email": "admin@figm.io",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1786013053728_45znz",
+      "createdAt": "2026-08-06T10:44:13.728Z"
     }
   ]
 }
