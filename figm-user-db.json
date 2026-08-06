@@ -6200,6 +6200,36 @@
       "status": "SUCCESS",
       "id": "log_1786013053728_45znz",
       "createdAt": "2026-08-06T10:44:13.728Z"
+    },
+    {
+      "action": "REGISTER",
+      "email": "admin@figm.io",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "FAILURE",
+      "details": "Email already registered",
+      "id": "log_1786013227599_mlkfr",
+      "createdAt": "2026-08-06T10:47:07.599Z"
+    },
+    {
+      "action": "REGISTER",
+      "email": "shehansanjula73@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "FAILURE",
+      "details": "Email already registered",
+      "id": "log_1786013233627_i9wp6",
+      "createdAt": "2026-08-06T10:47:13.627Z"
+    },
+    {
+      "action": "REGISTER",
+      "email": "shehansanjula73@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "FAILURE",
+      "details": "Email already registered",
+      "id": "log_1786013240148_jc5cp",
+      "createdAt": "2026-08-06T10:47:20.148Z"
     }
   ]
 }

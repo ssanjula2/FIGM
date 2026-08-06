@@ -319,14 +319,14 @@ export const UserDB = {
     db.users.push(newUser);
     saveDB(db);
 
-    // Asynchronously sync new user to Supabase Cloud Database
+    // Sync new user to Supabase Cloud Database
     try {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
       const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       if (url && key) {
         const { createClient } = require('@supabase/supabase-js');
         const supabase = createClient(url, key, { auth: { persistSession: false } });
-        supabase.from('users').insert({
+        supabase.from('users').upsert({
           id: newUser.id,
           email: newUser.email,
           password_hash: newUser.passwordHash,
@@ -342,54 +342,6 @@ export const UserDB = {
     return newUser;
   },
 
-  async createUserAsync(user: Omit<DBUser, 'id' | 'createdAt'>): Promise<DBUser> {
-    const newUser = UserDB.createUser(user);
-
-    try {
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key) {
-        const { createClient } = require('@supabase/supabase-js');
-        const supabase = createClient(url, key, { auth: { persistSession: false } });
-        await supabase.from('users').upsert({
-          id: newUser.id,
-          email: newUser.email,
-          password_hash: newUser.passwordHash,
-          full_name: newUser.fullName,
-          role: newUser.role,
-          api_key: newUser.apiKey,
-          created_at: newUser.createdAt,
-          updated_at: newUser.createdAt,
-        });
-      }
-    } catch {}
-
-    return newUser;
-  },
-
-  async updateUserAsync(userId: string, updates: Partial<Omit<DBUser, 'id' | 'createdAt'>>): Promise<DBUser | undefined> {
-    const updatedUser = UserDB.updateUser(userId, updates);
-    if (!updatedUser) return undefined;
-
-    try {
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key) {
-        const { createClient } = require('@supabase/supabase-js');
-        const supabase = createClient(url, key, { auth: { persistSession: false } });
-        await supabase.from('users').update({
-          full_name: updatedUser.fullName,
-          role: updatedUser.role,
-          refresh_token: updatedUser.refreshToken,
-          last_login_at: updatedUser.lastLoginAt,
-          updated_at: new Date().toISOString(),
-        }).eq('id', userId);
-      }
-    } catch {}
-
-    return updatedUser;
-  },
-
   updateUser(userId: string, updates: Partial<Omit<DBUser, 'id' | 'createdAt'>>): DBUser | undefined {
     const db = loadDB();
     const index = db.users.findIndex((u) => u.id === userId);
@@ -401,6 +353,24 @@ export const UserDB = {
     };
     db.users[index] = updatedUser;
     saveDB(db);
+
+    // Sync user updates to Supabase Cloud Database
+    try {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (url && key) {
+        const { createClient } = require('@supabase/supabase-js');
+        const supabase = createClient(url, key, { auth: { persistSession: false } });
+        supabase.from('users').update({
+          full_name: updatedUser.fullName,
+          role: updatedUser.role,
+          refresh_token: updatedUser.refreshToken,
+          last_login_at: updatedUser.lastLoginAt,
+          updated_at: new Date().toISOString(),
+        }).eq('id', userId).then();
+      }
+    } catch {}
+
     return updatedUser;
   },
 

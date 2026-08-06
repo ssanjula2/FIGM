@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
     const assignedRole = validateRole(role);
     const passwordHash = hashPassword(password);
-    const user = await UserDB.createUserAsync({ email, passwordHash, fullName, role: assignedRole });
+    const user = UserDB.createUser({ email, passwordHash, fullName, role: assignedRole });
 
     const payload = {
       userId: user.id,
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     const accessToken = signJWT(payload, 3600); // 1 hour
     const refreshToken = signRefreshToken(payload, 604800); // 7 days
 
-    await UserDB.updateUserAsync(user.id, { refreshToken });
+    UserDB.updateUser(user.id, { refreshToken });
     AuditLogger.logEvent('REGISTER', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
 
     const response = NextResponse.json({

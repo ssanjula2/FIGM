@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     const accessToken = signJWT(payload, 3600); // 1 hr
     const refreshToken = signRefreshToken(payload, 604800); // 7 days
 
-    await UserDB.updateUserAsync(user.id, {
+    UserDB.updateUser(user.id, {
       refreshToken,
       lastLoginAt: new Date().toISOString(),
     });
