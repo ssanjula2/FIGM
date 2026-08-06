@@ -243,7 +243,7 @@ export default function LiveDashboardContent() {
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>
-              85 Developers
+              {`${summary?.totalActiveUsers || 85}`}
             </span>
             <span className="badge-trend-green">N=85 Cohort</span>
           </div>
