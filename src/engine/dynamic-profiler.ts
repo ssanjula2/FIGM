@@ -22,7 +22,7 @@ export class DynamicProfiler {
    */
   public static profileExecution(code: string): DynamicProfileMetrics {
     const startMemory = process.memoryUsage().heapUsed;
-    const startTime = performance.now();
+    const startTime = perf.now();
 
     let hasRuntimeError = false;
     let runtimeErrorDetails: { message: string; stack?: string; line?: number } | undefined = undefined;
@@ -64,7 +64,7 @@ export class DynamicProfiler {
       };
     }
 
-    const endTime = performance.now();
+    const endTime = perf.now();
     const endMemory = process.memoryUsage().heapUsed;
 
     const codeFactor = Math.max(0, (code.length - 100) / 400);
