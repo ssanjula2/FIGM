@@ -111,6 +111,14 @@ export async function runJsonToSupabaseMigration(): Promise<MigrationSummary> {
       }
     }
 
+    const validProjectIds = new Set<string>();
+    try {
+      const existingProjects = await prisma.project.findMany({ select: { id: true } });
+      for (const ep of existingProjects) {
+        validProjectIds.add(ep.id);
+      }
+    } catch {}
+
     for (const p of projects) {
       try {
         const targetUserId = validUserIds.has(p.userId) ? p.userId : fallbackUserId;
@@ -135,6 +143,7 @@ export async function runJsonToSupabaseMigration(): Promise<MigrationSummary> {
         } else {
           projectsSkipped++;
         }
+        validProjectIds.add(p.id);
       } catch (err: any) {
         errors.push(`Project ${p.name}: ${err.message}`);
       }
@@ -143,13 +152,14 @@ export async function runJsonToSupabaseMigration(): Promise<MigrationSummary> {
     for (const s of scans) {
       try {
         const targetUserId = validUserIds.has(s.userId) ? s.userId : fallbackUserId;
+        const targetProjectId = (s.projectId && validProjectIds.has(s.projectId)) ? s.projectId : null;
         const existing = await prisma.scanReport.findUnique({ where: { id: s.id } });
         if (!existing) {
           await prisma.scanReport.create({
             data: {
               id: s.id,
               userId: targetUserId,
-              projectId: s.projectId,
+              projectId: targetProjectId,
               fileName: s.fileName,
               framework: s.framework,
               scanTimeMs: s.scanTimeMs,

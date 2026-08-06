@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-06T07:40:52.088Z",
+  "timestamp": "2026-08-06T08:31:09.399Z",
   "overall": {
     "truePositives": 18,
     "falsePositives": 3,
@@ -133,11 +133,11 @@
     }
   ],
   "performanceMetrics": {
-    "totalScanDurationMs": 1.7212000000000103,
+    "totalScanDurationMs": 1.9501999999999953,
     "totalLinesOfCode": 147,
     "totalASTNodes": 300,
-    "scanSpeedLOCPerSec": 85405.53102486586,
-    "astNodesPerSec": 174297.002091563,
-    "peakMemoryMB": 0.2082672119140625
+    "scanSpeedLOCPerSec": 75376.88442211073,
+    "astNodesPerSec": 153830.37637165457,
+    "peakMemoryMB": 0.217987060546875
   }
 }

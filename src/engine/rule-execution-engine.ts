@@ -21,6 +21,7 @@ export interface ScanResult {
   primitives: ALPPrimitiveNode[];
   complexity: ComplexityMetrics;
   profile: DynamicProfileMetrics;
+  qualityScore?: number;
 }
 
 export class RuleExecutionEngine {
@@ -49,6 +50,7 @@ export class RuleExecutionEngine {
           complexityRating: 'A',
         },
         profile,
+        qualityScore: 50,
       };
     }
 
@@ -64,6 +66,13 @@ export class RuleExecutionEngine {
     const totalErrors = diagnostics.filter((d) => d.severity === 'CRITICAL' || d.severity === 'HIGH').length;
     const totalWarnings = diagnostics.filter((d) => d.severity === 'MEDIUM' || d.severity === 'LOW').length;
 
+    const criticalCount = diagnostics.filter((d) => d.severity === 'CRITICAL').length;
+    const highCount = diagnostics.filter((d) => d.severity === 'HIGH').length;
+    const mediumCount = diagnostics.filter((d) => d.severity === 'MEDIUM').length;
+    const lowCount = diagnostics.filter((d) => d.severity === 'LOW').length;
+    const weightedPenalty = criticalCount * 15 + highCount * 8 + mediumCount * 3 + lowCount * 1;
+    const qualityScore = Math.max(0, 100 - weightedPenalty);
+
     return {
       filePath,
       framework: parseRes.framework,
@@ -75,6 +84,7 @@ export class RuleExecutionEngine {
       primitives,
       complexity,
       profile,
+      qualityScore,
     };
   }
 }
