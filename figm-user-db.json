@@ -857,6 +857,16 @@
       "apiKey": "figm_key_1786014944401_6rjqvecl",
       "createdAt": "2026-08-06T11:15:44.402Z",
       "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxNDk0NDQwMV8ycXN2ZCIsImVtYWlsIjoiYXVkaXRfdXNlcl8xNzg2MDE0OTQ0Mzc2QGZpZ20udGVzdCIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg2MDE0OTQ0LCJleHAiOjE3ODY2MTk3NDR9.LiwmgOcBgwWLEqizPnEo1lVrSpK3eCatkSs7dvqinA0"
+    },
+    {
+      "email": "shehansanjula341@gmail.com",
+      "passwordHash": "2fa3f907efb85ebd8ee3f1a5c1f4bbf8:9103826266bb9d9e154da1eab9d922b528662ddb92bced3504df95c992dd45086510b710e59f44d8506fc442e5b7eec6e83155ba2642824d1995bfc36c60b820",
+      "fullName": "ra",
+      "role": "DEVELOPER",
+      "id": "usr_1786015067036_xwvez",
+      "apiKey": "figm_key_1786015067036_li7nzbja",
+      "createdAt": "2026-08-06T11:17:47.036Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxNTA2NzAzNl94d3ZleiIsImVtYWlsIjoic2hlaGFuc2FuanVsYTM0MUBnbWFpbC5jb20iLCJraW5kIjoicmVmcmVzaCIsImlhdCI6MTc4NjAxNTA2NywiZXhwIjoxNzg2NjE5ODY3fQ.owSpP2vUCOIqjrOma1DIYxhF6aYBdFlQ5YvkJ7xkgrs"
     }
   ],
   "submissions": [],
@@ -7077,6 +7087,26 @@
       "status": "SUCCESS",
       "id": "log_1786014944796_wba4c",
       "createdAt": "2026-08-06T11:15:44.796Z"
+    },
+    {
+      "action": "REGISTER",
+      "email": "shehansanjula01@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "FAILURE",
+      "details": "Email already registered",
+      "id": "log_1786015061145_3ybah",
+      "createdAt": "2026-08-06T11:17:41.145Z"
+    },
+    {
+      "action": "REGISTER",
+      "userId": "usr_1786015067036_xwvez",
+      "email": "shehansanjula341@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1786015067874_hkvlp",
+      "createdAt": "2026-08-06T11:17:47.874Z"
     }
   ]
 }

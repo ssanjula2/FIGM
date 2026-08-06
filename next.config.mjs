@@ -5,11 +5,14 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['typescript', 'tsx']
   },
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     config.resolve.extensionAlias = {
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs']
     };
+    if (dev) {
+      config.cache = { type: 'memory' };
+    }
     return config;
   }
 };
