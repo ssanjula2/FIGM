@@ -12502,6 +12502,70 @@
       ],
       "id": "scan_1785997879425_g4prc",
       "createdAt": "2026-08-06T06:31:19.425Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "Component.tsx",
+      "framework": "REACT_JSX",
+      "qualityScore": 90,
+      "scanTimeMs": 4,
+      "memoryUsageMb": 2.79,
+      "ruleCount": 2,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "Component.tsx",
+          "location": {
+            "start": {
+              "line": 8,
+              "column": 20
+            },
+            "end": {
+              "line": 8,
+              "column": 21
+            }
+          },
+          "offendingCodeSnippet": "const payload = {",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 8"
+        },
+        {
+          "ruleId": "FIGM-REACT-03",
+          "ruleName": "Avoid Direct React State Mutation",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "CRITICAL",
+          "filePath": "Component.tsx",
+          "location": {
+            "start": {
+              "line": 14,
+              "column": 13
+            },
+            "end": {
+              "line": 14,
+              "column": 28
+            }
+          },
+          "offendingCodeSnippet": "dataStore.push(payload);",
+          "message": "Direct mutation of React state variable skips component re-renders.",
+          "remediation": "Use immutable state updates or return new object references inside state setters.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 99,
+          "evidence": "AST Node: [ExpressionStatement] at line 14"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1785998136428_h7uuu",
+      "createdAt": "2026-08-06T06:35:36.428Z"
     }
   ],
   "notifications": [

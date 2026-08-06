@@ -44,14 +44,15 @@ export default function ProfilerPage() {
         const metrics = DynamicProfiler.profileExecution(code);
         setLatencyMs(metrics.executionTimeMs);
         setHeapMb(metrics.peakMemoryMb);
-        setEventLoopMs(parseFloat((metrics.executionTimeMs * 0.15).toFixed(2)));
-        setGcCount(metrics.executionTimeMs > 2.0 ? 3 : 0);
+        setEventLoopMs(parseFloat((metrics.executionTimeMs * 0.08).toFixed(2)));
+        setGcCount(metrics.executionTimeMs > 3.0 ? 3 : 0);
+        setLastPreset(metrics.executionTimeMs > 3.0 ? 'HEAVY' : 'LIGHT');
       } catch {
         // Fallback
       } finally {
         setProfiling(false);
       }
-    }, 400);
+    }, 300);
   };
 
   const loadHeavyPreset = () => {
