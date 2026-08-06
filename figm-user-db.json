@@ -522,8 +522,8 @@
       "id": "usr_1785859372426_1cajw",
       "apiKey": "figm_key_1785859372426_zxtv2x4j",
       "createdAt": "2026-08-04T16:02:52.426Z",
-      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NTg1OTM3MjQyNl8xY2FqdyIsImVtYWlsIjoiYWRtaW5AZmlnbS5pbyIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg1OTQ0Nzk0LCJleHAiOjE3ODY1NDk1OTR9.1AA4dyYr6LP9VVc-4LDzqLmhZPkOZ-TSZcNmuknhnQU",
-      "lastLoginAt": "2026-08-05T15:46:34.226Z"
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NTg1OTM3MjQyNl8xY2FqdyIsImVtYWlsIjoiYWRtaW5AZmlnbS5pbyIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg1OTk1NjQ2LCJleHAiOjE3ODY2MDA0NDZ9.n0xev20OQR4qcDNAf7eqAX8SBCWXpXsUw3tW8goB1jA",
+      "lastLoginAt": "2026-08-06T05:54:06.704Z"
     },
     {
       "email": "usera@test.com",
@@ -4631,6 +4631,26 @@
       "status": "SUCCESS",
       "id": "log_1785944794230_xqvpe",
       "createdAt": "2026-08-05T15:46:34.230Z"
+    },
+    {
+      "action": "LOGIN",
+      "userId": "usr_1785859372426_1cajw",
+      "email": "admin@figm.io",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1785995642833_i20aw",
+      "createdAt": "2026-08-06T05:54:02.833Z"
+    },
+    {
+      "action": "LOGIN",
+      "userId": "usr_1785859372426_1cajw",
+      "email": "admin@figm.io",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1785995646708_xri39",
+      "createdAt": "2026-08-06T05:54:06.708Z"
     }
   ]
 }
