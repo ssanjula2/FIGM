@@ -21,7 +21,7 @@ export default function RootLayout({
           <Sidebar />
 
           {/* Main Content Area */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, marginLeft: '260px', width: 'calc(100% - 260px)' }}>
             <HeaderBar />
 
             <main style={{ flex: 1, padding: '36px 40px', maxWidth: '1480px', width: '100%', boxSizing: 'border-box', margin: '0 auto' }}>

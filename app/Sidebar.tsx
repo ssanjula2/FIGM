@@ -45,25 +45,25 @@ export default function Sidebar() {
   return (
     <aside
       style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
         width: '260px',
         minWidth: '260px',
         maxWidth: '260px',
-        minHeight: '100vh',
-        background: 'rgba(9, 13, 22, 0.85)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        height: '100vh',
+        background: 'rgba(9, 13, 22, 0.92)',
+        backdropFilter: 'blur(25px)',
+        WebkitBackdropFilter: 'blur(25px)',
         borderRight: '1px solid rgba(255, 255, 255, 0.08)',
         padding: '24px 16px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        position: 'sticky',
-        top: 0,
-        height: '100vh',
         boxSizing: 'border-box',
         overflowY: 'auto',
         flexShrink: 0,
-        zIndex: 40,
+        zIndex: 50,
       }}
     >
       <div>
