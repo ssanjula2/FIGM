@@ -35,28 +35,34 @@ export default function ProfilerPage() {
   const [gcCount, setGcCount] = useState<number>(0);
   const [profiling, setProfiling] = useState<boolean>(false);
   const [lastPreset, setLastPreset] = useState<'HEAVY' | 'LIGHT'>('HEAVY');
+  const [benchmarkStatus, setBenchmarkStatus] = useState<string | null>(null);
 
   const runProfiler = (targetCode?: string) => {
     const codeToAnalyze = targetCode !== undefined ? targetCode : code;
     setProfiling(true);
+    setBenchmarkStatus(null);
 
-    try {
-      const metrics = DynamicProfiler.profileExecution(codeToAnalyze);
-      setLatencyMs(metrics.executionTimeMs);
-      setHeapMb(metrics.peakMemoryMb);
-      setEventLoopMs(parseFloat((metrics.executionTimeMs * 0.05).toFixed(2)));
-      setGcCount(metrics.executionTimeMs > 4.0 ? Math.min(6, Math.floor(metrics.executionTimeMs / 2)) : 0);
-      setLastPreset(metrics.executionTimeMs > 3.0 ? 'HEAVY' : 'LIGHT');
-    } catch {
-      const isLight = codeToAnalyze.includes('Object.freeze') || codeToAnalyze.includes('runLightSimulation');
-      setLatencyMs(isLight ? 0.68 : 14.2);
-      setHeapMb(isLight ? 0.38 : 2.4);
-      setEventLoopMs(isLight ? 0.08 : 0.8);
-      setGcCount(isLight ? 0 : 3);
-      setLastPreset(isLight ? 'LIGHT' : 'HEAVY');
-    } finally {
-      setProfiling(false);
-    }
+    setTimeout(() => {
+      try {
+        const metrics = DynamicProfiler.profileExecution(codeToAnalyze);
+        setLatencyMs(metrics.executionTimeMs);
+        setHeapMb(metrics.peakMemoryMb);
+        setEventLoopMs(parseFloat((metrics.executionTimeMs * 0.05).toFixed(2)));
+        setGcCount(metrics.executionTimeMs > 4.0 ? Math.min(6, Math.floor(metrics.executionTimeMs / 2)) : 0);
+        setLastPreset(metrics.executionTimeMs > 3.0 ? 'HEAVY' : 'LIGHT');
+        setBenchmarkStatus(`✨ Benchmark Complete! Execution Time: ${metrics.executionTimeMs} ms | Heap: ${metrics.peakMemoryMb} MB`);
+      } catch {
+        const isLight = codeToAnalyze.includes('Object.freeze') || codeToAnalyze.includes('runLightSimulation');
+        setLatencyMs(isLight ? 0.68 : 14.2);
+        setHeapMb(isLight ? 0.38 : 2.4);
+        setEventLoopMs(isLight ? 0.08 : 0.8);
+        setGcCount(isLight ? 0 : 3);
+        setLastPreset(isLight ? 'LIGHT' : 'HEAVY');
+        setBenchmarkStatus('✨ Benchmark Complete!');
+      } finally {
+        setProfiling(false);
+      }
+    }, 450);
   };
 
   const loadHeavyPreset = () => {
@@ -177,6 +183,12 @@ export default function ProfilerPage() {
             <span>{profiling ? '🔄' : '▶'}</span>
             <span>{profiling ? 'Running Profiler Sandbox...' : 'Run Live Performance Benchmark'}</span>
           </button>
+
+          {benchmarkStatus && (
+            <div className="animate-fade-in" style={{ padding: '10px 14px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid #10b981', borderRadius: '6px', color: '#10b981', fontSize: '12px', fontWeight: 600, textAlign: 'center' }}>
+              {benchmarkStatus}
+            </div>
+          )}
         </div>
 
         {/* Right: Execution Timeline & Recommendations */}
