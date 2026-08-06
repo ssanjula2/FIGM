@@ -104,11 +104,105 @@ export interface DBUserStore {
 
 const DB_FILE = path.resolve(process.cwd(), 'figm-user-db.json');
 
+function getDefaultScanRecords(): DBScanRecord[] {
+  return [
+    {
+      id: 'scn_default_01',
+      userId: 'usr_developer_default',
+      projectId: 'proj_1786005070498_vbbyi',
+      fileName: 'DashboardPage.tsx',
+      framework: 'Next.js',
+      qualityScore: 88,
+      scanTimeMs: 7.14,
+      memoryUsageMb: 1.52,
+      ruleCount: 3,
+      aiFixCount: 1,
+      isFavorite: true,
+      createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+      diagnostics: [
+        {
+          ruleId: 'FIGM-PERF-01',
+          ruleName: 'Invariant Object Allocation in Iteration Scopes',
+          domain: 'PERFORMANCE',
+          concern: 'INVARIANT_ALLOCATIONS',
+          severity: 'HIGH',
+          filePath: 'DashboardPage.tsx',
+          location: { start: { line: 10, column: 24 } },
+          offendingCodeSnippet: 'const defaultMeta = { status: "active", tier: "premium" };',
+          remediation: 'Hoist invariant object out of iteration scope.',
+          standardReference: 'FIGM-PERF-01',
+        },
+      ],
+    },
+    {
+      id: 'scn_default_02',
+      userId: 'usr_developer_default',
+      projectId: 'proj_1786005070498_vbbyi',
+      fileName: 'UserProfile.jsx',
+      framework: 'React',
+      qualityScore: 92,
+      scanTimeMs: 5.82,
+      memoryUsageMb: 1.28,
+      ruleCount: 2,
+      aiFixCount: 1,
+      isFavorite: true,
+      createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+      diagnostics: [],
+    },
+    {
+      id: 'scn_default_03',
+      userId: 'usr_developer_default',
+      projectId: 'proj_1786005070501_1u7hd',
+      fileName: 'SearchPanel.component.ts',
+      framework: 'Angular',
+      qualityScore: 84,
+      scanTimeMs: 9.45,
+      memoryUsageMb: 2.15,
+      ruleCount: 4,
+      aiFixCount: 2,
+      isFavorite: false,
+      createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
+      diagnostics: [],
+    },
+    {
+      id: 'scn_default_04',
+      userId: 'usr_developer_default',
+      projectId: 'proj_1786005070501_1u7hd',
+      fileName: 'AnalyticsCard.vue',
+      framework: 'Vue',
+      qualityScore: 95,
+      scanTimeMs: 4.12,
+      memoryUsageMb: 0.98,
+      ruleCount: 1,
+      aiFixCount: 0,
+      isFavorite: false,
+      createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
+      diagnostics: [],
+    },
+    {
+      id: 'scn_default_05',
+      userId: 'usr_developer_default',
+      projectId: 'proj_1786005070498_vbbyi',
+      fileName: 'HeaderBar.tsx',
+      framework: 'Next.js',
+      qualityScore: 90,
+      scanTimeMs: 6.30,
+      memoryUsageMb: 1.40,
+      ruleCount: 2,
+      aiFixCount: 1,
+      isFavorite: true,
+      createdAt: new Date(Date.now() - 3600000 * 36).toISOString(),
+      diagnostics: [],
+    },
+  ];
+}
+
 function loadDB(): DBUserStore {
   if (fs.existsSync(DB_FILE)) {
     try {
       const data = fs.readFileSync(DB_FILE, 'utf-8');
       const parsed = JSON.parse(data);
+      const scanRecords = (parsed.scanRecords && parsed.scanRecords.length > 0) ? parsed.scanRecords : getDefaultScanRecords();
       return {
         users: (parsed.users || []).map((u: Partial<DBUser>) => ({
           ...u,
@@ -116,7 +210,7 @@ function loadDB(): DBUserStore {
         })),
         submissions: parsed.submissions || [],
         projects: parsed.projects || [],
-        scanRecords: parsed.scanRecords || [],
+        scanRecords,
         notifications: parsed.notifications || [],
         settings: parsed.settings || [],
         auditLogs: parsed.auditLogs || [],
@@ -129,7 +223,7 @@ function loadDB(): DBUserStore {
     users: [],
     submissions: [],
     projects: [],
-    scanRecords: [],
+    scanRecords: getDefaultScanRecords(),
     notifications: [],
     settings: [],
     auditLogs: [],
