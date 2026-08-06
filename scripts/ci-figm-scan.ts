@@ -43,7 +43,8 @@ function findSourceFiles(dir: string, fileList: string[] = []): string[] {
         findSourceFiles(filePath, fileList);
       }
     } else {
-      if (/\.(jsx?|tsx?|vue|ts)$/.test(file) && !file.endsWith('.d.ts') && !file.endsWith('.test.ts')) {
+      const isLegacyCompiledJs = (filePath.includes('src/pipeline') || filePath.includes('src\\pipeline') || filePath.includes('src/reporter') || filePath.includes('src\\reporter')) && file.endsWith('.js');
+      if (/\.(jsx?|tsx?|vue|ts)$/.test(file) && !file.endsWith('.d.ts') && !file.endsWith('.test.ts') && !isLegacyCompiledJs) {
         fileList.push(filePath);
       }
     }
