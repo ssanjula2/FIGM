@@ -163,11 +163,7 @@ export default function ProfilerPage() {
           <div style={{ border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden', background: '#090d16' }}>
             <textarea
               value={code}
-              onChange={(e) => {
-                const newCode = e.target.value;
-                setCode(newCode);
-                runProfiler(newCode);
-              }}
+              onChange={(e) => setCode(e.target.value)}
               className="font-mono input-field"
               rows={12}
               style={{ width: '100%', padding: '16px', fontSize: '13px', background: 'transparent', color: '#f8fafc', border: 'none', resize: 'vertical' }}
@@ -183,12 +179,6 @@ export default function ProfilerPage() {
             <span>{profiling ? '🔄' : '▶'}</span>
             <span>{profiling ? 'Running Profiler Sandbox...' : 'Run Live Performance Benchmark'}</span>
           </button>
-
-          {benchmarkStatus && (
-            <div className="animate-fade-in" style={{ padding: '10px 14px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid #10b981', borderRadius: '6px', color: '#10b981', fontSize: '12px', fontWeight: 600, textAlign: 'center' }}>
-              {benchmarkStatus}
-            </div>
-          )}
         </div>
 
         {/* Right: Execution Timeline & Recommendations */}
