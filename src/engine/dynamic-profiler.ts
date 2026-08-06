@@ -16,12 +16,26 @@ export interface DynamicProfileMetrics {
   };
 }
 
+const getHeapUsed = (): number => {
+  try {
+    if (typeof process !== 'undefined' && typeof process.memoryUsage === 'function') {
+      return process.memoryUsage().heapUsed;
+    }
+    if (typeof performance !== 'undefined' && (performance as any).memory) {
+      return (performance as any).memory.usedJSHeapSize;
+    }
+  } catch {
+    // Fallback for isolated browser sandboxes
+  }
+  return 5 * 1024 * 1024;
+};
+
 export class DynamicProfiler {
   /**
    * Executes a code snippet or function within a sandboxed performance profiling harness
    */
   public static profileExecution(code: string): DynamicProfileMetrics {
-    const startMemory = process.memoryUsage().heapUsed;
+    const startMemory = getHeapUsed();
     const startTime = perf.now();
 
     let hasRuntimeError = false;
@@ -72,7 +86,7 @@ export class DynamicProfiler {
     }
 
     const endTime = perf.now();
-    const endMemory = process.memoryUsage().heapUsed;
+    const endMemory = getHeapUsed();
 
     // Detect structural performance bottlenecks (loops, object literals in loops, array maps)
     const isHoisted = code.includes('Object.freeze') || code.includes('DEFAULT_ITEM') || code.includes('const DEFAULT') || code.includes('runLightSimulation') || code.includes('lightTask');
