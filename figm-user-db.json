@@ -797,6 +797,26 @@
       "createdAt": "2026-08-06T10:40:38.554Z",
       "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxMjgzODU1NF80ZWo5NyIsImVtYWlsIjoibWV0aG1pbmlwYWJhc2FyYTlAZ21haWwuY29tIiwia2luZCI6InJlZnJlc2giLCJpYXQiOjE3ODYwMTI5MTcsImV4cCI6MTc4NjYxNzcxN30.BC3eDOwsobNettPAyheE84Mbf7iaPVmB2cQLAY5uM2Y",
       "lastLoginAt": "2026-08-06T10:41:57.669Z"
+    },
+    {
+      "email": "shehansanjula2001@gmail.com",
+      "passwordHash": "092768483fceca46f88b335af5ab9bac:50cf67cde7525d34c3c26bb8043e67fb24f5eafe218dd6d55b27369c8dbb85cbf2b0aa78bdeb783f047b7f47a2c1a87648bfc2f88d93a3e2cfe91d399e944198",
+      "fullName": "shehan3",
+      "role": "DEVELOPER",
+      "id": "usr_1786013424758_5h09d",
+      "apiKey": "figm_key_1786013424758_lgbykcuj",
+      "createdAt": "2026-08-06T10:50:24.758Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxMzQyNDc1OF81aDA5ZCIsImVtYWlsIjoic2hlaGFuc2FuanVsYTIwMDFAZ21haWwuY29tIiwia2luZCI6InJlZnJlc2giLCJpYXQiOjE3ODYwMTM0MjQsImV4cCI6MTc4NjYxODIyNH0.xW1Jk6IcyLYGVYg_osQE6fHkI6-019JrFHxNJIZf7Tc"
+    },
+    {
+      "email": "testuser85_lanka@figm.io",
+      "passwordHash": "991c71e3f92702e520855106c93239e0:693f7235ed3f3c40d1e8cfed7131f9d1ddf9d6401aa76863ea482a827429b6682ee4f76ddb118610c161b5ede6d6ddc5273a74a613ee44e2d5f853c256e483c5",
+      "fullName": "Lankan Test User 85",
+      "role": "DEVELOPER",
+      "id": "usr_1786013640517_r2528",
+      "apiKey": "figm_key_1786013640517_kj7g6r7a",
+      "createdAt": "2026-08-06T10:54:00.517Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxMzY0MDUxN19yMjUyOCIsImVtYWlsIjoidGVzdHVzZXI4NV9sYW5rYUBmaWdtLmlvIiwia2luZCI6InJlZnJlc2giLCJpYXQiOjE3ODYwMTM2NDEsImV4cCI6MTc4NjYxODQ0MX0.soUb9-f01x6Gri7d9qeB7g3uK7Fwy3XD10uRGnBN8vs"
     }
   ],
   "submissions": [],
@@ -6230,6 +6250,47 @@
       "details": "Email already registered",
       "id": "log_1786013240148_jc5cp",
       "createdAt": "2026-08-06T10:47:20.148Z"
+    },
+    {
+      "action": "REGISTER",
+      "userId": "usr_1786013424758_5h09d",
+      "email": "shehansanjula2001@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1786013424766_2bszu",
+      "createdAt": "2026-08-06T10:50:24.766Z"
+    },
+    {
+      "action": "REGISTER",
+      "email": "shehansanjula2001@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "node",
+      "status": "FAILURE",
+      "details": "Email already registered",
+      "id": "log_1786013482747_0r5w0",
+      "createdAt": "2026-08-06T10:51:22.747Z"
+    },
+    {
+      "action": "LOGIN",
+      "userId": "usr_1786013424758_5h09d",
+      "email": "shehansanjula2001@gmail.com",
+      "ipAddress": "::1",
+      "userAgent": "node",
+      "status": "FAILURE",
+      "details": "Password mismatch",
+      "id": "log_1786013500106_ic9na",
+      "createdAt": "2026-08-06T10:51:40.107Z"
+    },
+    {
+      "action": "REGISTER",
+      "userId": "usr_1786013640517_r2528",
+      "email": "testuser85_lanka@figm.io",
+      "ipAddress": "::1",
+      "userAgent": "node",
+      "status": "SUCCESS",
+      "id": "log_1786013641474_pxb6m",
+      "createdAt": "2026-08-06T10:54:01.474Z"
     }
   ]
 }

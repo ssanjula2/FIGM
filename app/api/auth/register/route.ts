@@ -48,6 +48,28 @@ export async function POST(request: Request) {
     const passwordHash = hashPassword(password);
     const user = UserDB.createUser({ email, passwordHash, fullName, role: assignedRole });
 
+    // Explicit synchronous write-through to Supabase PostgreSQL Database
+    try {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (url && key) {
+        const { createClient } = require('@supabase/supabase-js');
+        const supabase = createClient(url, key, { auth: { persistSession: false } });
+        await supabase.from('users').upsert({
+          id: user.id,
+          email: user.email,
+          password_hash: user.passwordHash,
+          full_name: user.fullName,
+          role: user.role,
+          api_key: user.apiKey,
+          created_at: user.createdAt,
+          updated_at: user.createdAt,
+        });
+      }
+    } catch (dbErr: any) {
+      console.error('Supabase register sync error:', dbErr.message);
+    }
+
     const payload = {
       userId: user.id,
       email: user.email,

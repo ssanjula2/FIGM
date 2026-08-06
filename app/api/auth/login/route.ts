@@ -61,6 +61,23 @@ export async function POST(request: Request) {
       lastLoginAt: new Date().toISOString(),
     });
 
+    // Explicit synchronous write-through to Supabase PostgreSQL Database for login audit
+    try {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (url && key) {
+        const { createClient } = require('@supabase/supabase-js');
+        const supabase = createClient(url, key, { auth: { persistSession: false } });
+        await supabase.from('users').update({
+          refresh_token: refreshToken,
+          last_login_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        }).eq('id', user.id);
+      }
+    } catch (dbErr: any) {
+      console.error('Supabase login sync error:', dbErr.message);
+    }
+
     AuditLogger.logEvent('LOGIN', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
 
     const response = NextResponse.json({
