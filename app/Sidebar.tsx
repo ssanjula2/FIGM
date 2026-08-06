@@ -46,6 +46,8 @@ export default function Sidebar() {
     <aside
       style={{
         width: '260px',
+        minWidth: '260px',
+        maxWidth: '260px',
         minHeight: '100vh',
         background: 'rgba(9, 13, 22, 0.85)',
         backdropFilter: 'blur(20px)',
