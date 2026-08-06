@@ -122,7 +122,9 @@ export async function runCIBenchmarkScan(): Promise<CIReport> {
     }
   }
 
-  const scores = fileResults.map((f) => (typeof f.qualityScore === 'number' && !isNaN(f.qualityScore) ? f.qualityScore : 90));
+  const scores = fileResults
+    .map((f) => (typeof f.qualityScore === 'number' && !isNaN(f.qualityScore) ? f.qualityScore : 90))
+    .filter((s) => s >= 0 && s <= 100);
   const overallScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 100;
 
   const CRITICAL_THRESHOLD = 50;
