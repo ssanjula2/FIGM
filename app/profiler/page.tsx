@@ -42,10 +42,10 @@ export default function ProfilerPage() {
     setTimeout(() => {
       try {
         const metrics = DynamicProfiler.profileExecution(code);
-        setLatencyMs(metrics.executionTimeMs || (lastPreset === 'HEAVY' ? 14.2 : 0.85));
-        setHeapMb(metrics.peakMemoryMb || (lastPreset === 'HEAVY' ? 2.4 : 0.45));
-        setEventLoopMs(parseFloat((Math.random() * 0.5 + 0.3).toFixed(2)));
-        setGcCount(lastPreset === 'HEAVY' ? 3 : 0);
+        setLatencyMs(metrics.executionTimeMs);
+        setHeapMb(metrics.peakMemoryMb);
+        setEventLoopMs(parseFloat((metrics.executionTimeMs * 0.15).toFixed(2)));
+        setGcCount(metrics.executionTimeMs > 2.0 ? 3 : 0);
       } catch {
         // Fallback
       } finally {
