@@ -817,6 +817,46 @@
       "apiKey": "figm_key_1786013640517_kj7g6r7a",
       "createdAt": "2026-08-06T10:54:00.517Z",
       "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxMzY0MDUxN19yMjUyOCIsImVtYWlsIjoidGVzdHVzZXI4NV9sYW5rYUBmaWdtLmlvIiwia2luZCI6InJlZnJlc2giLCJpYXQiOjE3ODYwMTM2NDEsImV4cCI6MTc4NjYxODQ0MX0.soUb9-f01x6Gri7d9qeB7g3uK7Fwy3XD10uRGnBN8vs"
+    },
+    {
+      "email": "shehansanjula01@gmail.com",
+      "passwordHash": "1da3cda0d187f99a80cb9887b357b569:d3b776e1fa4571ca18c31b53c15ebc2d553029280e5883b45dbf0b1a14d6fce980a1e2f45db9e2c5977d79eaf3b6de8576f32600823c0734fd2e66e6a989151f",
+      "fullName": "sanju",
+      "role": "DEVELOPER",
+      "id": "usr_1786013718939_ep2fo",
+      "apiKey": "figm_key_1786013718939_oikzooho",
+      "createdAt": "2026-08-06T10:55:18.939Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxMzcxODkzOV9lcDJmbyIsImVtYWlsIjoic2hlaGFuc2FuanVsYTAxQGdtYWlsLmNvbSIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg2MDEzNzE5LCJleHAiOjE3ODY2MTg1MTl9.ZOQPu1xJRoTq-bB_HNtF6wBe2bpdazNoYqyMAbOT-n8"
+    },
+    {
+      "email": "audit_user_1786014132681@figm.test",
+      "passwordHash": "e278507df84b227ad3f5c35ed1c55f2b:780bf700e61361a185e6f6d242bb3698627cb94717218ef95209d552855b3a1982b9250a1f2fff73a819dcd1e329930c827fa9075d5a0a2a4e72a92573698ca4",
+      "fullName": "Audit Test Developer",
+      "role": "DEVELOPER",
+      "id": "usr_1786014132898_o25ko",
+      "apiKey": "figm_key_1786014132898_hniw415o",
+      "createdAt": "2026-08-06T11:02:12.898Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxNDEzMjg5OF9vMjVrbyIsImVtYWlsIjoiYXVkaXRfdXNlcl8xNzg2MDE0MTMyNjgxQGZpZ20udGVzdCIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg2MDE0MTMzLCJleHAiOjE3ODY2MTg5MzN9.fAmTq4RE8mUZSb1SN0Oo7o4oFuzyrKaynIGYVjd8DtU"
+    },
+    {
+      "email": "audit_user_1786014846781@figm.test",
+      "passwordHash": "f279872e63e356ce8db2a582b68a863c:96513308950e0e5d8a1c313fe0e71b346be0d5989d526fe1fb203a63cb428569a0156cdcef235eab13db88a5034574a3db9dea222ae31ac3cea8625a483741d1",
+      "fullName": "Audit Test Developer",
+      "role": "DEVELOPER",
+      "id": "usr_1786014846952_q2rm0",
+      "apiKey": "figm_key_1786014846952_o8qq9o5n",
+      "createdAt": "2026-08-06T11:14:06.952Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxNDg0Njk1Ml9xMnJtMCIsImVtYWlsIjoiYXVkaXRfdXNlcl8xNzg2MDE0ODQ2NzgxQGZpZ20udGVzdCIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg2MDE0ODQ3LCJleHAiOjE3ODY2MTk2NDd9.P6OIveLxmnXOe-bcJi4tLF19odlVrsRjAz4RaRkAMQA"
+    },
+    {
+      "email": "audit_user_1786014944376@figm.test",
+      "passwordHash": "ac1d001ef6aa9bbabf7884cbf2b84794:5413e6159efbf8a61ea67cec8440fc908d64efcb266348592e5ace7daef8d410b360b8eb9d2249aaf4c9557bdb56062687aa7a5e7b944c1c821e735e51c54e53",
+      "fullName": "Audit Test Developer",
+      "role": "DEVELOPER",
+      "id": "usr_1786014944401_2qsvd",
+      "apiKey": "figm_key_1786014944401_6rjqvecl",
+      "createdAt": "2026-08-06T11:15:44.402Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjAxNDk0NDQwMV8ycXN2ZCIsImVtYWlsIjoiYXVkaXRfdXNlcl8xNzg2MDE0OTQ0Mzc2QGZpZ20udGVzdCIsImtpbmQiOiJyZWZyZXNoIiwiaWF0IjoxNzg2MDE0OTQ0LCJleHAiOjE3ODY2MTk3NDR9.LiwmgOcBgwWLEqizPnEo1lVrSpK3eCatkSs7dvqinA0"
     }
   ],
   "submissions": [],
@@ -3639,6 +3679,710 @@
           "standardReference": "FIGM-A11Y-01"
         }
       ]
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 7.11,
+      "memoryUsageMb": 1.52,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786013748059_wzkd5",
+      "createdAt": "2026-08-06T10:55:48.059Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "DashboardPage.tsx",
+      "framework": "NEXT_JS",
+      "qualityScore": 85,
+      "scanTimeMs": 6.95,
+      "memoryUsageMb": 1.52,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 24
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultMeta = { status: 'active', tier: 'premium' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 19,
+              "column": 6
+            },
+            "end": {
+              "line": 19,
+              "column": 58
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"action-card\" onClick={handleAction}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 19"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 24,
+              "column": 6
+            },
+            "end": {
+              "line": 24,
+              "column": 52
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/banner.png\" alt=\"Dashboard Hero\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 24"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786013748911_581uc",
+      "createdAt": "2026-08-06T10:55:48.911Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "UserProfile.jsx",
+      "framework": "REACT_JSX",
+      "qualityScore": 85,
+      "scanTimeMs": 7.79,
+      "memoryUsageMb": 1.75,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 26
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultConfig = { theme: 'dark', priority: 'high' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 17,
+              "column": 6
+            },
+            "end": {
+              "line": 17,
+              "column": 47
+            }
+          },
+          "offendingCodeSnippet": "<img src={user.avatarUrl} alt=\"Avatar\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 17"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 20,
+              "column": 6
+            },
+            "end": {
+              "line": 20,
+              "column": 50
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"card\" onClick={handleClick}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 20"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786013750714_inhxl",
+      "createdAt": "2026-08-06T10:55:50.714Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "UserProfile.jsx",
+      "framework": "REACT_JSX",
+      "qualityScore": 85,
+      "scanTimeMs": 7.83,
+      "memoryUsageMb": 1.75,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 10,
+              "column": 26
+            },
+            "end": {
+              "line": 10,
+              "column": 62
+            }
+          },
+          "offendingCodeSnippet": "const defaultConfig = { theme: 'dark', priority: 'high' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 10"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 17,
+              "column": 6
+            },
+            "end": {
+              "line": 17,
+              "column": 47
+            }
+          },
+          "offendingCodeSnippet": "<img src={user.avatarUrl} alt=\"Avatar\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [JSXElement] at line 17"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 20,
+              "column": 6
+            },
+            "end": {
+              "line": 20,
+              "column": 50
+            }
+          },
+          "offendingCodeSnippet": "<div className=\"card\" onClick={handleClick}>",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 20"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786013751584_f1aws",
+      "createdAt": "2026-08-06T10:55:51.584Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "SearchPanel.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "qualityScore": 85,
+      "scanTimeMs": 2.12,
+      "memoryUsageMb": 0.65,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-ANG-02",
+          "ruleName": "Angular OnPush Change Detection Strategy",
+          "domain": "PERFORMANCE",
+          "concern": "ARCHITECTURE",
+          "severity": "HIGH",
+          "filePath": "SearchPanel.component.ts",
+          "location": {
+            "start": {
+              "line": 3,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 12
+            }
+          },
+          "offendingCodeSnippet": "@Component({",
+          "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+          "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [ClassDeclaration] at line 3"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "SearchPanel.component.ts",
+          "location": {
+            "start": {
+              "line": 8,
+              "column": 6
+            },
+            "end": {
+              "line": 8,
+              "column": 51
+            }
+          },
+          "offendingCodeSnippet": "<div class=\"btn-search\" (click)=\"onSearch()\">",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [Element$1] at line 8"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "SearchPanel.component.ts",
+          "location": {
+            "start": {
+              "line": 13,
+              "column": 6
+            },
+            "end": {
+              "line": 13,
+              "column": 54
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/assets/icon.png\" alt=\"Search Icon\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [Element$1] at line 13"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786013752717_u438w",
+      "createdAt": "2026-08-06T10:55:52.717Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "SearchPanel.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "qualityScore": 85,
+      "scanTimeMs": 2.12,
+      "memoryUsageMb": 0.65,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-ANG-02",
+          "ruleName": "Angular OnPush Change Detection Strategy",
+          "domain": "PERFORMANCE",
+          "concern": "ARCHITECTURE",
+          "severity": "HIGH",
+          "filePath": "SearchPanel.component.ts",
+          "location": {
+            "start": {
+              "line": 3,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 12
+            }
+          },
+          "offendingCodeSnippet": "@Component({",
+          "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+          "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [ClassDeclaration] at line 3"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "SearchPanel.component.ts",
+          "location": {
+            "start": {
+              "line": 8,
+              "column": 6
+            },
+            "end": {
+              "line": 8,
+              "column": 51
+            }
+          },
+          "offendingCodeSnippet": "<div class=\"btn-search\" (click)=\"onSearch()\">",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [Element$1] at line 8"
+        },
+        {
+          "ruleId": "FIGM-PERF-02",
+          "ruleName": "Un-dimensioned Dynamic Layout Elements",
+          "domain": "PERFORMANCE",
+          "concern": "LAYOUT_INSTABILITY",
+          "severity": "HIGH",
+          "filePath": "SearchPanel.component.ts",
+          "location": {
+            "start": {
+              "line": 13,
+              "column": 6
+            },
+            "end": {
+              "line": 13,
+              "column": 54
+            }
+          },
+          "offendingCodeSnippet": "<img src=\"/assets/icon.png\" alt=\"Search Icon\" />",
+          "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+          "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 92,
+          "evidence": "AST Node: [Element$1] at line 13"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786013753742_qoj3m",
+      "createdAt": "2026-08-06T10:55:53.742Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "TestComponent.tsx",
+      "framework": "REACT_JSX",
+      "qualityScore": 88,
+      "scanTimeMs": 1.72,
+      "memoryUsageMb": 0.55,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "TestComponent.tsx",
+          "location": {
+            "start": {
+              "line": 4,
+              "column": 27
+            },
+            "end": {
+              "line": 4,
+              "column": 45
+            }
+          },
+          "offendingCodeSnippet": "const config = { theme: 'dark' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 4"
+        },
+        {
+          "ruleId": "FIGM-PERF-05",
+          "ruleName": "Inline Anonymous Callbacks in Render Loops",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "MEDIUM",
+          "filePath": "TestComponent.tsx",
+          "location": {
+            "start": {
+              "line": 5,
+              "column": 36
+            },
+            "end": {
+              "line": 5,
+              "column": 81
+            }
+          },
+          "offendingCodeSnippet": "return <div onClick={() => console.log('test')}>{config.theme}</div>;",
+          "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+          "remediation": "Extract callback function or pass item ID to memoized event handler.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 85,
+          "evidence": "AST Node: [ArrowFunctionExpression] at line 5"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "TestComponent.tsx",
+          "location": {
+            "start": {
+              "line": 5,
+              "column": 19
+            },
+            "end": {
+              "line": 5,
+              "column": 81
+            }
+          },
+          "offendingCodeSnippet": "return <div onClick={() => console.log('test')}>{config.theme}</div>;",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 5"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786014846775_1nwdk",
+      "createdAt": "2026-08-06T11:14:06.775Z"
+    },
+    {
+      "userId": "usr_developer_default",
+      "projectId": "prj_default_spa",
+      "fileName": "TestComponent.tsx",
+      "framework": "REACT_JSX",
+      "qualityScore": 88,
+      "scanTimeMs": 1.68,
+      "memoryUsageMb": 0.55,
+      "ruleCount": 3,
+      "aiFixCount": 0,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "HIGH",
+          "filePath": "TestComponent.tsx",
+          "location": {
+            "start": {
+              "line": 4,
+              "column": 27
+            },
+            "end": {
+              "line": 4,
+              "column": 45
+            }
+          },
+          "offendingCodeSnippet": "const config = { theme: 'dark' };",
+          "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+          "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 95,
+          "evidence": "AST Node: [ObjectExpression] at line 4"
+        },
+        {
+          "ruleId": "FIGM-PERF-05",
+          "ruleName": "Inline Anonymous Callbacks in Render Loops",
+          "domain": "PERFORMANCE",
+          "concern": "INVARIANT_ALLOCATIONS",
+          "severity": "MEDIUM",
+          "filePath": "TestComponent.tsx",
+          "location": {
+            "start": {
+              "line": 5,
+              "column": 36
+            },
+            "end": {
+              "line": 5,
+              "column": 81
+            }
+          },
+          "offendingCodeSnippet": "return <div onClick={() => console.log('test')}>{config.theme}</div>;",
+          "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+          "remediation": "Extract callback function or pass item ID to memoized event handler.",
+          "standardReference": "ISO 25010",
+          "confidenceScore": 85,
+          "evidence": "AST Node: [ArrowFunctionExpression] at line 5"
+        },
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Keyboard Event Parity on Pointer Handlers",
+          "domain": "ACCESSIBILITY",
+          "concern": "KEYBOARD_ACCESSIBILITY",
+          "severity": "CRITICAL",
+          "filePath": "TestComponent.tsx",
+          "location": {
+            "start": {
+              "line": 5,
+              "column": 19
+            },
+            "end": {
+              "line": 5,
+              "column": 81
+            }
+          },
+          "offendingCodeSnippet": "return <div onClick={() => console.log('test')}>{config.theme}</div>;",
+          "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+          "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+          "standardReference": "WCAG 2.2",
+          "confidenceScore": 96,
+          "evidence": "AST Node: [JSXElement] at line 5"
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786014944374_h33w4",
+      "createdAt": "2026-08-06T11:15:44.374Z"
     }
   ],
   "notifications": [
@@ -3649,7 +4393,7 @@
       "message": "Scan report generated for ReactFiberWorkLoop.jsx with quality score 88%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-06-24T22:19:05.060Z"
+      "createdAt": "2026-06-24T23:02:48.442Z"
     },
     {
       "id": "notif_002",
@@ -3658,7 +4402,7 @@
       "message": "Scan report generated for AppRouterServerComponent.tsx with quality score 87%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-06-25T10:19:05.060Z"
+      "createdAt": "2026-06-25T11:02:48.442Z"
     },
     {
       "id": "notif_003",
@@ -3667,7 +4411,7 @@
       "message": "Scan report generated for BookingCalendar.tsx with quality score 91%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-06-25T22:19:05.060Z"
+      "createdAt": "2026-06-25T23:02:48.442Z"
     },
     {
       "id": "notif_004",
@@ -3676,7 +4420,7 @@
       "message": "Scan report generated for CanvasRenderer.tsx with quality score 90%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-06-26T10:19:05.060Z"
+      "createdAt": "2026-06-26T11:02:48.442Z"
     },
     {
       "id": "notif_005",
@@ -3685,7 +4429,7 @@
       "message": "Scan report generated for DialogComponent.tsx with quality score 97%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-06-26T22:19:05.060Z"
+      "createdAt": "2026-06-26T23:02:48.442Z"
     },
     {
       "id": "notif_006",
@@ -3694,7 +4438,7 @@
       "message": "Scan report generated for AuthDashboardContainer.tsx with quality score 94%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-06-27T10:19:05.060Z"
+      "createdAt": "2026-06-27T11:02:48.442Z"
     },
     {
       "id": "notif_007",
@@ -3703,7 +4447,7 @@
       "message": "Scan report generated for ReactiveEffectScope.vue with quality score 99%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-06-27T22:19:05.060Z"
+      "createdAt": "2026-06-27T23:02:48.442Z"
     },
     {
       "id": "notif_008",
@@ -3712,7 +4456,7 @@
       "message": "Scan report generated for ChangeDetectorRef.component.ts with quality score 97%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-06-28T10:19:05.060Z"
+      "createdAt": "2026-06-28T11:02:48.442Z"
     },
     {
       "id": "notif_009",
@@ -3721,7 +4465,7 @@
       "message": "Scan report generated for CompilerPipeline.ts with quality score 91%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-06-28T22:19:05.060Z"
+      "createdAt": "2026-06-28T23:02:48.442Z"
     },
     {
       "id": "notif_010",
@@ -3730,7 +4474,7 @@
       "message": "Scan report generated for TRPCContextHandler.ts with quality score 92%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-06-29T10:19:05.060Z"
+      "createdAt": "2026-06-29T11:02:48.442Z"
     },
     {
       "id": "notif_011",
@@ -3739,7 +4483,7 @@
       "message": "Scan report generated for PageServerLoad.ts with quality score 87%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-06-29T22:19:05.060Z"
+      "createdAt": "2026-06-29T23:02:48.442Z"
     },
     {
       "id": "notif_012",
@@ -3748,7 +4492,7 @@
       "message": "Scan report generated for PostListContainer.jsx with quality score 99%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-06-30T10:19:05.060Z"
+      "createdAt": "2026-06-30T11:02:48.442Z"
     },
     {
       "id": "notif_013",
@@ -3757,7 +4501,7 @@
       "message": "Scan report generated for UseQueryHook.tsx with quality score 92%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-06-30T22:19:05.060Z"
+      "createdAt": "2026-06-30T23:02:48.442Z"
     },
     {
       "id": "notif_014",
@@ -3766,7 +4510,7 @@
       "message": "Scan report generated for DocItemHeader.tsx with quality score 91%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-01T10:19:05.060Z"
+      "createdAt": "2026-07-01T11:02:48.442Z"
     },
     {
       "id": "notif_015",
@@ -3775,7 +4519,7 @@
       "message": "Scan report generated for TableCoreModel.tsx with quality score 94%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-01T22:19:05.060Z"
+      "createdAt": "2026-07-01T23:02:48.442Z"
     },
     {
       "id": "notif_016",
@@ -3784,7 +4528,7 @@
       "message": "Scan report generated for CreateSliceReducer.ts with quality score 95%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-02T10:19:05.060Z"
+      "createdAt": "2026-07-02T11:02:48.442Z"
     },
     {
       "id": "notif_017",
@@ -3793,7 +4537,7 @@
       "message": "Scan report generated for UseBoundStore.ts with quality score 92%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-02T22:19:05.060Z"
+      "createdAt": "2026-07-02T23:02:48.442Z"
     },
     {
       "id": "notif_018",
@@ -3802,7 +4546,7 @@
       "message": "Scan report generated for AppNuxtLayout.vue with quality score 86%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-03T10:19:05.060Z"
+      "createdAt": "2026-07-03T11:02:48.442Z"
     },
     {
       "id": "notif_019",
@@ -3811,7 +4555,7 @@
       "message": "Scan report generated for RouteHandler.ts with quality score 98%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-03T22:19:05.060Z"
+      "createdAt": "2026-07-03T23:02:48.442Z"
     },
     {
       "id": "notif_020",
@@ -3820,7 +4564,7 @@
       "message": "Scan report generated for CdkTreeControl.component.ts with quality score 99%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-04T10:19:05.060Z"
+      "createdAt": "2026-07-04T11:02:48.442Z"
     },
     {
       "id": "notif_021",
@@ -3829,7 +4573,7 @@
       "message": "Scan report generated for InteractiveCodeSandbox.tsx with quality score 97%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-04T22:19:05.060Z"
+      "createdAt": "2026-07-04T23:02:48.442Z"
     },
     {
       "id": "notif_022",
@@ -3838,7 +4582,7 @@
       "message": "Scan report generated for BlogPostHeader.tsx with quality score 93%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-05T10:19:05.060Z"
+      "createdAt": "2026-07-05T11:02:48.442Z"
     },
     {
       "id": "notif_023",
@@ -3847,7 +4591,7 @@
       "message": "Scan report generated for SessionAuthProvider.tsx with quality score 97%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-05T22:19:05.060Z"
+      "createdAt": "2026-07-05T23:02:48.442Z"
     },
     {
       "id": "notif_024",
@@ -3856,7 +4600,7 @@
       "message": "Scan report generated for RemoteComponentLoader.tsx with quality score 86%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-06T10:19:05.060Z"
+      "createdAt": "2026-07-06T11:02:48.442Z"
     },
     {
       "id": "notif_025",
@@ -3865,7 +4609,7 @@
       "message": "Scan report generated for ProjectGraphBuilder.ts with quality score 88%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-06T22:19:05.060Z"
+      "createdAt": "2026-07-06T23:02:48.442Z"
     },
     {
       "id": "notif_026",
@@ -3874,7 +4618,7 @@
       "message": "Scan report generated for IslandComponentHydrator.tsx with quality score 86%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-07T10:19:05.060Z"
+      "createdAt": "2026-07-07T11:02:48.442Z"
     },
     {
       "id": "notif_027",
@@ -3883,7 +4627,7 @@
       "message": "Scan report generated for StateMachineInterpreter.ts with quality score 86%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-07T22:19:05.060Z"
+      "createdAt": "2026-07-07T23:02:48.442Z"
     },
     {
       "id": "notif_028",
@@ -3892,7 +4636,7 @@
       "message": "Scan report generated for QTableDataGrid.vue with quality score 91%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-08T10:19:05.060Z"
+      "createdAt": "2026-07-08T11:02:48.442Z"
     },
     {
       "id": "notif_029",
@@ -3901,7 +4645,7 @@
       "message": "Scan report generated for ArchitectCommandRunner.ts with quality score 97%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-08T22:19:05.060Z"
+      "createdAt": "2026-07-08T23:02:48.442Z"
     },
     {
       "id": "notif_030",
@@ -3910,7 +4654,7 @@
       "message": "Scan report generated for TurboPackBundler.ts with quality score 94%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-09T10:19:05.060Z"
+      "createdAt": "2026-07-09T11:02:48.442Z"
     },
     {
       "id": "notif_031",
@@ -3919,7 +4663,7 @@
       "message": "Scan report generated for PaymentGatewayCheckout.tsx with quality score 83%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-09T22:19:05.060Z"
+      "createdAt": "2026-07-09T23:02:48.442Z"
     },
     {
       "id": "notif_032",
@@ -3928,7 +4672,7 @@
       "message": "Scan report generated for SinhalaNLPContainer.jsx with quality score 97%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-10T10:19:05.060Z"
+      "createdAt": "2026-07-10T11:02:48.442Z"
     },
     {
       "id": "notif_033",
@@ -3937,7 +4681,7 @@
       "message": "Scan report generated for APIMgmtDashboard.tsx with quality score 97%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-10T22:19:05.060Z"
+      "createdAt": "2026-07-10T23:02:48.442Z"
     },
     {
       "id": "notif_034",
@@ -3946,7 +4690,7 @@
       "message": "Scan report generated for DoctorAppointmentPanel.vue with quality score 86%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-11T10:19:05.060Z"
+      "createdAt": "2026-07-11T11:02:48.442Z"
     },
     {
       "id": "notif_035",
@@ -3955,7 +4699,7 @@
       "message": "Scan report generated for OrderDispatchMap.component.ts with quality score 98%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-11T22:19:05.060Z"
+      "createdAt": "2026-07-11T23:02:48.442Z"
     },
     {
       "id": "notif_036",
@@ -3964,7 +4708,7 @@
       "message": "Scan report generated for BillPaymentForm.tsx with quality score 94%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-12T10:19:05.060Z"
+      "createdAt": "2026-07-12T11:02:48.442Z"
     },
     {
       "id": "notif_037",
@@ -3973,7 +4717,7 @@
       "message": "Scan report generated for DriverLocationTracker.jsx with quality score 82%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-12T22:19:05.060Z"
+      "createdAt": "2026-07-12T23:02:48.442Z"
     },
     {
       "id": "notif_038",
@@ -3982,7 +4726,7 @@
       "message": "Scan report generated for TeaBiddingTable.vue with quality score 96%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-13T10:19:05.060Z"
+      "createdAt": "2026-07-13T11:02:48.442Z"
     },
     {
       "id": "notif_039",
@@ -3991,7 +4735,7 @@
       "message": "Scan report generated for BusRouteSearch.component.ts with quality score 98%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-13T22:19:05.060Z"
+      "createdAt": "2026-07-13T23:02:48.442Z"
     },
     {
       "id": "notif_040",
@@ -4000,7 +4744,7 @@
       "message": "Scan report generated for GemAuctionCard.tsx with quality score 93%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-14T10:19:05.060Z"
+      "createdAt": "2026-07-14T11:02:48.442Z"
     },
     {
       "id": "notif_041",
@@ -4009,7 +4753,7 @@
       "message": "Scan report generated for GovDataVisualization.tsx with quality score 91%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-14T22:19:05.060Z"
+      "createdAt": "2026-07-14T23:02:48.442Z"
     },
     {
       "id": "notif_042",
@@ -4018,7 +4762,7 @@
       "message": "Scan report generated for SriLankaCovidMap.jsx with quality score 93%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-15T10:19:05.060Z"
+      "createdAt": "2026-07-15T11:02:48.442Z"
     },
     {
       "id": "notif_043",
@@ -4027,7 +4771,7 @@
       "message": "Scan report generated for PaymentGatewayCheckout.tsx with quality score 82%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-15T22:19:05.060Z"
+      "createdAt": "2026-07-15T23:02:48.442Z"
     },
     {
       "id": "notif_044",
@@ -4036,7 +4780,7 @@
       "message": "Scan report generated for SinhalaNLPContainer.jsx with quality score 98%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-16T10:19:05.060Z"
+      "createdAt": "2026-07-16T11:02:48.442Z"
     },
     {
       "id": "notif_045",
@@ -4045,7 +4789,7 @@
       "message": "Scan report generated for APIMgmtDashboard.tsx with quality score 92%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-16T22:19:05.060Z"
+      "createdAt": "2026-07-16T23:02:48.442Z"
     },
     {
       "id": "notif_046",
@@ -4054,7 +4798,7 @@
       "message": "Scan report generated for DoctorAppointmentPanel.vue with quality score 83%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-17T10:19:05.060Z"
+      "createdAt": "2026-07-17T11:02:48.442Z"
     },
     {
       "id": "notif_047",
@@ -4063,7 +4807,7 @@
       "message": "Scan report generated for OrderDispatchMap.component.ts with quality score 86%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-17T22:19:05.060Z"
+      "createdAt": "2026-07-17T23:02:48.442Z"
     },
     {
       "id": "notif_048",
@@ -4072,7 +4816,7 @@
       "message": "Scan report generated for BillPaymentForm.tsx with quality score 90%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-18T10:19:05.060Z"
+      "createdAt": "2026-07-18T11:02:48.442Z"
     },
     {
       "id": "notif_049",
@@ -4081,7 +4825,7 @@
       "message": "Scan report generated for DriverLocationTracker.jsx with quality score 96%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-18T22:19:05.060Z"
+      "createdAt": "2026-07-18T23:02:48.442Z"
     },
     {
       "id": "notif_050",
@@ -4090,7 +4834,7 @@
       "message": "Scan report generated for TeaBiddingTable.vue with quality score 88%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-19T10:19:05.060Z"
+      "createdAt": "2026-07-19T11:02:48.442Z"
     },
     {
       "id": "notif_051",
@@ -4099,7 +4843,7 @@
       "message": "Scan report generated for BusRouteSearch.component.ts with quality score 93%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-19T22:19:05.060Z"
+      "createdAt": "2026-07-19T23:02:48.442Z"
     },
     {
       "id": "notif_052",
@@ -4108,7 +4852,7 @@
       "message": "Scan report generated for GemAuctionCard.tsx with quality score 91%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-20T10:19:05.060Z"
+      "createdAt": "2026-07-20T11:02:48.442Z"
     },
     {
       "id": "notif_053",
@@ -4117,7 +4861,7 @@
       "message": "Scan report generated for GovDataVisualization.tsx with quality score 84%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-20T22:19:05.060Z"
+      "createdAt": "2026-07-20T23:02:48.442Z"
     },
     {
       "id": "notif_054",
@@ -4126,7 +4870,7 @@
       "message": "Scan report generated for SriLankaCovidMap.jsx with quality score 94%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-21T10:19:05.060Z"
+      "createdAt": "2026-07-21T11:02:48.442Z"
     },
     {
       "id": "notif_055",
@@ -4135,7 +4879,7 @@
       "message": "Scan report generated for PaymentGatewayCheckout.tsx with quality score 88%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-21T22:19:05.060Z"
+      "createdAt": "2026-07-21T23:02:48.442Z"
     },
     {
       "id": "notif_056",
@@ -4144,7 +4888,7 @@
       "message": "Scan report generated for SinhalaNLPContainer.jsx with quality score 98%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-22T10:19:05.060Z"
+      "createdAt": "2026-07-22T11:02:48.442Z"
     },
     {
       "id": "notif_057",
@@ -4153,7 +4897,7 @@
       "message": "Scan report generated for APIMgmtDashboard.tsx with quality score 97%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-22T22:19:05.060Z"
+      "createdAt": "2026-07-22T23:02:48.442Z"
     },
     {
       "id": "notif_058",
@@ -4162,7 +4906,7 @@
       "message": "Scan report generated for DoctorAppointmentPanel.vue with quality score 95%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-23T10:19:05.060Z"
+      "createdAt": "2026-07-23T11:02:48.442Z"
     },
     {
       "id": "notif_059",
@@ -4171,7 +4915,7 @@
       "message": "Scan report generated for OrderDispatchMap.component.ts with quality score 87%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-23T22:19:05.060Z"
+      "createdAt": "2026-07-23T23:02:48.442Z"
     },
     {
       "id": "notif_060",
@@ -4180,7 +4924,7 @@
       "message": "Scan report generated for BillPaymentForm.tsx with quality score 89%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-24T10:19:05.060Z"
+      "createdAt": "2026-07-24T11:02:48.442Z"
     },
     {
       "id": "notif_061",
@@ -4189,7 +4933,7 @@
       "message": "Scan report generated for DriverLocationTracker.jsx with quality score 90%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-24T22:19:05.060Z"
+      "createdAt": "2026-07-24T23:02:48.442Z"
     },
     {
       "id": "notif_062",
@@ -4198,7 +4942,7 @@
       "message": "Scan report generated for TeaBiddingTable.vue with quality score 97%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-25T10:19:05.060Z"
+      "createdAt": "2026-07-25T11:02:48.442Z"
     },
     {
       "id": "notif_063",
@@ -4207,7 +4951,7 @@
       "message": "Scan report generated for BusRouteSearch.component.ts with quality score 84%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-25T22:19:05.060Z"
+      "createdAt": "2026-07-25T23:02:48.442Z"
     },
     {
       "id": "notif_064",
@@ -4216,7 +4960,7 @@
       "message": "Scan report generated for GemAuctionCard.tsx with quality score 87%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-26T10:19:05.060Z"
+      "createdAt": "2026-07-26T11:02:48.442Z"
     },
     {
       "id": "notif_065",
@@ -4225,7 +4969,7 @@
       "message": "Scan report generated for GovDataVisualization.tsx with quality score 88%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-26T22:19:05.060Z"
+      "createdAt": "2026-07-26T23:02:48.442Z"
     },
     {
       "id": "notif_066",
@@ -4234,7 +4978,7 @@
       "message": "Scan report generated for SriLankaCovidMap.jsx with quality score 84%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-27T10:19:05.060Z"
+      "createdAt": "2026-07-27T11:02:48.442Z"
     },
     {
       "id": "notif_067",
@@ -4243,7 +4987,7 @@
       "message": "Scan report generated for PaymentGatewayCheckout.tsx with quality score 82%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-27T22:19:05.060Z"
+      "createdAt": "2026-07-27T23:02:48.442Z"
     },
     {
       "id": "notif_068",
@@ -4252,7 +4996,7 @@
       "message": "Scan report generated for SinhalaNLPContainer.jsx with quality score 83%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-28T10:19:05.060Z"
+      "createdAt": "2026-07-28T11:02:48.442Z"
     },
     {
       "id": "notif_069",
@@ -4261,7 +5005,7 @@
       "message": "Scan report generated for APIMgmtDashboard.tsx with quality score 89%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-28T22:19:05.060Z"
+      "createdAt": "2026-07-28T23:02:48.442Z"
     },
     {
       "id": "notif_070",
@@ -4270,7 +5014,7 @@
       "message": "Scan report generated for DoctorAppointmentPanel.vue with quality score 94%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-07-29T10:19:05.060Z"
+      "createdAt": "2026-07-29T11:02:48.442Z"
     },
     {
       "id": "notif_071",
@@ -4279,7 +5023,7 @@
       "message": "Scan report generated for OrderDispatchMap.component.ts with quality score 87%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-29T22:19:05.060Z"
+      "createdAt": "2026-07-29T23:02:48.442Z"
     },
     {
       "id": "notif_072",
@@ -4288,7 +5032,7 @@
       "message": "Scan report generated for BillPaymentForm.tsx with quality score 99%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-30T10:19:05.060Z"
+      "createdAt": "2026-07-30T11:02:48.442Z"
     },
     {
       "id": "notif_073",
@@ -4297,7 +5041,7 @@
       "message": "Scan report generated for DriverLocationTracker.jsx with quality score 99%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-07-30T22:19:05.060Z"
+      "createdAt": "2026-07-30T23:02:48.442Z"
     },
     {
       "id": "notif_074",
@@ -4306,7 +5050,7 @@
       "message": "Scan report generated for TeaBiddingTable.vue with quality score 83%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-07-31T10:19:05.060Z"
+      "createdAt": "2026-07-31T11:02:48.442Z"
     },
     {
       "id": "notif_075",
@@ -4315,7 +5059,7 @@
       "message": "Scan report generated for BusRouteSearch.component.ts with quality score 84%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-07-31T22:19:05.060Z"
+      "createdAt": "2026-07-31T23:02:48.442Z"
     },
     {
       "id": "notif_076",
@@ -4324,7 +5068,7 @@
       "message": "Scan report generated for GemAuctionCard.tsx with quality score 98%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-08-01T10:19:05.060Z"
+      "createdAt": "2026-08-01T11:02:48.442Z"
     },
     {
       "id": "notif_077",
@@ -4333,7 +5077,7 @@
       "message": "Scan report generated for GovDataVisualization.tsx with quality score 83%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-08-01T22:19:05.060Z"
+      "createdAt": "2026-08-01T23:02:48.442Z"
     },
     {
       "id": "notif_078",
@@ -4342,7 +5086,7 @@
       "message": "Scan report generated for SriLankaCovidMap.jsx with quality score 95%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-08-02T10:19:05.060Z"
+      "createdAt": "2026-08-02T11:02:48.442Z"
     },
     {
       "id": "notif_079",
@@ -4351,7 +5095,7 @@
       "message": "Scan report generated for PaymentGatewayCheckout.tsx with quality score 92%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-08-02T22:19:05.060Z"
+      "createdAt": "2026-08-02T23:02:48.442Z"
     },
     {
       "id": "notif_080",
@@ -4360,7 +5104,7 @@
       "message": "Scan report generated for SinhalaNLPContainer.jsx with quality score 88%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-08-03T10:19:05.060Z"
+      "createdAt": "2026-08-03T11:02:48.442Z"
     },
     {
       "id": "notif_081",
@@ -4369,7 +5113,7 @@
       "message": "Scan report generated for APIMgmtDashboard.tsx with quality score 99%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-08-03T22:19:05.060Z"
+      "createdAt": "2026-08-03T23:02:48.442Z"
     },
     {
       "id": "notif_082",
@@ -4378,7 +5122,7 @@
       "message": "Scan report generated for DoctorAppointmentPanel.vue with quality score 97%",
       "type": "SUCCESS",
       "read": false,
-      "createdAt": "2026-08-04T10:19:05.060Z"
+      "createdAt": "2026-08-04T11:02:48.442Z"
     },
     {
       "id": "notif_083",
@@ -4387,7 +5131,7 @@
       "message": "Scan report generated for OrderDispatchMap.component.ts with quality score 96%",
       "type": "WARNING",
       "read": true,
-      "createdAt": "2026-08-04T22:19:05.060Z"
+      "createdAt": "2026-08-04T23:02:48.442Z"
     },
     {
       "id": "notif_084",
@@ -4396,7 +5140,7 @@
       "message": "Scan report generated for BillPaymentForm.tsx with quality score 88%",
       "type": "INFO",
       "read": false,
-      "createdAt": "2026-08-05T10:19:05.060Z"
+      "createdAt": "2026-08-05T11:02:48.442Z"
     },
     {
       "id": "notif_085",
@@ -4405,7 +5149,70 @@
       "message": "Scan report generated for DriverLocationTracker.jsx with quality score 87%",
       "type": "SUCCESS",
       "read": true,
-      "createdAt": "2026-08-05T22:19:05.060Z"
+      "createdAt": "2026-08-05T23:02:48.442Z"
+    },
+    {
+      "id": "notif_086",
+      "userId": "usr_1786011916744_555od",
+      "title": "🤖 AI Auto-Fix Ready",
+      "message": "Scan report generated for DashboardPage.tsx with quality score 85%",
+      "type": "INFO",
+      "read": false,
+      "createdAt": "2026-08-06T11:02:48.442Z"
+    },
+    {
+      "id": "notif_087",
+      "userId": "usr_1786011987323_0102a",
+      "title": "⚡ Code Inspection Completed",
+      "message": "Scan report generated for DashboardPage.tsx with quality score 85%",
+      "type": "WARNING",
+      "read": true,
+      "createdAt": "2026-08-06T23:02:48.442Z"
+    },
+    {
+      "id": "notif_088",
+      "userId": "usr_1786012838554_4ej97",
+      "title": "🤖 AI Auto-Fix Ready",
+      "message": "Scan report generated for UserProfile.jsx with quality score 85%",
+      "type": "SUCCESS",
+      "read": false,
+      "createdAt": "2026-08-07T11:02:48.442Z"
+    },
+    {
+      "id": "notif_089",
+      "userId": "usr_1786013424758_5h09d",
+      "title": "⚡ Code Inspection Completed",
+      "message": "Scan report generated for UserProfile.jsx with quality score 85%",
+      "type": "WARNING",
+      "read": true,
+      "createdAt": "2026-08-07T23:02:48.442Z"
+    },
+    {
+      "id": "notif_090",
+      "userId": "usr_1786013640517_r2528",
+      "title": "🤖 AI Auto-Fix Ready",
+      "message": "Scan report generated for SearchPanel.component.ts with quality score 85%",
+      "type": "INFO",
+      "read": false,
+      "createdAt": "2026-08-08T11:02:48.442Z"
+    },
+    {
+      "id": "notif_091",
+      "userId": "usr_1786013718939_ep2fo",
+      "title": "⚡ Code Inspection Completed",
+      "message": "Scan report generated for SearchPanel.component.ts with quality score 85%",
+      "type": "SUCCESS",
+      "read": true,
+      "createdAt": "2026-08-08T23:02:48.442Z"
+    },
+    {
+      "id": "notif_092",
+      "userId": "usr_1786014132898_o25ko",
+      "title": "🤖 AI Auto-Fix Ready",
+      "message": "Scan report generated for Component.tsx with quality score 90%",
+      "type": "INFO",
+      "read": false,
+      "createdAt": "2026-08-09T11:02:48.442Z"
     }
   ],
   "settings": [
@@ -5173,6 +5980,69 @@
       "aiRemediationLevel": "STRICT",
       "emailNotifications": true,
       "exportFormat": "PDF"
+    },
+    {
+      "id": "set_086",
+      "userId": "usr_1786011916744_555od",
+      "theme": "dark",
+      "autoScanOnCommit": true,
+      "aiRemediationLevel": "BALANCED",
+      "emailNotifications": true,
+      "exportFormat": "PDF"
+    },
+    {
+      "id": "set_087",
+      "userId": "usr_1786011987323_0102a",
+      "theme": "dark",
+      "autoScanOnCommit": true,
+      "aiRemediationLevel": "STRICT",
+      "emailNotifications": true,
+      "exportFormat": "PDF"
+    },
+    {
+      "id": "set_088",
+      "userId": "usr_1786012838554_4ej97",
+      "theme": "dark",
+      "autoScanOnCommit": true,
+      "aiRemediationLevel": "BALANCED",
+      "emailNotifications": true,
+      "exportFormat": "PDF"
+    },
+    {
+      "id": "set_089",
+      "userId": "usr_1786013424758_5h09d",
+      "theme": "dark",
+      "autoScanOnCommit": true,
+      "aiRemediationLevel": "STRICT",
+      "emailNotifications": true,
+      "exportFormat": "PDF"
+    },
+    {
+      "id": "set_090",
+      "userId": "usr_1786013640517_r2528",
+      "theme": "dark",
+      "autoScanOnCommit": true,
+      "aiRemediationLevel": "BALANCED",
+      "emailNotifications": true,
+      "exportFormat": "PDF"
+    },
+    {
+      "id": "set_091",
+      "userId": "usr_1786013718939_ep2fo",
+      "theme": "dark",
+      "autoScanOnCommit": true,
+      "aiRemediationLevel": "STRICT",
+      "emailNotifications": true,
+      "exportFormat": "PDF"
+    },
+    {
+      "id": "set_092",
+      "userId": "usr_1786014132898_o25ko",
+      "theme": "dark",
+      "autoScanOnCommit": true,
+      "aiRemediationLevel": "BALANCED",
+      "emailNotifications": true,
+      "exportFormat": "PDF"
     }
   ],
   "auditLogs": [
@@ -5185,7 +6055,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Alex Rivera (facebook/react) performed Code Inspection Scan successfully",
-      "createdAt": "2026-05-13T10:19:05.059Z"
+      "createdAt": "2026-05-13T11:02:48.441Z"
     },
     {
       "id": "log_002",
@@ -5196,7 +6066,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Guillermo Rauch (vercel/next.js) performed Platform Login successfully",
-      "createdAt": "2026-05-14T10:19:05.059Z"
+      "createdAt": "2026-05-14T11:02:48.442Z"
     },
     {
       "id": "log_003",
@@ -5207,7 +6077,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Peer Richelsen (calcom/cal.com) performed Platform Login successfully",
-      "createdAt": "2026-05-15T10:19:05.059Z"
+      "createdAt": "2026-05-15T11:02:48.442Z"
     },
     {
       "id": "log_004",
@@ -5218,7 +6088,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Christopher Chedeau (excalidraw/excalidraw) performed Code Inspection Scan successfully",
-      "createdAt": "2026-05-16T10:19:05.059Z"
+      "createdAt": "2026-05-16T11:02:48.442Z"
     },
     {
       "id": "log_005",
@@ -5229,7 +6099,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Shadcn (shadcn/ui) performed Platform Login successfully",
-      "createdAt": "2026-05-17T10:19:05.059Z"
+      "createdAt": "2026-05-17T11:02:48.442Z"
     },
     {
       "id": "log_006",
@@ -5240,7 +6110,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Paul Copplestone (supabase/supabase) performed Platform Login successfully",
-      "createdAt": "2026-05-18T10:19:05.059Z"
+      "createdAt": "2026-05-18T11:02:48.442Z"
     },
     {
       "id": "log_007",
@@ -5251,7 +6121,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Evan You (vuejs/core) performed Code Inspection Scan successfully",
-      "createdAt": "2026-05-19T10:19:05.059Z"
+      "createdAt": "2026-05-19T11:02:48.442Z"
     },
     {
       "id": "log_008",
@@ -5262,7 +6132,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Miško Hevery (angular/angular) performed Platform Login successfully",
-      "createdAt": "2026-05-20T10:19:05.059Z"
+      "createdAt": "2026-05-20T11:02:48.442Z"
     },
     {
       "id": "log_009",
@@ -5273,7 +6143,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Adam Wathan (tailwindlabs/tailwindcss) performed Platform Login successfully",
-      "createdAt": "2026-05-21T10:19:05.059Z"
+      "createdAt": "2026-05-21T11:02:48.442Z"
     },
     {
       "id": "log_010",
@@ -5284,7 +6154,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Theo Browne (t3-oss/create-t3-app) performed Code Inspection Scan successfully",
-      "createdAt": "2026-05-22T10:19:05.059Z"
+      "createdAt": "2026-05-22T11:02:48.442Z"
     },
     {
       "id": "log_011",
@@ -5295,7 +6165,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Rich Harris (sveltejs/kit) performed Platform Login successfully",
-      "createdAt": "2026-05-23T10:19:05.059Z"
+      "createdAt": "2026-05-23T11:02:48.442Z"
     },
     {
       "id": "log_012",
@@ -5306,7 +6176,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Corey Hulen (mattermost/mattermost-webapp) performed Platform Login successfully",
-      "createdAt": "2026-05-24T10:19:05.059Z"
+      "createdAt": "2026-05-24T11:02:48.442Z"
     },
     {
       "id": "log_013",
@@ -5317,7 +6187,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Tanner Linsley (tanstack/query) performed Code Inspection Scan successfully",
-      "createdAt": "2026-05-25T10:19:05.059Z"
+      "createdAt": "2026-05-25T11:02:48.442Z"
     },
     {
       "id": "log_014",
@@ -5328,7 +6198,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Sebastien Lorber (facebook/docusaurus) performed Platform Login successfully",
-      "createdAt": "2026-05-26T10:19:05.059Z"
+      "createdAt": "2026-05-26T11:02:48.442Z"
     },
     {
       "id": "log_015",
@@ -5339,7 +6209,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dominik Dorfmeister (tanstack/table) performed Platform Login successfully",
-      "createdAt": "2026-05-27T10:19:05.059Z"
+      "createdAt": "2026-05-27T11:02:48.442Z"
     },
     {
       "id": "log_016",
@@ -5350,7 +6220,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Mark Erikson (reduxjs/redux-toolkit) performed Code Inspection Scan successfully",
-      "createdAt": "2026-05-28T10:19:05.059Z"
+      "createdAt": "2026-05-28T11:02:48.442Z"
     },
     {
       "id": "log_017",
@@ -5361,7 +6231,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Daishi Kato (pmndrs/zustand) performed Platform Login successfully",
-      "createdAt": "2026-05-29T10:19:05.059Z"
+      "createdAt": "2026-05-29T11:02:48.442Z"
     },
     {
       "id": "log_018",
@@ -5372,7 +6242,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Pooya Parsa (nuxt/nuxt) performed Platform Login successfully",
-      "createdAt": "2026-05-30T10:19:05.059Z"
+      "createdAt": "2026-05-30T11:02:48.442Z"
     },
     {
       "id": "log_019",
@@ -5383,7 +6253,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Matteo Collina (fastify/fastify) performed Code Inspection Scan successfully",
-      "createdAt": "2026-05-31T10:19:05.059Z"
+      "createdAt": "2026-05-31T11:02:48.442Z"
     },
     {
       "id": "log_020",
@@ -5394,7 +6264,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Kito Mann (angular/components) performed Platform Login successfully",
-      "createdAt": "2026-06-01T10:19:05.059Z"
+      "createdAt": "2026-06-01T11:02:48.442Z"
     },
     {
       "id": "log_021",
@@ -5405,7 +6275,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Sophie Alpert (reactjs/react.dev) performed Platform Login successfully",
-      "createdAt": "2026-06-02T10:19:05.059Z"
+      "createdAt": "2026-06-02T11:02:48.442Z"
     },
     {
       "id": "log_022",
@@ -5416,7 +6286,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dan Abramov (gaearon/overreacted.io) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-03T10:19:05.059Z"
+      "createdAt": "2026-06-03T11:02:48.442Z"
     },
     {
       "id": "log_023",
@@ -5427,7 +6297,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Kent C. Dodds (epicweb-dev/full-stack) performed Platform Login successfully",
-      "createdAt": "2026-06-04T10:19:05.059Z"
+      "createdAt": "2026-06-04T11:02:48.442Z"
     },
     {
       "id": "log_024",
@@ -5438,7 +6308,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Jack Herrington (bluehawk/micro-frontends) performed Platform Login successfully",
-      "createdAt": "2026-06-05T10:19:05.059Z"
+      "createdAt": "2026-06-05T11:02:48.442Z"
     },
     {
       "id": "log_025",
@@ -5449,7 +6319,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Colum Ferry (nrwl/nx) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-06T10:19:05.059Z"
+      "createdAt": "2026-06-06T11:02:48.442Z"
     },
     {
       "id": "log_026",
@@ -5460,7 +6330,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Fred K. Schott (withastro/astro) performed Platform Login successfully",
-      "createdAt": "2026-06-07T10:19:05.059Z"
+      "createdAt": "2026-06-07T11:02:48.442Z"
     },
     {
       "id": "log_027",
@@ -5471,7 +6341,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User David Khourshid (statelyai/xstate) performed Platform Login successfully",
-      "createdAt": "2026-06-08T10:19:05.059Z"
+      "createdAt": "2026-06-08T11:02:48.442Z"
     },
     {
       "id": "log_028",
@@ -5482,7 +6352,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Bregt Werbrouck (quasarframework/quasar) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-09T10:19:05.059Z"
+      "createdAt": "2026-06-09T11:02:48.442Z"
     },
     {
       "id": "log_029",
@@ -5493,7 +6363,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Minko Gechev (angular/angular-cli) performed Platform Login successfully",
-      "createdAt": "2026-06-10T10:19:05.059Z"
+      "createdAt": "2026-06-10T11:02:48.442Z"
     },
     {
       "id": "log_030",
@@ -5504,7 +6374,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Tim Neutkens (vercel/turbo) performed Platform Login successfully",
-      "createdAt": "2026-06-11T10:19:05.059Z"
+      "createdAt": "2026-06-11T11:02:48.442Z"
     },
     {
       "id": "log_031",
@@ -5515,7 +6385,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Kasun Kalhara (LK: wso2/carbon-apimgt-admin-portal) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-12T10:19:05.059Z"
+      "createdAt": "2026-06-12T11:02:48.442Z"
     },
     {
       "id": "log_032",
@@ -5526,7 +6396,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Nuwan Bandara (LK: sliit-foss/sliit-foss-official-web) performed Platform Login successfully",
-      "createdAt": "2026-06-13T10:19:05.059Z"
+      "createdAt": "2026-06-13T11:02:48.442Z"
     },
     {
       "id": "log_033",
@@ -5537,7 +6407,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dasun Pathirana (LK: open-sri-lanka/lk-covid-tracker) performed Platform Login successfully",
-      "createdAt": "2026-06-14T10:19:05.059Z"
+      "createdAt": "2026-06-14T11:02:48.442Z"
     },
     {
       "id": "log_034",
@@ -5548,7 +6418,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Chathura De Silva (LK: colombo-tech/lanka-pay-gateway-spa) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-15T10:19:05.059Z"
+      "createdAt": "2026-06-15T11:02:48.442Z"
     },
     {
       "id": "log_035",
@@ -5559,7 +6429,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dilshan Perera (LK: lk-devs/sinhala-nlp-dashboard) performed Platform Login successfully",
-      "createdAt": "2026-06-16T10:19:05.059Z"
+      "createdAt": "2026-06-16T11:02:48.442Z"
     },
     {
       "id": "log_036",
@@ -5570,7 +6440,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Lakshan Fernando (LK: virtusa-labs/lk-telemed-frontend) performed Platform Login successfully",
-      "createdAt": "2026-06-17T10:19:05.059Z"
+      "createdAt": "2026-06-17T11:02:48.442Z"
     },
     {
       "id": "log_037",
@@ -5581,7 +6451,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Thilina Jayasinghe (LK: sysco-labs-lk/order-dispatch-spa) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-18T10:19:05.059Z"
+      "createdAt": "2026-06-18T11:02:48.442Z"
     },
     {
       "id": "log_038",
@@ -5592,7 +6462,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Pathum Wickramasinghe (LK: ifs-lk/field-service-mobile-web) performed Platform Login successfully",
-      "createdAt": "2026-06-19T10:19:05.059Z"
+      "createdAt": "2026-06-19T11:02:48.442Z"
     },
     {
       "id": "log_039",
@@ -5603,7 +6473,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Nipuna Ratnayake (LK: pickme-lk/driver-dashboard-spa) performed Platform Login successfully",
-      "createdAt": "2026-06-20T10:19:05.059Z"
+      "createdAt": "2026-06-20T11:02:48.442Z"
     },
     {
       "id": "log_040",
@@ -5614,7 +6484,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Buddhika Jayawardena (LK: dialog-axiom/lk-e-bill-portal) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-21T10:19:05.059Z"
+      "createdAt": "2026-06-21T11:02:48.442Z"
     },
     {
       "id": "log_041",
@@ -5625,7 +6495,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Sanjeewa Pushpakumara (LK: mobitel-lk/my-account-dashboard) performed Platform Login successfully",
-      "createdAt": "2026-06-22T10:19:05.059Z"
+      "createdAt": "2026-06-22T11:02:48.442Z"
     },
     {
       "id": "log_042",
@@ -5636,7 +6506,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Asanka Karunaratne (LK: kandy-devs/hill-capital-tours-web) performed Platform Login successfully",
-      "createdAt": "2026-06-23T10:19:05.059Z"
+      "createdAt": "2026-06-23T11:02:48.442Z"
     },
     {
       "id": "log_043",
@@ -5647,7 +6517,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Janith Weerasinghe (LK: galle-tech/lk-sea-ports-analytics) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-24T10:19:05.059Z"
+      "createdAt": "2026-06-24T11:02:48.442Z"
     },
     {
       "id": "log_044",
@@ -5658,7 +6528,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Ruwan Silva (LK: jaffna-devs/northern-agro-hub-spa) performed Platform Login successfully",
-      "createdAt": "2026-06-25T10:19:05.059Z"
+      "createdAt": "2026-06-25T11:02:48.442Z"
     },
     {
       "id": "log_045",
@@ -5669,7 +6539,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dhanushka Rajapaksha (LK: kurunegala-tech/lk-bus-routes-app) performed Platform Login successfully",
-      "createdAt": "2026-06-26T10:19:05.059Z"
+      "createdAt": "2026-06-26T11:02:48.442Z"
     },
     {
       "id": "log_046",
@@ -5680,7 +6550,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Mahesh Senanayake (LK: matara-devs/southern-railways-spa) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-27T10:19:05.059Z"
+      "createdAt": "2026-06-27T11:02:48.442Z"
     },
     {
       "id": "log_047",
@@ -5691,7 +6561,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Isuru Gunasekara (LK: ratnapura-tech/gem-bidding-platform) performed Platform Login successfully",
-      "createdAt": "2026-06-28T10:19:05.059Z"
+      "createdAt": "2026-06-28T11:02:48.442Z"
     },
     {
       "id": "log_048",
@@ -5702,7 +6572,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Sachithra Madusanka (LK: badulla-devs/tea-auction-portal) performed Platform Login successfully",
-      "createdAt": "2026-06-29T10:19:05.059Z"
+      "createdAt": "2026-06-29T11:02:48.442Z"
     },
     {
       "id": "log_049",
@@ -5713,7 +6583,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Kavinda Abeysekara (LK: colombo-react/lk-ui-component-library) performed Code Inspection Scan successfully",
-      "createdAt": "2026-06-30T10:19:05.059Z"
+      "createdAt": "2026-06-30T11:02:48.442Z"
     },
     {
       "id": "log_050",
@@ -5724,7 +6594,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Charith Mendis (LK: lk-open-data/gov-lanka-transparency-spa) performed Platform Login successfully",
-      "createdAt": "2026-07-01T10:19:05.059Z"
+      "createdAt": "2026-07-01T11:02:48.442Z"
     },
     {
       "id": "log_051",
@@ -5735,7 +6605,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Supun Tharaka (LK: wso2/carbon-apimgt-admin-portal) performed Platform Login successfully",
-      "createdAt": "2026-07-02T10:19:05.059Z"
+      "createdAt": "2026-07-02T11:02:48.442Z"
     },
     {
       "id": "log_052",
@@ -5746,7 +6616,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Pradeep Kumara (LK: sliit-foss/sliit-foss-official-web) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-03T10:19:05.059Z"
+      "createdAt": "2026-07-03T11:02:48.442Z"
     },
     {
       "id": "log_053",
@@ -5757,7 +6627,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Gayan Sampath (LK: open-sri-lanka/lk-covid-tracker) performed Platform Login successfully",
-      "createdAt": "2026-07-04T10:19:05.059Z"
+      "createdAt": "2026-07-04T11:02:48.442Z"
     },
     {
       "id": "log_054",
@@ -5768,7 +6638,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Bhanuka Harischandra (LK: colombo-tech/lanka-pay-gateway-spa) performed Platform Login successfully",
-      "createdAt": "2026-07-05T10:19:05.059Z"
+      "createdAt": "2026-07-05T11:02:48.442Z"
     },
     {
       "id": "log_055",
@@ -5779,7 +6649,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dinuka Wijesinghe (LK: lk-devs/sinhala-nlp-dashboard) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-06T10:19:05.059Z"
+      "createdAt": "2026-07-06T11:02:48.442Z"
     },
     {
       "id": "log_056",
@@ -5790,7 +6660,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Anushka Liyanage (LK: virtusa-labs/lk-telemed-frontend) performed Platform Login successfully",
-      "createdAt": "2026-07-07T10:19:05.059Z"
+      "createdAt": "2026-07-07T11:02:48.442Z"
     },
     {
       "id": "log_057",
@@ -5801,7 +6671,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Roshan Dissanayake (LK: sysco-labs-lk/order-dispatch-spa) performed Platform Login successfully",
-      "createdAt": "2026-07-08T10:19:05.059Z"
+      "createdAt": "2026-07-08T11:02:48.442Z"
     },
     {
       "id": "log_058",
@@ -5812,7 +6682,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Kusal Mendis (LK: ifs-lk/field-service-mobile-web) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-09T10:19:05.059Z"
+      "createdAt": "2026-07-09T11:02:48.442Z"
     },
     {
       "id": "log_059",
@@ -5823,7 +6693,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Wanindu Hasaranga (LK: pickme-lk/driver-dashboard-spa) performed Platform Login successfully",
-      "createdAt": "2026-07-10T10:19:05.059Z"
+      "createdAt": "2026-07-10T11:02:48.442Z"
     },
     {
       "id": "log_060",
@@ -5834,7 +6704,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Pathum Nissanka (LK: dialog-axiom/lk-e-bill-portal) performed Platform Login successfully",
-      "createdAt": "2026-07-11T10:19:05.059Z"
+      "createdAt": "2026-07-11T11:02:48.442Z"
     },
     {
       "id": "log_061",
@@ -5845,7 +6715,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Bhanuka Rajapaksa (LK: mobitel-lk/my-account-dashboard) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-12T10:19:05.059Z"
+      "createdAt": "2026-07-12T11:02:48.442Z"
     },
     {
       "id": "log_062",
@@ -5856,7 +6726,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Charith Asalanka (LK: kandy-devs/hill-capital-tours-web) performed Platform Login successfully",
-      "createdAt": "2026-07-13T10:19:05.059Z"
+      "createdAt": "2026-07-13T11:02:48.442Z"
     },
     {
       "id": "log_063",
@@ -5867,7 +6737,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dasun Shanaka (LK: galle-tech/lk-sea-ports-analytics) performed Platform Login successfully",
-      "createdAt": "2026-07-14T10:19:05.059Z"
+      "createdAt": "2026-07-14T11:02:48.442Z"
     },
     {
       "id": "log_064",
@@ -5878,7 +6748,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dushmantha Chameera (LK: jaffna-devs/northern-agro-hub-spa) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-15T10:19:05.060Z"
+      "createdAt": "2026-07-15T11:02:48.442Z"
     },
     {
       "id": "log_065",
@@ -5889,7 +6759,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Maheesh Theekshana (LK: kurunegala-tech/lk-bus-routes-app) performed Platform Login successfully",
-      "createdAt": "2026-07-16T10:19:05.060Z"
+      "createdAt": "2026-07-16T11:02:48.442Z"
     },
     {
       "id": "log_066",
@@ -5900,7 +6770,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Matheesha Pathirana (LK: matara-devs/southern-railways-spa) performed Platform Login successfully",
-      "createdAt": "2026-07-17T10:19:05.060Z"
+      "createdAt": "2026-07-17T11:02:48.442Z"
     },
     {
       "id": "log_067",
@@ -5911,7 +6781,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dunith Wellalage (LK: ratnapura-tech/gem-bidding-platform) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-18T10:19:05.060Z"
+      "createdAt": "2026-07-18T11:02:48.442Z"
     },
     {
       "id": "log_068",
@@ -5922,7 +6792,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Kamindu Mendis (LK: badulla-devs/tea-auction-portal) performed Platform Login successfully",
-      "createdAt": "2026-07-19T10:19:05.060Z"
+      "createdAt": "2026-07-19T11:02:48.442Z"
     },
     {
       "id": "log_069",
@@ -5933,7 +6803,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Asitha Fernando (LK: colombo-react/lk-ui-component-library) performed Platform Login successfully",
-      "createdAt": "2026-07-20T10:19:05.060Z"
+      "createdAt": "2026-07-20T11:02:48.442Z"
     },
     {
       "id": "log_070",
@@ -5944,7 +6814,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Lahiru Kumara (LK: lk-open-data/gov-lanka-transparency-spa) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-21T10:19:05.060Z"
+      "createdAt": "2026-07-21T11:02:48.442Z"
     },
     {
       "id": "log_071",
@@ -5955,7 +6825,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Nuwan Thushara (LK: wso2/carbon-apimgt-admin-portal) performed Platform Login successfully",
-      "createdAt": "2026-07-22T10:19:05.060Z"
+      "createdAt": "2026-07-22T11:02:48.442Z"
     },
     {
       "id": "log_072",
@@ -5966,7 +6836,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Avishka Fernando (LK: sliit-foss/sliit-foss-official-web) performed Platform Login successfully",
-      "createdAt": "2026-07-23T10:19:05.060Z"
+      "createdAt": "2026-07-23T11:02:48.442Z"
     },
     {
       "id": "log_073",
@@ -5977,7 +6847,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Sadeera Samarawickrama (LK: open-sri-lanka/lk-covid-tracker) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-24T10:19:05.060Z"
+      "createdAt": "2026-07-24T11:02:48.442Z"
     },
     {
       "id": "log_074",
@@ -5988,7 +6858,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Niroshan Dickwella (LK: colombo-tech/lanka-pay-gateway-spa) performed Platform Login successfully",
-      "createdAt": "2026-07-25T10:19:05.060Z"
+      "createdAt": "2026-07-25T11:02:48.442Z"
     },
     {
       "id": "log_075",
@@ -5999,7 +6869,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Danushka Gunathilaka (LK: lk-devs/sinhala-nlp-dashboard) performed Platform Login successfully",
-      "createdAt": "2026-07-26T10:19:05.060Z"
+      "createdAt": "2026-07-26T11:02:48.442Z"
     },
     {
       "id": "log_076",
@@ -6010,7 +6880,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Suranga Lakmal (LK: virtusa-labs/lk-telemed-frontend) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-27T10:19:05.060Z"
+      "createdAt": "2026-07-27T11:02:48.442Z"
     },
     {
       "id": "log_077",
@@ -6021,7 +6891,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Rangana Herath (LK: sysco-labs-lk/order-dispatch-spa) performed Platform Login successfully",
-      "createdAt": "2026-07-28T10:19:05.060Z"
+      "createdAt": "2026-07-28T11:02:48.442Z"
     },
     {
       "id": "log_078",
@@ -6032,7 +6902,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Tillakaratne Dilshan (LK: ifs-lk/field-service-mobile-web) performed Platform Login successfully",
-      "createdAt": "2026-07-29T10:19:05.060Z"
+      "createdAt": "2026-07-29T11:02:48.442Z"
     },
     {
       "id": "log_079",
@@ -6043,7 +6913,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Lasith Malinga (LK: pickme-lk/driver-dashboard-spa) performed Code Inspection Scan successfully",
-      "createdAt": "2026-07-30T10:19:05.060Z"
+      "createdAt": "2026-07-30T11:02:48.442Z"
     },
     {
       "id": "log_080",
@@ -6054,7 +6924,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Upul Tharanga (LK: dialog-axiom/lk-e-bill-portal) performed Platform Login successfully",
-      "createdAt": "2026-07-31T10:19:05.060Z"
+      "createdAt": "2026-07-31T11:02:48.442Z"
     },
     {
       "id": "log_081",
@@ -6065,7 +6935,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Chamara Kapugedera (LK: mobitel-lk/my-account-dashboard) performed Platform Login successfully",
-      "createdAt": "2026-08-01T10:19:05.060Z"
+      "createdAt": "2026-08-01T11:02:48.442Z"
     },
     {
       "id": "log_082",
@@ -6076,7 +6946,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Farveez Maharoof (LK: kandy-devs/hill-capital-tours-web) performed Code Inspection Scan successfully",
-      "createdAt": "2026-08-02T10:19:05.060Z"
+      "createdAt": "2026-08-02T11:02:48.442Z"
     },
     {
       "id": "log_083",
@@ -6087,7 +6957,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Nuwan Kulasekara (LK: galle-tech/lk-sea-ports-analytics) performed Platform Login successfully",
-      "createdAt": "2026-08-03T10:19:05.060Z"
+      "createdAt": "2026-08-03T11:02:48.442Z"
     },
     {
       "id": "log_084",
@@ -6098,7 +6968,7 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Dhammika Prasad (LK: jaffna-devs/northern-agro-hub-spa) performed Platform Login successfully",
-      "createdAt": "2026-08-04T10:19:05.060Z"
+      "createdAt": "2026-08-04T11:02:48.442Z"
     },
     {
       "id": "log_085",
@@ -6109,188 +6979,104 @@
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
       "details": "User Thilan Samaraweera (LK: kurunegala-tech/lk-bus-routes-app) performed Code Inspection Scan successfully",
-      "createdAt": "2026-08-05T10:19:05.060Z"
+      "createdAt": "2026-08-05T11:02:48.442Z"
     },
     {
-      "action": "LOGIN",
-      "email": "admin@figm.io",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "FAILURE",
-      "details": "User not found",
-      "id": "log_1786011897668_7od9g",
-      "createdAt": "2026-08-06T10:24:57.668Z"
-    },
-    {
-      "action": "LOGIN",
-      "email": "admin@figm.io",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "FAILURE",
-      "details": "User not found",
-      "id": "log_1786011900748_aff09",
-      "createdAt": "2026-08-06T10:25:00.748Z"
-    },
-    {
-      "action": "REGISTER",
+      "id": "log_086",
       "userId": "usr_1786011916744_555od",
       "email": "admin@figm.io",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "action": "REGISTER",
+      "ipAddress": "192.168.1.15",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
-      "id": "log_1786011916752_ve5an",
-      "createdAt": "2026-08-06T10:25:16.752Z"
+      "details": "User abcd  performed Platform Login successfully",
+      "createdAt": "2026-08-06T11:02:48.442Z"
     },
     {
-      "action": "REGISTER",
+      "id": "log_087",
       "userId": "usr_1786011987323_0102a",
       "email": "shehansanjula73@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "SUCCESS",
-      "id": "log_1786011987331_n6mss",
-      "createdAt": "2026-08-06T10:26:27.331Z"
-    },
-    {
       "action": "LOGIN",
-      "userId": "usr_1786011987323_0102a",
-      "email": "shehansanjula73@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "ipAddress": "192.168.1.16",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
-      "id": "log_1786012099214_06xew",
-      "createdAt": "2026-08-06T10:28:19.214Z"
+      "details": "User shehan performed Platform Login successfully",
+      "createdAt": "2026-08-07T11:02:48.442Z"
     },
     {
-      "action": "REGISTER",
-      "email": "methminipabasara9@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "FAILURE",
-      "details": "Password must contain at least one uppercase letter",
-      "id": "log_1786012819320_lt071",
-      "createdAt": "2026-08-06T10:40:19.320Z"
-    },
-    {
-      "action": "REGISTER",
-      "email": "methminipabasara9@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "FAILURE",
-      "details": "Password must contain at least one uppercase letter",
-      "id": "log_1786012824972_lbmdq",
-      "createdAt": "2026-08-06T10:40:24.972Z"
-    },
-    {
-      "action": "REGISTER",
-      "email": "methminipabasara9@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "FAILURE",
-      "details": "Password must contain at least one uppercase letter",
-      "id": "log_1786012826042_vpx45",
-      "createdAt": "2026-08-06T10:40:26.042Z"
-    },
-    {
-      "action": "REGISTER",
+      "id": "log_088",
       "userId": "usr_1786012838554_4ej97",
       "email": "methminipabasara9@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "action": "SCAN_RUN",
+      "ipAddress": "192.168.1.17",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       "status": "SUCCESS",
-      "id": "log_1786012838562_ycsxe",
-      "createdAt": "2026-08-06T10:40:38.562Z"
+      "details": "User sanjula performed Code Inspection Scan successfully",
+      "createdAt": "2026-08-08T11:02:48.442Z"
     },
     {
-      "action": "LOGIN",
-      "userId": "usr_1786012838554_4ej97",
-      "email": "methminipabasara9@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "SUCCESS",
-      "id": "log_1786012917674_z6hbw",
-      "createdAt": "2026-08-06T10:41:57.674Z"
-    },
-    {
-      "action": "LOGIN",
-      "userId": "usr_1786011916744_555od",
-      "email": "admin@figm.io",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "SUCCESS",
-      "id": "log_1786013053728_45znz",
-      "createdAt": "2026-08-06T10:44:13.728Z"
-    },
-    {
-      "action": "REGISTER",
-      "email": "admin@figm.io",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "FAILURE",
-      "details": "Email already registered",
-      "id": "log_1786013227599_mlkfr",
-      "createdAt": "2026-08-06T10:47:07.599Z"
-    },
-    {
-      "action": "REGISTER",
-      "email": "shehansanjula73@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "FAILURE",
-      "details": "Email already registered",
-      "id": "log_1786013233627_i9wp6",
-      "createdAt": "2026-08-06T10:47:13.627Z"
-    },
-    {
-      "action": "REGISTER",
-      "email": "shehansanjula73@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "FAILURE",
-      "details": "Email already registered",
-      "id": "log_1786013240148_jc5cp",
-      "createdAt": "2026-08-06T10:47:20.148Z"
-    },
-    {
-      "action": "REGISTER",
+      "id": "log_089",
       "userId": "usr_1786013424758_5h09d",
       "email": "shehansanjula2001@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
-      "status": "SUCCESS",
-      "id": "log_1786013424766_2bszu",
-      "createdAt": "2026-08-06T10:50:24.766Z"
-    },
-    {
-      "action": "REGISTER",
-      "email": "shehansanjula2001@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "node",
-      "status": "FAILURE",
-      "details": "Email already registered",
-      "id": "log_1786013482747_0r5w0",
-      "createdAt": "2026-08-06T10:51:22.747Z"
-    },
-    {
       "action": "LOGIN",
-      "userId": "usr_1786013424758_5h09d",
-      "email": "shehansanjula2001@gmail.com",
-      "ipAddress": "::1",
-      "userAgent": "node",
-      "status": "FAILURE",
-      "details": "Password mismatch",
-      "id": "log_1786013500106_ic9na",
-      "createdAt": "2026-08-06T10:51:40.107Z"
+      "ipAddress": "192.168.1.18",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      "status": "SUCCESS",
+      "details": "User shehan3 performed Platform Login successfully",
+      "createdAt": "2026-08-09T11:02:48.442Z"
     },
     {
-      "action": "REGISTER",
+      "id": "log_090",
       "userId": "usr_1786013640517_r2528",
       "email": "testuser85_lanka@figm.io",
+      "action": "REGISTER",
+      "ipAddress": "192.168.1.19",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      "status": "SUCCESS",
+      "details": "User Lankan Test User 85 performed Platform Login successfully",
+      "createdAt": "2026-08-10T11:02:48.442Z"
+    },
+    {
+      "id": "log_091",
+      "userId": "usr_1786013718939_ep2fo",
+      "email": "shehansanjula01@gmail.com",
+      "action": "SCAN_RUN",
+      "ipAddress": "192.168.1.20",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      "status": "SUCCESS",
+      "details": "User sanju performed Code Inspection Scan successfully",
+      "createdAt": "2026-08-11T11:02:48.442Z"
+    },
+    {
+      "id": "log_092",
+      "userId": "usr_1786014132898_o25ko",
+      "email": "audit_user_1786014132681@figm.test",
+      "action": "REGISTER",
+      "ipAddress": "192.168.1.21",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      "status": "SUCCESS",
+      "details": "User Audit Test Developer performed Platform Login successfully",
+      "createdAt": "2026-08-12T11:02:48.442Z"
+    },
+    {
+      "action": "REGISTER",
+      "userId": "usr_1786014846952_q2rm0",
+      "email": "audit_user_1786014846781@figm.test",
       "ipAddress": "::1",
       "userAgent": "node",
       "status": "SUCCESS",
-      "id": "log_1786013641474_pxb6m",
-      "createdAt": "2026-08-06T10:54:01.474Z"
+      "id": "log_1786014847433_vftld",
+      "createdAt": "2026-08-06T11:14:07.433Z"
+    },
+    {
+      "action": "REGISTER",
+      "userId": "usr_1786014944401_2qsvd",
+      "email": "audit_user_1786014944376@figm.test",
+      "ipAddress": "::1",
+      "userAgent": "node",
+      "status": "SUCCESS",
+      "id": "log_1786014944796_wba4c",
+      "createdAt": "2026-08-06T11:15:44.796Z"
     }
   ]
 }
