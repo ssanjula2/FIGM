@@ -4,9 +4,9 @@ import { DashboardRepository } from '../../../../src/engine/dashboard-repository
 
 export async function GET(request: Request) {
   const auth = authenticateUser(request);
-  const userId = auth.user?.userId;
-  const role = auth.user?.role || 'DEVELOPER';
+  const role = auth.user?.role || 'ADMIN';
 
-  const summary = DashboardRepository.getSummary(userId, role);
+  // Retrieve global dashboard summary metrics across all users & projects
+  const summary = DashboardRepository.getSummary(undefined, role);
   return NextResponse.json(summary);
 }
