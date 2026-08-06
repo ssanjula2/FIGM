@@ -71,7 +71,7 @@ export async function runJsonToSupabaseMigration(): Promise<MigrationSummary> {
               role: u.role,
               apiKey: u.apiKey,
               resetToken: u.resetToken,
-              resetTokenExpiresAt: u.resetTokenExpiry ? new Date(u.resetTokenExpiry) : null,
+              resetTokenExpiry: u.resetTokenExpiry ? new Date(u.resetTokenExpiry) : null,
               refreshToken: u.refreshToken,
               lastLoginAt: u.lastLoginAt ? new Date(u.lastLoginAt) : null,
               createdAt: u.createdAt ? new Date(u.createdAt) : new Date(),

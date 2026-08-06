@@ -12,7 +12,7 @@
     "build": "npx tsc",
     "build:ui": "next build",
     "start": "next start",
-    "test": "node --import tsx --test --test-concurrency=1 tests/guideline-filtering.test.ts tests/ast-detection.test.ts tests/validation-engine.test.ts tests/evaluation-runner.test.ts tests/cli-analyzer.test.ts tests/auth-isolation.test.ts tests/research-gap-eval.test.ts tests/ai-remediation.test.ts tests/ast-detection-rules.test.ts tests/functional-validation.test.ts tests/auth-production.test.ts tests/dashboard-analytics.test.ts tests/saas-projects-workspace.test.ts tests/saas-scan-history-export.test.ts tests/saas-user-notifications-settings.test.ts tests/saas-search-admin.test.ts tests/supabase-storage-provider.test.ts tests/json-migration.test.ts tests/realtime-storage.test.ts",
+    "test": "node --import tsx --test --test-concurrency=4 --test-timeout=30000 tests/guideline-filtering.test.ts tests/ast-detection.test.ts tests/validation-engine.test.ts tests/evaluation-runner.test.ts tests/cli-analyzer.test.ts tests/auth-isolation.test.ts tests/research-gap-eval.test.ts tests/ai-remediation.test.ts tests/ast-detection-rules.test.ts tests/functional-validation.test.ts tests/auth-production.test.ts tests/dashboard-analytics.test.ts tests/saas-projects-workspace.test.ts tests/saas-scan-history-export.test.ts tests/saas-user-notifications-settings.test.ts tests/saas-search-admin.test.ts tests/supabase-storage-provider.test.ts tests/json-migration.test.ts tests/realtime-storage.test.ts",
     "migrate-json-to-supabase": "node --import tsx scripts/migrate-json-to-supabase.ts",
     "generate-spec": "node --import tsx src/matrix/export-spec.ts",
     "analyze": "node --import tsx src/cli/figm-analyze.ts",
