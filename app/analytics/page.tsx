@@ -77,21 +77,21 @@ export default function AnalyticsPage() {
         {/* Card 1: F1-Score */}
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #38bdf8', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>F1-Score</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#38bdf8', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>93.0%</div>
+          <div style={{ fontSize: '26px', fontWeight: 900, color: '#38bdf8', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>90.0%</div>
           <div style={{ fontSize: '10px', color: '#86efac', marginTop: '4px', fontWeight: 600 }}>Harmonic Mean</div>
         </div>
 
         {/* Card 2: Precision */}
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #10b981', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Precision</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#10b981', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>94.2%</div>
+          <div style={{ fontSize: '26px', fontWeight: 900, color: '#10b981', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>85.7%</div>
           <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>TP / (TP + FP)</div>
         </div>
 
         {/* Card 3: Recall */}
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #f59e0b', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Recall</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#f59e0b', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>91.8%</div>
+          <div style={{ fontSize: '26px', fontWeight: 900, color: '#f59e0b', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>94.7%</div>
           <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>TP / (TP + FN)</div>
         </div>
 

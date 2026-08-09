@@ -309,7 +309,7 @@ export class FunctionalValidator {
         fp,
         fn,
         tn,
-        confidence: reportsA[0]?.confidenceScore || 90.0,
+        confidence: reportsA[0]?.confidenceScore ?? (sampleATriggered ? 0.95 : 0.0),
         execTimeMs: parseFloat(execTimeMs.toFixed(2)),
         aiFixGenerated,
         aiFixValid

@@ -6,7 +6,7 @@ Official Visual Studio Code extension for the **Framework-Independent Guideline 
 
 ## 🌟 Key Features
 
-- **⚡ Live Real-time Diagnostics**: Red squiggly underlines and inline warnings as you type or save.
+- **⚡ Live Real-time Diagnostics**: Red squiggly underlines and inline warnings as you type or save (uses fast client-side line heuristic mode for instant IDE responsiveness; full AST analysis runs via CLI/server engine).
 - **🛡️ WCAG 2.2 & ISO 25010 Mapping**: Hover popups provide detailed explanations, severity ratings, and standards citations.
 - **💡 Quick-Fix Code Actions**: Automated code patch transformations for React, Next.js, Angular, and Vue.
 - **📊 Status Bar Integration**: Displays current file quality score and issue count in real time.

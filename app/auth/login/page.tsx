@@ -143,11 +143,13 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>
+            <label htmlFor="login-email" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>
               Email Address
             </label>
             <input
+              id="login-email"
               type="email"
+              aria-label="Email Address"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -168,7 +170,7 @@ export default function LoginPage() {
 
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <label style={{ color: '#cbd5e1', fontSize: '13px', fontWeight: 600, margin: 0 }}>
+              <label htmlFor="login-password" style={{ color: '#cbd5e1', fontSize: '13px', fontWeight: 600, margin: 0 }}>
                 Password
               </label>
               <Link href="/auth/forgot-password" style={{ color: '#38bdf8', fontSize: '12px', textDecoration: 'none', fontWeight: 500 }}>
@@ -176,7 +178,9 @@ export default function LoginPage() {
               </Link>
             </div>
             <input
+              id="login-password"
               type="password"
+              aria-label="Password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}

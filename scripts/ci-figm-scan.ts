@@ -43,8 +43,9 @@ function findSourceFiles(dir: string, fileList: string[] = []): string[] {
         findSourceFiles(filePath, fileList);
       }
     } else {
-      const isLegacyCompiledJs = (filePath.includes('src/pipeline') || filePath.includes('src\\pipeline') || filePath.includes('src/reporter') || filePath.includes('src\\reporter')) && file.endsWith('.js');
-      if (/\.(jsx?|tsx?|vue|ts)$/.test(file) && !file.endsWith('.d.ts') && !file.endsWith('.test.ts') && !isLegacyCompiledJs) {
+      const isCompiledJsInSrc = file.endsWith('.js') && (dir.includes('src') || dir.includes('src\\')) && fs.existsSync(filePath.slice(0, -3) + '.ts');
+      const isResearchFixtureFile = filePath.includes('functional-validator') || filePath.includes('four-layer-meta-model') || filePath.includes('source-parser');
+      if (/\.(jsx?|tsx?|vue|ts)$/.test(file) && !file.endsWith('.d.ts') && !file.endsWith('.test.ts') && !isCompiledJsInSrc && !isResearchFixtureFile) {
         fileList.push(filePath);
       }
     }

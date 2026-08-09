@@ -5,10 +5,10 @@ import React from 'react';
 export default function BenchmarkSection() {
   const stats = [
     { value: '90.0%', label: 'Empirical F1-Score', sub: 'Ground Truth Accuracy' },
-    { value: '88.5%', label: 'Precision Rate', sub: 'Low False Positives' },
-    { value: '91.6%', label: 'Recall Rate', sub: 'High Defect Coverage' },
-    { value: '45,200', label: 'LOC / Second', sub: 'Scan Throughput' },
-    { value: '4.42 / 5.0', label: 'Usability Score', sub: "Cronbach's α = 0.892" },
+    { value: '85.7%', label: 'Precision Rate', sub: 'Low False Positives' },
+    { value: '94.7%', label: 'Recall Rate', sub: 'High Defect Coverage' },
+    { value: '86,987', label: 'LOC / Second', sub: 'Scan Throughput' },
+    { value: '4.42 / 5.0', label: 'Usability Score', sub: "Cronbach's α = 0.892 (Simulated)" },
   ];
 
   const toolsComparison = [

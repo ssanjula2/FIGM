@@ -44,8 +44,7 @@ jobs:
         run: npm run build
 
       - name: 🧪 Execute Automated Unit & Integration Tests
-        run: npm test || true
-        continue-on-error: true
+        run: npm test
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/postgres' }}
           DIRECT_URL: ${{ secrets.DIRECT_URL || 'postgresql://postgres:postgres@localhost:5432/postgres' }}

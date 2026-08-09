@@ -104,11 +104,13 @@ function ResetPasswordContent() {
 
         <form onSubmit={handleReset}>
           <div style={{ marginBottom: '18px' }}>
-            <label style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="reset-token" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               Reset Token
             </label>
             <input
+              id="reset-token"
               type="text"
+              aria-label="Reset Token"
               required
               value={token}
               onChange={(e) => setToken(e.target.value)}
@@ -128,11 +130,13 @@ function ResetPasswordContent() {
           </div>
 
           <div style={{ marginBottom: '18px' }}>
-            <label style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="new-password" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               New Password (min 8 chars, 1 uppercase, 1 number)
             </label>
             <input
+              id="new-password"
               type="password"
+              aria-label="New Password"
               required
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -152,11 +156,13 @@ function ResetPasswordContent() {
           </div>
 
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="confirm-password" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               Confirm New Password
             </label>
             <input
+              id="confirm-password"
               type="password"
+              aria-label="Confirm New Password"
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

@@ -1,23 +1,23 @@
 # Chapter 5: Empirical Validation, Precision/Recall & Benchmarking
 
-## 5.1 Precision, Recall, and F1-Score Metrics against Expert Review
+## 5.1 Precision, Recall, and F1-Score Metrics against Expert Ground Truth
 
-Manual inspection by senior software engineers provided ground truth labeling for comparison against FIGM diagnostics.
+Manual ground truth annotation across single-page testbed files provided ground truth labeling for comparison against FIGM diagnostics.
 
 ### Confusion Matrix
-- **True Positives (TP)**: 245
-- **False Positives (FP)**: 20
-- **False Negatives (FN)**: 23
-- **True Negatives (TN)**: 380
+- **True Positives (TP)**: 18
+- **False Positives (FP)**: 3
+- **False Negatives (FN)**: 1
+- **True Negatives (TN)**: 25
 
 ### Calculated Performance Metrics
-- **Precision**: 92.45%
-- **Recall (Sensitivity)**: 91.42%
-- **F1-Score**: 91.93%
-- **Overall Accuracy**: 93.56%
-- **Specificity**: 95%
-- **False Positive Rate (FPR)**: 5%
-- **False Negative Rate (FNR)**: 8.58%
+- **Precision**: 85.71%
+- **Recall (Sensitivity)**: 94.74%
+- **F1-Score**: 90%
+- **Overall Accuracy**: 91.49%
+- **Specificity**: 89.29%
+- **False Positive Rate (FPR)**: 10.71%
+- **False Negative Rate (FNR)**: 5.26%
 
 ---
 

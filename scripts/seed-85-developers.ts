@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { DBUserStore, DBUser, DBScanRecord, DBProject } from '../src/auth/user-db';
-import { getPrismaClient } from '../src/storage/supabase-storage-provider';
+import { getPrismaClient } from '../src/db/prisma-client';
 
 const DB_FILE = path.resolve(process.cwd(), 'figm-user-db.json');
 

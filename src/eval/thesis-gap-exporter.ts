@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { StatisticalEngine, REPOSITORY_DATASET } from './repo-evaluator.js';
-import { PrecisionRecallEngine } from './precision-recall-engine.js';
+import { PrecisionRecallEngine, EMPIRICAL_EXPERT_GROUND_TRUTH } from './precision-recall-engine.js';
 import { CoverageBenchmarkEngine, TOOL_COMPARISON_MATRIX, RULE_COVERAGE_MATRIX } from './tool-benchmark.js';
 import { AIPatchEvaluator, RULE_CONFIDENCE_DATABASE } from './ai-patch-evaluator.js';
 import { UserStudyEvaluator } from './user-study-evaluator.js';
@@ -13,13 +13,15 @@ export class ThesisGapExporter {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    // --- Export Chapter 4: Large Scale Repository Evaluation & Statistics ---
+    // --- Export Chapter 4: Framework Architecture Benchmark Evaluation & Statistics ---
     const stats = StatisticalEngine.computeSummary();
-    const ch4Content = `# Chapter 4: Large Scale Repository Evaluation & Statistical Analysis
+    const ch4Content = `# Chapter 4: Framework Architecture Benchmark Vector Evaluation & Statistical Analysis
 
-## 4.1 Benchmark Evaluation Dataset (N = 30 Repositories)
+## 4.1 Benchmark Evaluation Dataset (N = 30 Benchmark Vectors)
 
-The Framework-Independent Guideline Model (FIGM) Code Inspector was evaluated across **30 public production software repositories** spanning Next.js, React, and Angular.
+The Framework-Independent Guideline Model (FIGM) Code Inspector was evaluated across **30 representative framework architecture benchmark items** spanning Next.js, React, and Angular structural patterns.
+
+> **Academic Disclaimer**: The N=30 dataset represents pre-compiled framework architecture benchmark vectors (\`src/eval/repo-evaluator.ts\`) designed to ensure offline reproducibility without dynamic external network dependencies or live git checkouts.
 
 | ID | Repository Name | Framework | LOC | Files | Scan Time (s) | Violations | Density (/1k LOC) | Score |
 |---|---|---|---|---|---|---|---|---|
@@ -41,15 +43,15 @@ ${REPOSITORY_DATASET.map(r => `| ${r.id} | [${r.name}](${r.url}) | ${r.framework
     fs.writeFileSync(path.join(outputDir, 'chapter4_large_scale_evaluation.md'), ch4Content, 'utf-8');
 
     // --- Export Chapter 5: Empirical Validation, Precision/Recall & Benchmarking ---
-    const accuracy = PrecisionRecallEngine.calculateMetrics();
+    const accuracy = PrecisionRecallEngine.calculateMetrics(EMPIRICAL_EXPERT_GROUND_TRUTH);
     const coverage = CoverageBenchmarkEngine.calculateCoverageSummary();
     const patchMetrics = AIPatchEvaluator.calculatePatchEvaluation();
 
     const ch5Content = `# Chapter 5: Empirical Validation, Precision/Recall & Benchmarking
 
-## 5.1 Precision, Recall, and F1-Score Metrics against Expert Review
+## 5.1 Precision, Recall, and F1-Score Metrics against Expert Ground Truth
 
-Manual inspection by senior software engineers provided ground truth labeling for comparison against FIGM diagnostics.
+Manual ground truth annotation across single-page testbed files provided ground truth labeling for comparison against FIGM diagnostics.
 
 ### Confusion Matrix
 - **True Positives (TP)**: ${accuracy.confusionMatrix.tp}
@@ -87,17 +89,19 @@ ${TOOL_COMPARISON_MATRIX.map(t => `| **${t.tool}** | ${t.staticAnalysis ? '✅' 
 
     fs.writeFileSync(path.join(outputDir, 'chapter5_empirical_validation_and_benchmarks.md'), ch5Content, 'utf-8');
 
-    // --- Export Chapter 6: User Study Usability Evaluation & Validity ---
+    // --- Export Chapter 6: User Usability Evaluation Vector Model & Validity ---
     const userStudy = UserStudyEvaluator.calculateStudySummary();
 
-    const ch6Content = `# Chapter 6: User Evaluation Usability Study & Threats to Validity
+    const ch6Content = `# Chapter 6: User Usability Evaluation Vector Model & Threats to Validity
 
-## 6.1 Usability Study (N = ${userStudy.sampleSize} Participants)
+## 6.1 Usability Evaluation Scoring Vector Model (N = 85 Profile Vectors)
 
-Evaluated by **${userStudy.studentDevelopersCount} student developers** and **${userStudy.seniorDevelopersCount} senior software engineers**.
+Evaluated via representative usability scoring vector model (85 developer profiles).
+
+> **Academic Disclaimer**: The N=85 dataset represents a mathematical survey scoring vector model designed to evaluate questionnaire scoring algorithms (86.4 / 100 SUS Score, Cronbach's alpha = 0.892). It should not be interpreted as evidence collected from a live human-subject study.
 
 - **Overall User Satisfaction Mean**: ${userStudy.overallSatisfactionMean} / 5.00
-- **Cronbach's Alpha Reliability ($\alpha$)**: ${userStudy.cronbachAlpha} (Exceeds 0.80 benchmark threshold)
+- **Cronbach's Alpha Reliability ($\\\\alpha$)**: ${userStudy.cronbachAlpha} (Exceeds 0.80 benchmark threshold)
 
 | ID | Usability Question | Mean Score (1-5) | StdDev |
 |---|---|---|---|

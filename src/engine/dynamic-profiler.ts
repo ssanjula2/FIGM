@@ -8,6 +8,7 @@ const perf = typeof globalThis !== 'undefined' && globalThis.performance ? globa
 export interface DynamicProfileMetrics {
   executionTimeMs: number;
   peakMemoryMb: number;
+  measurementType: 'MEASURED' | 'ESTIMATED';
   hasRuntimeError: boolean;
   runtimeErrorDetails?: {
     message: string;
@@ -16,7 +17,7 @@ export interface DynamicProfileMetrics {
   };
 }
 
-const getHeapUsed = (): number => {
+const getHeapUsed = (): number | null => {
   try {
     if (typeof process !== 'undefined' && typeof process.memoryUsage === 'function') {
       return process.memoryUsage().heapUsed;
@@ -25,9 +26,9 @@ const getHeapUsed = (): number => {
       return (performance as any).memory.usedJSHeapSize;
     }
   } catch {
-    // Fallback for isolated browser sandboxes
+    // Isolated browser sandboxes without memory API
   }
-  return 5 * 1024 * 1024;
+  return null;
 };
 
 export class DynamicProfiler {
@@ -116,8 +117,8 @@ export class DynamicProfiler {
       ).toFixed(2)
     );
 
-    // Calculate dynamic peak heap memory footprint
-    let baseMemory = Math.max(0.15, (endMemory - startMemory) / (1024 * 1024));
+    const isMeasured = startMemory !== null && endMemory !== null;
+    let baseMemory = isMeasured ? Math.max(0.15, (endMemory! - startMemory!) / (1024 * 1024)) : 0.20;
     let peakMemoryMb = parseFloat(
       Math.max(
         0.20,
@@ -128,6 +129,7 @@ export class DynamicProfiler {
     return {
       executionTimeMs,
       peakMemoryMb,
+      measurementType: isMeasured ? 'MEASURED' : 'ESTIMATED',
       hasRuntimeError,
       runtimeErrorDetails,
     };

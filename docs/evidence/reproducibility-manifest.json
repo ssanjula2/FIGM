@@ -1,0 +1,32 @@
+{
+  "project": "FIGM Code Inspector",
+  "version": "1.0.0",
+  "reproducibilityCommands": [
+    {
+      "command": "npx tsc --noEmit",
+      "description": "Static type checking across all TypeScript modules"
+    },
+    {
+      "command": "npm test",
+      "description": "Runs all unit, integration, and security regression test suites"
+    },
+    {
+      "command": "npm run research:validate",
+      "description": "Validates mathematical consistency of evaluation metrics against canonical ground truth"
+    },
+    {
+      "command": "npm run ci:scan",
+      "description": "Executes static analysis engine on application codebase"
+    }
+  ],
+  "canonicalArtifacts": [
+    "benchmarks/eval-summary.json",
+    "docs/evidence/canonical-evaluation.json",
+    "docs/evidence/research-claim-traceability.md"
+  ],
+  "environmentRequirements": {
+    "nodeVersion": ">=22.0.0",
+    "npmVersion": ">=10.0.0",
+    "externalDependencies": "None (runs with offline deterministic fallbacks when external APIs/databases are unconfigured)"
+  }
+}

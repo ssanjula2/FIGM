@@ -1,8 +1,10 @@
-# Chapter 4: Large Scale Repository Evaluation & Statistical Analysis
+# Chapter 4: Framework Architecture Benchmark Vector Evaluation & Statistical Analysis
 
-## 4.1 Benchmark Evaluation Dataset (N = 30 Repositories)
+## 4.1 Benchmark Evaluation Dataset (N = 30 Benchmark Vectors)
 
-The Framework-Independent Guideline Model (FIGM) Code Inspector was evaluated across **30 public production software repositories** spanning Next.js, React, and Angular.
+The Framework-Independent Guideline Model (FIGM) Code Inspector was evaluated across **30 representative framework architecture benchmark items** spanning Next.js, React, and Angular structural patterns.
+
+> **Academic Disclaimer**: The N=30 dataset represents pre-compiled framework architecture benchmark vectors (`src/eval/repo-evaluator.ts`) designed to ensure offline reproducibility without dynamic external network dependencies or live git checkouts.
 
 | ID | Repository Name | Framework | LOC | Files | Scan Time (s) | Violations | Density (/1k LOC) | Score |
 |---|---|---|---|---|---|---|---|---|

@@ -32,13 +32,15 @@ graph TD
 
 ## 3. Empirical Evaluation Benchmark Results
 
-Executed via automated empirical runner (`tests/evaluation-runner.test.ts` & `tests/research-gap-eval.test.ts`):
+Executed via automated empirical runner (`src/eval/evaluation-runner.ts` & `benchmarks/eval-summary.json`):
 
-- **Dataset**: 30 Open-Source Single-Page Application Repositories
-- **True Positives**: 150 / 150
-- **False Positives**: 0 / 150
-- **False Negatives**: 0 / 150
-- **Precision**: **1.00 (100%)**
-- **Recall**: **1.00 (100%)**
-- **F1 Score**: **1.00 (100%)**
-- **Cronbach's Alpha Reliability**: **0.892 (High System Usability)**
+- **Ground-Truth Testbed**: 4 Framework Fixture Files (147 LOC Total)
+- **Representative Benchmark Dataset**: 30 Open-Source Single-Page Application Framework Items
+- **True Positives**: 18
+- **False Positives**: 3
+- **False Negatives**: 1
+- **Precision**: **0.857 (85.7%)**
+- **Recall**: **0.947 (94.7%)**
+- **F1 Score**: **0.900 (90.0%)**
+- **Cronbach's Alpha Reliability**: **0.892 (Simulated Survey Scoring Vector Model)**
+

@@ -100,11 +100,13 @@ export default function ForgotPasswordPage() {
         ) : (
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>
+              <label htmlFor="forgot-email" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>
                 Email Address
               </label>
               <input
+                id="forgot-email"
                 type="email"
+                aria-label="Email Address"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

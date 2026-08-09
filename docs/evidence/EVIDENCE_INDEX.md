@@ -31,7 +31,7 @@ docs/evidence/
 
 | Evidence Artifact | Description | Target Research Question / Objective | Verification File |
 | :--- | :--- | :--- | :--- |
-| **30-Repository Benchmark** | Precision ($94.2\%$), Recall ($91.8\%$), F1 ($93.0\%$) over $142,850 \text{ LOC}$. | **RQ4 & Objective 4** | `docs/evidence/benchmarks/benchmark-results.csv` |
+| **30-Repository Benchmark** | Precision ($85.7\%$), Recall ($94.7\%$), F1 ($90.0\%$) over representative benchmark vectors. | **RQ4 & Objective 4** | `docs/evidence/benchmarks/benchmark-results.csv` |
 | **Primary User Study** | $N=85$ cohort, SUS Score ($86.4/100$), Cronbach's $\alpha = 0.89$. | **Section 4.3 Primary Data** | `docs/evidence/user-study/user-study-results.json` |
 | **LaTeX Dissertation Tables** | Publication-ready LaTeX statistical tables. | **Dissertation Chapter 4 & 5** | `docs/evidence/latex-tables/latex-tables.tex` |
 | **DevSecOps CI Inspection** | Automated static quality gate scan ($90\%$ Quality Score). | **RQ3 & Objective 3** | `docs/evidence/ci-cd-reports/figm-ci-report.md` |

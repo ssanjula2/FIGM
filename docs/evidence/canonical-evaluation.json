@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-08-09T04:15:39.720Z",
+  "provenance": {
+    "generatedBy": "src/eval/evaluation-runner.ts",
+    "groundTruth": "benchmarks/ground-truth.json",
+    "testbed": "benchmarks/testbed",
+    "dynamic": true,
+    "executionMode": "AUTOMATED_DYNAMIC_EVALUATION"
+  },
+  "overall": {
+    "truePositives": 18,
+    "falsePositives": 3,
+    "falseNegatives": 1,
+    "precision": 0.8571,
+    "recall": 0.9474,
+    "f1Score": 0.9,
+    "precisionPct": "85.7%",
+    "recallPct": "94.7%",
+    "f1ScorePct": "90.0%"
+  },
+  "datasetClassification": {
+    "groundTruthTestbed": "4 framework fixture files (147 LOC total)",
+    "repositoryDataset": "30 representative open-source framework architecture benchmark items",
+    "userStudy": "Representative evaluation survey scoring vector model (85 simulated developer profiles)"
+  },
+  "performance": {
+    "totalScanDurationMs": 2.62,
+    "totalLinesOfCode": 147,
+    "scanSpeedLOCPerSec": 56053.4,
+    "peakMemoryMB": 0.22
+  },
+  "evidenceStatus": "CANONICAL_GROUND_TRUTH_VERIFIED"
+}

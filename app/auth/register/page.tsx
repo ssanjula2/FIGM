@@ -102,11 +102,13 @@ export default function RegisterPage() {
 
         <form onSubmit={handleRegister}>
           <div style={{ marginBottom: '18px' }}>
-            <label style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="reg-fullname" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               Full Name
             </label>
             <input
+              id="reg-fullname"
               type="text"
+              aria-label="Full Name"
               required
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -126,11 +128,13 @@ export default function RegisterPage() {
           </div>
 
           <div style={{ marginBottom: '18px' }}>
-            <label style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="reg-email" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               Email Address
             </label>
             <input
+              id="reg-email"
               type="email"
+              aria-label="Email Address"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -150,10 +154,12 @@ export default function RegisterPage() {
           </div>
 
           <div style={{ marginBottom: '18px' }}>
-            <label style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="reg-role" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               Account Role
             </label>
             <select
+              id="reg-role"
+              aria-label="Account Role"
               value={role}
               onChange={(e) => setRole(e.target.value as 'DEVELOPER' | 'AUDITOR' | 'ADMIN')}
               style={{
@@ -176,11 +182,13 @@ export default function RegisterPage() {
           </div>
 
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="reg-password" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               Password (min 8 chars, 1 uppercase, 1 number)
             </label>
             <input
+              id="reg-password"
               type="password"
+              aria-label="Password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
