@@ -20,6 +20,10 @@
     "export-docs": "node --import tsx src/docs/dissertation-exporter.ts",
     "research:evaluate": "node --import tsx src/eval/evaluation-runner.ts",
     "research:validate": "node --import tsx scripts/validate-research.ts",
+    "research:user-study:import": "node --import tsx scripts/import-user-study.ts",
+    "research:user-study:analyze": "node --import tsx scripts/import-user-study.ts",
+    "research:user-study:status": "node --import tsx scripts/user-study-status.ts",
+    "research:user-study:all": "node --import tsx scripts/import-user-study.ts && node --import tsx src/eval/evaluation-runner.ts",
     "ci:scan": "node --import tsx scripts/ci-figm-scan.ts",
     "ui": "next dev"
   },

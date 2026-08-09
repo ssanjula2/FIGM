@@ -10,3 +10,6 @@ figm-ci-report.json
 figm-ci-report.md
 figm-scan-report.json
 figm-scan-report.html
+research/raw/real/*.csv
+research/raw/real/*
+!research/raw/real/README.md

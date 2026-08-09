@@ -27,6 +27,7 @@ export default function Sidebar() {
         { href: '/accessibility', label: 'Accessibility', icon: '♿' },
         { href: '/performance', label: 'Web Vitals', icon: '⚡' },
         { href: '/history', label: 'Scan History', icon: '📜' },
+        { href: '/user-study', label: 'User Usability Study', icon: '📝' },
         { href: '/notifications', label: 'Notifications', icon: '🔔' },
       ],
     },
