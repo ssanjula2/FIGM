@@ -210,3 +210,11 @@ function ResetPasswordContent() {
     </div>
   );
 }
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div style={{ color: '#94a3b8', padding: '40px', textAlign: 'center' }}>Loading Reset Password...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
+  );
+}
