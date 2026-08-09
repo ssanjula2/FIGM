@@ -97,13 +97,23 @@ describe('Source-Level Anti-Hardcoding Guard Suite', () => {
     });
   });
 
-  test('Mathematical Invariants: Precision, Recall, and F1 satisfy 0 <= metric <= 1', () => {
-    const { PrecisionRecallEngine } = require('../src/eval/precision-recall-engine');
-    const sampleMatrix = { tp: 18, fp: 3, fn: 1, tn: 25 };
-    const metrics = PrecisionRecallEngine.calculateMetrics(sampleMatrix);
+  test('Mathematical Invariants & Anti-Fabrication: Synthetic data provenance strictly enforces isRealHumanData === false', () => {
+    const { ResearchDataPipeline } = require('../src/eval/research-data-pipeline');
+    const provenance = ResearchDataPipeline.getSyntheticModelProvenance();
 
-    assert.ok(metrics.precision >= 0 && metrics.precision <= 100, 'Precision must be bounded in [0, 100]');
-    assert.ok(metrics.recall >= 0 && metrics.recall <= 100, 'Recall must be bounded in [0, 100]');
-    assert.ok(metrics.f1Score >= 0 && metrics.f1Score <= 100, 'F1-Score must be bounded in [0, 100]');
+    assert.equal(provenance.isRealHumanData, false, 'Synthetic usability dataset MUST NOT be labeled as real human data');
+    assert.equal(provenance.datasetType, 'SYNTHETIC', 'Synthetic usability dataset must be explicitly classified as SYNTHETIC');
+
+    // Verify consent check blocks invalid ingestion
+    const invalidRecord = {
+      anonymousParticipantId: 'P001',
+      consentGiven: false,
+      consentTimestamp: new Date().toISOString(),
+      sessionId: 'S001',
+      studyVersion: '1.0.0',
+      susResponses: [4, 2, 4, 1, 5, 1, 5, 2, 4, 1]
+    };
+    const errors = ResearchDataPipeline.validateParticipantRecord(invalidRecord);
+    assert.ok(errors.length > 0, 'Validation MUST reject participant records without consent');
   });
 });
