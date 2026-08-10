@@ -38,14 +38,11 @@ export async function GET(request: Request) {
     total: result.total,
     page: result.page,
     pageSize: result.pageSize,
-    totalPages: result.totalPages,
   });
 }
 
 export async function POST(request: Request) {
   const auth = authenticateUser(request);
-  const userId = auth.user?.userId || 'usr_anonymous';
-
   try {
     const body = await request.json();
     const {
@@ -59,7 +56,10 @@ export async function POST(request: Request) {
       diagnostics,
       projectId,
       repositoryUrl,
+      participantId,
     } = body;
+
+    const userId = participantId || auth.user?.userId || 'P001';
 
     const record = ScanRepository.createScanRecord({
       userId,

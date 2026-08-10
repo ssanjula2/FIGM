@@ -246,9 +246,7 @@ export default function HistoryPage() {
                   ? 'ADMIN' 
                   : r.userId === 'usr_developer_default' 
                   ? 'DEV' 
-                  : r.userId === 'usr_user_study_participant'
-                  ? 'P001'
-                  : r.userId.length > 8 ? r.userId.substring(0, 8) : r.userId;
+                  : 'P001';
 
                 const isParticipant = formattedUserId.startsWith('P');
 
