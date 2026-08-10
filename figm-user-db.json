@@ -7,7 +7,9 @@
       "passwordHash": "4195d5d876ab546de8562d29e1731722:4e3a8b25a87a74fdc7bc2a9540a84e37a69842946fba5da0f66a92d1f90933dcf43a629544324f9ce088ca4b400350d14acc9b007f9d4b0cfde4cc9de7dce922",
       "role": "ADMIN",
       "apiKey": "figm_key_admin_sanjula",
-      "createdAt": "2026-08-10T09:25:46.413Z"
+      "createdAt": "2026-08-10T09:25:46.413Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfYWRtaW5fc2FuanVsYSIsImVtYWlsIjoic2FuanVsYUBuc2JtLmFjLmxrIiwia2luZCI6InJlZnJlc2giLCJpYXQiOjE3ODYzNTk1MDksImV4cCI6MTc4Njk2NDMwOX0.lcufh45yqur6x1XYmBMoct5nYnLVrGbqXZCtfN1Ktws",
+      "lastLoginAt": "2026-08-10T10:58:29.756Z"
     },
     {
       "id": "usr_admin_figm",
@@ -367,46 +369,133 @@
   ],
   "scanRecords": [
     {
-      "userId": "P001",
-      "projectId": "proj_user_study_benchmark",
-      "fileName": "UserProfile.jsx",
-      "framework": "React JSX",
+      "userId": "usr_test_exp_1786356876416_ilra",
+      "fileName": "ExportTarget.tsx",
+      "framework": "React",
+      "scanTimeMs": 10,
+      "memoryUsageMb": 1.5,
       "qualityScore": 88,
-      "scanTimeMs": 6.27,
-      "memoryUsageMb": 1.68,
-      "ruleCount": 4,
+      "ruleCount": 1,
+      "aiFixCount": 1,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Missing Alt Attribute",
+          "severity": "HIGH",
+          "domain": "ACCESSIBILITY",
+          "offendingCodeSnippet": "<img src=\"logo.png\" />",
+          "remediation": "Add descriptive alt property."
+        }
+      ],
+      "id": "scan_1786356876416_vlrgs",
+      "createdAt": "2026-08-10T10:14:36.416Z"
+    },
+    {
+      "userId": "usr_test_fav_1786356876412_2xem",
+      "fileName": "PaymentGateway.tsx",
+      "framework": "React",
+      "scanTimeMs": 12,
+      "memoryUsageMb": 1.8,
+      "qualityScore": 90,
+      "ruleCount": 1,
+      "aiFixCount": 1,
+      "diagnostics": [],
+      "isFavorite": true,
+      "id": "scan_1786356876412_18c6x",
+      "createdAt": "2026-08-10T10:14:36.412Z"
+    },
+    {
+      "userId": "usr_test_scan_1786356876407_s5cd",
+      "fileName": "PaymentGateway.tsx",
+      "framework": "React",
+      "repositoryUrl": "https://github.com/figm/payment-gateway",
+      "scanTimeMs": 14.8,
+      "memoryUsageMb": 2.1,
+      "qualityScore": 92,
+      "ruleCount": 2,
       "aiFixCount": 2,
-      "isFavorite": false,
       "diagnostics": [
         {
           "ruleId": "FIGM-PERF-01",
-          "ruleName": "Benchmark Diagnostic Rule Inspection",
-          "domain": "PERFORMANCE",
-          "concern": "BENCHMARK_RULE",
+          "ruleName": "Unbound Inline Event Handlers",
           "severity": "HIGH",
-          "filePath": "UserProfile.jsx",
-          "location": {
-            "start": {
-              "line": 4,
-              "column": 10
-            }
-          },
-          "offendingCodeSnippet": "// FIGM Benchmark Inspection Target",
-          "remediation": "Apply FIGM recommended guideline fix.",
-          "standardReference": "FIGM-STANDARD-2026"
+          "domain": "PERFORMANCE",
+          "offendingCodeSnippet": "<button onClick={() => handleClick()} />",
+          "remediation": "Extract event handler method."
         }
       ],
-      "id": "scan_1786355281425_hed4z",
-      "createdAt": "2026-08-10T09:48:01.425Z"
+      "isFavorite": false,
+      "id": "scan_1786356876408_qc9pr",
+      "createdAt": "2026-08-10T10:14:36.408Z"
+    },
+    {
+      "userId": "usr_test_exp_1786355587802_6f7e",
+      "fileName": "ExportTarget.tsx",
+      "framework": "React",
+      "scanTimeMs": 10,
+      "memoryUsageMb": 1.5,
+      "qualityScore": 88,
+      "ruleCount": 1,
+      "aiFixCount": 1,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Missing Alt Attribute",
+          "severity": "HIGH",
+          "domain": "ACCESSIBILITY",
+          "offendingCodeSnippet": "<img src=\"logo.png\" />",
+          "remediation": "Add descriptive alt property."
+        }
+      ],
+      "id": "scan_1786355587802_m2rqy",
+      "createdAt": "2026-08-10T09:53:07.802Z"
+    },
+    {
+      "userId": "usr_test_fav_1786355587800_suim",
+      "fileName": "PaymentGateway.tsx",
+      "framework": "React",
+      "scanTimeMs": 12,
+      "memoryUsageMb": 1.8,
+      "qualityScore": 90,
+      "ruleCount": 1,
+      "aiFixCount": 1,
+      "diagnostics": [],
+      "isFavorite": true,
+      "id": "scan_1786355587800_kagls",
+      "createdAt": "2026-08-10T09:53:07.800Z"
+    },
+    {
+      "userId": "usr_test_scan_1786355587797_nc28",
+      "fileName": "PaymentGateway.tsx",
+      "framework": "React",
+      "repositoryUrl": "https://github.com/figm/payment-gateway",
+      "scanTimeMs": 14.8,
+      "memoryUsageMb": 2.1,
+      "qualityScore": 92,
+      "ruleCount": 2,
+      "aiFixCount": 2,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Unbound Inline Event Handlers",
+          "severity": "HIGH",
+          "domain": "PERFORMANCE",
+          "offendingCodeSnippet": "<button onClick={() => handleClick()} />",
+          "remediation": "Extract event handler method."
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786355587798_3hbse",
+      "createdAt": "2026-08-10T09:53:07.798Z"
     },
     {
       "userId": "P001",
       "projectId": "proj_user_study_benchmark",
-      "fileName": "DashboardPage.tsx",
-      "framework": "Next.js App Router",
+      "fileName": "DataGrid.vue",
+      "framework": "Vue SFC",
       "qualityScore": 88,
-      "scanTimeMs": 5.31,
-      "memoryUsageMb": 1.24,
+      "scanTimeMs": 5.75,
+      "memoryUsageMb": 1.43,
       "ruleCount": 4,
       "aiFixCount": 2,
       "isFavorite": false,
@@ -417,7 +506,7 @@
           "domain": "PERFORMANCE",
           "concern": "BENCHMARK_RULE",
           "severity": "HIGH",
-          "filePath": "DashboardPage.tsx",
+          "filePath": "DataGrid.vue",
           "location": {
             "start": {
               "line": 4,
@@ -429,8 +518,8 @@
           "standardReference": "FIGM-STANDARD-2026"
         }
       ],
-      "id": "scan_1786355284406_75ce8",
-      "createdAt": "2026-08-10T09:48:04.406Z"
+      "id": "scan_1786355291047_64lao",
+      "createdAt": "2026-08-10T09:48:11.047Z"
     },
     {
       "userId": "P001",
@@ -468,11 +557,11 @@
     {
       "userId": "P001",
       "projectId": "proj_user_study_benchmark",
-      "fileName": "DataGrid.vue",
-      "framework": "Vue SFC",
+      "fileName": "DashboardPage.tsx",
+      "framework": "Next.js App Router",
       "qualityScore": 88,
-      "scanTimeMs": 5.75,
-      "memoryUsageMb": 1.43,
+      "scanTimeMs": 5.31,
+      "memoryUsageMb": 1.24,
       "ruleCount": 4,
       "aiFixCount": 2,
       "isFavorite": false,
@@ -483,7 +572,7 @@
           "domain": "PERFORMANCE",
           "concern": "BENCHMARK_RULE",
           "severity": "HIGH",
-          "filePath": "DataGrid.vue",
+          "filePath": "DashboardPage.tsx",
           "location": {
             "start": {
               "line": 4,
@@ -495,128 +584,41 @@
           "standardReference": "FIGM-STANDARD-2026"
         }
       ],
-      "id": "scan_1786355291047_64lao",
-      "createdAt": "2026-08-10T09:48:11.047Z"
+      "id": "scan_1786355284406_75ce8",
+      "createdAt": "2026-08-10T09:48:04.406Z"
     },
     {
-      "userId": "usr_test_scan_1786355587797_nc28",
-      "fileName": "PaymentGateway.tsx",
-      "framework": "React",
-      "repositoryUrl": "https://github.com/figm/payment-gateway",
-      "scanTimeMs": 14.8,
-      "memoryUsageMb": 2.1,
-      "qualityScore": 92,
-      "ruleCount": 2,
+      "userId": "P001",
+      "projectId": "proj_user_study_benchmark",
+      "fileName": "UserProfile.jsx",
+      "framework": "React JSX",
+      "qualityScore": 88,
+      "scanTimeMs": 6.27,
+      "memoryUsageMb": 1.68,
+      "ruleCount": 4,
       "aiFixCount": 2,
+      "isFavorite": false,
       "diagnostics": [
         {
           "ruleId": "FIGM-PERF-01",
-          "ruleName": "Unbound Inline Event Handlers",
-          "severity": "HIGH",
+          "ruleName": "Benchmark Diagnostic Rule Inspection",
           "domain": "PERFORMANCE",
-          "offendingCodeSnippet": "<button onClick={() => handleClick()} />",
-          "remediation": "Extract event handler method."
-        }
-      ],
-      "isFavorite": false,
-      "id": "scan_1786355587798_3hbse",
-      "createdAt": "2026-08-10T09:53:07.798Z"
-    },
-    {
-      "userId": "usr_test_fav_1786355587800_suim",
-      "fileName": "PaymentGateway.tsx",
-      "framework": "React",
-      "scanTimeMs": 12,
-      "memoryUsageMb": 1.8,
-      "qualityScore": 90,
-      "ruleCount": 1,
-      "aiFixCount": 1,
-      "diagnostics": [],
-      "isFavorite": true,
-      "id": "scan_1786355587800_kagls",
-      "createdAt": "2026-08-10T09:53:07.800Z"
-    },
-    {
-      "userId": "usr_test_exp_1786355587802_6f7e",
-      "fileName": "ExportTarget.tsx",
-      "framework": "React",
-      "scanTimeMs": 10,
-      "memoryUsageMb": 1.5,
-      "qualityScore": 88,
-      "ruleCount": 1,
-      "aiFixCount": 1,
-      "diagnostics": [
-        {
-          "ruleId": "FIGM-A11Y-01",
-          "ruleName": "Missing Alt Attribute",
+          "concern": "BENCHMARK_RULE",
           "severity": "HIGH",
-          "domain": "ACCESSIBILITY",
-          "offendingCodeSnippet": "<img src=\"logo.png\" />",
-          "remediation": "Add descriptive alt property."
+          "filePath": "UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 4,
+              "column": 10
+            }
+          },
+          "offendingCodeSnippet": "// FIGM Benchmark Inspection Target",
+          "remediation": "Apply FIGM recommended guideline fix.",
+          "standardReference": "FIGM-STANDARD-2026"
         }
       ],
-      "id": "scan_1786355587802_m2rqy",
-      "createdAt": "2026-08-10T09:53:07.802Z"
-    },
-    {
-      "userId": "usr_test_scan_1786356876407_s5cd",
-      "fileName": "PaymentGateway.tsx",
-      "framework": "React",
-      "repositoryUrl": "https://github.com/figm/payment-gateway",
-      "scanTimeMs": 14.8,
-      "memoryUsageMb": 2.1,
-      "qualityScore": 92,
-      "ruleCount": 2,
-      "aiFixCount": 2,
-      "diagnostics": [
-        {
-          "ruleId": "FIGM-PERF-01",
-          "ruleName": "Unbound Inline Event Handlers",
-          "severity": "HIGH",
-          "domain": "PERFORMANCE",
-          "offendingCodeSnippet": "<button onClick={() => handleClick()} />",
-          "remediation": "Extract event handler method."
-        }
-      ],
-      "isFavorite": false,
-      "id": "scan_1786356876408_qc9pr",
-      "createdAt": "2026-08-10T10:14:36.408Z"
-    },
-    {
-      "userId": "usr_test_fav_1786356876412_2xem",
-      "fileName": "PaymentGateway.tsx",
-      "framework": "React",
-      "scanTimeMs": 12,
-      "memoryUsageMb": 1.8,
-      "qualityScore": 90,
-      "ruleCount": 1,
-      "aiFixCount": 1,
-      "diagnostics": [],
-      "isFavorite": true,
-      "id": "scan_1786356876412_18c6x",
-      "createdAt": "2026-08-10T10:14:36.412Z"
-    },
-    {
-      "userId": "usr_test_exp_1786356876416_ilra",
-      "fileName": "ExportTarget.tsx",
-      "framework": "React",
-      "scanTimeMs": 10,
-      "memoryUsageMb": 1.5,
-      "qualityScore": 88,
-      "ruleCount": 1,
-      "aiFixCount": 1,
-      "diagnostics": [
-        {
-          "ruleId": "FIGM-A11Y-01",
-          "ruleName": "Missing Alt Attribute",
-          "severity": "HIGH",
-          "domain": "ACCESSIBILITY",
-          "offendingCodeSnippet": "<img src=\"logo.png\" />",
-          "remediation": "Add descriptive alt property."
-        }
-      ],
-      "id": "scan_1786356876416_vlrgs",
-      "createdAt": "2026-08-10T10:14:36.416Z"
+      "id": "scan_1786355281425_hed4z",
+      "createdAt": "2026-08-10T09:48:01.425Z"
     }
   ],
   "notifications": [
@@ -733,6 +735,16 @@
       "status": "SUCCESS",
       "id": "log_1786356866598_xbi8j",
       "createdAt": "2026-08-10T10:14:26.598Z"
+    },
+    {
+      "action": "LOGIN",
+      "userId": "usr_admin_sanjula",
+      "email": "sanjula@nsbm.ac.lk",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "id": "log_1786359510881_ype4w",
+      "createdAt": "2026-08-10T10:58:30.881Z"
     }
   ]
 }

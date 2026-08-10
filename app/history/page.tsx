@@ -10,6 +10,8 @@ export default function HistoryPage() {
     total,
     page,
     setPage,
+    pageSize,
+    setPageSize,
     totalPages,
     loading,
     error,
@@ -161,6 +163,33 @@ export default function HistoryPage() {
           >
             {sortOrder === 'asc' ? '↑ Asc' : '↓ Desc'}
           </button>
+
+          {/* Page Size Selector */}
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setPage(1);
+            }}
+            style={{
+              padding: '9px 14px',
+              borderRadius: '8px',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              background: 'rgba(9, 13, 22, 0.8)',
+              color: '#f8fafc',
+              fontSize: '13px',
+              fontWeight: 600,
+              outline: 'none',
+              cursor: 'pointer',
+            }}
+            title="Records Per Page"
+          >
+            <option value="10" style={{ background: '#090d16', color: '#fff' }}>10 Per Page</option>
+            <option value="25" style={{ background: '#090d16', color: '#fff' }}>25 Per Page</option>
+            <option value="50" style={{ background: '#090d16', color: '#fff' }}>50 Per Page</option>
+            <option value="100" style={{ background: '#090d16', color: '#fff' }}>100 Per Page (Default)</option>
+            <option value="250" style={{ background: '#090d16', color: '#fff' }}>Show All (250)</option>
+          </select>
         </div>
       </div>
 
