@@ -222,10 +222,19 @@ function getDefaultUsers(): DBUser[] {
   ];
 }
 
+declare global {
+  var _figm_db_cache: DBUserStore | undefined;
+}
+
 const TMP_DB_FILE = path.resolve('/tmp', 'figm-user-db.json');
 
 function loadDB(): DBUserStore {
+  if (globalThis._figm_db_cache) {
+    return globalThis._figm_db_cache;
+  }
+
   const targetFile = fs.existsSync(TMP_DB_FILE) ? TMP_DB_FILE : DB_FILE;
+  let loadedStore: DBUserStore | null = null;
   if (fs.existsSync(targetFile)) {
     try {
       const data = fs.readFileSync(targetFile, 'utf-8');
@@ -236,8 +245,8 @@ function loadDB(): DBUserStore {
         role: u.role || 'DEVELOPER',
       }));
 
-      return {
-        users: existingUsers,
+      loadedStore = {
+        users: existingUsers.length > 0 ? existingUsers : getDefaultUsers(),
         submissions: parsed.submissions || [],
         projects: parsed.projects || [],
         scanRecords,
@@ -249,18 +258,25 @@ function loadDB(): DBUserStore {
       // Fallback
     }
   }
-  return {
-    users: getDefaultUsers(),
-    submissions: [],
-    projects: [],
-    scanRecords: [],
-    notifications: [],
-    settings: [],
-    auditLogs: [],
-  };
+
+  if (!loadedStore) {
+    loadedStore = {
+      users: getDefaultUsers(),
+      submissions: [],
+      projects: [],
+      scanRecords: [],
+      notifications: [],
+      settings: [],
+      auditLogs: [],
+    };
+  }
+
+  globalThis._figm_db_cache = loadedStore;
+  return loadedStore;
 }
 
 function saveDB(store: DBUserStore): void {
+  globalThis._figm_db_cache = store;
   try {
     fs.writeFileSync(DB_FILE, JSON.stringify(store, null, 2), 'utf-8');
   } catch {
