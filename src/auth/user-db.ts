@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { hashPassword } from './auth-service';
 
 export type UserRole = 'ADMIN' | 'DEVELOPER' | 'AUDITOR';
 
@@ -202,9 +203,9 @@ function getDefaultUsers(): DBUser[] {
     {
       id: 'usr_admin_default',
       email: 'sanjula@nsbm.ac.lk',
-      fullName: 'A P H D S Sanjula',
+      fullName: 'A P H D S Sanjula (Admin)',
       role: 'ADMIN',
-      passwordHash: '$2b$10$w1qE6q6E3u9v4c3d2e1f0.3q5r7s9t1u3v5w7x9y1z3a5b7c9d1e3',
+      passwordHash: hashPassword('Admin123456!'),
       apiKey: 'figm_key_admin_sanjula',
       createdAt: new Date().toISOString(),
     }

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-10T08:41:32.308Z",
+  "generatedAt": "2026-08-10T08:48:03.904Z",
   "provenance": {
     "generatedBy": "src/eval/evaluation-runner.ts",
     "groundTruth": "benchmarks/ground-truth.json",
@@ -25,10 +25,10 @@
     "userStudy": "Representative evaluation survey scoring vector model (85 simulated developer profiles)"
   },
   "performance": {
-    "totalScanDurationMs": 1.75,
+    "totalScanDurationMs": 2.27,
     "totalLinesOfCode": 147,
-    "scanSpeedLOCPerSec": 83971.2,
-    "peakMemoryMB": 0.22
+    "scanSpeedLOCPerSec": 64786.2,
+    "peakMemoryMB": 0.1
   },
   "evidenceStatus": "CANONICAL_GROUND_TRUTH_VERIFIED"
 }
