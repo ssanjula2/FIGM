@@ -12,7 +12,7 @@ export default function Sidebar() {
       groupName: 'WORKSPACE',
       items: [
         { href: '/projects', label: 'Projects Workspace', icon: '📦' },
-        { href: '/', label: 'Overview', icon: '📊' },
+        { href: '/dashboard', label: 'Overview', icon: '📊' },
         { href: '/live-scan', label: 'Live Scan', icon: '⚡' },
         { href: '/diagnostics', label: 'Diagnostics', icon: '🔍' },
         { href: '/ai-fix', label: 'AI Fix Assistant', icon: '🤖' },
@@ -70,7 +70,7 @@ export default function Sidebar() {
     >
       <div>
         {/* Brand Header */}
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px', paddingLeft: '6px' }}>
+        <Link href="/dashboard" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px', paddingLeft: '6px' }}>
           <div
             style={{
               width: '40px',
