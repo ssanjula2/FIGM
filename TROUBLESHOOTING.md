@@ -26,6 +26,81 @@ Common issues, diagnostic steps, and resolution solutions.
 # Check TypeScript Compilation
 npm run build
 
+
+// hi 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Run Full Test Verification
 npm test
 
