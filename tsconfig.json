@@ -28,6 +28,8 @@
     ]
   },
   "include": [
+    "next-env.d.ts",
+    "*.d.ts",
     "src/**/*",
     "tests/**/*",
     "app/**/*",
