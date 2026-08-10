@@ -89,21 +89,43 @@ ${TOOL_COMPARISON_MATRIX.map(t => `| **${t.tool}** | ${t.staticAnalysis ? '✅' 
 
     fs.writeFileSync(path.join(outputDir, 'chapter5_empirical_validation_and_benchmarks.md'), ch5Content, 'utf-8');
 
-    // --- Export Chapter 6: User Usability Evaluation Vector Model & Validity ---
+    // --- Export Chapter 6: User Usability Evaluation & Threats to Validity ---
+    const { processUserStudyPipeline } = require('../../scripts/import-user-study.js');
+    const realReport = processUserStudyPipeline();
     const userStudy = UserStudyEvaluator.calculateStudySummary();
 
-    const ch6Content = `# Chapter 6: User Usability Evaluation Vector Model & Threats to Validity
+    const isReal = realReport.provenance.isRealHumanData && realReport.provenance.validParticipantCount > 0;
+    const participantStatusText = isReal
+      ? `${realReport.provenance.validParticipantCount} / ${realReport.provenance.targetSampleSize} Valid Real Participants`
+      : `0 / 85 Valid Real Participants (Collection Status: NOT_COLLECTED)`;
 
-## 6.1 Usability Evaluation Scoring Vector Model (N = 85 Profile Vectors)
+    const susDisplay = isReal
+      ? `${realReport.metrics.susMean.toFixed(1)} / 100`
+      : `PENDING REAL DATA (Formula Verification Test Score: 86.4 / 100 [SYNTHETIC_PIPELINE_TEST_DATA])`;
 
-Evaluated via representative usability scoring vector model (85 developer profiles).
+    const alphaDisplay = isReal
+      ? `${realReport.metrics.cronbachAlpha.toFixed(3)}`
+      : `PENDING REAL DATA (Formula Verification Test Alpha: 0.892 [SYNTHETIC_PIPELINE_TEST_DATA])`;
 
-> **Academic Disclaimer**: The N=85 dataset represents a mathematical survey scoring vector model designed to evaluate questionnaire scoring algorithms (86.4 / 100 SUS Score, Cronbach's alpha = 0.892). It should not be interpreted as evidence collected from a live human-subject study.
+    const ch6Content = `# Chapter 6: User Usability Evaluation & Threats to Validity
 
-- **Overall User Satisfaction Mean**: ${userStudy.overallSatisfactionMean} / 5.00
-- **Cronbach's Alpha Reliability ($\\\\alpha$)**: ${userStudy.cronbachAlpha} (Exceeds 0.80 benchmark threshold)
+## 6.1 Usability Evaluation Provenance & Status
 
-| ID | Usability Question | Mean Score (1-5) | StdDev |
+- **Dataset Type**: ${isReal ? 'REAL_HUMAN_DATA' : 'SYNTHETIC_PIPELINE_TEST_DATA'}
+- **Real Human Participant Count**: ${participantStatusText}
+- **Data Collection Status**: ${realReport.provenance.collectionStatus}
+- **System Usability Scale (SUS) Score**: ${susDisplay}
+- **Cronbach's Alpha Reliability ($\\\\alpha$)**: ${alphaDisplay}
+
+> **Academic Provenance Notice**: Real human participant data has not yet been collected (0/85 valid responses ingested). The questionnaire scoring pipeline formula has been verified using a synthetic pipeline test vector model (SYNTHETIC_PIPELINE_TEST_DATA). Live empirical human results will be computed dynamically upon ingesting responses via \`npm run research:user-study:import\`.
+
+### Pipeline Verification Test Questionnaire Items (Formula Test Data)
+
+- **Formula Test Sample Size**: ${userStudy.sampleSize} Profile Vectors
+- **Overall User Satisfaction Mean (Test Model)**: ${userStudy.overallSatisfactionMean} / 5.00
+- **Formula Test Cronbach's Alpha**: ${userStudy.cronbachAlpha}
+
+| ID | Usability Question | Formula Test Mean (1-5) | StdDev |
 |---|---|---|---|
 ${userStudy.questions.map(q => `| ${q.id} | ${q.questionText} | **${q.meanScore.toFixed(2)}** | ${q.stdDev.toFixed(2)} |`).join('\n')}
 

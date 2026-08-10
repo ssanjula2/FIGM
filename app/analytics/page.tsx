@@ -105,15 +105,15 @@ export default function AnalyticsPage() {
         {/* Card 5: SUS Score */}
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #ec4899', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>SUS Usability</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#ec4899', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>86.4</div>
-          <div style={{ fontSize: '10px', color: '#86efac', marginTop: '4px', fontWeight: 600 }}>Grade A (N=85)</div>
+          <div style={{ fontSize: '18px', fontWeight: 900, color: '#ec4899', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>Pending Data</div>
+          <div style={{ fontSize: '10px', color: '#f59e0b', marginTop: '4px', fontWeight: 600 }}>0/85 Real Responses</div>
         </div>
 
         {/* Card 6: Cronbach Alpha */}
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #06b6d4', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Cronbach α</div>
-          <div style={{ fontSize: '26px', fontWeight: 900, color: '#06b6d4', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>0.89</div>
-          <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>High Reliability</div>
+          <div style={{ fontSize: '18px', fontWeight: 900, color: '#06b6d4', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>Pending Data</div>
+          <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>Target: N=85</div>
         </div>
       </div>
 
