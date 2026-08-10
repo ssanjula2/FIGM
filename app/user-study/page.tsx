@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const BENCHMARKS = {
   react: {
@@ -274,8 +274,53 @@ export default function UserStudyPage() {
   const [isScanning, setIsScanning] = useState(false);
   const [scanCompleted, setScanCompleted] = useState(false);
   const [activeTask, setActiveTask] = useState<number | null>(1);
+  const [participantId, setParticipantId] = useState<string>('P001');
 
   const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf7XA39VT1Gx5inZstWj7sXkquAb04aK70BWz8uYWWtjMZDOw/viewform';
+
+  useEffect(() => {
+    // Check if browser has persistent study participant session ID
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('figm_study_participant_id');
+      if (stored) {
+        setParticipantId(stored);
+      } else {
+        // Fetch next sequential participant ID from server
+        fetch('/api/user-study/log-scan')
+          .then(res => res.json())
+          .then(data => {
+            if (data.nextParticipantId) {
+              setParticipantId(data.nextParticipantId);
+              localStorage.setItem('figm_study_participant_id', data.nextParticipantId);
+            }
+          })
+          .catch(() => {});
+      }
+    }
+  }, []);
+
+  const handleStartNewParticipantSession = () => {
+    fetch('/api/user-study/log-scan')
+      .then(res => res.json())
+      .then(data => {
+        const nextId = data.nextParticipantId || 'P001';
+        setParticipantId(nextId);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('figm_study_participant_id', nextId);
+        }
+        setScanCompleted(false);
+      })
+      .catch(() => {
+        // Fallback increment
+        const currentNum = parseInt(participantId.replace('P', ''), 10) || 1;
+        const nextId = `P${String(currentNum + 1).padStart(3, '0')}`;
+        setParticipantId(nextId);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('figm_study_participant_id', nextId);
+        }
+        setScanCompleted(false);
+      });
+  };
 
   const handleRunScan = () => {
     setIsScanning(true);
@@ -285,6 +330,7 @@ export default function UserStudyPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          participantId,
           framework: benchmark.framework,
           fileName: benchmark.file,
           qualityScore: 88,
@@ -391,7 +437,19 @@ export default function UserStudyPage() {
       <div id="benchmark-section" className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h3 style={{ fontSize: '20px', margin: '0 0 4px 0', color: '#ffffff' }}>🧪 Interactive FIGM Benchmark Inspector</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+              <h3 style={{ fontSize: '20px', margin: 0, color: '#ffffff' }}>🧪 Interactive FIGM Benchmark Inspector</h3>
+              <span style={{ fontSize: '12px', padding: '4px 10px', borderRadius: '20px', background: 'rgba(6, 182, 212, 0.15)', color: '#22d3ee', border: '1px solid rgba(6, 182, 212, 0.35)', fontWeight: 800, fontFamily: 'monospace' }}>
+                👤 Participant ID: {participantId}
+              </span>
+              <button
+                onClick={handleStartNewParticipantSession}
+                style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '6px', background: 'rgba(255, 255, 255, 0.05)', color: '#94a3b8', border: '1px solid rgba(255, 255, 255, 0.1)', cursor: 'pointer', fontWeight: 600 }}
+                title="Start session as next participant (e.g. P002, P003...)"
+              >
+                🔄 New Participant
+              </button>
+            </div>
             <span style={{ fontSize: '14px', color: '#94a3b8' }}>Select a Single Page Application framework fixture to inspect static diagnostics.</span>
           </div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', width: '100%', maxWidth: '400px' }}>

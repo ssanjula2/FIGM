@@ -2,26 +2,51 @@ import { NextResponse } from 'next/server';
 import { UserDB } from '../../../../src/auth/user-db';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
+export async function GET() {
+  try {
+    const existingScans = UserDB.getScanRecords();
+    const uniqueParticipants = new Set(
+      existingScans
+        .filter(r => r.userId.startsWith('P') && r.userId !== 'usr_user_study_participant')
+        .map(r => r.userId)
+    );
+    const count = uniqueParticipants.size + 1;
+    const nextParticipantId = `P${String(count).padStart(3, '0')}`;
+    return NextResponse.json({ nextParticipantId, totalParticipants: uniqueParticipants.size });
+  } catch (err: any) {
+    return NextResponse.json({ nextParticipantId: 'P001', totalParticipants: 0 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { framework, fileName, qualityScore, diagnosticsCount } = body;
+    const { framework, fileName, qualityScore, diagnosticsCount, participantId: clientParticipantId } = body;
 
     const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
+    const existingScans = UserDB.getScanRecords();
+    const uniqueParticipants = new Set(
+      existingScans
+        .filter(r => r.userId.startsWith('P') && r.userId !== 'usr_user_study_participant')
+        .map(r => r.userId)
+    );
+    const fallbackCount = uniqueParticipants.size + 1;
+    const participantId = clientParticipantId || `P${String(fallbackCount).padStart(3, '0')}`;
+
     // 1. Audit Log event for Admin Visibility
     AuditLogger.logEvent('SCAN_RUN', {
-      email: `participant_anon@user-study.figm`,
+      email: `${participantId.toLowerCase()}@user-study.figm`,
       ipAddress: ip,
       userAgent,
       status: 'SUCCESS',
-      details: `User Study benchmark scan executed on ${framework} (${fileName}) - ${diagnosticsCount || 4} issues detected`
+      details: `User Study (${participantId}) benchmark scan executed on ${framework} (${fileName}) - ${diagnosticsCount || 4} issues detected`
     });
 
     // 2. Persist in DB scan records for Admin / History view
     const newRecord = UserDB.createScanRecord({
-      userId: 'usr_user_study_participant',
+      userId: participantId,
       projectId: 'proj_user_study_benchmark',
       fileName: fileName || 'BenchmarkFixture.tsx',
       framework: framework || 'React',
@@ -74,7 +99,7 @@ export async function POST(request: Request) {
       // Background sync fallback
     }
 
-    return NextResponse.json({ success: true, recordId: newRecord.id });
+    return NextResponse.json({ success: true, recordId: newRecord.id, participantId });
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Failed to log study scan' }, { status: 500 });
   }

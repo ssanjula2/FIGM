@@ -198,7 +198,7 @@ export default function HistoryPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#64748b', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
-                <th style={{ padding: '14px 16px' }}>Fav</th>
+                <th style={{ padding: '14px 16px' }}>User ID</th>
                 <th style={{ padding: '14px 16px' }}>Target File</th>
                 <th style={{ padding: '14px 16px' }}>Framework</th>
                 <th style={{ padding: '14px 16px' }}>Quality Score</th>
@@ -210,16 +210,44 @@ export default function HistoryPage() {
               </tr>
             </thead>
             <tbody>
-              {records.map((r) => (
+              {records.map((r) => {
+                const formattedUserId = r.userId.startsWith('P') 
+                  ? r.userId 
+                  : r.userId.includes('admin') || r.userId.includes('sanjula') 
+                  ? 'ADMIN' 
+                  : r.userId === 'usr_developer_default' 
+                  ? 'DEV' 
+                  : r.userId === 'usr_user_study_participant'
+                  ? 'P001'
+                  : r.userId.length > 8 ? r.userId.substring(0, 8) : r.userId;
+
+                const isParticipant = formattedUserId.startsWith('P');
+
+                return (
                 <tr key={r.id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', transition: 'background 0.2s ease' }}>
                   <td style={{ padding: '14px 16px' }}>
-                    <button
-                      onClick={() => toggleFavorite(r.id)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}
-                      title="Toggle Favorite"
-                    >
-                      {r.isFavorite ? '⭐' : '☆'}
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button
+                        onClick={() => toggleFavorite(r.id)}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', padding: 0 }}
+                        title="Toggle Favorite"
+                      >
+                        {r.isFavorite ? '⭐' : '☆'}
+                      </button>
+                      <span style={{
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        fontFamily: 'JetBrains Mono, monospace',
+                        background: isParticipant ? 'rgba(6, 182, 212, 0.15)' : 'rgba(168, 85, 247, 0.15)',
+                        color: isParticipant ? '#22d3ee' : '#c084fc',
+                        border: isParticipant ? '1px solid rgba(6, 182, 212, 0.35)' : '1px solid rgba(168, 85, 247, 0.35)',
+                        letterSpacing: '0.5px'
+                      }}>
+                        {formattedUserId}
+                      </span>
+                    </div>
                   </td>
                   <td style={{ padding: '14px 16px', fontWeight: 700, color: '#f8fafc', fontFamily: 'JetBrains Mono, monospace' }}>
                     <Link href={`/reports/${r.id}`} style={{ color: '#38bdf8', textDecoration: 'none' }}>
@@ -297,7 +325,8 @@ export default function HistoryPage() {
                     </div>
                   </td>
                 </tr>
-              ))}
+              );
+            })}
             </tbody>
           </table>
 
