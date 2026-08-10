@@ -19,8 +19,184 @@
       "createdAt": "2026-08-10T09:25:46.413Z"
     }
   ],
+  "submissions": [],
   "projects": [],
-  "scanRecords": [],
+  "scanRecords": [
+    {
+      "userId": "P001",
+      "projectId": "proj_user_study_benchmark",
+      "fileName": "UserProfile.jsx",
+      "framework": "React JSX",
+      "qualityScore": 88,
+      "scanTimeMs": 6.27,
+      "memoryUsageMb": 1.68,
+      "ruleCount": 4,
+      "aiFixCount": 2,
+      "isFavorite": false,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Benchmark Diagnostic Rule Inspection",
+          "domain": "PERFORMANCE",
+          "concern": "BENCHMARK_RULE",
+          "severity": "HIGH",
+          "filePath": "UserProfile.jsx",
+          "location": {
+            "start": {
+              "line": 4,
+              "column": 10
+            }
+          },
+          "offendingCodeSnippet": "// FIGM Benchmark Inspection Target",
+          "remediation": "Apply FIGM recommended guideline fix.",
+          "standardReference": "FIGM-STANDARD-2026"
+        }
+      ],
+      "id": "scan_1786355281425_hed4z",
+      "createdAt": "2026-08-10T09:48:01.425Z"
+    },
+    {
+      "userId": "P001",
+      "projectId": "proj_user_study_benchmark",
+      "fileName": "DashboardPage.tsx",
+      "framework": "Next.js App Router",
+      "qualityScore": 88,
+      "scanTimeMs": 5.31,
+      "memoryUsageMb": 1.24,
+      "ruleCount": 4,
+      "aiFixCount": 2,
+      "isFavorite": false,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Benchmark Diagnostic Rule Inspection",
+          "domain": "PERFORMANCE",
+          "concern": "BENCHMARK_RULE",
+          "severity": "HIGH",
+          "filePath": "DashboardPage.tsx",
+          "location": {
+            "start": {
+              "line": 4,
+              "column": 10
+            }
+          },
+          "offendingCodeSnippet": "// FIGM Benchmark Inspection Target",
+          "remediation": "Apply FIGM recommended guideline fix.",
+          "standardReference": "FIGM-STANDARD-2026"
+        }
+      ],
+      "id": "scan_1786355284406_75ce8",
+      "createdAt": "2026-08-10T09:48:04.406Z"
+    },
+    {
+      "userId": "P001",
+      "projectId": "proj_user_study_benchmark",
+      "fileName": "SearchPanel.component.ts",
+      "framework": "Angular TypeScript",
+      "qualityScore": 88,
+      "scanTimeMs": 7.32,
+      "memoryUsageMb": 1.66,
+      "ruleCount": 4,
+      "aiFixCount": 2,
+      "isFavorite": false,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Benchmark Diagnostic Rule Inspection",
+          "domain": "PERFORMANCE",
+          "concern": "BENCHMARK_RULE",
+          "severity": "HIGH",
+          "filePath": "SearchPanel.component.ts",
+          "location": {
+            "start": {
+              "line": 4,
+              "column": 10
+            }
+          },
+          "offendingCodeSnippet": "// FIGM Benchmark Inspection Target",
+          "remediation": "Apply FIGM recommended guideline fix.",
+          "standardReference": "FIGM-STANDARD-2026"
+        }
+      ],
+      "id": "scan_1786355287823_7lnm1",
+      "createdAt": "2026-08-10T09:48:07.823Z"
+    },
+    {
+      "userId": "P001",
+      "projectId": "proj_user_study_benchmark",
+      "fileName": "DataGrid.vue",
+      "framework": "Vue SFC",
+      "qualityScore": 88,
+      "scanTimeMs": 5.75,
+      "memoryUsageMb": 1.43,
+      "ruleCount": 4,
+      "aiFixCount": 2,
+      "isFavorite": false,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Benchmark Diagnostic Rule Inspection",
+          "domain": "PERFORMANCE",
+          "concern": "BENCHMARK_RULE",
+          "severity": "HIGH",
+          "filePath": "DataGrid.vue",
+          "location": {
+            "start": {
+              "line": 4,
+              "column": 10
+            }
+          },
+          "offendingCodeSnippet": "// FIGM Benchmark Inspection Target",
+          "remediation": "Apply FIGM recommended guideline fix.",
+          "standardReference": "FIGM-STANDARD-2026"
+        }
+      ],
+      "id": "scan_1786355291047_64lao",
+      "createdAt": "2026-08-10T09:48:11.047Z"
+    }
+  ],
   "notifications": [],
-  "userSettings": []
+  "settings": [],
+  "auditLogs": [
+    {
+      "action": "SCAN_RUN",
+      "email": "p001@user-study.figm",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "details": "User Study (P001) benchmark scan executed on React JSX (UserProfile.jsx) - 4 issues detected",
+      "id": "log_1786355281423_pphlt",
+      "createdAt": "2026-08-10T09:48:01.423Z"
+    },
+    {
+      "action": "SCAN_RUN",
+      "email": "p001@user-study.figm",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "details": "User Study (P001) benchmark scan executed on Next.js App Router (DashboardPage.tsx) - 4 issues detected",
+      "id": "log_1786355284405_4ubry",
+      "createdAt": "2026-08-10T09:48:04.405Z"
+    },
+    {
+      "action": "SCAN_RUN",
+      "email": "p001@user-study.figm",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "details": "User Study (P001) benchmark scan executed on Angular TypeScript (SearchPanel.component.ts) - 4 issues detected",
+      "id": "log_1786355287822_y0igh",
+      "createdAt": "2026-08-10T09:48:07.822Z"
+    },
+    {
+      "action": "SCAN_RUN",
+      "email": "p001@user-study.figm",
+      "ipAddress": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0",
+      "status": "SUCCESS",
+      "details": "User Study (P001) benchmark scan executed on Vue SFC (DataGrid.vue) - 4 issues detected",
+      "id": "log_1786355291046_8w64z",
+      "createdAt": "2026-08-10T09:48:11.046Z"
+    }
+  ]
 }
