@@ -127,16 +127,16 @@ export default function UserStudyPage() {
   };
 
   return (
-    <div style={{ padding: '32px 24px', maxWidth: '1200px', margin: '0 auto', color: '#f8fafc', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="user-study-container" style={{ padding: '32px 24px', maxWidth: '1200px', width: '100%', margin: '0 auto', color: '#f8fafc', fontFamily: 'system-ui, -apple-system, sans-serif', boxSizing: 'border-box' }}>
       {/* Header Banner */}
-      <div style={{ background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px' }}>
-        <span style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '9999px', background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', fontSize: '13px', fontWeight: 600, marginBottom: '12px' }}>
+      <div className="user-study-hero" style={{ background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px', boxSizing: 'border-box' }}>
+        <span style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '9999px', background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', fontSize: '13px', fontWeight: 600, marginBottom: '12px', whiteSpace: 'normal', lineHeight: '1.4' }}>
           ACADEMIC RESEARCH USER STUDY — TARGET N=85 PARTICIPANTS
         </span>
-        <h1 style={{ fontSize: '32px', fontWeight: 700, margin: '0 0 8px 0', color: '#ffffff' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: 700, margin: '0 0 8px 0', color: '#ffffff', lineHeight: '1.2' }}>
           FIGM Code Inspector — User Study
         </h1>
-        <h2 style={{ fontSize: '18px', color: '#94a3b8', fontWeight: 400, margin: '0 0 16px 0' }}>
+        <h2 style={{ fontSize: '18px', color: '#94a3b8', fontWeight: 400, margin: '0 0 16px 0', lineHeight: '1.4' }}>
           Usability Evaluation of the Framework-Independent Guideline Model for Single Page Applications
         </h2>
         <div style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6' }}>
@@ -146,8 +146,8 @@ export default function UserStudyPage() {
       </div>
 
       {/* Main Instructions & Action Buttons */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', marginBottom: '32px' }}>
-        <div style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+      <div className="user-study-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '32px' }}>
+        <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', boxSizing: 'border-box' }}>
           <h3 style={{ fontSize: '20px', margin: '0 0 12px 0', color: '#38bdf8' }}>📖 How to Participate</h3>
           <ol style={{ paddingLeft: '20px', margin: 0, lineHeight: '1.8', color: '#cbd5e1', fontSize: '15px' }}>
             <li><strong>Step 1:</strong> Select a benchmark fixture (React, Angular, or Vue) below.</li>
@@ -157,21 +157,23 @@ export default function UserStudyPage() {
           </ol>
         </div>
 
-        <div style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px' }}>
+        <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px', boxSizing: 'border-box' }}>
           <button
+            className="user-study-cta-btn touch-target"
             onClick={() => {
               const el = document.getElementById('benchmark-section');
               el?.scrollIntoView({ behavior: 'smooth' });
             }}
-            style={{ padding: '14px 24px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', border: 'none', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}
+            style={{ padding: '14px 24px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', border: 'none', fontSize: '16px', fontWeight: 600, cursor: 'pointer', minHeight: '44px', width: '100%', boxSizing: 'border-box' }}
           >
             ⚡ Start FIGM User Study Tasks
           </button>
           <a
+            className="user-study-cta-btn touch-target"
             href={googleFormUrl}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'block', padding: '14px 24px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', border: '1px solid rgba(52, 211, 153, 0.4)', textAlign: 'center', fontSize: '16px', fontWeight: 600, textDecoration: 'none' }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '14px 24px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', border: '1px solid rgba(52, 211, 153, 0.4)', textAlign: 'center', fontSize: '16px', fontWeight: 600, textDecoration: 'none', minHeight: '44px', width: '100%', boxSizing: 'border-box' }}
           >
             📝 Open Google Form Questionnaire ↗
           </a>
@@ -179,9 +181,9 @@ export default function UserStudyPage() {
       </div>
 
       {/* Task Guide Overview */}
-      <div style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '32px' }}>
+      <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '32px', boxSizing: 'border-box' }}>
         <h3 style={{ fontSize: '20px', margin: '0 0 16px 0', color: '#f59e0b' }}>🎯 Structured Evaluation Tasks (Questions 9–15)</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+        <div className="user-study-grid-tasks" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
           {[
             { num: 1, title: 'Identify Rule ID', desc: 'Find rule associated with an issue (e.g. FIGM-PERF-01)' },
             { num: 2, title: 'Understand Diagnostic', desc: 'Review what the issue is & why it matters' },
@@ -197,7 +199,9 @@ export default function UserStudyPage() {
                 borderRadius: '8px',
                 background: activeTask === t.num ? 'rgba(59, 130, 246, 0.15)' : 'rgba(255, 255, 255, 0.03)',
                 border: activeTask === t.num ? '1px solid #3b82f6' : '1px solid rgba(255, 255, 255, 0.05)',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                minHeight: '44px',
+                boxSizing: 'border-box'
               }}
             >
               <div style={{ fontSize: '12px', fontWeight: 600, color: '#60a5fa', marginBottom: '4px' }}>TASK {t.num}</div>
@@ -209,18 +213,20 @@ export default function UserStudyPage() {
       </div>
 
       {/* Interactive Benchmark Selector & Code Inspector Section */}
-      <div id="benchmark-section" style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px' }}>
+      <div id="benchmark-section" className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <h3 style={{ fontSize: '20px', margin: '0 0 4px 0', color: '#ffffff' }}>🧪 Interactive FIGM Benchmark Inspector</h3>
             <span style={{ fontSize: '14px', color: '#94a3b8' }}>Select a Single Page Application framework fixture to inspect static diagnostics.</span>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', width: '100%', maxWidth: '300px' }}>
             {(['react', 'angular', 'vue'] as const).map((fw) => (
               <button
                 key={fw}
+                className="touch-target"
                 onClick={() => { setSelectedFramework(fw); setScanCompleted(false); }}
                 style={{
+                  flex: 1,
                   padding: '8px 16px',
                   borderRadius: '6px',
                   background: selectedFramework === fw ? '#2563eb' : 'rgba(255, 255, 255, 0.05)',
@@ -228,7 +234,8 @@ export default function UserStudyPage() {
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   cursor: 'pointer',
                   fontWeight: 600,
-                  textTransform: 'capitalize'
+                  textTransform: 'capitalize',
+                  minHeight: '44px'
                 }}
               >
                 {fw}
@@ -238,19 +245,20 @@ export default function UserStudyPage() {
         </div>
 
         {/* Source Code Viewer */}
-        <div style={{ background: '#090d16', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '20px', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.5', overflowX: 'auto' }}>
+        <div className="code-scroll-container" style={{ background: '#090d16', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '20px', fontFamily: 'monospace', fontSize: '13px', lineHeight: '1.5', overflowX: 'auto', boxSizing: 'border-box' }}>
           <div style={{ color: '#64748b', fontSize: '12px', marginBottom: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '4px' }}>
             FIXTURE: {BENCHMARKS[selectedFramework].name}
           </div>
-          <pre style={{ margin: 0, color: '#e2e8f0' }}>{BENCHMARKS[selectedFramework].code}</pre>
+          <pre style={{ margin: 0, color: '#e2e8f0', whiteSpace: 'pre', minWidth: 'fit-content' }}>{BENCHMARKS[selectedFramework].code}</pre>
         </div>
 
         {/* Scan Action */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
           <button
+            className="touch-target user-study-cta-btn"
             onClick={handleRunScan}
             disabled={isScanning}
-            style={{ padding: '12px 24px', borderRadius: '8px', background: isScanning ? '#64748b' : '#10b981', color: '#ffffff', border: 'none', fontSize: '15px', fontWeight: 600, cursor: isScanning ? 'wait' : 'pointer' }}
+            style={{ padding: '12px 24px', borderRadius: '8px', background: isScanning ? '#64748b' : '#10b981', color: '#ffffff', border: 'none', fontSize: '15px', fontWeight: 600, cursor: isScanning ? 'wait' : 'pointer', minHeight: '44px' }}
           >
             {isScanning ? '⏳ Running FIGM Rules Analysis...' : '⚡ Run FIGM Scan on Benchmark'}
           </button>
@@ -263,26 +271,26 @@ export default function UserStudyPage() {
 
         {/* Scan Diagnostics Output Table */}
         {scanCompleted && (
-          <div style={{ background: 'rgba(9, 13, 22, 0.6)', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
+          <div className="table-scroll-container" style={{ background: 'rgba(9, 13, 22, 0.6)', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)', overflowX: 'auto', width: '100%' }}>
+            <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
               <thead>
                 <tr style={{ background: 'rgba(255, 255, 255, 0.05)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#94a3b8' }}>
-                  <th style={{ padding: '12px 16px' }}>Rule ID</th>
-                  <th style={{ padding: '12px 16px' }}>Guideline Name</th>
-                  <th style={{ padding: '12px 16px' }}>Category</th>
-                  <th style={{ padding: '12px 16px' }}>Severity</th>
-                  <th style={{ padding: '12px 16px' }}>Line</th>
-                  <th style={{ padding: '12px 16px' }}>Recommendation</th>
+                  <th style={{ padding: '12px 16px', minWidth: '100px' }}>Rule ID</th>
+                  <th style={{ padding: '12px 16px', minWidth: '160px' }}>Guideline Name</th>
+                  <th style={{ padding: '12px 16px', minWidth: '110px' }}>Category</th>
+                  <th style={{ padding: '12px 16px', minWidth: '90px' }}>Severity</th>
+                  <th style={{ padding: '12px 16px', minWidth: '70px' }}>Line</th>
+                  <th style={{ padding: '12px 16px', minWidth: '200px' }}>Recommendation</th>
                 </tr>
               </thead>
               <tbody>
                 {INITIAL_DIAGNOSTICS.map((d) => (
                   <tr key={d.id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: 700, color: '#60a5fa' }}>{d.ruleId}</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 700, color: '#60a5fa', whiteSpace: 'nowrap' }}>{d.ruleId}</td>
                     <td style={{ padding: '12px 16px', color: '#ffffff' }}>{d.ruleName}</td>
                     <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{d.category}</td>
                     <td style={{ padding: '12px 16px', color: d.severity === 'CRITICAL' ? '#ef4444' : '#f59e0b', fontWeight: 600 }}>{d.severity}</td>
-                    <td style={{ padding: '12px 16px', color: '#94a3b8' }}>Line {d.line}</td>
+                    <td style={{ padding: '12px 16px', color: '#94a3b8', whiteSpace: 'nowrap' }}>Line {d.line}</td>
                     <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{d.recommendation}</td>
                   </tr>
                 ))}
@@ -293,16 +301,17 @@ export default function UserStudyPage() {
       </div>
 
       {/* Completion Banner & Questionnaire Link */}
-      <div style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 95, 70, 0.25))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(52, 211, 153, 0.3)', textAlign: 'center' }}>
+      <div className="user-study-hero" style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 95, 70, 0.25))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(52, 211, 153, 0.3)', textAlign: 'center', boxSizing: 'border-box' }}>
         <h3 style={{ fontSize: '24px', margin: '0 0 8px 0', color: '#ffffff' }}>Finish Your Usability Evaluation</h3>
         <p style={{ fontSize: '15px', color: '#a7f3d0', margin: '0 0 20px 0', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}>
           Please answer the questionnaire based on your actual experience using FIGM Code Inspector. There are no right or wrong answers.
         </p>
         <a
+          className="user-study-cta-btn touch-target"
           href={googleFormUrl}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ display: 'inline-block', padding: '16px 36px', borderRadius: '12px', background: '#10b981', color: '#ffffff', fontSize: '18px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)' }}
+          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '16px 36px', borderRadius: '12px', background: '#10b981', color: '#ffffff', fontSize: '18px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)', minHeight: '44px', boxSizing: 'border-box' }}
         >
           📝 Open User Study Questionnaire ↗
         </a>

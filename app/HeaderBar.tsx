@@ -21,23 +21,7 @@ export default function HeaderBar() {
 
   return (
     <>
-      <header
-        style={{
-          height: '68px',
-          background: 'rgba(9, 13, 22, 0.75)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          padding: '0 36px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          position: 'sticky',
-          top: 0,
-          zIndex: 30,
-          boxSizing: 'border-box',
-        }}
-      >
+      <header className="header-bar-container">
         {/* Search Bar Trigger */}
         <div
           onClick={() => setIsSearchOpen(true)}
