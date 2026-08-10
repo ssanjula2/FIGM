@@ -1288,6 +1288,42 @@
       "id": "usr_1786344209115_o0div",
       "apiKey": "figm_key_1786344209115_esusacue",
       "createdAt": "2026-08-10T06:43:29.115Z"
+    },
+    {
+      "email": "usera@test.com",
+      "passwordHash": "4849d76864758794e43ba64b84e16a40:3d60136f41c960159a4381b92555755e2add166fa20e39c74ee3d9e6c0e5de0e5104bd3562bd5e9139dc0c62a2d7386bb1c3ed9420ddc556768ea8e9dc1c37b0",
+      "fullName": "User A",
+      "role": "DEVELOPER",
+      "id": "usr_1786344406102_mt8mt",
+      "apiKey": "figm_key_1786344406102_1it24mcq",
+      "createdAt": "2026-08-10T06:46:46.102Z"
+    },
+    {
+      "email": "userb@test.com",
+      "passwordHash": "66d9608f3a753c953d7f8c1f9b033c1a:9df39b57e8669b58c71ad453335b3ffa72dd407993a926d76da8df288a7257aa628e5b8c558f1ddbb62a516ed683234a5abea98e8240df7800895e600eb666fd",
+      "fullName": "User B",
+      "role": "DEVELOPER",
+      "id": "usr_1786344406112_tkejr",
+      "apiKey": "figm_key_1786344406112_4rgyfspp",
+      "createdAt": "2026-08-10T06:46:46.112Z"
+    },
+    {
+      "email": "test_1786344406402@figm.io",
+      "passwordHash": "0171a0364f352cfe09470969a4da3362:167c33e6db8cd045aba323b9ecc2e39a928d02b09b0e3e1e751f48a1fafb7c3c8c80ef2deca5281d72921338b6d8b3baffb5d4a242fbbf3d199bc1c3e93ac476",
+      "fullName": "Updated Auditor Name",
+      "role": "AUDITOR",
+      "id": "usr_1786344406411_gec94",
+      "apiKey": "figm_key_1786344406411_w724ebc0",
+      "createdAt": "2026-08-10T06:46:46.411Z"
+    },
+    {
+      "email": "reset_1786344406417@figm.io",
+      "passwordHash": "02bc464620658a94fab66cb00ac93ccd:d828cf9cf618061ea88f55e5f3c8c778339c11b324d4084d74e1e27f265c553a76b505111696bff9611f58eed3887e60aa9bc7d9d740b8662228299864e4967e",
+      "fullName": "Reset User",
+      "role": "DEVELOPER",
+      "id": "usr_1786344406425_dgr4x",
+      "apiKey": "figm_key_1786344406425_1i1l4wyl",
+      "createdAt": "2026-08-10T06:46:46.425Z"
     }
   ],
   "submissions": [
@@ -1620,6 +1656,39 @@
       "diagnosticsCount": 1,
       "id": "sub_1786344174254_2c4mw",
       "createdAt": "2026-08-10T06:42:54.254Z"
+    },
+    {
+      "userId": "usr_1786344406102_mt8mt",
+      "fileName": "UserA_Component.tsx",
+      "framework": "REACT",
+      "codeContent": "export function ComponentA() {}",
+      "executionTimeMs": 12,
+      "qualityScore": 95,
+      "diagnosticsCount": 1,
+      "id": "sub_1786344406114_nbtb1",
+      "createdAt": "2026-08-10T06:46:46.114Z"
+    },
+    {
+      "userId": "usr_1786344406112_tkejr",
+      "fileName": "UserB_Service.ts",
+      "framework": "ANGULAR",
+      "codeContent": "export class ServiceB {}",
+      "executionTimeMs": 18,
+      "qualityScore": 90,
+      "diagnosticsCount": 2,
+      "id": "sub_1786344406117_p0t7z",
+      "createdAt": "2026-08-10T06:46:46.117Z"
+    },
+    {
+      "userId": "usr_test_1786344407200",
+      "fileName": "DashboardTestComponent.tsx",
+      "framework": "REACT_JSX",
+      "codeContent": "const a = 1;",
+      "executionTimeMs": 0.45,
+      "qualityScore": 92,
+      "diagnosticsCount": 1,
+      "id": "sub_1786344407201_orz19",
+      "createdAt": "2026-08-10T06:46:47.201Z"
     }
   ],
   "projects": [
@@ -4165,6 +4234,15 @@
       "status": "SUCCESS",
       "id": "log_1786344173483_xgsik",
       "createdAt": "2026-08-10T06:42:53.483Z"
+    },
+    {
+      "action": "LOGIN",
+      "email": "audit_1786344406450@figm.io",
+      "ipAddress": "192.168.1.50",
+      "userAgent": "TestBrowser/1.0",
+      "status": "SUCCESS",
+      "id": "log_1786344406451_9qqwb",
+      "createdAt": "2026-08-10T06:46:46.451Z"
     }
   ]
 }

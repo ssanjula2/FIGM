@@ -2,8 +2,8 @@
 
 ## Executive Summary
 * **Benchmark Lines of Code**: 147 LOC
-* **Scan Duration**: 1.92 ms
-* **Scan Throughput**: 76586 LOC/sec
+* **Scan Duration**: 1.84 ms
+* **Scan Throughput**: 79878 LOC/sec
 * **Peak Memory Usage**: 0.22 MB
 * **Overall Precision**: 85.7%
 * **Overall Recall**: 94.7%

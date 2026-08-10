@@ -11,7 +11,7 @@
 ---
 
 ## 1. PURPOSE OF THE STUDY
-You are invited to participate in an empirical research study evaluating the usability, understandability, usefulness, and task completion experience of the **Framework-Independent Guideline Model (FIGM) Code Inspector** when evaluating Single Page Application (SPA) source code across React, Angular, and Vue.
+You are invited to participate in an empirical research study evaluating the usability, understandability, usefulness, and task completion experience of the **Framework-Independent Guideline Model (FIGM) Code Inspector** when evaluating Single Page Application (SPA) source code across Next.js, React, Angular, and Vue.
 
 ## 2. STUDY PROCEDURE & EXPECTED DURATION
 If you agree to participate:

@@ -18,6 +18,7 @@ Navigate to the FIGM User Study page at `/user-study` (or open the provided onli
 ### Step 2: Select a Benchmark Code Fixture
 Choose one of the representative SPA source code fixtures:
 - **React**: `UserProfile.jsx` (React 18 functional component with state and event handlers)
+- **Next.js**: `DashboardPage.tsx` (Next.js App Router component with Server/Client boundaries)
 - **Angular**: `SearchPanel.component.ts` (Angular 17 component with RxJS subscriptions)
 - **Vue**: `DataGrid.vue` (Vue 3 Composition API with reactive data structures)
 
