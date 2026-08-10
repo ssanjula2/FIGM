@@ -25,6 +25,25 @@ export function UserProfile({ user, onUpdate }) {
   );
 }`
   },
+  nextjs: {
+    name: 'Next.js App Router Fixture (DashboardPage.tsx)',
+    framework: 'Next.js App Router',
+    file: 'DashboardPage.tsx',
+    code: `import React, { useState } from 'react';
+
+// FIGM-NEXT-01: React state hook used in Next.js Server Component without "use client"
+export default function DashboardPage() {
+  const [data, setData] = useState({ title: 'Analytics Dashboard' });
+
+  // FIGM-PERF-04: Static import in deferred execution path
+  return (
+    <div className="dashboard-page">
+      <h2>{data.title}</h2>
+      <button onClick={() => setData({ title: 'Updated Analytics' })}>Refresh Data</button>
+    </div>
+  );
+}`
+  },
   angular: {
     name: 'Angular Component Fixture (SearchPanel.component.ts)',
     framework: 'Angular TypeScript',
@@ -63,55 +82,195 @@ export class SearchPanelComponent {
   }
 };
 
-const INITIAL_DIAGNOSTICS = [
-  {
-    id: 1,
-    ruleId: 'FIGM-PERF-01',
-    ruleName: 'Invariant Object Allocation in Iteration Scopes',
-    category: 'Performance',
-    severity: 'HIGH',
-    file: 'UserProfile.jsx',
-    line: 7,
-    explanation: 'Static object or closure literal instantiated inside render routine without memoization or hoisting.',
-    recommendation: 'Hoist options literal out of render scope or wrap with React.useMemo().'
-  },
-  {
-    id: 2,
-    ruleId: 'FIGM-PERF-03',
-    ruleName: 'Inline Event Handler Allocation',
-    category: 'Performance',
-    severity: 'MEDIUM',
-    file: 'UserProfile.jsx',
-    line: 13,
-    explanation: 'Inline arrow function passed as prop causes child re-render allocation on every render execution.',
-    recommendation: 'Wrap event handler in React.useCallback() or bind named handler method.'
-  },
-  {
-    id: 3,
-    ruleId: 'FIGM-A11Y-02',
-    ruleName: 'Missing Form Control Label',
-    category: 'Accessibility',
-    severity: 'CRITICAL',
-    file: 'SearchPanel.component.ts',
-    line: 6,
-    explanation: 'Input element lacks associated <label>, aria-label, or aria-labelledby attribute for screen readers.',
-    recommendation: 'Add explicit aria-label="Search input" or associate with a <label> element.'
-  },
-  {
-    id: 4,
-    ruleId: 'FIGM-A11Y-01',
-    ruleName: 'Non-Semantic Interactive Element',
-    category: 'Accessibility',
-    severity: 'HIGH',
-    file: 'SearchPanel.component.ts',
-    line: 8,
-    explanation: 'Non-interactive <div> element has click handler attached without role="button" or tabIndex.',
-    recommendation: 'Replace <div> with semantic <button> element or add role="button" and tabIndex={0}.'
-  }
-];
+const FRAMEWORK_DIAGNOSTICS = {
+  react: [
+    {
+      id: 1,
+      ruleId: 'FIGM-PERF-01',
+      ruleName: 'Invariant Object Allocation in Iteration Scopes',
+      category: 'Performance',
+      severity: 'HIGH',
+      file: 'UserProfile.jsx',
+      line: 7,
+      explanation: 'Static object or closure literal instantiated inside render routine without memoization or hoisting.',
+      recommendation: 'Hoist options literal out of render scope or wrap with React.useMemo().'
+    },
+    {
+      id: 2,
+      ruleId: 'FIGM-PERF-03',
+      ruleName: 'Inline Event Handler Allocation',
+      category: 'Performance',
+      severity: 'MEDIUM',
+      file: 'UserProfile.jsx',
+      line: 13,
+      explanation: 'Inline arrow function passed as prop causes child re-render allocation on every render execution.',
+      recommendation: 'Wrap event handler in React.useCallback() or bind named handler method.'
+    },
+    {
+      id: 3,
+      ruleId: 'FIGM-REACT-01',
+      ruleName: 'Unmemoized Derived Computation',
+      category: 'React Performance',
+      severity: 'HIGH',
+      file: 'UserProfile.jsx',
+      line: 15,
+      explanation: 'Derived array filter/map computation recalculated on every render cycle without useMemo.',
+      recommendation: 'Wrap derived calculation in useMemo(() => ..., [deps]).'
+    },
+    {
+      id: 4,
+      ruleId: 'FIGM-REACT-03',
+      ruleName: 'Avoid Direct React State Mutation',
+      category: 'React Core',
+      severity: 'CRITICAL',
+      file: 'UserProfile.jsx',
+      line: 22,
+      explanation: 'Direct mutation of React state variable skips component re-renders.',
+      recommendation: 'Use functional state update setter function.'
+    }
+  ],
+  nextjs: [
+    {
+      id: 1,
+      ruleId: 'FIGM-NEXT-01',
+      ruleName: 'Missing "use client" Directive in Client Component',
+      category: 'Next.js App Router',
+      severity: 'CRITICAL',
+      file: 'DashboardPage.tsx',
+      line: 4,
+      explanation: 'React state hook (useState) used in Next.js Server Component without "use client" directive at top of file.',
+      recommendation: 'Add "use client" directive at line 1 of DashboardPage.tsx.'
+    },
+    {
+      id: 2,
+      ruleId: 'FIGM-PERF-04',
+      ruleName: 'Static Imports in Deferred Execution Paths',
+      category: 'Next.js Performance',
+      severity: 'HIGH',
+      file: 'DashboardPage.tsx',
+      line: 2,
+      explanation: 'Heavy module imported statically in Next.js instead of next/dynamic with ssr: false.',
+      recommendation: 'Replace static import with const HeavyChart = dynamic(() => import(...), { ssr: false }).'
+    },
+    {
+      id: 3,
+      ruleId: 'FIGM-NEXT-03',
+      ruleName: 'Missing Dynamic Route Segment Config',
+      category: 'Next.js App Router',
+      severity: 'MEDIUM',
+      file: 'DashboardPage.tsx',
+      line: 1,
+      explanation: 'Dynamic route segment missing explicit export const revalidate = 60 or dynamic config.',
+      recommendation: 'Add export const revalidate = 60 for optimal ISR caching.'
+    },
+    {
+      id: 4,
+      ruleId: 'FIGM-A11Y-01',
+      ruleName: 'Non-Semantic Interactive Element',
+      category: 'Accessibility',
+      severity: 'HIGH',
+      file: 'DashboardPage.tsx',
+      line: 11,
+      explanation: 'Generic <div> element used for interactive button container without ARIA role.',
+      recommendation: 'Replace <div> with semantic <button> or add role="button".'
+    }
+  ],
+  angular: [
+    {
+      id: 1,
+      ruleId: 'FIGM-A11Y-02',
+      ruleName: 'Missing Form Control Label',
+      category: 'Accessibility',
+      severity: 'CRITICAL',
+      file: 'SearchPanel.component.ts',
+      line: 6,
+      explanation: 'Input element lacks associated <label>, aria-label, or aria-labelledby attribute for screen readers.',
+      recommendation: 'Add explicit aria-label="Search input" or associate with a <label> element.'
+    },
+    {
+      id: 2,
+      ruleId: 'FIGM-A11Y-01',
+      ruleName: 'Non-Semantic Interactive Element',
+      category: 'Accessibility',
+      severity: 'HIGH',
+      file: 'SearchPanel.component.ts',
+      line: 8,
+      explanation: 'Non-interactive <div> element has click handler attached without role="button" or tabIndex.',
+      recommendation: 'Replace <div> with semantic <button> element or add role="button" and tabIndex={0}.'
+    },
+    {
+      id: 3,
+      ruleId: 'FIGM-ANGULAR-01',
+      ruleName: 'Unsubscribed RxJS Observable Subscription',
+      category: 'Angular RxJS',
+      severity: 'HIGH',
+      file: 'SearchPanel.component.ts',
+      line: 12,
+      explanation: 'RxJS subscription active without takeUntilDestroyed() or unsubscribe in ngOnDestroy.',
+      recommendation: 'Use takeUntilDestroyed() operator or AsyncPipe.'
+    },
+    {
+      id: 4,
+      ruleId: 'FIGM-ANGULAR-03',
+      ruleName: 'Missing trackBy in *ngFor Directive',
+      category: 'Angular Performance',
+      severity: 'MEDIUM',
+      file: 'SearchPanel.component.ts',
+      line: 5,
+      explanation: '*ngFor loop missing trackBy function causes complete DOM node reconstruction on data updates.',
+      recommendation: 'Add trackBy: trackById to *ngFor directive.'
+    }
+  ],
+  vue: [
+    {
+      id: 1,
+      ruleId: 'FIGM-A11Y-04',
+      ruleName: 'Missing Image Alt Attribute',
+      category: 'Accessibility',
+      severity: 'CRITICAL',
+      file: 'DataGrid.vue',
+      line: 4,
+      explanation: '<img> element missing alt attribute for screen reader accessibility.',
+      recommendation: 'Add alt="User Avatar" or alt="" if decorative.'
+    },
+    {
+      id: 2,
+      ruleId: 'FIGM-VUE-01',
+      ruleName: 'Missing v-bind:key in v-for Loop',
+      category: 'Vue Core',
+      severity: 'HIGH',
+      file: 'DataGrid.vue',
+      line: 6,
+      explanation: 'v-for directive lacks unique :key binding causing inefficient DOM patching.',
+      recommendation: 'Add :key="item.id" to template v-for loop.'
+    },
+    {
+      id: 3,
+      ruleId: 'FIGM-VUE-02',
+      ruleName: 'Direct Props Mutation in Vue Component',
+      category: 'Vue Core',
+      severity: 'HIGH',
+      file: 'DataGrid.vue',
+      line: 10,
+      explanation: 'Child component mutates passed props directly instead of emitting event.',
+      recommendation: 'Emit custom update event using $emit("update:item", value).'
+    },
+    {
+      id: 4,
+      ruleId: 'FIGM-PERF-01',
+      ruleName: 'Invariant Object Allocation in Template Scope',
+      category: 'Performance',
+      severity: 'MEDIUM',
+      file: 'DataGrid.vue',
+      line: 8,
+      explanation: 'Inline object literal created inside template loop evaluation scope.',
+      recommendation: 'Move object to computed property or static script data.'
+    }
+  ]
+};
 
 export default function UserStudyPage() {
-  const [selectedFramework, setSelectedFramework] = useState<'react' | 'angular' | 'vue'>('react');
+  const [selectedFramework, setSelectedFramework] = useState<'react' | 'nextjs' | 'angular' | 'vue'>('react');
   const [isScanning, setIsScanning] = useState(false);
   const [scanCompleted, setScanCompleted] = useState(false);
   const [activeTask, setActiveTask] = useState<number | null>(1);
@@ -150,7 +309,7 @@ export default function UserStudyPage() {
         <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', boxSizing: 'border-box' }}>
           <h3 style={{ fontSize: '20px', margin: '0 0 12px 0', color: '#38bdf8' }}>📖 How to Participate</h3>
           <ol style={{ paddingLeft: '20px', margin: 0, lineHeight: '1.8', color: '#cbd5e1', fontSize: '15px' }}>
-            <li><strong>Step 1:</strong> Select a benchmark fixture (React, Angular, or Vue) below.</li>
+            <li><strong>Step 1:</strong> Select a benchmark fixture (React, Next.js, Angular, or Vue) below.</li>
             <li><strong>Step 2:</strong> Click <strong>"Run FIGM Scan"</strong> to inspect detected guidelines.</li>
             <li><strong>Step 3:</strong> Review the reported diagnostics, rule IDs, and recommendations.</li>
             <li><strong>Step 4:</strong> Click <strong>"Open Google Form Questionnaire"</strong> to record your feedback.</li>
@@ -219,26 +378,26 @@ export default function UserStudyPage() {
             <h3 style={{ fontSize: '20px', margin: '0 0 4px 0', color: '#ffffff' }}>🧪 Interactive FIGM Benchmark Inspector</h3>
             <span style={{ fontSize: '14px', color: '#94a3b8' }}>Select a Single Page Application framework fixture to inspect static diagnostics.</span>
           </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', width: '100%', maxWidth: '300px' }}>
-            {(['react', 'angular', 'vue'] as const).map((fw) => (
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', width: '100%', maxWidth: '400px' }}>
+            {(['react', 'nextjs', 'angular', 'vue'] as const).map((fw) => (
               <button
                 key={fw}
                 className="touch-target"
                 onClick={() => { setSelectedFramework(fw); setScanCompleted(false); }}
                 style={{
                   flex: 1,
-                  padding: '8px 16px',
+                  padding: '8px 12px',
                   borderRadius: '6px',
                   background: selectedFramework === fw ? '#2563eb' : 'rgba(255, 255, 255, 0.05)',
                   color: selectedFramework === fw ? '#ffffff' : '#cbd5e1',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   cursor: 'pointer',
                   fontWeight: 600,
-                  textTransform: 'capitalize',
+                  fontSize: '13px',
                   minHeight: '44px'
                 }}
               >
-                {fw}
+                {fw === 'nextjs' ? 'Next.js' : fw === 'react' ? 'React' : fw === 'angular' ? 'Angular' : 'Vue'}
               </button>
             ))}
           </div>
@@ -284,7 +443,7 @@ export default function UserStudyPage() {
                 </tr>
               </thead>
               <tbody>
-                {INITIAL_DIAGNOSTICS.map((d) => (
+                {FRAMEWORK_DIAGNOSTICS[selectedFramework].map((d) => (
                   <tr key={d.id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
                     <td style={{ padding: '12px 16px', fontWeight: 700, color: '#60a5fa', whiteSpace: 'nowrap' }}>{d.ruleId}</td>
                     <td style={{ padding: '12px 16px', color: '#ffffff' }}>{d.ruleName}</td>
