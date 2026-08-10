@@ -1,0 +1,31 @@
+{
+  "provenance": {
+    "datasetId": "FIGM-REAL-HUMAN-USER-STUDY-V1",
+    "datasetType": "SYNTHETIC",
+    "isRealHumanData": false,
+    "collectionStatus": "NOT_COLLECTED",
+    "targetSampleSize": 85,
+    "validParticipantCount": 0,
+    "targetReached": false,
+    "anonymizedParticipantIds": [],
+    "totalResponsesIngested": 0,
+    "excludedResponsesCount": 0,
+    "processedAt": "2026-08-10T10:30:02.427Z"
+  },
+  "metrics": {
+    "susMean": 0,
+    "susMedian": 0,
+    "susStdDev": 0,
+    "susMin": 0,
+    "susMax": 0,
+    "cronbachAlpha": 0,
+    "taskCompletionRatePercent": 0,
+    "taskConfidenceMean": 0,
+    "taskDifficultyMean": 0,
+    "usefulnessMean": 0,
+    "ruleIdentificationDistribution": {}
+  },
+  "exclusionLog": [
+    "Raw responses file not found at C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\research\\raw\\real\\responses.csv. Reporting NOT_COLLECTED baseline state."
+  ]
+}

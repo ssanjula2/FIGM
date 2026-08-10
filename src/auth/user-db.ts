@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { hashPassword } from './auth-service';
 
 export type UserRole = 'ADMIN' | 'DEVELOPER' | 'AUDITOR';
 
@@ -198,56 +199,54 @@ function getDefaultScanRecords(): DBScanRecord[] {
 }
 
 function getDefaultUsers(): DBUser[] {
-  const users: DBUser[] = [
+  const adminPass = hashPassword('Admin123456!');
+  return [
     {
-      id: 'usr_admin_default',
-      email: 'admin@figm.io',
-      fullName: 'Lead Software Architect & Reviewer',
+      id: 'usr_admin_sanjula',
+      email: 'sanjula@nsbm.ac.lk',
+      fullName: 'A P H D S Sanjula (Admin)',
       role: 'ADMIN',
-      passwordHash: 'hashedpass',
-      apiKey: 'figm_key_admin_default',
+      passwordHash: adminPass,
+      apiKey: 'figm_key_admin_sanjula',
       createdAt: new Date().toISOString(),
     },
     {
-      id: 'usr_developer_default',
-      email: 'dev@figm.io',
-      fullName: 'Senior Frontend Developer',
-      role: 'DEVELOPER',
-      passwordHash: 'hashedpass',
-      apiKey: 'figm_key_dev_default',
+      id: 'usr_admin_figm',
+      email: 'admin@figm.io',
+      fullName: 'FIGM Lead System Administrator',
+      role: 'ADMIN',
+      passwordHash: adminPass,
+      apiKey: 'figm_key_admin_figm',
       createdAt: new Date().toISOString(),
-    },
+    }
   ];
-
-  for (let i = 1; i <= 83; i++) {
-    users.push({
-      id: `usr_eval_${String(i).padStart(2, '0')}`,
-      email: `engineer_${i}@cohort.figm.io`,
-      fullName: `Research Participant Software Engineer #${i}`,
-      role: i % 10 === 0 ? 'AUDITOR' : 'DEVELOPER',
-      passwordHash: 'hashedpass',
-      apiKey: `figm_key_eval_${i}`,
-      createdAt: new Date(Date.now() - 3600000 * (i % 72)).toISOString(),
-    });
-  }
-
-  return users;
 }
 
+declare global {
+  var _figm_db_cache: DBUserStore | undefined;
+}
+
+const TMP_DB_FILE = path.resolve('/tmp', 'figm-user-db.json');
+
 function loadDB(): DBUserStore {
-  if (fs.existsSync(DB_FILE)) {
+  if (globalThis._figm_db_cache) {
+    return globalThis._figm_db_cache;
+  }
+
+  const targetFile = fs.existsSync(TMP_DB_FILE) ? TMP_DB_FILE : DB_FILE;
+  let loadedStore: DBUserStore | null = null;
+  if (fs.existsSync(targetFile)) {
     try {
-      const data = fs.readFileSync(DB_FILE, 'utf-8');
+      const data = fs.readFileSync(targetFile, 'utf-8');
       const parsed = JSON.parse(data);
-      const scanRecords = (parsed.scanRecords && parsed.scanRecords.length > 0) ? parsed.scanRecords : getDefaultScanRecords();
+      const scanRecords = parsed.scanRecords || [];
       const existingUsers = (parsed.users || []).map((u: Partial<DBUser>) => ({
         ...u,
         role: u.role || 'DEVELOPER',
       }));
-      const users = existingUsers.length >= 85 ? existingUsers : getDefaultUsers();
 
-      return {
-        users,
+      loadedStore = {
+        users: existingUsers.length > 0 ? existingUsers : getDefaultUsers(),
         submissions: parsed.submissions || [],
         projects: parsed.projects || [],
         scanRecords,
@@ -259,19 +258,34 @@ function loadDB(): DBUserStore {
       // Fallback
     }
   }
-  return {
-    users: getDefaultUsers(),
-    submissions: [],
-    projects: [],
-    scanRecords: getDefaultScanRecords(),
-    notifications: [],
-    settings: [],
-    auditLogs: [],
-  };
+
+  if (!loadedStore) {
+    loadedStore = {
+      users: getDefaultUsers(),
+      submissions: [],
+      projects: [],
+      scanRecords: [],
+      notifications: [],
+      settings: [],
+      auditLogs: [],
+    };
+  }
+
+  globalThis._figm_db_cache = loadedStore;
+  return loadedStore;
 }
 
 function saveDB(store: DBUserStore): void {
-  fs.writeFileSync(DB_FILE, JSON.stringify(store, null, 2), 'utf-8');
+  globalThis._figm_db_cache = store;
+  try {
+    fs.writeFileSync(DB_FILE, JSON.stringify(store, null, 2), 'utf-8');
+  } catch {
+    try {
+      fs.writeFileSync(TMP_DB_FILE, JSON.stringify(store, null, 2), 'utf-8');
+    } catch {
+      // Memory fallback in read-only serverless environments
+    }
+  }
 }
 
 export const UserDB = {

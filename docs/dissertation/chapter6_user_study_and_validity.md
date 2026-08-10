@@ -1,15 +1,22 @@
-# Chapter 6: User Usability Evaluation Vector Model & Threats to Validity
+# Chapter 6: User Usability Evaluation & Threats to Validity
 
-## 6.1 Usability Evaluation Scoring Vector Model (N = 85 Profile Vectors)
+## 6.1 Usability Evaluation Provenance & Status
 
-Evaluated via representative usability scoring vector model (85 developer profiles).
+- **Dataset Type**: SYNTHETIC_PIPELINE_TEST_DATA
+- **Real Human Participant Count**: 0 / 85 Valid Real Participants (Collection Status: NOT_COLLECTED)
+- **Data Collection Status**: NOT_COLLECTED
+- **System Usability Scale (SUS) Score**: PENDING REAL DATA (Formula Verification Test Score: 86.4 / 100 [SYNTHETIC_PIPELINE_TEST_DATA])
+- **Cronbach's Alpha Reliability ($\\alpha$)**: PENDING REAL DATA (Formula Verification Test Alpha: 0.892 [SYNTHETIC_PIPELINE_TEST_DATA])
 
-> **Academic Disclaimer**: The N=85 dataset represents a mathematical survey scoring vector model designed to evaluate questionnaire scoring algorithms (86.4 / 100 SUS Score, Cronbach's alpha = 0.892). It should not be interpreted as evidence collected from a live human-subject study.
+> **Academic Provenance Notice**: Real human participant data has not yet been collected (0/85 valid responses ingested). The questionnaire scoring pipeline formula has been verified using a synthetic pipeline test vector model (SYNTHETIC_PIPELINE_TEST_DATA). Live empirical human results will be computed dynamically upon ingesting responses via `npm run research:user-study:import`.
 
-- **Overall User Satisfaction Mean**: 4.7 / 5.00
-- **Cronbach's Alpha Reliability ($\\alpha$)**: 0.85 (Exceeds 0.80 benchmark threshold)
+### Pipeline Verification Test Questionnaire Items (Formula Test Data)
 
-| ID | Usability Question | Mean Score (1-5) | StdDev |
+- **Formula Test Sample Size**: 85 Profile Vectors
+- **Overall User Satisfaction Mean (Test Model)**: 4.7 / 5.00
+- **Formula Test Cronbach's Alpha**: 0.85
+
+| ID | Usability Question | Formula Test Mean (1-5) | StdDev |
 |---|---|---|---|
 | Q1 | The FIGM tool is easy to configure and use. | **4.60** | 0.62 |
 | Q2 | The diagnostic reports are easy to understand for beginners. | **4.70** | 0.56 |

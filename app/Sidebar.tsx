@@ -45,6 +45,7 @@ export default function Sidebar() {
 
   return (
     <aside
+      className="sidebar-desktop"
       style={{
         position: 'fixed',
         top: 0,
@@ -53,7 +54,7 @@ export default function Sidebar() {
         minWidth: '260px',
         maxWidth: '260px',
         height: '100vh',
-        background: 'rgba(9, 13, 22, 0.92)',
+        background: 'rgba(9, 13, 22, 0.95)',
         backdropFilter: 'blur(25px)',
         WebkitBackdropFilter: 'blur(25px)',
         borderRight: '1px solid rgba(255, 255, 255, 0.08)',

@@ -9,7 +9,7 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'DEVELOPER' | 'AUDITOR' | 'ADMIN'>('DEVELOPER');
+  const [role, setRole] = useState<'DEVELOPER' | 'AUDITOR'>('DEVELOPER');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -161,7 +161,7 @@ export default function RegisterPage() {
               id="reg-role"
               aria-label="Account Role"
               value={role}
-              onChange={(e) => setRole(e.target.value as 'DEVELOPER' | 'AUDITOR' | 'ADMIN')}
+              onChange={(e) => setRole(e.target.value as 'DEVELOPER' | 'AUDITOR')}
               style={{
                 width: '100%',
                 padding: '12px 16px',
@@ -177,7 +177,6 @@ export default function RegisterPage() {
             >
               <option value="DEVELOPER">Developer (Scan & Fix)</option>
               <option value="AUDITOR">Auditor (Read-Only Diagnostics)</option>
-              <option value="ADMIN">Admin (Full System Access & Audit Logs)</option>
             </select>
           </div>
 

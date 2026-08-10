@@ -13,3 +13,6 @@ figm-scan-report.html
 research/raw/real/*.csv
 research/raw/real/*
 !research/raw/real/README.md
+
+.vercel
+.env*

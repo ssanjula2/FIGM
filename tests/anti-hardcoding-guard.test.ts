@@ -116,4 +116,16 @@ describe('Source-Level Anti-Hardcoding Guard Suite', () => {
     const errors = ResearchDataPipeline.validateParticipantRecord(invalidRecord);
     assert.ok(errors.length > 0, 'Validation MUST reject participant records without consent');
   });
+
+  test('Pipeline Baseline Provenance: Missing or uncollected raw data MUST report isRealHumanData = false and collectionStatus = NOT_COLLECTED', () => {
+    const { processUserStudyPipeline } = require('../scripts/import-user-study');
+    const nonExistentPath = path.join(__dirname, 'non-existent-responses.csv');
+    const report = processUserStudyPipeline(nonExistentPath);
+
+    assert.equal(report.provenance.isRealHumanData, false, 'Missing raw response file MUST report isRealHumanData = false');
+    assert.equal(report.provenance.collectionStatus, 'NOT_COLLECTED', 'Missing raw response file MUST report collectionStatus = NOT_COLLECTED');
+    assert.equal(report.provenance.validParticipantCount, 0, 'Missing raw response file MUST report validParticipantCount = 0');
+    assert.equal(report.provenance.datasetType, 'SYNTHETIC', 'Missing raw response file MUST classify datasetType as SYNTHETIC');
+    assert.equal(report.provenance.targetReached, false, 'Missing raw response file MUST report targetReached = false');
+  });
 });

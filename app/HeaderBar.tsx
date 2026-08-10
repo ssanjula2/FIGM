@@ -21,23 +21,7 @@ export default function HeaderBar() {
 
   return (
     <>
-      <header
-        style={{
-          height: '68px',
-          background: 'rgba(9, 13, 22, 0.75)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          padding: '0 36px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          position: 'sticky',
-          top: 0,
-          zIndex: 30,
-          boxSizing: 'border-box',
-        }}
-      >
+      <header className="header-bar-container">
         {/* Search Bar Trigger */}
         <div
           onClick={() => setIsSearchOpen(true)}
@@ -261,14 +245,11 @@ export default function HeaderBar() {
                 boxShadow: '0 0 12px rgba(56, 189, 248, 0.4)',
               }}
             >
-              AR
+              L
             </div>
             <div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#f8fafc', lineHeight: 1.2 }}>
-                Aarav Raj
-              </div>
-              <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 600, lineHeight: 1.2 }}>
-                Lead Architect
+                LOGIN
               </div>
             </div>
           </Link>
