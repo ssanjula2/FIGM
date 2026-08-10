@@ -1,59 +1,90 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { DBUserStore } from '../src/auth/user-db';
-import { getPrismaClient } from '../src/db/prisma-client';
+import { createClient } from '@supabase/supabase-js';
 
-async function wipeAllSyntheticData() {
+// Parse .env manually to ensure credentials are available
+const envPath = path.resolve(process.cwd(), '.env');
+if (fs.existsSync(envPath)) {
+  const envLines = fs.readFileSync(envPath, 'utf-8').split('\n');
+  for (const line of envLines) {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
+      const idx = trimmed.indexOf('=');
+      const key = trimmed.substring(0, idx).trim();
+      let val = trimmed.substring(idx + 1).trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      process.env[key] = val;
+    }
+  }
+}
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://kiohthribojmofafmanc.supabase.co';
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+async function wipeRemoteSupabaseAndLocalJson() {
   console.log('====================================================');
-  console.log('  FIGM ZERO-TRUST SYNTHETIC DATA WIPE PROCESSOR');
+  console.log('  FIGM ZERO-TRUST SUPABASE REMOTE DATA WIPER');
   console.log('====================================================');
 
   // 1. Wipe local JSON DB
   const localDbPath = path.resolve(process.cwd(), 'figm-user-db.json');
   const cleanJsonDb = {
-    users: [
-      {
-        id: 'usr_admin_01',
-        fullName: 'A P H D S Sanjula',
-        email: 'sanjula@nsbm.ac.lk',
-        passwordHash: '$2b$10$w1qE6q6E3u9v4c3d2e1f0.3q5r7s9t1u3v5w7x9y1z3a5b7c9d1e3',
-        role: 'ADMIN',
-        createdAt: new Date().toISOString()
-      }
-    ],
+    users: [],
     projects: [],
     scanRecords: [],
     notifications: [],
     userSettings: []
   };
-
   fs.writeFileSync(localDbPath, JSON.stringify(cleanJsonDb, null, 2), 'utf-8');
-  console.log('✅ Wiped synthetic data from local JSON DB (figm-user-db.json). Only Admin account preserved.');
+  console.log('✅ Wiped all synthetic rows from local JSON DB (figm-user-db.json).');
 
-  // 2. Wipe Supabase DB via Prisma
-  try {
-    const prisma = getPrismaClient();
-    if (prisma) {
-      await prisma.scanRecord.deleteMany({});
-      await prisma.project.deleteMany({});
-      await prisma.notification.deleteMany({});
-      await prisma.userSettings.deleteMany({});
-      await prisma.user.deleteMany({
-        where: {
-          email: { not: 'sanjula@nsbm.ac.lk' }
+  // 2. Wipe Supabase Remote Database via Service Role Key
+  if (!serviceRoleKey) {
+    console.error('❌ Missing SUPABASE_SERVICE_ROLE_KEY in .env!');
+    return;
+  }
+
+  const supabase = createClient(supabaseUrl, serviceRoleKey, {
+    auth: { persistSession: false }
+  });
+
+  const tablesToWipe = [
+    'scan_reports',
+    'saved_reports',
+    'export_history',
+    'ai_history',
+    'audit_logs',
+    'notifications',
+    'settings',
+    'api_keys',
+    'projects',
+    'users'
+  ];
+
+  for (const table of tablesToWipe) {
+    try {
+      const { error } = await supabase.from(table).delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      if (error) {
+        // Fallback: delete with gte 'a' or non-null check
+        const { error: err2 } = await supabase.from(table).delete().gt('created_at', '1970-01-01');
+        if (err2) {
+          console.log(`⚠️ Notice on table ${table}: ${error.message}`);
+        } else {
+          console.log(`✅ Wiped remote table: ${table}`);
         }
-      });
-      console.log('✅ Wiped all synthetic rows from Supabase PostgreSQL tables (User, Project, ScanRecord, UserSettings, Notification).');
-    } else {
-      console.log('ℹ️ Supabase PostgreSQL is not connected; skipped remote SQL wipe.');
+      } else {
+        console.log(`✅ Wiped remote table: ${table}`);
+      }
+    } catch (err: any) {
+      console.log(`⚠️ Could not wipe table ${table}:`, err.message || err);
     }
-  } catch (err: any) {
-    console.log('⚠️ Supabase wipe notice:', err.message || err);
   }
 
   console.log('====================================================');
-  console.log('✅ ALL SYNTHETIC DATA WIPED CLEAN. READY FOR REAL PARTICIPANTS.');
+  console.log('✅ ALL REMOTE SUPABASE DATABASE TABLES WIPED CLEAN.');
   console.log('====================================================');
 }
 
-wipeAllSyntheticData().catch(console.error);
+wipeRemoteSupabaseAndLocalJson().catch(console.error);

@@ -1,14 +1,5 @@
 {
-  "users": [
-    {
-      "id": "usr_admin_01",
-      "fullName": "A P H D S Sanjula",
-      "email": "sanjula@nsbm.ac.lk",
-      "passwordHash": "$2b$10$w1qE6q6E3u9v4c3d2e1f0.3q5r7s9t1u3v5w7x9y1z3a5b7c9d1e3",
-      "role": "ADMIN",
-      "createdAt": "2026-08-10T07:27:55.150Z"
-    }
-  ],
+  "users": [],
   "projects": [],
   "scanRecords": [],
   "notifications": [],
