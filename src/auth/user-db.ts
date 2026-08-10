@@ -198,56 +198,35 @@ function getDefaultScanRecords(): DBScanRecord[] {
 }
 
 function getDefaultUsers(): DBUser[] {
-  const users: DBUser[] = [
+  return [
     {
       id: 'usr_admin_default',
-      email: 'admin@figm.io',
-      fullName: 'Lead Software Architect & Reviewer',
+      email: 'sanjula@nsbm.ac.lk',
+      fullName: 'A P H D S Sanjula',
       role: 'ADMIN',
-      passwordHash: 'hashedpass',
-      apiKey: 'figm_key_admin_default',
+      passwordHash: '$2b$10$w1qE6q6E3u9v4c3d2e1f0.3q5r7s9t1u3v5w7x9y1z3a5b7c9d1e3',
+      apiKey: 'figm_key_admin_sanjula',
       createdAt: new Date().toISOString(),
-    },
-    {
-      id: 'usr_developer_default',
-      email: 'dev@figm.io',
-      fullName: 'Senior Frontend Developer',
-      role: 'DEVELOPER',
-      passwordHash: 'hashedpass',
-      apiKey: 'figm_key_dev_default',
-      createdAt: new Date().toISOString(),
-    },
+    }
   ];
-
-  for (let i = 1; i <= 83; i++) {
-    users.push({
-      id: `usr_eval_${String(i).padStart(2, '0')}`,
-      email: `engineer_${i}@cohort.figm.io`,
-      fullName: `Research Participant Software Engineer #${i}`,
-      role: i % 10 === 0 ? 'AUDITOR' : 'DEVELOPER',
-      passwordHash: 'hashedpass',
-      apiKey: `figm_key_eval_${i}`,
-      createdAt: new Date(Date.now() - 3600000 * (i % 72)).toISOString(),
-    });
-  }
-
-  return users;
 }
 
+const TMP_DB_FILE = path.resolve('/tmp', 'figm-user-db.json');
+
 function loadDB(): DBUserStore {
-  if (fs.existsSync(DB_FILE)) {
+  const targetFile = fs.existsSync(TMP_DB_FILE) ? TMP_DB_FILE : DB_FILE;
+  if (fs.existsSync(targetFile)) {
     try {
-      const data = fs.readFileSync(DB_FILE, 'utf-8');
+      const data = fs.readFileSync(targetFile, 'utf-8');
       const parsed = JSON.parse(data);
-      const scanRecords = (parsed.scanRecords && parsed.scanRecords.length > 0) ? parsed.scanRecords : getDefaultScanRecords();
+      const scanRecords = parsed.scanRecords || [];
       const existingUsers = (parsed.users || []).map((u: Partial<DBUser>) => ({
         ...u,
         role: u.role || 'DEVELOPER',
       }));
-      const users = existingUsers.length >= 85 ? existingUsers : getDefaultUsers();
 
       return {
-        users,
+        users: existingUsers,
         submissions: parsed.submissions || [],
         projects: parsed.projects || [],
         scanRecords,
@@ -263,7 +242,7 @@ function loadDB(): DBUserStore {
     users: getDefaultUsers(),
     submissions: [],
     projects: [],
-    scanRecords: getDefaultScanRecords(),
+    scanRecords: [],
     notifications: [],
     settings: [],
     auditLogs: [],
@@ -271,7 +250,15 @@ function loadDB(): DBUserStore {
 }
 
 function saveDB(store: DBUserStore): void {
-  fs.writeFileSync(DB_FILE, JSON.stringify(store, null, 2), 'utf-8');
+  try {
+    fs.writeFileSync(DB_FILE, JSON.stringify(store, null, 2), 'utf-8');
+  } catch {
+    try {
+      fs.writeFileSync(TMP_DB_FILE, JSON.stringify(store, null, 2), 'utf-8');
+    } catch {
+      // Memory fallback in read-only serverless environments
+    }
+  }
 }
 
 export const UserDB = {
