@@ -91,11 +91,11 @@ export default function Sidebar() {
             FI
           </div>
           <div>
-            <div style={{ fontWeight: 900, fontSize: '18px', color: '#f8fafc', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
-              FIGM SaaS
+            <div style={{ fontWeight: 900, fontSize: '15px', color: '#f8fafc', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
+              FIGM Code Inspector
             </div>
             <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600, lineHeight: 1.2 }}>
-              Production SaaS Platform
+              Research & Developer Tool
             </div>
           </div>
         </Link>
@@ -160,10 +160,10 @@ export default function Sidebar() {
       {/* Footer System Badge */}
       <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '14px', paddingLeft: '8px', marginTop: '20px' }}>
         <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>
-          FIGM SaaS Platform v3.0
+          FIGM Code Inspector v3.0
         </div>
         <div style={{ fontSize: '10px', color: '#38bdf8', marginTop: '2px', fontWeight: 700 }}>
-          ISO/IEC 25010 &bull; WCAG 2.2 AA
+          ISO/IEC 25010 Aligned &bull; WCAG 2.2 AA Designed
         </div>
       </div>
     </aside>

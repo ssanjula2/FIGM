@@ -49,7 +49,7 @@ export default function OverviewPage() {
               border: '1px solid rgba(56, 189, 248, 0.3)',
             }}
           >
-            v2.0 Enterprise
+            Research & Developer Tool
           </span>
         </div>
 
@@ -69,7 +69,7 @@ export default function OverviewPage() {
               transition: 'all 0.2s ease',
             }}
           >
-            🚀 SaaS Landing Showcase
+            🚀 Research Showcase
           </button>
           <button
             onClick={() => setViewMode('DASHBOARD')}

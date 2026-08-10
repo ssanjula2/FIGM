@@ -46,13 +46,13 @@ export default function FeaturesGrid() {
     <section style={{ padding: '80px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
         <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
-          ENTERPRISE-GRADE CAPABILITIES
+          SYSTEM ARCHITECTURE CAPABILITIES
         </div>
         <h2 style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', margin: '0 0 16px 0', letterSpacing: '-0.5px' }}>
           Core System Components
         </h2>
         <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '700px', margin: '0 auto 48px auto', lineHeight: 1.6 }}>
-          Designed with modular, decoupled architecture following SOLID principles and ISO/IEC 25010 quality standards.
+          Designed with modular, decoupled architecture following SOLID principles and aligned with ISO/IEC 25010 quality characteristics.
         </p>
 
         {/* 6 Features Grid */}

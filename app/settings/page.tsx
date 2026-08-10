@@ -33,7 +33,7 @@ export default function SettingsPage() {
     return (
       <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
         <div style={{ fontSize: '32px', marginBottom: '16px' }}>⏳</div>
-        <div>Loading SaaS Platform Configurations...</div>
+        <div>Loading FIGM Code Inspector Configurations...</div>
       </div>
     );
   }

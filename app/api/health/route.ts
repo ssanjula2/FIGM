@@ -7,7 +7,7 @@ export async function GET() {
 
   return NextResponse.json({
     status: 'HEALTHY',
-    version: '3.0.0-saas',
+    version: '3.0.0-figm-inspector',
     timestamp: new Date().toISOString(),
     uptimeSeconds: Math.floor(process.uptime()),
     storageProvider: provider.name,

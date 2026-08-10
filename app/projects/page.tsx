@@ -154,7 +154,7 @@ export default function ProjectsPage() {
               {stats.averageQualityScore}%
             </div>
             <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>
-              ISO/IEC 25010 Evaluated
+              ISO/IEC 25010 Aligned
             </div>
           </div>
 

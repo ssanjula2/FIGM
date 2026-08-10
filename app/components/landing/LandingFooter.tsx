@@ -27,12 +27,12 @@ export default function LandingFooter() {
             <p style={{ color: '#64748b', fontSize: '13px', lineHeight: 1.6, maxWidth: '320px', margin: '0 0 16px 0' }}>
               Framework-Independent Guideline Model for Single-Page Applications across React, Next.js, and Angular.
             </p>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <span style={{ fontSize: '11px', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', padding: '4px 10px', borderRadius: '20px', fontWeight: 700 }}>
-                ISO/IEC 25010 Verified
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '11px', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', padding: '4px 10px', borderRadius: '20px', fontWeight: 700, border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                Aligned with ISO/IEC 25010 quality characteristics
               </span>
-              <span style={{ fontSize: '11px', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', padding: '4px 10px', borderRadius: '20px', fontWeight: 700 }}>
-                WCAG 2.2 AA Aligned
+              <span style={{ fontSize: '11px', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', padding: '4px 10px', borderRadius: '20px', fontWeight: 700, border: '1px solid rgba(56, 189, 248, 0.2)' }}>
+                Designed with WCAG 2.2 AA accessibility principles
               </span>
             </div>
           </div>

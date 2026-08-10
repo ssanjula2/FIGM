@@ -312,7 +312,7 @@ export default function HeaderBar() {
             {/* Results Body */}
             <div style={{ maxHeight: '420px', overflowY: 'auto', padding: '16px 20px' }}>
               {searchLoading && (
-                <div style={{ padding: '20px', textAlign: 'center', color: '#94a3b8' }}>Searching SaaS registry...</div>
+                <div style={{ padding: '20px', textAlign: 'center', color: '#94a3b8' }}>Searching FIGM Code Inspector registry...</div>
               )}
 
               {!searchLoading && query.trim() === '' && (

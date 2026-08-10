@@ -143,7 +143,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
           <div style={{ fontSize: '36px', fontWeight: 900, color: record.qualityScore >= 90 ? '#22c55e' : record.qualityScore >= 75 ? '#eab308' : '#ef4444', marginTop: '6px' }}>
             {record.qualityScore}%
           </div>
-          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>ISO/IEC 25010 Evaluated</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>ISO/IEC 25010 Aligned</div>
         </div>
 
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
