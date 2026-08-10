@@ -64,15 +64,36 @@ export async function GET(request: Request) {
     pageSize,
   });
 
-  // Merge Supabase records with local records avoiding duplicates
+  // Merge Supabase records with local records (Supabase Cloud records take priority over local cache)
   const localMap = new Map((result.records || []).map((r) => [r.id, r]));
   for (const sr of supabaseRecords) {
-    if (!localMap.has(sr.id)) {
-      localMap.set(sr.id, sr);
-    }
+    localMap.set(sr.id, sr);
   }
 
-  const combinedRecords = Array.from(localMap.values());
+  let combinedRecords = Array.from(localMap.values());
+
+  if (framework && framework !== 'ALL') {
+    const fw = framework.toLowerCase();
+    combinedRecords = combinedRecords.filter((r) => (r.framework || '').toLowerCase().includes(fw));
+  }
+
+  if (search && search.trim() !== '') {
+    const q = search.toLowerCase().trim();
+    combinedRecords = combinedRecords.filter(
+      (r) =>
+        (r.fileName || '').toLowerCase().includes(q) ||
+        (r.framework || '').toLowerCase().includes(q) ||
+        (r.userId || '').toLowerCase().includes(q)
+    );
+  }
+
+  if (onlyFavorites) {
+    combinedRecords = combinedRecords.filter((r) => r.isFavorite === true);
+  }
+
+  // Sort by createdAt desc
+  combinedRecords.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+
   const startIdx = (page - 1) * pageSize;
   const paginatedRecords = combinedRecords.slice(startIdx, startIdx + pageSize);
 
