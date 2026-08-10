@@ -1,86 +1,131 @@
-# MASTER VERCEL PRODUCTION DEPLOYMENT & ZERO-TRUST AUDIT REPORT
+# MASTER RESEARCH SOFTWARE & ACADEMIC INTEGRITY ZERO-TRUST AUDIT REPORT
 
 **Research Title**: "Usability Evaluation of the Framework-Independent Guideline Model (FIGM) Code Inspector for Single Page Applications"  
 **Repository**: `ssanjula2/FIGM`  
+**Institution**: NSBM Green University  
+**Module**: IS303.2 Research Methodology Repeat Coursework 2025  
 **Candidate**: A P H D S Sanjula  
 **Student ID**: 28256  
-**Module**: IS303.2 Research Methodology Repeat Coursework 2025  
-**University**: NSBM Green University  
-**Target Sample Size**: **85 Valid Real Human Participants** (`P001`..`P085`)  
-**Audit Date**: August 9, 2026  
+**Audit Date**: August 10, 2026  
 
 ---
 
-## 1. EXECUTIVE VERDICT & DEPLOYMENT READINESS CLASSIFICATION
+## 1. EXECUTIVE STATUS & DISSERTATION SUBMISSION VERDICT
 
-# 🟢 **FULL GO — READY FOR VERCEL DEPLOYMENT**
+# 🟡 **TECHNICALLY READY — REAL HUMAN USER-STUDY EVIDENCE PENDING**
 
-### **OVERALL VERCEL PRODUCTION READINESS: 100%**
-
-| Category | Score | Status | Findings Summary |
-| :--- | :---: | :---: | :--- |
-| **Build Readiness** | **100/100** | 🟢 Pass | All 24 routes compiled cleanly in Next.js App Router (`next build`). `package.json` build script fixed. |
-| **Runtime Readiness** | **100/100** | 🟢 Pass | Next.js 14 App Router static pre-rendering (~105 kB JS footprint), Vercel serverless functions verified. |
-| **Security & Secrets** | **100/100** | 🟢 Pass | JWT `httpOnly` cookies, CORS headers active, zero committed secrets (`.env` gitignored). |
-| **Database & Supabase** | **100/100** | 🟢 Pass | Supabase PostgreSQL with PgBouncer connection pooler (`port 6543`), Prisma ORM schema active (`prisma generate`). |
-| **Authentication** | **100/100** | 🟢 Pass | Dual JWT/Supabase auth active; `app/auth/reset-password/page.tsx` default export fixed. |
-| **FIGM Inspection Engine** | **100/100** | 🟢 Pass | Pure TypeScript/AST analysis engine; executes in both browser and Vercel serverless functions. |
-| **User Study (`/user-study`)** | **100/100** | 🟢 Pass | Interactive benchmark inspector (React, Angular, Vue), live Google Form integration, N=85 target tracking. |
-| **Research Integrity** | **100/100** | 🟢 Pass | Zero hardcoded research metrics, zero fake participants, dynamic participant ID generator (`P001`..`P085`). |
-| **Performance** | **100/100** | 🟢 Pass | Static pre-rendering for all 24 routes, low First Load JS footprint. |
-| **Accessibility** | **100/100** | 🟢 Pass | Keyboard navigability, WCAG 2.1 contrast ratios, semantic HTML. |
-| **Deployment Safety** | **100/100** | 🟢 Pass | Raw participant CSV directory ignored in `.gitignore`, no secrets committed. |
+> **Academic Integrity Ruling**: The FIGM software engineering platform, AST inspection engine, dynamic evaluation pipelines, Next.js web portal, and Vercel cloud infrastructure are 100% production-ready and fully operational. However, because zero fake participant responses were generated and live human data collection is currently pending ($0 / 85$ valid responses collected), the academic submission verdict remains **YELLOW**. The verdict will transition to **GREEN** immediately after the 85 real participant CSV responses are collected from the live Google Form and ingested via `npm run research:user-study:import`.
 
 ---
 
-## 2. PARTICIPANT WORKFLOW & GOOGLE FORM INTEGRATION
+## 2. AUDIT GAP MATRIX & COMPONENT CLASSIFICATION
 
-The participant landing page ([app/user-study/page.tsx](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/app/user-study/page.tsx)) provides a complete 4-step workflow:
-1. **Open `/user-study`**: Access participant background & research instructions.
-2. **Select SPA Fixture**: Choose React (`UserProfile.jsx`), Angular (`SearchPanel.component.ts`), or Vue (`DataGrid.vue`).
-3. **Run FIGM Scan**: Trigger static rule analysis and inspect detected rule IDs (`FIGM-PERF-01`..`04`, `FIGM-A11Y-01`..`04`), line numbers, and recommendations.
-4. **Complete Questionnaire**: Click **"Open Google Form Questionnaire"** ↗ to submit feedback via the live Google Form ([https://docs.google.com/forms/d/e/1FAIpQLSf7XA39VT1Gx5inZstWj7sXkquAb04aK70BWz8uYWWtjMZDOw/viewform](https://docs.google.com/forms/d/e/1FAIpQLSf7XA39VT1Gx5inZstWj7sXkquAb04aK70BWz8uYWWtjMZDOw/viewform)).
+| Category | Status | Evidence File / Code Location | Risk Level | Required Action |
+| :--- | :---: | :--- | :---: | :--- |
+| **1. Real Human Participant Data** | 🟡 PENDING | `research/raw/real/responses.csv` | LOW | Collect responses via live Google Form |
+| **2. 85 Participant Target** | 🟢 PASS | `scripts/user-study-status.ts` | LOW | Target set to $N=85$ valid participants |
+| **3. SUS Questionnaire** | 🟢 PASS | `research/QUESTIONNAIRE.md` | LOW | 10 standard SUS items defined |
+| **4. Informed Consent Protocol** | 🟢 PASS | `research/CONSENT_FORM.md` | LOW | Informed consent form active |
+| **5. Participant Instructions** | 🟢 PASS | `research/PARTICIPANT_INSTRUCTIONS.md` | LOW | Step-by-step instructions documented |
+| **6. Task Protocol** | 🟢 PASS | `app/user-study/page.tsx` | LOW | 5 structured evaluation tasks active |
+| **7. Participant ID Generation** | 🟢 PASS | `scripts/import-user-study.ts` | LOW | Dynamic `P001`..`P085` assignment post-validation |
+| **8. Anonymous Data Collection** | 🟢 PASS | `research/ANONYMIZATION_PROTOCOL.md` | LOW | Zero PII collected (no names/emails/phones) |
+| **9. Raw Data Storage** | 🟢 PASS | `research/raw/real/` | LOW | Directory structure initialized & gitignored |
+| **10. Data Anonymization** | 🟢 PASS | `research/anonymized/real/` | LOW | Anonymization pipeline verified |
+| **11. Data Validation Engine** | 🟢 PASS | `scripts/import-user-study.ts` | LOW | Consent, Likert range & completeness validation |
+| **12. Data Processing Pipeline** | 🟢 PASS | `scripts/import-user-study.ts` | LOW | Automated CSV processing & report exporter |
+| **13. SUS Scoring Formula** | 🟢 PASS | `scripts/import-user-study.ts` | LOW | Standard odd $(R-1)$ & even $(5-R)$ formulas |
+| **14. Cronbach's Alpha Engine** | 🟢 PASS | `scripts/import-user-study.ts` | LOW | Dynamic variance calculation $K/(K-1) \cdot (1 - \sum \sigma_i^2 / \sigma_T^2)$ |
+| **15. Task Completion Metrics** | 🟢 PASS | `scripts/import-user-study.ts` | LOW | Dynamic task completion rate computation |
+| **16. Demographic Data Schema** | 🟢 PASS | `research/DATA_DICTIONARY.md` | LOW | Role, experience, framework, frequency schemas |
+| **17. Research Ethics Documentation** | 🟡 VERIFY | `research/CONSENT_FORM.md` | LOW | Marked `ETHICS_APPROVAL_STATUS = NEEDS_VERIFICATION` |
+| **18. Ground Truth Provenance** | 🟢 PASS | `benchmarks/ground-truth.json` | LOW | Expert-labeled violation ground truth active |
+| **19. Benchmark Provenance** | 🟢 PASS | `benchmarks/eval-summary.json` | LOW | $N=30$ architecture testbed independent |
+| **20. Precision / Recall / F1** | 🟢 PASS | `src/eval/precision-recall-engine.ts` | LOW | Dynamically computed from confusion matrix |
+| **21. Throughput Measurement** | 🟢 PASS | `src/eval/evaluation-runner.ts` | LOW | Dynamically measured runtime LOC/sec |
+| **22. Memory Measurement** | 🟢 PASS | `src/eval/evaluation-runner.ts` | LOW | Measured Node heap/RSS usage in MB |
+| **23. Vue Parsing Limitation** | 🟢 PASS | `src/parser/resilient-parser.ts` | LOW | Regex AST fallback handles template scripts |
+| **24. Next.js FIGM-PERF-04** | 🟢 PASS | `src/pipeline/guideline-filtering.ts` | LOW | Dynamic import detection active |
+| **25. Anti-Hardcoding Guard** | 🟢 PASS | `tests/anti-hardcoding-guard.test.ts` | LOW | Zero hardcoded metric constants in `src/` |
+| **26. Anti-Circularity Guard** | 🟢 PASS | `src/eval/evaluation-runner.ts` | LOW | EvaluationRunner does not read canonical output |
+| **27. Test Suite Coverage** | 🟢 PASS | `tests/` | LOW | 114/114 subtests passed across 21 suites |
+| **28. Vercel Production Build** | 🟢 PASS | `https://figm-code-inspector.vercel.app` | LOW | Live production deployment verified |
+| **29. Dissertation Evidence** | 🟢 PASS | `docs/dissertation/` | LOW | LaTeX chapters synchronized dynamically |
+| **30. Research Documentation** | 🟢 PASS | `research/README.md` | LOW | Protocols & data dictionaries fully aligned |
 
 ---
 
-## 3. VERCEL DEPLOYMENT CONFIGURATION & COMMANDS
+## 3. FILES INSPECTED AND CHANGED
 
-### Production Settings Matrix
-- **Framework Preset**: `Next.js`
-- **Build Command**: `npx prisma generate && next build`
-- **Output Directory**: `.next`
-- **Install Command**: `npm install`
+### Files Inspected
+- `package.json`, `next.config.mjs`, `vercel.json`, `middleware.ts`, `prisma/schema.prisma`
+- `src/eval/precision-recall-engine.ts`, `src/eval/user-study-evaluator.ts`, `src/eval/evaluation-runner.ts`
+- `scripts/import-user-study.ts`, `scripts/user-study-status.ts`, `scripts/validate-research.ts`
+- `tests/user-study-pipeline.test.ts`, `tests/anti-hardcoding-guard.test.ts`, `tests/evaluation-runner.test.ts`
+- `research/README.md`, `research/DATA_DICTIONARY.md`, `research/DATA_COLLECTION_PROTOCOL.md`, `research/ANONYMIZATION_PROTOCOL.md`
 
-### Environment Variables to Configure in Vercel Dashboard
-- `STORAGE_PROVIDER`: `supabase`
-- `JWT_SECRET`: *(Production JWT secret string)*
-- `REFRESH_SECRET`: *(Production Refresh secret string)*
-- `NEXT_PUBLIC_SUPABASE_URL`: `https://kiohthribojmofafmanc.supabase.co`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: `sb_publishable_3er17EZB2zuTVD4S6PEvxw_Ty7pimZ6`
-- `SUPABASE_SERVICE_ROLE_KEY`: *(Supabase service role secret key)*
-- `DATABASE_URL`: `postgresql://postgres.kiohthribojmofafmanc:figm-inspector%40%230@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true`
-- `DIRECT_URL`: `postgresql://postgres.kiohthribojmofafmanc:figm-inspector%40%230@aws-1-ap-south-1.pooler.supabase.com:5432/postgres`
-- `NEXT_PUBLIC_APP_URL`: `https://<your-app-name>.vercel.app`
+### Files Created / Enhanced
+- `research/CONSENT_FORM.md` *(New participant informed consent form)*
+- `research/PARTICIPANT_INSTRUCTIONS.md` *(New neutral participant workflow guide)*
+- `research/QUESTIONNAIRE.md` *(New complete questionnaire item specification)*
+- `research/raw/real/.gitkeep`, `research/processed/real/.gitkeep`, `research/anonymized/real/.gitkeep`, `research/analysis/.gitkeep`, `research/evidence/.gitkeep`
+- `tests/anti-hardcoding-guard.test.ts` *(Added negative control baseline provenance assertions)*
 
 ---
 
-## 4. RELEASE VERIFICATION COMMAND MATRIX
+## 4. DATASET PROVENANCE & PROVENANCE METADATA
 
-| Verification Command | Purpose | Output / Status |
+```json
+{
+  "datasetId": "FIGM-REAL-HUMAN-USER-STUDY-V1",
+  "datasetType": "SYNTHETIC",
+  "isRealHumanData": false,
+  "collectionStatus": "NOT_COLLECTED",
+  "targetSampleSize": 85,
+  "validParticipantCount": 0,
+  "targetReached": false,
+  "anonymizedParticipantIds": [],
+  "totalResponsesIngested": 0,
+  "excludedResponsesCount": 0,
+  "processedAt": "2026-08-10T06:10:00.000Z"
+}
+```
+
+---
+
+## 5. MATHEMATICAL FORMULAS & CALCULATION ENGINES
+
+### A. System Usability Scale (SUS) Scoring
+$$\text{SUS Score} = 2.5 \times \left( \sum_{i \in \text{Odd}} (R_i - 1) + \sum_{j \in \text{Even}} (5 - R_j) \right)$$
+
+### B. Cronbach's Alpha ($\alpha$) Reliability
+$$\alpha = \frac{K}{K - 1} \left( 1 - \frac{\sum_{j=1}^K \sigma_{y_j}^2}{\sigma_X^2} \right)$$
+*Where $K = 10$ questionnaire items, $\sigma_{y_j}^2$ is the variance of item $j$, and $\sigma_X^2$ is total scale variance.*
+
+### C. Precision, Recall, F1-Score
+$$\text{Precision} = \frac{TP}{TP + FP}, \quad \text{Recall} = \frac{TP}{TP + FN}, \quad F1 = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
+
+---
+
+## 6. RELEASE VERIFICATION COMMAND RESULTS
+
+| Command | Purpose | Result / Status |
 | :--- | :--- | :--- |
 | `npx tsc --noEmit` | Type Safety | **PASSED** (0 errors) ✅ |
-| `npx prisma generate` | Prisma Client Generation | **PASSED** (v7.9.1 generated) ✅ |
-| `npm run build` | Next.js Production Build | **PASSED** (24/24 static routes compiled) ✅ |
-| `npx tsx --test tests/user-study-pipeline.test.ts` | Participant ID & Pipeline Tests | **PASSED** (8/8 tests passed) ✅ |
-| `npm test` | Main Comprehensive Test Suite | **PASSED** (114/114 tests passed) ✅ |
-| `npm run research:user-study:status` | Sample Size Progress Tracker | **PASSED** (`0/85 valid participants collected`) ✅ |
 | `npm run research:evaluate` | Dynamic Evaluation Execution | **PASSED** (Regenerated canonical reports) ✅ |
 | `npm run research:validate` | Integrity & Provenance Check | **PASSED** (Verified provenance `dynamic: true` & formulas) ✅ |
 | `npm run ci:scan` | Static Quality Gate | **PASSED** (Quality Score: 73%, exceeding 70% threshold) ✅ |
 | `npm --prefix vscode-extension run compile` | VS Code Extension Build | **PASSED** (0 errors) ✅ |
+| `npm test` | Comprehensive Test Suite | **PASSED** (114/114 subtests passed across 21 suites) ✅ |
+| `npx tsx --test tests/anti-hardcoding-guard.test.ts` | Negative Controls & Guard Suite | **PASSED** (6/6 tests passed including baseline provenance) ✅ |
 
 ---
 
-## FINAL RELEASE RECOMMENDATION
+## 7. FINAL DISSERTATION SUBMISSION STATUS
 
-# 🟢 **FULL GO — READY FOR VERCEL DEPLOYMENT**
+# 🟡 **TECHNICALLY READY — REAL HUMAN USER-STUDY EVIDENCE PENDING**
+
+**Candidate Action Required**:
+1. Distribute Google Form link to SPA developers/students: [https://docs.google.com/forms/d/e/1FAIpQLSf7XA39VT1Gx5inZstWj7sXkquAb04aK70BWz8uYWWtjMZDOw/viewform](https://docs.google.com/forms/d/e/1FAIpQLSf7XA39VT1Gx5inZstWj7sXkquAb04aK70BWz8uYWWtjMZDOw/viewform)
+2. Export raw responses CSV to `research/raw/real/responses.csv`.
+3. Run `npm run research:user-study:import` to ingest, validate, anonymize (`P001`..`P085`), and update provenance to `REAL_HUMAN_DATA`.
