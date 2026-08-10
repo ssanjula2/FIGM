@@ -279,6 +279,22 @@ export default function UserStudyPage() {
 
   const handleRunScan = () => {
     setIsScanning(true);
+    try {
+      const benchmark = BENCHMARKS[selectedFramework];
+      fetch('/api/user-study/log-scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          framework: benchmark.framework,
+          fileName: benchmark.file,
+          qualityScore: 88,
+          diagnosticsCount: 4
+        })
+      }).catch(() => {});
+    } catch {
+      // Silent catch for background telemetry logging
+    }
+
     setTimeout(() => {
       setIsScanning(false);
       setScanCompleted(true);
