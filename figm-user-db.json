@@ -918,6 +918,24 @@
       "id": "usr_1786351291187_au656",
       "apiKey": "figm_key_1786351291187_t0qb3azj",
       "createdAt": "2026-08-10T08:41:31.187Z"
+    },
+    {
+      "email": "test_profile_1786351341620_m0i3@figm.io",
+      "passwordHash": "926259c2ea21505249d6dd9fcceb0e66:684ee765be3857a15a4fbd42910ef348e01e190d16f4fcf3321012dc1ce6db406f0cd538865d75fefbe8dcd3635a1bc2a7c4049c9f36be6de92bb169e118c475",
+      "fullName": "Test Profile User",
+      "role": "DEVELOPER",
+      "id": "usr_1786351341629_h9p6y",
+      "apiKey": "figm_key_1786351341632_5b189acda007",
+      "createdAt": "2026-08-10T08:42:21.629Z"
+    },
+    {
+      "email": "provider_test_1786351341861_wjqr@figm.io",
+      "passwordHash": "hashedpass",
+      "fullName": "Provider Test User",
+      "role": "DEVELOPER",
+      "id": "usr_1786351341861_hpk9h",
+      "apiKey": "figm_key_1786351341861_ycnpcfib",
+      "createdAt": "2026-08-10T08:42:21.861Z"
     }
   ],
   "submissions": [
@@ -1189,6 +1207,90 @@
       "qualityScore": 100,
       "totalScans": 0,
       "createdAt": "2026-08-10T08:31:36.661Z"
+    },
+    {
+      "userId": "usr_test_proj_1786351340880_s1yv",
+      "name": "E-Commerce Frontend",
+      "description": "Main online store web client",
+      "framework": "React",
+      "repoUrl": "https://github.com/figm/ecommerce-frontend",
+      "status": "ACTIVE",
+      "id": "proj_1786351340881_se9yf",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-10T08:42:20.881Z"
+    },
+    {
+      "userId": "usr_test_search_1786351340885_2tve",
+      "name": "Alpha Analytics",
+      "description": "Data platform",
+      "framework": "Next.js",
+      "repoUrl": "https://github.com/figm/alpha",
+      "status": "ACTIVE",
+      "id": "proj_1786351340886_3tr5b",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-10T08:42:20.886Z"
+    },
+    {
+      "userId": "usr_test_dup_1786351340887_tce0",
+      "name": "Original App",
+      "description": "Original description",
+      "framework": "Vue",
+      "repoUrl": "https://github.com/figm/original",
+      "status": "ACTIVE",
+      "id": "proj_1786351340888_pnitm",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-10T08:42:20.888Z"
+    },
+    {
+      "userId": "usr_test_dup_1786351340887_tce0",
+      "name": "Original App (Copy)",
+      "description": "Original description",
+      "framework": "Vue",
+      "repoUrl": "https://github.com/figm/original",
+      "status": "ACTIVE",
+      "id": "proj_1786351340890_ob670",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-10T08:42:20.890Z"
+    },
+    {
+      "userId": "usr_test_stats_1786351340896_w5q8",
+      "name": "Stats App 1",
+      "description": "Test stats",
+      "framework": "React",
+      "repoUrl": "https://github.com/figm/stats1",
+      "status": "ACTIVE",
+      "id": "proj_1786351340897_ur8is",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-10T08:42:20.897Z"
+    },
+    {
+      "userId": "usr_1786351341861_hpk9h",
+      "name": "Storage Provider Project",
+      "description": "Testing JsonStorageProvider",
+      "framework": "Next.js",
+      "repoUrl": "https://github.com/figm/provider-test",
+      "status": "ACTIVE",
+      "id": "proj_1786351341864_xl7mt",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-10T08:42:21.864Z"
+    },
+    {
+      "userId": "usr_delegation_1786351341866_bpii",
+      "name": "Delegation Test Project",
+      "description": "Verifying RepositoryFactory abstraction",
+      "framework": "React",
+      "repoUrl": "https://github.com/figm/delegation-test",
+      "status": "ACTIVE",
+      "id": "proj_1786351341867_7gok8",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-10T08:42:21.867Z"
     }
   ],
   "scanRecords": [
@@ -1404,6 +1506,66 @@
       ],
       "id": "scan_1786350695890_u0918",
       "createdAt": "2026-08-10T08:31:35.890Z"
+    },
+    {
+      "userId": "usr_test_scan_1786351341108_ho99",
+      "fileName": "PaymentGateway.tsx",
+      "framework": "React",
+      "repositoryUrl": "https://github.com/figm/payment-gateway",
+      "scanTimeMs": 14.8,
+      "memoryUsageMb": 2.1,
+      "qualityScore": 92,
+      "ruleCount": 2,
+      "aiFixCount": 2,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Unbound Inline Event Handlers",
+          "severity": "HIGH",
+          "domain": "PERFORMANCE",
+          "offendingCodeSnippet": "<button onClick={() => handleClick()} />",
+          "remediation": "Extract event handler method."
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786351341108_jjge1",
+      "createdAt": "2026-08-10T08:42:21.109Z"
+    },
+    {
+      "userId": "usr_test_fav_1786351341111_hnpn",
+      "fileName": "PaymentGateway.tsx",
+      "framework": "React",
+      "scanTimeMs": 12,
+      "memoryUsageMb": 1.8,
+      "qualityScore": 90,
+      "ruleCount": 1,
+      "aiFixCount": 1,
+      "diagnostics": [],
+      "isFavorite": true,
+      "id": "scan_1786351341112_92uvx",
+      "createdAt": "2026-08-10T08:42:21.112Z"
+    },
+    {
+      "userId": "usr_test_exp_1786351341117_10ph",
+      "fileName": "ExportTarget.tsx",
+      "framework": "React",
+      "scanTimeMs": 10,
+      "memoryUsageMb": 1.5,
+      "qualityScore": 88,
+      "ruleCount": 1,
+      "aiFixCount": 1,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Missing Alt Attribute",
+          "severity": "HIGH",
+          "domain": "ACCESSIBILITY",
+          "offendingCodeSnippet": "<img src=\"logo.png\" />",
+          "remediation": "Add descriptive alt property."
+        }
+      ],
+      "id": "scan_1786351341118_r76xt",
+      "createdAt": "2026-08-10T08:42:21.118Z"
     }
   ],
   "notifications": [
@@ -1442,6 +1604,24 @@
       "id": "notif_1786350696415_odmxk",
       "read": true,
       "createdAt": "2026-08-10T08:31:36.415Z"
+    },
+    {
+      "userId": "usr_notif_1786351341606_6309",
+      "type": "SCAN_SUCCESS",
+      "title": "Scan Complete",
+      "message": "Your project scan finished with 0 critical defects.",
+      "id": "notif_1786351341607_7c516",
+      "read": true,
+      "createdAt": "2026-08-10T08:42:21.607Z"
+    },
+    {
+      "userId": "usr_notif_1786351341606_6309",
+      "type": "SECURITY_ALERT",
+      "title": "Security Alert",
+      "message": "Unused state variable detected in main panel.",
+      "id": "notif_1786351341609_axo1i",
+      "read": true,
+      "createdAt": "2026-08-10T08:42:21.609Z"
     }
   ],
   "settings": [
@@ -1455,6 +1635,14 @@
     },
     {
       "userId": "usr_settings_1786350696421_uulm",
+      "theme": "light",
+      "autoSave": true,
+      "autoScan": false,
+      "aiModel": "claude-3.5-sonnet",
+      "exportFormat": "PDF"
+    },
+    {
+      "userId": "usr_settings_1786351341616_vzwz",
       "theme": "light",
       "autoSave": true,
       "autoScan": false,
