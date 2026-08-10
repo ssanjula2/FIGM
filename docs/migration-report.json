@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-08-10T13:53:51.090Z",
+  "timestamp": "2026-08-10T15:51:02.018Z",
   "usersImported": 4,
-  "usersSkipped": 8,
+  "usersSkipped": 14,
   "projectsImported": 7,
-  "projectsSkipped": 0,
+  "projectsSkipped": 7,
   "scansImported": 3,
-  "scansSkipped": 3,
+  "scansSkipped": 6,
   "notificationsImported": 0,
   "notificationsSkipped": 0,
   "auditLogsImported": 1,
-  "auditLogsSkipped": 1,
+  "auditLogsSkipped": 2,
   "status": "SUCCESS",
   "errors": []
 }
