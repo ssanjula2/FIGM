@@ -199,14 +199,24 @@ function getDefaultScanRecords(): DBScanRecord[] {
 }
 
 function getDefaultUsers(): DBUser[] {
+  const adminPass = hashPassword('Admin123456!');
   return [
     {
-      id: 'usr_admin_default',
+      id: 'usr_admin_sanjula',
       email: 'sanjula@nsbm.ac.lk',
       fullName: 'A P H D S Sanjula (Admin)',
       role: 'ADMIN',
-      passwordHash: hashPassword('Admin123456!'),
+      passwordHash: adminPass,
       apiKey: 'figm_key_admin_sanjula',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'usr_admin_figm',
+      email: 'admin@figm.io',
+      fullName: 'FIGM Lead System Administrator',
+      role: 'ADMIN',
+      passwordHash: adminPass,
+      apiKey: 'figm_key_admin_figm',
       createdAt: new Date().toISOString(),
     }
   ];

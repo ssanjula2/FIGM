@@ -306,7 +306,7 @@ export default function LoginPage() {
             color: '#94a3b8',
           }}
         >
-          🔑 <strong style={{ color: '#38bdf8' }}>Admin Credentials</strong>: <code style={{ color: '#f1f5f9' }}>admin@figm.io</code> / <code style={{ color: '#f1f5f9' }}>AdminPassword123!</code>
+          🔑 <strong style={{ color: '#38bdf8' }}>Admin Credentials</strong>: <code style={{ color: '#f1f5f9' }}>sanjula@nsbm.ac.lk</code> / <code style={{ color: '#f1f5f9' }}>Admin123456!</code>
         </div>
       </div>
     </div>
