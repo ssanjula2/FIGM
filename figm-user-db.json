@@ -23,6 +23,30 @@
   "projects": [],
   "scanRecords": [
     {
+      "id": "scn_p003_react_1786366567316",
+      "userId": "P003",
+      "projectId": "proj_user_study_benchmark",
+      "fileName": "UserProfile.jsx",
+      "framework": "React SPA",
+      "qualityScore": 88,
+      "scanTimeMs": 5.7,
+      "memoryUsageMb": 1.44,
+      "ruleCount": 4,
+      "aiFixCount": 2,
+      "isFavorite": false,
+      "createdAt": "2026-08-10T12:56:07.316Z",
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Invariant Object Allocation in Iteration Scopes",
+          "severity": "HIGH",
+          "domain": "PERFORMANCE",
+          "offendingCodeSnippet": "const options = { theme: \"dark\" };",
+          "remediation": "Hoist options literal out of render scope."
+        }
+      ]
+    },
+    {
       "id": "scn_p001_react_1786364597882",
       "userId": "P001",
       "projectId": "proj_user_study_benchmark",
