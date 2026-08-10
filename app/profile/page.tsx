@@ -45,11 +45,11 @@ export default function ProfilePage() {
 
   const fetchProfile = async () => {
     try {
-      const res = await fetch('/api/profile');
-      if (res.status === 401) {
-        router.push('/login');
-        return;
-      }
+      const token = typeof window !== 'undefined' ? localStorage.getItem('figm_token') : null;
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const res = await fetch('/api/profile', { headers });
       if (!res.ok) throw new Error('Failed to fetch profile');
       const data = await res.json();
       setProfile(data);
@@ -79,9 +79,13 @@ export default function ProfilePage() {
 
     setPassSubmitting(true);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('figm_token') : null;
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
       const res = await fetch('/api/profile', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           action: 'CHANGE_PASSWORD',
           currentPassword,
@@ -106,9 +110,13 @@ export default function ProfilePage() {
   const handleRegenerateApiKey = async () => {
     if (!confirm('Are you sure you want to regenerate your API key?')) return;
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('figm_token') : null;
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
       const res = await fetch('/api/profile', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ action: 'REGENERATE_API_KEY' }),
       });
       if (res.ok) {
@@ -122,7 +130,11 @@ export default function ProfilePage() {
 
   const handleDeleteAccount = async () => {
     try {
-      const res = await fetch('/api/profile', { method: 'DELETE' });
+      const token = typeof window !== 'undefined' ? localStorage.getItem('figm_token') : null;
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const res = await fetch('/api/profile', { method: 'DELETE', headers });
       if (res.ok) {
         localStorage.removeItem('figm_token');
         router.push('/login');
