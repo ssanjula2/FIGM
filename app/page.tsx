@@ -10,6 +10,7 @@ import FeaturesGrid from './components/landing/FeaturesGrid';
 import ArchitecturePipeline from './components/landing/ArchitecturePipeline';
 import BenchmarkSection from './components/landing/BenchmarkSection';
 import LandingFooter from './components/landing/LandingFooter';
+import ReferencesSection from './components/landing/ReferencesSection';
 
 // Import Live Dashboard Analytics Component
 import LiveDashboardContent from './components/dashboard/LiveDashboardContent';
@@ -99,6 +100,7 @@ export default function OverviewPage() {
           <FeaturesGrid />
           <ArchitecturePipeline />
           <BenchmarkSection />
+          <ReferencesSection />
           <LandingFooter />
         </div>
       ) : (
