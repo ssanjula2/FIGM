@@ -98,7 +98,7 @@ export class RemediationEngine {
       case 'FIGM-A11Y-01': {
         // Add keyboard listener and tabIndex to click handler
         if (code.includes(snippet)) {
-          let fixedSnippet = snippet.replace(/<div\b/, '<button type="button" tabIndex={0}');
+          let fixedSnippet = snippet.replace(/<div\b/, '<div role="button" tabIndex={0}');
           if (!fixedSnippet.includes('onKeyDown')) {
             fixedSnippet = fixedSnippet.replace(
               /onClick=\{(.*?)\}/,
@@ -106,10 +106,10 @@ export class RemediationEngine {
             );
           }
           remediatedCode = code.replace(snippet, fixedSnippet);
-          appliedFixDescription = 'Converted non-interactive <div> to a native <button> with tabIndex={0} and keyboard onKeyDown handler.';
+          appliedFixDescription = 'Annotated clickable <div> with ARIA role="button", tabIndex={0}, and keyboard onKeyDown handler.';
         } else {
-          remediatedCode = code.replace(/onClick=/g, 'tabIndex={0} onKeyDown={(e) => e.key === "Enter" && e.currentTarget.click()} onClick=');
-          appliedFixDescription = 'Injected tabIndex={0} and keyboard onKeyDown listener to click handler.';
+          remediatedCode = code.replace(/onClick=/g, 'role="button" tabIndex={0} onKeyDown={(e) => e.key === "Enter" && e.currentTarget.click()} onClick=');
+          appliedFixDescription = 'Injected role="button", tabIndex={0}, and keyboard onKeyDown listener.';
         }
         break;
       }
