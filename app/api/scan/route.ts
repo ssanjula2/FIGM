@@ -20,15 +20,13 @@ export async function POST(request: Request) {
     }
 
     const targetFile = fileName || 'Component.tsx';
+    const scanResult = RuleExecutionEngine.analyzeFile(targetFile, code);
 
     // Handle AI Fix Request
     if (action === 'ai-fix' && defect) {
-      const aiResult = await AIRemediationPipeline.remediateDefect(code, defect, 'REACT_JSX');
+      const aiResult = await AIRemediationPipeline.remediateDefect(code, defect, scanResult.framework);
       return NextResponse.json(aiResult);
     }
-
-    // Standard Scan Request
-    const scanResult = RuleExecutionEngine.analyzeFile(targetFile, code);
 
     // Optional Authentication Context
     const auth = authenticateUser(request);
