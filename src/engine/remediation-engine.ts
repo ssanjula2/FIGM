@@ -175,4 +175,35 @@ export class RemediationEngine {
       suggestedFix,
     };
   }
+
+  /**
+   * Re-scan proposed patch in isolated copy to verify if the original issue is resolved and 0 syntax errors exist
+   */
+  public static validatePatch(
+    originalCode: string,
+    remediatedCode: string,
+    defect: DiagnosticReport
+  ): { isValid: boolean; status: 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED'; remainingDiagnostics: DiagnosticReport[] } {
+    if (originalCode === remediatedCode) {
+      return { isValid: false, status: 'UNRESOLVED', remainingDiagnostics: [defect] };
+    }
+
+    // Import RuleExecutionEngine dynamically to avoid circular dependencies
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { RuleExecutionEngine } = require('./rule-execution-engine.js');
+    const res = RuleExecutionEngine.analyzeFile(defect.filePath || 'component.tsx', remediatedCode);
+
+    const hasSyntaxError = res.diagnostics.some((d: DiagnosticReport) => d.category === 'SYNTAX_ERROR');
+    if (hasSyntaxError) {
+      return { isValid: false, status: 'PATCH_REJECTED', remainingDiagnostics: res.diagnostics };
+    }
+
+    const originalStillPresent = res.diagnostics.some((d: DiagnosticReport) => d.ruleId === defect.ruleId);
+    if (originalStillPresent) {
+      return { isValid: false, status: 'UNRESOLVED', remainingDiagnostics: res.diagnostics };
+    }
+
+    return { isValid: true, status: 'FIXED', remainingDiagnostics: res.diagnostics };
+  }
 }
+

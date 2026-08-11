@@ -68,21 +68,35 @@ export interface FormalPredicateSpec {
   plainTextLogic: string;
 }
 
+export type DiagnosticCategory =
+  | 'SYNTAX_ERROR'
+  | 'TYPE_COMPILE_ERROR'
+  | 'FIGM_GUIDELINE_VIOLATION'
+  | 'SECURITY_ISSUE'
+  | 'COMPLEXITY_WARNING';
+
 /**
  * Diagnostic Error Report Metadata Schema
  */
 export interface DiagnosticReport {
   ruleId: string;
   ruleName: string;
+  category?: DiagnosticCategory;
   domain: DomainType;
   concern: ConcernType;
   severity: RuleSeverity;
   filePath: string;
   location: SourceRange;
+  line?: number;
+  column?: number;
   offendingCodeSnippet: string;
+  sourceSnippet?: string;
   message: string;
   remediation: string;
+  recommendation?: string;
   standardReference: string;
   confidenceScore?: number;
   evidence?: string;
+  fixAvailable?: boolean;
 }
+

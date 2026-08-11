@@ -9,6 +9,8 @@ import { ASTDetectionEngine } from '../ast/ast-detection-engine.js';
 import { ALPExtractionEngine, ALPPrimitiveNode } from '../parser/alp-extractor.js';
 import { ComplexityAnalyzer, ComplexityMetrics } from './complexity-analyzer.js';
 import { DynamicProfiler, DynamicProfileMetrics } from './dynamic-profiler.js';
+import { TypeCheckerService } from '../analysis/type-checker-service.js';
+import { ComplexityEngine, DetailedComplexityMetrics } from '../analysis/complexity/complexity-engine.js';
 
 export interface ScanResult {
   filePath: string;
@@ -19,9 +21,10 @@ export interface ScanResult {
   parseErrors: Array<{ line: number; column: number; message: string }>;
   diagnostics: DiagnosticReport[];
   primitives: ALPPrimitiveNode[];
-  complexity: ComplexityMetrics;
+  complexity: DetailedComplexityMetrics & ComplexityMetrics;
   profile: DynamicProfileMetrics;
   qualityScore?: number;
+  typeCheckDisclaimer?: string;
 }
 
 export class RuleExecutionEngine {
@@ -31,37 +34,52 @@ export class RuleExecutionEngine {
   public static analyzeFile(filePath: string, code: string): ScanResult {
     const parseRes: ParseResult = SourceParser.parseSource(code, filePath);
     const profile = DynamicProfiler.profileExecution(code);
+    const detailedComplexity = ComplexityEngine.analyzeComplexity(parseRes.ast, code);
+    const typeCheckRes = TypeCheckerService.checkCode(code, filePath);
 
-    if (!parseRes.ast) {
-      return {
-        filePath,
-        framework: parseRes.framework,
-        totalErrors: parseRes.parseErrors.length,
-        totalWarnings: 0,
-        extractedALPsCount: 0,
-        parseErrors: parseRes.parseErrors,
-        diagnostics: [],
-        primitives: [],
-        complexity: {
-          cyclomaticComplexity: 1,
-          cognitiveComplexity: 0,
-          decisionPointsCount: 0,
-          maxNestingDepth: 0,
-          complexityRating: 'A',
-        },
-        profile,
-        qualityScore: 50,
-      };
+    const diagnostics: DiagnosticReport[] = [];
+
+    // 1. Inject Parse / Syntax Errors if present
+    if (parseRes.parseErrors && parseRes.parseErrors.length > 0) {
+      for (const err of parseRes.parseErrors) {
+        diagnostics.push({
+          ruleId: 'SYNTAX-PARSE-ERROR',
+          ruleName: 'Syntax Parse Error',
+          category: 'SYNTAX_ERROR',
+          domain: 'PERFORMANCE',
+          concern: 'RESOURCE_UTILIZATION',
+          severity: 'CRITICAL',
+          filePath,
+          location: {
+            start: { line: err.line, column: err.column },
+            end: { line: err.line, column: err.column + 5 },
+          },
+          line: err.line,
+          column: err.column,
+          offendingCodeSnippet: code.split('\n')[err.line - 1] || code.substring(0, 50),
+          sourceSnippet: code.split('\n')[err.line - 1] || code.substring(0, 50),
+          message: `Syntax Error: ${err.message}`,
+          remediation: `Fix syntax syntax near line ${err.line}, column ${err.column}.`,
+          recommendation: `Check for unclosed braces, unexpected tokens, or syntax typos.`,
+          standardReference: 'ECMAScript Language Specification / Parser Protocol',
+          confidenceScore: 1.0,
+          fixAvailable: false,
+        });
+      }
     }
 
-    // 1. Calculate AST Cyclomatic & Cognitive Complexity
-    const complexity = ComplexityAnalyzer.calculateComplexity(parseRes.ast);
+    // 2. Inject Type Compiler Errors
+    if (typeCheckRes.hasTypeErrors) {
+      diagnostics.push(...typeCheckRes.diagnostics);
+    }
 
-    // 2. Extract Abstract Language Primitives (ALPs)
-    const primitives = ALPExtractionEngine.extractPrimitives(parseRes.ast, parseRes.framework);
+    // 3. Evaluate FIGM Guidelines against AST if available
+    if (parseRes.ast) {
+      const figmDiags = ASTDetectionEngine.evaluateNode(parseRes.ast, filePath, parseRes.framework);
+      diagnostics.push(...figmDiags);
+    }
 
-    // 3. Evaluate 8 FIGM Core Rules against AST
-    const diagnostics = ASTDetectionEngine.evaluateNode(parseRes.ast, filePath, parseRes.framework);
+    const primitives = parseRes.ast ? ALPExtractionEngine.extractPrimitives(parseRes.ast, parseRes.framework) : [];
 
     const totalErrors = diagnostics.filter((d) => d.severity === 'CRITICAL' || d.severity === 'HIGH').length;
     const totalWarnings = diagnostics.filter((d) => d.severity === 'MEDIUM' || d.severity === 'LOW').length;
@@ -73,6 +91,14 @@ export class RuleExecutionEngine {
     const weightedPenalty = criticalCount * 15 + highCount * 8 + mediumCount * 3 + lowCount * 1;
     const qualityScore = Math.max(0, 100 - weightedPenalty);
 
+    const legacyComplexity: ComplexityMetrics = {
+      cyclomaticComplexity: detailedComplexity.cyclomaticComplexity,
+      cognitiveComplexity: detailedComplexity.cognitiveComplexity,
+      decisionPointsCount: detailedComplexity.decisionPointsCount,
+      maxNestingDepth: detailedComplexity.maxNestingDepth,
+      complexityRating: detailedComplexity.complexityRating,
+    };
+
     return {
       filePath,
       framework: parseRes.framework,
@@ -82,9 +108,11 @@ export class RuleExecutionEngine {
       parseErrors: parseRes.parseErrors,
       diagnostics,
       primitives,
-      complexity,
+      complexity: { ...detailedComplexity, ...legacyComplexity },
       profile,
       qualityScore,
+      typeCheckDisclaimer: typeCheckRes.disclaimer,
     };
   }
 }
+

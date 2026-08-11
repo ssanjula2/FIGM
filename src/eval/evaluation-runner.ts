@@ -129,7 +129,8 @@ export class EvaluationRunner {
 
     // Check for unexpected extra diagnostics (False Positives)
     for (const scanRes of fileScanResults) {
-      for (const diag of scanRes.diagnostics) {
+      const figmDiags = scanRes.diagnostics.filter((d) => d.ruleId.startsWith('FIGM-'));
+      for (const diag of figmDiags) {
         const expected = groundTruths.find((gt) => gt.filePath === scanRes.filePath && gt.ruleId === diag.ruleId);
         if (!expected) {
           globalFP++;

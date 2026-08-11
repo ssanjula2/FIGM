@@ -20,6 +20,8 @@ export class SourceParser {
     const framework = this.detectFramework(filePath, code);
     const errors: Array<{ line: number; column: number; message: string }> = [];
 
+    this.validateSyntax(code, errors);
+
     try {
       const rootNode = this.buildASTFromCode(code, filePath, framework, errors);
       return {
@@ -45,6 +47,50 @@ export class SourceParser {
         },
         parseErrors: errors
       };
+    }
+  }
+
+  /**
+   * Validate code syntax for unclosed assignments, broken signatures, and unmatched delimiters
+   */
+  private static validateSyntax(code: string, errors: Array<{ line: number; column: number; message: string }>): void {
+    const lines = code.split(/\r?\n/);
+    lines.forEach((lineText, idx) => {
+      const lineNum = idx + 1;
+      const trimmed = lineText.trim();
+
+      if (/(const|let|var)\s+\w+\s*=\s*;/.test(trimmed)) {
+        const col = lineText.indexOf('=') + 1;
+        errors.push({ line: lineNum, column: col, message: 'Unexpected token ";" following assignment operator "="' });
+      }
+
+      if (/function\s+\w*\s*\(\s*\{$/.test(trimmed)) {
+        errors.push({ line: lineNum, column: lineText.length, message: 'Unexpected token "{" in function parameter list' });
+      }
+
+      if (idx === lines.length - 1 && /(const|let|var)\s+\w+\s*=\s*\{$/.test(trimmed)) {
+        errors.push({ line: lineNum, column: lineText.length, message: 'Unexpected end of input: Unclosed object literal' });
+      }
+
+      if (idx === lines.length - 1 && /return\s*\(\s*$/.test(trimmed)) {
+        errors.push({ line: lineNum, column: lineText.length, message: 'Unexpected end of input: Unclosed return expression' });
+      }
+    });
+
+    if (errors.length === 0) {
+      let openBraces = 0;
+      let openParens = 0;
+      for (let i = 0; i < code.length; i++) {
+        if (code[i] === '{') openBraces++;
+        if (code[i] === '}') openBraces--;
+        if (code[i] === '(') openParens++;
+        if (code[i] === ')') openParens--;
+      }
+      if (openBraces > 0) {
+        errors.push({ line: lines.length, column: 1, message: 'Syntax Error: Unclosed curly brace "{"' });
+      } else if (openParens > 0) {
+        errors.push({ line: lines.length, column: 1, message: 'Syntax Error: Unclosed parenthesis "("}' });
+      }
     }
   }
 
