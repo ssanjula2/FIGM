@@ -25,7 +25,7 @@ export default function LandingFooter() {
               <span style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc' }}>FIGM Code Inspector</span>
             </div>
             <p style={{ color: '#64748b', fontSize: '13px', lineHeight: 1.6, maxWidth: '320px', margin: '0 0 16px 0' }}>
-              Framework-Independent Guideline Model for Single-Page Applications across React, Next.js, and Angular.
+              Framework-Independent Guideline Model for Single-Page Applications across React, Next.js, Angular, and Vue.
             </p>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               <span style={{ fontSize: '11px', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', padding: '4px 10px', borderRadius: '20px', fontWeight: 700, border: '1px solid rgba(16, 185, 129, 0.2)' }}>
@@ -42,7 +42,7 @@ export default function LandingFooter() {
             <div style={{ color: '#f8fafc', fontWeight: 700, fontSize: '14px', marginBottom: '16px' }}>Navigation</div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <li><Link href="/live-scan" style={{ color: '#94a3b8', textDecoration: 'none' }}>Live Code Scanner</Link></li>
-              <li><Link href="/guidelines" style={{ color: '#94a3b8', textDecoration: 'none' }}>25 Guideline Rules</Link></li>
+              <li><Link href="/guidelines" style={{ color: '#94a3b8', textDecoration: 'none' }}>23 Guideline Rules</Link></li>
               <li><Link href="/diagnostics" style={{ color: '#94a3b8', textDecoration: 'none' }}>Diagnostics Hub</Link></li>
               <li><Link href="/profiler" style={{ color: '#94a3b8', textDecoration: 'none' }}>Dynamic Profiler</Link></li>
               <li><Link href="/ai-fix" style={{ color: '#94a3b8', textDecoration: 'none' }}>Gemini AI Remediation</Link></li>

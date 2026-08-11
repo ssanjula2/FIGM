@@ -28,17 +28,27 @@ function DiagnosticsContent() {
   const [searchQuery, setSearchQuery] = useState<string>(searchParams.get('q') || '');
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
 
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
   useEffect(() => {
-    fetch('/api/report')
-      .then((res) => res.json())
-      .then((data) => {
+    async function loadDiagnostics() {
+      try {
+        setLoading(true);
+        setErrorMsg(null);
+        const res = await fetch('/api/report');
+        if (!res.ok) {
+          throw new Error(`HTTP error ${res.status}`);
+        }
+        const data = await res.json();
         setDiagnostics(data.allDiagnostics || []);
-        setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err: any) {
         console.error('Failed to load diagnostics:', err);
+        setErrorMsg(err.message || 'Failed to fetch scan diagnostics');
+      } finally {
         setLoading(false);
-      });
+      }
+    }
+    loadDiagnostics();
   }, []);
 
   useEffect(() => {

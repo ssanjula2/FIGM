@@ -85,7 +85,12 @@ export default function AIFixPage() {
       <div className="glass-panel" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <span className="badge badge-domain">FIGM-REACT-03</span>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <span className="badge badge-domain">FIGM-REACT-03</span>
+              <span style={{ fontSize: '10px', color: '#eab308', background: 'rgba(234, 179, 8, 0.1)', padding: '2px 8px', borderRadius: '4px', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 700 }}>
+                Demonstration Benchmark Fixture
+              </span>
+            </div>
             <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#f8fafc', marginTop: '6px' }}>
               Avoid Direct React State Mutation
             </h2>

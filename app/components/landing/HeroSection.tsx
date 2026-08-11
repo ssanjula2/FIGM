@@ -128,8 +128,9 @@ function UserList({ users }) {
         >
           Unifying performance, accessibility, and architectural quality assurance across{' '}
           <strong style={{ color: '#f1f5f9' }}>React</strong>,{' '}
-          <strong style={{ color: '#f1f5f9' }}>Next.js App Router</strong>, and{' '}
-          <strong style={{ color: '#f1f5f9' }}>Angular</strong> via 4-Layer Meta-Model primitives and Gemini 2.5 Flash.
+          <strong style={{ color: '#f1f5f9' }}>Next.js App Router</strong>,{' '}
+          <strong style={{ color: '#f1f5f9' }}>Angular</strong>, and{' '}
+          <strong style={{ color: '#f1f5f9' }}>Vue 3 SFCs</strong> via 4-Layer Meta-Model primitives and Gemini 2.5 Flash.
         </p>
 
         {/* CTA Buttons */}
@@ -173,7 +174,7 @@ function UserList({ users }) {
             }}
           >
             <span>🔍</span>
-            <span>Explore 25 Rules</span>
+            <span>Explore 23 Rules</span>
           </Link>
 
           <Link

@@ -25,7 +25,7 @@ export default function WebVitalsPage() {
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '1400px', margin: '0 auto' }}>
       <div>
         <div style={{ fontSize: '12px', color: '#eab308', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
-          Real-Time Performance Metrics
+          Demonstration / Proxy Performance Metrics (Estimated from DB Scan Latency)
         </div>
         <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>
           Web Vitals & Page Load Time Diagnostics

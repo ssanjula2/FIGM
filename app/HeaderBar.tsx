@@ -62,7 +62,7 @@ export default function HeaderBar() {
             }}
           >
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: passed ? '#34d399' : '#f87171', boxShadow: passed ? '0 0 10px #34d399' : '0 0 10px #f87171' }}></span>
-            <span>🛡️ FIGM Score: <b>{dynamicScore}% ({passed ? 'PASSED ✅' : 'FAILED ❌'})</b></span>
+            <span>🛡️ Quality Score: <b>{dynamicScore}% ({passed ? 'PASSED ✅' : 'FAILED ❌'})</b></span>
           </Link>
 
           {/* Framework Selector */}

@@ -322,10 +322,23 @@ export default function UserStudyPage() {
       });
   };
 
-  const handleRunScan = () => {
+  const [dynamicScanResult, setDynamicScanResult] = useState<any>(null);
+
+  const handleRunScan = async () => {
     setIsScanning(true);
+    setDynamicScanResult(null);
     try {
       const benchmark = BENCHMARKS[selectedFramework];
+      const res = await fetch('/api/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: benchmark.code, fileName: benchmark.file }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setDynamicScanResult(data);
+      }
+      
       fetch('/api/user-study/log-scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -337,14 +350,12 @@ export default function UserStudyPage() {
           diagnosticsCount: 4
         })
       }).catch(() => {});
-    } catch {
-      // Silent catch for background telemetry logging
-    }
-
-    setTimeout(() => {
+    } catch (err) {
+      console.error('Dynamic scan error:', err);
+    } finally {
       setIsScanning(false);
       setScanCompleted(true);
-    }, 600);
+    }
   };
 
   return (
@@ -352,7 +363,7 @@ export default function UserStudyPage() {
       {/* Header Banner */}
       <div className="user-study-hero" style={{ background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px', boxSizing: 'border-box' }}>
         <span style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '9999px', background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', fontSize: '13px', fontWeight: 600, marginBottom: '12px', whiteSpace: 'normal', lineHeight: '1.4' }}>
-          ACADEMIC RESEARCH USER STUDY — TARGET N=85 PARTICIPANTS
+          ACADEMIC RESEARCH USER STUDY — TARGET N=85 PARTICIPANTS (HUMAN COLLECTION PENDING)
         </span>
         <h1 style={{ fontSize: '32px', fontWeight: 700, margin: '0 0 8px 0', color: '#ffffff', lineHeight: '1.2' }}>
           FIGM Code Inspector — User Study

@@ -4,11 +4,11 @@ import React from 'react';
 
 export default function ResearchOverview() {
   const dsrmPhases = [
-    { num: '01', title: 'Problem Identification', desc: 'Fragmented SPA quality tooling across React, Next.js, and Angular.' },
-    { num: '02', title: 'Objective Definition', desc: 'Formalized 4-layer meta-model & 25 framework-independent rules.' },
+    { num: '01', title: 'Problem Identification', desc: 'Fragmented SPA quality tooling across React, Next.js, Angular, and Vue.' },
+    { num: '02', title: 'Objective Definition', desc: 'Formalized 4-layer meta-model & 23 framework-independent rules (25 AST predicates).' },
     { num: '03', title: 'Design & Development', desc: 'Implemented SourceParser, AST engine & Gemini 2.5 Flash pipeline.' },
     { num: '04', title: 'Demonstration', desc: 'Deployed interactive Next.js web application and CLI runner.' },
-    { num: '05', title: 'Evaluation', desc: 'Evaluated 30 repos (755k LOC), ground truth (F1=90%), and user study (α=0.89).' },
+    { num: '05', title: 'Evaluation', desc: 'Evaluated 30 repos (755k LOC), ground truth (F1=90.0%); human usability study prepared for N=85 (collection pending).' },
     { num: '06', title: 'Communication', desc: 'Published LaTeX dissertation artifacts & IEEE tool demo documentation.' },
   ];
 
