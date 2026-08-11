@@ -30,9 +30,10 @@ export class RemediationEngine {
         // Hoist invariant object literal outside loop scope
         if (code.includes(snippet)) {
           const hoistedVarName = `HOISTED_INVARIANT_${Math.floor(Math.random() * 1000)}`;
-          const hoistedDecl = `// [FIGM Quick-Fix]: Hoisted invariant object allocation outside loop scope\nconst ${hoistedVarName} = Object.freeze(${snippet.replace(/^const\s+\w+\s*=\s*/, '')});\n\n`;
+          const rawObj = snippet.replace(/^const\s+\w+\s*=\s*/, '').replace(/;\s*$/, '').trim();
+          const hoistedDecl = `// [FIGM Quick-Fix]: Hoisted invariant object allocation outside loop scope\nconst ${hoistedVarName} = Object.freeze(${rawObj});\n\n`;
           
-          remediatedCode = hoistedDecl + code.replace(snippet, `${hoistedVarName}`);
+          remediatedCode = hoistedDecl + code.replace(snippet, `const options = ${hoistedVarName};`);
           appliedFixDescription = 'Hoisted static object literal out of loop scope into a frozen top-level constant.';
         } else {
           remediatedCode = code.replace(
