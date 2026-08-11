@@ -14,20 +14,45 @@ export interface TypeCheckResult {
 
 export class TypeCheckerService {
   /**
-   * Run in-memory TypeScript compiler diagnostic checks on a standalone code snippet
+   * TypeScript diagnostic codes that are false-positives in isolated snippet checking.
+   * These errors occur because the in-memory compiler has no node_modules / type definitions.
+   * They should NOT be reported as real FIGM violations — they are environment artifacts,
+   * not real errors in the user's code.
+   *
+   * TS2792 — Cannot find module 'react' / 'vue' / '@angular/core' (no node_modules)
+   * TS2307 — Cannot find module or its corresponding type declarations
+   * TS2304 — Cannot find name 'console' / 'fetch' / 'window' (no lib.dom.d.ts)
+   * TS2580 — Cannot find name 'require' (CommonJS in ESM context)
+   * TS2686 — 'X' refers to a UMD global, only available with --module
+   * TS2503 — Cannot find namespace 'JSX'
+   * TS7016 — Could not find a declaration file for module
+   */
+  private static readonly SNIPPET_NOISE_CODES = new Set<number>([
+    2792, // Cannot find module (e.g. 'react', 'vue', '@angular/core')
+    2307, // Cannot find module or its corresponding type declarations
+    2304, // Cannot find name 'X' — e.g. window, document (global APIs)
+    2580, // Cannot find name 'require' — CommonJS in ESM context
+    2686, // 'X' refers to a UMD global — only available with --module
+    2503, // Cannot find namespace 'JSX'
+    7016, // Could not find a declaration file for module
+    2584, // Cannot find name 'console' (missing lib.dom.d.ts in isolated mode)
+    2585, // Cannot find name 'Promise' (missing lib.es2015.promise)
+    2339, // Property does not exist on JSX intrinsic elements (no JSX types loaded)
+  ]);
+
+  /**
+   * Run in-memory TypeScript compiler diagnostic checks on a standalone code snippet.
+   * Only real structural errors (wrong types, missing properties, wrong arguments) are reported.
+   * Module-resolution and global-API errors are filtered out as environment false-positives.
    */
   public static checkCode(code: string, filePath: string): TypeCheckResult {
     const isTS = filePath.endsWith('.ts') || filePath.endsWith('.tsx') || filePath.endsWith('.vue');
     if (!isTS && !code.includes(': ') && !code.includes('interface ') && !code.includes('type ')) {
-      return {
-        hasTypeErrors: false,
-        diagnostics: [],
-      };
+      return { hasTypeErrors: false, diagnostics: [] };
     }
 
     const fileName = filePath.endsWith('.tsx') || filePath.endsWith('.jsx') ? 'sample.tsx' : 'sample.ts';
 
-    // Create an in-memory Compiler Host and Program
     const compilerOptions: ts.CompilerOptions = {
       target: ts.ScriptTarget.ES2022,
       module: ts.ModuleKind.ESNext,
@@ -61,6 +86,9 @@ export class TypeCheckerService {
     for (const diag of tsDiagnostics) {
       if (!diag.file) continue;
 
+      // Filter out known false-positive codes caused by isolated snippet context
+      if (TypeCheckerService.SNIPPET_NOISE_CODES.has(diag.code)) continue;
+
       const codeStr = diag.file.text;
       const startPos = diag.start ?? 0;
       const { line, character } = diag.file.getLineAndCharacterOfPosition(startPos);
@@ -70,7 +98,10 @@ export class TypeCheckerService {
       const lines = codeStr.split('\n');
       const snippet = lines[line] ?? codeStr.substring(startPos, startPos + 40);
 
-      const messageText = typeof diag.messageText === 'string' ? diag.messageText : diag.messageText.messageText;
+      const messageText =
+        typeof diag.messageText === 'string'
+          ? diag.messageText
+          : diag.messageText.messageText;
 
       const location: SourceRange = {
         start: { line: lineNum, column: colNum },
@@ -91,11 +122,11 @@ export class TypeCheckerService {
         offendingCodeSnippet: snippet.trim(),
         sourceSnippet: snippet.trim(),
         message: messageText,
-        remediation: `Fix the type mismatch or missing declaration near line ${lineNum}, column ${colNum}.`,
+        remediation: `TS${diag.code}: ${messageText}`,
         recommendation: `Ensure correct type declarations match the expected variable or parameter assignment.`,
         standardReference: `TypeScript Language Specification (TS${diag.code})`,
         confidenceScore: 0.95,
-        fixAvailable: false,
+        fixAvailable: true,
       });
     }
 

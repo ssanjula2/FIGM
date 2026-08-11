@@ -314,10 +314,57 @@ export class RemediationEngine {
 
       default:
         if (defect.ruleId.startsWith('TYPE-TS-')) {
-          appliedFixDescription = `Applied TypeScript type coercion advisory for [${defect.ruleId}].`;
+          const tsCode = parseInt(defect.ruleId.replace('TYPE-TS-', ''), 10);
+
+          // TS2345 — Argument of type 'X' is not assignable to parameter of type 'Y'
+          // TS2322 — Type 'X' is not assignable to type 'Y'
+          if (tsCode === 2345 || tsCode === 2322) {
+            if (snippet && code.includes(snippet)) {
+              // Try to add type assertion
+              const fixedSnippet = snippet.replace(/(\w+)\s*\)/, '$1 as any)').replace(/=\s*(\w+)/, '= $1 as any');
+              if (fixedSnippet !== snippet) {
+                remediatedCode = code.replace(snippet, fixedSnippet);
+                appliedFixDescription = `Added \`as any\` type assertion to resolve TS${tsCode} type mismatch. Review and replace 'any' with the correct type.`;
+              } else {
+                appliedFixDescription = `TS${tsCode}: Add explicit type annotation or type assertion on the offending value.`;
+              }
+            }
+          }
+          // TS2339 — Property 'X' does not exist on type 'Y'
+          else if (tsCode === 2339) {
+            appliedFixDescription = `TS2339: Property does not exist. Add the property to the type definition, use optional chaining (\`obj?.prop\`), or add a type assertion.`;
+          }
+          // TS2551 — Property 'X' does not exist on type 'Y'. Did you mean 'Z'?
+          else if (tsCode === 2551) {
+            appliedFixDescription = `TS2551: Property name typo. Check the TypeScript error message for the suggested correct property name and rename it in your code.`;
+          }
+          // TS2531 — Object is possibly 'null'
+          else if (tsCode === 2531) {
+            if (snippet && code.includes(snippet)) {
+              // Add optional chaining
+              const fixedSnippet = snippet.replace(/(\w+)\.(\w+)/, '$1?.$2');
+              if (fixedSnippet !== snippet) {
+                remediatedCode = code.replace(snippet, fixedSnippet);
+                appliedFixDescription = 'Added optional chaining (?.) to guard against null object access (TS2531).';
+              }
+            }
+          }
+          // TS7006 — Parameter 'X' implicitly has an 'any' type
+          else if (tsCode === 7006) {
+            if (snippet && code.includes(snippet)) {
+              const fixedSnippet = snippet.replace(/\((\w+)\)/, '($1: unknown)').replace(/,\s*(\w+)\)/, ', $1: unknown)');
+              remediatedCode = code.replace(snippet, fixedSnippet);
+              appliedFixDescription = 'Added explicit `unknown` type annotation to parameter with implicit any (TS7006). Replace `unknown` with the correct type.';
+            }
+          }
+          // Generic TYPE-TS fallback
+          else {
+            appliedFixDescription = `TS${tsCode}: ${defect.message || 'Review the TypeScript error and add the correct type annotation or assertion.'}`;
+          }
         } else {
           appliedFixDescription = 'No specific quick-fix rule transformation defined.';
         }
+
     }
 
     const suggestedFix = PatchGenerator.generateGitDiff(
