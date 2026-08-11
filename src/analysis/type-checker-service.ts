@@ -38,20 +38,33 @@ export class TypeCheckerService {
     2584, // Cannot find name 'console' (missing lib.dom.d.ts in isolated mode)
     2585, // Cannot find name 'Promise' (missing lib.es2015.promise)
     2339, // Property does not exist on JSX intrinsic elements (no JSX types loaded)
+    1003, 1005, 1109, 1127, 1128, 1135, 1136, 1381, 1382, 17002, 2657, // HTML template noise in Angular/Vue
   ]);
 
   /**
    * Run in-memory TypeScript compiler diagnostic checks on a standalone code snippet.
    * Only real structural errors (wrong types, missing properties, wrong arguments) are reported.
-   * Module-resolution and global-API errors are filtered out as environment false-positives.
+   * Module-resolution, template HTML strings, and global-API errors are filtered out.
    */
   public static checkCode(code: string, filePath: string): TypeCheckResult {
+    // If Vue SFC, extract script portion for TS checking
+    let codeToTypeCheck = code;
+    if (filePath.endsWith('.vue')) {
+      const scriptMatch = code.match(/<script[\s\S]*?>([\s\S]*?)<\/script>/i);
+      if (scriptMatch && scriptMatch[1]) {
+        codeToTypeCheck = scriptMatch[1];
+      } else {
+        return { hasTypeErrors: false, diagnostics: [] };
+      }
+    }
+
     const isTS = filePath.endsWith('.ts') || filePath.endsWith('.tsx') || filePath.endsWith('.vue');
-    if (!isTS && !code.includes(': ') && !code.includes('interface ') && !code.includes('type ')) {
+    if (!isTS && !codeToTypeCheck.includes(': ') && !codeToTypeCheck.includes('interface ') && !codeToTypeCheck.includes('type ')) {
       return { hasTypeErrors: false, diagnostics: [] };
     }
 
     const fileName = filePath.endsWith('.tsx') || filePath.endsWith('.jsx') ? 'sample.tsx' : 'sample.ts';
+
 
     const compilerOptions: ts.CompilerOptions = {
       target: ts.ScriptTarget.ES2022,
@@ -63,7 +76,7 @@ export class TypeCheckerService {
       skipLibCheck: true,
     };
 
-    const sourceFile = ts.createSourceFile(fileName, code, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
+    const sourceFile = ts.createSourceFile(fileName, codeToTypeCheck, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
 
     const host: ts.CompilerHost = {
       getSourceFile: (name) => (name === fileName ? sourceFile : undefined),
@@ -75,7 +88,7 @@ export class TypeCheckerService {
       useCaseSensitiveFileNames: () => true,
       getNewLine: () => '\n',
       fileExists: (f) => f === fileName,
-      readFile: (f) => (f === fileName ? code : undefined),
+      readFile: (f) => (f === fileName ? codeToTypeCheck : undefined),
     };
 
     const program = ts.createProgram([fileName], compilerOptions, host);
