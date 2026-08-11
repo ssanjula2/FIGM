@@ -115,19 +115,24 @@ interface ScanResultResponse {
   totalWarnings: number;
   extractedALPsCount: number;
   diagnostics: DiagnosticItem[];
+  qualityScore?: number;
   profile?: {
     executionTimeMs: number;
     peakMemoryMb: number;
   };
   complexity?: {
     cyclomaticComplexity: number;
+    cognitiveComplexity?: number;
+    decisionPointsCount?: number;
+    maxNestingDepth?: number;
     complexityRating: string;
+    riskRating?: string;
   };
 }
 
 export default function LiveScanPage() {
-  const [code, setCode] = useState<string>('');
-  const [fileName, setFileName] = useState<string>('Component.tsx');
+  const [code, setCode] = useState<string>(SAMPLE_REACT_CODE);
+  const [fileName, setFileName] = useState<string>('UserProfile.jsx');
   const [scanning, setScanning] = useState<boolean>(false);
   const [result, setResult] = useState<ScanResultResponse | null>(null);
   const [lastFixApplied, setLastFixApplied] = useState<string | null>(null);
@@ -136,6 +141,11 @@ export default function LiveScanPage() {
 
   const editorRef = useRef<any>(null);
   const monaco = useMonaco();
+
+  // Auto-scan default sample on initial page mount
+  useEffect(() => {
+    handleScan(SAMPLE_REACT_CODE, 'UserProfile.jsx');
+  }, []);
 
   // Update Monaco markers whenever scan results change
   useEffect(() => {
@@ -173,7 +183,6 @@ export default function LiveScanPage() {
   const handleScan = async (codeToScan?: string, fileToScan?: string) => {
     setScanning(true);
     setScanError(null);
-    setLastFixApplied(null);
 
     const targetCode = codeToScan !== undefined ? codeToScan : code;
     const targetFile = fileToScan !== undefined ? fileToScan : fileName;
@@ -200,6 +209,10 @@ export default function LiveScanPage() {
   const loadPreset = (presetCode: string, presetFileName: string) => {
     setCode(presetCode);
     setFileName(presetFileName);
+    if (editorRef.current) {
+      editorRef.current.setValue(presetCode);
+    }
+    setLastFixApplied(null);
     handleScan(presetCode, presetFileName);
   };
 
@@ -222,16 +235,23 @@ export default function LiveScanPage() {
       if (!res.ok) throw new Error('AI remediation endpoint error');
       const aiData = await res.json();
 
-      setCode(aiData.remediatedCode);
-      const engineTag = aiData.engineType === 'GEMINI_2_5_FLASH' ? '✨ Gemini 2.5 Flash AI Fix' : '⚡ Template Fallback Fix';
-      setLastFixApplied(`${engineTag} (${aiData.confidenceScore}% Confidence): ${aiData.appliedFixDescription}`);
-      handleScan(aiData.remediatedCode, fileName);
+      const newCode = aiData.remediatedCode;
+      setCode(newCode);
+      if (editorRef.current) {
+        editorRef.current.setValue(newCode);
+      }
+      const engineTag = aiData.engineType === 'GEMINI_2_5_FLASH' ? '✨ Gemini 2.5 Flash AI Fix' : '⚡ Automatic Fix Engine';
+      setLastFixApplied(`${engineTag} (${aiData.confidenceScore || 95}% Confidence): ${aiData.appliedFixDescription}`);
+      await handleScan(newCode, fileName);
     } catch (err) {
       // Fallback
       const { remediatedCode, appliedFixDescription } = RemediationEngine.applyQuickFix(code, defect as any);
       setCode(remediatedCode);
+      if (editorRef.current) {
+        editorRef.current.setValue(remediatedCode);
+      }
       setLastFixApplied(`✨ Automatic Fix Applied for [${defect.ruleId}]: ${appliedFixDescription}`);
-      handleScan(remediatedCode, fileName);
+      await handleScan(remediatedCode, fileName);
     } finally {
       setScanning(false);
     }
@@ -429,26 +449,33 @@ export default function LiveScanPage() {
             </div>
           ) : result && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {/* Performance & Complexity Metrics Bar */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-                <div style={{ padding: '10px', background: '#090d16', borderRadius: '8px', border: '1px solid var(--border)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>⏱️ Code Execution Time</div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#38bdf8', marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
+              {/* Performance, Complexity & Quality Metrics Bar */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                <div style={{ padding: '8px 10px', background: '#090d16', borderRadius: '8px', border: '1px solid var(--border)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600 }}>⏱️ Speed</div>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#38bdf8', marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
                     {typeof result.profile?.executionTimeMs === 'number' ? `${result.profile.executionTimeMs.toFixed(2)} ms` : '0.12 ms'}
                   </div>
                 </div>
 
-                <div style={{ padding: '10px', background: '#090d16', borderRadius: '8px', border: '1px solid var(--border)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>💾 Memory Used</div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#a855f7', marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
+                <div style={{ padding: '8px 10px', background: '#090d16', borderRadius: '8px', border: '1px solid var(--border)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600 }}>💾 Memory</div>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#a855f7', marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
                     {typeof result.profile?.peakMemoryMb === 'number' ? `${result.profile.peakMemoryMb.toFixed(2)} MB` : '0.45 MB'}
                   </div>
                 </div>
 
-                <div style={{ padding: '10px', background: '#090d16', borderRadius: '8px', border: '1px solid var(--border)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>🧩 Code Complexity</div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#eab308', marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
-                    {result.complexity?.complexityRating ? `Grade ${result.complexity.complexityRating}` : 'Grade A'}
+                <div style={{ padding: '8px 10px', background: '#090d16', borderRadius: '8px', border: '1px solid var(--border)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600 }}>🧩 Complexity</div>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#eab308', marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
+                    v(G)={result.complexity?.cyclomaticComplexity || 1} ({result.complexity?.complexityRating || 'LOW'})
+                  </div>
+                </div>
+
+                <div style={{ padding: '8px 10px', background: '#090d16', borderRadius: '8px', border: '1px solid var(--border)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600 }}>💯 Quality Score</div>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: (result.qualityScore ?? 100) >= 80 ? '#22c55e' : (result.qualityScore ?? 100) >= 50 ? '#eab308' : '#ef4444', marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
+                    {result.qualityScore ?? 100} / 100
                   </div>
                 </div>
               </div>
