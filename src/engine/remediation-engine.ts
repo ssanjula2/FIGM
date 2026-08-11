@@ -212,8 +212,55 @@ export class RemediationEngine {
       }
 
       case 'FIGM-REACT-03': {
-        // Fix direct state mutation
+        // Fix direct state mutation — handles both array mutations and property assignments
         if (snippet && code.includes(snippet)) {
+          // Pattern 1: Array .push(item) mutation — e.g. data.push(item)
+          const pushMatch = snippet.match(/(\w+)\.push\((.+)\);/);
+          if (pushMatch) {
+            const arrName = pushMatch[1];
+            const pushArg = pushMatch[2];
+            const setter = `set${arrName.charAt(0).toUpperCase() + arrName.slice(1)}`;
+            const fix = `// [FIGM Quick-Fix]: Immutable Array Append\n${setter}(prev => [...prev, ${pushArg}]);`;
+            remediatedCode = code.replace(snippet, fix);
+            appliedFixDescription = 'Replaced direct .push() array mutation with immutable spread append inside a state setter.';
+            break;
+          }
+
+          // Pattern 2: Array .pop() mutation
+          const popMatch = snippet.match(/(\w+)\.pop\(\);/);
+          if (popMatch) {
+            const arrName = popMatch[1];
+            const setter = `set${arrName.charAt(0).toUpperCase() + arrName.slice(1)}`;
+            const fix = `// [FIGM Quick-Fix]: Immutable Array Pop\n${setter}(prev => prev.slice(0, -1));`;
+            remediatedCode = code.replace(snippet, fix);
+            appliedFixDescription = 'Replaced direct .pop() array mutation with immutable .slice(0, -1) state update.';
+            break;
+          }
+
+          // Pattern 3: Array .splice() mutation
+          const spliceMatch = snippet.match(/(\w+)\.splice\((.+)\);/);
+          if (spliceMatch) {
+            const arrName = spliceMatch[1];
+            const setter = `set${arrName.charAt(0).toUpperCase() + arrName.slice(1)}`;
+            const fix = `// [FIGM Quick-Fix]: Immutable Array Filter\n${setter}(prev => prev.filter((_, i) => i !== indexToRemove));`;
+            remediatedCode = code.replace(snippet, fix);
+            appliedFixDescription = 'Replaced direct .splice() array mutation with immutable .filter() state update.';
+            break;
+          }
+
+          // Pattern 4: Array .sort() or .reverse() in-place mutation
+          const sortMatch = snippet.match(/(\w+)\.(sort|reverse)\(/);
+          if (sortMatch) {
+            const arrName = sortMatch[1];
+            const method = sortMatch[2];
+            const setter = `set${arrName.charAt(0).toUpperCase() + arrName.slice(1)}`;
+            const fix = `// [FIGM Quick-Fix]: Immutable Array ${method.charAt(0).toUpperCase() + method.slice(1)}\n${setter}(prev => [...prev].${method}());`;
+            remediatedCode = code.replace(snippet, fix);
+            appliedFixDescription = `Replaced in-place .${method}() mutation with immutable spread copy before sorting.`;
+            break;
+          }
+
+          // Pattern 5: Object property assignment — e.g. obj.prop = val
           const mutMatch = snippet.match(/(\w+)\.(\w+)\s*=\s*(.+);/);
           if (mutMatch) {
             const objName = mutMatch[1];
@@ -222,10 +269,12 @@ export class RemediationEngine {
             const fix = `// [FIGM Quick-Fix]: Immutable State Update\nset${objName.charAt(0).toUpperCase() + objName.slice(1)}(prev => ({ ...prev, ${propName}: ${valName} }));`;
             remediatedCode = code.replace(snippet, fix);
             appliedFixDescription = 'Replaced direct state property mutation with immutable state updater function.';
-          } else {
-            remediatedCode = code.replace(/(\w+)\.(\w+)\s*=\s*(.+);/g, '/* [FIGM Fix]: Immutable State Update */');
-            appliedFixDescription = 'Converted direct state mutation into immutable state update.';
+            break;
           }
+
+          // Generic fallback — annotate the mutation
+          remediatedCode = code.replace(snippet, `/* [FIGM Fix]: Replace this direct mutation with an immutable state setter call */`);
+          appliedFixDescription = 'Annotated direct state mutation for manual conversion to immutable update pattern.';
         }
         break;
       }
