@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { POST as logScanPOST } from '../app/api/user-study/log-scan/route';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -127,5 +128,74 @@ describe('Source-Level Anti-Hardcoding Guard Suite', () => {
     assert.equal(report.provenance.validParticipantCount, 0, 'Missing raw response file MUST report validParticipantCount = 0');
     assert.equal(report.provenance.datasetType, 'SYNTHETIC', 'Missing raw response file MUST classify datasetType as SYNTHETIC');
     assert.equal(report.provenance.targetReached, false, 'Missing raw response file MUST report targetReached = false');
+  });
+
+  test('scripts/ directory contains no fabricated-participant seed scripts (regression guard)', () => {
+    // These 8 scripts previously fabricated up to 85 fake "developer"/"participant" user
+    // accounts -- some using the real, identifiable names and emails of actual open-source
+    // maintainers and professional athletes -- and wrote them directly into figm-user-db.json
+    // and, for several of them, the real Supabase database. They were deleted entirely rather
+    // than fixed in place, since a script whose only purpose is fabricating participant records
+    // is itself the problem, not a bug within it. This test fails loudly if any of them (or an
+    // obvious re-creation under the same name) is ever reintroduced.
+    const bannedScriptNames = [
+      'seed-85-developers.ts',
+      'seed-hybrid-real-cohort.ts',
+      'force-wipe-supabase-and-seed-85.ts',
+      'wipe-and-seed-clean-85-users.ts',
+      'seed-all-database-tables.ts',
+      'seed-all-tables-prisma.ts',
+      'seed-multi-framework-data.ts',
+      'seed-prisma-compiled.js',
+    ];
+    const scriptsDir = path.join(rootDir, 'scripts');
+    const existingFiles = fs.existsSync(scriptsDir) ? fs.readdirSync(scriptsDir) : [];
+    for (const banned of bannedScriptNames) {
+      assert.equal(existingFiles.includes(banned), false, `scripts/${banned} fabricates participant data and must not exist`);
+    }
+  });
+
+  test('scripts/ directory contains no script that both defines a large hardcoded name list and writes it to the database', () => {
+    // A more general version of the guard above: catches a differently-named script built the
+    // same way (many hardcoded human names + a direct figm-user-db.json/Supabase write), not
+    // just the specific 8 filenames already known and removed.
+    const scriptsDir = path.join(rootDir, 'scripts');
+    const files = fs.existsSync(scriptsDir) ? fs.readdirSync(scriptsDir).filter((f) => f.endsWith('.ts') || f.endsWith('.js')) : [];
+    for (const file of files) {
+      const content = fs.readFileSync(path.join(scriptsDir, file), 'utf-8');
+      const nameArrayMatch = content.match(/\[\s*(?:'[^']{3,40}'\s*,\s*){10,}/);
+      const writesToDb = /figm-user-db\.json|from\(['"]users['"]\)\.upsert|from\(['"]users['"]\)\.insert/.test(content);
+      assert.ok(
+        !(nameArrayMatch && writesToDb),
+        `scripts/${file} appears to define a hardcoded list of >=10 names AND write directly to the user database -- this is the exact shape of the fabricated-cohort scripts already removed. If this is legitimate, it must operate only on isolated test fixtures, never figm-user-db.json or the real Supabase 'users' table.`
+      );
+    }
+  });
+
+  test('DissertationExporter.generateChapter5LaTeX never claims a completed human study or reports a specific SUS/satisfaction number', () => {
+    // A prior version of this generator hardcoded a "NSBM Green University Student Developer
+    // Cohort Evaluation" section claiming "primary data was collected" from 85 students, with an
+    // invented SUS score (84.6/100, "Grade A") and two invented satisfaction percentages that
+    // existed nowhere else in the codebase -- no formula, no synthetic-test-vector basis, just
+    // typed-in numbers. This is reachable live via authenticated GET /api/export-dissertation.
+    const filePath = path.join(rootDir, 'src/docs/dissertation-exporter.ts');
+    const content = fs.readFileSync(filePath, 'utf-8');
+
+    assert.equal(/primary data was collected/i.test(content), false, 'Must not claim data collection occurred without a real data source');
+    assert.equal(/84\.6|92\.4\\?%|89\.1\\?%/.test(content), false, 'Must not contain the specific fabricated SUS/satisfaction figures');
+    assert.equal(/Grade A/i.test(content), false, 'Must not contain a fabricated qualitative usability grade');
+  });
+
+  test('POST /api/user-study/log-scan requires real code and never accepts a client-supplied score (regression guard)', async () => {
+    const noCodeReq = new Request('http://localhost:3000/api/user-study/log-scan', {
+      method: 'POST',
+      body: JSON.stringify({ participantId: 'P001', framework: 'React', fileName: 'X.jsx', qualityScore: 99, diagnosticsCount: 0 }),
+    });
+    const noCodeRes = await logScanPOST(noCodeReq);
+    assert.equal(noCodeRes.status, 400, 'A request with no real code (even one supplying a client-side score) must be rejected, not silently logged with a fabricated/trusted score');
+
+    const source = fs.readFileSync(path.join(rootDir, 'app/api/user-study/log-scan/route.ts'), 'utf-8');
+    assert.equal(/clientScore|clientCount/.test(source), false, 'log-scan must not read a client-supplied qualityScore/diagnosticsCount at all');
+    assert.equal(/FIGM-STANDARD-2026/.test(source), false, 'log-scan must not contain the old canned fallback diagnostic');
   });
 });

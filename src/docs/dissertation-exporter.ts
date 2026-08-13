@@ -133,19 +133,16 @@ ${evalResults.ruleMetrics
 \\end{tabular}
 \\end{table}
 
-\\section{NSBM Green University Student Developer Cohort Evaluation}
-To validate system usability and fix actionability, primary data was collected from a controlled evaluation cohort of $N = 85$ student developers at NSBM Green University.
-\begin{itemize}
-    \item \textbf{System Usability Scale (SUS) Score}: 84.6 / 100 (Grade A - Superior Usability)
-    \item \textbf{AI Quick-Fix Patch Acceptance Rate}: 92.4\%
-    \item \textbf{Performance Insight Clarity}: 89.1\% positive rating
-\end{itemize}
+\\section{Developer Usability Study}
+A target cohort of $N = 85$ student developers at NSBM Green University was planned for a System Usability Scale (SUS) evaluation of FIGM. As of this export, \\textbf{0 of 85} real participant responses have been collected (see \\texttt{research/CONSENT\\_FORM.md} and \\texttt{data/user-study-responses.json}) -- no SUS score, patch-acceptance rate, or satisfaction metric is reported here, because none has been measured from real data. A prior version of this chapter reported a completed evaluation with a specific SUS score and satisfaction percentages; those figures were fabricated (invented, with no underlying computation or data source) and have been retracted rather than replaced with different numbers.
 
-\section{Scan Throughput \& Memory Usage}
-* \textbf{Total Code Base Scanned}: ${evalResults.performanceMetrics.totalLinesOfCode} LOC
-* \textbf{Scan Duration}: ${evalResults.performanceMetrics.totalScanDurationMs.toFixed(2)} ms
-* \textbf{Scan Speed}: ${evalResults.performanceMetrics.scanSpeedLOCPerSec.toFixed(0)} LOC/sec
-* \textbf{Peak Heap Memory Delta}: ${evalResults.performanceMetrics.peakMemoryMB.toFixed(2)} MB
+\\section{Scan Throughput \\& Memory Usage}
+\\begin{itemize}
+    \\item \\textbf{Total Code Base Scanned}: ${evalResults.performanceMetrics.totalLinesOfCode} LOC
+    \\item \\textbf{Scan Duration}: ${evalResults.performanceMetrics.totalScanDurationMs.toFixed(2)} ms
+    \\item \\textbf{Scan Speed}: ${evalResults.performanceMetrics.scanSpeedLOCPerSec.toFixed(0)} LOC/sec
+    \\item \\textbf{Peak Heap Memory Delta}: ${evalResults.performanceMetrics.peakMemoryMB.toFixed(2)} MB
+\\end{itemize}
 `;
   }
 }

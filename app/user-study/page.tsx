@@ -82,193 +82,6 @@ export class SearchPanelComponent {
   }
 };
 
-const FRAMEWORK_DIAGNOSTICS = {
-  react: [
-    {
-      id: 1,
-      ruleId: 'FIGM-PERF-01',
-      ruleName: 'Invariant Object Allocation in Iteration Scopes',
-      category: 'Performance',
-      severity: 'HIGH',
-      file: 'UserProfile.jsx',
-      line: 7,
-      explanation: 'Static object or closure literal instantiated inside render routine without memoization or hoisting.',
-      recommendation: 'Hoist options literal out of render scope or wrap with React.useMemo().'
-    },
-    {
-      id: 2,
-      ruleId: 'FIGM-PERF-03',
-      ruleName: 'Inline Event Handler Allocation',
-      category: 'Performance',
-      severity: 'MEDIUM',
-      file: 'UserProfile.jsx',
-      line: 13,
-      explanation: 'Inline arrow function passed as prop causes child re-render allocation on every render execution.',
-      recommendation: 'Wrap event handler in React.useCallback() or bind named handler method.'
-    },
-    {
-      id: 3,
-      ruleId: 'FIGM-REACT-01',
-      ruleName: 'Unmemoized Derived Computation',
-      category: 'React Performance',
-      severity: 'HIGH',
-      file: 'UserProfile.jsx',
-      line: 15,
-      explanation: 'Derived array filter/map computation recalculated on every render cycle without useMemo.',
-      recommendation: 'Wrap derived calculation in useMemo(() => ..., [deps]).'
-    },
-    {
-      id: 4,
-      ruleId: 'FIGM-REACT-03',
-      ruleName: 'Avoid Direct React State Mutation',
-      category: 'React Core',
-      severity: 'CRITICAL',
-      file: 'UserProfile.jsx',
-      line: 22,
-      explanation: 'Direct mutation of React state variable skips component re-renders.',
-      recommendation: 'Use functional state update setter function.'
-    }
-  ],
-  nextjs: [
-    {
-      id: 1,
-      ruleId: 'FIGM-NEXT-01',
-      ruleName: 'Missing "use client" Directive in Client Component',
-      category: 'Next.js App Router',
-      severity: 'CRITICAL',
-      file: 'DashboardPage.tsx',
-      line: 4,
-      explanation: 'React state hook (useState) used in Next.js Server Component without "use client" directive at top of file.',
-      recommendation: 'Add "use client" directive at line 1 of DashboardPage.tsx.'
-    },
-    {
-      id: 2,
-      ruleId: 'FIGM-PERF-04',
-      ruleName: 'Static Imports in Deferred Execution Paths',
-      category: 'Next.js Performance',
-      severity: 'HIGH',
-      file: 'DashboardPage.tsx',
-      line: 2,
-      explanation: 'Heavy module imported statically in Next.js instead of next/dynamic with ssr: false.',
-      recommendation: 'Replace static import with const HeavyChart = dynamic(() => import(...), { ssr: false }).'
-    },
-    {
-      id: 3,
-      ruleId: 'FIGM-NEXT-03',
-      ruleName: 'Missing Dynamic Route Segment Config',
-      category: 'Next.js App Router',
-      severity: 'MEDIUM',
-      file: 'DashboardPage.tsx',
-      line: 1,
-      explanation: 'Dynamic route segment missing explicit export const revalidate = 60 or dynamic config.',
-      recommendation: 'Add export const revalidate = 60 for optimal ISR caching.'
-    },
-    {
-      id: 4,
-      ruleId: 'FIGM-A11Y-01',
-      ruleName: 'Non-Semantic Interactive Element',
-      category: 'Accessibility',
-      severity: 'HIGH',
-      file: 'DashboardPage.tsx',
-      line: 11,
-      explanation: 'Generic <div> element used for interactive button container without ARIA role.',
-      recommendation: 'Replace <div> with semantic <button> or add role="button".'
-    }
-  ],
-  angular: [
-    {
-      id: 1,
-      ruleId: 'FIGM-A11Y-02',
-      ruleName: 'Missing Form Control Label',
-      category: 'Accessibility',
-      severity: 'CRITICAL',
-      file: 'SearchPanel.component.ts',
-      line: 6,
-      explanation: 'Input element lacks associated <label>, aria-label, or aria-labelledby attribute for screen readers.',
-      recommendation: 'Add explicit aria-label="Search input" or associate with a <label> element.'
-    },
-    {
-      id: 2,
-      ruleId: 'FIGM-A11Y-01',
-      ruleName: 'Non-Semantic Interactive Element',
-      category: 'Accessibility',
-      severity: 'HIGH',
-      file: 'SearchPanel.component.ts',
-      line: 8,
-      explanation: 'Non-interactive <div> element has click handler attached without role="button" or tabIndex.',
-      recommendation: 'Replace <div> with semantic <button> element or add role="button" and tabIndex={0}.'
-    },
-    {
-      id: 3,
-      ruleId: 'FIGM-ANGULAR-01',
-      ruleName: 'Unsubscribed RxJS Observable Subscription',
-      category: 'Angular RxJS',
-      severity: 'HIGH',
-      file: 'SearchPanel.component.ts',
-      line: 12,
-      explanation: 'RxJS subscription active without takeUntilDestroyed() or unsubscribe in ngOnDestroy.',
-      recommendation: 'Use takeUntilDestroyed() operator or AsyncPipe.'
-    },
-    {
-      id: 4,
-      ruleId: 'FIGM-ANGULAR-03',
-      ruleName: 'Missing trackBy in *ngFor Directive',
-      category: 'Angular Performance',
-      severity: 'MEDIUM',
-      file: 'SearchPanel.component.ts',
-      line: 5,
-      explanation: '*ngFor loop missing trackBy function causes complete DOM node reconstruction on data updates.',
-      recommendation: 'Add trackBy: trackById to *ngFor directive.'
-    }
-  ],
-  vue: [
-    {
-      id: 1,
-      ruleId: 'FIGM-A11Y-04',
-      ruleName: 'Missing Image Alt Attribute',
-      category: 'Accessibility',
-      severity: 'CRITICAL',
-      file: 'DataGrid.vue',
-      line: 4,
-      explanation: '<img> element missing alt attribute for screen reader accessibility.',
-      recommendation: 'Add alt="User Avatar" or alt="" if decorative.'
-    },
-    {
-      id: 2,
-      ruleId: 'FIGM-VUE-01',
-      ruleName: 'Missing v-bind:key in v-for Loop',
-      category: 'Vue Core',
-      severity: 'HIGH',
-      file: 'DataGrid.vue',
-      line: 6,
-      explanation: 'v-for directive lacks unique :key binding causing inefficient DOM patching.',
-      recommendation: 'Add :key="item.id" to template v-for loop.'
-    },
-    {
-      id: 3,
-      ruleId: 'FIGM-VUE-02',
-      ruleName: 'Direct Props Mutation in Vue Component',
-      category: 'Vue Core',
-      severity: 'HIGH',
-      file: 'DataGrid.vue',
-      line: 10,
-      explanation: 'Child component mutates passed props directly instead of emitting event.',
-      recommendation: 'Emit custom update event using $emit("update:item", value).'
-    },
-    {
-      id: 4,
-      ruleId: 'FIGM-PERF-01',
-      ruleName: 'Invariant Object Allocation in Template Scope',
-      category: 'Performance',
-      severity: 'MEDIUM',
-      file: 'DataGrid.vue',
-      line: 8,
-      explanation: 'Inline object literal created inside template loop evaluation scope.',
-      recommendation: 'Move object to computed property or static script data.'
-    }
-  ]
-};
-
 export default function UserStudyPage() {
   const [selectedFramework, setSelectedFramework] = useState<'react' | 'nextjs' | 'angular' | 'vue'>('react');
   const [isScanning, setIsScanning] = useState(false);
@@ -338,7 +151,13 @@ export default function UserStudyPage() {
         const data = await res.json();
         setDynamicScanResult(data);
       }
-      
+
+      // Send the real source (`code`) rather than a client-computed score/count -- the research
+      // log-scan endpoint independently re-runs the real analysis engine on it server-side
+      // (src/engine/rule-execution-engine.ts) and persists THAT result. Previously this sent a
+      // hardcoded qualityScore/diagnosticsCount (88 / 4) for every participant regardless of
+      // framework or actual findings, which meant the benchmark-task portion of the study's
+      // "research data" was fabricated rather than measured.
       fetch('/api/user-study/log-scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -346,8 +165,7 @@ export default function UserStudyPage() {
           participantId,
           framework: benchmark.framework,
           fileName: benchmark.file,
-          qualityScore: 88,
-          diagnosticsCount: 4
+          code: benchmark.code,
         })
       }).catch(() => {});
     } catch (err) {
@@ -506,32 +324,40 @@ export default function UserStudyPage() {
           >
             {isScanning ? '⏳ Running FIGM Rules Analysis...' : '⚡ Run FIGM Scan on Benchmark'}
           </button>
-          {scanCompleted && (
+          {scanCompleted && dynamicScanResult && (
             <span style={{ color: '#34d399', fontSize: '14px', fontWeight: 600 }}>
-              ✅ Scan Complete: 4 Guideline Diagnostics Detected
+              ✅ Scan Complete: {dynamicScanResult.diagnostics?.length ?? 0} Guideline Diagnostics Detected
+            </span>
+          )}
+          {scanCompleted && !dynamicScanResult && (
+            <span style={{ color: '#f87171', fontSize: '14px', fontWeight: 600 }}>
+              ⚠️ Scan request failed — no result to report
             </span>
           )}
         </div>
 
-        {/* Calculated Benchmark Metrics & Diagnostics Summary */}
-        {scanCompleted && (
+        {/* Calculated Benchmark Metrics & Diagnostics Summary -- rendered from the real,
+            live /api/scan response (dynamicScanResult) captured in handleRunScan above, never
+            from static placeholder content. If the request failed, nothing is shown rather than
+            substituting a fabricated result. */}
+        {scanCompleted && dynamicScanResult && (
           <div style={{ marginBottom: '20px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', marginBottom: '16px' }}>
               <div style={{ padding: '12px 16px', background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '10px', textAlign: 'center' }}>
                 <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>QUALITY SCORE</div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#38bdf8', fontFamily: 'monospace' }}>88 / 100</div>
+                <div style={{ fontSize: '22px', fontWeight: 800, color: '#38bdf8', fontFamily: 'monospace' }}>{dynamicScanResult.qualityScore ?? '—'} / 100</div>
               </div>
               <div style={{ padding: '12px 16px', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.25)', borderRadius: '10px', textAlign: 'center' }}>
                 <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>ISSUES DETECTED</div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#f59e0b', fontFamily: 'monospace' }}>4 Violations</div>
+                <div style={{ fontSize: '22px', fontWeight: 800, color: '#f59e0b', fontFamily: 'monospace' }}>{dynamicScanResult.diagnostics?.length ?? 0} Violations</div>
               </div>
               <div style={{ padding: '12px 16px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.25)', borderRadius: '10px', textAlign: 'center' }}>
                 <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>SCAN LATENCY</div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#34d399', fontFamily: 'monospace' }}>5.8 ms</div>
+                <div style={{ fontSize: '22px', fontWeight: 800, color: '#34d399', fontFamily: 'monospace' }}>{dynamicScanResult.profile?.executionTimeMs?.toFixed?.(2) ?? '—'} ms</div>
               </div>
               <div style={{ padding: '12px 16px', background: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.25)', borderRadius: '10px', textAlign: 'center' }}>
                 <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>FRAMEWORK ENGINE</div>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: '#c084fc', marginTop: '2px' }}>{selectedFramework.toUpperCase()}</div>
+                <div style={{ fontSize: '18px', fontWeight: 800, color: '#c084fc', marginTop: '2px' }}>{dynamicScanResult.framework ?? selectedFramework.toUpperCase()}</div>
               </div>
             </div>
 
@@ -541,23 +367,31 @@ export default function UserStudyPage() {
                 <tr style={{ background: 'rgba(255, 255, 255, 0.05)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#94a3b8' }}>
                   <th style={{ padding: '12px 16px', minWidth: '100px' }}>Rule ID</th>
                   <th style={{ padding: '12px 16px', minWidth: '160px' }}>Guideline Name</th>
-                  <th style={{ padding: '12px 16px', minWidth: '110px' }}>Category</th>
+                  <th style={{ padding: '12px 16px', minWidth: '110px' }}>Domain</th>
                   <th style={{ padding: '12px 16px', minWidth: '90px' }}>Severity</th>
                   <th style={{ padding: '12px 16px', minWidth: '70px' }}>Line</th>
                   <th style={{ padding: '12px 16px', minWidth: '200px' }}>Recommendation</th>
                 </tr>
               </thead>
               <tbody>
-                {FRAMEWORK_DIAGNOSTICS[selectedFramework].map((d) => (
-                  <tr key={d.id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: 700, color: '#60a5fa', whiteSpace: 'nowrap' }}>{d.ruleId}</td>
-                    <td style={{ padding: '12px 16px', color: '#ffffff' }}>{d.ruleName}</td>
-                    <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{d.category}</td>
-                    <td style={{ padding: '12px 16px', color: d.severity === 'CRITICAL' ? '#ef4444' : '#f59e0b', fontWeight: 600 }}>{d.severity}</td>
-                    <td style={{ padding: '12px 16px', color: '#94a3b8', whiteSpace: 'nowrap' }}>Line {d.line}</td>
-                    <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{d.recommendation}</td>
+                {(dynamicScanResult.diagnostics ?? []).length === 0 ? (
+                  <tr>
+                    <td colSpan={6} style={{ padding: '16px', color: '#94a3b8', textAlign: 'center' }}>
+                      No guideline violations detected in this scan.
+                    </td>
                   </tr>
-                ))}
+                ) : (
+                  dynamicScanResult.diagnostics.map((d: any, idx: number) => (
+                    <tr key={`${d.ruleId}-${idx}`} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                      <td style={{ padding: '12px 16px', fontWeight: 700, color: '#60a5fa', whiteSpace: 'nowrap' }}>{d.ruleId}</td>
+                      <td style={{ padding: '12px 16px', color: '#ffffff' }}>{d.ruleName}</td>
+                      <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{d.domain}</td>
+                      <td style={{ padding: '12px 16px', color: d.severity === 'CRITICAL' ? '#ef4444' : '#f59e0b', fontWeight: 600 }}>{d.severity}</td>
+                      <td style={{ padding: '12px 16px', color: '#94a3b8', whiteSpace: 'nowrap' }}>Line {d.location?.start?.line ?? d.line ?? '—'}</td>
+                      <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{d.remediation}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

@@ -4125,6 +4125,92 @@
       "id": "usr_1786621871508_f1t86",
       "apiKey": "figm_key_1786621871508_wdfts92g",
       "createdAt": "2026-08-13T11:51:11.508Z"
+    },
+    {
+      "email": "admin_escalation_1786623278020@figm.io",
+      "passwordHash": "3ae1e79a93465e6b9ca3579e4c7e3946:10081deb124bfa4b6fa6daf1c750ccf2690c22b6a4bf1d9cf7f49d827e43b514ef5c0a0236204847de1eb10d524830be9275fdbb8c523b58badfa87980bf8f58",
+      "fullName": "Attacker",
+      "role": "DEVELOPER",
+      "id": "usr_1786623278032_93opn",
+      "apiKey": "figm_key_1786623278032_hqssuv6j",
+      "createdAt": "2026-08-13T12:14:38.032Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjYyMzI3ODAzMl85M29wbiIsImVtYWlsIjoiYWRtaW5fZXNjYWxhdGlvbl8xNzg2NjIzMjc4MDIwQGZpZ20uaW8iLCJraW5kIjoicmVmcmVzaCIsImlhdCI6MTc4NjYyMzI3OCwiZXhwIjoxNzg3MjI4MDc4fQ.Yb6PkU6P9ZsfHwda9gak6ahIOMnPX67pC0pO0ONZv20"
+    },
+    {
+      "email": "auditor_signup_1786623278043@figm.io",
+      "passwordHash": "77cd34f239500fd2dd9abc1e113599c5:2a0655a80023a04b69fa7920c91eecabe6b51cc7b94ad12d2ed56e55991d6e931153c55d731babd7a91d7eaa61c9102aa5f9317fdd1ef8f099bfcbb193e9d695",
+      "fullName": "New Auditor",
+      "role": "AUDITOR",
+      "id": "usr_1786623278051_93zvi",
+      "apiKey": "figm_key_1786623278051_mj6tuq1c",
+      "createdAt": "2026-08-13T12:14:38.051Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjYyMzI3ODA1MV85M3p2aSIsImVtYWlsIjoiYXVkaXRvcl9zaWdudXBfMTc4NjYyMzI3ODA0M0BmaWdtLmlvIiwia2luZCI6InJlZnJlc2giLCJpYXQiOjE3ODY2MjMyNzgsImV4cCI6MTc4NzIyODA3OH0.2KdVFR04eipOPnEf8P-4Aw0ITYiFjIP_lrhOst95cQI"
+    },
+    {
+      "email": "prod_reset_1786623278061@figm.io",
+      "passwordHash": "072f25f98a10ddd9f1560955628bb93f:81dc5d9447744fc558843976fd41954464ca74f773bb11e12a04221b4ee7a93069d8bfe445777feda5c3af81468a1c508ddcb88532cc0466e482b6b12d11cf8b",
+      "fullName": "Reset Prod User",
+      "role": "DEVELOPER",
+      "id": "usr_1786623278068_hrbz5",
+      "apiKey": "figm_key_1786623278068_b1sqvewi",
+      "createdAt": "2026-08-13T12:14:38.068Z",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpbmQiOiJyZWZyZXNoIn0.eyJzdWIiOiJ1c3JfMTc4NjYyMzI3ODA2OF9ocmJ6NSIsImVtYWlsIjoicHJvZF9yZXNldF8xNzg2NjIzMjc4MDYxQGZpZ20uaW8iLCJraW5kIjoicmVmcmVzaCIsImlhdCI6MTc4NjYyMzI3OCwiZXhwIjoxNzg3MjI4MDc4fQ.6gme3UnnluvPeUwUKJpWQBnhkxeq71oxXTrb8Mv2P88",
+      "resetToken": "fb38237860cd5da08d5639c7def17783948c4326ce96c796340a37745a9c786d",
+      "resetTokenExpiry": "2026-08-13T12:29:38.078Z"
+    },
+    {
+      "email": "usera@test.com",
+      "passwordHash": "c9454a90918f3ae1733c14c71f0e7217:bb819558bc61ec76b1ab3fdc6c393e37e349752a437f9e0268130a55017a66edbf960d83edce76cb396ae2d39409556c42bd38ee1a3994040a4bcb7d34b4ec7e",
+      "fullName": "User A",
+      "role": "DEVELOPER",
+      "id": "usr_1786623278797_gw9jb",
+      "apiKey": "figm_key_1786623278797_gscu9ddn",
+      "createdAt": "2026-08-13T12:14:38.797Z"
+    },
+    {
+      "email": "userb@test.com",
+      "passwordHash": "ad883110014e5f6d058b810cc2a679d4:1dd1bd928bac0da62a73d5694134d270b358d12ff6c56112201c80fae2b0949007e55c797c5dfe83646c312e57ce1a3d2dc1a46cf624b378c691eb0eb4dcfe5c",
+      "fullName": "User B",
+      "role": "DEVELOPER",
+      "id": "usr_1786623278807_zqjbr",
+      "apiKey": "figm_key_1786623278807_x88y2hvy",
+      "createdAt": "2026-08-13T12:14:38.807Z"
+    },
+    {
+      "email": "test_1786623279070@figm.io",
+      "passwordHash": "49f8dcbff39e95ddb7b22d9e242ae911:dcd82da4ff6c9e9bddaec865deb6747c993a14fa3922022f5989428776ff8d7381a66af06a09dbdff02626e073921b22709a8f1402c68285c1da4596e2dc9408",
+      "fullName": "Updated Auditor Name",
+      "role": "AUDITOR",
+      "id": "usr_1786623279082_p2946",
+      "apiKey": "figm_key_1786623279082_ghkn1lc8",
+      "createdAt": "2026-08-13T12:14:39.082Z"
+    },
+    {
+      "email": "reset_1786623279089@figm.io",
+      "passwordHash": "f049cc92cc989aeae3bb62c519edff61:5c3be0e544b2f8e07127bd84a3e6e04a65e7435296fb995da5b06460c0e3572dd06900231a236a6eba1f47767cf6c17b3a254ace4d7aeb2a94b37e4a5cb63a20",
+      "fullName": "Reset User",
+      "role": "DEVELOPER",
+      "id": "usr_1786623279096_qbkfl",
+      "apiKey": "figm_key_1786623279096_nxb2oc7a",
+      "createdAt": "2026-08-13T12:14:39.096Z"
+    },
+    {
+      "email": "test_profile_1786623310073_onyu@figm.io",
+      "passwordHash": "b43e45097f3ae4b4183b93852d0997d3:51d4b99d1ec092854c74303c934f96ae7e844b2ea37ef520be5b9cd3bb7f6ffb77e9f13bae0f2377be2e85df045e936f39aee56e418004aafd9306ba278e0505",
+      "fullName": "Test Profile User",
+      "role": "DEVELOPER",
+      "id": "usr_1786623310080_bhebh",
+      "apiKey": "figm_key_1786623310084_a121dff55855",
+      "createdAt": "2026-08-13T12:15:10.080Z"
+    },
+    {
+      "email": "provider_test_1786623310302_os51@figm.io",
+      "passwordHash": "hashedpass",
+      "fullName": "Provider Test User",
+      "role": "DEVELOPER",
+      "id": "usr_1786623310306_1j3ym",
+      "apiKey": "figm_key_1786623310306_gktyyvsr",
+      "createdAt": "2026-08-13T12:15:10.306Z"
     }
   ],
   "submissions": [
@@ -6591,6 +6677,39 @@
       "diagnosticsCount": 1,
       "id": "sub_1786621856058_x8ix6",
       "createdAt": "2026-08-13T11:50:56.058Z"
+    },
+    {
+      "userId": "usr_1786623278797_gw9jb",
+      "fileName": "UserA_Component.tsx",
+      "framework": "REACT",
+      "codeContent": "export function ComponentA() {}",
+      "executionTimeMs": 12,
+      "qualityScore": 95,
+      "diagnosticsCount": 1,
+      "id": "sub_1786623278810_a5sjr",
+      "createdAt": "2026-08-13T12:14:38.810Z"
+    },
+    {
+      "userId": "usr_1786623278807_zqjbr",
+      "fileName": "UserB_Service.ts",
+      "framework": "ANGULAR",
+      "codeContent": "export class ServiceB {}",
+      "executionTimeMs": 18,
+      "qualityScore": 90,
+      "diagnosticsCount": 2,
+      "id": "sub_1786623278814_af84v",
+      "createdAt": "2026-08-13T12:14:38.814Z"
+    },
+    {
+      "userId": "usr_test_1786623295028",
+      "fileName": "DashboardTestComponent.tsx",
+      "framework": "REACT_JSX",
+      "codeContent": "const a = 1;",
+      "executionTimeMs": 0.45,
+      "qualityScore": 92,
+      "diagnosticsCount": 1,
+      "id": "sub_1786623295028_mty6z",
+      "createdAt": "2026-08-13T12:14:55.028Z"
     }
   ],
   "projects": [
@@ -12917,6 +13036,138 @@
       "qualityScore": 100,
       "totalScans": 0,
       "createdAt": "2026-08-13T11:51:11.515Z"
+    },
+    {
+      "userId": "usr_owner_1786623278084",
+      "name": "Private Project",
+      "description": "Should not be readable by anyone else",
+      "framework": "React",
+      "repoUrl": "https://github.com/figm/private-project",
+      "status": "ACTIVE",
+      "id": "proj_1786623278084_7bzxs",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:14:38.084Z"
+    },
+    {
+      "userId": "usr_dup_owner_1786623278089",
+      "name": "Owner Only Project",
+      "description": "desc",
+      "framework": "Vue",
+      "repoUrl": "https://github.com/figm/owner-only",
+      "status": "ACTIVE",
+      "id": "proj_1786623278089_uw3ww",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:14:38.089Z"
+    },
+    {
+      "userId": "usr_dup_owner_1786623278089",
+      "name": "Owner Only Project (Copy)",
+      "description": "desc",
+      "framework": "Vue",
+      "repoUrl": "https://github.com/figm/owner-only",
+      "status": "ACTIVE",
+      "id": "proj_1786623278092_4whm5",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:14:38.092Z"
+    },
+    {
+      "userId": "usr_mass_owner_1786623278096",
+      "name": "Updated Name",
+      "description": "desc",
+      "framework": "React",
+      "repoUrl": "https://github.com/figm/mass-assign",
+      "status": "ACTIVE",
+      "id": "proj_1786623278096_g3hf5",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:14:38.096Z"
+    },
+    {
+      "userId": "usr_test_proj_1786623309368_1q1l",
+      "name": "E-Commerce Frontend",
+      "description": "Main online store web client",
+      "framework": "React",
+      "repoUrl": "https://github.com/figm/ecommerce-frontend",
+      "status": "ACTIVE",
+      "id": "proj_1786623309372_2bczl",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:15:09.372Z"
+    },
+    {
+      "userId": "usr_test_search_1786623309377_xxt7",
+      "name": "Alpha Analytics",
+      "description": "Data platform",
+      "framework": "Next.js",
+      "repoUrl": "https://github.com/figm/alpha",
+      "status": "ACTIVE",
+      "id": "proj_1786623309377_nr80c",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:15:09.377Z"
+    },
+    {
+      "userId": "usr_test_dup_1786623309381_22wa",
+      "name": "Original App",
+      "description": "Original description",
+      "framework": "Vue",
+      "repoUrl": "https://github.com/figm/original",
+      "status": "ACTIVE",
+      "id": "proj_1786623309381_169k4",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:15:09.381Z"
+    },
+    {
+      "userId": "usr_test_dup_1786623309381_22wa",
+      "name": "Original App (Copy)",
+      "description": "Original description",
+      "framework": "Vue",
+      "repoUrl": "https://github.com/figm/original",
+      "status": "ACTIVE",
+      "id": "proj_1786623309385_qho05",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:15:09.385Z"
+    },
+    {
+      "userId": "usr_test_stats_1786623309396_pjmg",
+      "name": "Stats App 1",
+      "description": "Test stats",
+      "framework": "React",
+      "repoUrl": "https://github.com/figm/stats1",
+      "status": "ACTIVE",
+      "id": "proj_1786623309396_zohtg",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:15:09.396Z"
+    },
+    {
+      "userId": "usr_1786623310306_1j3ym",
+      "name": "Storage Provider Project",
+      "description": "Testing JsonStorageProvider",
+      "framework": "Next.js",
+      "repoUrl": "https://github.com/figm/provider-test",
+      "status": "ACTIVE",
+      "id": "proj_1786623310310_huzcn",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:15:10.310Z"
+    },
+    {
+      "userId": "usr_delegation_1786623310315_pvwj",
+      "name": "Delegation Test Project",
+      "description": "Verifying RepositoryFactory abstraction",
+      "framework": "React",
+      "repoUrl": "https://github.com/figm/delegation-test",
+      "status": "ACTIVE",
+      "id": "proj_1786623310315_lq01j",
+      "qualityScore": 100,
+      "totalScans": 0,
+      "createdAt": "2026-08-13T12:15:10.315Z"
     }
   ],
   "scanRecords": [
@@ -17875,6 +18126,80 @@
       ],
       "id": "scan_1786621870793_pasa0",
       "createdAt": "2026-08-13T11:51:10.793Z"
+    },
+    {
+      "userId": "usr_dashboard_seed_1786623295024",
+      "fileName": "SeedComponent.tsx",
+      "framework": "REACT_JSX",
+      "qualityScore": 82,
+      "scanTimeMs": 12.5,
+      "memoryUsageMb": 2.4,
+      "ruleCount": 3,
+      "aiFixCount": 1,
+      "diagnostics": [],
+      "isFavorite": false,
+      "id": "scan_1786623295024_h1nay",
+      "createdAt": "2026-08-13T12:14:55.024Z"
+    },
+    {
+      "userId": "usr_test_scan_1786623309595_4t3r",
+      "fileName": "PaymentGateway.tsx",
+      "framework": "React",
+      "repositoryUrl": "https://github.com/figm/payment-gateway",
+      "scanTimeMs": 14.8,
+      "memoryUsageMb": 2.1,
+      "qualityScore": 92,
+      "ruleCount": 2,
+      "aiFixCount": 2,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-PERF-01",
+          "ruleName": "Unbound Inline Event Handlers",
+          "severity": "HIGH",
+          "domain": "PERFORMANCE",
+          "offendingCodeSnippet": "<button onClick={() => handleClick()} />",
+          "remediation": "Extract event handler method."
+        }
+      ],
+      "isFavorite": false,
+      "id": "scan_1786623309599_upe6k",
+      "createdAt": "2026-08-13T12:15:09.599Z"
+    },
+    {
+      "userId": "usr_test_fav_1786623309603_rfeq",
+      "fileName": "PaymentGateway.tsx",
+      "framework": "React",
+      "scanTimeMs": 12,
+      "memoryUsageMb": 1.8,
+      "qualityScore": 90,
+      "ruleCount": 1,
+      "aiFixCount": 1,
+      "diagnostics": [],
+      "isFavorite": true,
+      "id": "scan_1786623309603_relkb",
+      "createdAt": "2026-08-13T12:15:09.603Z"
+    },
+    {
+      "userId": "usr_test_exp_1786623309611_yavi",
+      "fileName": "ExportTarget.tsx",
+      "framework": "React",
+      "scanTimeMs": 10,
+      "memoryUsageMb": 1.5,
+      "qualityScore": 88,
+      "ruleCount": 1,
+      "aiFixCount": 1,
+      "diagnostics": [
+        {
+          "ruleId": "FIGM-A11Y-01",
+          "ruleName": "Missing Alt Attribute",
+          "severity": "HIGH",
+          "domain": "ACCESSIBILITY",
+          "offendingCodeSnippet": "<img src=\"logo.png\" />",
+          "remediation": "Add descriptive alt property."
+        }
+      ],
+      "id": "scan_1786623309611_tyiqa",
+      "createdAt": "2026-08-13T12:15:09.611Z"
     }
   ],
   "notifications": [
@@ -19227,6 +19552,33 @@
       "id": "notif_1786621871263_3yk40",
       "read": true,
       "createdAt": "2026-08-13T11:51:11.263Z"
+    },
+    {
+      "userId": "usr_notif_owner_1786623278104",
+      "type": "SCAN_SUCCESS",
+      "title": "Private Notification",
+      "message": "Should only be markable-as-read by its owner",
+      "id": "notif_1786623278104_q364l",
+      "read": true,
+      "createdAt": "2026-08-13T12:14:38.104Z"
+    },
+    {
+      "userId": "usr_notif_1786623310053_6g7v",
+      "type": "SCAN_SUCCESS",
+      "title": "Scan Complete",
+      "message": "Your project scan finished with 0 critical defects.",
+      "id": "notif_1786623310057_p2scw",
+      "read": true,
+      "createdAt": "2026-08-13T12:15:10.057Z"
+    },
+    {
+      "userId": "usr_notif_1786623310053_6g7v",
+      "type": "SECURITY_ALERT",
+      "title": "Security Alert",
+      "message": "Unused state variable detected in main panel.",
+      "id": "notif_1786623310060_08uo9",
+      "read": true,
+      "createdAt": "2026-08-13T12:15:10.060Z"
     }
   ],
   "settings": [
@@ -19808,6 +20160,14 @@
     },
     {
       "userId": "usr_settings_1786621871273_517b",
+      "theme": "light",
+      "autoSave": true,
+      "autoScan": false,
+      "aiModel": "claude-3.5-sonnet",
+      "exportFormat": "PDF"
+    },
+    {
+      "userId": "usr_settings_1786623310070_wdy4",
       "theme": "light",
       "autoSave": true,
       "autoScan": false,
@@ -21239,6 +21599,192 @@
       "details": "scan",
       "id": "log_1786621867074_n0pix",
       "createdAt": "2026-08-13T11:51:07.074Z"
+    },
+    {
+      "action": "REGISTER",
+      "userId": "usr_1786623278032_93opn",
+      "email": "admin_escalation_1786623278020@figm.io",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "unknown",
+      "status": "SUCCESS",
+      "id": "log_1786623278039_g45th",
+      "createdAt": "2026-08-13T12:14:38.039Z"
+    },
+    {
+      "action": "REGISTER",
+      "userId": "usr_1786623278051_93zvi",
+      "email": "auditor_signup_1786623278043@figm.io",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "unknown",
+      "status": "SUCCESS",
+      "id": "log_1786623278057_t889w",
+      "createdAt": "2026-08-13T12:14:38.057Z"
+    },
+    {
+      "action": "REGISTER",
+      "userId": "usr_1786623278068_hrbz5",
+      "email": "prod_reset_1786623278061@figm.io",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "unknown",
+      "status": "SUCCESS",
+      "id": "log_1786623278074_4j6p5",
+      "createdAt": "2026-08-13T12:14:38.074Z"
+    },
+    {
+      "action": "FORGOT_PASSWORD",
+      "userId": "usr_1786623278068_hrbz5",
+      "email": "prod_reset_1786623278061@figm.io",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "unknown",
+      "status": "SUCCESS",
+      "id": "log_1786623278081_mc9v7",
+      "createdAt": "2026-08-13T12:14:38.081Z"
+    },
+    {
+      "action": "LOGIN",
+      "email": "real.person.1786623278111@example.com",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "test",
+      "status": "SUCCESS",
+      "id": "log_1786623278111_g4n8o",
+      "createdAt": "2026-08-13T12:14:38.111Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278117_74z87",
+      "createdAt": "2026-08-13T12:14:38.117Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278120_dgs12",
+      "createdAt": "2026-08-13T12:14:38.120Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278123_ypf8u",
+      "createdAt": "2026-08-13T12:14:38.123Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278127_dydch",
+      "createdAt": "2026-08-13T12:14:38.127Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278130_xst8x",
+      "createdAt": "2026-08-13T12:14:38.130Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278134_junbn",
+      "createdAt": "2026-08-13T12:14:38.134Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278137_29twa",
+      "createdAt": "2026-08-13T12:14:38.137Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278141_2cxn2",
+      "createdAt": "2026-08-13T12:14:38.141Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278144_8sv90",
+      "createdAt": "2026-08-13T12:14:38.144Z"
+    },
+    {
+      "action": "RESET_PASSWORD",
+      "userId": "usr_pw_ratelimit_1786623278116",
+      "email": "usr_pw_ratelimit_1786623278116@figm.io",
+      "ipAddress": "10.20.149.68",
+      "userAgent": "system",
+      "status": "FAILURE",
+      "details": "CHANGE_PASSWORD via /api/profile: User not found",
+      "id": "log_1786623278147_y5o6f",
+      "createdAt": "2026-08-13T12:14:38.147Z"
+    },
+    {
+      "action": "LOGIN",
+      "email": "audit_1786623279121@figm.io",
+      "ipAddress": "192.168.1.50",
+      "userAgent": "TestBrowser/1.0",
+      "status": "SUCCESS",
+      "id": "log_1786623279121_65bpr",
+      "createdAt": "2026-08-13T12:14:39.121Z"
+    },
+    {
+      "action": "SCAN_RUN",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "system",
+      "status": "SUCCESS",
+      "details": "scan",
+      "id": "log_1786623305889_9srt0",
+      "createdAt": "2026-08-13T12:15:05.889Z"
+    },
+    {
+      "action": "SCAN_RUN",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "system",
+      "status": "SUCCESS",
+      "details": "scan",
+      "id": "log_1786623305895_riypr",
+      "createdAt": "2026-08-13T12:15:05.895Z"
     }
   ]
 }
