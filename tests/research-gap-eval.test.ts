@@ -1,32 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { StatisticalEngine, REPOSITORY_DATASET } from '../src/eval/repo-evaluator.js';
 import { PrecisionRecallEngine, EMPIRICAL_EXPERT_GROUND_TRUTH } from '../src/eval/precision-recall-engine.js';
 import { CoverageBenchmarkEngine, TOOL_COMPARISON_MATRIX, RULE_COVERAGE_MATRIX } from '../src/eval/tool-benchmark.js';
 import { AIPatchEvaluator, RULE_CONFIDENCE_DATABASE } from '../src/eval/ai-patch-evaluator.js';
 import { UserStudyEvaluator } from '../src/eval/user-study-evaluator.js';
 import { ThesisGapExporter } from '../src/eval/thesis-gap-exporter.js';
 
+// GAP 1 & GAP 7 previously asserted against src/eval/repo-evaluator.ts's REPOSITORY_DATASET,
+// a hardcoded set of 30 fabricated repository records (invented GitHub repo names/URLs and
+// LOC/violation/score figures that were never produced by cloning or scanning anything). That
+// dataset and its generator have been deleted; this suite no longer tests fabricated data.
+
 test('Research Gap Evaluation Suite & Dissertation Artifact Validation', async (t) => {
-  await t.test('GAP 1 & GAP 7: 30 Repository Evaluation Dataset & Statistical Metrics', () => {
-    assert.equal(REPOSITORY_DATASET.length, 30, 'Dataset must contain 30 production repositories');
-
-    const nextRepos = REPOSITORY_DATASET.filter((r) => r.framework === 'Next.js');
-    const reactRepos = REPOSITORY_DATASET.filter((r) => r.framework === 'React');
-    const angularRepos = REPOSITORY_DATASET.filter((r) => r.framework === 'Angular');
-
-    assert.equal(nextRepos.length, 10);
-    assert.equal(reactRepos.length, 10);
-    assert.equal(angularRepos.length, 10);
-
-    const stats = StatisticalEngine.computeSummary();
-    assert.equal(stats.sampleSize, 30);
-    assert.ok(stats.locMean > 10000);
-    assert.ok(stats.scanTimeMeanSec > 0);
-    assert.ok(stats.ci95Lower < stats.violationsMean);
-    assert.ok(stats.ci95Upper > stats.violationsMean);
-  });
-
   await t.test('GAP 2: Precision, Recall, F1 & Confusion Matrix', () => {
     const accuracy = PrecisionRecallEngine.calculateMetrics(EMPIRICAL_EXPERT_GROUND_TRUTH);
 

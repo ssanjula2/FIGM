@@ -1,7 +1,7 @@
 {
   "meta": {
     "benchmarkSuite": "FIGM Empirical Evaluation Benchmark Testbed v1.0",
-    "totalExpectedViolations": 18,
+    "totalExpectedViolations": 19,
     "frameworks": ["REACT_JSX", "VUE_SFC", "ANGULAR_TEMPLATE", "GENERIC_ESTREE"]
   },
   "groundTruthViolations": [

@@ -22,8 +22,8 @@ export default function ResearchOverview() {
   const us = data?.userStudy;
 
   const phase05Desc = bm
-    ? `Evaluated ${evalDataset?.sizeTarget ?? '30 repos'} against ground truth (P=${(bm.precision * 100).toFixed(1)}%, R=${(bm.recall * 100).toFixed(1)}%, F1=${(bm.f1Score * 100).toFixed(1)}%); human usability study N=${us?.targetParticipants ?? 85} — ${us?.collectionStatus === 'COMPLETE' ? 'data collection complete' : 'collection pending'}.`
-    : 'Evaluated 30 repositories against ground truth; human usability study N=85 — collection pending.';
+    ? `Evaluated against ${evalDataset?.sizeTarget ?? 'the hand-labelled ground-truth fixture set'} (P=${(bm.precision * 100).toFixed(1)}%, R=${(bm.recall * 100).toFixed(1)}%, F1=${(bm.f1Score * 100).toFixed(1)}%); human usability study N=${us?.targetParticipants ?? 85} — ${us?.collectionStatus === 'COMPLETE' ? 'data collection complete' : 'collection pending'}.`
+    : 'Evaluated against the hand-labelled ground-truth fixture set; human usability study N=85 — collection pending.';
 
   const dsrmPhases = DSRM_PHASES.map((p) =>
     p.num === '05' ? { ...p, desc: phase05Desc } : p

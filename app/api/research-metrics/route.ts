@@ -248,10 +248,10 @@ export async function GET() {
         supportedFrameworks: ['React (JSX/TSX)', 'Next.js App Router', 'Angular Templates', 'Vue 3 SFCs (.vue)'],
         aiRemediationModel: 'Gemini 2.5 Flash',
         evaluationDataset: {
-          description: '30 public open-source SPA repositories mined from GitHub',
-          scope: 'React, Next.js, Angular',
-          sizeTarget: '20–30 repositories (755k LOC)',
-          groundTruthMethod: 'Manual expert architectural review cross-referenced with automated scan output',
+          description: '4 hand-authored, framework-tagged fixture files (React JSX, Vue SFC, Angular template, generic ESTree/vanilla JS)',
+          scope: 'React, Vue, Angular, and framework-agnostic (vanilla JS) SPA code patterns — benchmarks/testbed',
+          sizeTarget: '147 LOC across 4 files, scored against 19 hand-labelled ground-truth violations (benchmarks/ground-truth.json)',
+          groundTruthMethod: 'Manually authored and hand-labelled violations, scored automatically by src/eval/evaluation-runner.ts on every `npm run research:evaluate` run',
         },
       },
 

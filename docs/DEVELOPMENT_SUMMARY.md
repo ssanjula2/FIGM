@@ -114,11 +114,13 @@ The Rule Book is categorized into **Universal Common Rules** alongside framework
 
 ---
 
-## 5. Empirical Research & Dissertation Validation (All 10 Gaps Closed)
+## 5. Empirical Research & Dissertation Validation
+
+> **Note**: GAP 1 below was previously marked "100% Completed" on the strength of a fabricated 30-repository dataset. That dataset has since been deleted (see `docs/dissertation/chapter6_conclusion.md` for the retraction) and GAP 1 is now honestly reported as not performed. Several of the numeric figures in GAPs 2, 5, 7, and 8 below have not been independently re-verified against current live output as part of this pass and should be checked against `/api/research-metrics` and `benchmarks/eval-summary.json` before being cited.
 
 | Research Gap | Status | Key Deliverables & Output Metrics |
 | :--- | :--- | :--- |
-| **GAP 1: 30-Repository Evaluation** | ✅ 100% Completed | Evaluated 30 public production repos (10 Next.js, 10 React, 10 Angular) in [repo-evaluator.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/eval/repo-evaluator.ts). |
+| **GAP 1: Large-Scale Repository Evaluation** | ❌ Not performed — prior claim retracted | The previously claimed "30 public production repos" dataset (`src/eval/repo-evaluator.ts`) was a hardcoded array of fabricated repository records (invented repo names/URLs, e.g. `exchangerates/dashboard`, which does not exist); it has been deleted. No repositories were ever cloned or scanned. Remains future work — see `docs/dissertation/chapter6_conclusion.md` §6.4. |
 | **GAP 2: Precision, Recall & F1** | ✅ 100% Completed | Tested against expert manual review: **Precision = 92.45%**, **Recall = 91.42%**, **F1 = 91.93%**, **Accuracy = 93.56%** in [precision-recall-engine.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/eval/precision-recall-engine.ts). |
 | **GAP 3: Guideline Coverage** | ✅ 100% Completed | 23 total rules categorized into universal common & framework-specific rules in [tool-benchmark.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/eval/tool-benchmark.ts). |
 | **GAP 4: Enhanced Runtime Profiling** | ✅ 100% Completed | Sandboxed runtime profiling measuring execution latency (ms) and peak heap memory in [dynamic-profiler.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/engine/dynamic-profiler.ts). |
@@ -134,7 +136,7 @@ The Rule Book is categorized into **Universal Common Rules** alongside framework
 ## 6. Exported Dissertation Artifacts
 
 The thesis exporter automatically generates Markdown and LaTeX dissertation chapters:
-- [chapter4_large_scale_evaluation.md](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/docs/dissertation/chapter4_large_scale_evaluation.md)
+- ~~chapter4_large_scale_evaluation.md~~ (removed — generated from the fabricated 30-repository dataset, which has been deleted; no replacement large-scale evaluation currently exists)
 - [chapter5_empirical_validation_and_benchmarks.md](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/docs/dissertation/chapter5_empirical_validation_and_benchmarks.md)
 - [chapter6_user_study_and_validity.md](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/docs/dissertation/chapter6_user_study_and_validity.md)
 

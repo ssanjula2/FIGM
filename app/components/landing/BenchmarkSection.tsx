@@ -69,7 +69,7 @@ export default function BenchmarkSection() {
           Real-World Benchmark Performance
         </h2>
         <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '720px', margin: '0 auto 48px auto', lineHeight: 1.6 }}>
-          Evaluated against 30 open-source GitHub repositories (755k+ LOC) and an annotated ground-truth benchmark suite.
+          Evaluated against a hand-labelled, multi-framework ground-truth benchmark suite (React, Vue, Angular, vanilla JS).
           Metrics are computed live from <code style={{ color: '#38bdf8', fontSize: '13px' }}>benchmarks/eval-summary.json</code>.
         </p>
 

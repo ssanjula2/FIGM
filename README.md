@@ -18,7 +18,7 @@
 - **AI Remediation Pipeline**: Contextual patch generation leveraging Google Gemini models.
 - **Multi-Format Exporter**: Export inspection results to PDF, HTML, JSON, CSV, and Markdown with embedded ISO/IEC 25010 & WCAG 2.2 Level AA citations.
 - **Role-Based Access Control (RBAC)**: Enforces `ADMIN`, `AUDITOR`, and `DEVELOPER` permissions with JWT access & refresh tokens.
-- **Empirical Research Suite**: Automated benchmark evaluator testing 30 open-source repositories with statistical metric collection (Precision, Recall, F1, Cronbach's Alpha).
+- **Empirical Research Suite**: Automated benchmark evaluator (`npm run research:evaluate`) scoring the scanner against a hand-labelled, multi-framework ground-truth fixture set (`benchmarks/testbed` + `benchmarks/ground-truth.json`) with statistical metric collection (Precision, Recall, F1).
 
 ---
 

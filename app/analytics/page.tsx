@@ -218,8 +218,8 @@ export default function AnalyticsPage() {
             <p style={{ color: '#94a3b8', fontSize: '13px', margin: '4px 0 0 0', maxWidth: '640px' }}>
               The Precision/Recall/F1 figures above are computed by dynamically re-running the scanner against a hand-authored,
               manually-labeled ground-truth fixture set (<code>benchmarks/ground-truth.json</code> + <code>benchmarks/testbed/*</code>)
-              spanning React, Vue, Angular, and Vanilla JS fixtures — not against a live scan of the named open-source repositories
-              below, which remain a separate, offline-reproducible architecture benchmark (fixed dataset, not re-scanned on demand).
+              spanning React, Vue, Angular, and Vanilla JS fixtures. No multi-repository or GitHub-scale dataset is scanned —
+              a prior fabricated 30-repository dataset (<code>src/eval/repo-evaluator.ts</code>) has been removed.
             </p>
           </div>
           <div style={{ display: 'flex', gap: '6px' }}>

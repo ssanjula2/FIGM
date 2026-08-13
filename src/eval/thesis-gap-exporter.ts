@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { StatisticalEngine, REPOSITORY_DATASET } from './repo-evaluator.js';
 import { PrecisionRecallEngine, EMPIRICAL_EXPERT_GROUND_TRUTH } from './precision-recall-engine.js';
 import { CoverageBenchmarkEngine, TOOL_COMPARISON_MATRIX, RULE_COVERAGE_MATRIX } from './tool-benchmark.js';
 import { AIPatchEvaluator, RULE_CONFIDENCE_DATABASE } from './ai-patch-evaluator.js';
@@ -13,34 +12,18 @@ export class ThesisGapExporter {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    // --- Export Chapter 4: Framework Architecture Benchmark Evaluation & Statistics ---
-    const stats = StatisticalEngine.computeSummary();
-    const ch4Content = `# Chapter 4: Framework Architecture Benchmark Vector Evaluation & Statistical Analysis
-
-## 4.1 Benchmark Evaluation Dataset (N = 30 Benchmark Vectors)
-
-The Framework-Independent Guideline Model (FIGM) Code Inspector was evaluated across **30 representative framework architecture benchmark items** spanning Next.js, React, and Angular structural patterns.
-
-> **Academic Disclaimer**: The N=30 dataset represents pre-compiled framework architecture benchmark vectors (\`src/eval/repo-evaluator.ts\`) designed to ensure offline reproducibility without dynamic external network dependencies or live git checkouts.
-
-| ID | Repository Name | Framework | LOC | Files | Scan Time (s) | Violations | Density (/1k LOC) | Score |
-|---|---|---|---|---|---|---|---|---|
-${REPOSITORY_DATASET.map(r => `| ${r.id} | [${r.name}](${r.url}) | ${r.framework} | ${r.loc.toLocaleString()} | ${r.filesAnalyzed} | ${r.scanDurationSec}s | ${r.totalViolations} | ${r.violationDensityPer1kLOC} | ${r.overallScore}/100 |`).join('\n')}
-
----
-
-## 4.2 Statistical Distribution & Descriptive Metrics
-
-- **Total Repositories Analyzed**: ${stats.sampleSize}
-- **Mean Lines of Code (LOC)**: ${stats.locMean.toLocaleString()} (StdDev: ${stats.locStdDev.toLocaleString()})
-- **Median LOC**: ${stats.locMedian.toLocaleString()}
-- **Mean Scan Execution Duration**: ${stats.scanTimeMeanSec} seconds (StdDev: ${stats.scanTimeStdDevSec}s)
-- **Mean Violations Detected**: ${stats.violationsMean} (StdDev: ${stats.violationsStdDev})
-- **Mean Violation Density**: ${stats.violationDensityMean} defects per 1,000 LOC
-- **95% Confidence Interval**: [${stats.ci95Lower}, ${stats.ci95Upper}] violations per project
-`;
-
-    fs.writeFileSync(path.join(outputDir, 'chapter4_large_scale_evaluation.md'), ch4Content, 'utf-8');
+    // NOTE: This exporter previously generated a "Chapter 4" document from
+    // src/eval/repo-evaluator.ts's REPOSITORY_DATASET — 30 hand-typed records with invented
+    // GitHub repo names/URLs (several do not exist, e.g. "exchangerates/dashboard",
+    // "saasify/react-dash") and fabricated LOC/violation/score figures. No repositories were
+    // ever cloned or scanned to produce those numbers, so the dataset and this generator block
+    // were deleted rather than relabeled. The only real evaluation is the fixture-based
+    // ground-truth benchmark below (Chapter 5), driven by benchmarks/ground-truth.json +
+    // benchmarks/testbed.
+    const staleCh4Path = path.join(outputDir, 'chapter4_large_scale_evaluation.md');
+    if (fs.existsSync(staleCh4Path)) {
+      fs.unlinkSync(staleCh4Path);
+    }
 
     // --- Export Chapter 5: Empirical Validation, Precision/Recall & Benchmarking ---
     const accuracy = PrecisionRecallEngine.calculateMetrics(EMPIRICAL_EXPERT_GROUND_TRUTH);
