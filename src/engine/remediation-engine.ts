@@ -105,9 +105,16 @@ export class RemediationEngine {
         if (code.includes(snippet)) {
           let fixedSnippet = snippet.replace(/<div\b/, '<div role="button" tabIndex={0}');
           if (!fixedSnippet.includes('onKeyDown')) {
+            // The captured group ($1) is the onClick attribute's VALUE expression, which is
+            // routinely an arrow function (e.g. `() => handleClick(item)`) rather than a bare
+            // function reference. Calling it as `$1()` without wrapping parens is a real,
+            // live-reproduced bug: due to operator precedence, `() => handleClick(item)()`
+            // parses as an arrow function whose BODY is `handleClick(item)()` — it defines a
+            // function and never calls it, a silent no-op. Wrapping in parens, `($1)()`, calls
+            // the value correctly whether it's an arrow function or a bare reference.
             fixedSnippet = fixedSnippet.replace(
               /onClick=\{(.*?)\}/,
-              'onClick={$1} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { $1(); } }}'
+              'onClick={$1} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { ($1)(); } }}'
             );
           }
           remediatedCode = code.replace(snippet, fixedSnippet);
@@ -115,6 +122,26 @@ export class RemediationEngine {
         } else {
           remediatedCode = code.replace(/onClick=/g, 'role="button" tabIndex={0} onKeyDown={(e) => e.key === "Enter" && e.currentTarget.click()} onClick=');
           appliedFixDescription = 'Injected role="button", tabIndex={0}, and keyboard onKeyDown listener.';
+        }
+        break;
+      }
+
+      case 'FIGM-REACT-02': {
+        // Replace an array-index (or loop-index-variable) key with a stable identifier derived
+        // from the .map() callback's item parameter — the actual fix FIGM-REACT-02 asks for.
+        // Previously this rule had NO case here at all and silently fell through to the generic
+        // "universal fallback" below, which pattern-matches the code's superficial shape rather
+        // than the rule being fixed — live-reproduced misfiring the A11Y "clickable element"
+        // template on a key-prop violation because the snippet also happened to contain onClick.
+        if (code.includes(snippet)) {
+          const mapParamMatch = snippet.match(/\.map\(\s*\(?\s*(\w+)/);
+          const itemVar = mapParamMatch ? mapParamMatch[1] : 'item';
+          const fixedSnippet = snippet.replace(/key=\{\s*(index|i|idx)\s*\}/, `key={${itemVar}.id}`);
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = `Replaced array-index key with a stable identifier (${itemVar}.id).`;
+        } else {
+          remediatedCode = code.replace(/key=\{\s*(index|i|idx)\s*\}/g, 'key={item.id}');
+          appliedFixDescription = 'Replaced array-index key props with a stable identifier placeholder (item.id) — adjust to match your actual data shape.';
         }
         break;
       }
@@ -374,13 +401,25 @@ export class RemediationEngine {
           // 1. Universal A11Y: Clickable non-button element
           if (/<(div|span|p|a|li|section)\b/i.test(rawSnippet) && (rawSnippet.includes('onClick=') || rawSnippet.includes('(click)=') || rawSnippet.includes('@click='))) {
             if (rawSnippet.includes('onClick=')) {
+              // Wrap the captured handler value in parens before invoking it — see the identical,
+              // live-reproduced fix in the FIGM-A11Y-01 case above for why `$1()` alone is broken
+              // whenever the onClick value is an arrow function rather than a bare reference.
               const fixedSnippet = rawSnippet.replace(/<(div|span|p|a|li|section)\b/i, '<$1 role="button" tabIndex={0}')
-                .replace(/onClick=\{(.*?)\}/, 'onClick={$1} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { $1(); } }}');
+                .replace(/onClick=\{(.*?)\}/, 'onClick={$1} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { ($1)(); } }}');
               remediatedCode = code.replace(rawSnippet, fixedSnippet);
               appliedFixDescription = 'Annotated non-interactive element with ARIA role="button", tabIndex={0}, and keyboard listener.';
             } else if (rawSnippet.includes('(click)=')) {
-              const fixedSnippet = rawSnippet.replace(/<(div|span|p|a|li|section)\b/i, '<$1 role="button" tabindex="0" (keydown.enter)="$2"')
-                .replace(/\(click\)="([^"]+)"/, '(click)="$1" (keydown.enter)="$1()"');
+              // Two bugs fixed here: the tag-annotation replace referenced a nonexistent second
+              // capture group ($2 — the regex only has one), silently injecting an empty
+              // `(keydown.enter)=""`; and the handler was invoked twice ("$1()" appended to a
+              // captured value that, per Angular template convention, already ends in "()", e.g.
+              // `(click)="doSomething()"` -> "doSomething()()" — calling the return value).
+              const clickMatch = rawSnippet.match(/\(click\)="([^"]+)"/);
+              const handlerExpr = clickMatch ? clickMatch[1] : '';
+              let fixedSnippet = rawSnippet.replace(/<(div|span|p|a|li|section)\b/i, '<$1 role="button" tabindex="0"');
+              if (handlerExpr) {
+                fixedSnippet = fixedSnippet.replace(/\(click\)="([^"]+)"/, `(click)="${handlerExpr}" (keydown.enter)="${handlerExpr}"`);
+              }
               remediatedCode = code.replace(rawSnippet, fixedSnippet);
               appliedFixDescription = 'Injected role="button", tabindex="0", and (keydown.enter) handler into Angular element.';
             } else {

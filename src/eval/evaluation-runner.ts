@@ -327,10 +327,22 @@ ${evalResults.frameworkMetrics
         recallPct: `${(evalResults.overall.recall * 100).toFixed(1)}%`,
         f1ScorePct: `${(evalResults.overall.f1Score * 100).toFixed(1)}%`
       },
+      // This artifact covers ONLY the automated ground-truth benchmark evaluation below — it
+      // must never reference a repository-scale dataset or a human/user study, because neither
+      // was actually used to compute overall.truePositives/falsePositives/falseNegatives above.
+      // A prior version of this block hardcoded "30 representative open-source framework
+      // architecture benchmark items" and "85 simulated developer profiles" as static string
+      // literals with no connection to any real computation — presenting synthetic/nonexistent
+      // datasets as if they contributed to this evaluation's real numbers. Per this codebase's
+      // own research-integrity requirement (never combine automated benchmark metrics with
+      // human-study metrics, never present synthetic data as empirical), those fields were
+      // removed rather than "corrected" to a different number, since no repository-scale or
+      // human-study evaluation backs this specific artifact at all.
       datasetClassification: {
-        groundTruthTestbed: '4 framework fixture files (147 LOC total)',
-        repositoryDataset: '30 representative open-source framework architecture benchmark items',
-        userStudy: 'Representative evaluation survey scoring vector model (85 simulated developer profiles)'
+        metricType: 'AUTOMATED_BENCHMARK_METRICS_ONLY',
+        groundTruthTestbed: `${evalResults.performanceMetrics.totalLinesOfCode} LOC across the fixture files in benchmarks/testbed, scored against benchmarks/ground-truth.json`,
+        humanStudyIncluded: false,
+        humanStudyStatusSource: 'research/analysis/usability-results.json (see that file for real participant count / collection status — never this artifact)'
       },
       performance: {
         totalScanDurationMs: parseFloat(evalResults.performanceMetrics.totalScanDurationMs.toFixed(2)),

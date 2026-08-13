@@ -120,6 +120,86 @@ function render(items) {
     assert.equal(validation.isValid, false);
     assert.equal(validation.status, 'PATCH_REJECTED');
   });
+
+  await t.test('REGRESSION (found via live production testing): FIGM-REACT-02 gets its own fix, not the A11Y "clickable element" fallback', () => {
+    // FIGM-REACT-02 previously had no dedicated case in applyQuickFix's switch, so it silently
+    // fell through to the generic "universal pattern" fallback, which pattern-matches the
+    // snippet's superficial shape rather than the actual rule. Because this snippet also
+    // contains onClick=, the fallback misfired the A11Y "clickable non-interactive element"
+    // template (adding role="button"/tabIndex/onKeyDown) and left the real key={index} violation
+    // completely untouched — reproduced live against the production deployment before being
+    // fixed here.
+    const code = `items.map((item, index) => <li key={index} onClick={() => handleClick(item)}>{item.name}</li>)`;
+    const defect: DiagnosticReport = {
+      ruleId: 'FIGM-REACT-02',
+      ruleName: 'Stable List Key Prop Assignment',
+      message: 'Array index assigned as list key prop causing component re-ordering and state bugs.',
+      domain: 'PERFORMANCE',
+      concern: 'LAYOUT_INSTABILITY',
+      severity: 'HIGH',
+      filePath: 'List.jsx',
+      location: { start: { line: 1, column: 31 }, end: { line: 1, column: 94 } },
+      offendingCodeSnippet: code,
+      remediation: 'Assign a unique stable identifier (item.id) to list key props instead of array index.',
+      standardReference: 'ISO 25010'
+    };
+
+    const result = RemediationEngine.applyQuickFix(code, defect);
+    assert.ok(!result.remediatedCode.includes('key={index}'), 'the array-index key must actually be replaced');
+    assert.ok(result.remediatedCode.includes('key={item.id}'), 'replaced with a stable identifier derived from the .map() item parameter');
+    assert.ok(!result.remediatedCode.includes('role="button"'), 'must not apply the unrelated A11Y "clickable element" template to a key-prop violation');
+
+    const rescan = RuleExecutionEngineCheck(result.remediatedCode);
+    assert.ok(!rescan.some((d: DiagnosticReport) => d.ruleId === 'FIGM-REACT-02'), 'the original FIGM-REACT-02 violation must genuinely disappear on re-scan');
+  });
+
+  await t.test('REGRESSION (found via live production testing): FIGM-A11Y-01 keyboard handler correctly invokes an arrow-function onClick value', () => {
+    // The generated onKeyDown handler captured the onClick attribute's value ($1) and called it
+    // as `$1()` with no wrapping parens. When the onClick value is an arrow function (the
+    // overwhelmingly common real-world case, e.g. `onClick={() => handleClick(item)}`), operator
+    // precedence means `() => handleClick(item)()` parses as an arrow function whose BODY is
+    // `handleClick(item)()` — defining a function and never calling it, a silent no-op reproduced
+    // live against the production deployment. Wrapping in parens, `($1)()`, calls the value
+    // correctly whether it is an arrow function or a bare function reference.
+    const code = `<div onClick={() => handleClick(item)}>Click area</div>`;
+    const defect: DiagnosticReport = {
+      ruleId: 'FIGM-A11Y-01',
+      ruleName: 'Keyboard Event Parity on Pointer Handlers',
+      message: 'Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.',
+      domain: 'ACCESSIBILITY',
+      concern: 'KEYBOARD_ACCESSIBILITY',
+      severity: 'CRITICAL',
+      filePath: 'Widget.tsx',
+      location: { start: { line: 1, column: 0 }, end: { line: 1, column: 57 } },
+      offendingCodeSnippet: code,
+      remediation: 'Add onKeyDown handler and tabIndex.',
+      standardReference: 'WCAG 2.2'
+    };
+
+    const result = RemediationEngine.applyQuickFix(code, defect);
+    const marker = 'onKeyDown={';
+    const markerIdx = result.remediatedCode.indexOf(marker);
+    assert.ok(markerIdx >= 0, 'onKeyDown handler must be present in the remediated code');
+    // Brace-counting extraction (not a regex) so nested {} inside the handler body don't
+    // truncate the match early — this is JSX attribute syntax, not a flat string.
+    let depth = 1;
+    let i = markerIdx + marker.length;
+    while (depth > 0 && i < result.remediatedCode.length) {
+      if (result.remediatedCode[i] === '{') depth++;
+      else if (result.remediatedCode[i] === '}') depth--;
+      i++;
+    }
+    const handlerBody = result.remediatedCode.slice(markerIdx + marker.length, i - 1);
+
+    // Real syntax + semantic check: actually execute the generated handler and confirm it
+    // invokes handleClick with the original item, rather than just eyeballing the string.
+    let calledWith: unknown = null;
+    const handleClick = (x: unknown) => { calledWith = x; };
+    const item = { id: 42 };
+    const fn = new Function('handleClick', 'item', 'e', `return (${handlerBody})(e);`);
+    fn(handleClick, item, { key: 'Enter' });
+    assert.equal(calledWith, item, 'pressing Enter must actually call handleClick(item), not silently no-op');
+  });
 });
 
 function RuleExecutionEngineCheck(code: string) {
