@@ -28,12 +28,17 @@ export class RemediationEngine {
     switch (defect.ruleId) {
       case 'FIGM-PERF-01': {
         // Hoist invariant object literal outside loop scope
-        if (code.includes(snippet)) {
+        const originalDeclMatch = snippet.match(/^const\s+(\w+)\s*=\s*([\s\S]*?);?\s*$/);
+        if (code.includes(snippet) && originalDeclMatch) {
+          const originalVarName = originalDeclMatch[1];
+          const rawObj = originalDeclMatch[2].trim();
           const hoistedVarName = `HOISTED_INVARIANT_${Math.floor(Math.random() * 1000)}`;
-          const rawObj = snippet.replace(/^const\s+\w+\s*=\s*/, '').replace(/;\s*$/, '').trim();
           const hoistedDecl = `// [FIGM Quick-Fix]: Hoisted invariant object allocation outside loop scope\nconst ${hoistedVarName} = Object.freeze(${rawObj});\n\n`;
 
-          remediatedCode = hoistedDecl + code.replace(snippet, `const options = ${hoistedVarName};`);
+          // Preserve the ORIGINAL local variable name so every downstream reference to it inside the
+          // loop body still resolves — replacing it with a differently-named binding (as a previous
+          // version of this fix did) leaves dangling references to the now-undeclared original name.
+          remediatedCode = hoistedDecl + code.replace(snippet, `const ${originalVarName} = ${hoistedVarName};`);
           appliedFixDescription = 'Hoisted static object literal out of loop scope into a frozen top-level constant.';
         } else {
           remediatedCode = code.replace(
@@ -459,10 +464,30 @@ export class RemediationEngine {
     // Import RuleExecutionEngine dynamically to avoid circular dependencies
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { RuleExecutionEngine } = require('./rule-execution-engine.js');
+    const originalRes = RuleExecutionEngine.analyzeFile(defect.filePath || 'component.tsx', originalCode);
     const res = RuleExecutionEngine.analyzeFile(defect.filePath || 'component.tsx', remediatedCode);
 
     const hasSyntaxError = res.diagnostics.some((d: DiagnosticReport) => d.category === 'SYNTAX_ERROR');
     if (hasSyntaxError) {
+      return { isValid: false, status: 'PATCH_REJECTED', remainingDiagnostics: res.diagnostics };
+    }
+
+    // Reject patches that introduce NEW real TypeScript compile error CODES (e.g. a dangling reference
+    // to a variable the patch itself renamed away) that were not present in the original code. This is
+    // what actually catches "the rule stopped firing but the patch is broken" cases -- confirming the
+    // specific ruleId is gone is not sufficient on its own (found via live testing, see audit docs).
+    // Compared by diagnostic CODE (ruleId, e.g. "TYPE-TS-18004"), not exact message text: the same
+    // pre-existing, unrelated TS error (e.g. a JSX style-prop type mismatch, expected since no
+    // @types/react is loaded in the isolated checker) can get slightly reworded by an otherwise-benign
+    // patch -- e.g. Object.freeze() narrows an object literal's inferred type -- without being a new
+    // problem the patch introduced.
+    const originalTypeErrorCodes = new Set(
+      originalRes.diagnostics.filter((d: DiagnosticReport) => d.category === 'TYPE_COMPILE_ERROR').map((d: DiagnosticReport) => d.ruleId)
+    );
+    const newTypeErrors = res.diagnostics.filter(
+      (d: DiagnosticReport) => d.category === 'TYPE_COMPILE_ERROR' && !originalTypeErrorCodes.has(d.ruleId)
+    );
+    if (newTypeErrors.length > 0) {
       return { isValid: false, status: 'PATCH_REJECTED', remainingDiagnostics: res.diagnostics };
     }
 

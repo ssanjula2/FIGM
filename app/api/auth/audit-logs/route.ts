@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const logs = AuditLogger.getRecentLogs(100);
+  const logs = await AuditLogger.getRecentLogs(100);
   return NextResponse.json({
     logs,
     total: logs.length,

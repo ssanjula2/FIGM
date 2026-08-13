@@ -5,7 +5,7 @@ import { AuditLogger } from '../../../../src/auth/audit-logger';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   const auth = authenticateUser(request);
-  const project = ProjectRepository.getProjectById(params.id);
+  const project = await ProjectRepository.getProjectById(params.id);
   if (!project) {
     return NextResponse.json({ error: 'Project not found' }, { status: 404 });
   }
@@ -23,7 +23,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const existingProject = ProjectRepository.getProjectById(params.id);
+  const existingProject = await ProjectRepository.getProjectById(params.id);
   if (!existingProject) {
     return NextResponse.json({ error: 'Project not found' }, { status: 404 });
   }
@@ -34,7 +34,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
   try {
     const body = await request.json();
-    const updated = ProjectRepository.updateProject(params.id, body);
+    const updated = await ProjectRepository.updateProject(params.id, body);
     return NextResponse.json({ message: 'Project updated successfully', project: updated });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Failed to update project';
@@ -48,7 +48,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const existingProject = ProjectRepository.getProjectById(params.id);
+  const existingProject = await ProjectRepository.getProjectById(params.id);
   if (!existingProject) {
     return NextResponse.json({ error: 'Project not found' }, { status: 404 });
   }
@@ -57,8 +57,8 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     return NextResponse.json({ error: 'Forbidden: You do not own this project' }, { status: 403 });
   }
 
-  const success = ProjectRepository.deleteProject(params.id);
-  AuditLogger.logEvent('DELETE_PROJECT', {
+  const success = await ProjectRepository.deleteProject(params.id);
+  await AuditLogger.logEvent('DELETE_PROJECT', {
     userId: auth.user.userId,
     email: auth.user.email,
     details: `Deleted project: ${params.id}`,

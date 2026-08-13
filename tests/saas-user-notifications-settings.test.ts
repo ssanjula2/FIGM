@@ -11,30 +11,30 @@ describe('SaaS Production Features 5, 6, 7: User Profile, Settings & Notificatio
     RepositoryFactory.resetProvider();
     const userId = `usr_notif_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    NotificationRepository.createNotification(
+    await NotificationRepository.createNotification(
       userId,
       'SCAN_SUCCESS',
       'Scan Complete',
       'Your project scan finished with 0 critical defects.'
     );
 
-    NotificationRepository.createNotification(
+    await NotificationRepository.createNotification(
       userId,
       'SECURITY_ALERT',
       'Security Alert',
       'Unused state variable detected in main panel.'
     );
 
-    const res = NotificationRepository.getNotifications(userId);
+    const res = await NotificationRepository.getNotifications(userId);
     assert.ok(Array.isArray(res.notifications));
     assert.ok(res.unreadCount >= 0);
 
     if (res.notifications.length > 0) {
-      NotificationRepository.markAsRead(res.notifications[0].id);
+      await NotificationRepository.markAsRead(res.notifications[0].id);
     }
 
-    NotificationRepository.markAllAsRead(userId);
-    const updatedRes = NotificationRepository.getNotifications(userId);
+    await NotificationRepository.markAllAsRead(userId);
+    const updatedRes = await NotificationRepository.getNotifications(userId);
     assert.ok(updatedRes !== undefined);
   });
 
@@ -42,10 +42,10 @@ describe('SaaS Production Features 5, 6, 7: User Profile, Settings & Notificatio
     RepositoryFactory.resetProvider();
     const userId = `usr_settings_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    const defaultSettings = UserRepository.getSettings(userId);
+    const defaultSettings = await UserRepository.getSettings(userId);
     assert.ok(defaultSettings);
 
-    const updated = UserRepository.updateSettings(userId, {
+    const updated = await UserRepository.updateSettings(userId, {
       theme: 'light',
       aiModel: 'claude-3.5-sonnet',
       autoScan: false,
@@ -66,14 +66,14 @@ describe('SaaS Production Features 5, 6, 7: User Profile, Settings & Notificatio
       role: 'DEVELOPER',
     });
 
-    const profileData = UserRepository.getUserProfile(user.id);
+    const profileData = await UserRepository.getUserProfile(user.id);
     assert.strictEqual(profileData.user?.fullName, 'Test Profile User');
 
-    const newKey = UserRepository.regenerateApiKey(user.id);
+    const newKey = await UserRepository.regenerateApiKey(user.id);
     assert.ok(newKey);
     assert.ok(newKey.startsWith('figm_key_'));
 
-    const changeRes = UserRepository.changePassword(user.id, rawPass, 'NewSecretPass456!');
+    const changeRes = await UserRepository.changePassword(user.id, rawPass, 'NewSecretPass456!');
     assert.strictEqual(changeRes.success, true);
   });
 });

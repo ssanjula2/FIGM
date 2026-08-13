@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
 import { UserDB } from '../src/auth/user-db';
@@ -183,20 +182,27 @@ export async function runJsonToSupabaseMigration(): Promise<MigrationSummary> {
 
     for (const a of auditLogs) {
       try {
-        const targetUserId = validUserIds.has(a.userId) ? a.userId : fallbackUserId;
-        await prisma.auditLog.create({
-          data: {
-            id: a.id,
-            userId: targetUserId,
-            action: a.action,
-            details: a.details || 'System event',
-            ipAddress: a.ipAddress || '127.0.0.1',
-            userAgent: 'FIGM Inspector Backend Agent v3.0',
-            createdAt: a.createdAt ? new Date(a.createdAt) : new Date(),
-          },
-        });
-        auditLogsImported++;
-      } catch {
+        const targetUserId = a.userId && validUserIds.has(a.userId) ? a.userId : null;
+        const existing = await prisma.auditLog.findUnique({ where: { id: a.id } });
+        if (!existing) {
+          await prisma.auditLog.create({
+            data: {
+              id: a.id,
+              userId: targetUserId,
+              email: a.email || null,
+              action: a.action,
+              details: a.details || 'System event',
+              ipAddress: a.ipAddress || '127.0.0.1',
+              userAgent: 'FIGM Inspector Backend Agent v3.0',
+              createdAt: a.createdAt ? new Date(a.createdAt) : new Date(),
+            },
+          });
+          auditLogsImported++;
+        } else {
+          auditLogsSkipped++;
+        }
+      } catch (err: any) {
+        errors.push(`AuditLog ${a.id}: ${err.message}`);
         auditLogsSkipped++;
       }
     }

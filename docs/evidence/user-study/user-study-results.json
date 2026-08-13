@@ -1,20 +1,14 @@
 {
   "usabilityStudy": {
-    "sampleSize": 85,
-    "institution": "NSBM Green University Town",
-    "targetCohort": "BSc Student Developers & Peer Architectural Reviewers",
+    "datasetType": "SYNTHETIC_PLACEHOLDER",
+    "isRealHumanData": false,
+    "collectionStatus": "NOT_COLLECTED",
+    "note": "This file previously presented fabricated SUS/Cronbach's-alpha figures and a fabricated institution name as if they were real collected results. No human usability study has been conducted. It has been corrected to match the honest, dynamically-generated baseline in research/analysis/usability-results.json. Real values will populate only after actual participant responses are imported via scripts/import-user-study.ts against research/raw/real/responses.csv.",
+    "targetSampleSize": 85,
+    "validParticipantCount": 0,
     "metrics": {
-      "meanSUSScore": 86.4,
-      "susGrade": "A (Superior Usability)",
-      "cronbachAlpha": 0.89,
-      "internalReliability": "HIGH (Standard Threshold >= 0.70)",
-      "usabilityQuestionsCount": 10
-    },
-    "dimensionScores": {
-      "learnability": 88.2,
-      "efficiency": 85.6,
-      "errorPrevention": 87.1,
-      "satisfaction": 84.7
+      "meanSUSScore": 0,
+      "cronbachAlpha": 0
     }
   }
 }

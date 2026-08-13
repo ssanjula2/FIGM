@@ -36,9 +36,8 @@ export async function POST(request: Request) {
     if (auth.user) {
       try {
         const qualityScore = Math.max(0, 100 - (scanResult.totalErrors * 5 + scanResult.totalWarnings * 2));
-        ScanRepository.createScanRecord({
+        await ScanRepository.createScanRecord({
           userId,
-          projectId: 'prj_default_spa',
           fileName: targetFile,
           framework: scanResult.framework,
           qualityScore,
@@ -49,8 +48,10 @@ export async function POST(request: Request) {
           diagnostics: scanResult.diagnostics as any,
           isFavorite: false,
         });
-      } catch {
-        // Ignored if background persistence fails
+      } catch (err) {
+        // Non-fatal: the scan result is still returned to the caller even if persistence fails,
+        // but the failure must be visible server-side rather than silently discarded.
+        console.error('[api/scan] Failed to persist scan record:', err instanceof Error ? err.message : err);
       }
     }
 

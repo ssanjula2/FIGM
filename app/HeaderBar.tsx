@@ -24,7 +24,15 @@ export default function HeaderBar() {
       <header className="header-bar-container">
         {/* Search Bar Trigger */}
         <div
+          role="button"
+          tabIndex={0}
           onClick={() => setIsSearchOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setIsSearchOpen(true);
+            }
+          }}
           style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
         >
           <span style={{ position: 'absolute', left: '14px', color: '#64748b', fontSize: '14px' }}>🔍</span>
@@ -116,7 +124,16 @@ export default function HeaderBar() {
           {/* Notification Bell */}
           <div style={{ position: 'relative' }}>
             <div
+              role="button"
+              tabIndex={0}
+              aria-label="Notifications"
               onClick={() => setShowNotifDropdown(!showNotifDropdown)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setShowNotifDropdown(!showNotifDropdown);
+                }
+              }}
               style={{
                 background: 'rgba(255, 255, 255, 0.05)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -195,7 +212,15 @@ export default function HeaderBar() {
                     notifications.slice(0, 5).map((n) => (
                       <div
                         key={n.id}
+                        role="button"
+                        tabIndex={0}
                         onClick={() => markAsRead(n.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            markAsRead(n.id);
+                          }
+                        }}
                         style={{
                           background: n.read ? 'transparent' : 'rgba(56, 189, 248, 0.08)',
                           padding: '10px 12px',

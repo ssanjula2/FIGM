@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { SourceParser } from '../src/parser/source-parser.js';
 import { ASTDetectionEngine } from '../src/ast/ast-detection-engine.js';
 
-test('FIGM Complete 23-Rule AST Detection Suite', async (t) => {
+test('FIGM Complete 25-Rule AST Detection Suite', async (t) => {
   // 1. Universal Common Rules
   await t.test('FIGM-PERF-01: Detects object allocation inside loops', () => {
     const code = `function loop(items) {\n  return items.map(item => {\n    const config = { theme: 'dark' };\n    return config;\n  });\n}`;

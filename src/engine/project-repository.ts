@@ -23,16 +23,16 @@ export class ProjectRepository {
     return RepositoryFactory.getStorageProvider();
   }
 
-  public static createProject(data: Omit<DBProject, 'id' | 'createdAt' | 'totalScans' | 'qualityScore'>): DBProject {
-    return ProjectRepository.provider.createProject(data) as DBProject;
+  public static async createProject(data: Omit<DBProject, 'id' | 'createdAt' | 'totalScans' | 'qualityScore'>): Promise<DBProject> {
+    return ProjectRepository.provider.createProject(data) as Promise<DBProject>;
   }
 
-  public static getProjectById(id: string): DBProject | undefined {
-    return ProjectRepository.provider.getProjectById(id) as DBProject | undefined;
+  public static async getProjectById(id: string): Promise<DBProject | undefined> {
+    return ProjectRepository.provider.getProjectById(id) as Promise<DBProject | undefined>;
   }
 
-  public static getProjects(options: ProjectFilterOptions = {}): DBProject[] {
-    let projects = (ProjectRepository.provider.getProjects(options.userId) as DBProject[]) || [];
+  public static async getProjects(options: ProjectFilterOptions = {}): Promise<DBProject[]> {
+    let projects = ((await ProjectRepository.provider.getProjects(options.userId)) as DBProject[]) || [];
 
     if (options.status && options.status !== 'ALL') {
       projects = projects.filter((p) => p.status === options.status);
@@ -75,24 +75,24 @@ export class ProjectRepository {
     return projects;
   }
 
-  public static updateProject(id: string, updates: Partial<Omit<DBProject, 'id' | 'createdAt'>>): DBProject | undefined {
-    return ProjectRepository.provider.updateProject(id, updates) as DBProject | undefined;
+  public static async updateProject(id: string, updates: Partial<Omit<DBProject, 'id' | 'createdAt'>>): Promise<DBProject | undefined> {
+    return ProjectRepository.provider.updateProject(id, updates) as Promise<DBProject | undefined>;
   }
 
-  public static archiveProject(id: string): DBProject | undefined {
-    return ProjectRepository.provider.updateProject(id, { status: 'ARCHIVED' }) as DBProject | undefined;
+  public static async archiveProject(id: string): Promise<DBProject | undefined> {
+    return ProjectRepository.provider.updateProject(id, { status: 'ARCHIVED' }) as Promise<DBProject | undefined>;
   }
 
-  public static duplicateProject(id: string, userId?: string): DBProject | undefined {
-    return ProjectRepository.provider.duplicateProject(id, userId || '') as DBProject | undefined;
+  public static async duplicateProject(id: string, userId?: string): Promise<DBProject | undefined> {
+    return ProjectRepository.provider.duplicateProject(id, userId || '') as Promise<DBProject | undefined>;
   }
 
-  public static deleteProject(id: string): boolean {
-    return ProjectRepository.provider.deleteProject(id) as boolean;
+  public static async deleteProject(id: string): Promise<boolean> {
+    return ProjectRepository.provider.deleteProject(id) as Promise<boolean>;
   }
 
-  public static getProjectStats(userId?: string): ProjectStats {
-    const projects = (ProjectRepository.provider.getProjects(userId) as DBProject[]) || [];
+  public static async getProjectStats(userId?: string): Promise<ProjectStats> {
+    const projects = ((await ProjectRepository.provider.getProjects(userId)) as DBProject[]) || [];
     const totalProjects = projects.length;
     const activeProjects = projects.filter((p) => p.status === 'ACTIVE').length;
     const archivedProjects = projects.filter((p) => p.status === 'ARCHIVED').length;

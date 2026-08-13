@@ -6,6 +6,6 @@ export async function GET(request: Request) {
   const auth = authenticateUser(request);
   const userId = auth.user?.userId;
 
-  const reports = DashboardRepository.getRecentReports(userId, 10);
+  const reports = await DashboardRepository.getRecentReports(userId, 10);
   return NextResponse.json({ reports });
 }

@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import { verifyRefreshToken, signJWT, signRefreshToken } from '../../../../src/auth/auth-service';
-import { UserDB } from '../../../../src/auth/user-db';
+import { RepositoryFactory } from '../../../../src/storage/repository-factory';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
 export async function POST(request: Request) {
   const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
   const userAgent = request.headers.get('user-agent') || 'unknown';
+  const provider = RepositoryFactory.getStorageProvider();
 
   try {
     let token: string | undefined;
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
     }
 
     if (!token) {
-      AuditLogger.logEvent('REFRESH_TOKEN', { ipAddress: ip, userAgent, status: 'FAILURE', details: 'Missing refresh token' });
+      await AuditLogger.logEvent('REFRESH_TOKEN', { ipAddress: ip, userAgent, status: 'FAILURE', details: 'Missing refresh token' });
       return NextResponse.json(
         { error: 'Refresh token is required', code: 'MISSING_REFRESH_TOKEN' },
         { status: 400 }
@@ -36,16 +37,16 @@ export async function POST(request: Request) {
 
     const payload = verifyRefreshToken(token);
     if (!payload) {
-      AuditLogger.logEvent('REFRESH_TOKEN', { ipAddress: ip, userAgent, status: 'FAILURE', details: 'Invalid or expired refresh token' });
+      await AuditLogger.logEvent('REFRESH_TOKEN', { ipAddress: ip, userAgent, status: 'FAILURE', details: 'Invalid or expired refresh token' });
       return NextResponse.json(
         { error: 'Invalid or expired refresh token', code: 'INVALID_REFRESH_TOKEN' },
         { status: 401 }
       );
     }
 
-    const user = UserDB.findUserById(payload.userId);
+    const user = await provider.findUserById(payload.userId);
     if (!user || user.refreshToken !== token) {
-      AuditLogger.logEvent('REFRESH_TOKEN', { userId: payload.userId, email: payload.email, ipAddress: ip, userAgent, status: 'FAILURE', details: 'Token revoked or user mismatch' });
+      await AuditLogger.logEvent('REFRESH_TOKEN', { userId: payload.userId, email: payload.email, ipAddress: ip, userAgent, status: 'FAILURE', details: 'Token revoked or user mismatch' });
       return NextResponse.json(
         { error: 'Refresh token has been revoked', code: 'TOKEN_REVOKED' },
         { status: 401 }
@@ -62,8 +63,8 @@ export async function POST(request: Request) {
     const newAccessToken = signJWT(userPayload, 3600);
     const newRefreshToken = signRefreshToken(userPayload, 604800);
 
-    UserDB.updateUser(user.id, { refreshToken: newRefreshToken });
-    AuditLogger.logEvent('REFRESH_TOKEN', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
+    await provider.updateUser(user.id, { refreshToken: newRefreshToken });
+    await AuditLogger.logEvent('REFRESH_TOKEN', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
 
     const response = NextResponse.json({
       message: 'Token refreshed successfully',

@@ -243,7 +243,7 @@ export async function GET() {
 
       // ── FIGM system capabilities ───────────────────────────────────────
       systemCapabilities: {
-        totalGuidelineRules: 23,
+        totalGuidelineRules: 25,
         totalASTPredicates: 25,
         supportedFrameworks: ['React (JSX/TSX)', 'Next.js App Router', 'Angular Templates', 'Vue 3 SFCs (.vue)'],
         aiRemediationModel: 'Gemini 2.5 Flash',

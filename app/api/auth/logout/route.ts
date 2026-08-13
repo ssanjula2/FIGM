@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { authenticateUser } from '../../../../src/auth/auth-middleware';
-import { UserDB } from '../../../../src/auth/user-db';
+import { RepositoryFactory } from '../../../../src/storage/repository-factory';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
 export async function POST(request: Request) {
@@ -9,10 +9,10 @@ export async function POST(request: Request) {
 
   const auth = authenticateUser(request);
   if (auth.user) {
-    UserDB.updateUser(auth.user.userId, { refreshToken: undefined });
-    AuditLogger.logEvent('LOGOUT', { userId: auth.user.userId, email: auth.user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
+    await RepositoryFactory.getStorageProvider().updateUser(auth.user.userId, { refreshToken: undefined });
+    await AuditLogger.logEvent('LOGOUT', { userId: auth.user.userId, email: auth.user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
   } else {
-    AuditLogger.logEvent('LOGOUT', { ipAddress: ip, userAgent, status: 'SUCCESS', details: 'Unauthenticated logout request' });
+    await AuditLogger.logEvent('LOGOUT', { ipAddress: ip, userAgent, status: 'SUCCESS', details: 'Unauthenticated logout request' });
   }
 
   const response = NextResponse.json({ message: 'Logout successful' });

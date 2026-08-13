@@ -15,18 +15,39 @@ export interface AuthSession {
   expiresAt: number;
 }
 
+const PLACEHOLDER_SECRET_PATTERN = /YOUR_|CHANGE_?ME|<.*>|\bexample\b|\bplaceholder\b|\btodo\b|\bTBD\b/i;
+
+/**
+ * Fails fast in production if a secret is too short or looks like an unfilled template placeholder
+ * (e.g. "YOUR_PRODUCTION_JWT_SECRET_STRING" from .env.example accidentally left in place). Presence
+ * alone was previously the only check -- any non-empty string, however weak, was accepted.
+ */
+function validateSecretStrength(secret: string, varName: string): void {
+  if (process.env.NODE_ENV !== 'production') return;
+  if (secret.length < 32) {
+    throw new Error(`FATAL: ${varName} must be at least 32 characters in production (got ${secret.length}).`);
+  }
+  if (PLACEHOLDER_SECRET_PATTERN.test(secret)) {
+    throw new Error(`FATAL: ${varName} looks like an unfilled template placeholder value in production.`);
+  }
+}
+
 function getJwtSecret(): string {
   if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
     throw new Error('FATAL: JWT_SECRET environment variable is missing in production environment');
   }
-  return process.env.JWT_SECRET || 'figm-multi-tenant-super-secret-key-2026';
+  const secret = process.env.JWT_SECRET || 'figm-multi-tenant-super-secret-key-2026';
+  validateSecretStrength(secret, 'JWT_SECRET');
+  return secret;
 }
 
 function getRefreshSecret(): string {
   if (process.env.NODE_ENV === 'production' && !process.env.REFRESH_SECRET) {
     throw new Error('FATAL: REFRESH_SECRET environment variable is missing in production environment');
   }
-  return process.env.REFRESH_SECRET || 'figm-multi-tenant-refresh-secret-key-2026';
+  const secret = process.env.REFRESH_SECRET || 'figm-multi-tenant-refresh-secret-key-2026';
+  validateSecretStrength(secret, 'REFRESH_SECRET');
+  return secret;
 }
 
 const JWT_SECRET = getJwtSecret();

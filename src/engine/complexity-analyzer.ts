@@ -47,18 +47,10 @@ export class ComplexityAnalyzer {
         type === 'WhileStatement' ||
         type === 'DoWhileStatement' ||
         type === 'CatchClause' ||
-        type === 'SwitchCase'
+        (type === 'SwitchCase' && node.test) // switch case with test condition
       ) {
         decisionPoints++;
         cognitiveScore += 1 + Math.max(0, depth - 1);
-      }
-
-      const snippet = node.attributes?.codeSnippet || node.name || '';
-      if (typeof snippet === 'string') {
-        if (snippet.includes('if (') || snippet.includes('else if') || snippet.includes('switch') || snippet.includes('for (') || snippet.includes('while (')) {
-          decisionPoints++;
-          cognitiveScore += 1;
-        }
       }
 
       if (type === 'LogicalExpression' && (node.operator === '&&' || node.operator === '||' || node.operator === '??')) {

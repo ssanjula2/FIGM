@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   const sortBy = (searchParams.get('sortBy') as any) || undefined;
   const sortOrder = (searchParams.get('sortOrder') as any) || undefined;
 
-  const projects = ProjectRepository.getProjects({
+  const projects = await ProjectRepository.getProjects({
     userId,
     search,
     framework,
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     sortOrder,
   });
 
-  const stats = ProjectRepository.getProjectStats(userId);
+  const stats = await ProjectRepository.getProjectStats(userId);
 
   return NextResponse.json({ projects, stats });
 }
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const project = ProjectRepository.createProject({
+    const project = await ProjectRepository.createProject({
       userId: auth.user.userId,
       name: name.trim(),
       description: description || '',
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       status: 'ACTIVE',
     });
 
-    AuditLogger.logEvent('CREATE_PROJECT', {
+    await AuditLogger.logEvent('CREATE_PROJECT', {
       userId: auth.user.userId,
       email: auth.user.email,
       details: `Created project: ${project.name}`,

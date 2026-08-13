@@ -16,7 +16,7 @@ export interface IStorageProvider {
   findUserByResetToken(token: string): Promise<DBUser | undefined> | DBUser | undefined;
   findUserByRefreshToken(token: string): Promise<DBUser | undefined> | DBUser | undefined;
   getAllUsers(): Promise<DBUser[]> | DBUser[];
-  createUser(user: Omit<DBUser, 'id' | 'createdAt'>): Promise<DBUser> | DBUser;
+  createUser(user: Omit<DBUser, 'id' | 'createdAt'> & { id?: string }): Promise<DBUser> | DBUser;
   updateUser(userId: string, updates: Partial<Omit<DBUser, 'id' | 'createdAt'>>): Promise<DBUser | undefined> | DBUser | undefined;
   deleteUser(userId: string): Promise<boolean> | boolean;
 

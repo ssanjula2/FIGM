@@ -4,8 +4,8 @@ import { DashboardRepository } from '../src/engine/dashboard-repository';
 import { UserDB } from '../src/auth/user-db';
 
 test('Dashboard Analytics & Repository Suite', async (t) => {
-  await t.test('DashboardRepository.getSummary aggregates metrics dynamically', () => {
-    const summary = DashboardRepository.getSummary('usr_demo', 'ADMIN');
+  await t.test('DashboardRepository.getSummary aggregates metrics dynamically', async () => {
+    const summary = await DashboardRepository.getSummary('usr_demo', 'ADMIN');
 
     assert.ok(summary.totalProjects >= 1);
     assert.ok(summary.totalScans >= 1);
@@ -18,8 +18,8 @@ test('Dashboard Analytics & Repository Suite', async (t) => {
     assert.ok(summary.totalActiveUsers >= 1);
   });
 
-  await t.test('DashboardRepository.getActivityFeed returns activity timeline items', () => {
-    const activity = DashboardRepository.getActivityFeed(5);
+  await t.test('DashboardRepository.getActivityFeed returns activity timeline items', async () => {
+    const activity = await DashboardRepository.getActivityFeed(5);
     assert.ok(Array.isArray(activity));
     assert.ok(activity.length > 0);
 
@@ -29,8 +29,8 @@ test('Dashboard Analytics & Repository Suite', async (t) => {
     assert.ok(first.badgeColor !== undefined);
   });
 
-  await t.test('DashboardRepository.getRecentReports returns report items', () => {
-    const reports = DashboardRepository.getRecentReports('usr_demo', 5);
+  await t.test('DashboardRepository.getRecentReports returns report items', async () => {
+    const reports = await DashboardRepository.getRecentReports('usr_demo', 5);
     assert.ok(Array.isArray(reports));
     assert.ok(reports.length > 0);
 
@@ -40,7 +40,7 @@ test('Dashboard Analytics & Repository Suite', async (t) => {
     assert.ok(first.qualityScore >= 0);
   });
 
-  await t.test('Persisted submissions flow into DashboardRepository summary', () => {
+  await t.test('Persisted submissions flow into DashboardRepository summary', async () => {
     const testUserId = `usr_test_${Date.now()}`;
     UserDB.createSubmission({
       userId: testUserId,
@@ -52,7 +52,7 @@ test('Dashboard Analytics & Repository Suite', async (t) => {
       diagnosticsCount: 1,
     });
 
-    const userSummary = DashboardRepository.getSummary(testUserId, 'DEVELOPER');
+    const userSummary = await DashboardRepository.getSummary(testUserId, 'DEVELOPER');
     assert.ok(userSummary.totalScans >= 1);
     assert.strictEqual(userSummary.avgQualityScore, 92);
   });

@@ -24,10 +24,10 @@ export async function GET(request: Request) {
   }
 
   // Projects Search
-  const projects = ProjectRepository.getProjects({ userId, search: q });
+  const projects = await ProjectRepository.getProjects({ userId, search: q });
 
   // Scans Search
-  const scansResult = ScanRepository.getScanRecords({ userId, search: q, pageSize: 20 });
+  const scansResult = await ScanRepository.getScanRecords({ userId, search: q, pageSize: 20 });
   const scans = scansResult.records;
 
   // FIGM Specification Rules Search
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
   // Users Search (Admin Only)
   let users: any[] = [];
   if (isAdmin) {
-    const allUsers = UserRepository.getAllUsers();
+    const allUsers = await UserRepository.getAllUsers();
     users = allUsers
       .filter(
         (u) =>

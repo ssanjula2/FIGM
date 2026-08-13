@@ -7,6 +7,6 @@ export async function GET(request: Request) {
   const role = auth.user?.role || 'ADMIN';
 
   // Retrieve global dashboard summary metrics across all users & projects
-  const summary = DashboardRepository.getSummary(undefined, role);
+  const summary = await DashboardRepository.getSummary(undefined, role);
   return NextResponse.json(summary);
 }

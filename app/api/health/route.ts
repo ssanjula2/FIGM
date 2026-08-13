@@ -3,6 +3,7 @@ import { RepositoryFactory } from '../../../src/storage/repository-factory';
 
 export async function GET() {
   const provider = RepositoryFactory.getStorageProvider();
+  const isConnected = typeof (provider as any).isConnected === 'function' ? (provider as any).isConnected() : true;
   const memory = process.memoryUsage();
 
   return NextResponse.json({
@@ -21,9 +22,9 @@ export async function GET() {
     services: {
       auth: 'ACTIVE',
       ruleEngine: 'ACTIVE',
-      aiRemediation: 'ACTIVE',
+      aiRemediation: process.env.GEMINI_API_KEY ? 'ACTIVE' : 'TEMPLATE_FALLBACK_ONLY',
       dynamicProfiler: 'ACTIVE',
-      realtime: provider.name === 'supabase' ? 'CONNECTED' : 'DISCONNECTED_FALLBACK',
+      database: provider.name === 'supabase' && isConnected ? 'CONNECTED_POSTGRES' : 'JSON_FILE_FALLBACK',
     },
   });
 }

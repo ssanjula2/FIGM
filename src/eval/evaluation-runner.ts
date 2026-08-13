@@ -354,7 +354,7 @@ ${evalResults.frameworkMetrics
     console.log(`  - docs/evidence/canonical-evaluation.json`);
   }
 
-  private static calculateMetrics(tp: number, fp: number, fn: number): MetricScore {
+  public static calculateMetrics(tp: number, fp: number, fn: number): MetricScore {
     const precision = tp + fp === 0 ? 1.0 : tp / (tp + fp);
     const recall = tp + fn === 0 ? 1.0 : tp / (tp + fn);
     const f1Score = precision + recall === 0 ? 0.0 : (2 * precision * recall) / (precision + recall);

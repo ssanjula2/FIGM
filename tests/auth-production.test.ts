@@ -115,9 +115,9 @@ test('Production Auth System Suite', async (t) => {
     assert.strictEqual(updatedUser?.resetToken, undefined);
   });
 
-  await t.test('Audit Logger Event Verification', () => {
+  await t.test('Audit Logger Event Verification', async () => {
     const email = `audit_${Date.now()}@figm.io`;
-    const log = AuditLogger.logEvent('LOGIN', {
+    const log = await AuditLogger.logEvent('LOGIN', {
       email,
       ipAddress: '192.168.1.50',
       userAgent: 'TestBrowser/1.0',
@@ -128,18 +128,18 @@ test('Production Auth System Suite', async (t) => {
     assert.strictEqual(log.action, 'LOGIN');
     assert.strictEqual(log.email, email);
 
-    const recent = AuditLogger.getRecentLogs(10);
+    const recent = await AuditLogger.getRecentLogs(10);
     assert.ok(recent.length > 0);
   });
 
-  await t.test('Rate Limiter Enforcement', () => {
+  await t.test('Rate Limiter Enforcement', async () => {
     const testIp = `10.0.0.${Math.floor(Math.random() * 200)}`;
     for (let i = 0; i < 5; i++) {
-      const res = checkRateLimit(testIp, 5, 60000);
+      const res = await checkRateLimit(testIp, 5, 60000);
       assert.strictEqual(res, null, `Request ${i + 1} should pass`);
     }
 
-    const blockedRes = checkRateLimit(testIp, 5, 60000);
+    const blockedRes = await checkRateLimit(testIp, 5, 60000);
     assert.ok(blockedRes !== null, 'Request 6 should be blocked');
     assert.strictEqual(blockedRes?.status, 429);
   });

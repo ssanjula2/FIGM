@@ -1,15 +1,38 @@
 import { NextResponse } from 'next/server';
-import { UserDB } from '../../../../src/auth/user-db';
+import { RepositoryFactory } from '../../../../src/storage/repository-factory';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 import { RuleExecutionEngine } from '../../../../src/engine/rule-execution-engine';
+import { hashPassword } from '../../../../src/auth/auth-service';
+
+/**
+ * User-study participant scans are attributed to a synthetic identity ("P001", "P002", ...) rather
+ * than a real authenticated account. ScanReport.userId is a required (non-null) foreign key to User,
+ * so a matching User row must exist before a scan can be persisted for a given participant. Ensures
+ * one exists (idempotent upsert-by-id) without ever touching an existing real user's data.
+ */
+async function ensureParticipantUser(provider: ReturnType<typeof RepositoryFactory.getStorageProvider>, participantId: string) {
+  const existing = await provider.findUserById(participantId);
+  if (existing) return;
+  const email = `${participantId.toLowerCase()}@user-study.figm.local`;
+  const byEmail = await provider.findUserByEmail(email);
+  if (byEmail) return;
+  await provider.createUser({
+    id: participantId,
+    email,
+    passwordHash: hashPassword(`user-study-${participantId}-${Date.now()}`),
+    fullName: `User Study Participant ${participantId}`,
+    role: 'DEVELOPER',
+  });
+}
 
 export async function GET() {
   try {
-    const existingScans = UserDB.getScanRecords();
+    const provider = RepositoryFactory.getStorageProvider();
+    const existingScans = (await provider.getScanRecords()) || [];
     const uniqueParticipants = new Set(
       existingScans
-        .filter(r => r.userId.startsWith('P') && r.userId !== 'usr_user_study_participant')
-        .map(r => r.userId)
+        .filter((r) => r.userId.startsWith('P') && r.userId !== 'usr_user_study_participant')
+        .map((r) => r.userId)
     );
     const count = uniqueParticipants.size + 1;
     const nextParticipantId = `P${String(count).padStart(3, '0')}`;
@@ -21,20 +44,23 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const provider = RepositoryFactory.getStorageProvider();
     const body = await request.json();
     const { framework, fileName, code, qualityScore: clientScore, diagnosticsCount: clientCount, participantId: clientParticipantId } = body;
 
     const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    const existingScans = UserDB.getScanRecords();
+    const existingScans = (await provider.getScanRecords()) || [];
     const uniqueParticipants = new Set(
       existingScans
-        .filter(r => r.userId.startsWith('P') && r.userId !== 'usr_user_study_participant')
-        .map(r => r.userId)
+        .filter((r) => r.userId.startsWith('P') && r.userId !== 'usr_user_study_participant')
+        .map((r) => r.userId)
     );
     const fallbackCount = uniqueParticipants.size + 1;
     const participantId = clientParticipantId || `P${String(fallbackCount).padStart(3, '0')}`;
+
+    await ensureParticipantUser(provider, participantId);
 
     // Dynamic AST Analysis Engine Execution
     let dynamicScore = clientScore || 88;
@@ -70,18 +96,17 @@ export async function POST(request: Request) {
     const ruleCount = dynamicDiagnostics.length > 0 ? dynamicDiagnostics.length : (clientCount || 4);
 
     // 1. Audit Log event for Admin Visibility
-    AuditLogger.logEvent('SCAN_RUN', {
+    await AuditLogger.logEvent('SCAN_RUN', {
       email: `${participantId.toLowerCase()}@user-study.figm`,
       ipAddress: ip,
       userAgent,
       status: 'SUCCESS',
-      details: `User Study (${participantId}) benchmark scan executed on ${framework} (${fileName}) - ${ruleCount} issues detected`
+      details: `User Study (${participantId}) benchmark scan executed on ${framework} (${fileName}) - ${ruleCount} issues detected`,
     });
 
-    // 2. Persist in DB scan records for Admin / History view
-    const newRecord = UserDB.createScanRecord({
+    // 2. Persist scan record for Admin / History view (via the real storage provider)
+    const newRecord = await provider.createScanRecord({
       userId: participantId,
-      projectId: 'proj_user_study_benchmark',
       fileName: fileName || 'BenchmarkFixture.tsx',
       framework: framework || 'React',
       qualityScore: dynamicScore,
@@ -102,36 +127,9 @@ export async function POST(request: Request) {
           offendingCodeSnippet: '// FIGM Benchmark Inspection Target',
           remediation: 'Apply FIGM recommended guideline fix.',
           standardReference: 'FIGM-STANDARD-2026',
-        }
-      ]
+        },
+      ],
     });
-
-    // 3. Sync to Supabase if connected
-    try {
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key) {
-        const { createClient } = require('@supabase/supabase-js');
-        const supabase = createClient(url, key, { auth: { persistSession: false } });
-        await supabase.from('scan_reports').upsert({
-          id: newRecord.id,
-          user_id: newRecord.userId,
-          project_id: newRecord.projectId,
-          file_name: newRecord.fileName,
-          framework: newRecord.framework,
-          quality_score: newRecord.qualityScore,
-          scan_time_ms: newRecord.scanTimeMs,
-          memory_usage_mb: newRecord.memoryUsageMb,
-          rule_count: newRecord.ruleCount,
-          ai_fix_count: newRecord.aiFixCount,
-          is_favorite: newRecord.isFavorite,
-          diagnostics: newRecord.diagnostics,
-          created_at: newRecord.createdAt
-        });
-      }
-    } catch {
-      // Background sync fallback
-    }
 
     return NextResponse.json({ success: true, recordId: newRecord.id, participantId });
   } catch (err: any) {

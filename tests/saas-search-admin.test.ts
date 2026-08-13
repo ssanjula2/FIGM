@@ -23,20 +23,20 @@ describe('SaaS Production Features 8 & 9: Search & Admin Suite', () => {
       role: 'DEVELOPER',
     });
 
-    const allUsers = UserRepository.getAllUsers();
+    const allUsers = await UserRepository.getAllUsers();
     assert.ok(Array.isArray(allUsers));
 
-    const updatedRole = UserRepository.updateUserRole(targetUser.id, 'AUDITOR');
+    const updatedRole = await UserRepository.updateUserRole(targetUser.id, 'AUDITOR');
     assert.ok(updatedRole);
     assert.strictEqual(updatedRole?.role, 'AUDITOR');
 
-    const resetPass = UserRepository.adminResetPassword(targetUser.id, 'NewAdminPass123!');
+    const resetPass = await UserRepository.adminResetPassword(targetUser.id, 'NewAdminPass123!');
     assert.ok(resetPass);
 
-    const deleted = UserRepository.deleteAccount(targetUser.id);
+    const deleted = await UserRepository.deleteAccount(targetUser.id);
     assert.strictEqual(deleted, true);
 
-    const check = UserRepository.getUserProfile(targetUser.id).user;
-    assert.strictEqual(check, undefined);
+    const profile = await UserRepository.getUserProfile(targetUser.id);
+    assert.strictEqual(profile.user, undefined);
   });
 });

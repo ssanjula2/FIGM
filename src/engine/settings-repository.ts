@@ -1,11 +1,12 @@
-import { UserDB, DBSettings } from '../auth/user-db';
+import { DBSettings } from '../auth/user-db';
+import { RepositoryFactory } from '../storage/repository-factory';
 
 export class SettingsRepository {
-  public static getSettings(userId: string): DBSettings {
-    return UserDB.getUserSettings(userId);
+  public static async getSettings(userId: string): Promise<DBSettings> {
+    return RepositoryFactory.getStorageProvider().getUserSettings(userId) as Promise<DBSettings>;
   }
 
-  public static updateSettings(userId: string, settings: Partial<Omit<DBSettings, 'userId'>>): DBSettings {
-    return UserDB.updateUserSettings(userId, settings);
+  public static async updateSettings(userId: string, settings: Partial<Omit<DBSettings, 'userId'>>): Promise<DBSettings> {
+    return RepositoryFactory.getStorageProvider().updateUserSettings(userId, settings) as Promise<DBSettings>;
   }
 }

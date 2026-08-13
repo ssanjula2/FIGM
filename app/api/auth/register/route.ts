@@ -7,68 +7,47 @@ import {
   validatePassword,
   validateRole,
 } from '../../../../src/auth/auth-service';
-import { UserDB } from '../../../../src/auth/user-db';
+import { RepositoryFactory } from '../../../../src/storage/repository-factory';
 import { checkRateLimit } from '../../../../src/auth/rate-limiter';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
 export async function POST(request: Request) {
   const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
-  const rateLimitError = checkRateLimit(ip, 10, 60000);
+  const rateLimitError = await checkRateLimit(ip, 10, 60000);
   if (rateLimitError) return rateLimitError;
 
   const userAgent = request.headers.get('user-agent') || 'unknown';
+  const provider = RepositoryFactory.getStorageProvider();
 
   try {
     const body = await request.json();
     const { email, password, fullName, role } = body;
 
     if (!fullName || typeof fullName !== 'string' || fullName.trim().length < 2) {
-      AuditLogger.logEvent('REGISTER', { email, ipAddress: ip, userAgent, status: 'FAILURE', details: 'Invalid full name' });
+      await AuditLogger.logEvent('REGISTER', { email, ipAddress: ip, userAgent, status: 'FAILURE', details: 'Invalid full name' });
       return NextResponse.json({ error: 'Full name must be at least 2 characters long', code: 'INVALID_NAME' }, { status: 400 });
     }
 
     if (!validateEmail(email)) {
-      AuditLogger.logEvent('REGISTER', { email, ipAddress: ip, userAgent, status: 'FAILURE', details: 'Invalid email format' });
+      await AuditLogger.logEvent('REGISTER', { email, ipAddress: ip, userAgent, status: 'FAILURE', details: 'Invalid email format' });
       return NextResponse.json({ error: 'Please provide a valid email address', code: 'INVALID_EMAIL' }, { status: 400 });
     }
 
     const passCheck = validatePassword(password);
     if (!passCheck.valid) {
-      AuditLogger.logEvent('REGISTER', { email, ipAddress: ip, userAgent, status: 'FAILURE', details: passCheck.message });
+      await AuditLogger.logEvent('REGISTER', { email, ipAddress: ip, userAgent, status: 'FAILURE', details: passCheck.message });
       return NextResponse.json({ error: passCheck.message, code: 'WEAK_PASSWORD' }, { status: 400 });
     }
 
-    const existing = UserDB.findUserByEmail(email);
+    const existing = await provider.findUserByEmail(email);
     if (existing) {
-      AuditLogger.logEvent('REGISTER', { email, ipAddress: ip, userAgent, status: 'FAILURE', details: 'Email already registered' });
+      await AuditLogger.logEvent('REGISTER', { email, ipAddress: ip, userAgent, status: 'FAILURE', details: 'Email already registered' });
       return NextResponse.json({ error: 'An account with this email address already exists', code: 'EMAIL_EXISTS' }, { status: 409 });
     }
 
     const assignedRole = validateRole(role);
     const passwordHash = hashPassword(password);
-    const user = UserDB.createUser({ email, passwordHash, fullName, role: assignedRole });
-
-    // Explicit synchronous write-through to Supabase PostgreSQL Database
-    try {
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key) {
-        const { createClient } = require('@supabase/supabase-js');
-        const supabase = createClient(url, key, { auth: { persistSession: false } });
-        await supabase.from('users').upsert({
-          id: user.id,
-          email: user.email,
-          password_hash: user.passwordHash,
-          full_name: user.fullName,
-          role: user.role,
-          api_key: user.apiKey,
-          created_at: user.createdAt,
-          updated_at: user.createdAt,
-        });
-      }
-    } catch (dbErr: any) {
-      console.error('Supabase register sync error:', dbErr.message);
-    }
+    const user = await provider.createUser({ email, passwordHash, fullName, role: assignedRole });
 
     const payload = {
       userId: user.id,
@@ -80,8 +59,8 @@ export async function POST(request: Request) {
     const accessToken = signJWT(payload, 3600); // 1 hour
     const refreshToken = signRefreshToken(payload, 604800); // 7 days
 
-    UserDB.updateUser(user.id, { refreshToken });
-    AuditLogger.logEvent('REGISTER', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
+    await provider.updateUser(user.id, { refreshToken });
+    await AuditLogger.logEvent('REGISTER', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
 
     const response = NextResponse.json({
       message: 'Account created successfully',

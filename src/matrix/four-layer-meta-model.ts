@@ -1,6 +1,6 @@
 /**
  * Framework-Independent Guideline Model (FIGM)
- * Four-Layer Architecture Meta-Model Implementation (Complete 23 Rules)
+ * Four-Layer Architecture Meta-Model Implementation (Complete 25 Rules)
  * 
  * Hierarchy:
  * Domain -> Concern -> Abstract Language Primitive (ALP) -> Rule
@@ -14,7 +14,7 @@ import {
 import { QUERY_TEMPLATES, FRAMEWORK_TRANSLATIONS } from '../ast/universal-ast-mapper.js';
 
 /**
- * Core Abstract Language Primitives (ALPs) Definition for all 23 Rules
+ * Core Abstract Language Primitives (ALPs) Definition for all 25 Rules
  */
 export const CORE_ALPS: AbstractLanguagePrimitive[] = [
   {

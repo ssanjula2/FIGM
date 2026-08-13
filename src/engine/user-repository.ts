@@ -8,10 +8,10 @@ export class UserRepository {
     return RepositoryFactory.getStorageProvider();
   }
 
-  public static getUserProfile(userId: string): { user: DBUser | undefined; stats: any; settings: DBSettings } {
-    const user = UserRepository.provider.findUserById(userId) as DBUser | undefined;
-    const projects = (UserRepository.provider.getProjects(userId) as DBProject[]) || [];
-    const scans = (UserRepository.provider.getScanRecords(userId) as DBScanRecord[]) || [];
+  public static async getUserProfile(userId: string): Promise<{ user: DBUser | undefined; stats: any; settings: DBSettings }> {
+    const user = (await UserRepository.provider.findUserById(userId)) as DBUser | undefined;
+    const projects = ((await UserRepository.provider.getProjects(userId)) as DBProject[]) || [];
+    const scans = ((await UserRepository.provider.getScanRecords(userId)) as DBScanRecord[]) || [];
 
     const averageScore =
       scans.length > 0
@@ -24,24 +24,24 @@ export class UserRepository {
       averageScore,
     };
 
-    const settings = UserRepository.provider.getUserSettings(userId) as DBSettings;
+    const settings = (await UserRepository.provider.getUserSettings(userId)) as DBSettings;
 
     return { user, stats, settings };
   }
 
-  public static updateProfile(
+  public static async updateProfile(
     userId: string,
     updates: { fullName?: string; avatarUrl?: string; email?: string }
-  ): DBUser | undefined {
-    return UserRepository.provider.updateUser(userId, updates) as DBUser | undefined;
+  ): Promise<DBUser | undefined> {
+    return UserRepository.provider.updateUser(userId, updates) as Promise<DBUser | undefined>;
   }
 
-  public static changePassword(
+  public static async changePassword(
     userId: string,
     currentPass: string,
     newPass: string
-  ): { success: boolean; message: string } {
-    const user = UserRepository.provider.findUserById(userId) as DBUser | undefined;
+  ): Promise<{ success: boolean; message: string }> {
+    const user = (await UserRepository.provider.findUserById(userId)) as DBUser | undefined;
     if (!user) {
       return { success: false, message: 'User not found' };
     }
@@ -51,39 +51,39 @@ export class UserRepository {
     }
 
     const newHash = hashPassword(newPass);
-    UserRepository.provider.updateUser(userId, { passwordHash: newHash });
+    await UserRepository.provider.updateUser(userId, { passwordHash: newHash });
     return { success: true, message: 'Password updated successfully' };
   }
 
-  public static regenerateApiKey(userId: string): string | undefined {
+  public static async regenerateApiKey(userId: string): Promise<string | undefined> {
     const newKey = `figm_key_${Date.now()}_${crypto.randomBytes(6).toString('hex')}`;
-    const updated = UserRepository.provider.updateUser(userId, { apiKey: newKey }) as DBUser | undefined;
+    const updated = (await UserRepository.provider.updateUser(userId, { apiKey: newKey })) as DBUser | undefined;
     return updated?.apiKey;
   }
 
-  public static deleteAccount(userId: string): boolean {
-    return UserRepository.provider.deleteUser(userId) as boolean;
+  public static async deleteAccount(userId: string): Promise<boolean> {
+    return UserRepository.provider.deleteUser(userId) as Promise<boolean>;
   }
 
-  public static getSettings(userId: string): DBSettings {
-    return UserRepository.provider.getUserSettings(userId) as DBSettings;
+  public static async getSettings(userId: string): Promise<DBSettings> {
+    return UserRepository.provider.getUserSettings(userId) as Promise<DBSettings>;
   }
 
-  public static updateSettings(userId: string, settings: Partial<Omit<DBSettings, 'userId'>>): DBSettings {
-    return UserRepository.provider.updateUserSettings(userId, settings) as DBSettings;
+  public static async updateSettings(userId: string, settings: Partial<Omit<DBSettings, 'userId'>>): Promise<DBSettings> {
+    return UserRepository.provider.updateUserSettings(userId, settings) as Promise<DBSettings>;
   }
 
   // Admin Methods
-  public static getAllUsers(): DBUser[] {
-    return (UserRepository.provider.getAllUsers() as DBUser[]) || [];
+  public static async getAllUsers(): Promise<DBUser[]> {
+    return ((await UserRepository.provider.getAllUsers()) as DBUser[]) || [];
   }
 
-  public static updateUserRole(userId: string, role: any): DBUser | undefined {
-    return UserRepository.provider.updateUser(userId, { role }) as DBUser | undefined;
+  public static async updateUserRole(userId: string, role: any): Promise<DBUser | undefined> {
+    return UserRepository.provider.updateUser(userId, { role }) as Promise<DBUser | undefined>;
   }
 
-  public static adminResetPassword(userId: string, newPassword: string): DBUser | undefined {
+  public static async adminResetPassword(userId: string, newPassword: string): Promise<DBUser | undefined> {
     const newHash = hashPassword(newPassword);
-    return UserRepository.provider.updateUser(userId, { passwordHash: newHash }) as DBUser | undefined;
+    return UserRepository.provider.updateUser(userId, { passwordHash: newHash }) as Promise<DBUser | undefined>;
   }
 }

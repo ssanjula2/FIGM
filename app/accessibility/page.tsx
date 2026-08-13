@@ -174,7 +174,16 @@ export default function AccessibilityPage() {
             {ACCESSIBILITY_RULES.map((rule) => (
               <div
                 key={rule.id}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedRule.id === rule.id}
                 onClick={() => setSelectedRule(rule)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedRule(rule);
+                  }
+                }}
                 style={{
                   padding: '16px',
                   borderRadius: '10px',

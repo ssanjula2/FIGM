@@ -6,35 +6,35 @@ export class NotificationRepository {
     return RepositoryFactory.getStorageProvider();
   }
 
-  public static createNotification(
+  public static async createNotification(
     userId: string,
     type: 'SCAN_SUCCESS' | 'SCAN_FAILED' | 'AI_FINISHED' | 'EXPORT_FINISHED' | 'SECURITY_ALERT',
     title: string,
     message: string
-  ): DBNotification {
+  ): Promise<DBNotification> {
     return NotificationRepository.provider.createNotification({
       userId,
       type,
       title,
       message,
-    }) as DBNotification;
+    }) as Promise<DBNotification>;
   }
 
-  public static getNotifications(userId: string): { notifications: DBNotification[]; unreadCount: number } {
-    const notifications = (NotificationRepository.provider.getNotifications(userId) as DBNotification[]) || [];
+  public static async getNotifications(userId: string): Promise<{ notifications: DBNotification[]; unreadCount: number }> {
+    const notifications = ((await NotificationRepository.provider.getNotifications(userId)) as DBNotification[]) || [];
     const unreadCount = notifications.filter((n) => !n.read).length;
     return { notifications, unreadCount };
   }
 
-  public static markAsRead(id: string): void {
-    NotificationRepository.provider.markNotificationRead(id);
+  public static async markAsRead(id: string): Promise<void> {
+    await NotificationRepository.provider.markNotificationRead(id);
   }
 
-  public static markAllAsRead(userId: string): void {
-    NotificationRepository.provider.markAllNotificationsRead(userId);
+  public static async markAllAsRead(userId: string): Promise<void> {
+    await NotificationRepository.provider.markAllNotificationsRead(userId);
   }
 
-  public static clearNotifications(userId: string): void {
-    NotificationRepository.provider.clearNotifications(userId);
+  public static async clearNotifications(userId: string): Promise<void> {
+    await NotificationRepository.provider.clearNotifications(userId);
   }
 }

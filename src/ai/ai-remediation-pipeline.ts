@@ -15,6 +15,9 @@ export interface AIRemediationPipelineResult extends RemediationResult {
   engineType: 'GEMINI_2_5_FLASH' | 'TEMPLATE_FALLBACK';
   confidenceScore: number;
   fallbackReason?: string;
+  /** True only if the patched code was re-scanned and the original violation (defect.ruleId) is confirmed gone. */
+  verified: boolean;
+  verificationStatus: 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED';
 }
 
 export class AIRemediationPipeline {
@@ -43,13 +46,21 @@ export class AIRemediationPipeline {
       // 3. Parse Response
       const parsed = AIResponseParser.parseResponse(geminiRes.rawText);
 
-      // 4. Validate Patch
+      // 4. Validate Patch (syntax/shape)
       const validation = AIPatchValidator.validatePatch(code, parsed.remediatedCode, defect.filePath);
       if (!validation.isValid) {
         return this.executeFallback(code, defect, `Gemini patch validation failed: ${validation.reason}`);
       }
 
-      // 5. Synthesize Unified Git Diff
+      // 5. Re-scan the patched code and confirm the ORIGINAL violation is actually resolved.
+      // A patch that parses fine but leaves the same ruleId present (or introduces a syntax error)
+      // must not be reported as a successful fix.
+      const verification = RemediationEngine.validatePatch(code, parsed.remediatedCode, defect);
+      if (!verification.isValid) {
+        return this.executeFallback(code, defect, `Gemini patch did not resolve ${defect.ruleId} on re-scan (${verification.status}).`);
+      }
+
+      // 6. Synthesize Unified Git Diff
       const suggestedFix = PatchGenerator.generateGitDiff(
         defect.filePath || 'component.tsx',
         code,
@@ -65,7 +76,9 @@ export class AIRemediationPipeline {
         appliedFixDescription: parsed.explanation,
         suggestedFix,
         engineType: 'GEMINI_2_5_FLASH',
-        confidenceScore: parsed.confidenceScore
+        confidenceScore: parsed.confidenceScore,
+        verified: true,
+        verificationStatus: verification.status,
       };
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err);
@@ -83,12 +96,15 @@ export class AIRemediationPipeline {
     reason: string
   ): AIRemediationPipelineResult {
     const fallbackRes = RemediationEngine.applyQuickFix(code, defect);
+    const verification = RemediationEngine.validatePatch(code, fallbackRes.remediatedCode, defect);
 
     return {
       ...fallbackRes,
       engineType: 'TEMPLATE_FALLBACK',
-      confidenceScore: 90.0,
-      fallbackReason: reason
+      confidenceScore: verification.isValid ? 90.0 : 40.0,
+      fallbackReason: reason,
+      verified: verification.isValid,
+      verificationStatus: verification.status,
     };
   }
 }

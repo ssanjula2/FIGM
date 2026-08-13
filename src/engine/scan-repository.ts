@@ -28,16 +28,16 @@ export class ScanRepository {
     return RepositoryFactory.getStorageProvider();
   }
 
-  public static createScanRecord(scan: Omit<DBScanRecord, 'id' | 'createdAt'>): DBScanRecord {
-    return ScanRepository.provider.createScanRecord(scan) as DBScanRecord;
+  public static async createScanRecord(scan: Omit<DBScanRecord, 'id' | 'createdAt'>): Promise<DBScanRecord> {
+    return ScanRepository.provider.createScanRecord(scan) as Promise<DBScanRecord>;
   }
 
-  public static getScanRecordById(id: string): DBScanRecord | undefined {
-    return ScanRepository.provider.getScanRecordById(id) as DBScanRecord | undefined;
+  public static async getScanRecordById(id: string): Promise<DBScanRecord | undefined> {
+    return ScanRepository.provider.getScanRecordById(id) as Promise<DBScanRecord | undefined>;
   }
 
-  public static getScanRecords(options: ScanFilterOptions = {}): PaginatedScanResult {
-    let records = (ScanRepository.provider.getScanRecords(options.userId) as DBScanRecord[]) || [];
+  public static async getScanRecords(options: ScanFilterOptions = {}): Promise<PaginatedScanResult> {
+    let records = ((await ScanRepository.provider.getScanRecords(options.userId)) as DBScanRecord[]) || [];
 
     if (options.projectId) {
       records = records.filter((r) => r.projectId === options.projectId);
@@ -105,11 +105,11 @@ export class ScanRepository {
     };
   }
 
-  public static toggleFavorite(id: string): DBScanRecord | undefined {
-    return ScanRepository.provider.toggleFavoriteScan(id) as DBScanRecord | undefined;
+  public static async toggleFavorite(id: string): Promise<DBScanRecord | undefined> {
+    return ScanRepository.provider.toggleFavoriteScan(id) as Promise<DBScanRecord | undefined>;
   }
 
-  public static deleteScanRecord(id: string): boolean {
-    return ScanRepository.provider.deleteScanRecord(id) as boolean;
+  public static async deleteScanRecord(id: string): Promise<boolean> {
+    return ScanRepository.provider.deleteScanRecord(id) as Promise<boolean>;
   }
 }

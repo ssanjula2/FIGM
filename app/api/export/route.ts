@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { UserDB } from '../../../src/auth/user-db';
+import { ScanRepository } from '../../../src/engine/scan-repository';
 import { ExportService } from '../../../src/engine/export-service';
 import { NotificationRepository } from '../../../src/engine/notification-repository';
 import { authenticateUser } from '../../../src/auth/auth-middleware';
@@ -7,7 +7,10 @@ import { authenticateUser } from '../../../src/auth/auth-middleware';
 export async function POST(request: Request) {
   try {
     const auth = authenticateUser(request);
-    const userId = auth.user?.userId || 'usr_anonymous';
+    if (auth.errorResponse || !auth.user) {
+      return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const userId = auth.user.userId;
 
     const body = await request.json();
     const { scanId, format } = body;
@@ -19,9 +22,13 @@ export async function POST(request: Request) {
       );
     }
 
-    const record = UserDB.getScanRecordById(scanId);
+    const record = await ScanRepository.getScanRecordById(scanId);
     if (!record) {
       return NextResponse.json({ error: 'Scan record not found' }, { status: 404 });
+    }
+
+    if (auth.user.role !== 'ADMIN' && record.userId !== userId) {
+      return NextResponse.json({ error: 'Forbidden: You do not own this scan record' }, { status: 403 });
     }
 
     const requestedFormat = (format || 'JSON').toUpperCase();
@@ -49,7 +56,7 @@ export async function POST(request: Request) {
       content = ExportService.exportJSON(record);
     }
 
-    NotificationRepository.createNotification(
+    await NotificationRepository.createNotification(
       userId,
       'EXPORT_FINISHED',
       'Export Ready',

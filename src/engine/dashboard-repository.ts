@@ -47,11 +47,11 @@ export class DashboardRepository {
     return RepositoryFactory.getStorageProvider();
   }
 
-  public static getSummary(userId?: string, role = 'DEVELOPER'): DashboardSummary {
-    const scanRecords = (DashboardRepository.provider.getScanRecords(userId) as DBScanRecord[]) || [];
+  public static async getSummary(userId?: string, role = 'DEVELOPER'): Promise<DashboardSummary> {
+    const scanRecords = ((await DashboardRepository.provider.getScanRecords(userId)) as DBScanRecord[]) || [];
     const submissions = userId ? UserDB.getSubmissionsByUserId(userId) : [];
-    const projects = (DashboardRepository.provider.getProjects(userId) as any[]) || [];
-    const users = (DashboardRepository.provider.getAllUsers() as any[]) || [];
+    const projects = ((await DashboardRepository.provider.getProjects(userId)) as any[]) || [];
+    const users = ((await DashboardRepository.provider.getAllUsers()) as any[]) || [];
 
     const totalScans = scanRecords.length + submissions.length;
     const totalProjects = Math.max(projects.length, 1);
@@ -127,8 +127,8 @@ export class DashboardRepository {
     };
   }
 
-  public static getActivityFeed(limit = 10): ActivityItem[] {
-    const logs = (DashboardRepository.provider.getAuditLogs(limit) as DBAuditLog[]) || [];
+  public static async getActivityFeed(limit = 10): Promise<ActivityItem[]> {
+    const logs = ((await DashboardRepository.provider.getAuditLogs(limit)) as DBAuditLog[]) || [];
     if (logs.length > 0) {
       return logs.map((log) => ({
         id: log.id,
@@ -173,8 +173,8 @@ export class DashboardRepository {
     ];
   }
 
-  public static getRecentReports(userId?: string, limit = 10): ReportSummaryItem[] {
-    const records = (DashboardRepository.provider.getScanRecords(userId) as DBScanRecord[]) || [];
+  public static async getRecentReports(userId?: string, limit = 10): Promise<ReportSummaryItem[]> {
+    const records = ((await DashboardRepository.provider.getScanRecords(userId)) as DBScanRecord[]) || [];
     const submissions = userId ? UserDB.getSubmissionsByUserId(userId) : [];
 
     if (records.length > 0 || submissions.length > 0) {

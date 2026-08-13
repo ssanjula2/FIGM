@@ -14,6 +14,21 @@ export interface TypeCheckResult {
 
 export class TypeCheckerService {
   /**
+   * Cache of parsed lib.*.d.ts SourceFiles, shared across all checkCode() calls in this process.
+   * Without this, ts.createCompilerHost's default getSourceFile re-reads and re-parses every lib
+   * file from disk on every single call, which is fine for one file but far too slow when scanning
+   * hundreds of files in one process (e.g. `npm run ci:scan`).
+   */
+  private static readonly libFileCache = new Map<string, ts.SourceFile | undefined>();
+
+  /**
+   * Previous Program, passed as `oldProgram` to ts.createProgram so the lib bindings/checker state
+   * are structurally reused across calls (TypeScript's own incremental-compilation mechanism) instead
+   * of being rebuilt from scratch for every single file scanned in a process.
+   */
+  private static lastProgram: ts.Program | undefined;
+
+  /**
    * TypeScript diagnostic codes that are false-positives in isolated snippet checking.
    * These errors occur because the in-memory compiler has no node_modules / type definitions.
    * They should NOT be reported as real FIGM violations — they are environment artifacts,
@@ -70,28 +85,39 @@ export class TypeCheckerService {
       target: ts.ScriptTarget.ES2022,
       module: ts.ModuleKind.ESNext,
       jsx: ts.JsxEmit.ReactJSX,
+      lib: ['lib.es2022.d.ts', 'lib.dom.d.ts', 'lib.dom.iterable.d.ts'],
       noEmit: true,
       strict: false,
       allowJs: true,
       skipLibCheck: true,
+      esModuleInterop: true,
+      allowSyntheticDefaultImports: true,
+      moduleResolution: ts.ModuleResolutionKind.Bundler,
     };
 
     const sourceFile = ts.createSourceFile(fileName, codeToTypeCheck, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
 
+    // Base host reads real lib.*.d.ts files from the installed `typescript` package on disk, so
+    // global built-ins (Promise, Map, Set, URL, console, ...) resolve exactly as they do for a real
+    // tsc invocation. Only the virtual in-memory snippet file is intercepted and served from memory.
+    const defaultHost = ts.createCompilerHost(compilerOptions, true);
     const host: ts.CompilerHost = {
-      getSourceFile: (name) => (name === fileName ? sourceFile : undefined),
-      getDefaultLibFileName: () => 'lib.d.ts',
-      writeFile: () => {},
-      getCurrentDirectory: () => '/',
-      getDirectories: () => [],
-      getCanonicalFileName: (f) => f,
-      useCaseSensitiveFileNames: () => true,
-      getNewLine: () => '\n',
-      fileExists: (f) => f === fileName,
-      readFile: (f) => (f === fileName ? codeToTypeCheck : undefined),
+      ...defaultHost,
+      getSourceFile: (name, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
+        if (name === fileName) return sourceFile;
+        if (TypeCheckerService.libFileCache.has(name)) {
+          return TypeCheckerService.libFileCache.get(name);
+        }
+        const libSourceFile = defaultHost.getSourceFile(name, languageVersionOrOptions, onError, shouldCreateNewSourceFile);
+        TypeCheckerService.libFileCache.set(name, libSourceFile);
+        return libSourceFile;
+      },
+      fileExists: (f) => f === fileName || defaultHost.fileExists(f),
+      readFile: (f) => (f === fileName ? codeToTypeCheck : defaultHost.readFile(f)),
     };
 
-    const program = ts.createProgram([fileName], compilerOptions, host);
+    const program = ts.createProgram([fileName], compilerOptions, host, TypeCheckerService.lastProgram);
+    TypeCheckerService.lastProgram = program;
     const tsDiagnostics = ts.getPreEmitDiagnostics(program);
 
     const reports: DiagnosticReport[] = [];

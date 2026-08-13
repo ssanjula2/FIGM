@@ -128,6 +128,90 @@ describe('Code Complexity Engine Specification', () => {
     assert.equal(metrics.constructBreakdown['catch'], 1);
   });
 
+  test('Fixture 11: do/while loop increases cyclomatic complexity', () => {
+    const code = `
+      function loop(x) {
+        do {
+          x--;
+        } while (x > 0);
+      }
+    `;
+    const metrics = ComplexityEngine.analyzeComplexity(getAST(code), code);
+    assert.ok(metrics.cyclomaticComplexity >= 2, `expected complexity >= 2, got ${metrics.cyclomaticComplexity}`);
+  });
+
+  test('Fixture 12: standalone ternary expression — KNOWN LIMITATION, does NOT increase complexity', () => {
+    // ComplexityEngine.analyzeComplexity() does have a ConditionalExpression branch (verified in
+    // src/analysis/complexity/complexity-engine.ts), but SourceParser.buildASTFromCode() never
+    // synthesizes ConditionalExpression nodes at all (confirmed: zero occurrences of
+    // 'ConditionalExpression' in source-parser.ts). That branch is therefore structurally dead code
+    // against this parser's output. Documented in docs/audit/INITIAL_REPOSITORY_FORENSIC_AUDIT.md §4.
+    // This test pins the ACTUAL (deficient) behavior so a future parser fix visibly flips it to 2.
+    const code = `
+      function pick(x) {
+        return x > 0 ? 'positive' : 'non-positive';
+      }
+    `;
+    const metrics = ComplexityEngine.analyzeComplexity(getAST(code), code);
+    assert.equal(metrics.cyclomaticComplexity, 1, 'KNOWN LIMITATION: standalone ternary is not counted (no ConditionalExpression node is ever synthesized by the parser)');
+  });
+
+  test('Fixture 13: logical && operator — KNOWN LIMITATION, does NOT increase complexity', () => {
+    // Same root cause as Fixture 12: LogicalExpression nodes are never synthesized by the parser.
+    const code = `
+      function bothTrue(a, b) {
+        return a && b;
+      }
+    `;
+    const metrics = ComplexityEngine.analyzeComplexity(getAST(code), code);
+    assert.equal(metrics.cyclomaticComplexity, 1, 'KNOWN LIMITATION: standalone && is not counted (no LogicalExpression node is ever synthesized by the parser)');
+  });
+
+  test('Fixture 14: logical || operator — KNOWN LIMITATION, does NOT increase complexity', () => {
+    const code = `
+      function eitherTrue(a, b) {
+        return a || b;
+      }
+    `;
+    const metrics = ComplexityEngine.analyzeComplexity(getAST(code), code);
+    assert.equal(metrics.cyclomaticComplexity, 1, 'KNOWN LIMITATION: standalone || is not counted (no LogicalExpression node is ever synthesized by the parser)');
+  });
+
+  test('Fixture 15: nested if is counted, but the && condition and ternary body inside it are not', () => {
+    // Only the `if` itself is detected (real IfStatement synthesis works); the && inside its
+    // condition and the ternary inside its body are both invisible to the complexity walker for the
+    // same reason as Fixtures 12-14. This is the compounded, real-world shape of the limitation.
+    const code = `
+      function classify(a, b, c) {
+        if (a && b) {
+          return c ? 'high' : 'medium';
+        }
+        return 'low';
+      }
+    `;
+    const metrics = ComplexityEngine.analyzeComplexity(getAST(code), code);
+    assert.equal(metrics.cyclomaticComplexity, 2, 'KNOWN LIMITATION: only the if is counted; && and ternary inside it are invisible to the complexity walker');
+  });
+
+  test('Fixture 16: empty file does not throw and yields minimal baseline complexity', () => {
+    const code = '';
+    assert.doesNotThrow(() => {
+      const metrics = ComplexityEngine.analyzeComplexity(getAST(code), code);
+      assert.equal(metrics.cyclomaticComplexity, 1);
+      assert.equal(metrics.decisionPointsCount, 0);
+    });
+  });
+
+  test('Fixture 17: malformed/unparseable source does not throw and still returns a metrics object', () => {
+    const code = `function broken( { const x = ; if (`;
+    assert.doesNotThrow(() => {
+      const parseRes = SourceParser.parseSource(code, 'broken.ts');
+      const metrics = ComplexityEngine.analyzeComplexity(parseRes.ast, code);
+      assert.ok(typeof metrics.cyclomaticComplexity === 'number');
+      assert.ok(metrics.cyclomaticComplexity >= 1);
+    });
+  });
+
   test('Fixture 10: Complex real-world function rating', () => {
     const code = `
       function processOrder(order) {

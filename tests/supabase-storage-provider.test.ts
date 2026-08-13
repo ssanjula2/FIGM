@@ -49,11 +49,11 @@ describe('Phase 1 & 2: Database Abstraction & StorageProvider Suite', () => {
     assert.ok(supabaseProvider);
   });
 
-  it('ProjectRepository delegates operations transparently through StorageProvider', () => {
+  it('ProjectRepository delegates operations transparently through StorageProvider', async () => {
     RepositoryFactory.resetProvider();
     const userId = `usr_delegation_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    const proj = ProjectRepository.createProject({
+    const proj = await ProjectRepository.createProject({
       userId,
       name: 'Delegation Test Project',
       description: 'Verifying RepositoryFactory abstraction',
@@ -65,7 +65,7 @@ describe('Phase 1 & 2: Database Abstraction & StorageProvider Suite', () => {
     assert.ok(proj.id);
     assert.strictEqual(proj.name, 'Delegation Test Project');
 
-    const found = ProjectRepository.getProjectById(proj.id);
+    const found = await ProjectRepository.getProjectById(proj.id);
     assert.ok(found);
     assert.strictEqual(found?.id, proj.id);
   });

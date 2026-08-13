@@ -9,7 +9,7 @@ describe('SaaS Production Features 2 & 4: Scan History & Export Engine Suite', (
     RepositoryFactory.resetProvider();
     const userId = `usr_test_scan_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    const scan = ScanRepository.createScanRecord({
+    const scan = await ScanRepository.createScanRecord({
       userId,
       fileName: 'PaymentGateway.tsx',
       framework: 'React',
@@ -41,7 +41,7 @@ describe('SaaS Production Features 2 & 4: Scan History & Export Engine Suite', (
     RepositoryFactory.resetProvider();
     const userId = `usr_test_fav_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    const scan = ScanRepository.createScanRecord({
+    const scan = await ScanRepository.createScanRecord({
       userId,
       fileName: 'PaymentGateway.tsx',
       framework: 'React',
@@ -56,13 +56,13 @@ describe('SaaS Production Features 2 & 4: Scan History & Export Engine Suite', (
 
     assert.ok(scan.id);
 
-    const res1 = ScanRepository.getScanRecords({ userId, search: 'PaymentGateway' });
+    const res1 = await ScanRepository.getScanRecords({ userId, search: 'PaymentGateway' });
     assert.ok(res1.records.length >= 1);
 
-    const toggled = ScanRepository.toggleFavorite(scan.id);
+    const toggled = await ScanRepository.toggleFavorite(scan.id);
     assert.ok(toggled !== undefined);
 
-    const favsOnly = ScanRepository.getScanRecords({ userId, onlyFavorites: true });
+    const favsOnly = await ScanRepository.getScanRecords({ userId, onlyFavorites: true });
     assert.ok(favsOnly.records.some((r) => r.id === scan.id));
   });
 
@@ -70,7 +70,7 @@ describe('SaaS Production Features 2 & 4: Scan History & Export Engine Suite', (
     RepositoryFactory.resetProvider();
     const userId = `usr_test_exp_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    const record = ScanRepository.createScanRecord({
+    const record = await ScanRepository.createScanRecord({
       userId,
       fileName: 'ExportTarget.tsx',
       framework: 'React',

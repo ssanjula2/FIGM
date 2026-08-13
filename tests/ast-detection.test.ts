@@ -1,9 +1,22 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { ASTDetectionEngine } from '../src/ast/ast-detection-engine.js';
+import { SourceParser } from '../src/parser/source-parser.js';
 import { ASTNode } from '../src/types/ast-spec.js';
 
 describe('FIGM Phase 2 AST Detection Engine & Predicates', () => {
+  test('does not misclassify a React JSX component nested in any app-like path as Next.js', () => {
+    const code = `
+      export default function UserCard() {
+        return <div className="card">Hello</div>;
+      }
+    `;
+
+    const parseRes = SourceParser.parseSource(code, 'src/app/components/UserCard.tsx');
+    assert.equal(parseRes.framework, 'REACT_JSX');
+    assert.notEqual(parseRes.framework, 'NEXT_JS');
+  });
+
   test('Detects FIGM-PERF-01: Invariant Object Allocation in Loop Scope', () => {
     const nonCompliantAST: ASTNode = {
       type: 'ObjectExpression',

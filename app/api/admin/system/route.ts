@@ -6,13 +6,19 @@ import path from 'node:path';
 
 export async function GET(request: Request) {
   const auth = authorizeRole(request, ['ADMIN']);
-  const actingUser = auth.user || { userId: 'usr_admin_sanjula', role: 'ADMIN', email: 'sanjula@nsbm.ac.lk' };
+  if (auth.errorResponse || !auth.user) {
+    return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
   const provider = RepositoryFactory.getStorageProvider();
+  const isConnected = typeof (provider as any).isConnected === 'function' ? (provider as any).isConnected() : provider.name !== 'supabase';
+
+  const queryStart = process.hrtime.bigint();
   const users = (await provider.getAllUsers()) || [];
   const projects = (await provider.getProjects()) || [];
   const scans = (await provider.getScanRecords()) || [];
   const auditLogs = (await provider.getAuditLogs(100)) || [];
+  const measuredQueryMs = Number(process.hrtime.bigint() - queryStart) / 1_000_000;
 
   const dbFile = path.resolve(process.cwd(), 'figm-user-db.json');
   let storageSizeBytes = 0;
@@ -22,32 +28,24 @@ export async function GET(request: Request) {
 
   const databaseStatistics = {
     providerName: provider.name,
+    connected: isConnected,
     totalUsers: users.length,
     totalProjects: projects.length,
     totalScanReports: scans.length,
     totalAuditLogs: auditLogs.length,
-    connectionPoolState: provider.name === 'supabase' ? 'ACTIVE_TRANSACTION_MODE' : 'LOCAL_STORAGE_ENGINE',
-    queryPerformanceAvgMs: provider.name === 'supabase' ? 14.2 : 0.34,
+    // Measured from the 4 queries executed above (getAllUsers/getProjects/getScanRecords/getAuditLogs), not a canned constant.
+    lastQueryBatchMs: Number(measuredQueryMs.toFixed(2)),
   };
 
   const storageUsage = {
     storageSizeBytes,
     storageSizeFormatted: `${(storageSizeBytes / 1024).toFixed(2)} KB`,
-    bucketName: 'figm-reports',
-    storageProvider: provider.name === 'supabase' ? 'Supabase Storage Bucket (AWS S3)' : 'Local File Persistence',
-  };
-
-  const realtimeConnections = {
-    activeChannels: provider.name === 'supabase' ? 4 : 1,
-    channels: ['notifications', 'projects', 'scan_reports', 'audit_logs'],
-    connectionStatus: provider.name === 'supabase' ? 'WEBSOCKET_CONNECTED' : 'EVENT_EMITTER_ACTIVE',
+    storageProvider: provider.name === 'supabase' && isConnected ? 'Postgres (Supabase-hosted, via Prisma)' : 'Local JSON file (figm-user-db.json)',
   };
 
   const migrationStatus = {
     schemaVersion: '3.0.0-supabase',
-    lastMigrationDate: new Date().toISOString(),
-    status: 'UP_TO_DATE',
-    skippedDuplicatesCount: 0,
+    status: isConnected ? 'CONNECTED' : 'NOT_CONNECTED_USING_JSON_FALLBACK',
   };
 
   const systemHealth = {
@@ -55,15 +53,12 @@ export async function GET(request: Request) {
     uptimeSeconds: Math.floor(process.uptime()),
     nodeVersion: process.version,
     memoryUsage: process.memoryUsage(),
-    cpuLoadPercentage: (Math.random() * 8 + 2).toFixed(2),
-    apiLatencyMs: 0.38,
   };
 
   return NextResponse.json({
     systemHealth,
     databaseStatistics,
     storageUsage,
-    realtimeConnections,
     migrationStatus,
     usageStats: {
       totalUsers: users.length,

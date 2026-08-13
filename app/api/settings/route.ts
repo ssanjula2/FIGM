@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const auth = authenticateUser(request);
   const userId = auth.user?.userId || 'usr_anonymous';
 
-  const settings = UserRepository.getSettings(userId);
+  const settings = await UserRepository.getSettings(userId);
   return NextResponse.json({ settings });
 }
 
@@ -16,7 +16,7 @@ export async function PATCH(request: Request) {
 
   try {
     const body = await request.json();
-    const settings = UserRepository.updateSettings(userId, body);
+    const settings = await UserRepository.updateSettings(userId, body);
     return NextResponse.json({
       message: 'Settings updated successfully',
       settings,

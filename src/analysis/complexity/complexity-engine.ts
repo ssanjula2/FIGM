@@ -19,6 +19,33 @@ export interface DetailedComplexityMetrics {
 }
 
 export class ComplexityEngine {
+  private static estimateMaxNestingDepthFromCode(code: string): number {
+    const lines = code.split(/\r?\n/);
+    let braceDepth = 0;
+    let maxDepth = 0;
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+
+      const controlFlowOpening = (trimmed.match(/\b(?:if|for|while|switch|catch|else if)\b\s*\(/g) || []).length;
+      const openBraces = (trimmed.match(/\{/g) || []).length;
+      const closeBraces = (trimmed.match(/\}/g) || []).length;
+
+      if (controlFlowOpening > 0 && openBraces > 0) {
+        const computedDepth = braceDepth + controlFlowOpening;
+        maxDepth = Math.max(maxDepth, computedDepth);
+      } else if (controlFlowOpening > 0) {
+        const computedDepth = braceDepth + controlFlowOpening;
+        maxDepth = Math.max(maxDepth, computedDepth);
+      }
+
+      braceDepth += openBraces - closeBraces;
+    }
+
+    return maxDepth;
+  }
+
   /**
    * Calculate dynamic code complexity metrics from AST and raw code
    */
@@ -142,6 +169,11 @@ export class ComplexityEngine {
     };
 
     traverse(ast.program || ast, 0, null);
+
+    const sourceDepth = this.estimateMaxNestingDepthFromCode(code);
+    if (sourceDepth > maxDepth) {
+      maxDepth = sourceDepth;
+    }
 
     const cyclomaticComplexity = 1 + decisionPointsCount;
     const maxFunctionComplexity = functionComplexities.length > 0 ? Math.max(...functionComplexities) : cyclomaticComplexity;

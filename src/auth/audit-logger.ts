@@ -1,7 +1,8 @@
-import { UserDB, DBAuditLog } from './user-db';
+import { DBAuditLog } from './user-db';
+import { RepositoryFactory } from '../storage/repository-factory';
 
 export class AuditLogger {
-  public static logEvent(
+  public static async logEvent(
     action: DBAuditLog['action'],
     options: {
       userId?: string;
@@ -11,8 +12,8 @@ export class AuditLogger {
       status?: 'SUCCESS' | 'FAILURE';
       details?: string;
     }
-  ): DBAuditLog {
-    return UserDB.addAuditLog({
+  ): Promise<DBAuditLog> {
+    return RepositoryFactory.getStorageProvider().addAuditLog({
       action,
       userId: options.userId,
       email: options.email,
@@ -20,10 +21,10 @@ export class AuditLogger {
       userAgent: options.userAgent || 'system',
       status: options.status || 'SUCCESS',
       details: options.details,
-    });
+    }) as Promise<DBAuditLog>;
   }
 
-  public static getRecentLogs(limit = 100): DBAuditLog[] {
-    return UserDB.getAuditLogs(limit);
+  public static async getRecentLogs(limit = 100): Promise<DBAuditLog[]> {
+    return RepositoryFactory.getStorageProvider().getAuditLogs(limit) as Promise<DBAuditLog[]>;
   }
 }

@@ -31,6 +31,13 @@ function createFIGMUserStudyForm() {
   form.setAllowResponseEdits(false);
   form.setShowLinkToRespondAgain(false);
   form.setPublishingSummary(false);
+  // Prevents the same signed-in Google account from submitting more than once. Google enforces this
+  // internally via the responder's account and does NOT add an email/identity column to the exported
+  // response sheet (that only happens if setCollectEmail(true) is separately called, which it is not
+  // here) -- so this closes the duplicate-submission gap without weakening participant anonymity.
+  // NOTE: requires participants to be signed into a Google account to open the form.
+  form.setLimitOneResponsePerUser(true);
+  form.setRequireLogin(true);
 
   // Link Destination Spreadsheet
   const ss = SpreadsheetApp.create("FIGM User Study — Responses (Target N=85)");

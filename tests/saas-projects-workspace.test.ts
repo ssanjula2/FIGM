@@ -8,7 +8,7 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     RepositoryFactory.resetProvider();
     const userId = `usr_test_proj_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    const project = ProjectRepository.createProject({
+    const project = await ProjectRepository.createProject({
       userId,
       name: 'E-Commerce Frontend',
       description: 'Main online store web client',
@@ -22,7 +22,7 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     assert.strictEqual(project.status, 'ACTIVE');
 
     RepositoryFactory.resetProvider();
-    const fetched = ProjectRepository.getProjectById(project.id);
+    const fetched = await ProjectRepository.getProjectById(project.id);
     assert.ok(fetched);
     assert.strictEqual(fetched?.id, project.id);
   });
@@ -31,7 +31,7 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     RepositoryFactory.resetProvider();
     const userId = `usr_test_search_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    ProjectRepository.createProject({
+    await ProjectRepository.createProject({
       userId,
       name: 'Alpha Analytics',
       description: 'Data platform',
@@ -41,7 +41,7 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     });
 
     RepositoryFactory.resetProvider();
-    const searchRes = ProjectRepository.getProjects({ userId });
+    const searchRes = await ProjectRepository.getProjects({ userId });
     assert.ok(searchRes.length >= 1);
   });
 
@@ -49,7 +49,7 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     RepositoryFactory.resetProvider();
     const userId = `usr_test_dup_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    const original = ProjectRepository.createProject({
+    const original = await ProjectRepository.createProject({
       userId,
       name: 'Original App',
       description: 'Original description',
@@ -59,7 +59,7 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     });
 
     RepositoryFactory.resetProvider();
-    const duplicate = ProjectRepository.duplicateProject(original.id);
+    const duplicate = await ProjectRepository.duplicateProject(original.id);
     assert.ok(duplicate);
     assert.notStrictEqual(duplicate?.id, original.id);
     assert.strictEqual(duplicate?.name, 'Original App (Copy)');
@@ -69,7 +69,7 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     RepositoryFactory.resetProvider();
     const userId = `usr_test_arch_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    const project = ProjectRepository.createProject({
+    const project = await ProjectRepository.createProject({
       userId,
       name: 'Temporary Sandbox',
       description: 'To be archived',
@@ -79,16 +79,16 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     });
 
     RepositoryFactory.resetProvider();
-    const archived = ProjectRepository.archiveProject(project.id);
+    const archived = await ProjectRepository.archiveProject(project.id);
     assert.ok(archived);
     assert.strictEqual(archived?.status, 'ARCHIVED');
 
     RepositoryFactory.resetProvider();
-    const deleted = ProjectRepository.deleteProject(project.id);
+    const deleted = await ProjectRepository.deleteProject(project.id);
     assert.strictEqual(deleted, true);
 
     RepositoryFactory.resetProvider();
-    const check = ProjectRepository.getProjectById(project.id);
+    const check = await ProjectRepository.getProjectById(project.id);
     assert.strictEqual(check, undefined);
   });
 
@@ -96,7 +96,7 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     RepositoryFactory.resetProvider();
     const userId = `usr_test_stats_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-    ProjectRepository.createProject({
+    await ProjectRepository.createProject({
       userId,
       name: 'Stats App 1',
       description: 'Test stats',
@@ -106,7 +106,7 @@ describe('SaaS Production Feature 1: Project Workspace Suite', () => {
     });
 
     RepositoryFactory.resetProvider();
-    const stats = ProjectRepository.getProjectStats(userId);
+    const stats = await ProjectRepository.getProjectStats(userId);
     assert.ok(stats.totalProjects >= 1);
     assert.ok(stats.activeProjects >= 1);
   });

@@ -318,11 +318,11 @@ export const UserDB = {
     return db.users;
   },
 
-  createUser(user: Omit<DBUser, 'id' | 'createdAt'>): DBUser {
+  createUser(user: Omit<DBUser, 'id' | 'createdAt'> & { id?: string }): DBUser {
     const db = loadDB();
     const newUser: DBUser = {
       ...user,
-      id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      id: user.id || `usr_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       email: user.email.toLowerCase(),
       passwordHash: user.passwordHash,
       fullName: user.fullName,

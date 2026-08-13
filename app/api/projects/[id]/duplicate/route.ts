@@ -8,7 +8,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const duplicated = ProjectRepository.duplicateProject(params.id, auth.user.userId);
+  const duplicated = await ProjectRepository.duplicateProject(params.id, auth.user.userId);
   if (!duplicated) {
     return NextResponse.json({ error: 'Project not found' }, { status: 404 });
   }
