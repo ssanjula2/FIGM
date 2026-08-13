@@ -1,0 +1,160 @@
+{
+  "_generatedBy": "scripts/generate-annotation-package.ts",
+  "_generatedAt": "2026-08-13T11:41:01.810Z",
+  "_warning": "INTERNAL USE ONLY -- never copy this file into research/independent-annotation/package/. It contains the real answers.",
+  "_matchingNote": "The real evaluation pipeline (src/eval/evaluation-runner.ts) matches ground truth to detections by (filePath, ruleId) only, never by line number. blindedLine below is documentary/for human sanity-checking only, not a match key.",
+  "groundTruthViolations": [
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-04",
+      "expectedLine": 2,
+      "description": "Static import HeavyAnalytics used in conditional function",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-03",
+      "expectedLine": 9,
+      "description": "window.addEventListener scroll missing removal teardown",
+      "blindedLine": 8
+    },
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-02",
+      "expectedLine": 22,
+      "description": "Un-dimensioned img element user.avatar",
+      "blindedLine": 20
+    },
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-01",
+      "expectedLine": 25,
+      "description": "div onClick without onKeyDown or tabindex",
+      "blindedLine": 22
+    },
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-02",
+      "expectedLine": 30,
+      "description": "CustomDropdown control missing role and aria-label",
+      "blindedLine": 26
+    },
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-03",
+      "expectedLine": 33,
+      "description": "status div banner missing aria-live announcer",
+      "blindedLine": 28
+    },
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-01",
+      "expectedLine": 39,
+      "description": "Invariant object allocation itemConfig inside render map",
+      "blindedLine": 33
+    },
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-04",
+      "expectedLine": 44,
+      "description": "Modal component overlay without focus restoration",
+      "blindedLine": 37
+    },
+    {
+      "filePath": "VueBenchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-PERF-02",
+      "expectedLine": 4,
+      "description": "Un-dimensioned img userAvatar in Vue template",
+      "blindedLine": 3
+    },
+    {
+      "filePath": "VueBenchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-A11Y-01",
+      "expectedLine": 7,
+      "description": "span v-on:click without keydown or tabindex",
+      "blindedLine": 5
+    },
+    {
+      "filePath": "VueBenchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-PERF-01",
+      "expectedLine": 11,
+      "description": "Invariant style object allocation in v-for loop",
+      "blindedLine": 8
+    },
+    {
+      "filePath": "VueBenchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-A11Y-03",
+      "expectedLine": 15,
+      "description": "status div in Vue template missing aria-live",
+      "blindedLine": 11
+    },
+    {
+      "filePath": "VueBenchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-PERF-03",
+      "expectedLine": 29,
+      "description": "window.addEventListener resize in Vue mounted hook",
+      "blindedLine": 25
+    },
+    {
+      "filePath": "AngularBenchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-PERF-02",
+      "expectedLine": 7,
+      "description": "Un-dimensioned img avatarUrl in Angular template",
+      "blindedLine": null
+    },
+    {
+      "filePath": "AngularBenchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-A11Y-01",
+      "expectedLine": 10,
+      "description": "div (click) without keydown or tabindex",
+      "blindedLine": null
+    },
+    {
+      "filePath": "AngularBenchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-A11Y-03",
+      "expectedLine": 15,
+      "description": "status div in Angular template missing aria-live",
+      "blindedLine": null
+    },
+    {
+      "filePath": "AngularBenchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-PERF-03",
+      "expectedLine": 26,
+      "description": "window.addEventListener scroll in Angular ngOnInit hook",
+      "blindedLine": 23
+    },
+    {
+      "filePath": "VanillaJSBenchmark.js",
+      "framework": "GENERIC_ESTREE",
+      "ruleId": "FIGM-PERF-04",
+      "expectedLine": 2,
+      "description": "Static import ChartEngine used inside conditional function",
+      "blindedLine": 1
+    },
+    {
+      "filePath": "VanillaJSBenchmark.js",
+      "framework": "GENERIC_ESTREE",
+      "ruleId": "FIGM-PERF-03",
+      "expectedLine": 6,
+      "description": "window.addEventListener orientationchange missing teardown",
+      "blindedLine": 4
+    }
+  ]
+}
