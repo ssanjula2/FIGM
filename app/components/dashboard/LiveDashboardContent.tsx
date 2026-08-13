@@ -108,7 +108,14 @@ export default function LiveDashboardContent() {
 
   const radius = 62;
   const circumference = 2 * Math.PI * radius;
-  const healthScore = summary?.avgQualityScore || 87;
+  // `?? 0` (nullish coalescing), not `|| N` — the backend now reports real data, including real
+  // zeros for a fresh/quiet deployment, and `||` would silently swap any real 0 back out for a
+  // fabricated placeholder number (0 is falsy in JS). Every metric below in this component was
+  // previously affected by exactly this bug: even after the backend (DashboardRepository) was
+  // fixed to stop padding its own numbers with hardcoded floors, this component's `|| 30`-style
+  // fallbacks would have silently reintroduced fake numbers on the screen whenever the real
+  // value was genuinely 0.
+  const healthScore = summary?.avgQualityScore ?? 0;
   const strokeDashoffset = circumference - (healthScore / 100) * circumference;
 
   if (loading) {
@@ -200,7 +207,7 @@ export default function LiveDashboardContent() {
         <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #38bdf8' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Projects</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalProjects || 5}</span>
+            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalProjects ?? 0}</span>
             <span className="badge-trend-green">↗ Active</span>
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.35) 100%)', borderTop: '1px solid #38bdf8' }} />
@@ -210,7 +217,7 @@ export default function LiveDashboardContent() {
         <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #10b981' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Repository Scans</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalScans || 30}</span>
+            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalScans ?? 0}</span>
             <span className="badge-trend-green">↗ +100%</span>
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.35) 100%)', borderTop: '1px solid #10b981' }} />
@@ -220,7 +227,7 @@ export default function LiveDashboardContent() {
         <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #f59e0b' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Rules Triggered</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalRulesTriggered || 823}</span>
+            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalRulesTriggered ?? 0}</span>
             <span className="badge-trend-green">25 Rules</span>
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.35) 100%)', borderTop: '1px solid #f59e0b' }} />
@@ -230,7 +237,7 @@ export default function LiveDashboardContent() {
         <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #a855f7' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Fix Suggestions</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalAiSuggestions || 175}</span>
+            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalAiSuggestions ?? 0}</span>
             <span className="badge-trend-green">100% Valid</span>
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0.35) 100%)', borderTop: '1px solid #a855f7' }} />
@@ -243,9 +250,14 @@ export default function LiveDashboardContent() {
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>
-              {`${summary?.totalActiveUsers || 85}`}
+              {`${summary?.totalActiveUsers ?? 0}`}
             </span>
-            <span className="badge-trend-green">N=85 Cohort</span>
+            {/* Previously a hardcoded "N=85 Cohort" badge, unconditionally displayed regardless
+                of the real totalActiveUsers count above it — the same fabricated-participant-
+                count shape this codebase's research-integrity work explicitly guards against
+                elsewhere (see docs/audit/HUMAN_STUDY_PROVENANCE_AUDIT.md). This is real active-
+                user telemetry, not a human-study cohort, so it now just labels what it is. */}
+            <span className="badge-trend-green">Active Users</span>
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(244, 63, 94, 0.1) 0%, rgba(244, 63, 94, 0.35) 100%)', borderTop: '1px solid #f43f5e' }} />
         </div>
@@ -295,11 +307,11 @@ export default function LiveDashboardContent() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '16px' }}>
             <div>
               <div style={{ fontSize: '11px', color: '#94a3b8' }}>Avg Latency</div>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: '#38bdf8' }}>{summary?.avgScanDurationMs || 0.34} ms</div>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#38bdf8' }}>{summary?.avgScanDurationMs ?? 0} ms</div>
             </div>
             <div>
               <div style={{ fontSize: '11px', color: '#94a3b8' }}>Peak Memory</div>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: '#a855f7' }}>{summary?.avgMemoryUsageMb || 1.42} MB</div>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#a855f7' }}>{summary?.avgMemoryUsageMb ?? 0} MB</div>
             </div>
           </div>
         </div>

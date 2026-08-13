@@ -6,6 +6,7 @@
 import { ASTNode, DiagnosticReport, FrameworkType } from '../types/ast-spec.js';
 import { UniversalASTMapper } from './universal-ast-mapper.js';
 import { FOUR_LAYER_MAPPINGS } from '../matrix/four-layer-meta-model.js';
+import { getStandardReference } from '../matrix/standard-clause-mapping.js';
 
 export class ASTDetectionEngine {
   /**
@@ -278,7 +279,10 @@ export class ASTDetectionEngine {
       offendingCodeSnippet: node.attributes?.codeSnippet ? String(node.attributes.codeSnippet) : `<${node.name || node.type} />`,
       message,
       remediation: mapping.rule.remediation,
-      standardReference: mapping.domain === 'PERFORMANCE' ? 'ISO 25010' : 'WCAG 2.2',
+      // See standard-clause-mapping.ts for why this is now a real per-concern WCAG SC number or
+      // ISO 25010 sub-characteristic (where independently verifiable) instead of a blanket
+      // domain-level "ISO 25010"/"WCAG 2.2" string.
+      standardReference: getStandardReference(mapping.domain, mapping.concern),
       confidenceScore,
       evidence: `AST Node: [${node.type}] at line ${node.loc?.start?.line || 1}`
     };

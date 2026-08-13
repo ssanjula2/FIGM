@@ -16,6 +16,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { RuleExecutionEngine, ScanResult } from '../engine/rule-execution-engine.js';
 import { ReportGenerator, AggregateScanReport } from '../reporter/report-generator.js';
+import { calculateQualityScoreFromCounts } from '../engine/quality-score.js';
 
 export interface CLIOptions {
   targetDir: string;
@@ -104,10 +105,7 @@ export function runCLI(args: string[]): number {
   const aggregateReport: AggregateScanReport = ReportGenerator.createAggregateReport(results);
   const { summary } = aggregateReport;
 
-  // Quality Score Formula
-  const penalty =
-    summary.criticalCount * 15 + summary.highCount * 8 + summary.mediumCount * 3 + summary.lowCount * 1;
-  const qualityScore = Math.max(0, 100 - penalty);
+  const qualityScore = calculateQualityScoreFromCounts(summary);
 
   console.log(`\n-------------------------------------------------------`);
   console.log(` SCAN SUMMARY`);

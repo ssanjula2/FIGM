@@ -12,6 +12,10 @@ export interface RemediationResult {
   remediatedCode: string;
   appliedFixDescription: string;
   suggestedFix?: GitPatchResult;
+  /** True when a safe automatic fix is not possible (e.g. a useMemo dependency array that
+   *  cannot be reliably inferred) — callers must surface this as MANUAL_REVIEW_REQUIRED rather
+   *  than attempting to verify/claim a complete automated fix. */
+  requiresManualReview?: boolean;
 }
 
 export class RemediationEngine {
@@ -21,6 +25,7 @@ export class RemediationEngine {
   public static applyQuickFix(code: string, defect: DiagnosticReport): RemediationResult {
     let remediatedCode = code;
     let appliedFixDescription = 'Applied automated code transformation.';
+    let requiresManualReview = false;
 
     const snippet = defect.offendingCodeSnippet.trim();
     const startLine = defect.location?.start?.line || 1;
@@ -51,16 +56,22 @@ export class RemediationEngine {
       }
 
       case 'FIGM-PERF-02': {
-        // Inject width and height attributes into img or visual element
+        // Inject width and height attributes into img or visual element. FIGM-PERF-02's real
+        // trigger condition (evalPerf02) only requires width AND height both present (or an
+        // aspect-ratio) — width+height alone is sufficient, so the fix stops there. An earlier
+        // version also injected a `style={{ aspectRatio: ... }}` object-literal prop, which was
+        // unnecessary for satisfying the rule and, found via the real detect->remediate->re-scan
+        // verification run, caused the isolated single-file TypeScript checker to spuriously
+        // report TYPE-TS-2875 on the patched JSX, rejecting an otherwise-correct patch.
         if (code.includes(snippet)) {
           let fixedSnippet = snippet;
           if (!snippet.includes('width=')) {
-            fixedSnippet = fixedSnippet.replace(/<img\s+/, '<img width="300" height="200" style={{ aspectRatio: "150/100" }} ');
+            fixedSnippet = fixedSnippet.replace(/<img\s+/, '<img width="300" height="200" ');
           }
           remediatedCode = code.replace(snippet, fixedSnippet);
-          appliedFixDescription = 'Injected explicit width, height, and CSS aspect-ratio attributes to prevent Cumulative Layout Shift (CLS).';
+          appliedFixDescription = 'Injected explicit width and height attributes to prevent Cumulative Layout Shift (CLS).';
         } else {
-          remediatedCode = code.replace(/<img\s+/g, '<img width="300" height="200" style={{ aspectRatio: "150/100" }} ');
+          remediatedCode = code.replace(/<img\s+/g, '<img width="300" height="200" ');
           appliedFixDescription = 'Injected explicit width and height attributes to un-dimensioned <img> tags.';
         }
         break;
@@ -96,6 +107,45 @@ export class RemediationEngine {
             remediatedCode = `// [FIGM Quick-Fix]: Lazy loaded module\n` + code.replace(snippet, `/* lazy */ import(${snippet.replace('import ', '')})`);
           }
           appliedFixDescription = 'Converted top-level static import into a dynamic lazy import() code-splitting boundary.';
+        }
+        break;
+      }
+
+      case 'FIGM-PERF-05': {
+        // Inline anonymous arrow function inside a render/map loop. A correct fix means hoisting
+        // it into a stable, memoized handler — but the callback typically closes over the current
+        // loop item (e.g. `onClick={() => handleClick(item.id)}`), so a real fix needs the
+        // handler to be curried/bound per-item (e.g. via a data-attribute + a single stable
+        // top-level handler, or useCallback keyed correctly per item) — which cannot be safely
+        // inferred from the snippet alone without risking a stale-closure bug. Flagged for manual
+        // review rather than generating a plausible-looking but potentially wrong rewrite.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: Extract this inline callback into a stable handler (e.g. a top-level function keyed by the item's id, or useCallback with the correct per-item dependency) — cannot be safely automated because it closes over the current loop item.\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: extract this inline render-loop callback into a stable, correctly-memoized handler. This cannot be safely automated because the callback closes over the current loop item.';
+        break;
+      }
+
+      case 'FIGM-PERF-06': {
+        // Synchronous Web Storage API accessed inside a loop — hoist the read/write outside the
+        // loop when it does not depend on the loop variable (the common real case: reading the
+        // same key on every iteration, e.g. an auth token).
+        if (code.includes(snippet)) {
+          const declMatch = snippet.match(/^(const|let|var)\s+(\w+)\s*=\s*((?:local|session)Storage\.\w+\([^)]*\));?\s*$/);
+          if (declMatch) {
+            const [, decl, varName, storageCall] = declMatch;
+            const hoistedDecl = `// [FIGM Quick-Fix]: Hoisted repeated Storage API read outside loop scope\n${decl} ${varName} = ${storageCall};\n\n`;
+            remediatedCode = hoistedDecl + code.replace(snippet, '');
+            appliedFixDescription = `Hoisted the repeated ${varName} storage read outside the loop so it runs once instead of once per iteration.`;
+          } else {
+            appliedFixDescription = 'Hoist this Storage API call outside the loop if its result does not depend on the current loop iteration; otherwise cache the result across iterations.';
+          }
+        } else {
+          appliedFixDescription = 'Hoist this Storage API call outside the loop if its result does not depend on the current loop iteration; otherwise cache the result across iterations.';
         }
         break;
       }
@@ -188,6 +238,40 @@ export class RemediationEngine {
         break;
       }
 
+      case 'FIGM-A11Y-05': {
+        // Unlabeled form input — inject an explicit aria-label derived from context where
+        // possible (placeholder text is the most reliable per-element hint available at the
+        // snippet level), otherwise a generic placeholder the developer must fill in.
+        if (code.includes(snippet)) {
+          const placeholderMatch = snippet.match(/placeholder=["']([^"']+)["']/);
+          const label = placeholderMatch ? placeholderMatch[1] : 'TODO: describe this field';
+          const fixedSnippet = snippet.replace(/<(input|textarea|select)\b/, `<$1 aria-label="${label}"`);
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = placeholderMatch
+            ? `Injected aria-label="${label}" derived from the existing placeholder text.`
+            : 'Injected a placeholder aria-label — replace with a real accessible description of this field.';
+        } else {
+          remediatedCode = code.replace(/<(input|textarea|select)\b/g, '<$1 aria-label="TODO: describe this field"');
+          appliedFixDescription = 'Injected placeholder aria-label attributes — replace with real accessible descriptions.';
+        }
+        break;
+      }
+
+      case 'FIGM-A11Y-06': {
+        // Positive tabIndex overrides natural focus order — reset to 0 (focusable in natural DOM
+        // order) rather than guessing an intended custom order, which would just be a different
+        // instance of the same anti-pattern.
+        if (code.includes(snippet)) {
+          const fixedSnippet = snippet.replace(/tab[Ii]ndex=(["'{])[1-9]\d*(["'}])/, 'tabIndex=$10$2');
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = 'Reset the positive tabIndex to 0 (natural DOM focus order) instead of an arbitrary custom order.';
+        } else {
+          remediatedCode = code.replace(/tab[Ii]ndex=(["'{])[1-9]\d*(["'}])/g, 'tabIndex=$10$2');
+          appliedFixDescription = 'Reset positive tabIndex values to 0 (natural DOM focus order).';
+        }
+        break;
+      }
+
       case 'SYNTAX-PARSE-ERROR':
       case 'SYNTAX_ERROR': {
         // Fix common syntax typos
@@ -214,32 +298,84 @@ export class RemediationEngine {
       }
 
       case 'FIGM-NEXT-02': {
-        // Convert native <img> to Next.js <Image /> component
-        if (code.includes('<img')) {
-          remediatedCode = code.replace(/<img\s+/g, '<Image width={500} height={300} ');
-          if (!remediatedCode.includes("import Image from 'next/image'")) {
-            remediatedCode = `import Image from 'next/image';\n` + remediatedCode;
+        // The live FIGM-NEXT-02 rule (isHeavyStaticImportInNext in source-parser.ts) flags a
+        // heavy module imported statically in a Next.js file instead of via next/dynamic — this
+        // case previously converted native <img> tags to next/image's <Image>, a fix for a
+        // completely unrelated concern (another old-taxonomy mismatch, the same class of bug
+        // found and fixed for FIGM-REACT-01 above).
+        if (code.includes(snippet)) {
+          const importMatch = snippet.match(/import\s+(\w+)\s+from\s+(['"][^'"]+['"]);?/);
+          if (importMatch) {
+            const [, compName, modPath] = importMatch;
+            const fixedSnippet = `import dynamic from 'next/dynamic';\nconst ${compName} = dynamic(() => import(${modPath}), { ssr: false });`;
+            remediatedCode = code.replace(snippet, fixedSnippet);
+            appliedFixDescription = `Converted the static "${compName}" import into a next/dynamic lazy import with ssr: false.`;
+          } else {
+            appliedFixDescription = 'Convert this static import of a heavy module into a next/dynamic lazy import.';
           }
-          appliedFixDescription = 'Converted native <img> to Next.js optimized <Image /> component with explicit dimensions.';
+        } else {
+          appliedFixDescription = 'Convert this static import of a heavy module into a next/dynamic lazy import.';
         }
         break;
       }
 
+      case 'FIGM-NEXT-03': {
+        // Missing `export const revalidate` on an App Router page. The diagnostic's snippet is a
+        // synthetic marker ('export const revalidate'), not a real source line — the whole point
+        // is that the real line is absent — so the fix always inserts it at the top of the file.
+        // 60 seconds is a conservative, commonly-recommended default; the developer should tune
+        // it to the page's real staleness tolerance.
+        remediatedCode = `export const revalidate = 60; // [FIGM Quick-Fix]: adjust to this page's real staleness tolerance\n\n${code}`;
+        appliedFixDescription = 'Added export const revalidate = 60 route segment configuration — adjust the value to this page\'s real staleness tolerance.';
+        break;
+      }
+
       case 'FIGM-NEXT-04': {
-        // Guard window access in React Server Components
-        if (code.includes('window.')) {
-          remediatedCode = code.replace(/(window\.\w+)/g, "(typeof window !== 'undefined' ? $1 : null)");
-          appliedFixDescription = "Encapsulated direct window object access with SSR 'typeof window !== undefined' guard.";
+        // The live FIGM-NEXT-04 rule (isExternalFontLink in source-parser.ts) flags an external
+        // Google Fonts <link> tag — this case previously guarded `window.` access instead, a fix
+        // for a completely unrelated concern (the same old-taxonomy mismatch found and fixed for
+        // FIGM-REACT-01/FIGM-NEXT-02 above; found via the real detect->remediate->re-scan
+        // verification run across all 25 rules, not assumed).
+        requiresManualReview = true;
+        const familyMatch = snippet.match(/family=([^&"']+)/);
+        if (familyMatch && code.includes(snippet)) {
+          const family = familyMatch[1].split(':')[0].replace(/\+/g, ' ');
+          const exportName = family.replace(/\s+/g, '');
+          const varName = exportName.charAt(0).toLowerCase() + exportName.slice(1);
+          const importDecl = `import { ${exportName} } from 'next/font/google';\nconst ${varName} = ${exportName}({ subsets: ['latin'] });\n\n`;
+          remediatedCode = importDecl + code.replace(
+            snippet,
+            `{/* [FIGM Manual Review Required]: apply className={${varName}.className} to the real <html> or <body> element — cannot be safely automated without knowing where it belongs in the JSX tree. */}`
+          );
+          appliedFixDescription = `Replaced the external Google Fonts <link> with a next/font/google import (${exportName}) — apply className={${varName}.className} to the appropriate <html>/<body> element manually.`;
+        } else {
+          appliedFixDescription = 'Manual review required: replace this external Google Fonts <link> with a next/font/google import and apply its className to the appropriate element.';
         }
         break;
       }
 
       case 'FIGM-REACT-01': {
-        // Fix unstable key prop
-        if (code.includes('key={Math.random()}')) {
-          remediatedCode = code.replace(/key=\{Math\.random\(\)\}/g, 'key={item.id || index}');
-          appliedFixDescription = 'Replaced non-deterministic Math.random() key prop with stable item.id || index key identifier.';
+        // The live FIGM-REACT-01 rule (isExpensiveDerivedStateWithoutMemo in source-parser.ts)
+        // flags an expensive derived computation (.sort()/.filter()/.reduce()) in render with no
+        // useMemo — this case previously fixed `key={Math.random()}` instead, a violation that
+        // does not correspond to what the rule actually detects (a leftover from an older rule
+        // taxonomy), so real FIGM-REACT-01 violations were never actually remediated.
+        //
+        // A correct fix means wrapping the computation in `useMemo(() => EXPR, [deps])`, but the
+        // real dependency array cannot be safely inferred from the snippet alone — guessing wrong
+        // (e.g. an empty array) produces a stale-closure bug that can be worse than the original
+        // missing-memoization issue. This is not safely automatable, so it is flagged for manual
+        // review (requiresManualReview) rather than faking a complete fix that would pass a naive
+        // "does the rule still fire" re-scan check by coincidence of the word "useMemo" appearing
+        // on the line.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: Wrap in React.useMemo(() => { ... }, [/* real dependencies */]) — the dependency array cannot be safely inferred automatically.\n${snippet}`
+          );
         }
+        appliedFixDescription = 'Manual review required: wrap this expensive derived computation in React.useMemo() with the correct dependency array. This cannot be safely automated because the real dependencies cannot be reliably inferred from the code alone.';
         break;
       }
 
@@ -311,16 +447,27 @@ export class RemediationEngine {
         break;
       }
 
-      case 'FIGM-REACT-05': {
-        // Memoize Context Provider value
-        if (code.includes('<') && code.includes('.Provider')) {
-          remediatedCode = code.replace(/value=\{([^}]+)\}/g, 'value={React.useMemo(() => ($1), [$1])}');
-          appliedFixDescription = 'Wrapped Context.Provider value in React.useMemo memoization boundary.';
+      case 'FIGM-REACT-04': {
+        // Inline callback prop passed to a custom component without useCallback. A safe fix
+        // requires knowing the real dependency array — the same constraint as FIGM-PERF-01 and
+        // FIGM-REACT-01 above — so this is flagged for manual review rather than guessing an
+        // empty dependency array, which risks a stale-closure bug if the callback actually closes
+        // over a changing value.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: Wrap this inline callback in React.useCallback(fn, [/* real dependencies */]) — cannot be safely automated because the dependency array cannot be reliably inferred.\n${snippet}`
+          );
         }
+        appliedFixDescription = 'Manual review required: wrap this inline callback prop in React.useCallback() with the correct dependency array. This cannot be safely automated because the real dependencies cannot be reliably inferred from the code alone.';
         break;
       }
 
-      case 'FIGM-ANGULAR-01': {
+      // NOTE: this case previously existed under the nonexistent rule ID 'FIGM-ANGULAR-01' (the
+      // real ID is 'FIGM-ANG-01') — its logic was correct for what it does, just registered under
+      // an ID the live engine never actually emits, so it was completely unreachable dead code.
+      case 'FIGM-ANG-01': {
         // Fix unsubscribed RxJS subscription
         if (code.includes('.subscribe(')) {
           remediatedCode = code.replace(/this\.(\w+\$)\.subscribe\(/g, 'this.subscription = this.$1.subscribe(');
@@ -335,11 +482,76 @@ export class RemediationEngine {
         break;
       }
 
-      case 'FIGM-ANGULAR-02': {
+      case 'FIGM-ANG-02': {
+        // Add ChangeDetectionStrategy.OnPush to the @Component decorator.
+        if (code.includes('@Component({')) {
+          remediatedCode = code.replace(
+            /@Component\(\{/,
+            '@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush,'
+          );
+          if (!remediatedCode.includes('ChangeDetectionStrategy')) {
+            if (/from\s+['"]@angular\/core['"]/.test(remediatedCode)) {
+              remediatedCode = remediatedCode.replace(
+                /import\s*\{([^}]*)\}\s*from\s*['"]@angular\/core['"]/,
+                (_m: string, names: string) => `import {${names.includes('ChangeDetectionStrategy') ? names : names + ', ChangeDetectionStrategy'}} from '@angular/core'`
+              );
+            } else {
+              remediatedCode = `import { ChangeDetectionStrategy } from '@angular/core';\n${remediatedCode}`;
+            }
+          }
+          appliedFixDescription = 'Added changeDetection: ChangeDetectionStrategy.OnPush to the @Component decorator.';
+        }
+        break;
+      }
+
+      // Previously existed under the nonexistent rule ID 'FIGM-ANGULAR-02' (the real ID for
+      // "*ngFor without trackBy" is 'FIGM-ANG-03', not 'FIGM-ANG-02' which is "missing OnPush").
+      case 'FIGM-ANG-03': {
         // Add trackBy to *ngFor
         if (code.includes('*ngFor')) {
           remediatedCode = code.replace(/\*ngFor="let\s+(\w+)\s+of\s+([^"]+)"/g, '*ngFor="let $1 of $2; trackBy: trackById"');
-          appliedFixDescription = 'Added trackBy: trackById iteration function to *ngFor directive.';
+          appliedFixDescription = 'Added trackBy: trackById iteration function to *ngFor directive — a matching trackById(index, item) method must exist on the component class.';
+        }
+        break;
+      }
+
+      case 'FIGM-ANG-04': {
+        // A method call inside an Angular template ({{ computeTotal() }}) re-executes on every
+        // change-detection cycle. A correct fix means converting it to a getter, a memoized
+        // signal, or a pure pipe — which requires understanding what the method actually does,
+        // not safely inferable from the template snippet alone.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `<!-- [FIGM Manual Review Required]: Convert this method call to a getter, a cached signal, or a pure pipe — re-executing on every change-detection cycle cannot be safely auto-fixed without knowing what the method computes. -->\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: convert this template method call to a getter, cached signal, or pure pipe. This cannot be safely automated without knowing what the method computes.';
+        break;
+      }
+
+      case 'FIGM-ANG-05': {
+        // Direct nativeElement DOM mutation bypasses Angular's Renderer2 abstraction (breaks
+        // server-side rendering / Web Worker rendering). The common, well-defined sub-case —
+        // setting a single style property — has a safe, mechanical Renderer2 equivalent; other
+        // shapes (innerHTML, setAttribute, classList, ...) are flagged for manual review since a
+        // generic textual rewrite risks getting the Renderer2 method/argument order wrong.
+        const styleMatch = snippet.match(/this\.(\w+)\.nativeElement\.style\.(\w+)\s*=\s*(.+?);?\s*$/);
+        if (styleMatch) {
+          const [, elRef, styleProp, value] = styleMatch;
+          const fixedSnippet = `this.renderer.setStyle(this.${elRef}.nativeElement, '${styleProp}', ${value});`;
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = `Replaced direct nativeElement.style.${styleProp} mutation with this.renderer.setStyle() — ensure Renderer2 is injected in the constructor.`;
+        } else {
+          requiresManualReview = true;
+          if (code.includes(snippet)) {
+            remediatedCode = code.replace(
+              snippet,
+              `// [FIGM Manual Review Required]: Replace this direct nativeElement mutation with the matching Renderer2 method (setProperty/setAttribute/appendChild/etc.) — cannot be safely automated for this mutation shape.\n${snippet}`
+            );
+          }
+          appliedFixDescription = 'Manual review required: replace this direct nativeElement mutation with the matching Renderer2 method. Only the common style-property-assignment shape can be safely auto-fixed.';
         }
         break;
       }
@@ -485,17 +697,26 @@ export class RemediationEngine {
       remediatedCode,
       appliedFixDescription,
       suggestedFix,
+      requiresManualReview,
     };
   }
 
   /**
-   * Re-scan proposed patch in isolated copy to verify if the original issue is resolved and 0 syntax errors exist
+   * Re-scan proposed patch in isolated copy to verify if the original issue is resolved and 0 syntax errors exist.
+   * `requiresManualReview` (from RemediationResult) short-circuits straight to MANUAL_REVIEW_REQUIRED — a rule
+   * whose safe fix depends on information that cannot be reliably inferred (e.g. a useMemo dependency array)
+   * must never be reported as FIXED merely because the specific ruleId happens to stop firing on re-scan.
    */
   public static validatePatch(
     originalCode: string,
     remediatedCode: string,
-    defect: DiagnosticReport
-  ): { isValid: boolean; status: 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED'; remainingDiagnostics: DiagnosticReport[] } {
+    defect: DiagnosticReport,
+    requiresManualReview = false
+  ): { isValid: boolean; status: 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED' | 'MANUAL_REVIEW_REQUIRED'; remainingDiagnostics: DiagnosticReport[] } {
+    if (requiresManualReview) {
+      return { isValid: false, status: 'MANUAL_REVIEW_REQUIRED', remainingDiagnostics: [defect] };
+    }
+
     if (originalCode === remediatedCode) {
       return { isValid: false, status: 'UNRESOLVED', remainingDiagnostics: [defect] };
     }

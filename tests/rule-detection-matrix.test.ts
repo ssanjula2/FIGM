@@ -180,4 +180,25 @@ describe('Phase 3: Real Rule Detection Matrix (25 rules x positive + negative fi
     const ids = new Set(CASES.map((c) => c.ruleId));
     assert.equal(ids.size, 25, 'no duplicate rule IDs');
   });
+
+  describe('Vue click-handler syntax variants (FIGM-A11Y-01)', () => {
+    // The matrix above only exercises the explicit `v-on:click` directive form. Vue also supports
+    // the `@click` shorthand for the identical binding — the far more common real-world form —
+    // which was NOT recognized until this was found and fixed (previously a genuine live
+    // accessibility violation written the idiomatic way would silently evade FIGM-A11Y-01
+    // entirely). Both forms, plus the keydown equivalent, are verified here explicitly.
+    it('detects a real violation written with the @click shorthand', () => {
+      const code = `<template>\n  <div @click="handleClick">Click me</div>\n</template>`;
+      const res = SourceParser.parseSource(code, 'Widget.vue');
+      const reports = ASTDetectionEngine.evaluateNode(res.ast!, 'Widget.vue', res.framework);
+      assert.ok(reports.some((r) => r.ruleId === 'FIGM-A11Y-01'), '@click shorthand must be recognized, same as v-on:click');
+    });
+
+    it('does NOT fire when @click is paired with @keydown.enter (correct, accessible code)', () => {
+      const code = `<template>\n  <div @click="handleClick" @keydown.enter="handleClick" tabindex="0">Click me</div>\n</template>`;
+      const res = SourceParser.parseSource(code, 'Widget.vue');
+      const reports = ASTDetectionEngine.evaluateNode(res.ast!, 'Widget.vue', res.framework);
+      assert.ok(!reports.some((r) => r.ruleId === 'FIGM-A11Y-01'), 'a real keyboard handler + tabindex must suppress the violation, whether written with @ or v-on: syntax');
+    });
+  });
 });

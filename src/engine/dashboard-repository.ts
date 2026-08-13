@@ -51,14 +51,23 @@ export class DashboardRepository {
     const scanRecords = ((await DashboardRepository.provider.getScanRecords(userId)) as DBScanRecord[]) || [];
     const submissions = userId ? UserDB.getSubmissionsByUserId(userId) : [];
     const projects = ((await DashboardRepository.provider.getProjects(userId)) as any[]) || [];
-    const users = ((await DashboardRepository.provider.getAllUsers()) as any[]) || [];
 
+    // Real counts only — no artificial minimum floors. A brand-new/low-traffic deployment must
+    // show its real (possibly small or zero) numbers, not a padded-up minimum designed to make
+    // the dashboard look more active than it actually is. Previously this function padded every
+    // one of these fields with a hardcoded floor (totalScans/totalReports >= 30,
+    // totalRulesTriggered >= 823, totalAiSuggestions >= 175, totalActiveUsers >= 85) and, when
+    // there were literally zero real scans, fabricated an entire fake framework distribution
+    // (react:10, nextjs:10, angular:10, vue:2, generic:2) and fake average quality/duration
+    // numbers — production statistics presented to real users that were not derived from the
+    // real database at all.
     const totalScans = scanRecords.length + submissions.length;
-    const totalProjects = Math.max(projects.length, 1);
-    const totalReports = Math.max(totalScans, 12);
+    const totalProjects = projects.length;
+    const totalReports = totalScans;
 
     let totalQualityScore = 0;
     let totalScanDurationMs = 0;
+    let totalMemoryUsageMb = 0;
     let totalRulesTriggered = 0;
     let totalAiSuggestions = 0;
 
@@ -74,10 +83,11 @@ export class DashboardRepository {
 
     scanRecords.forEach((s) => {
       if (s.userId) activeUserSet.add(s.userId);
-      totalQualityScore += s.qualityScore || 85;
-      totalScanDurationMs += s.scanTimeMs || 340;
-      totalRulesTriggered += s.ruleCount || 3;
-      totalAiSuggestions += s.aiFixCount || 1;
+      totalQualityScore += s.qualityScore ?? 0;
+      totalScanDurationMs += s.scanTimeMs ?? 0;
+      totalMemoryUsageMb += (s as any).memoryUsageMb ?? 0;
+      totalRulesTriggered += s.ruleCount ?? 0;
+      totalAiSuggestions += s.aiFixCount ?? 0;
 
       const fw = (s.framework || '').toLowerCase();
       if (fw.includes('react')) fwDist.react++;
@@ -89,10 +99,10 @@ export class DashboardRepository {
 
     submissions.forEach((s) => {
       if (s.userId) activeUserSet.add(s.userId);
-      totalQualityScore += s.qualityScore || 85;
-      totalScanDurationMs += s.executionTimeMs || 340;
-      totalRulesTriggered += s.diagnosticsCount || 1;
-      totalAiSuggestions += 1;
+      totalQualityScore += s.qualityScore ?? 0;
+      totalScanDurationMs += s.executionTimeMs ?? 0;
+      totalRulesTriggered += s.diagnosticsCount ?? 0;
+      totalAiSuggestions += 0;
 
       const fw = (s.framework || '').toLowerCase();
       if (fw.includes('react')) fwDist.react++;
@@ -102,27 +112,20 @@ export class DashboardRepository {
       else fwDist.generic++;
     });
 
-    if (totalScans === 0) {
-      fwDist.react = 10;
-      fwDist.nextjs = 10;
-      fwDist.angular = 10;
-      fwDist.vue = 2;
-      fwDist.generic = 2;
-    }
-
-    const avgQualityScore = totalScans > 0 ? Math.round(totalQualityScore / totalScans) : 87;
-    const avgScanDurationMs = totalScans > 0 ? parseFloat((totalScanDurationMs / totalScans).toFixed(2)) : 0.34;
+    const avgQualityScore = totalScans > 0 ? Math.round(totalQualityScore / totalScans) : 0;
+    const avgScanDurationMs = totalScans > 0 ? parseFloat((totalScanDurationMs / totalScans).toFixed(2)) : 0;
+    const avgMemoryUsageMb = totalScans > 0 ? parseFloat((totalMemoryUsageMb / totalScans).toFixed(2)) : 0;
 
     return {
       totalProjects,
-      totalScans: Math.max(totalScans, 30),
-      totalReports: Math.max(totalReports, 30),
-      totalRulesTriggered: Math.max(totalRulesTriggered, 823),
-      totalAiSuggestions: Math.max(totalAiSuggestions, 175),
+      totalScans,
+      totalReports,
+      totalRulesTriggered,
+      totalAiSuggestions,
       avgQualityScore,
-      avgScanDurationMs: avgScanDurationMs || 0.34,
-      avgMemoryUsageMb: 1.42,
-      totalActiveUsers: Math.max(activeUserSet.size, users.length, 85),
+      avgScanDurationMs,
+      avgMemoryUsageMb,
+      totalActiveUsers: activeUserSet.size,
       frameworkDistribution: fwDist,
     };
   }

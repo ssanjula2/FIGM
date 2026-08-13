@@ -17,7 +17,7 @@ export interface AIRemediationPipelineResult extends RemediationResult {
   fallbackReason?: string;
   /** True only if the patched code was re-scanned and the original violation (defect.ruleId) is confirmed gone. */
   verified: boolean;
-  verificationStatus: 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED';
+  verificationStatus: 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED' | 'MANUAL_REVIEW_REQUIRED';
 }
 
 export class AIRemediationPipeline {
@@ -96,7 +96,7 @@ export class AIRemediationPipeline {
     reason: string
   ): AIRemediationPipelineResult {
     const fallbackRes = RemediationEngine.applyQuickFix(code, defect);
-    const verification = RemediationEngine.validatePatch(code, fallbackRes.remediatedCode, defect);
+    const verification = RemediationEngine.validatePatch(code, fallbackRes.remediatedCode, defect, fallbackRes.requiresManualReview);
 
     return {
       ...fallbackRes,

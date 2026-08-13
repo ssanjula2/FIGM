@@ -35,12 +35,16 @@ export async function POST(request: Request) {
     // Persist scan record under authenticated user or guest audit log
     if (auth.user) {
       try {
-        const qualityScore = Math.max(0, 100 - (scanResult.totalErrors * 5 + scanResult.totalWarnings * 2));
+        // Use the SAME quality score already computed by RuleExecutionEngine and returned in the
+        // live response below — a separately-recomputed formula here previously produced a
+        // different number (a real, live-observed discrepancy: 74 in the live response vs. 88 in
+        // the persisted history record for the same scan) purely because this route independently
+        // reimplemented a cruder, differently-weighted formula instead of reusing the real one.
         await ScanRepository.createScanRecord({
           userId,
           fileName: targetFile,
           framework: scanResult.framework,
-          qualityScore,
+          qualityScore: scanResult.qualityScore ?? 0,
           scanTimeMs: scanResult.profile?.executionTimeMs || 0.12,
           memoryUsageMb: scanResult.profile?.peakMemoryMb || 0.45,
           ruleCount: scanResult.diagnostics.length,

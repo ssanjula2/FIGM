@@ -584,8 +584,13 @@ export class SourceParser {
         const tagStartCol = tagStartMatch.index ?? 0;
         const attrsText = scanJsxOpenTagAttrs(cleanLines, idx, tagStartCol);
 
-        const hasOnClick = attrsText.includes('onClick') || attrsText.includes('v-on:click') || attrsText.includes('(click)');
-        const hasOnKeyDown = attrsText.includes('onKeyDown') || attrsText.includes('v-on:keydown') || attrsText.includes('(keydown)');
+        // Vue recognizes both the explicit `v-on:click` directive and the `@click` shorthand for
+        // the identical binding — only the explicit form was checked here, so a real, common Vue
+        // accessibility violation written with the shorthand (the more idiomatic, far more common
+        // real-world form) silently evaded FIGM-A11Y-01 entirely. Same for the keydown equivalent
+        // (`@keydown.enter`, already assumed to exist by RemediationEngine's Vue fix template).
+        const hasOnClick = attrsText.includes('onClick') || attrsText.includes('v-on:click') || attrsText.includes('@click') || attrsText.includes('(click)');
+        const hasOnKeyDown = attrsText.includes('onKeyDown') || attrsText.includes('v-on:keydown') || attrsText.includes('@keydown') || attrsText.includes('(keydown)');
         const hasTabIndex = attrsText.includes('tabIndex') || attrsText.includes('tabindex');
 
         // Check positive tabIndex > 0 (FIGM-A11Y-06)

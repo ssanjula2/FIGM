@@ -11,6 +11,7 @@ import { ComplexityAnalyzer, ComplexityMetrics } from './complexity-analyzer.js'
 import { DynamicProfiler, DynamicProfileMetrics } from './dynamic-profiler.js';
 import { TypeCheckerService } from '../analysis/type-checker-service.js';
 import { ComplexityEngine, DetailedComplexityMetrics } from '../analysis/complexity/complexity-engine.js';
+import { calculateQualityScoreFromCounts } from './quality-score.js';
 
 export interface ScanResult {
   filePath: string;
@@ -88,8 +89,7 @@ export class RuleExecutionEngine {
     const highCount = diagnostics.filter((d) => d.severity === 'HIGH').length;
     const mediumCount = diagnostics.filter((d) => d.severity === 'MEDIUM').length;
     const lowCount = diagnostics.filter((d) => d.severity === 'LOW').length;
-    const weightedPenalty = criticalCount * 15 + highCount * 8 + mediumCount * 3 + lowCount * 1;
-    const qualityScore = Math.max(0, 100 - weightedPenalty);
+    const qualityScore = calculateQualityScoreFromCounts({ criticalCount, highCount, mediumCount, lowCount });
 
     const legacyComplexity: ComplexityMetrics = {
       cyclomaticComplexity: detailedComplexity.cyclomaticComplexity,

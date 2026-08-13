@@ -5,6 +5,7 @@
 
 import { ScanResult } from '../engine/rule-execution-engine.js';
 import { DiagnosticReport } from '../types/ast-spec.js';
+import { calculateQualityScoreFromCounts } from '../engine/quality-score.js';
 
 export interface AggregateScanReport {
   summary: {
@@ -59,9 +60,7 @@ export class ReportGenerator {
     const { summary, allDiagnostics, fileResults } = report;
 
     const totalIssues = summary.totalDiagnostics;
-    const weightedPenalty =
-      summary.criticalCount * 15 + summary.highCount * 8 + summary.mediumCount * 3 + summary.lowCount * 1;
-    const qualityScore = Math.max(0, 100 - weightedPenalty);
+    const qualityScore = calculateQualityScoreFromCounts(summary);
 
     let performanceRating = 'A';
     if (qualityScore >= 90) performanceRating = 'A+';
