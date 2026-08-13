@@ -1,12 +1,11 @@
-# FIGM Code Inspector — Enterprise Cloud SaaS & Research Platform
+# FIGM Code Inspector — Multi-Tenant SaaS Platform & Research Prototype
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/figm/figm-code-inspector)
-[![Tests Passing](https://img.shields.io/badge/tests-103%2F103%20passed-success.svg)](https://github.com/figm/figm-code-inspector)
-[![Code Quality Score](https://img.shields.io/badge/code%20quality-96%2F100-blue.svg)](https://github.com/figm/figm-code-inspector)
-[![Security Score](https://img.shields.io/badge/security-94%2F100-emerald.svg)](https://github.com/figm/figm-code-inspector)
-[![Dissertation Compliance](https://img.shields.io/badge/dissertation-100%25%20compliant-purple.svg)](https://github.com/figm/figm-code-inspector)
+[![Tests Passing](https://img.shields.io/badge/tests-271%2F271%20passed-success.svg)](https://github.com/ssanjula2/FIGM)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ssanjula2/FIGM)
 
-**FIGM Code Inspector** is a production-grade, multi-tenant SaaS platform and automated code inspection engine built upon the **Framework-Independent Guideline Model (FIGM)**. It parses component source code (React JSX/TSX, Next.js App Router, Angular Components, Vue SFCs) into a normalized **Abstract Language Primitive (ALP)** AST representation, detects architectural defects across Performance and Accessibility guidelines, and generates real-time AI remediation patches via the Gemini API.
+> The "Code Quality 96/100", "Security 94/100", "Build: passing", and "Dissertation: 100% compliant" badges previously shown here traced to no computation anywhere in this codebase and have been removed rather than replaced with different unverified numbers. The test-count badge above is the actual count from the last `npm test` run (see Validation below); the workflow at `.github/workflows/figm-scan.yml` runs static analysis on push/PR but has not yet run on a public remote, so no CI status badge is shown until it has real run history to report.
+
+**FIGM Code Inspector** is a multi-tenant SaaS-architected code inspection platform and undergraduate research prototype (NSBM Green University, IS303.2 Research Methodology coursework) built upon the **Framework-Independent Guideline Model (FIGM)**. It parses component source code (React JSX/TSX, Next.js App Router, Angular Components, Vue SFCs) into a normalized **Abstract Language Primitive (ALP)** AST representation, detects architectural defects across Performance and Accessibility guidelines, and generates AI-assisted remediation patches via the Gemini API.
 
 ---
 
@@ -30,7 +29,7 @@
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/figm/figm-code-inspector.git
+git clone https://github.com/ssanjula2/FIGM.git
 cd figm-model
 npm install
 ```

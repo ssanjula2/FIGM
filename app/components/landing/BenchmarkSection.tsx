@@ -162,7 +162,7 @@ export default function BenchmarkSection() {
               Comparative Rule Coverage Matrix (FIGM vs Industrial Tools)
             </h3>
             <span style={{ color: '#38bdf8', fontSize: '12px', fontWeight: 700, background: 'rgba(56, 189, 248, 0.1)', padding: '4px 12px', borderRadius: '20px' }}>
-              FIGM Coverage: 23/23 Rules
+              FIGM Coverage: 25/25 Rules
             </span>
           </div>
 

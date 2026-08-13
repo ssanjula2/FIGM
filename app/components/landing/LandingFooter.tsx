@@ -42,7 +42,7 @@ export default function LandingFooter() {
             <div style={{ color: '#f8fafc', fontWeight: 700, fontSize: '14px', marginBottom: '16px' }}>Navigation</div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <li><Link href="/live-scan" style={{ color: '#94a3b8', textDecoration: 'none' }}>Live Code Scanner</Link></li>
-              <li><Link href="/guidelines" style={{ color: '#94a3b8', textDecoration: 'none' }}>23 Guideline Rules</Link></li>
+              <li><Link href="/guidelines" style={{ color: '#94a3b8', textDecoration: 'none' }}>25 Guideline Rules</Link></li>
               <li><Link href="/diagnostics" style={{ color: '#94a3b8', textDecoration: 'none' }}>Diagnostics Hub</Link></li>
               <li><Link href="/profiler" style={{ color: '#94a3b8', textDecoration: 'none' }}>Dynamic Profiler</Link></li>
               <li><Link href="/ai-fix" style={{ color: '#94a3b8', textDecoration: 'none' }}>Gemini AI Remediation</Link></li>
@@ -56,7 +56,7 @@ export default function LandingFooter() {
               <li><Link href="/analytics" style={{ color: '#94a3b8', textDecoration: 'none' }}>Empirical Metrics</Link></li>
               <li><Link href="/history" style={{ color: '#94a3b8', textDecoration: 'none' }}>Scan History</Link></li>
               <li><Link href="/auth/login" style={{ color: '#94a3b8', textDecoration: 'none' }}>Auth Workspace</Link></li>
-              <li><a href="https://github.com" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', textDecoration: 'none' }}>GitHub Repository ↗</a></li>
+              <li><a href="https://github.com/ssanjula2/FIGM" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', textDecoration: 'none' }}>GitHub Repository ↗</a></li>
               <li><a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', textDecoration: 'none' }}>W3C WCAG 2.2 Spec ↗</a></li>
             </ul>
           </div>
@@ -68,7 +68,7 @@ export default function LandingFooter() {
               Framework-Independent Guideline Model for Automated SPA Quality Assurance and AI-Assisted Remediation (2026).
             </p>
             <div style={{ color: '#38bdf8', fontSize: '12px', fontWeight: 700 }}>
-              MSc Software Engineering Thesis
+              IS303.2 Research Methodology Coursework
             </div>
           </div>
         </div>

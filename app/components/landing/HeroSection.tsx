@@ -89,7 +89,7 @@ function UserList({ users }) {
           }}
         >
           <span style={{ fontSize: '14px' }}>🎓</span>
-          <span>IEEE / MSc Research Artifact — Framework-Independent Guideline Model</span>
+          <span>NSBM Green University · IS303.2 Research Methodology — Framework-Independent Guideline Model</span>
         </div>
 
         {/* Hero Title */}
@@ -174,7 +174,7 @@ function UserList({ users }) {
             }}
           >
             <span>🔍</span>
-            <span>Explore 23 Rules</span>
+            <span>Explore 25 Rules</span>
           </Link>
 
           <Link

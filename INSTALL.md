@@ -17,7 +17,7 @@ This guide details local installation, environment setup, database initializatio
 
 ### Step 1: Repository Setup
 ```bash
-git clone https://github.com/figm/figm-code-inspector.git
+git clone https://github.com/ssanjula2/FIGM.git
 cd figm-model
 ```
 
