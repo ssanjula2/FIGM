@@ -58,7 +58,7 @@ const CASES: Case[] = [
 // Rules where a safe, fully-automatic fix is genuinely impossible (the dependency array / method
 // semantics cannot be reliably inferred from the snippet alone) — these must honestly report
 // MANUAL_REVIEW_REQUIRED, never a false FIXED claim.
-const EXPECTED_MANUAL_REVIEW = new Set(['FIGM-PERF-05', 'FIGM-NEXT-04', 'FIGM-REACT-01', 'FIGM-REACT-04', 'FIGM-ANG-04']);
+const EXPECTED_MANUAL_REVIEW = new Set(['FIGM-PERF-05', 'FIGM-NEXT-02', 'FIGM-NEXT-04', 'FIGM-REACT-01', 'FIGM-REACT-04', 'FIGM-ANG-04']);
 
 describe('Phase 10: remediation coverage and honesty for all 25 real rules', () => {
   it('covers exactly the 25 real rule IDs, no duplicates, no invented rules', () => {
@@ -79,12 +79,6 @@ describe('Phase 10: remediation coverage and honesty for all 25 real rules', () 
       if (EXPECTED_MANUAL_REVIEW.has(c.ruleId)) {
         assert.equal(verification.status, 'MANUAL_REVIEW_REQUIRED', `${c.ruleId} must honestly flag manual review, not fake a complete fix`);
         assert.equal(fix.requiresManualReview, true);
-      } else if (c.ruleId === 'FIGM-NEXT-02') {
-        // A defensible PATCH_REJECTED: the generated next/dynamic() call is real, correct Next.js
-        // code, but the isolated single-file type checker flags a genuine type mismatch against
-        // the actual installed monaco-editor package's types when imported this way. Rejecting is
-        // the honest outcome, not a bug in the remediation logic itself.
-        assert.equal(verification.status, 'PATCH_REJECTED');
       } else {
         assert.equal(verification.status, 'FIXED', `${c.ruleId} should be a safely automatable fix that is genuinely verified fixed on re-scan`);
         assert.notEqual(fix.remediatedCode, c.code, `${c.ruleId}'s fix must actually change the code`);

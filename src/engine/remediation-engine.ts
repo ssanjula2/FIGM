@@ -299,23 +299,33 @@ export class RemediationEngine {
 
       case 'FIGM-NEXT-02': {
         // The live FIGM-NEXT-02 rule (isHeavyStaticImportInNext in source-parser.ts) flags a
-        // heavy module imported statically in a Next.js file instead of via next/dynamic — this
+        // heavy module imported statically in a Next.js file instead of loaded lazily — this
         // case previously converted native <img> tags to next/image's <Image>, a fix for a
-        // completely unrelated concern (another old-taxonomy mismatch, the same class of bug
-        // found and fixed for FIGM-REACT-01 above).
+        // completely unrelated concern (an old-taxonomy mismatch, the same class of bug found
+        // and fixed for FIGM-REACT-01/FIGM-NEXT-04 above).
+        //
+        // A first fix wrapped every heavy import unconditionally in `next/dynamic`. That was
+        // found to be genuinely WRONG, not just risky, by live-testing it against the rule's own
+        // real target module list (monaco-editor, chart.js, three, canvas, echarts, d3): every
+        // one of these is a vanilla JS library, not a React component. `next/dynamic` is
+        // specifically for lazy-loading a COMPONENT (its type signature expects the imported
+        // module to resolve to `{ default: ComponentType } | ComponentType`) — wrapping a vanilla
+        // library in it produces code that fails real type-checking (reproduced live against the
+        // actual installed `monaco-editor` package, not a hypothetical). The genuinely correct
+        // fix depends on how the binding is actually used elsewhere in the file (as a component,
+        // vs. as a plain API surface loaded inside an effect/handler) — information this snippet-
+        // level template cannot see, so this is flagged for manual review rather than guessing.
+        requiresManualReview = true;
+        const importMatch = snippet.match(/import\s+(\w+)\s+from\s+(['"][^'"]+['"]);?/);
+        const compName = importMatch ? importMatch[1] : 'the imported binding';
+        const modPath = importMatch ? importMatch[2] : "'the-module'";
         if (code.includes(snippet)) {
-          const importMatch = snippet.match(/import\s+(\w+)\s+from\s+(['"][^'"]+['"]);?/);
-          if (importMatch) {
-            const [, compName, modPath] = importMatch;
-            const fixedSnippet = `import dynamic from 'next/dynamic';\nconst ${compName} = dynamic(() => import(${modPath}), { ssr: false });`;
-            remediatedCode = code.replace(snippet, fixedSnippet);
-            appliedFixDescription = `Converted the static "${compName}" import into a next/dynamic lazy import with ssr: false.`;
-          } else {
-            appliedFixDescription = 'Convert this static import of a heavy module into a next/dynamic lazy import.';
-          }
-        } else {
-          appliedFixDescription = 'Convert this static import of a heavy module into a next/dynamic lazy import.';
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: If ${compName} is rendered as a React component, wrap it: const ${compName} = dynamic(() => import(${modPath}), { ssr: false }) (requires: import dynamic from 'next/dynamic'). If it is a vanilla library (the common case for monaco-editor/chart.js/three/canvas/echarts/d3), load it lazily instead, e.g. inside a useEffect: useEffect(() => { import(${modPath}).then((mod) => { /* use mod */ }); }, []). Which applies depends on how ${compName} is actually used below — not safely inferable from this line alone.\n${snippet}`
+          );
         }
+        appliedFixDescription = `Manual review required: ${compName} needs a lazy-loading strategy, but which one (next/dynamic for a component vs. a plain lazy import() for a vanilla library) depends on how it is used elsewhere in the file — not safely inferable from the import line alone.`;
         break;
       }
 

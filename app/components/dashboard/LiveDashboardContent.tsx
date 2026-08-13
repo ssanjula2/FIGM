@@ -208,7 +208,9 @@ export default function LiveDashboardContent() {
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Projects</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalProjects ?? 0}</span>
-            <span className="badge-trend-green">↗ Active</span>
+            {/* Previously a static "Active" status badge implying project activity with no real
+                activity-tracking data behind it — removed for the same reason as the trend
+                badges above. */}
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.35) 100%)', borderTop: '1px solid #38bdf8' }} />
         </div>
@@ -218,7 +220,10 @@ export default function LiveDashboardContent() {
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Repository Scans</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalScans ?? 0}</span>
-            <span className="badge-trend-green">↗ +100%</span>
+            {/* Previously a static "+100%" trend badge with no real historical data behind it —
+                this codebase has no time-series scan history to compute a real trend from, so per
+                the "remove the trend claim rather than fabricate it" rule, it's simply removed
+                rather than replaced with a different unverifiable number. */}
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.35) 100%)', borderTop: '1px solid #10b981' }} />
         </div>
@@ -238,7 +243,9 @@ export default function LiveDashboardContent() {
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Fix Suggestions</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalAiSuggestions ?? 0}</span>
-            <span className="badge-trend-green">100% Valid</span>
+            {/* Previously a static "100% Valid" badge — no per-suggestion validity tracking
+                exists in the data model to compute a real validity rate from, so the claim is
+                removed rather than presented as if it were measured. */}
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0.35) 100%)', borderTop: '1px solid #a855f7' }} />
         </div>
