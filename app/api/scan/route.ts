@@ -3,7 +3,7 @@ import { RuleExecutionEngine } from '../../../src/engine/rule-execution-engine';
 import { AIRemediationPipeline } from '../../../src/ai/ai-remediation-pipeline';
 import { ScanRepository } from '../../../src/engine/scan-repository';
 import { authenticateUser } from '../../../src/auth/auth-middleware';
-import { checkRateLimit } from '../../../src/auth/rate-limiter';
+import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 import { AuditLogger } from '../../../src/auth/audit-logger';
 
 const MAX_CODE_LENGTH = 500000; // 500KB limit
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     // scan. Static scans run entirely locally and are the core interactive product feature, so
     // their limit is generous enough not to interfere with normal editor-like usage (e.g. a user
     // re-scanning after every few keystrokes) while still bounding scripted abuse.
-    const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+    const ip = getClientIp(request);
     const rateLimitError = await checkRateLimit(ip, action === 'ai-fix' ? 15 : 60, 60000);
     if (rateLimitError) return rateLimitError;
 

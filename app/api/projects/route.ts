@@ -5,7 +5,14 @@ import { AuditLogger } from '../../../src/auth/audit-logger';
 
 export async function GET(request: Request) {
   const auth = authenticateUser(request);
-  const userId = auth.user?.userId;
+  if (auth.errorResponse || !auth.user) {
+    return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Regular users see only their own projects; ADMIN can see across all users (undefined userId).
+  // Never let an unauthenticated/failed-auth request fall through to undefined here --
+  // getProjects/getProjectStats treat a missing userId as "return every user's records."
+  const userId = auth.user.role === 'ADMIN' ? undefined : auth.user.userId;
 
   const { searchParams } = new URL(request.url);
   const search = searchParams.get('search') || undefined;

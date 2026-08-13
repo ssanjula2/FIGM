@@ -3,7 +3,7 @@ import { RepositoryFactory } from '../../../../src/storage/repository-factory';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 import { RuleExecutionEngine } from '../../../../src/engine/rule-execution-engine';
 import { hashPassword } from '../../../../src/auth/auth-service';
-import { checkRateLimit } from '../../../../src/auth/rate-limiter';
+import { checkRateLimit, getClientIp } from '../../../../src/auth/rate-limiter';
 
 // Participant ids must match the synthetic "P001"-style format this endpoint generates itself.
 // Without this check, a caller could pass an existing real user's id as participantId and this
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { framework, fileName, code, participantId: clientParticipantId } = body;
 
-    const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+    const ip = getClientIp(request);
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
     const rateLimitError = await checkRateLimit(ip, 30, 60000);

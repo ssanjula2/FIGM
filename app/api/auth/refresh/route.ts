@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { verifyRefreshToken, signJWT, signRefreshToken } from '../../../../src/auth/auth-service';
 import { RepositoryFactory } from '../../../../src/storage/repository-factory';
-import { checkRateLimit } from '../../../../src/auth/rate-limiter';
+import { checkRateLimit, getClientIp } from '../../../../src/auth/rate-limiter';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
 export async function POST(request: Request) {
-  const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+  const ip = getClientIp(request);
   const rateLimitError = await checkRateLimit(ip, 20, 60000);
   if (rateLimitError) return rateLimitError;
 

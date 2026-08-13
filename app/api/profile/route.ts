@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { authenticateUser } from '../../../src/auth/auth-middleware';
 import { UserRepository } from '../../../src/engine/user-repository';
 import { AuditLogger } from '../../../src/auth/audit-logger';
-import { checkRateLimit } from '../../../src/auth/rate-limiter';
+import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 
 export async function GET(request: Request) {
   const auth = authenticateUser(request);
@@ -52,7 +52,7 @@ export async function PATCH(request: Request) {
       // could try to brute-force currentPassword); throttle the same way login does. The audit
       // log entry both records the attempt and is what checkRateLimit's DB-backed path counts
       // against for subsequent requests from this IP.
-      const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+      const ip = getClientIp(request);
       const rateLimitError = await checkRateLimit(ip, 10, 60000);
       if (rateLimitError) return rateLimitError;
 
