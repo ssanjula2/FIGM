@@ -85,6 +85,14 @@ function stripCommentsAndStrings(code: string): string {
         // be blanked even though it doesn't have the JSX-attribute `identifier=` shape.
         const lookbehind = code.slice(Math.max(0, i - 24), i);
         const isModuleSpecifier = /\b(from|import)\s*$/.test(lookbehind) || /\brequire\(\s*$/.test(lookbehind);
+        // A quoted string that is the first argument to `addEventListener(`/`removeEventListener(`
+        // is the event-type name (e.g. 'scroll', 'resize') — structural code FIGM-PERF-03 reads
+        // to pair listener registration with its matching teardown by event type, not display
+        // text. Missing this exception silently broke event-type-aware cleanup pairing: the
+        // string was blanked before the pairing regex ever saw it (found while fixing FIGM-PERF-03's
+        // event-type-blind pairing bug — see the QA matrix adversarial fixture in
+        // tests/qa-matrix-boundary-adversarial.test.ts).
+        const isEventListenerArg = /\.(add|remove)EventListener\(\s*$/.test(lookbehind);
         // A directive prologue (`"use client"`, `"use server"`, `"use strict"`) is a language-
         // level structural marker, not string DATA, even though it's syntactically just a bare
         // string-literal expression statement — the exact shape a display-text assignment is
@@ -108,7 +116,7 @@ function stripCommentsAndStrings(code: string): string {
           const isPlainAssignment = /=\s*$/.test(lookbehind);
           stringBlank = isPlainAssignment && !isPropertyValue && !isTaggedTemplate;
         } else {
-          stringBlank = !(isAttrStyle || isModuleSpecifier || isDirectivePrologue);
+          stringBlank = !(isAttrStyle || isModuleSpecifier || isDirectivePrologue || isEventListenerArg);
         }
         stringQuote = ch;
         out[i] = ch;
@@ -232,7 +240,14 @@ function isReferencedInsideConditionalBlock(fullCode: string, bindingNames: stri
       conditionalFloor = depth;
     }
 
-    if (!isImportLine && !isIfLine && nameRegexes.some((re) => re.test(line))) {
+    // Bug found via QA matrix adversarial testing: excluding the ENTIRE `if (...)` line from
+    // usage counting (not just the condition) meant the extremely common single-line-body shape
+    // `if (cond) { Heavy.load(); }` was invisible to this check -- the usage and its guarding
+    // `if` share one physical line, so `isIfLine` suppressed it entirely and the import was
+    // never flagged as conditional-only. `conditionalFloor` is already set above (before this
+    // check runs) for the line that opens the `if`, so a same-line usage now correctly resolves
+    // through the same conditionalFloor !== -1 branch a later, separate-line usage would.
+    if (!isImportLine && nameRegexes.some((re) => re.test(line))) {
       if (conditionalFloor !== -1) sawConditionalUsage = true;
       else sawUnconditionalUsage = true;
     }
@@ -454,7 +469,12 @@ export class SourceParser {
       const cTrimmed = cleanLineFull.trim();
 
       // Scope Transitions
-      if (cTrimmed.includes('.map(') || cTrimmed.includes('.forEach(') || cTrimmed.includes('for (') || cTrimmed.includes('while (')) {
+      // Bug found via the real-world 4-fixture ground-truth benchmark (VueBenchmark.vue): Vue's
+      // template-level `v-for="item in products"` loop directive never matched any of the JS-
+      // syntax loop triggers below, so a genuine invariant object allocated inside a v-for was
+      // silently invisible to FIGM-PERF-01 -- confirmed as the benchmark's one remaining false
+      // negative (see benchmarks/ground-truth.json, VueBenchmark.vue line 11).
+      if (cTrimmed.includes('.map(') || cTrimmed.includes('.forEach(') || cTrimmed.includes('for (') || cTrimmed.includes('while (') || cTrimmed.includes('v-for=')) {
         currentScope = 'LOOP';
       } else if (cTrimmed.includes('function render') || cTrimmed.includes('return (') || cTrimmed.includes('return <') || cTrimmed.includes('export default function')) {
         currentScope = 'RENDER';
@@ -482,8 +502,22 @@ export class SourceParser {
       }
 
       // 2. Invariant Object Allocation in Loop/Render (FIGM-PERF-01)
+      // Bug found via QA matrix huge-file stress testing: `cTrimmed.startsWith('const ')`
+      // required the declaration to be the very first token on the physical line, so the
+      // extremely common single-line-arrow-body shape (`items.map(item => { const cfg = {...};
+      // return x; })`) was silently invisible to this HIGH-severity rule -- confirmed as a real
+      // false negative (see tests/qa-matrix-cross-cutting.test.ts), not just a contrived edge
+      // case. A word-boundary-aware regex anchored on the declaration keyword, matched anywhere
+      // in the line, catches both the single-line and original multi-line (declaration-starts-
+      // the-line) shapes identically.
       if (currentScope === 'LOOP' || currentScope === 'RENDER') {
-        if ((cTrimmed.startsWith('const ') || cTrimmed.startsWith('let ') || cTrimmed.startsWith('var ')) && cTrimmed.includes('= {')) {
+        // Vue templates allocate an invariant object via a bound attribute expression
+        // (`:style="{ color: 'blue' }"`), not a JS `const/let/var` declaration -- a structurally
+        // different violation shape than the JSX/script-side pattern above, also found via the
+        // real-world ground-truth benchmark's VueBenchmark.vue fixture.
+        const isJsDeclaration = /\b(const|let|var)\s+\w+\s*=\s*\{/.test(cTrimmed);
+        const isVueAttrBinding = /:[\w-]+\s*=\s*["']\{/.test(cTrimmed);
+        if (isJsDeclaration || isVueAttrBinding) {
           root.children!.push({
             type: 'ObjectExpression',
             scopeType: currentScope,
@@ -552,7 +586,17 @@ export class SourceParser {
 
       // 6. addEventListener Cleanup (FIGM-PERF-03)
       if (cTrimmed.includes('.addEventListener(')) {
-        const hasCleanup = cleanCode.includes('.removeEventListener(');
+        // Bug found via QA matrix adversarial testing: checking `cleanCode.includes('.removeEventListener(')`
+        // treats ANY removeEventListener call anywhere in the file as cleanup for EVERY
+        // addEventListener call, regardless of event type -- so a component with both a 'scroll'
+        // listener (never cleaned up) and an unrelated 'resize' listener (properly cleaned up)
+        // silently hid the real 'scroll' leak. Pairing by the event-type string literal is a
+        // meaningfully closer approximation without requiring full data-flow analysis.
+        const eventNameMatch = cTrimmed.match(/\.addEventListener\(\s*['"]([^'"]+)['"]/);
+        const eventName = eventNameMatch?.[1];
+        const hasCleanup = eventName
+          ? new RegExp(`\\.removeEventListener\\(\\s*['"]${eventName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}['"]`).test(cleanCode)
+          : cleanCode.includes('.removeEventListener(');
         root.children!.push({
           type: 'CallExpression',
           name: 'addEventListener',
@@ -771,8 +815,17 @@ export class SourceParser {
       }
 
       // 16. Direct React State Mutation (FIGM-REACT-03)
+      // Bug found via the real-world 4-fixture ground-truth benchmark (ReactBenchmark.jsx line 39,
+      // `return <span key={item.id} style={itemConfig}>{item.name}</span>;`): the old check fired
+      // on ANY line containing both an "=" character ANYWHERE (including JSX `key=`/`style=` prop
+      // syntax) and the substring ".name"/"state." ANYWHERE (including a plain JSX read like
+      // `{item.name}`), so a JSX render expression that merely displays `item.name` was
+      // misclassified as a state mutation. Fixed by requiring ".name"/"state.<prop>" to be
+      // immediately followed by a real single "=" assignment operator (not "==", "===", or a JSX
+      // attribute's "={"), which is what an actual property mutation (`user.name = 'x'`,
+      // `state.foo = 'x'`) looks like and a JSX read never does.
       const isMutationMethod = cTrimmed.includes('.push(') || cTrimmed.includes('.splice(') || cTrimmed.includes('.pop(') || cTrimmed.includes('.shift(') || cTrimmed.includes('.unshift(') || cTrimmed.includes('.sort(');
-      const isPropAssignment = /^\s*\w+(\.\w+)+\s*=\s*/.test(cTrimmed) || (cTrimmed.includes('=') && (cTrimmed.includes('.name') || cTrimmed.includes('state.')));
+      const isPropAssignment = /^\s*\w+(\.\w+)+\s*=\s*/.test(cTrimmed) || /\.name\s*=(?!=)/.test(cTrimmed) || /\bstate\.\w+\s*=(?!=)/.test(cTrimmed);
       if (isMutationMethod || isPropAssignment) {
         if (!cTrimmed.includes('setState') && !cTrimmed.startsWith('set') && !cTrimmed.startsWith('const ') && !cTrimmed.startsWith('let ') && !cTrimmed.startsWith('var ') && !cTrimmed.includes('==') && !cTrimmed.includes(':')) {
           root.children!.push({

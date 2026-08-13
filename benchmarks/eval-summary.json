@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-08-13T12:14:57.146Z",
+  "timestamp": "2026-08-13T13:12:13.254Z",
   "overall": {
-    "truePositives": 18,
-    "falsePositives": 3,
-    "falseNegatives": 1,
-    "precision": 0.8571428571428571,
-    "recall": 0.9473684210526315,
-    "f1Score": 0.9
+    "truePositives": 19,
+    "falsePositives": 2,
+    "falseNegatives": 0,
+    "precision": 0.9047619047619048,
+    "recall": 1,
+    "f1Score": 0.9500000000000001
   },
   "ruleMetrics": [
     {
       "ruleId": "FIGM-PERF-01",
       "domain": "PERFORMANCE",
-      "truePositives": 1,
+      "truePositives": 2,
       "falsePositives": 0,
-      "falseNegatives": 1,
+      "falseNegatives": 0,
       "precision": 1,
-      "recall": 0.5,
-      "f1Score": 0.6666666666666666
+      "recall": 1,
+      "f1Score": 1
     },
     {
       "ruleId": "FIGM-PERF-02",
@@ -95,21 +95,21 @@
       "framework": "REACT_JSX",
       "fileCount": 1,
       "truePositives": 8,
-      "falsePositives": 2,
+      "falsePositives": 1,
       "falseNegatives": 0,
-      "precision": 0.8,
+      "precision": 0.8888888888888888,
       "recall": 1,
-      "f1Score": 0.888888888888889
+      "f1Score": 0.9411764705882353
     },
     {
       "framework": "VUE_SFC",
       "fileCount": 1,
-      "truePositives": 4,
+      "truePositives": 5,
       "falsePositives": 0,
-      "falseNegatives": 1,
+      "falseNegatives": 0,
       "precision": 1,
-      "recall": 0.8,
-      "f1Score": 0.888888888888889
+      "recall": 1,
+      "f1Score": 1
     },
     {
       "framework": "ANGULAR_TEMPLATE",
@@ -133,11 +133,11 @@
     }
   ],
   "performanceMetrics": {
-    "totalScanDurationMs": 248.67189999999982,
+    "totalScanDurationMs": 296.51200000000017,
     "totalLinesOfCode": 147,
-    "totalASTNodes": 264,
-    "scanSpeedLOCPerSec": 591.1403741234941,
-    "astNodesPerSec": 1061.639855568724,
-    "peakMemoryMB": 9.755844116210938
+    "totalASTNodes": 276,
+    "scanSpeedLOCPerSec": 495.76408374703186,
+    "astNodesPerSec": 930.8223613209578,
+    "peakMemoryMB": 9.678108215332031
   }
 }

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-13T12:14:57.150Z",
+  "generatedAt": "2026-08-13T13:12:13.259Z",
   "provenance": {
     "generatedBy": "src/eval/evaluation-runner.ts",
     "groundTruth": "benchmarks/ground-truth.json",
@@ -9,15 +9,15 @@
     "executionMode": "AUTOMATED_DYNAMIC_EVALUATION"
   },
   "overall": {
-    "truePositives": 18,
-    "falsePositives": 3,
-    "falseNegatives": 1,
-    "precision": 0.8571,
-    "recall": 0.9474,
-    "f1Score": 0.9,
-    "precisionPct": "85.7%",
-    "recallPct": "94.7%",
-    "f1ScorePct": "90.0%"
+    "truePositives": 19,
+    "falsePositives": 2,
+    "falseNegatives": 0,
+    "precision": 0.9048,
+    "recall": 1,
+    "f1Score": 0.95,
+    "precisionPct": "90.5%",
+    "recallPct": "100.0%",
+    "f1ScorePct": "95.0%"
   },
   "datasetClassification": {
     "metricType": "AUTOMATED_BENCHMARK_METRICS_ONLY",
@@ -26,10 +26,10 @@
     "humanStudyStatusSource": "research/analysis/usability-results.json (see that file for real participant count / collection status — never this artifact)"
   },
   "performance": {
-    "totalScanDurationMs": 248.67,
+    "totalScanDurationMs": 296.51,
     "totalLinesOfCode": 147,
-    "scanSpeedLOCPerSec": 591.1,
-    "peakMemoryMB": 9.76
+    "scanSpeedLOCPerSec": 495.8,
+    "peakMemoryMB": 9.68
   },
   "evidenceStatus": "CANONICAL_GROUND_TRUTH_VERIFIED"
 }

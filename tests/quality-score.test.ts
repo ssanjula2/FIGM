@@ -17,11 +17,17 @@ import { calculateQualityScoreFromCounts, severityCountsFromDiagnostics, calcula
 describe('Quality Score: single canonical formula, no live-vs-persisted drift', () => {
   it('reproduces the real live-vs-persisted discrepancy fixture and confirms it no longer diverges', () => {
     // The exact fixture used in live production testing that exposed the bug: FIGM-PERF-05
-    // (MEDIUM), FIGM-REACT-02 (HIGH), FIGM-REACT-03 (CRITICAL).
+    // (MEDIUM) and FIGM-REACT-02 (HIGH). This fixture used to also fire FIGM-REACT-03
+    // (CRITICAL) via `{item.name}`, but that was a confirmed, unrelated false positive
+    // (FIGM-REACT-03's `.name`/`state.` check matched the substring anywhere on the line,
+    // including inside a plain JSX read, not just an actual property assignment) — fixed at the
+    // root cause in src/parser/source-parser.ts (see tests/qa-matrix-boundary-adversarial.test.ts's
+    // REACT-03 regression case). The live-vs-persisted drift bug this test targets is orthogonal
+    // to which specific rules fire and remains fully covered below.
     const code = `items.map((item, index) => <li key={index} onClick={() => handleClick(item)}>{item.name}</li>)`;
     const scanResult = RuleExecutionEngine.analyzeFile('List.jsx', code);
 
-    assert.ok(scanResult.diagnostics.length >= 3, 'sanity check: the fixture must still produce multiple diagnostics');
+    assert.ok(scanResult.diagnostics.length >= 2, 'sanity check: the fixture must still produce multiple diagnostics');
 
     // The score the live API response actually returns.
     const liveScore = scanResult.qualityScore;
