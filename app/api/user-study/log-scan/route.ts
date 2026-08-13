@@ -3,6 +3,12 @@ import { RepositoryFactory } from '../../../../src/storage/repository-factory';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 import { RuleExecutionEngine } from '../../../../src/engine/rule-execution-engine';
 import { hashPassword } from '../../../../src/auth/auth-service';
+import { checkRateLimit } from '../../../../src/auth/rate-limiter';
+
+// Participant ids must match the synthetic "P001"-style format this endpoint generates itself.
+// Without this check, a caller could pass an existing real user's id as participantId and this
+// route would attribute a fabricated benchmark scan record to that real account.
+const PARTICIPANT_ID_PATTERN = /^P\d{3,6}$/;
 
 /**
  * User-study participant scans are attributed to a synthetic identity ("P001", "P002", ...) rather
@@ -50,6 +56,13 @@ export async function POST(request: Request) {
 
     const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
     const userAgent = request.headers.get('user-agent') || 'unknown';
+
+    const rateLimitError = await checkRateLimit(ip, 30, 60000);
+    if (rateLimitError) return rateLimitError;
+
+    if (clientParticipantId && !PARTICIPANT_ID_PATTERN.test(clientParticipantId)) {
+      return NextResponse.json({ error: 'Invalid participantId format' }, { status: 400 });
+    }
 
     const existingScans = (await provider.getScanRecords()) || [];
     const uniqueParticipants = new Set(

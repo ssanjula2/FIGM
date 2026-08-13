@@ -26,8 +26,19 @@ export class NotificationRepository {
     return { notifications, unreadCount };
   }
 
-  public static async markAsRead(id: string): Promise<void> {
+  /**
+   * Marks a single notification as read, but only if it belongs to `userId`. Without this
+   * ownership check, any caller who knows/guesses another user's notification id could mark it
+   * as read on their behalf (a cross-user IDOR) -- storage providers' markNotificationRead(id)
+   * filter only by id, not by owner.
+   */
+  public static async markAsRead(id: string, userId: string): Promise<boolean> {
+    const notifications = ((await NotificationRepository.provider.getNotifications(userId)) as DBNotification[]) || [];
+    const owned = notifications.some((n) => n.id === id);
+    if (!owned) return false;
+
     await NotificationRepository.provider.markNotificationRead(id);
+    return true;
   }
 
   public static async markAllAsRead(userId: string): Promise<void> {

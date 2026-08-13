@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { verifyRefreshToken, signJWT, signRefreshToken } from '../../../../src/auth/auth-service';
 import { RepositoryFactory } from '../../../../src/storage/repository-factory';
+import { checkRateLimit } from '../../../../src/auth/rate-limiter';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
 export async function POST(request: Request) {
   const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+  const rateLimitError = await checkRateLimit(ip, 20, 60000);
+  if (rateLimitError) return rateLimitError;
+
   const userAgent = request.headers.get('user-agent') || 'unknown';
   const provider = RepositoryFactory.getStorageProvider();
 
@@ -77,14 +81,16 @@ export async function POST(request: Request) {
       httpOnly: true,
       path: '/',
       maxAge: 3600,
-      sameSite: 'lax',
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
     });
 
     response.cookies.set('figm_refresh_token', newRefreshToken, {
       httpOnly: true,
       path: '/',
       maxAge: 604800,
-      sameSite: 'lax',
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
     });
 
     return response;

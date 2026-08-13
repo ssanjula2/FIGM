@@ -22,14 +22,16 @@ export async function POST(request: Request) {
     httpOnly: true,
     path: '/',
     maxAge: 0,
-    sameSite: 'lax',
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
   });
 
   response.cookies.set('figm_refresh_token', '', {
     httpOnly: true,
     path: '/',
     maxAge: 0,
-    sameSite: 'lax',
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
   });
 
   return response;

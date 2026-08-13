@@ -5,7 +5,10 @@ import { NotificationRepository } from '../../../src/engine/notification-reposit
 
 export async function GET(request: Request) {
   const auth = authenticateUser(request);
-  const userId = auth.user?.userId || 'usr_anonymous';
+  if (auth.errorResponse || !auth.user) {
+    return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const userId = auth.user.userId;
 
   const { notifications, unreadCount } = await NotificationRepository.getNotifications(userId);
 
@@ -17,7 +20,10 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   const auth = authenticateUser(request);
-  const userId = auth.user?.userId || 'usr_anonymous';
+  if (auth.errorResponse || !auth.user) {
+    return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const userId = auth.user.userId;
 
   try {
     const body = await request.json();
@@ -29,7 +35,10 @@ export async function PATCH(request: Request) {
     }
 
     if (notificationId) {
-      await NotificationRepository.markAsRead(notificationId);
+      const ok = await NotificationRepository.markAsRead(notificationId, userId);
+      if (!ok) {
+        return NextResponse.json({ error: 'Notification not found' }, { status: 404 });
+      }
       return NextResponse.json({ message: 'Notification marked as read' });
     }
 
@@ -42,8 +51,10 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
   const auth = authenticateUser(request);
-  const userId = auth.user?.userId || 'usr_anonymous';
+  if (auth.errorResponse || !auth.user) {
+    return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  await NotificationRepository.clearNotifications(userId);
+  await NotificationRepository.clearNotifications(auth.user.userId);
   return NextResponse.json({ message: 'Notifications cleared successfully' });
 }

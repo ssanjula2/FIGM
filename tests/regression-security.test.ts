@@ -30,8 +30,14 @@ test('Security & Vulnerability Regression Test Suite', async (t) => {
   await t.test('GET /api/projects/[id] blocks unauthenticated cross-user IDOR access', async () => {
     const req = new Request('http://localhost:3000/api/projects/prj_demo_react');
     const res = await projectGET(req, { params: { id: 'prj_demo_react' } });
-    
-    // Unauthenticated request should be forbidden or return 401/403/404 if project is missing/unauthorized
-    assert.ok(res.status === 403 || res.status === 401 || res.status === 404);
+
+    // This must be 401 specifically. Previously the route only checked ownership when
+    // `auth.user` was truthy (`if (auth.user && ...)`), so an unauthenticated request skipped
+    // the ownership check entirely and fell through to a 200 leak whenever the id happened to
+    // exist -- this assertion previously accepted 403/401/404 and passed only because
+    // 'prj_demo_react' doesn't exist in this test's fixture data (a coincidental 404, not a
+    // real proof the IDOR was blocked). See tests/api-security-audit.test.ts for the version of
+    // this test that creates a real owned project and proves the 401/403 paths directly.
+    assert.equal(res.status, 401);
   });
 });

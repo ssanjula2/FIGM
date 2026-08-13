@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { authenticateUser } from '../../../src/auth/auth-middleware';
 import { UserRepository } from '../../../src/engine/user-repository';
 import { AuditLogger } from '../../../src/auth/audit-logger';
+import { checkRateLimit } from '../../../src/auth/rate-limiter';
 
 export async function GET(request: Request) {
   const auth = authenticateUser(request);
@@ -47,10 +48,26 @@ export async function PATCH(request: Request) {
     }
 
     if (action === 'CHANGE_PASSWORD') {
+      // Password changes are as sensitive as login attempts (an attacker with a stolen session
+      // could try to brute-force currentPassword); throttle the same way login does. The audit
+      // log entry both records the attempt and is what checkRateLimit's DB-backed path counts
+      // against for subsequent requests from this IP.
+      const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+      const rateLimitError = await checkRateLimit(ip, 10, 60000);
+      if (rateLimitError) return rateLimitError;
+
       if (!currentPassword || !newPassword) {
+        await AuditLogger.logEvent('RESET_PASSWORD', { userId, email: auth.user.email, ipAddress: ip, status: 'FAILURE', details: 'CHANGE_PASSWORD via /api/profile: missing fields' });
         return NextResponse.json({ error: 'Current password and new password are required' }, { status: 400 });
       }
       const res = await UserRepository.changePassword(userId, currentPassword, newPassword);
+      await AuditLogger.logEvent('RESET_PASSWORD', {
+        userId,
+        email: auth.user.email,
+        ipAddress: ip,
+        status: res.success ? 'SUCCESS' : 'FAILURE',
+        details: `CHANGE_PASSWORD via /api/profile: ${res.message}`,
+      });
       if (!res.success) {
         return NextResponse.json({ error: res.message }, { status: 400 });
       }

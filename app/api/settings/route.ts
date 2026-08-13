@@ -4,19 +4,30 @@ import { UserRepository } from '../../../src/engine/user-repository';
 
 export async function GET(request: Request) {
   const auth = authenticateUser(request);
-  const userId = auth.user?.userId || 'usr_anonymous';
+  if (auth.errorResponse || !auth.user) {
+    return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  const settings = await UserRepository.getSettings(userId);
+  const settings = await UserRepository.getSettings(auth.user.userId);
   return NextResponse.json({ settings });
 }
 
+const ALLOWED_SETTINGS_FIELDS = ['theme', 'autoSave', 'autoScan', 'aiModel', 'exportFormat'] as const;
+
 export async function PATCH(request: Request) {
   const auth = authenticateUser(request);
-  const userId = auth.user?.userId || 'usr_anonymous';
+  if (auth.errorResponse || !auth.user) {
+    return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const userId = auth.user.userId;
 
   try {
     const body = await request.json();
-    const settings = await UserRepository.updateSettings(userId, body);
+    const updates: Record<string, unknown> = {};
+    for (const key of ALLOWED_SETTINGS_FIELDS) {
+      if (key in body) updates[key] = body[key];
+    }
+    const settings = await UserRepository.updateSettings(userId, updates);
     return NextResponse.json({
       message: 'Settings updated successfully',
       settings,

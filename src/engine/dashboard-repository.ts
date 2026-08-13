@@ -42,6 +42,13 @@ export interface ReportSummaryItem {
   createdAt: string;
 }
 
+function maskEmail(email?: string): string {
+  if (!email || !email.includes('@')) return 'developer';
+  const [local, domain] = email.split('@');
+  const maskedLocal = local.length <= 1 ? '*' : `${local[0]}${'*'.repeat(Math.min(local.length - 1, 3))}`;
+  return `${maskedLocal}@${domain}`;
+}
+
 export class DashboardRepository {
   private static get provider() {
     return RepositoryFactory.getStorageProvider();
@@ -133,15 +140,22 @@ export class DashboardRepository {
   public static async getActivityFeed(limit = 10): Promise<ActivityItem[]> {
     const logs = ((await DashboardRepository.provider.getAuditLogs(limit)) as DBAuditLog[]) || [];
     if (logs.length > 0) {
-      return logs.map((log) => ({
-        id: log.id,
-        type: log.action === 'REGISTER' ? 'REGISTER' : log.action === 'LOGIN' ? 'LOGIN' : 'SCAN',
-        title: `${log.action} Event`,
-        description: log.details || `User ${log.email || 'developer'} performed ${log.action}`,
-        timestamp: log.createdAt,
-        user: log.email || 'developer',
-        badgeColor: log.status === 'SUCCESS' ? '#10b981' : '#f43f5e',
-      }));
+      return logs.map((log) => {
+        // This feed is served publicly (unauthenticated) as a live "platform pulse" showcase on
+        // the main dashboard -- real user email addresses must never appear in it. Mask to
+        // first-char + domain (e.g. "j***@example.com") so the feed still reads as real activity
+        // without disclosing who specifically performed the action.
+        const maskedUser = maskEmail(log.email);
+        return {
+          id: log.id,
+          type: log.action === 'REGISTER' ? 'REGISTER' : log.action === 'LOGIN' ? 'LOGIN' : 'SCAN',
+          title: `${log.action} Event`,
+          description: log.details || `User ${maskedUser} performed ${log.action}`,
+          timestamp: log.createdAt,
+          user: maskedUser,
+          badgeColor: log.status === 'SUCCESS' ? '#10b981' : '#f43f5e',
+        };
+      });
     }
 
     const now = new Date();

@@ -75,14 +75,16 @@ export async function POST(request: Request) {
       httpOnly: true,
       path: '/',
       maxAge: 3600,
-      sameSite: 'lax',
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
     });
 
     response.cookies.set('figm_refresh_token', refreshToken, {
       httpOnly: true,
       path: '/',
       maxAge: 604800,
-      sameSite: 'lax',
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
     });
 
     return response;

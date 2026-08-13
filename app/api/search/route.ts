@@ -23,12 +23,15 @@ export async function GET(request: Request) {
     });
   }
 
-  // Projects Search
-  const projects = await ProjectRepository.getProjects({ userId, search: q });
-
-  // Scans Search
-  const scansResult = await ScanRepository.getScanRecords({ userId, search: q, pageSize: 20 });
-  const scans = scansResult.records;
+  // Projects & Scans Search — scoped to the caller's own data (or all data for ADMIN). An
+  // unauthenticated request must never fall through to userId=undefined here, since
+  // getProjects/getScanRecords treat a missing userId as "return every user's records."
+  const projects = userId
+    ? await ProjectRepository.getProjects({ userId: isAdmin ? undefined : userId, search: q })
+    : [];
+  const scans = userId
+    ? (await ScanRepository.getScanRecords({ userId: isAdmin ? undefined : userId, search: q, pageSize: 20 })).records
+    : [];
 
   // FIGM Specification Rules Search
   const rules = FOUR_LAYER_MAPPINGS.filter(

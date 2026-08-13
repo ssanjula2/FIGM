@@ -36,6 +36,14 @@ function getJwtSecret(): string {
   if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
     throw new Error('FATAL: JWT_SECRET environment variable is missing in production environment');
   }
+  if (!process.env.JWT_SECRET) {
+    // This fallback only exists so the app can boot in local/dev/test environments without a
+    // .env file. It's a fixed value committed in source, so anyone with repo access can forge
+    // tokens (including role:'ADMIN') for any deployment that reaches this branch -- which
+    // happens whenever NODE_ENV isn't exactly 'production' (unset, 'staging', 'test', etc.).
+    // eslint-disable-next-line no-console
+    console.error('[auth-service] JWT_SECRET is not set -- using the hardcoded default development secret. This is INSECURE outside local development.');
+  }
   const secret = process.env.JWT_SECRET || 'figm-multi-tenant-super-secret-key-2026';
   validateSecretStrength(secret, 'JWT_SECRET');
   return secret;
@@ -45,6 +53,10 @@ function getRefreshSecret(): string {
   if (process.env.NODE_ENV === 'production' && !process.env.REFRESH_SECRET) {
     throw new Error('FATAL: REFRESH_SECRET environment variable is missing in production environment');
   }
+  if (!process.env.REFRESH_SECRET) {
+    // eslint-disable-next-line no-console
+    console.error('[auth-service] REFRESH_SECRET is not set -- using the hardcoded default development secret. This is INSECURE outside local development.');
+  }
   const secret = process.env.REFRESH_SECRET || 'figm-multi-tenant-refresh-secret-key-2026';
   validateSecretStrength(secret, 'REFRESH_SECRET');
   return secret;
@@ -52,6 +64,19 @@ function getRefreshSecret(): string {
 
 const JWT_SECRET = getJwtSecret();
 const REFRESH_SECRET = getRefreshSecret();
+
+/**
+ * Constant-time string comparison for HMAC signatures, matching the timingSafeEqual pattern
+ * already used for password verification below. A plain `!==` comparison on the signature would
+ * short-circuit on the first differing byte, which is a (low-practicality but real) timing
+ * side-channel for an attacker trying to forge a valid signature byte-by-byte.
+ */
+function safeCompare(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+}
 
 /**
  * Hash password securely using PBKDF2 with SHA-512 and salt
@@ -138,7 +163,7 @@ export function verifyJWT(token: string): UserPayload | null {
       .update(`${encodedHeader}.${encodedPayload}`)
       .digest('base64url');
 
-    if (signature !== expectedSignature) return null;
+    if (!safeCompare(signature, expectedSignature)) return null;
 
     const payloadJson = Buffer.from(encodedPayload, 'base64url').toString('utf-8');
     const claim = JSON.parse(payloadJson);
@@ -171,7 +196,7 @@ export function verifyRefreshToken(token: string): { userId: string; email: stri
       .update(`${encodedHeader}.${encodedPayload}`)
       .digest('base64url');
 
-    if (signature !== expectedSignature) return null;
+    if (!safeCompare(signature, expectedSignature)) return null;
 
     const payloadJson = Buffer.from(encodedPayload, 'base64url').toString('utf-8');
     const claim = JSON.parse(payloadJson);

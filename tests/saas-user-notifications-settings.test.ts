@@ -30,7 +30,7 @@ describe('SaaS Production Features 5, 6, 7: User Profile, Settings & Notificatio
     assert.ok(res.unreadCount >= 0);
 
     if (res.notifications.length > 0) {
-      await NotificationRepository.markAsRead(res.notifications[0].id);
+      await NotificationRepository.markAsRead(res.notifications[0].id, userId);
     }
 
     await NotificationRepository.markAllAsRead(userId);
