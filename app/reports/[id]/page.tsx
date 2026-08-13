@@ -389,8 +389,8 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
           <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '20px' }}>Scan Execution Lifecycle</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', borderLeft: '2px solid #0284c7', paddingLeft: '20px' }}>
             <div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8' }}>0.00ms — AST Parsing Initiated</div>
-              <div style={{ fontSize: '12px', color: '#94a3b8' }}>Parsed {record.fileName} into Abstract Syntax Tree primitives.</div>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8' }}>0.00ms — Structural Parsing Initiated</div>
+              <div style={{ fontSize: '12px', color: '#94a3b8' }}>Parsed {record.fileName} into an AST-shaped intermediate representation.</div>
             </div>
             <div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8' }}>0.12ms — Rule Execution Engine</div>
@@ -412,7 +412,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
             <li><strong>ISO/IEC 25010</strong>: Systems and software Quality Requirements and Evaluation (SQuaRE) framework.</li>
             <li><strong>W3C WCAG 2.2 AA</strong>: Web Content Accessibility Guidelines for perceivable, operable, understandable, and robust UI.</li>
             <li><strong>Google Core Web Vitals</strong>: Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS).</li>
-            <li><strong>FIGM Specification v3.0</strong>: 3-stage AST extraction protocol for framework-independent static analysis.</li>
+            <li><strong>FIGM Specification v3.0</strong>: 3-stage extraction protocol (parse → normalize → extract) for framework-independent static analysis.</li>
           </ul>
         </div>
       )}

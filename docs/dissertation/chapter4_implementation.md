@@ -39,7 +39,22 @@ flowchart LR
 
 ## 4.2 Resilient Source Code Parser Adapter
 
-Static analysis of modern web applications requires handling heterogeneous template syntaxes and incomplete or malformed code blocks. The `SourceParser` adapter provides resilient AST node generation:
+> **Architecture correction** (see `docs/audit/AST_ARCHITECTURE_AUDIT.md` for the full rule-by-rule
+> trace): a prior version of this section described `SourceParser` as producing genuine AST node
+> generation for all 25 guideline rules. On inspection of the actual implementation, `SourceParser`
+> is a resilient **line/regex-based pattern scanner**: it applies ~22 independent substring/regex
+> checks per line (preceded by a real character-level lexer that blanks comment and string-literal
+> text to avoid matching inside them) and emits a synthetic, AST-*shaped* intermediate
+> representation (`ASTNode` objects with real `type`/`loc`/`attributes` fields) rather than a tree
+> produced by parsing the language grammar. 22 of the 25 FIGM rules are pure regex/substring
+> matching against this representation; 2 (FIGM-PERF-04, FIGM-A11Y-01) additionally use a
+> hand-rolled brace-depth-tracking heuristic for better resilience to multi-line formatting. As of
+> this audit, exactly 1 rule (FIGM-REACT-02, on React/Next.js files) is evaluated against a
+> genuine TypeScript-compiler-derived AST (`src/analysis/react-ast-rules.ts`) — see §4.2.2. The
+> accurate characterization of the overall system is **AST-informed pattern-based static
+> analysis**, with a growing genuine-AST-based subset, not a uniformly AST-based tool.
+
+Static analysis of modern web applications requires handling heterogeneous template syntaxes and incomplete or malformed code blocks. The `SourceParser` adapter provides resilient pattern-based parsing that produces an AST-shaped intermediate representation:
 
 ```typescript
 export class SourceParser {
@@ -64,6 +79,37 @@ The parser inspects file extensions and structural syntax keywords:
 * `.vue`: Mapped to `VUE_SFC`.
 * `.component.ts` or `@Component`: Mapped to `ANGULAR_TEMPLATE`.
 * `.js` or `.ts`: Mapped to `GENERIC_ESTREE`.
+
+### 4.2.2 Genuine AST Migration (Stage A: React / Next.js)
+
+FIGM-REACT-02 ("array index used as a React list `key`") is evaluated against a real
+TypeScript-compiler-derived AST (`ts.createSourceFile` + a scope-aware visitor,
+`src/analysis/react-ast-rules.ts`) for `REACT_JSX`/`NEXT_JS` files, in place of the pattern-based
+predicate used for every other rule. This required understanding real parameter binding: the
+predicate walks up from each JSX `key` attribute to find the nearest enclosing `.map((item, N) =>
+...)` callback and checks whether the key's expression is exactly a reference to that callback's
+own index parameter `N` — a real scope question a line-pattern check cannot answer, because it
+depends on where an identifier is bound, not what it is spelled.
+
+This directly fixes two concrete, demonstrated defects in the pattern-based version (both proven
+in `tests/react-ast-rules.test.ts`, which asserts the pattern-based engine's actual behavior on
+each case, not a hypothetical):
+- **False positive**: a local variable that happens to be named `index` but is *not* the loop's
+  index parameter (e.g. `const index = computeSomething();`) was flagged by the substring check
+  `key={index}` regardless of where `index` came from. The real-AST version correctly does not
+  flag it, since no enclosing `.map()` callback binds an `index` parameter in that case.
+- **False negative**: an index parameter named anything other than the three names the
+  pattern-based version hardcodes (`index`, `i`, `idx`) — e.g. `.map((item, position) => ...)` —
+  was invisible to it. The real-AST version detects the violation regardless of the parameter's
+  name, and additionally recognizes a template-literal key derived solely from the index (e.g.
+  `` key={`row-${index}`} ``), which contains no occurrence of the literal substring the
+  pattern-based check searches for.
+
+This is deliberately scoped to one rule and two frameworks as the first increment of a staged
+migration (Stage A → B: Next.js-specific rules → C: Angular, requiring `@angular/compiler` → D:
+Vue, requiring `@vue/compiler-sfc` → E: a common intermediate representation once at least two
+real per-framework parsers exist to abstract over). See `docs/audit/AST_ARCHITECTURE_AUDIT.md` for
+the full rule-by-rule classification of all 25 rules and the complete migration plan.
 
 ---
 
@@ -138,7 +184,7 @@ sequenceDiagram
     Developer->>Parser: Submit Source Code (React / Next.js / Angular)
     Parser->>Mapper: Send Raw AST Node Tree
     Mapper->>Engine: Send Normalized ALP Primitives
-    Engine->>Engine: Evaluate 25 AST Rule Predicates
+    Engine->>Engine: Evaluate 25 guideline predicates (24 pattern-based, 1 real-AST — see 4.2.2)
 
     alt No Violation Found
         Engine-->>Developer: Return Clean Report (Zero Defects)

@@ -70,7 +70,7 @@ $$\text{Domain} \longrightarrow \text{Concern} \longrightarrow \text{Abstract La
 ### 3.2.1 Layer Definitions
 1. **Domain Layer**: The highest abstraction level partitioning quality concerns into **Performance Efficiency** (ISO 25010) and **Accessibility** (WCAG 2.2).
 2. **Concern Layer**: Specific quality categories (e.g., Invariant Allocations, Layout Instability, Keyboard Accessibility, Status Messages).
-3. **Abstract Language Primitive (ALP) Layer**: Framework-agnostic Abstract Syntax Tree (AST) node constructs.
+3. **Abstract Language Primitive (ALP) Layer**: Framework-agnostic node constructs, conceptually modeled on Abstract Syntax Tree (AST) node types. *(See Chapter 4 §4.2 for the implementation-level distinction: these are extracted from an AST-shaped intermediate representation built by pattern-based scanning for 24 of 25 rules, and from a genuine compiler-derived AST for 1 rule as of the Stage A migration documented there.)*
 4. **Rule Layer**: Executable detection logic defining compliance rules, severity metrics, and remediation paths.
 
 ---

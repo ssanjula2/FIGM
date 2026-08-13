@@ -6,6 +6,7 @@
 **A note on this file's history this session**: this document was found silently truncated to blank lines **twice** during this session, for reasons never determined (no other file in `docs/audit/` was affected either time). If you are continuing this audit in a future session and this file is unexpectedly short or empty, that is a known, reproducible environment anomaly in this workspace — not evidence that no work was done. Rewritten fresh both times rather than reconstructed from memory, cross-checked against the actual current source and test suite.
 
 
+
 ---
 
 ## 1. Executive Summary

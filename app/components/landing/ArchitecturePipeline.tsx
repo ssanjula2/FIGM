@@ -50,10 +50,10 @@ export default function ArchitecturePipeline() {
     {
       id: 2,
       stageName: 'Stage 2',
-      shortLabel: 'AST Parsing',
+      shortLabel: 'Structural Parsing',
       icon: '🌳',
-      title: 'Abstract Syntax Tree (AST)',
-      description: 'FIGM analyzes the structure and semantics of the source code through AST-based inspection.',
+      title: 'AST-Shaped Intermediate Representation',
+      description: 'FIGM parses source structure into an AST-shaped representation via pattern-based scanning, with a genuine compiler-derived AST used for select rules (see docs/audit/AST_ARCHITECTURE_AUDIT.md).',
       type: 'ast',
       content: {
         astText: `CallExpression
@@ -201,7 +201,7 @@ setUser(user);`,
               lineHeight: 1.6,
             }}
           >
-            An end-to-end framework-independent static analysis pipeline converting framework-specific AST nodes into Abstract Logic Patterns (ALPs) for reusable quality verification and patch validation.
+            An end-to-end framework-independent static analysis pipeline converting framework-specific, AST-shaped nodes into Abstract Language Primitives (ALPs) for reusable quality verification and patch validation.
           </p>
         </div>
 
@@ -350,7 +350,7 @@ setUser(user);`,
 
             {activeStage.type === 'ast' && (
               <div>
-                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginBottom: '8px' }}>PARSED ABSTRACT SYNTAX TREE (AST)</div>
+                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginBottom: '8px' }}>ILLUSTRATIVE AST-SHAPED STRUCTURE</div>
                 <pre style={{ margin: 0, fontFamily: 'monospace', fontSize: '13px', color: '#38bdf8', lineHeight: 1.5, overflowX: 'auto' }}>
                   <code>{activeStage.content.astText}</code>
                 </pre>

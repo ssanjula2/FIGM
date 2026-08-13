@@ -12,6 +12,7 @@ import { DynamicProfiler, DynamicProfileMetrics } from './dynamic-profiler.js';
 import { TypeCheckerService } from '../analysis/type-checker-service.js';
 import { ComplexityEngine, DetailedComplexityMetrics } from '../analysis/complexity/complexity-engine.js';
 import { calculateQualityScoreFromCounts } from './quality-score.js';
+import { detectArrayIndexKey, supportsRealAstAnalysis } from '../analysis/react-ast-rules.js';
 
 export interface ScanResult {
   filePath: string;
@@ -77,7 +78,19 @@ export class RuleExecutionEngine {
     // 3. Evaluate FIGM Guidelines against AST if available
     if (parseRes.ast) {
       const figmDiags = ASTDetectionEngine.evaluateNode(parseRes.ast, filePath, parseRes.framework);
-      diagnostics.push(...figmDiags);
+
+      // Stage A real-AST migration (see src/analysis/react-ast-rules.ts): for React/Next.js
+      // files, FIGM-REACT-02 is detected via genuine TypeScript-compiler AST traversal instead
+      // of the regex/substring heuristic every other rule still uses. Swap in place -- same rule
+      // ID, same report shape, same position in the pipeline -- rather than appending a second,
+      // duplicate diagnostic for the same violation.
+      if (supportsRealAstAnalysis(parseRes.framework)) {
+        const withoutRegexReact02 = figmDiags.filter((d) => d.ruleId !== 'FIGM-REACT-02');
+        const realAstReact02 = detectArrayIndexKey(code, filePath);
+        diagnostics.push(...withoutRegexReact02, ...realAstReact02);
+      } else {
+        diagnostics.push(...figmDiags);
+      }
     }
 
     const primitives = parseRes.ast ? ALPExtractionEngine.extractPrimitives(parseRes.ast, parseRes.framework) : [];
