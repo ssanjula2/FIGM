@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { hashPassword } from './auth-service';
+import crypto from 'node:crypto';
+import { hashPassword, isInsecureFallbackAllowed } from './auth-service';
 
 export type UserRole = 'ADMIN' | 'DEVELOPER' | 'AUDITOR';
 
@@ -198,28 +199,66 @@ function getDefaultScanRecords(): DBScanRecord[] {
   ];
 }
 
+export interface DefaultAdminAccount {
+  id: string;
+  email: string;
+  fullName: string;
+}
+
+export const DEFAULT_ADMIN_ACCOUNTS: DefaultAdminAccount[] = [
+  { id: 'usr_admin_sanjula', email: 'sanjula@nsbm.ac.lk', fullName: 'A P H D S Sanjula (Admin)' },
+  { id: 'usr_admin_figm', email: 'admin@figm.io', fullName: 'FIGM Lead System Administrator' },
+];
+
+/**
+ * Resolves the password used to bootstrap the default ADMIN accounts on first boot (empty/missing
+ * DB file). Previously this was the literal string 'Admin123456!', hardcoded in source and also
+ * displayed on the public /login page -- anyone who ever saw the source or the login page had
+ * standing admin credentials for every deployment that hadn't been manually reset. Fails closed
+ * outside development/test: a production-equivalent deployment must set ADMIN_BOOTSTRAP_PASSWORD
+ * itself, or no default admin account is created at all.
+ */
+export function resolveBootstrapAdminPassword(): string {
+  const configured = process.env.ADMIN_BOOTSTRAP_PASSWORD;
+  if (configured && configured.length >= 12) {
+    return configured;
+  }
+
+  if (!isInsecureFallbackAllowed()) {
+    throw new Error(
+      'FATAL: ADMIN_BOOTSTRAP_PASSWORD environment variable is missing or shorter than 12 characters. ' +
+      'Refusing to seed default ADMIN accounts with a predictable password outside development/test. ' +
+      'Set ADMIN_BOOTSTRAP_PASSWORD to a strong random value before first boot, or provision admin ' +
+      'accounts via a secure out-of-band process instead of relying on the seeded defaults.'
+    );
+  }
+
+  // Local/dev/test convenience only: a fresh random password generated once per process, never
+  // written to disk or git. Printed once so a developer can actually log in locally.
+  const generated = crypto.randomBytes(18).toString('base64url');
+  // eslint-disable-next-line no-console
+  console.error(
+    `[user-db] ADMIN_BOOTSTRAP_PASSWORD is not set -- generated a one-time local admin password: ${generated}\n` +
+    '[user-db] This password is not persisted anywhere and will change on next restart. Set ' +
+    'ADMIN_BOOTSTRAP_PASSWORD to pin it. INSECURE outside local development/test.'
+  );
+  return generated;
+}
+
 function getDefaultUsers(): DBUser[] {
-  const adminPass = hashPassword('Admin123456!');
-  return [
-    {
-      id: 'usr_admin_sanjula',
-      email: 'sanjula@nsbm.ac.lk',
-      fullName: 'A P H D S Sanjula (Admin)',
-      role: 'ADMIN',
-      passwordHash: adminPass,
-      apiKey: 'figm_key_admin_sanjula',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: 'usr_admin_figm',
-      email: 'admin@figm.io',
-      fullName: 'FIGM Lead System Administrator',
-      role: 'ADMIN',
-      passwordHash: adminPass,
-      apiKey: 'figm_key_admin_figm',
-      createdAt: new Date().toISOString(),
-    }
-  ];
+  const adminPass = hashPassword(resolveBootstrapAdminPassword());
+  const now = new Date().toISOString();
+  return DEFAULT_ADMIN_ACCOUNTS.map((account) => ({
+    id: account.id,
+    email: account.email,
+    fullName: account.fullName,
+    role: 'ADMIN' as const,
+    passwordHash: adminPass,
+    // Random per boot, never a fixed source-committed literal (previously 'figm_key_admin_sanjula' /
+    // 'figm_key_admin_figm' -- guessable, and visible to anyone with repo access).
+    apiKey: `figm_key_${crypto.randomBytes(16).toString('hex')}`,
+    createdAt: now,
+  }));
 }
 
 declare global {

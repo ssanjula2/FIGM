@@ -292,22 +292,6 @@ export default function LoginPage() {
             )}
           </button>
         </form>
-
-        {/* Quick Admin Credentials Hint */}
-        <div
-          style={{
-            marginTop: '24px',
-            padding: '12px',
-            borderRadius: '10px',
-            background: 'rgba(56, 189, 248, 0.06)',
-            border: '1px dashed rgba(56, 189, 248, 0.2)',
-            textAlign: 'center',
-            fontSize: '12px',
-            color: '#94a3b8',
-          }}
-        >
-          🔑 <strong style={{ color: '#38bdf8' }}>Admin Credentials</strong>: <code style={{ color: '#f1f5f9' }}>sanjula@nsbm.ac.lk</code> / <code style={{ color: '#f1f5f9' }}>Admin123456!</code>
-        </div>
       </div>
     </div>
   );

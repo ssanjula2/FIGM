@@ -1,7 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 import { hashPassword } from '../src/auth/auth-service';
+import { DEFAULT_ADMIN_ACCOUNTS, resolveBootstrapAdminPassword } from '../src/auth/user-db';
 
 // Parse .env manually to ensure credentials are available
 const envPath = path.resolve(process.cwd(), '.env');
@@ -29,26 +31,22 @@ async function wipeRemoteSupabaseAndSetAdmin() {
   console.log('  FIGM ZERO-TRUST DB RESET & ADMIN CREATOR');
   console.log('====================================================');
 
-  const adminPasswordHash = hashPassword('Admin123456!');
-  const adminUser1 = {
-    id: 'usr_admin_sanjula',
-    fullName: 'A P H D S Sanjula (Admin)',
-    email: 'sanjula@nsbm.ac.lk',
+  // Sourced from ADMIN_BOOTSTRAP_PASSWORD (or, in development/test only, a freshly generated
+  // one-time value) via the same shared resolver getDefaultUsers() uses -- never a hardcoded
+  // literal. Outside development/test this throws if ADMIN_BOOTSTRAP_PASSWORD isn't set, which is
+  // intentional: this script resets real credentials (including in remote Supabase), so it must
+  // not silently fall back to a predictable password there.
+  const adminPasswordHash = hashPassword(resolveBootstrapAdminPassword());
+  const createdAt = new Date().toISOString();
+  const [adminUser1, adminUser2] = DEFAULT_ADMIN_ACCOUNTS.map((account) => ({
+    id: account.id,
+    fullName: account.fullName,
+    email: account.email,
     passwordHash: adminPasswordHash,
     role: 'ADMIN',
-    apiKey: 'figm_key_admin_sanjula',
-    createdAt: new Date().toISOString()
-  };
-
-  const adminUser2 = {
-    id: 'usr_admin_figm',
-    fullName: 'FIGM Lead System Administrator',
-    email: 'admin@figm.io',
-    passwordHash: adminPasswordHash,
-    role: 'ADMIN',
-    apiKey: 'figm_key_admin_figm',
-    createdAt: new Date().toISOString()
-  };
+    apiKey: `figm_key_${crypto.randomBytes(16).toString('hex')}`,
+    createdAt,
+  }));
 
   // 1. Wipe local JSON DB and set Admin users
   const localDbPath = path.resolve(process.cwd(), 'figm-user-db.json');
@@ -60,7 +58,7 @@ async function wipeRemoteSupabaseAndSetAdmin() {
     userSettings: []
   };
   fs.writeFileSync(localDbPath, JSON.stringify(cleanJsonDb, null, 2), 'utf-8');
-  console.log('✅ Local JSON DB reset with valid Admins (sanjula@nsbm.ac.lk & admin@figm.io / Admin123456!).');
+  console.log(`✅ Local JSON DB reset with valid Admins (${adminUser1.email} & ${adminUser2.email}). Password was NOT printed here -- see ADMIN_BOOTSTRAP_PASSWORD or the one-time generated-password log line above.`);
 
   // 2. Wipe Supabase Remote Database and Upsert Admin Users
   if (serviceRoleKey) {
@@ -112,7 +110,7 @@ async function wipeRemoteSupabaseAndSetAdmin() {
   }
 
   console.log('====================================================');
-  console.log('✅ ADMIN USERS CONFIGURED SUCCESSFULLY (Admin123456!).');
+  console.log('✅ ADMIN USERS CONFIGURED SUCCESSFULLY.');
   console.log('====================================================');
 }
 

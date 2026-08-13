@@ -36,10 +36,15 @@ Default local environment values:
 ```env
 PORT=3000
 NODE_ENV=development
-JWT_SECRET=figm-multi-tenant-super-secret-key-2026
-REFRESH_SECRET=figm-multi-tenant-refresh-secret-key-2026
 STORAGE_PROVIDER=json
 ```
+
+`JWT_SECRET`/`REFRESH_SECRET`/`ADMIN_BOOTSTRAP_PASSWORD` may be left unset for local development only
+(`NODE_ENV=development`) -- the app will generate/use a one-time or fixed development-only fallback
+and print a warning. In any other environment (including `NODE_ENV=production`, unset, or anything
+else) these are required and the app refuses to start without them. Generate real values with e.g.
+`openssl rand -hex 32` (secrets) / `openssl rand -base64 24` (admin bootstrap password) -- never reuse
+the values that shipped in earlier versions of this file or in `.env.example`.
 
 ---
 

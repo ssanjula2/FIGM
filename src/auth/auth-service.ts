@@ -18,52 +18,71 @@ export interface AuthSession {
 const PLACEHOLDER_SECRET_PATTERN = /YOUR_|CHANGE_?ME|<.*>|\bexample\b|\bplaceholder\b|\btodo\b|\bTBD\b/i;
 
 /**
- * Fails fast in production if a secret is too short or looks like an unfilled template placeholder
- * (e.g. "YOUR_PRODUCTION_JWT_SECRET_STRING" from .env.example accidentally left in place). Presence
- * alone was previously the only check -- any non-empty string, however weak, was accepted.
+ * Environments where a predictable, source-committed fallback secret/credential is tolerable.
+ * Deliberately an allow-list (not "anything that isn't 'production'"): an unset NODE_ENV, or an
+ * unrecognized value like 'staging'/'preview', previously fell through to the insecure fallback
+ * silently. Only local development and the automated test runner are exempted; every other value
+ * -- including unset -- is treated as production-equivalent and fails closed.
+ */
+const INSECURE_FALLBACK_ALLOWED_ENVS = new Set(['development', 'test']);
+
+export function isInsecureFallbackAllowed(): boolean {
+  return INSECURE_FALLBACK_ALLOWED_ENVS.has(process.env.NODE_ENV || '');
+}
+
+/**
+ * Fails fast if a secret is too short or looks like an unfilled template placeholder (e.g.
+ * "YOUR_PRODUCTION_JWT_SECRET_STRING" from .env.example accidentally left in place), in any
+ * environment where the insecure fallback isn't tolerated. Presence alone was previously the only
+ * check -- any non-empty string, however weak, was accepted.
  */
 function validateSecretStrength(secret: string, varName: string): void {
-  if (process.env.NODE_ENV !== 'production') return;
+  if (isInsecureFallbackAllowed()) return;
   if (secret.length < 32) {
-    throw new Error(`FATAL: ${varName} must be at least 32 characters in production (got ${secret.length}).`);
+    throw new Error(`FATAL: ${varName} must be at least 32 characters (got ${secret.length}).`);
   }
   if (PLACEHOLDER_SECRET_PATTERN.test(secret)) {
-    throw new Error(`FATAL: ${varName} looks like an unfilled template placeholder value in production.`);
+    throw new Error(`FATAL: ${varName} looks like an unfilled template placeholder value.`);
   }
+}
+
+function resolveSecret(envVarName: 'JWT_SECRET' | 'REFRESH_SECRET', devFallback: string): string {
+  const configured = process.env[envVarName];
+  if (configured) {
+    validateSecretStrength(configured, envVarName);
+    return configured;
+  }
+
+  if (!isInsecureFallbackAllowed()) {
+    // Fail closed. No predictable fallback is ever used outside development/test, regardless of
+    // whether NODE_ENV is 'production', unset, 'staging', 'preview', or anything else -- closing
+    // the loophole where only an exact NODE_ENV==='production' match used to trigger this check.
+    throw new Error(
+      `FATAL: ${envVarName} environment variable is missing. Refusing to start with a predictable ` +
+      `fallback secret outside local development/test. Set ${envVarName} to a strong random value ` +
+      `(e.g. \`openssl rand -hex 32\`).`
+    );
+  }
+
+  // Local/dev/test convenience only: a fixed, source-committed value. Anyone with repo access can
+  // forge tokens (including role:'ADMIN') signed with this secret -- acceptable only because this
+  // branch is now unreachable outside development/test.
+  // eslint-disable-next-line no-console
+  console.error(
+    `[auth-service] ${envVarName} is not set -- using the hardcoded default development secret. ` +
+    'This is INSECURE outside local development/test.'
+  );
+  validateSecretStrength(devFallback, envVarName);
+  return devFallback;
 }
 
 function getJwtSecret(): string {
-  if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
-    throw new Error('FATAL: JWT_SECRET environment variable is missing in production environment');
-  }
-  if (!process.env.JWT_SECRET) {
-    // This fallback only exists so the app can boot in local/dev/test environments without a
-    // .env file. It's a fixed value committed in source, so anyone with repo access can forge
-    // tokens (including role:'ADMIN') for any deployment that reaches this branch -- which
-    // happens whenever NODE_ENV isn't exactly 'production' (unset, 'staging', 'test', etc.).
-    // eslint-disable-next-line no-console
-    console.error('[auth-service] JWT_SECRET is not set -- using the hardcoded default development secret. This is INSECURE outside local development.');
-  }
-  const secret = process.env.JWT_SECRET || 'figm-multi-tenant-super-secret-key-2026';
-  validateSecretStrength(secret, 'JWT_SECRET');
-  return secret;
+  return resolveSecret('JWT_SECRET', 'figm-multi-tenant-super-secret-key-2026');
 }
 
 function getRefreshSecret(): string {
-  if (process.env.NODE_ENV === 'production' && !process.env.REFRESH_SECRET) {
-    throw new Error('FATAL: REFRESH_SECRET environment variable is missing in production environment');
-  }
-  if (!process.env.REFRESH_SECRET) {
-    // eslint-disable-next-line no-console
-    console.error('[auth-service] REFRESH_SECRET is not set -- using the hardcoded default development secret. This is INSECURE outside local development.');
-  }
-  const secret = process.env.REFRESH_SECRET || 'figm-multi-tenant-refresh-secret-key-2026';
-  validateSecretStrength(secret, 'REFRESH_SECRET');
-  return secret;
+  return resolveSecret('REFRESH_SECRET', 'figm-multi-tenant-refresh-secret-key-2026');
 }
-
-const JWT_SECRET = getJwtSecret();
-const REFRESH_SECRET = getRefreshSecret();
 
 /**
  * Constant-time string comparison for HMAC signatures, matching the timingSafeEqual pattern
@@ -108,7 +127,11 @@ export function signJWT(payload: UserPayload, expiresInSeconds = 3600): string {
     sub: payload.userId,
     email: payload.email,
     name: payload.fullName,
-    role: payload.role || 'DEVELOPER',
+    // Normalized through the same allow-list verifyJWT decodes with below, so no caller -- however
+    // it obtained `payload` -- can ever mint a claim outside {ADMIN, AUDITOR, DEVELOPER}. Route
+    // handlers must still only ever pass a role read from the authenticated user's own DB record,
+    // never a client-supplied field; this is defense-in-depth, not a substitute for that.
+    role: validateRole(payload.role),
     iat: now,
     exp: now + expiresInSeconds,
   };
@@ -117,7 +140,7 @@ export function signJWT(payload: UserPayload, expiresInSeconds = 3600): string {
   const encodedPayload = Buffer.from(JSON.stringify(claim)).toString('base64url');
 
   const signature = crypto
-    .createHmac('sha256', JWT_SECRET)
+    .createHmac('sha256', getJwtSecret())
     .update(`${encodedHeader}.${encodedPayload}`)
     .digest('base64url');
 
@@ -142,7 +165,7 @@ export function signRefreshToken(payload: UserPayload, expiresInSeconds = 604800
   const encodedPayload = Buffer.from(JSON.stringify(claim)).toString('base64url');
 
   const signature = crypto
-    .createHmac('sha256', REFRESH_SECRET)
+    .createHmac('sha256', getRefreshSecret())
     .update(`${encodedHeader}.${encodedPayload}`)
     .digest('base64url');
 
@@ -159,7 +182,7 @@ export function verifyJWT(token: string): UserPayload | null {
 
     const [encodedHeader, encodedPayload, signature] = parts;
     const expectedSignature = crypto
-      .createHmac('sha256', JWT_SECRET)
+      .createHmac('sha256', getJwtSecret())
       .update(`${encodedHeader}.${encodedPayload}`)
       .digest('base64url');
 
@@ -175,7 +198,10 @@ export function verifyJWT(token: string): UserPayload | null {
       userId: claim.sub,
       email: claim.email,
       fullName: claim.name,
-      role: (claim.role as UserRole) || 'DEVELOPER',
+      // Same enum allow-list as signing (see signJWT). A token whose signature verifies but whose
+      // role claim is outside {ADMIN, AUDITOR, DEVELOPER} is clamped to the least-privileged role
+      // rather than trusted verbatim.
+      role: validateRole(claim.role),
     };
   } catch {
     return null;
@@ -192,7 +218,7 @@ export function verifyRefreshToken(token: string): { userId: string; email: stri
 
     const [encodedHeader, encodedPayload, signature] = parts;
     const expectedSignature = crypto
-      .createHmac('sha256', REFRESH_SECRET)
+      .createHmac('sha256', getRefreshSecret())
       .update(`${encodedHeader}.${encodedPayload}`)
       .digest('base64url');
 

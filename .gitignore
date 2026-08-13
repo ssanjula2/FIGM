@@ -16,3 +16,9 @@ research/raw/real/*
 
 .vercel
 .env*
+
+# Local JSON-storage runtime database (users, sessions/refresh tokens, scan history, etc.).
+# Previously committed with a live admin refresh token and hardcoded default admin password --
+# see audit/new.md CRITICAL SEC-01. Never re-track this file; if it needs to be inspected, read it
+# locally, never `git add` it. Regenerated automatically on first boot via ADMIN_BOOTSTRAP_PASSWORD.
+figm-user-db.json
