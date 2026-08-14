@@ -1,0 +1,169 @@
+{
+  "generatedAt": "2026-08-14T11:12:44.365Z",
+  "figmVersion": "FIGM-Core-v2 (see figm-spec.json meta.version)",
+  "repoCount": 5,
+  "totalFilesScanned": 80,
+  "totalLOC": 4732,
+  "totalFigmFindings": 268,
+  "totalScanDurationMs": 3291.1677999999993,
+  "totalEngineCrashes": 0,
+  "totalFilesWithParseErrors": 0,
+  "asyncEngineCrashesDuringRun": [
+    {
+      "type": "unhandledRejection",
+      "message": "TypeError: RSS is not a constructor\n    at generate (eval at profileExecution (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\src\\engine\\dynamic-profiler.ts:3:48), <anonymous>:11:16)\n    at eval (eval at profileExecution (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\src\\engine\\dynamic-profiler.ts:3:48), <anonymous>:46:1)\n    at Function.profileExecution (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\src\\engine\\dynamic-profiler.ts:73:19)\n    at Function.analyzeFile (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\src\\engine\\rule-execution-engine.ts:38:37)\n    at scanRepo (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\benchmarks\\real-world\\run-real-world-benchmark.ts:175:54)\n    at main (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\benchmarks\\real-world\\run-real-world-benchmark.ts:283:20)\n    at fs (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\benchmarks\\real-world\\run-real-world-benchmark.ts:345:1)\n    at Object.<anonymous> (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\benchmarks\\real-world\\run-real-world-benchmark.ts:360:8)\n    at Module._compile (node:internal/modules/cjs/loader:1554:14)\n    at Object.transformer (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\node_modules\\tsx\\dist\\register-BoI6-WNn.cjs:9:3252)",
+      "detectedAtRepo": "vanillawebprojects"
+    }
+  ],
+  "repos": [
+    {
+      "name": "react-crash-2021",
+      "url": "https://github.com/bradtraversy/react-crash-2021.git",
+      "commit": "a644cdedd86d9a4bb939eca4881bf26a29340519",
+      "primaryFrameworkLabel": "React",
+      "filesScanned": 10,
+      "totalLOC": 340,
+      "scanDurationMs": 1128.2517000000007,
+      "totalFigmFindings": 15,
+      "findingsByRule": {
+        "FIGM-REACT-01": 1,
+        "FIGM-PERF-05": 5,
+        "FIGM-A11Y-05": 4,
+        "FIGM-REACT-03": 4,
+        "FIGM-REACT-02": 1
+      },
+      "findingsBySeverity": {
+        "HIGH": 2,
+        "MEDIUM": 5,
+        "CRITICAL": 8
+      },
+      "frameworksDetected": {
+        "REACT_JSX": 3,
+        "GENERIC_ESTREE": 7
+      },
+      "parserFailures": {
+        "filesWithParseErrors": 0,
+        "totalParseErrorCount": 0
+      },
+      "engineCrashCount": 0
+    },
+    {
+      "name": "nextjs-portfolio-starter",
+      "url": "https://github.com/vercel/nextjs-portfolio-starter.git",
+      "commit": "90cfee0f74c25bb3688369a0587e435f8b8f114d",
+      "primaryFrameworkLabel": "Next.js",
+      "filesScanned": 5,
+      "totalLOC": 128,
+      "scanDurationMs": 364.77880000000005,
+      "totalFigmFindings": 5,
+      "findingsByRule": {
+        "FIGM-REACT-03": 3,
+        "FIGM-PERF-01": 1,
+        "FIGM-REACT-01": 1
+      },
+      "findingsBySeverity": {
+        "CRITICAL": 3,
+        "HIGH": 2
+      },
+      "frameworksDetected": {
+        "GENERIC_ESTREE": 2,
+        "NEXT_JS": 2,
+        "REACT_JSX": 1
+      },
+      "parserFailures": {
+        "filesWithParseErrors": 0,
+        "totalParseErrorCount": 0
+      },
+      "engineCrashCount": 0
+    },
+    {
+      "name": "angular-tour-of-heroes",
+      "url": "https://github.com/johnpapa/angular-tour-of-heroes.git",
+      "commit": "c65967710e8b1b87c0e6a4f19eea2b5f54e7c50e",
+      "primaryFrameworkLabel": "Angular",
+      "filesScanned": 21,
+      "totalLOC": 609,
+      "scanDurationMs": 633.5619000000006,
+      "totalFigmFindings": 15,
+      "findingsByRule": {
+        "FIGM-REACT-03": 3,
+        "FIGM-ANG-02": 5,
+        "FIGM-ANG-01": 5,
+        "FIGM-PERF-04": 2
+      },
+      "findingsBySeverity": {
+        "CRITICAL": 8,
+        "HIGH": 5,
+        "MEDIUM": 2
+      },
+      "frameworksDetected": {
+        "GENERIC_ESTREE": 14,
+        "ANGULAR_TEMPLATE": 7
+      },
+      "parserFailures": {
+        "filesWithParseErrors": 0,
+        "totalParseErrorCount": 0
+      },
+      "engineCrashCount": 0
+    },
+    {
+      "name": "vue-hackernews-2.0",
+      "url": "https://github.com/vuejs/vue-hackernews-2.0.git",
+      "commit": "98399b55c6f1da4197840ba76189795b3e95be0f",
+      "primaryFrameworkLabel": "Vue",
+      "filesScanned": 23,
+      "totalLOC": 1396,
+      "scanDurationMs": 692.1539000000012,
+      "totalFigmFindings": 19,
+      "findingsByRule": {
+        "FIGM-PERF-04": 2,
+        "FIGM-REACT-03": 10,
+        "FIGM-REACT-01": 5,
+        "FIGM-PERF-02": 1,
+        "FIGM-PERF-05": 1
+      },
+      "findingsBySeverity": {
+        "MEDIUM": 3,
+        "CRITICAL": 10,
+        "HIGH": 6
+      },
+      "frameworksDetected": {
+        "GENERIC_ESTREE": 15,
+        "VUE_SFC": 8
+      },
+      "parserFailures": {
+        "filesWithParseErrors": 0,
+        "totalParseErrorCount": 0
+      },
+      "engineCrashCount": 0
+    },
+    {
+      "name": "vanillawebprojects",
+      "url": "https://github.com/bradtraversy/vanillawebprojects.git",
+      "commit": "adc66a181a67049fb413c8862181ddc6c45ba22b",
+      "primaryFrameworkLabel": "Generic JavaScript",
+      "filesScanned": 21,
+      "totalLOC": 2259,
+      "scanDurationMs": 472.42149999999674,
+      "totalFigmFindings": 214,
+      "findingsByRule": {
+        "FIGM-REACT-03": 133,
+        "FIGM-PERF-03": 69,
+        "FIGM-REACT-01": 11,
+        "FIGM-PERF-02": 1
+      },
+      "findingsBySeverity": {
+        "CRITICAL": 202,
+        "HIGH": 12
+      },
+      "frameworksDetected": {
+        "GENERIC_ESTREE": 21
+      },
+      "parserFailures": {
+        "filesWithParseErrors": 0,
+        "totalParseErrorCount": 0
+      },
+      "engineCrashCount": 0
+    }
+  ]
+}

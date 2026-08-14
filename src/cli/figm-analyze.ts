@@ -174,8 +174,24 @@ function getArgValue(args: string[], flag: string): string | null {
   return null;
 }
 
-// Direct Execution Entry Point
-if (process.argv[1] && (process.argv[1].includes('figm-analyze') || process.argv[1].includes('figm-model'))) {
+// Direct Execution Entry Point.
+//
+// Bug found via the real-world benchmark (benchmarks/real-world/METHODOLOGY.md section 6b): the
+// previous check (`process.argv[1].includes('figm-model')`) matches ANY process whose entry
+// script path merely contains the substring "figm-model" -- which is true for every single
+// script/test run from within this project, since the repository itself lives in a directory
+// named "figm-model". That meant simply *importing* `runCLI`/`parseCLIArgs` from an unrelated
+// file (e.g. a test file) silently triggered a full, unrequested recursive scan of the entire
+// project (hundreds of files) as an import side effect. This was previously a silent, wasteful
+// bug; the real-world benchmark's cloned fixtures (`benchmarks/real-world/.repo-clones/`)
+// contained a file (`nextjs-portfolio-starter/scripts/gen-rss.js`) that turned it into a crash
+// (see the same METHODOLOGY.md section for the full mechanism) by getting swept into that
+// unrequested scan and triggering DynamicProfiler's unhandled-promise-rejection bug. Fixed by
+// checking the entry script's exact basename instead of a path substring, so only genuinely
+// running this file directly (`npm run analyze`, or the `bin/figm-analyze.js` wrapper, both of
+// which resolve to a file literally named figm-analyze.ts/.js) triggers auto-execution.
+const entryScriptBasename = process.argv[1] ? path.basename(process.argv[1]) : '';
+if (entryScriptBasename === 'figm-analyze.ts' || entryScriptBasename === 'figm-analyze.js') {
   const exitCode = runCLI(process.argv.slice(2));
   if (exitCode !== 0 && process.env.NODE_ENV !== 'test') {
     process.exit(exitCode);

@@ -1,0 +1,198 @@
+{
+  "name": "nextjs-portfolio-starter",
+  "url": "https://github.com/vercel/nextjs-portfolio-starter.git",
+  "commit": "90cfee0f74c25bb3688369a0587e435f8b8f114d",
+  "primaryFrameworkLabel": "Next.js",
+  "filesScanned": 5,
+  "totalLOC": 128,
+  "scanDurationMs": 364.77880000000005,
+  "totalFigmFindings": 5,
+  "findingsByRule": {
+    "FIGM-REACT-03": 3,
+    "FIGM-PERF-01": 1,
+    "FIGM-REACT-01": 1
+  },
+  "findingsBySeverity": {
+    "CRITICAL": 3,
+    "HIGH": 2
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 2,
+    "NEXT_JS": 2,
+    "REACT_JSX": 1
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "next.config.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 3,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "pages/_app.js",
+      "framework": "NEXT_JS",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "pages/_document.js",
+      "framework": "NEXT_JS",
+      "loc": 32,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "scripts/gen-rss.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 43,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "theme.config.js",
+      "framework": "REACT_JSX",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-REACT-03",
+      "ruleName": "Avoid Direct React State Mutation",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "CRITICAL",
+      "filePath": "next.config.js",
+      "location": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 29
+        }
+      },
+      "offendingCodeSnippet": "module.exports = withNextra()",
+      "message": "Direct mutation of React state variable skips component re-renders.",
+      "remediation": "Use immutable state updates or return new object references inside state setters.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 99,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 2"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "pages/_document.js",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 15
+        },
+        "end": {
+          "line": 8,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "const meta = {",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 4"
+    },
+    {
+      "ruleId": "FIGM-REACT-03",
+      "ruleName": "Avoid Direct React State Mutation",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "CRITICAL",
+      "filePath": "scripts/gen-rss.js",
+      "location": {
+        "start": {
+          "line": 24,
+          "column": 6
+        },
+        "end": {
+          "line": 31,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "allPosts.push({",
+      "message": "Direct mutation of React state variable skips component re-renders.",
+      "remediation": "Use immutable state updates or return new object references inside state setters.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 99,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 24"
+    },
+    {
+      "ruleId": "FIGM-REACT-03",
+      "ruleName": "Avoid Direct React State Mutation",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "CRITICAL",
+      "filePath": "scripts/gen-rss.js",
+      "location": {
+        "start": {
+          "line": 35,
+          "column": 2
+        },
+        "end": {
+          "line": 35,
+          "column": 62
+        }
+      },
+      "offendingCodeSnippet": "allPosts.sort((a, b) => new Date(b.date) - new Date(a.date))",
+      "message": "Direct mutation of React state variable skips component re-renders.",
+      "remediation": "Use immutable state updates or return new object references inside state setters.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 99,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 35"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "scripts/gen-rss.js",
+      "location": {
+        "start": {
+          "line": 35,
+          "column": 2
+        },
+        "end": {
+          "line": 35,
+          "column": 62
+        }
+      },
+      "offendingCodeSnippet": "allPosts.sort((a, b) => new Date(b.date) - new Date(a.date))",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 35"
+    }
+  ]
+}

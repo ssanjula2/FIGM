@@ -22,3 +22,8 @@ research/raw/real/*
 # see audit/new.md CRITICAL SEC-01. Never re-track this file; if it needs to be inspected, read it
 # locally, never `git add` it. Regenerated automatically on first boot via ADMIN_BOOTSTRAP_PASSWORD.
 figm-user-db.json
+
+# Real-world benchmark: third-party repos cloned by run-real-world-benchmark.ts. Never commit
+# other projects' source code -- only our own scan output (benchmarks/real-world/raw-results/)
+# and reports are tracked.
+benchmarks/real-world/.repo-clones/
