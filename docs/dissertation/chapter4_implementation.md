@@ -53,6 +53,20 @@ flowchart LR
 > genuine TypeScript-compiler-derived AST (`src/analysis/react-ast-rules.ts`) — see §4.2.2. The
 > accurate characterization of the overall system is **AST-informed pattern-based static
 > analysis**, with a growing genuine-AST-based subset, not a uniformly AST-based tool.
+>
+> **Update (AST migration, see `docs/architecture/AST_MIGRATION_MAP.md`):** the "growing" subset
+> above is no longer just FIGM-REACT-02. 15 of the 25 rules (FIGM-PERF-01/02/04, FIGM-A11Y-01/02/03/04,
+> FIGM-NEXT-01/02/03/04, FIGM-REACT-02/03, FIGM-ANG-01/02/05) are now detected via a real
+> `ts.createSourceFile`-backed parser (`src/parser/typescript-framework-parser.ts` +
+> `src/ast/real-syntax-node-builder.ts`) for the frameworks where that syntax is genuinely
+> TypeScript/JSX (React, Next.js, plain JS/TS, and Angular's TypeScript class body). The remaining
+> 10 rules (FIGM-PERF-03/05/06, FIGM-A11Y-05/06, FIGM-REACT-01/04, FIGM-ANG-03/04) are still
+> regex/substring, as is *every* rule when applied to a Vue SFC or to Angular's template markup
+> (the TypeScript compiler cannot parse either). Every diagnostic now carries a `sourceKind` field
+> (`REAL_AST` or `LEGACY_TEXT_HEURISTIC`) recording which mechanism actually produced it, so this
+> claim is independently checkable against the tool's own live output, not only against this text.
+> The system is still, honestly, a hybrid — "AST-based" is accurate for a specific, documented
+> majority of rule/framework combinations, not for the tool as a uniform whole.
 
 Static analysis of modern web applications requires handling heterogeneous template syntaxes and incomplete or malformed code blocks. The `SourceParser` adapter provides resilient pattern-based parsing that produces an AST-shaped intermediate representation:
 

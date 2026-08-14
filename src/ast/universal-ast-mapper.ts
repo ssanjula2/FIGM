@@ -186,7 +186,14 @@ export class UniversalASTMapper {
       attributes: { ...(rawNode.attributes || {}) },
       loc: rawNode.loc || { start: { line: 1, column: 0 }, end: { line: 1, column: 1 } },
       children: rawNode.children ? rawNode.children.map((c) => this.normalizeNode(c, framework)) : [],
-      scopeType: rawNode.scopeType || 'GLOBAL'
+      scopeType: rawNode.scopeType || 'GLOBAL',
+      // AST Migration Phase 8: this field was added to ASTNode after normalizeNode was already
+      // reconstructing a fresh object here (rather than spreading rawNode) -- without explicitly
+      // carrying it forward, every node's real-AST-vs-legacy provenance was silently lost between
+      // SourceParser/real-syntax-node-builder and ASTDetectionEngine.createReport, making every
+      // diagnostic report LEGACY_TEXT_HEURISTIC regardless of actual origin (caught by
+      // tests/ast-migration.test.ts's sourceKind provenance suite).
+      sourceKind: rawNode.sourceKind
     };
 
     // Extract framework-specific attributes into unified attributes dictionary

@@ -11,26 +11,37 @@
  * matches, not from a parser that actually understands JavaScript/JSX grammar or scope.
  *
  * FIGM-REACT-02 ("array index used as list `key`") is migrated here to use the real `typescript`
- * compiler API (`ts.createSourceFile` + a real AST visitor), because it is the rule where that
- * distinction has a directly demonstrable, testable effect: detecting "is this JSX attribute's
- * expression exactly the index parameter bound by the enclosing `.map((item, N) => ...)`
- * callback" requires understanding real parameter binding and lexical scope, not just seeing the
- * literal substrings "key={index}" / "key={i}" / "key={idx}" the regex version hardcodes. See
- * tests/react-ast-rules.test.ts for concrete cases the regex version gets wrong that this gets
- * right (a differently-named index parameter; a same-named-but-unrelated local variable; a
- * template-literal key) and cases both correctly agree on (existing regression fixtures).
+ * compiler API, because it is the rule where that distinction has a directly demonstrable,
+ * testable effect: detecting "is this JSX attribute's expression exactly the index parameter
+ * bound by the enclosing `.map((item, N) => ...)` callback" requires understanding real parameter
+ * binding and lexical scope, not just seeing the literal substrings "key={index}" / "key={i}" /
+ * "key={idx}" the regex version hardcodes. See tests/react-ast-rules.test.ts for concrete cases
+ * the regex version gets wrong that this gets right (a differently-named index parameter; a
+ * same-named-but-unrelated local variable; a template-literal key) and cases both correctly agree
+ * on (existing regression fixtures).
  *
- * This module deliberately does NOT attempt to migrate every rule at once (see the phased
- * migration plan referenced above) — it is scoped to exactly one rule, for exactly the two
- * frameworks (`REACT_JSX`, `NEXT_JS`) where genuine JSX/TSX parsing applies, and is wired in
- * additively by RuleExecutionEngine (it replaces only FIGM-REACT-02's regex-based diagnostics for
- * those two frameworks; every other rule and every other framework is completely unaffected).
+ * AST Migration Phase 5: this module now parses through the shared `TypeScriptFrameworkParser`
+ * (src/parser/typescript-framework-parser.ts) — the same parser abstraction
+ * src/ast/real-syntax-node-builder.ts uses for every other real-AST-migrated rule — instead of
+ * calling `ts.createSourceFile` directly itself. This is a pure relocation: the detection logic
+ * (expressionIsIndexDerived, findEnclosingMapIndexBinding, buildReport) is byte-for-byte
+ * unchanged, only *how the SourceFile is obtained* changed, so React and Next.js now share one
+ * consistent syntax-aware parsing entry point instead of two independent `ts.createSourceFile`
+ * call sites doing the same thing slightly differently.
+ *
+ * This module deliberately does NOT attempt to migrate every rule at once (see
+ * docs/architecture/AST_MIGRATION_MAP.md for the full phased plan) — it is scoped to exactly one
+ * rule, for exactly the two frameworks (`REACT_JSX`, `NEXT_JS`) where genuine JSX/TSX parsing
+ * applies, and is wired in additively by RuleExecutionEngine (it replaces only FIGM-REACT-02's
+ * regex-based diagnostics for those two frameworks; every other rule and every other framework is
+ * completely unaffected).
  */
 
 import * as ts from 'typescript';
 import { DiagnosticReport, FrameworkType } from '../types/ast-spec.js';
 import { FOUR_LAYER_MAPPINGS } from '../matrix/four-layer-meta-model.js';
 import { getStandardReference } from '../matrix/standard-clause-mapping.js';
+import { TypeScriptFrameworkParser } from '../parser/typescript-framework-parser.js';
 
 const SUPPORTED_FRAMEWORKS: FrameworkType[] = ['REACT_JSX', 'NEXT_JS'];
 
@@ -123,8 +134,20 @@ export function detectArrayIndexKey(code: string, filePath: string): DiagnosticR
   const reports: DiagnosticReport[] = [];
 
   try {
-    const scriptKind = filePath.endsWith('.tsx') || filePath.endsWith('.jsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TSX;
-    const sourceFile = ts.createSourceFile(filePath, code, ts.ScriptTarget.ES2022, true, scriptKind);
+    // Shared parser abstraction (Phase 5) -- same TypeScriptFrameworkParser instance type every
+    // other real-AST-migrated rule uses (src/ast/real-syntax-node-builder.ts), rather than this
+    // module's own independent `ts.createSourceFile` call. FrameworkParser.parse() is itself
+    // wrapped in try/catch and never throws, but this function's own try/catch is kept as a
+    // second, redundant safety net around the traversal below (belt-and-braces, matching
+    // SourceParser's resilience contract: a pathological input degrades to "no findings," never a
+    // crashed scan).
+    const parser = new TypeScriptFrameworkParser();
+    parser.parse(code, filePath);
+    const root = parser.getRoot();
+    if (!root) return [];
+    // TypeScriptFrameworkParser's root is always a ts.SourceFile at runtime; see the identical,
+    // fuller-documented cast in real-syntax-node-builder.ts's buildRealSyntaxNodes.
+    const sourceFile = root as ts.SourceFile;
 
     const visit = (node: ts.Node) => {
       if (ts.isJsxAttribute(node) && node.name.getText(sourceFile) === 'key' && node.initializer) {

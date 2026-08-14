@@ -16,6 +16,19 @@ export interface SourceRange {
 }
 
 /**
+ * Detection provenance for a single ASTNode. Set by whichever builder produced the node --
+ * `REAL_AST` for a node derived from genuine parser traversal (currently: the TypeScript
+ * compiler API, for REACT_JSX/NEXT_JS/GENERIC_ESTREE/ANGULAR_TEMPLATE's class body), or
+ * `LEGACY_TEXT_HEURISTIC` for a node derived from regex/substring matching over source lines
+ * (currently: every VUE_SFC node, Angular template-markup rules FIGM-ANG-03/04, and every rule
+ * not yet migrated -- see docs/architecture/AST_MIGRATION_MAP.md). Never label a
+ * LEGACY_TEXT_HEURISTIC node's evidence as AST-derived, and never claim this field is present
+ * on nodes produced before this field existed (treat `undefined` as unknown provenance, not as
+ * an implicit REAL_AST).
+ */
+export type DetectionSourceKind = 'REAL_AST' | 'LEGACY_TEXT_HEURISTIC';
+
+/**
  * Generic Abstract Syntax Tree Node representation
  */
 export interface ASTNode {
@@ -27,6 +40,7 @@ export interface ASTNode {
   parent?: ASTNode;
   children?: ASTNode[];
   scopeType?: 'GLOBAL' | 'MODULE' | 'FUNCTION' | 'LOOP' | 'RENDER' | 'BLOCK';
+  sourceKind?: DetectionSourceKind;
   [key: string]: unknown;
 }
 
@@ -98,5 +112,8 @@ export interface DiagnosticReport {
   confidenceScore?: number;
   evidence?: string;
   fixAvailable?: boolean;
+  /** See DetectionSourceKind. Absent on diagnostic categories this doesn't apply to
+   *  (SYNTAX_ERROR, TYPE_COMPILE_ERROR) and on rules not yet touched by the AST migration. */
+  sourceKind?: DetectionSourceKind;
 }
 

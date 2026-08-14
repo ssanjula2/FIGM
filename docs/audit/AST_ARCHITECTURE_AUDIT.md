@@ -1,3 +1,14 @@
+> **STATUS UPDATE (AST migration):** this document's findings were accurate as of when it was
+> written and are preserved below unmodified as the historical baseline. That baseline has since
+> changed: 15 of the 25 rules are now detected via genuine TypeScript-compiler-API AST traversal
+> for the frameworks/syntax where that's actually possible (React, Next.js, plain JS/TS, and
+> Angular's TypeScript class body); the other 10, and every rule on Vue SFC or Angular template
+> markup, remain exactly the regex/text-heuristic detection this document describes. See
+> `docs/architecture/AST_MIGRATION_MAP.md` for the full rule-by-rule current state, the design
+> rationale, and what is deliberately still out of scope (Vue, Angular template markup). Every
+> diagnostic now carries a `sourceKind` field (`REAL_AST` / `LEGACY_TEXT_HEURISTIC`) so this can be
+> checked against live tool output, not just against documentation.
+
 # FIGM Analysis Engine — Architecture Audit
 
 **Question this document answers**: does FIGM's detection engine use a real AST, or text/regex

@@ -4,6 +4,23 @@
  */
 
 import { ASTNode, FrameworkType } from '../types/ast-spec.js';
+import {
+  buildRealSyntaxNodes,
+  isGeneralJsRealAstEligible,
+  isJsxRealAstEligible,
+  isAngularClassRealAstEligible,
+} from '../ast/real-syntax-node-builder.js';
+
+/**
+ * Per-rule real-AST eligibility gates (AST Migration Phases 4-7). When a rule is real-AST-eligible
+ * for the current file's framework, the legacy regex/substring block below that used to detect it
+ * is skipped for that framework -- `buildRealSyntaxNodes` (src/ast/real-syntax-node-builder.ts)
+ * produces the equivalent ASTNode instead, appended to `root.children` at the end of
+ * `buildASTFromCode`. Every other framework/rule combination is completely untouched: this is an
+ * additive, framework-gated swap, not a rewrite of the legacy loop. See
+ * docs/architecture/AST_MIGRATION_MAP.md for the full per-rule rationale.
+ */
+const REAL_AST_NEXT01_04_FRAMEWORKS: FrameworkType[] = ['NEXT_JS', 'REACT_JSX'];
 
 export interface ParseResult {
   filePath: string;
@@ -448,18 +465,41 @@ export class SourceParser {
 
     let currentScope: 'GLOBAL' | 'MODULE' | 'FUNCTION' | 'LOOP' | 'RENDER' = 'GLOBAL';
 
-    // Check App Router missing revalidate (FIGM-NEXT-03)
+    // AST Migration Phases 4-7: real-AST detection for the migrated rule subset (see
+    // docs/architecture/AST_MIGRATION_MAP.md). Computed once up front; the per-rule eligibility
+    // gates below (useRealAstGeneral/Jsx/Angular/Next*) suppress only the specific legacy blocks
+    // this now supersedes, for exactly the frameworks where a real parse is possible -- every
+    // other rule/framework combination below is unmodified regex/substring detection.
+    const realAst = buildRealSyntaxNodes(code, filePath, framework);
+    const useRealAstGeneral = isGeneralJsRealAstEligible(framework);
+    const useRealAstJsx = isJsxRealAstEligible(framework);
+    const useRealAstAngular = isAngularClassRealAstEligible(framework);
+    // FIGM-NEXT-01's real trigger condition is NEXT_JS-only in practice (see the detailed
+    // rationale in real-syntax-node-builder.ts's buildRealSyntaxNodes) -- a plain REACT_JSX file
+    // must never get an (incorrect) FIGM-NEXT-01 candidate just because it calls useState/useEffect.
+    const useRealAstNext01 = framework === 'NEXT_JS';
+    const useRealAstNext04 = REAL_AST_NEXT01_04_FRAMEWORKS.includes(framework);
+    const useRealAstNext02 = framework === 'NEXT_JS';
+
+    // Check App Router missing revalidate (FIGM-NEXT-03) -- superseded by buildNext03Root inside
+    // buildRealSyntaxNodes for NEXT_JS (see real-syntax-node-builder.ts); this legacy check now
+    // only still matters for a hypothetical non-NEXT_JS framework value that nonetheless has
+    // isAppRouterPage set, which cannot occur given how detectFramework assigns NEXT_JS, but is
+    // left as a harmless no-op guard rather than deleted, to avoid asserting a stronger invariant
+    // than the rest of this file currently guarantees elsewhere.
     if (framework === 'NEXT_JS' && root.attributes?.isAppRouterPage && !root.attributes?.hasRevalidateExport) {
-      root.children!.push({
-        type: 'ExportNamedDeclaration',
-        name: 'revalidate',
-        scopeType: 'MODULE',
-        attributes: {
-          missingRevalidateConfig: true,
-          codeSnippet: 'export const revalidate'
-        },
-        loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 10 } }
-      });
+      if (!useRealAstNext02) {
+        root.children!.push({
+          type: 'ExportNamedDeclaration',
+          name: 'revalidate',
+          scopeType: 'MODULE',
+          attributes: {
+            missingRevalidateConfig: true,
+            codeSnippet: 'export const revalidate'
+          },
+          loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 10 } }
+        });
+      }
     }
 
     lines.forEach((lineText, idx) => {
@@ -483,20 +523,32 @@ export class SourceParser {
       }
 
       // 1. Top-Level Imports (FIGM-PERF-04 & FIGM-NEXT-02)
+      // FIGM-PERF-04 is real-AST-migrated for useRealAstGeneral frameworks (see buildPerf04 in
+      // real-syntax-node-builder.ts); FIGM-NEXT-02 is real-AST-migrated for NEXT_JS (buildNext02).
+      // Each attribute below is only computed via the legacy regex path when its own rule is NOT
+      // real-AST-eligible for this framework, so a single import line is never counted twice.
       if (cTrimmed.startsWith('import ') && !cTrimmed.includes('type ')) {
         const moduleName = (trimmed.match(/from ['"](.*)['"]/) || [])[1] || 'unknown';
-        const isHeavy = ['monaco-editor', 'chart.js', 'three', 'canvas', 'echarts', 'd3'].some(m => moduleName.includes(m));
         const importedNames = extractImportedBindingNames(trimmed);
+
+        const attrs: Record<string, unknown> = { codeSnippet: trimmed };
+        if (!useRealAstGeneral) {
+          attrs.referencedInConditional = isReferencedInsideConditionalBlock(cleanCode, importedNames);
+        }
+        if (!useRealAstNext02) {
+          // useRealAstNext02 is exactly `framework === 'NEXT_JS'`, so this attribute can only
+          // ever be meaningfully true when useRealAstNext02 is also true (i.e. real-AST-owned) --
+          // this legacy branch exists solely so non-NEXT_JS frameworks still get an (always-false,
+          // structurally inert) attribute rather than an undefined one, matching the original
+          // unconditional-computation shape.
+          attrs.isHeavyStaticImportInNext = false;
+        }
 
         root.children!.push({
           type: 'ImportDeclaration',
           name: moduleName,
           scopeType: currentScope,
-          attributes: {
-            codeSnippet: trimmed,
-            referencedInConditional: isReferencedInsideConditionalBlock(cleanCode, importedNames),
-            isHeavyStaticImportInNext: framework === 'NEXT_JS' && isHeavy && !cleanCode.includes('dynamic(')
-          },
+          attributes: attrs,
           loc: { start: { line: lineNum, column: lineText.indexOf('import') }, end: { line: lineNum, column: lineText.length } }
         });
       }
@@ -514,8 +566,10 @@ export class SourceParser {
         // Vue templates allocate an invariant object via a bound attribute expression
         // (`:style="{ color: 'blue' }"`), not a JS `const/let/var` declaration -- a structurally
         // different violation shape than the JSX/script-side pattern above, also found via the
-        // real-world ground-truth benchmark's VueBenchmark.vue fixture.
-        const isJsDeclaration = /\b(const|let|var)\s+\w+\s*=\s*\{/.test(cTrimmed);
+        // real-world ground-truth benchmark's VueBenchmark.vue fixture. The isJsDeclaration
+        // branch is real-AST-migrated for useRealAstGeneral frameworks (buildPerf01); the
+        // Vue-only isVueAttrBinding branch is unaffected (VUE_SFC is never real-AST-eligible).
+        const isJsDeclaration = !useRealAstGeneral && /\b(const|let|var)\s+\w+\s*=\s*\{/.test(cTrimmed);
         const isVueAttrBinding = /:[\w-]+\s*=\s*["']\{/.test(cTrimmed);
         if (isJsDeclaration || isVueAttrBinding) {
           root.children!.push({
@@ -562,7 +616,11 @@ export class SourceParser {
       }
 
       // 5. Image Tag Dimensions (FIGM-PERF-02)
-      if (cTrimmed.includes('<img')) {
+      // Real-AST-migrated (buildPerf02) for useRealAstJsx frameworks (REACT_JSX/NEXT_JS), where
+      // <img> is guaranteed to be real parsed JSX. Left active here for every other framework,
+      // including ANGULAR_TEMPLATE, whose <img> usage typically lives inside an inline template
+      // *string* the class-body AST parser cannot see into (see AST_MIGRATION_MAP.md §5).
+      if (!useRealAstJsx && cTrimmed.includes('<img')) {
         const hasWidth = /width=["'{]?\d+["'}]?/.test(trimmed);
         const hasHeight = /height=["'{]?\d+["'}]?/.test(trimmed);
         const hasAspect = trimmed.includes('aspectRatio') || trimmed.includes('aspect-ratio');
@@ -633,8 +691,15 @@ export class SourceParser {
         // accessibility violation written with the shorthand (the more idiomatic, far more common
         // real-world form) silently evaded FIGM-A11Y-01 entirely. Same for the keydown equivalent
         // (`@keydown.enter`, already assumed to exist by RemediationEngine's Vue fix template).
-        const hasOnClick = attrsText.includes('onClick') || attrsText.includes('v-on:click') || attrsText.includes('@click') || attrsText.includes('(click)');
-        const hasOnKeyDown = attrsText.includes('onKeyDown') || attrsText.includes('v-on:keydown') || attrsText.includes('@keydown') || attrsText.includes('(keydown)');
+        //
+        // FIGM-A11Y-01 (the onClick/onKeyDown pair) is real-AST-migrated for useRealAstJsx
+        // frameworks (buildA11y01 in real-syntax-node-builder.ts) -- this legacy path no longer
+        // sets onClick/onKeyDown for those frameworks, to avoid a duplicate diagnostic. It still
+        // fully applies for VUE_SFC/ANGULAR_TEMPLATE (@click/(click) are not real JSX/TS syntax
+        // the TypeScript parser understands). FIGM-A11Y-06 (positiveTabIndex) is NOT migrated in
+        // this pass and stays legacy for every framework, including React/Next.
+        const hasOnClick = !useRealAstJsx && (attrsText.includes('onClick') || attrsText.includes('v-on:click') || attrsText.includes('@click') || attrsText.includes('(click)'));
+        const hasOnKeyDown = !useRealAstJsx && (attrsText.includes('onKeyDown') || attrsText.includes('v-on:keydown') || attrsText.includes('@keydown') || attrsText.includes('(keydown)'));
         const hasTabIndex = attrsText.includes('tabIndex') || attrsText.includes('tabindex');
 
         // Check positive tabIndex > 0 (FIGM-A11Y-06)
@@ -694,7 +759,8 @@ export class SourceParser {
       }
 
       // 9. Custom Component ARIA Role/Label (FIGM-A11Y-02)
-      if (cTrimmed.includes('<Custom') || cTrimmed.includes('<Select') || cTrimmed.includes('<Dropdown')) {
+      // Real-AST-migrated (buildA11y02) for useRealAstJsx frameworks; unchanged elsewhere.
+      if (!useRealAstJsx && (cTrimmed.includes('<Custom') || cTrimmed.includes('<Select') || cTrimmed.includes('<Dropdown'))) {
         const compName = (trimmed.match(/<([A-Z][A-Za-z0-9]+)/) || [])[1] || 'CustomComponent';
         const hasRole = cTrimmed.includes('role=');
         const hasAriaLabel = cTrimmed.includes('aria-label=') || cTrimmed.includes('aria-labelledby=');
@@ -716,7 +782,8 @@ export class SourceParser {
       }
 
       // 10. Dynamic Status Container missing aria-live (FIGM-A11Y-03)
-      if (cTrimmed.includes('className="status') || cTrimmed.includes('class="status') || cTrimmed.includes('id="status')) {
+      // Real-AST-migrated (buildA11y03) for useRealAstJsx frameworks; unchanged elsewhere.
+      if (!useRealAstJsx && (cTrimmed.includes('className="status') || cTrimmed.includes('class="status') || cTrimmed.includes('id="status'))) {
         const hasAriaLive = cTrimmed.includes('aria-live=');
         const hasRoleStatus = cTrimmed.includes('role="status"') || cTrimmed.includes('role="alert"');
 
@@ -737,7 +804,8 @@ export class SourceParser {
       }
 
       // 11. Modal Focus Containment (FIGM-A11Y-04)
-      if (cTrimmed.includes('<Modal') || cTrimmed.includes('<Dialog')) {
+      // Real-AST-migrated (buildA11y04) for useRealAstJsx frameworks; unchanged elsewhere.
+      if (!useRealAstJsx && (cTrimmed.includes('<Modal') || cTrimmed.includes('<Dialog'))) {
         const compName = trimmed.includes('<Modal') ? 'Modal' : 'Dialog';
         const hasRestoration = cTrimmed.includes('restoresFocus') || cTrimmed.includes('onClose=');
 
@@ -755,7 +823,14 @@ export class SourceParser {
       }
 
       // 12. Client Hooks without "use client" (FIGM-NEXT-01)
-      if ((framework === 'NEXT_JS' || root.attributes?.isAppRouterPage) && !root.attributes?.hasUseClientDirective) {
+      // Real-AST-migrated (buildNext01) for useRealAstNext01 frameworks (NEXT_JS only -- see the
+      // rationale in real-syntax-node-builder.ts). useRealAstNext01 is exactly `framework ===
+      // 'NEXT_JS'`, and isAppRouterPage being true always implies detectFramework already
+      // classified the file NEXT_JS, so `!useRealAstNext01` alone (framework narrowed to non-
+      // NEXT_JS) already makes the original `framework === 'NEXT_JS' ||` half of this condition
+      // unreachable; kept only the isAppRouterPage half, both to satisfy the compiler and because
+      // it is the only half that could ever matter here.
+      if (!useRealAstNext01 && root.attributes?.isAppRouterPage && !root.attributes?.hasUseClientDirective) {
         if (cTrimmed.includes('useState(') || cTrimmed.includes('useEffect(') || cTrimmed.includes('useContext(') || cTrimmed.includes('useRef(')) {
           root.children!.push({
             type: 'CallExpression',
@@ -771,7 +846,8 @@ export class SourceParser {
       }
 
       // 13. External Font Link in Next.js (FIGM-NEXT-04)
-      if (cTrimmed.includes('fonts.googleapis.com') || (cTrimmed.includes('<link') && cTrimmed.includes('stylesheet') && cTrimmed.includes('fonts'))) {
+      // Real-AST-migrated (buildNext04) for useRealAstNext04 frameworks; unchanged elsewhere.
+      if (!useRealAstNext04 && (cTrimmed.includes('fonts.googleapis.com') || (cTrimmed.includes('<link') && cTrimmed.includes('stylesheet') && cTrimmed.includes('fonts')))) {
         root.children!.push({
           type: 'JSXElement',
           name: 'link',
@@ -824,8 +900,9 @@ export class SourceParser {
       // immediately followed by a real single "=" assignment operator (not "==", "===", or a JSX
       // attribute's "={"), which is what an actual property mutation (`user.name = 'x'`,
       // `state.foo = 'x'`) looks like and a JSX read never does.
-      const isMutationMethod = cTrimmed.includes('.push(') || cTrimmed.includes('.splice(') || cTrimmed.includes('.pop(') || cTrimmed.includes('.shift(') || cTrimmed.includes('.unshift(') || cTrimmed.includes('.sort(');
-      const isPropAssignment = /^\s*\w+(\.\w+)+\s*=\s*/.test(cTrimmed) || /\.name\s*=(?!=)/.test(cTrimmed) || /\bstate\.\w+\s*=(?!=)/.test(cTrimmed);
+      // Real-AST-migrated (buildReact03) for useRealAstGeneral frameworks; unchanged elsewhere.
+      const isMutationMethod = !useRealAstGeneral && (cTrimmed.includes('.push(') || cTrimmed.includes('.splice(') || cTrimmed.includes('.pop(') || cTrimmed.includes('.shift(') || cTrimmed.includes('.unshift(') || cTrimmed.includes('.sort('));
+      const isPropAssignment = !useRealAstGeneral && (/^\s*\w+(\.\w+)+\s*=\s*/.test(cTrimmed) || /\.name\s*=(?!=)/.test(cTrimmed) || /\bstate\.\w+\s*=(?!=)/.test(cTrimmed));
       if (isMutationMethod || isPropAssignment) {
         if (!cTrimmed.includes('setState') && !cTrimmed.startsWith('set') && !cTrimmed.startsWith('const ') && !cTrimmed.startsWith('let ') && !cTrimmed.startsWith('var ') && !cTrimmed.includes('==') && !cTrimmed.includes(':')) {
           root.children!.push({
@@ -856,7 +933,9 @@ export class SourceParser {
       }
 
       // 18. Angular Unsubscribed Observable (FIGM-ANG-01)
-      if (framework === 'ANGULAR_TEMPLATE' || cleanCode.includes('@Component')) {
+      // Real-AST-migrated (buildAng01) for useRealAstAngular frameworks (ANGULAR_TEMPLATE /
+      // GENERIC_ESTREE, matching evalAng01's own gate); unchanged for every other framework.
+      if (!useRealAstAngular && (framework === 'ANGULAR_TEMPLATE' || cleanCode.includes('@Component'))) {
         if (cTrimmed.includes('.subscribe(') && !cleanCode.includes('takeUntilDestroyed') && !cleanCode.includes('unsubscribe') && !cleanCode.includes('DestroyRef')) {
           root.children!.push({
             type: 'CallExpression',
@@ -872,7 +951,8 @@ export class SourceParser {
       }
 
       // 19. Angular Component Missing OnPush (FIGM-ANG-02)
-      if (cTrimmed.includes('@Component({') && !cleanCode.includes('ChangeDetectionStrategy.OnPush')) {
+      // Real-AST-migrated (buildAng02) for useRealAstAngular frameworks; unchanged elsewhere.
+      if (!useRealAstAngular && cTrimmed.includes('@Component({') && !cleanCode.includes('ChangeDetectionStrategy.OnPush')) {
         root.children!.push({
           type: 'ClassDeclaration',
           name: 'Component',
@@ -914,7 +994,8 @@ export class SourceParser {
       }
 
       // 22. Angular Direct nativeElement Mutation (FIGM-ANG-05)
-      if ((cTrimmed.includes('nativeElement.') || cTrimmed.includes('.nativeElement')) && !cTrimmed.includes('renderer.') && !cTrimmed.includes('Renderer2')) {
+      // Real-AST-migrated (buildAng05) for useRealAstAngular frameworks; unchanged elsewhere.
+      if (!useRealAstAngular && (cTrimmed.includes('nativeElement.') || cTrimmed.includes('.nativeElement')) && !cTrimmed.includes('renderer.') && !cTrimmed.includes('Renderer2')) {
         root.children!.push({
           type: 'MemberExpression',
           name: 'nativeElement',
@@ -978,6 +1059,14 @@ export class SourceParser {
         });
       }
     });
+
+    // Append every real-AST-derived node (see top of this method) after the legacy line loop, so
+    // ASTDetectionEngine/ALPExtractionEngine's flat root.children traversal sees both sets
+    // uniformly. Each node already carries sourceKind: 'REAL_AST'; every node pushed by the loop
+    // above implicitly has no sourceKind set (treated as unknown/legacy provenance -- see
+    // DetectionSourceKind's doc comment in src/types/ast-spec.ts) rather than being retroactively
+    // labeled, since this pass did not touch its detection logic.
+    root.children!.push(...realAst.nodes);
 
     return root;
   }

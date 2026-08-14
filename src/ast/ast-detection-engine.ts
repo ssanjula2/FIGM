@@ -284,7 +284,17 @@ export class ASTDetectionEngine {
       // domain-level "ISO 25010"/"WCAG 2.2" string.
       standardReference: getStandardReference(mapping.domain, mapping.concern),
       confidenceScore,
-      evidence: `AST Node: [${node.type}] at line ${node.loc?.start?.line || 1}`
+      // AST Migration Phase 8: never claim "AST" for a node this migration hasn't actually
+      // touched. node.sourceKind is only set ('REAL_AST') by src/ast/real-syntax-node-builder.ts;
+      // every node still produced by SourceParser's legacy regex loop has no sourceKind at all,
+      // which is surfaced honestly here as 'LEGACY_TEXT_HEURISTIC' rather than silently omitted
+      // (omitting it would make it easy to *assume* AST provenance by default -- see
+      // DetectionSourceKind's doc comment in src/types/ast-spec.ts).
+      sourceKind: node.sourceKind ?? 'LEGACY_TEXT_HEURISTIC',
+      evidence:
+        node.sourceKind === 'REAL_AST'
+          ? `Real AST (TypeScript compiler): [${node.type}] at line ${node.loc?.start?.line || 1}`
+          : `Legacy text-heuristic pattern match: [${node.type}] at line ${node.loc?.start?.line || 1}`
     };
   }
 }

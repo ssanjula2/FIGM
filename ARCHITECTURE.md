@@ -17,7 +17,7 @@ graph TD
     SupabaseProvider --> Postgres["Supabase PostgreSQL (Prisma ORM)"]
     SupabaseProvider --> Storage["Supabase Cloud Storage"]
     SupabaseProvider --> Realtime["Supabase WebSockets"]
-    Services --> ASTEngine["FIGM 3-Stage AST Protocol"]
+    Services --> ASTEngine["FrameworkParser abstraction: real TypeScript-compiler AST for JS/TS/JSX/TSX-eligible frameworks, legacy text-heuristic for Vue SFC & Angular template markup"]
 ```
 
 ---
@@ -25,7 +25,14 @@ graph TD
 ## 2. Architectural Principles & SOLID Adherence
 
 1. **Single Responsibility Principle (SRP)**:
-   - `SourceParser`: AST parsing.
+   - `SourceParser`: dispatches each file to a real TypeScript-compiler-backed AST builder
+     (`src/ast/real-syntax-node-builder.ts`, via `src/parser/typescript-framework-parser.ts`) for
+     15 of 25 FIGM rules on the frameworks where that syntax is genuinely parseable (React,
+     Next.js, plain JS/TS, and the TypeScript class body of Angular components), and to a
+     regex/substring text-heuristic path for the remainder — see
+     `docs/architecture/AST_MIGRATION_MAP.md` for the exact rule-by-rule breakdown and rationale.
+     Every produced node is labeled `sourceKind: 'REAL_AST' | 'LEGACY_TEXT_HEURISTIC'` so this
+     distinction is inspectable in the diagnostics output, not just in source comments.
    - `ALPExtractionEngine`: Normalizes AST into ALP format.
    - `RuleExecutionEngine`: Evaluates ALP nodes against FIGM rules.
    - `ExportService`: Formats inspection reports.
