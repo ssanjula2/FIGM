@@ -456,7 +456,7 @@ export default function LiveDashboardContent() {
                       </span>
                     </td>
                     <td style={{ padding: '12px 16px', color: '#94a3b8' }}>{rep.scanTimeMs} ms</td>
-                    <td style={{ padding: '12px 16px', color: '#64748b', fontSize: '12px' }}>
+                    <td style={{ padding: '12px 16px', color: '#7c8ba6', fontSize: '12px' }}>
                       {new Date(rep.createdAt).toLocaleTimeString()}
                     </td>
                   </tr>

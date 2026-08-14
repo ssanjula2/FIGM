@@ -43,7 +43,7 @@ export default function ReferencesPage() {
         >
           Dissertation Bibliography
         </h1>
-        <p style={{ color: '#64748b', fontSize: '14px', margin: 0, lineHeight: 1.6 }}>
+        <p style={{ color: '#7c8ba6', fontSize: '14px', margin: 0, lineHeight: 1.6 }}>
           All 9 references cited in the research proposal for{' '}
           <em style={{ color: '#94a3b8' }}>
             &ldquo;Usability Evaluation of the Framework-Independent Guideline Model (FIGM) Code Inspector for Single Page Applications&rdquo;
@@ -74,7 +74,7 @@ export default function ReferencesPage() {
             { label: 'Year', value: '2025' },
           ].map((item) => (
             <div key={item.label}>
-              <div style={{ fontSize: '10px', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
+              <div style={{ fontSize: '10px', color: '#7c8ba6', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
                 {item.label}
               </div>
               <div style={{ fontSize: '14px', color: '#f1f5f9', fontWeight: 700 }}>{item.value}</div>

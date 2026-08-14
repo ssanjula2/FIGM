@@ -135,7 +135,7 @@ export default function ProjectsPage() {
             <div style={{ fontSize: '28px', fontWeight: 900, color: '#38bdf8', marginTop: '8px' }}>
               {stats.totalProjects}
             </div>
-            <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', color: '#7c8ba6', marginTop: '4px' }}>
               {stats.activeProjects} active &bull; {stats.archivedProjects} archived
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function ProjectsPage() {
             <div style={{ fontSize: '28px', fontWeight: 900, color: '#22c55e', marginTop: '8px' }}>
               {stats.averageQualityScore}%
             </div>
-            <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', color: '#7c8ba6', marginTop: '4px' }}>
               ISO/IEC 25010 Aligned
             </div>
           </div>
@@ -171,7 +171,7 @@ export default function ProjectsPage() {
             <div style={{ fontSize: '28px', fontWeight: 900, color: '#a855f7', marginTop: '8px' }}>
               {stats.totalScansAcrossProjects}
             </div>
-            <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', color: '#7c8ba6', marginTop: '4px' }}>
               Across active projects
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function ProjectsPage() {
       >
         {/* Search input */}
         <div style={{ position: 'relative', flex: 1, minWidth: '260px' }}>
-          <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }}>🔍</span>
+          <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#7c8ba6' }}>🔍</span>
           <input
             type="text"
             placeholder="Search projects by name, description, repo URL..."
@@ -435,13 +435,13 @@ export default function ProjectsPage() {
                 <div style={{ marginTop: '20px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                     <div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Quality Score</div>
+                      <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 600 }}>Quality Score</div>
                       <div style={{ fontSize: '20px', fontWeight: 900, color: proj.qualityScore >= 90 ? '#22c55e' : proj.qualityScore >= 75 ? '#eab308' : '#ef4444' }}>
                         {proj.qualityScore}%
                       </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>Total Scans</div>
+                      <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 600 }}>Total Scans</div>
                       <div style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc' }}>
                         {proj.totalScans}
                       </div>

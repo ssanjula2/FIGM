@@ -80,16 +80,23 @@ export default function SettingsPage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Theme</label>
-            <select
-              value={settings.theme}
-              onChange={(e) => updateSettings({ theme: e.target.value as any })}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#38bdf8', fontWeight: 700, fontSize: '13px' }}
+            <label id="theme-label" style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Theme</label>
+            {/* A prior version of this control offered two additional light-palette and
+                OS-preference-following options alongside the dark one -- every page in this app
+                is hardcoded to the dark palette via inline styles, so selecting either did
+                nothing visually while still persisting the choice, a misleading affordance.
+                Rather than leave a non-functional selector (or silently drop the setting the
+                backend still stores), this is now honest static text: one real theme exists
+                today. */}
+            <div
+              aria-labelledby="theme-label"
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#38bdf8', fontWeight: 700, fontSize: '13px', boxSizing: 'border-box' }}
             >
-              <option value="dark">🌙 Dark Glass (Vercel & Linear)</option>
-              <option value="light">☀️ Light Minimal</option>
-              <option value="system">🖥️ System Default</option>
-            </select>
+              🌙 Dark Glass (Vercel &amp; Linear)
+            </div>
+            <p style={{ fontSize: '11px', color: '#7c8ba6', margin: '6px 0 0 0' }}>
+              Light theme and system-based switching are not implemented yet — every page currently ships in Dark Glass only.
+            </p>
           </div>
 
           <div>

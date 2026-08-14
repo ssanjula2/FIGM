@@ -127,7 +127,7 @@ function DiagnosticsContent() {
               className="input-field"
               style={{ width: '100%', paddingLeft: '34px' }}
             />
-            <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }}>🔍</span>
+            <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#7c8ba6' }}>🔍</span>
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
@@ -300,7 +300,7 @@ function DiagnosticsContent() {
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
+                  <span style={{ fontSize: '11px', color: '#7c8ba6', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
                     Code Line with Issue
                   </span>
                   <button

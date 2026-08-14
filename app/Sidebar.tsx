@@ -1,11 +1,50 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function Sidebar() {
+interface SidebarProps {
+  /** Whether the mobile/tablet off-canvas sidebar is currently open (< 1024px only -- on desktop
+   *  the sidebar is always visible via CSS regardless of this prop, see globals.css's
+   *  `.sidebar-desktop` / `.sidebar-open` rules). */
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const asideRef = useRef<HTMLElement>(null);
+  const firstLinkRef = useRef<HTMLAnchorElement>(null);
+
+  // Focus the first nav link the moment the mobile drawer opens, and trap Tab/Shift+Tab within it
+  // while open -- without this, a keyboard user who opens the menu keeps tabbing through content
+  // hidden behind the drawer instead of the drawer's own links.
+  useEffect(() => {
+    if (!isOpen) return;
+    firstLinkRef.current?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !asideRef.current) return;
+      const focusable = asideRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
   const navGroups = [
     {
@@ -43,9 +82,13 @@ export default function Sidebar() {
     },
   ];
 
+  let firstLinkAssigned = false;
+
   return (
     <aside
-      className="sidebar-desktop"
+      ref={asideRef}
+      id="primary-navigation"
+      className={`sidebar-desktop${isOpen ? ' sidebar-open' : ''}`}
       style={{
         position: 'fixed',
         top: 0,
@@ -69,92 +112,127 @@ export default function Sidebar() {
       }}
     >
       <div>
-        {/* Brand Header */}
-        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px', paddingLeft: '6px' }}>
-          <div
+        {/* Brand Header + mobile-only close button */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '6px' }}>
+            <div
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #38bdf8 0%, #a855f7 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+                color: '#030712',
+                fontSize: '15px',
+                letterSpacing: '0.5px',
+                boxShadow: '0 0 20px rgba(56, 189, 248, 0.4)',
+                flexShrink: 0,
+              }}
+            >
+              FI
+            </div>
+            <div>
+              <div style={{ fontWeight: 900, fontSize: '15px', color: '#f8fafc', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
+                FIGM Code Inspector
+              </div>
+              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600, lineHeight: 1.2 }}>
+                Research & Developer Tool
+              </div>
+            </div>
+          </Link>
+
+          {/* Only rendered/visible on mobile/tablet via .sidebar-close-btn's CSS (globals.css) --
+              gives keyboard/touch users an explicit, discoverable way to close the drawer beyond
+              Escape or the backdrop. */}
+          <button
+            type="button"
+            className="sidebar-close-btn"
+            onClick={onClose}
+            aria-label="Close navigation menu"
             style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, #38bdf8 0%, #a855f7 100%)',
-              display: 'flex',
+              display: 'none',
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '8px',
+              width: '32px',
+              height: '32px',
               alignItems: 'center',
               justifyContent: 'center',
-              fontWeight: 800,
-              color: '#030712',
-              fontSize: '15px',
-              letterSpacing: '0.5px',
-              boxShadow: '0 0 20px rgba(56, 189, 248, 0.4)',
+              color: '#f8fafc',
+              fontSize: '16px',
+              cursor: 'pointer',
               flexShrink: 0,
             }}
           >
-            FI
-          </div>
-          <div>
-            <div style={{ fontWeight: 900, fontSize: '15px', color: '#f8fafc', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
-              FIGM Code Inspector
-            </div>
-            <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600, lineHeight: 1.2 }}>
-              Research & Developer Tool
-            </div>
-          </div>
-        </Link>
+            <span aria-hidden="true">✕</span>
+          </button>
+        </div>
 
         {/* Navigation Link Groups */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {navGroups.map((group) => (
-            <div key={group.groupName}>
-              <div
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 800,
-                  color: '#64748b',
-                  letterSpacing: '1px',
-                  marginBottom: '8px',
-                  paddingLeft: '10px',
-                }}
-              >
-                {group.groupName}
-              </div>
+        <nav aria-label="Primary">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {navGroups.map((group) => (
+              <div key={group.groupName}>
+                <div
+                  style={{
+                    fontSize: '10px',
+                    fontWeight: 800,
+                    color: '#7c8ba6',
+                    letterSpacing: '1px',
+                    marginBottom: '8px',
+                    paddingLeft: '10px',
+                  }}
+                >
+                  {group.groupName}
+                </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                {group.items.map((item) => {
-                  const isActive = pathname === item.href;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '9px 12px',
-                        borderRadius: '10px',
-                        fontSize: '13px',
-                        fontWeight: isActive ? 700 : 500,
-                        color: isActive ? '#38bdf8' : '#94a3b8',
-                        background: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
-                        border: isActive ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid transparent',
-                        boxShadow: isActive ? '0 0 15px rgba(56, 189, 248, 0.15)' : 'none',
-                        textDecoration: 'none',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ fontSize: '15px' }}>{item.icon}</span>
-                        <span>{item.label}</span>
-                      </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  {group.items.map((item) => {
+                    const isActive = pathname === item.href;
+                    const isFirst = !firstLinkAssigned;
+                    if (isFirst) firstLinkAssigned = true;
+                    return (
+                      <Link
+                        key={item.href}
+                        ref={isFirst ? firstLinkRef : undefined}
+                        href={item.href}
+                        onClick={onClose}
+                        aria-current={isActive ? 'page' : undefined}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '9px 12px',
+                          borderRadius: '10px',
+                          fontSize: '13px',
+                          fontWeight: isActive ? 700 : 500,
+                          color: isActive ? '#38bdf8' : '#94a3b8',
+                          background: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
+                          border: isActive ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid transparent',
+                          boxShadow: isActive ? '0 0 15px rgba(56, 189, 248, 0.15)' : 'none',
+                          textDecoration: 'none',
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span aria-hidden="true" style={{ fontSize: '15px' }}>{item.icon}</span>
+                          <span>{item.label}</span>
+                        </div>
 
-                      {isActive && (
-                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8' }} />
-                      )}
-                    </Link>
-                  );
-                })}
+                        {isActive && (
+                          <div aria-hidden="true" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8' }} />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </nav>
       </div>
 
       {/* Footer System Badge */}

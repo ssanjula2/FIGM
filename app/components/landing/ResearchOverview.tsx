@@ -74,7 +74,7 @@ export default function ResearchOverview() {
               <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#f8fafc', margin: '0 0 8px 0' }}>
                 {phase.title}
               </h3>
-              <p style={{ color: loading && phase.num === '05' ? '#64748b' : '#94a3b8', fontSize: '13px', margin: 0, lineHeight: 1.5 }}>
+              <p style={{ color: loading && phase.num === '05' ? '#7c8ba6' : '#94a3b8', fontSize: '13px', margin: 0, lineHeight: 1.5 }}>
                 {loading && phase.num === '05' ? 'Loading live metrics…' : phase.desc}
               </p>
             </div>
@@ -139,7 +139,7 @@ export default function ResearchOverview() {
                 }}
               >
                 <div style={{ fontSize: '22px', fontWeight: 900, color: m.color }}>{m.value}</div>
-                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '4px' }}>{m.label}</div>
+                <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginTop: '4px' }}>{m.label}</div>
               </div>
             ))}
           </div>

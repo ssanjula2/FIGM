@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
@@ -11,6 +11,16 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const errorRef = useRef<HTMLDivElement>(null);
+
+  // Move focus to the error message when a new one appears -- a screen-reader user submitting a
+  // form that fails needs to land on the reason, not stay silently on the submit button. role="alert"
+  // below already announces it; this additionally makes it reachable for anyone tabbing/reviewing.
+  useEffect(() => {
+    if (error) {
+      errorRef.current?.focus();
+    }
+  }, [error]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,6 +108,8 @@ export default function LoginPage() {
       >
         {/* Toggle Tabs */}
         <div
+          role="group"
+          aria-label="Choose sign in or create account"
           style={{
             display: 'flex',
             background: 'rgba(9, 13, 22, 0.9)',
@@ -109,6 +121,7 @@ export default function LoginPage() {
         >
           <button
             type="button"
+            aria-pressed={!isRegister}
             onClick={() => {
               setIsRegister(false);
               setError(null);
@@ -130,6 +143,7 @@ export default function LoginPage() {
           </button>
           <button
             type="button"
+            aria-pressed={isRegister}
             onClick={() => {
               setIsRegister(true);
               setError(null);
@@ -153,9 +167,9 @@ export default function LoginPage() {
 
         {/* Title & Subtitle */}
         <div style={{ marginBottom: '24px', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#f8fafc', margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#f8fafc', margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>
             {isRegister ? 'Create Account' : 'Welcome Back'}
-          </h2>
+          </h1>
           <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0, lineHeight: 1.4 }}>
             {isRegister
               ? 'Register your developer profile to access tenant workspace.'
@@ -163,9 +177,14 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Error Notice */}
+        {/* Error Notice -- role="alert" announces it to screen readers the moment it appears
+            (implicit assertive live region); tabIndex + the focus effect above make it the next
+            stop for a keyboard user too, instead of leaving focus stranded on the submit button. */}
         {error && (
           <div
+            ref={errorRef}
+            role="alert"
+            tabIndex={-1}
             style={{
               padding: '12px 14px',
               borderRadius: '10px',
@@ -178,35 +197,33 @@ export default function LoginPage() {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
+              outline: 'none',
             }}
           >
-            <span>⚠️</span>
+            <span aria-hidden="true">⚠️</span>
             <span>{error}</span>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+        <form onSubmit={handleSubmit} aria-busy={loading} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
           {isRegister && (
             <div>
-              <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', fontWeight: 700 }}>
+              <label htmlFor="auth-fullname" style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', fontWeight: 700 }}>
                 Full Name
               </label>
               <input
+                id="auth-fullname"
+                name="fullName"
                 type="text"
                 required
+                autoComplete="name"
                 placeholder="Jane Doe"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                className="input-field"
                 style={{
                   width: '100%',
-                  padding: '12px 14px',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  background: 'rgba(9, 13, 22, 0.8)',
-                  color: '#f8fafc',
-                  fontSize: '14px',
-                  outline: 'none',
                   boxSizing: 'border-box',
                 }}
               />
@@ -214,48 +231,42 @@ export default function LoginPage() {
           )}
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', fontWeight: 700 }}>
+            <label htmlFor="auth-email" style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', fontWeight: 700 }}>
               Email Address
             </label>
             <input
+              id="auth-email"
+              name="email"
               type="email"
               required
+              autoComplete="email"
               placeholder="developer@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="input-field"
               style={{
                 width: '100%',
-                padding: '12px 14px',
-                borderRadius: '10px',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                background: 'rgba(9, 13, 22, 0.8)',
-                color: '#f8fafc',
-                fontSize: '14px',
-                outline: 'none',
                 boxSizing: 'border-box',
               }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', fontWeight: 700 }}>
+            <label htmlFor="auth-password" style={{ display: 'block', fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', fontWeight: 700 }}>
               Password
             </label>
             <input
+              id="auth-password"
+              name="password"
               type="password"
               required
+              autoComplete={isRegister ? 'new-password' : 'current-password'}
               placeholder="••••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="input-field"
               style={{
                 width: '100%',
-                padding: '12px 14px',
-                borderRadius: '10px',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                background: 'rgba(9, 13, 22, 0.8)',
-                color: '#f8fafc',
-                fontSize: '14px',
-                outline: 'none',
                 boxSizing: 'border-box',
               }}
             />

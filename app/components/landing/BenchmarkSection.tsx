@@ -117,7 +117,7 @@ export default function BenchmarkSection() {
                   {st.value}
                 </div>
                 <div style={{ color: '#f8fafc', fontSize: '13px', fontWeight: 700, marginBottom: '2px' }}>{st.label}</div>
-                <div style={{ color: '#64748b', fontSize: '11px' }}>{st.sub}</div>
+                <div style={{ color: '#7c8ba6', fontSize: '11px' }}>{st.sub}</div>
               </div>
             ))}
           </div>

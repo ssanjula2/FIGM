@@ -63,7 +63,7 @@ export default function HistoryPage() {
       >
         {/* Search */}
         <div style={{ position: 'relative', flex: 1, minWidth: '260px' }}>
-          <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }}>🔍</span>
+          <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#7c8ba6' }}>🔍</span>
           <input
             type="text"
             placeholder="Search scans by file name, framework, repository..."
@@ -226,7 +226,7 @@ export default function HistoryPage() {
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '12px', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#64748b', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
+              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#7c8ba6', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
                 <th style={{ padding: '14px 16px' }}>User ID</th>
                 <th style={{ padding: '14px 16px' }}>Target File</th>
                 <th style={{ padding: '14px 16px' }}>Framework</th>
@@ -296,7 +296,7 @@ export default function HistoryPage() {
                   </td>
                   <td style={{ padding: '14px 16px', color: '#94a3b8' }}>{r.scanTimeMs} ms</td>
                   <td style={{ padding: '14px 16px', color: '#94a3b8' }}>{r.memoryUsageMb} MB</td>
-                  <td style={{ padding: '14px 16px', color: '#64748b', fontSize: '12px' }}>
+                  <td style={{ padding: '14px 16px', color: '#7c8ba6', fontSize: '12px' }}>
                     {new Date(r.createdAt).toLocaleString()}
                   </td>
                   <td style={{ padding: '14px 16px', textAlign: 'right' }}>
@@ -359,7 +359,7 @@ export default function HistoryPage() {
 
           {/* Pagination Footer */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 8px 8px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', marginTop: '8px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>
+            <div style={{ fontSize: '12px', color: '#7c8ba6' }}>
               Showing {records.length} of {total} scan records (Page {page} of {totalPages})
             </div>
 

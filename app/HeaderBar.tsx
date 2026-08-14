@@ -7,7 +7,13 @@ import { useGlobalSearch } from '../src/hooks/useGlobalSearch';
 
 import { useScans } from '../src/hooks/useScans';
 
-export default function HeaderBar() {
+interface HeaderBarProps {
+  menuButtonRef: React.RefObject<HTMLButtonElement>;
+  sidebarOpen: boolean;
+  onMenuToggle: () => void;
+}
+
+export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: HeaderBarProps) {
   const [framework, setFramework] = useState('Next.js');
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
@@ -22,6 +28,34 @@ export default function HeaderBar() {
   return (
     <>
       <header className="header-bar-container">
+        {/* Mobile/Tablet Navigation Toggle -- hidden on desktop via .mobile-menu-toggle's CSS
+            (globals.css), visible below 1024px where the primary sidebar is off-canvas. */}
+        <button
+          type="button"
+          ref={menuButtonRef}
+          className="mobile-menu-toggle"
+          onClick={onMenuToggle}
+          aria-expanded={sidebarOpen}
+          aria-controls="primary-navigation"
+          aria-label={sidebarOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '8px',
+            width: '36px',
+            height: '36px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#f8fafc',
+            fontSize: '18px',
+            cursor: 'pointer',
+            flexShrink: 0,
+            marginRight: '12px',
+          }}
+        >
+          <span aria-hidden="true">{sidebarOpen ? '✕' : '☰'}</span>
+        </button>
+
         {/* Search Bar Trigger */}
         <div
           role="button"
@@ -35,7 +69,7 @@ export default function HeaderBar() {
           }}
           style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
         >
-          <span style={{ position: 'absolute', left: '14px', color: '#64748b', fontSize: '14px' }}>🔍</span>
+          <span style={{ position: 'absolute', left: '14px', color: '#7c8ba6', fontSize: '14px' }}>🔍</span>
           <input
             type="text"
             readOnly
@@ -205,7 +239,7 @@ export default function HeaderBar() {
 
                 <div style={{ maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {notifications.length === 0 ? (
-                    <div style={{ padding: '20px', textAlign: 'center', color: '#64748b', fontSize: '12px' }}>
+                    <div style={{ padding: '20px', textAlign: 'center', color: '#7c8ba6', fontSize: '12px' }}>
                       No notifications
                     </div>
                   ) : (
@@ -309,7 +343,7 @@ export default function HeaderBar() {
           >
             {/* Input Header */}
             <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '18px', color: '#64748b' }}>🔍</span>
+              <span style={{ fontSize: '18px', color: '#7c8ba6' }}>🔍</span>
               <input
                 type="text"
                 autoFocus
@@ -328,7 +362,7 @@ export default function HeaderBar() {
               />
               <button
                 onClick={() => setIsSearchOpen(false)}
-                style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '16px', cursor: 'pointer' }}
+                style={{ background: 'none', border: 'none', color: '#7c8ba6', fontSize: '16px', cursor: 'pointer' }}
               >
                 esc
               </button>
@@ -341,7 +375,7 @@ export default function HeaderBar() {
               )}
 
               {!searchLoading && query.trim() === '' && (
-                <div style={{ color: '#64748b', fontSize: '13px', textAlign: 'center', padding: '20px' }}>
+                <div style={{ color: '#7c8ba6', fontSize: '13px', textAlign: 'center', padding: '20px' }}>
                   Search across Projects, Scan Reports, 25 FIGM Guidelines, Repositories, and System Users.
                 </div>
               )}

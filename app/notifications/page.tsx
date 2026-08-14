@@ -68,7 +68,7 @@ export default function NotificationsPage() {
       </div>
 
       {loading && (
-        <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+        <div role="status" style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
           Loading notification feed...
         </div>
       )}
@@ -82,41 +82,47 @@ export default function NotificationsPage() {
       )}
 
       {!loading && notifications.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {notifications.map((n) => (
-            <div
-              key={n.id}
-              onClick={() => markAsRead(n.id)}
-              style={{
-                background: n.read ? 'rgba(15, 23, 42, 0.4)' : 'rgba(15, 23, 42, 0.85)',
-                backdropFilter: 'blur(16px)',
-                border: n.read ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(56, 189, 248, 0.3)',
-                borderRadius: '14px',
-                padding: '18px 24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <div style={{ fontSize: '24px' }}>{typeIcons[n.type] || '🔔'}</div>
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: n.read ? 600 : 800, color: n.read ? '#cbd5e1' : '#f8fafc' }}>
-                    {n.title} {!n.read && <span style={{ color: '#38bdf8', fontSize: '10px', marginLeft: '6px' }}>● NEW</span>}
-                  </div>
-                  <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '4px' }}>{n.message}</div>
-                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>{new Date(n.createdAt).toLocaleString()}</div>
-                </div>
-              </div>
+            <li key={n.id}>
+              <button
+                type="button"
+                onClick={() => markAsRead(n.id)}
+                aria-label={`${n.read ? 'Notification' : 'Mark as read'}: ${n.title}. ${n.message}`}
+                style={{
+                  width: '100%',
+                  background: n.read ? 'rgba(15, 23, 42, 0.4)' : 'rgba(15, 23, 42, 0.85)',
+                  backdropFilter: 'blur(16px)',
+                  border: n.read ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(56, 189, 248, 0.3)',
+                  borderRadius: '14px',
+                  padding: '18px 24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  font: 'inherit',
+                  textAlign: 'left',
+                }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <span style={{ fontSize: '24px' }} aria-hidden="true">{typeIcons[n.type] || '🔔'}</span>
+                  <span>
+                    <span style={{ display: 'block', fontSize: '14px', fontWeight: n.read ? 600 : 800, color: n.read ? '#cbd5e1' : '#f8fafc' }}>
+                      {n.title} {!n.read && <span style={{ color: '#38bdf8', fontSize: '10px', marginLeft: '6px' }}>● NEW</span>}
+                    </span>
+                    <span style={{ display: 'block', fontSize: '13px', color: '#94a3b8', marginTop: '4px' }}>{n.message}</span>
+                    <span style={{ display: 'block', fontSize: '11px', color: '#7c8ba6', marginTop: '4px' }}>{new Date(n.createdAt).toLocaleString()}</span>
+                  </span>
+                </span>
 
-              {!n.read && (
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8' }} />
-              )}
-            </div>
+                {!n.read && (
+                  <span aria-hidden="true" style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8', flexShrink: 0 }} />
+                )}
+              </button>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );

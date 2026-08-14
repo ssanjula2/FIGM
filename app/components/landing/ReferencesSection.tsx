@@ -39,14 +39,14 @@ export default function ReferencesSection() {
           >
             Research References
           </h2>
-          <p style={{ color: '#64748b', fontSize: '13px', margin: 0 }}>
+          <p style={{ color: '#7c8ba6', fontSize: '13px', margin: 0 }}>
             IS303.2 Research Methodology — A P H D S Sanjula (28256) · NSBM Green University · 2025
           </p>
         </div>
 
         {/* Loading state */}
         {loading && (
-          <div style={{ textAlign: 'center', color: '#64748b', padding: '40px' }}>
+          <div style={{ textAlign: 'center', color: '#7c8ba6', padding: '40px' }}>
             Loading references from API…
           </div>
         )}
@@ -138,7 +138,7 @@ export default function ReferencesSection() {
                       style={{
                         fontSize: '10px',
                         fontWeight: 800,
-                        color: '#64748b',
+                        color: '#7c8ba6',
                         background: 'rgba(255, 255, 255, 0.04)',
                         border: '1px solid rgba(255, 255, 255, 0.07)',
                         borderRadius: '6px',

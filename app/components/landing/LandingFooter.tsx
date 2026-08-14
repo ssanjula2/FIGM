@@ -24,7 +24,7 @@ export default function LandingFooter() {
               </div>
               <span style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc' }}>FIGM Code Inspector</span>
             </div>
-            <p style={{ color: '#64748b', fontSize: '13px', lineHeight: 1.6, maxWidth: '320px', margin: '0 0 16px 0' }}>
+            <p style={{ color: '#7c8ba6', fontSize: '13px', lineHeight: 1.6, maxWidth: '320px', margin: '0 0 16px 0' }}>
               Framework-Independent Guideline Model for Single-Page Applications across React, Next.js, Angular, and Vue.
             </p>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -64,7 +64,7 @@ export default function LandingFooter() {
           {/* Academic Info */}
           <div>
             <div style={{ color: '#f8fafc', fontWeight: 700, fontSize: '14px', marginBottom: '16px' }}>Academic Citation</div>
-            <p style={{ color: '#64748b', fontSize: '12px', lineHeight: 1.6, margin: '0 0 12px 0' }}>
+            <p style={{ color: '#7c8ba6', fontSize: '12px', lineHeight: 1.6, margin: '0 0 12px 0' }}>
               Framework-Independent Guideline Model for Automated SPA Quality Assurance and AI-Assisted Remediation (2026).
             </p>
             <div style={{ color: '#38bdf8', fontSize: '12px', fontWeight: 700 }}>
@@ -79,8 +79,8 @@ export default function LandingFooter() {
             © 2026 FIGM Code Inspector. All rights reserved. MIT License.
           </div>
           <div style={{ display: 'flex', gap: '16px' }}>
-            <Link href="/settings" style={{ color: '#64748b', textDecoration: 'none' }}>Settings</Link>
-            <Link href="/admin" style={{ color: '#64748b', textDecoration: 'none' }}>Admin Panel</Link>
+            <Link href="/settings" style={{ color: '#7c8ba6', textDecoration: 'none' }}>Settings</Link>
+            <Link href="/admin" style={{ color: '#7c8ba6', textDecoration: 'none' }}>Admin Panel</Link>
           </div>
         </div>
       </div>

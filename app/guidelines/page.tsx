@@ -502,18 +502,18 @@ export default function GuidelinesPage() {
           }}
         >
           <div>
-            <span style={{ color: '#64748b' }}>Target Code Element: </span>
+            <span style={{ color: '#7c8ba6' }}>Target Code Element: </span>
             <span style={{ color: '#f8fafc' }}>{rule.targetConstruct}</span>
           </div>
           <div>
-            <span style={{ color: '#64748b' }}>What is checked: </span>
+            <span style={{ color: '#7c8ba6' }}>What is checked: </span>
             <span style={{ color: '#cbd5e1' }}>{rule.predicate}</span>
           </div>
         </div>
 
         {/* Framework Specific Implementation Tips */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
-          <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
+          <div style={{ fontSize: '11px', color: '#7c8ba6', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
             Implementation Guidance:
           </div>
           {rule.frameworks.map((fw, idx) => (
@@ -542,7 +542,7 @@ export default function GuidelinesPage() {
           💡 <strong>How to Fix:</strong> {rule.remediation}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: '11px', color: '#64748b' }}>
+          <span style={{ fontSize: '11px', color: '#7c8ba6' }}>
             Standard: {rule.standard}
           </span>
           <Link
@@ -621,7 +621,7 @@ export default function GuidelinesPage() {
             className="input-field"
             style={{ width: '100%', paddingLeft: '34px' }}
           />
-          <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }}>🔍</span>
+          <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#7c8ba6' }}>🔍</span>
         </div>
 
         {/* Domain Filter Pills */}

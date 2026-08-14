@@ -115,7 +115,7 @@ export default function AdminPage() {
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>🛡️</div>
         <h2 style={{ fontSize: '22px', fontWeight: 900, color: '#f8fafc', margin: 0 }}>Access Restricted</h2>
         <p style={{ color: '#94a3b8', marginTop: '8px', maxWidth: '500px', margin: '8px auto' }}>{error}</p>
-        <div style={{ marginTop: '20px', fontSize: '13px', color: '#64748b' }}>
+        <div style={{ marginTop: '20px', fontSize: '13px', color: '#7c8ba6' }}>
           Please sign in with an <strong>ADMIN</strong> role account to view system logs and user administration.
         </div>
       </div>
@@ -226,7 +226,7 @@ export default function AdminPage() {
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '16px', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#64748b', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
+              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#7c8ba6', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
                 <th style={{ padding: '14px 16px' }}>User Name</th>
                 <th style={{ padding: '14px 16px' }}>Email Address</th>
                 <th style={{ padding: '14px 16px' }}>Role</th>
@@ -261,7 +261,7 @@ export default function AdminPage() {
                       <option value="ADMIN">ADMIN</option>
                     </select>
                   </td>
-                  <td style={{ padding: '14px 16px', color: '#64748b', fontSize: '12px' }}>
+                  <td style={{ padding: '14px 16px', color: '#7c8ba6', fontSize: '12px' }}>
                     {new Date(u.createdAt).toLocaleDateString()}
                   </td>
                   <td style={{ padding: '14px 16px', textAlign: 'right' }}>
@@ -332,7 +332,7 @@ export default function AdminPage() {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#64748b', fontWeight: 800 }}>
+                <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#7c8ba6', fontWeight: 800 }}>
                   <th style={{ padding: '10px' }}>Action</th>
                   <th style={{ padding: '10px' }}>User Email</th>
                   <th style={{ padding: '10px' }}>Details</th>
@@ -350,8 +350,8 @@ export default function AdminPage() {
                     </td>
                     <td style={{ padding: '10px', color: '#f8fafc' }}>{l.email || 'Anonymous'}</td>
                     <td style={{ padding: '10px', color: '#94a3b8' }}>{l.details || '-'}</td>
-                    <td style={{ padding: '10px', color: '#64748b', fontFamily: 'monospace' }}>{l.ipAddress}</td>
-                    <td style={{ padding: '10px', color: '#64748b' }}>{new Date(l.createdAt).toLocaleString()}</td>
+                    <td style={{ padding: '10px', color: '#7c8ba6', fontFamily: 'monospace' }}>{l.ipAddress}</td>
+                    <td style={{ padding: '10px', color: '#7c8ba6' }}>{new Date(l.createdAt).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>

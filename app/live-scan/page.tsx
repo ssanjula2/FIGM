@@ -255,7 +255,7 @@ function DiffView({ before, after }: { before: string; after: string }) {
           padding: '6px 12px',
           background: 'rgba(15,23,42,0.9)',
           borderBottom: '1px solid rgba(255,255,255,0.07)',
-          color: '#64748b',
+          color: '#7c8ba6',
           fontSize: '10px',
           fontWeight: 700,
           display: 'flex',
@@ -554,7 +554,7 @@ export default function LiveScanPage() {
           <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.4px', margin: 0 }}>
             ⚡ Live Code Inspector &amp; Auto-Fix Studio
           </h1>
-          <p style={{ color: '#64748b', fontSize: '13px', marginTop: '4px' }}>
+          <p style={{ color: '#7c8ba6', fontSize: '13px', marginTop: '4px' }}>
             Paste <strong style={{ color: '#94a3b8' }}>any</strong> code below — FIGM detects real violations from your actual code and applies targeted fixes. Nothing is hardcoded.
           </p>
         </div>
@@ -615,7 +615,7 @@ export default function LiveScanPage() {
 
             {/* Sample presets */}
             <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-              <span style={{ fontSize: '10px', color: '#64748b' }}>Try Sample:</span>
+              <span style={{ fontSize: '10px', color: '#7c8ba6' }}>Try Sample:</span>
               {[
                 { label: 'Next.js', code: SAMPLE_NEXTJS_CODE, file: 'DashboardPage.tsx', color: '#ffffff' },
                 { label: 'React', code: SAMPLE_REACT_CODE, file: 'UserProfile.jsx', color: '#38bdf8' },
@@ -636,7 +636,7 @@ export default function LiveScanPage() {
 
           {/* File name */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>File Name:</span>
+            <span style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 600 }}>File Name:</span>
             <input
               type="text"
               value={fileName}
@@ -686,6 +686,7 @@ export default function LiveScanPage() {
           {/* Scan error */}
           {scanError && (
             <div
+              role="alert"
               style={{
                 padding: '10px 14px',
                 borderRadius: '8px',
@@ -726,7 +727,10 @@ export default function LiveScanPage() {
             )}
           </div>
 
-          {/* Empty / loading / results */}
+          {/* Empty / loading / results -- a single aria-live region wrapping all three states so a
+              screen reader announces "Analyzing…" when a scan starts and the resulting summary
+              when it finishes, without stacking a separate live region per state. */}
+          <div aria-live="polite" aria-atomic="false" style={{ display: 'contents' }}>
           {!result && !scanning ? (
             <div
               style={{
@@ -735,7 +739,7 @@ export default function LiveScanPage() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#64748b',
+                color: '#7c8ba6',
                 textAlign: 'center',
                 padding: '48px 20px',
               }}
@@ -824,7 +828,7 @@ export default function LiveScanPage() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   fontSize: '11px',
-                  color: '#64748b',
+                  color: '#7c8ba6',
                   background: '#090d16',
                   padding: '7px 12px',
                   borderRadius: '6px',
@@ -969,7 +973,7 @@ export default function LiveScanPage() {
                                 style={{
                                   fontSize: '9px',
                                   fontWeight: 700,
-                                  color: d.sourceKind === 'REAL_AST' ? '#a855f7' : '#64748b',
+                                  color: d.sourceKind === 'REAL_AST' ? '#a855f7' : '#7c8ba6',
                                   background: d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.1)' : 'rgba(100,116,139,0.1)',
                                   border: `1px solid ${d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.3)' : 'rgba(100,116,139,0.3)'}`,
                                   borderRadius: '4px',
@@ -1026,7 +1030,7 @@ export default function LiveScanPage() {
                         </div>
 
                         {/* Source range + standard reference */}
-                        <div style={{ fontSize: '10px', color: '#64748b', display: 'flex', gap: '10px', flexWrap: 'wrap', fontFamily: 'JetBrains Mono' }}>
+                        <div style={{ fontSize: '10px', color: '#7c8ba6', display: 'flex', gap: '10px', flexWrap: 'wrap', fontFamily: 'JetBrains Mono' }}>
                           <span>
                             Location: L{line}
                             {column != null ? `:C${column}` : ''}
@@ -1099,12 +1103,12 @@ export default function LiveScanPage() {
                               {statusMeta.detail}
                             </div>
                             {fixResult.description && (
-                              <div style={{ fontSize: '11px', color: '#64748b' }}>
+                              <div style={{ fontSize: '11px', color: '#7c8ba6' }}>
                                 {fixResult.description}
                               </div>
                             )}
                             {fixResult.fallbackReason && (
-                              <div style={{ fontSize: '10px', color: '#64748b', fontStyle: 'italic' }}>
+                              <div style={{ fontSize: '10px', color: '#7c8ba6', fontStyle: 'italic' }}>
                                 ({fixResult.fallbackReason})
                               </div>
                             )}
@@ -1148,6 +1152,7 @@ export default function LiveScanPage() {
               )}
             </div>
           )}
+          </div>
         </div>
       </div>
     </div>

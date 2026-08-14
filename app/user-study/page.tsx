@@ -233,7 +233,7 @@ export default function UserStudyPage() {
       {/* Task Guide Overview */}
       <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '32px', boxSizing: 'border-box' }}>
         <h3 style={{ fontSize: '20px', margin: '0 0 16px 0', color: '#f59e0b' }}>🎯 Structured Evaluation Tasks (Questions 9–15)</h3>
-        <div className="user-study-grid-tasks" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+        <div className="user-study-grid-tasks" role="group" aria-label="Structured evaluation tasks" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
           {[
             { num: 1, title: 'Identify Rule ID', desc: 'Find rule associated with an issue (e.g. FIGM-PERF-01)' },
             { num: 2, title: 'Understand Diagnostic', desc: 'Review what the issue is & why it matters' },
@@ -241,9 +241,12 @@ export default function UserStudyPage() {
             { num: 4, title: 'Understand Fix', desc: 'Evaluate confidence in recommended improvement' },
             { num: 5, title: 'Manual Comparison', desc: 'Evaluate if FIGM helped spot issues hard to spot manually' }
           ].map((t) => (
-            <div
+            <button
               key={t.num}
+              type="button"
               onClick={() => setActiveTask(t.num)}
+              aria-pressed={activeTask === t.num}
+              className="touch-target"
               style={{
                 padding: '16px',
                 borderRadius: '8px',
@@ -251,13 +254,17 @@ export default function UserStudyPage() {
                 border: activeTask === t.num ? '1px solid #3b82f6' : '1px solid rgba(255, 255, 255, 0.05)',
                 cursor: 'pointer',
                 minHeight: '44px',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                display: 'block',
+                textAlign: 'left',
+                font: 'inherit',
+                width: '100%',
               }}
             >
               <div style={{ fontSize: '12px', fontWeight: 600, color: '#60a5fa', marginBottom: '4px' }}>TASK {t.num}</div>
               <div style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '4px' }}>{t.title}</div>
               <div style={{ fontSize: '13px', color: '#94a3b8' }}>{t.desc}</div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -308,7 +315,7 @@ export default function UserStudyPage() {
 
         {/* Source Code Viewer */}
         <div className="code-scroll-container" style={{ background: '#090d16', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '20px', fontFamily: 'monospace', fontSize: '13px', lineHeight: '1.5', overflowX: 'auto', boxSizing: 'border-box' }}>
-          <div style={{ color: '#64748b', fontSize: '12px', marginBottom: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '4px' }}>
+          <div style={{ color: '#7c8ba6', fontSize: '12px', marginBottom: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '4px' }}>
             FIXTURE: {BENCHMARKS[selectedFramework].name}
           </div>
           <pre style={{ margin: 0, color: '#e2e8f0', whiteSpace: 'pre', minWidth: 'fit-content' }}>{BENCHMARKS[selectedFramework].code}</pre>
@@ -320,20 +327,22 @@ export default function UserStudyPage() {
             className="touch-target user-study-cta-btn"
             onClick={handleRunScan}
             disabled={isScanning}
-            style={{ padding: '12px 24px', borderRadius: '8px', background: isScanning ? '#64748b' : '#10b981', color: '#ffffff', border: 'none', fontSize: '15px', fontWeight: 600, cursor: isScanning ? 'wait' : 'pointer', minHeight: '44px' }}
+            style={{ padding: '12px 24px', borderRadius: '8px', background: isScanning ? '#7c8ba6' : '#10b981', color: '#ffffff', border: 'none', fontSize: '15px', fontWeight: 600, cursor: isScanning ? 'wait' : 'pointer', minHeight: '44px' }}
           >
             {isScanning ? '⏳ Running FIGM Rules Analysis...' : '⚡ Run FIGM Scan on Benchmark'}
           </button>
-          {scanCompleted && dynamicScanResult && (
-            <span style={{ color: '#34d399', fontSize: '14px', fontWeight: 600 }}>
-              ✅ Scan Complete: {dynamicScanResult.diagnostics?.length ?? 0} Guideline Diagnostics Detected
-            </span>
-          )}
-          {scanCompleted && !dynamicScanResult && (
-            <span style={{ color: '#f87171', fontSize: '14px', fontWeight: 600 }}>
-              ⚠️ Scan request failed — no result to report
-            </span>
-          )}
+          <span role="status">
+            {scanCompleted && dynamicScanResult && (
+              <span style={{ color: '#34d399', fontSize: '14px', fontWeight: 600 }}>
+                ✅ Scan Complete: {dynamicScanResult.diagnostics?.length ?? 0} Guideline Diagnostics Detected
+              </span>
+            )}
+            {scanCompleted && !dynamicScanResult && (
+              <span style={{ color: '#f87171', fontSize: '14px', fontWeight: 600 }}>
+                ⚠️ Scan request failed — no result to report
+              </span>
+            )}
+          </span>
         </div>
 
         {/* Calculated Benchmark Metrics & Diagnostics Summary -- rendered from the real,

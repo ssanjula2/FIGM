@@ -41,7 +41,7 @@ export default function WebVitalsPage() {
           <div key={idx} className="glass-panel" style={{ padding: '20px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
             <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 600 }}>{m.title}</div>
             <div style={{ fontSize: '32px', fontWeight: 900, color: m.color, margin: '12px 0 4px 0' }}>{m.value}</div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px', color: '#64748b' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px', color: '#7c8ba6' }}>
               <span>Target: {m.target}</span>
               <span style={{ padding: '2px 8px', borderRadius: '12px', background: `${m.color}20`, color: m.color, fontWeight: 700 }}>
                 {m.status}

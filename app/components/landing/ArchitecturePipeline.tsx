@@ -255,7 +255,7 @@ setUser(user);`,
                   }}
                 >
                   <span style={{ fontSize: '18px' }}>{stage.icon}</span>
-                  <span style={{ fontSize: '10px', color: '#64748b', fontWeight: 800 }}>
+                  <span style={{ fontSize: '10px', color: '#7c8ba6', fontWeight: 800 }}>
                     {stage.stageName}
                   </span>
                   <span
@@ -341,7 +341,7 @@ setUser(user);`,
           <div style={{ background: '#020617', borderRadius: '12px', padding: '20px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
             {activeStage.type === 'code' && (
               <div>
-                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginBottom: '8px' }}>INPUT SOURCE CODE (TSX)</div>
+                <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginBottom: '8px' }}>INPUT SOURCE CODE (TSX)</div>
                 <pre style={{ margin: 0, fontFamily: 'monospace', fontSize: '13px', color: '#f8fafc', lineHeight: 1.5, overflowX: 'auto' }}>
                   <code>{activeStage.content.codeBefore}</code>
                 </pre>
@@ -350,7 +350,7 @@ setUser(user);`,
 
             {activeStage.type === 'ast' && (
               <div>
-                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginBottom: '8px' }}>ILLUSTRATIVE AST-SHAPED STRUCTURE</div>
+                <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginBottom: '8px' }}>ILLUSTRATIVE AST-SHAPED STRUCTURE</div>
                 <pre style={{ margin: 0, fontFamily: 'monospace', fontSize: '13px', color: '#38bdf8', lineHeight: 1.5, overflowX: 'auto' }}>
                   <code>{activeStage.content.astText}</code>
                 </pre>
@@ -359,7 +359,7 @@ setUser(user);`,
 
             {activeStage.type === 'alp' && (
               <div style={{ textAlign: 'center', padding: '16px 0' }}>
-                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginBottom: '12px' }}>NORMALIZED ABSTRACT LOGIC PATTERN</div>
+                <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginBottom: '12px' }}>NORMALIZED ABSTRACT LOGIC PATTERN</div>
                 <div
                   style={{
                     display: 'inline-block',
@@ -497,7 +497,7 @@ setUser(user);`,
               </span>
             </div>
 
-            <span style={{ color: '#64748b', fontSize: '18px', fontWeight: 700 }}>→</span>
+            <span style={{ color: '#7c8ba6', fontSize: '18px', fontWeight: 700 }}>→</span>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
               <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700 }}>PARSER ENGINE</span>
@@ -506,7 +506,7 @@ setUser(user);`,
               </span>
             </div>
 
-            <span style={{ color: '#64748b', fontSize: '18px', fontWeight: 700 }}>→</span>
+            <span style={{ color: '#7c8ba6', fontSize: '18px', fontWeight: 700 }}>→</span>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
               <span style={{ fontSize: '11px', color: '#a855f7', fontWeight: 700 }}>INTERMEDIATE LAYER</span>
@@ -515,7 +515,7 @@ setUser(user);`,
               </span>
             </div>
 
-            <span style={{ color: '#64748b', fontSize: '18px', fontWeight: 700 }}>→</span>
+            <span style={{ color: '#7c8ba6', fontSize: '18px', fontWeight: 700 }}>→</span>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
               <span style={{ fontSize: '11px', color: '#10b981', fontWeight: 700 }}>UNIFIED EVALUATION</span>

@@ -44,7 +44,7 @@ export default function FIGMModelSection() {
         <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '720px', margin: '0 auto 12px auto', lineHeight: 1.6 }}>
           Mapping framework-specific syntax to formal mathematical predicates (<strong style={{ color: '#38bdf8' }}>Domain → Concern → ALP → Rule</strong>).
         </p>
-        <p style={{ color: '#64748b', fontSize: '12px', maxWidth: '720px', margin: '0 auto 40px auto', lineHeight: 1.5 }}>
+        <p style={{ color: '#7c8ba6', fontSize: '12px', maxWidth: '720px', margin: '0 auto 40px auto', lineHeight: 1.5 }}>
           &quot;Detection Weight&quot; below is a static per-rule confidence value configured in the detection engine's evidence
           scoring, not a measured empirical accuracy figure — see <a href="/analytics" style={{ color: '#38bdf8' }}>/analytics</a> for live benchmark Precision/Recall/F1.
         </p>
@@ -104,7 +104,7 @@ export default function FIGMModelSection() {
                 <div style={{ color: '#f8fafc', fontSize: '14px', fontWeight: 700 }}>
                   {rule.name}
                 </div>
-                <div style={{ color: '#64748b', fontSize: '12px', marginTop: '4px', fontFamily: 'monospace' }}>
+                <div style={{ color: '#7c8ba6', fontSize: '12px', marginTop: '4px', fontFamily: 'monospace' }}>
                   ALP Primitive: {rule.alp}
                 </div>
               </div>

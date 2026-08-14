@@ -139,7 +139,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
       {/* Main Stats Banner Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '32px' }}>
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
-          <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 700 }}>Overall Quality Score</div>
+          <div style={{ fontSize: '12px', color: '#7c8ba6', fontWeight: 700 }}>Overall Quality Score</div>
           <div style={{ fontSize: '36px', fontWeight: 900, color: record.qualityScore >= 90 ? '#22c55e' : record.qualityScore >= 75 ? '#eab308' : '#ef4444', marginTop: '6px' }}>
             {record.qualityScore}%
           </div>
@@ -147,7 +147,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
         </div>
 
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
-          <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 700 }}>Total Defects Detected</div>
+          <div style={{ fontSize: '12px', color: '#7c8ba6', fontWeight: 700 }}>Total Defects Detected</div>
           <div style={{ fontSize: '36px', fontWeight: 900, color: '#f8fafc', marginTop: '6px' }}>
             {record.ruleCount}
           </div>
@@ -155,7 +155,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
         </div>
 
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
-          <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 700 }}>Scan Duration</div>
+          <div style={{ fontSize: '12px', color: '#7c8ba6', fontWeight: 700 }}>Scan Duration</div>
           <div style={{ fontSize: '36px', fontWeight: 900, color: '#38bdf8', marginTop: '6px' }}>
             {record.scanTimeMs}ms
           </div>
@@ -163,7 +163,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
         </div>
 
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
-          <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 700 }}>AI Patches Generated</div>
+          <div style={{ fontSize: '12px', color: '#7c8ba6', fontWeight: 700 }}>AI Patches Generated</div>
           <div style={{ fontSize: '36px', fontWeight: 900, color: '#a855f7', marginTop: '6px' }}>
             {record.aiFixCount}
           </div>
@@ -279,7 +279,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
                           {d.ruleName}
                         </h4>
                       </div>
-                      <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+                      <div style={{ fontSize: '12px', color: '#7c8ba6', marginTop: '4px' }}>
                         Domain: <strong>{d.domain}</strong> &bull; Line {d.location?.start?.line || 1}, Column {d.location?.start?.column || 1} &bull; Confidence: <span style={{ color: '#22c55e', fontWeight: 700 }}>High (98.4%)</span>
                       </div>
                     </div>
@@ -302,7 +302,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
                   {/* Code Snippet Viewer */}
                   {d.offendingCodeSnippet && (
                     <div style={{ marginTop: '12px', marginBottom: '16px' }}>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginBottom: '4px' }}>
+                      <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginBottom: '4px' }}>
                         OFFENDING CODE SNIPPET (Line {d.location?.start?.line || 1})
                       </div>
                       <pre
