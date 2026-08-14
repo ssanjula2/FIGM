@@ -109,6 +109,24 @@ interface DiagnosticItem {
   message: string;
   remediation: string;
   standardReference: string;
+  evidence?: string;
+  sourceKind?: 'REAL_AST' | 'LEGACY_TEXT_HEURISTIC';
+}
+
+/** Mirrors AIRemediationPipelineResult (src/ai/ai-remediation-pipeline.ts) -- the client must
+ *  never invent its own notion of "fixed" independent of what the server actually verified. */
+type VerificationStatus = 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED' | 'MANUAL_REVIEW_REQUIRED' | 'VERIFICATION_UNAVAILABLE';
+
+interface FixOutcome {
+  beforeCode: string;
+  afterCode: string;
+  description: string;
+  engine: string;
+  /** True ONLY when the patched code was actually re-scanned and the original violation
+   *  (defect.ruleId) is confirmed gone -- never set true just because a patch was produced. */
+  verified: boolean;
+  status: VerificationStatus;
+  fallbackReason?: string;
 }
 
 interface ScanResultResponse {
@@ -135,11 +153,57 @@ const SEV_COLOR: Record<string, string> = {
   LOW: '#94a3b8',
 };
 
+// Frameworks the real engine detects (for classification) but runs zero FIGM guideline rules
+// against -- must never be presented as a "clean scan," since no rule was actually evaluated.
+// Mirrors FrameworkType in src/types/ast-spec.ts.
+const UNSUPPORTED_FRAMEWORKS = new Set(['SVELTE']);
+
+// Mirrors MAX_CODE_LENGTH in app/api/scan/route.ts -- checked client-side too so an obviously
+// oversized paste gets an immediate, specific message instead of a network round-trip that
+// ends in a generic error.
+const MAX_CODE_LENGTH = 500000;
+
 const SEV_BG: Record<string, string> = {
   CRITICAL: 'rgba(239,68,68,0.12)',
   HIGH: 'rgba(245,158,11,0.12)',
   MEDIUM: 'rgba(56,189,248,0.10)',
   LOW: 'rgba(148,163,184,0.08)',
+};
+
+// ── Fix outcome presentation — every label here must match what the real engine actually
+// verified via a re-scan (AIRemediationPipeline / RemediationEngine.validatePatch). Never
+// present a status here as "fixed" unless `verified === true` backs it.
+const FIX_STATUS_META: Record<VerificationStatus, { icon: string; label: string; color: string; detail: string }> = {
+  FIXED: {
+    icon: '✅',
+    label: 'Verified Fixed',
+    color: '#86efac',
+    detail: 'The patched code was re-scanned with the real FIGM engine and this violation no longer fires.',
+  },
+  MANUAL_REVIEW_REQUIRED: {
+    icon: '⚠️',
+    label: 'Manual Review Required',
+    color: '#fde68a',
+    detail: 'FIGM cannot safely auto-apply this fix (e.g. it would require inferring information like a dependency array). Review the suggested change below and apply it yourself if correct — your code was NOT changed.',
+  },
+  UNRESOLVED: {
+    icon: '❌',
+    label: 'Fix Did Not Resolve The Violation',
+    color: '#fca5a5',
+    detail: 'A patch was generated, but re-scanning it still detects the same violation. Your code was NOT changed.',
+  },
+  PATCH_REJECTED: {
+    icon: '❌',
+    label: 'Patch Rejected',
+    color: '#fca5a5',
+    detail: 'The suggested patch would introduce a new syntax or type error. Your code was NOT changed.',
+  },
+  VERIFICATION_UNAVAILABLE: {
+    icon: '⚠️',
+    label: 'Applied Locally — Not Verified',
+    color: '#fde68a',
+    detail: 'A local patch was applied, but it could not be re-scanned to confirm the violation is actually gone (connection unavailable). Re-scan manually to confirm before trusting this fix.',
+  },
 };
 
 // ── Diff viewer helper ──────────────────────────────────────────────────────
@@ -241,9 +305,7 @@ export default function LiveScanPage() {
 
   // Per-violation fix state
   const [fixingId, setFixingId] = useState<string | null>(null);
-  const [fixResults, setFixResults] = useState<
-    Record<string, { beforeCode: string; afterCode: string; description: string; engine: string }>
-  >({});
+  const [fixResults, setFixResults] = useState<Record<string, FixOutcome>>({});
 
   const editorRef = useRef<any>(null);
   const monaco = useMonaco();
@@ -256,6 +318,14 @@ export default function LiveScanPage() {
     const targetFile = fileToScan !== undefined ? fileToScan : fileName;
 
     if (!targetCode.trim()) return;
+
+    if (targetCode.length > MAX_CODE_LENGTH) {
+      setScanError(
+        `Payload too large (${(targetCode.length / 1000).toFixed(0)} KB) — the maximum is ${MAX_CODE_LENGTH / 1000} KB. Trim the input and try again.`
+      );
+      setResult(null);
+      return;
+    }
 
     setScanning(true);
     setScanError(null);
@@ -316,8 +386,20 @@ export default function LiveScanPage() {
     setCode(newCode);
 
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
+
+    // Empty source: nothing to scan. Clear any previous result rather than leaving it
+    // displayed -- a stale diagnostics list describing code that's no longer in the editor
+    // would misrepresent what's actually there.
+    if (!newCode.trim()) {
+      setResult(null);
+      setScanError(null);
+      setFixResults({});
+      lastScannedCode.current = '';
+      return;
+    }
+
     debounceTimer.current = setTimeout(() => {
-      if (newCode.trim() && newCode !== lastScannedCode.current) {
+      if (newCode !== lastScannedCode.current) {
         handleScan(newCode, fileName);
       }
     }, 1500); // 1.5 s debounce
@@ -334,14 +416,21 @@ export default function LiveScanPage() {
 
   // ── Jump to line in editor ────────────────────────────────────────────
   const jumpToLine = (line: number) => {
+    const safeLine = Number.isFinite(line) && line > 0 ? line : 1;
     if (editorRef.current) {
-      editorRef.current.revealLineInCenter(line);
-      editorRef.current.setPosition({ lineNumber: line, column: 1 });
+      editorRef.current.revealLineInCenter(safeLine);
+      editorRef.current.setPosition({ lineNumber: safeLine, column: 1 });
       editorRef.current.focus();
     }
   };
 
   // ── Apply fix for a specific violation ───────────────────────────────
+  // Contract: the editor's actual code is only ever mutated once a fix has been VERIFIED --
+  // i.e. the server re-scanned the patched code with the real engine and confirmed
+  // defect.ruleId no longer fires (see AIRemediationPipeline.remediateDefect /
+  // RemediationEngine.validatePatch). A patch that doesn't verify is shown for inspection
+  // (so the user can see what was attempted and why it wasn't applied) but never silently
+  // written into the user's code, and never labeled "Fixed".
   const applyFix = async (defect: DiagnosticItem) => {
     const fixKey = defect.ruleId + '_' + defect.location.start.line;
     setFixingId(fixKey);
@@ -357,42 +446,92 @@ export default function LiveScanPage() {
       if (!res.ok) throw new Error('AI fix endpoint error');
       const aiData = await res.json();
 
-      const newCode: string = aiData.remediatedCode || code;
+      const candidateCode: string = aiData.remediatedCode || code;
+      const verified: boolean = aiData.verified === true;
+      const status: VerificationStatus = aiData.verificationStatus || 'UNRESOLVED';
       const engineLabel =
-        aiData.engineType === 'GEMINI_2_5_FLASH' ? '✨ Gemini 2.5 Flash' : '⚡ Auto Fix Engine';
+        aiData.engineType === 'GEMINI_2_5_FLASH' ? '✨ Gemini 2.5 Flash' : '⚡ Deterministic Engine';
 
       setFixResults((prev) => ({
         ...prev,
         [fixKey]: {
           beforeCode,
-          afterCode: newCode,
+          afterCode: candidateCode,
           description: aiData.appliedFixDescription || defect.remediation,
           engine: engineLabel,
+          verified,
+          status,
+          fallbackReason: aiData.fallbackReason,
         },
       }));
 
-      setCode(newCode);
-      if (editorRef.current) editorRef.current.setValue(newCode);
-      await handleScan(newCode, fileName);
+      if (verified) {
+        setCode(candidateCode);
+        if (editorRef.current) editorRef.current.setValue(candidateCode);
+        await handleScan(candidateCode, fileName);
+      }
+      // Not verified: leave the editor and the currently-displayed scan result untouched --
+      // nothing changed, so there is nothing to re-scan.
     } catch {
-      // Client-side deterministic fallback
+      // The /api/scan round-trip itself failed (e.g. genuinely offline) -- fall back to the
+      // deterministic engine running locally, but it must still be verified before being
+      // trusted, not assumed to have worked just because it ran without throwing.
       try {
-        const { remediatedCode, appliedFixDescription } = RemediationEngine.applyQuickFix(
-          code,
-          defect as any
-        );
+        const localResult = RemediationEngine.applyQuickFix(code, defect as any);
+        const { remediatedCode, appliedFixDescription, requiresManualReview } = localResult;
+
+        if (requiresManualReview) {
+          setFixResults((prev) => ({
+            ...prev,
+            [fixKey]: {
+              beforeCode,
+              afterCode: remediatedCode,
+              description: appliedFixDescription,
+              engine: '⚡ Deterministic Engine (offline)',
+              verified: false,
+              status: 'MANUAL_REVIEW_REQUIRED',
+            },
+          }));
+          return;
+        }
+
+        // Verify through the SAME real engine every other scan on this page uses -- a second
+        // /api/scan call on the candidate code, not a client-reimplemented notion of "fixed".
+        let verified = false;
+        let status: VerificationStatus = 'VERIFICATION_UNAVAILABLE';
+        try {
+          const verifyRes = await fetch('/api/scan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: remediatedCode, fileName }),
+          });
+          if (verifyRes.ok) {
+            const verifyData: ScanResultResponse = await verifyRes.json();
+            const stillPresent = verifyData.diagnostics.some((d) => d.ruleId === defect.ruleId);
+            verified = !stillPresent;
+            status = verified ? 'FIXED' : 'UNRESOLVED';
+          }
+        } catch {
+          // Still offline -- report the local patch honestly as unverified rather than "fixed".
+        }
+
         setFixResults((prev) => ({
           ...prev,
           [fixKey]: {
             beforeCode,
             afterCode: remediatedCode,
             description: appliedFixDescription,
-            engine: '⚡ Deterministic Engine',
+            engine: '⚡ Deterministic Engine (offline)',
+            verified,
+            status,
           },
         }));
-        setCode(remediatedCode);
-        if (editorRef.current) editorRef.current.setValue(remediatedCode);
-        await handleScan(remediatedCode, fileName);
+
+        if (verified) {
+          setCode(remediatedCode);
+          if (editorRef.current) editorRef.current.setValue(remediatedCode);
+          await handleScan(remediatedCode, fileName);
+        }
       } catch (e2) {
         setScanError('Fix failed: ' + String(e2));
       }
@@ -627,7 +766,7 @@ export default function LiveScanPage() {
                 Analyzing Code…
               </div>
               <div style={{ fontSize: '12px', marginTop: '4px' }}>
-                Running 23 FIGM guideline rules against your code
+                Running all 25 FIGM guideline rules against your code
               </div>
             </div>
           ) : result && (
@@ -709,7 +848,32 @@ export default function LiveScanPage() {
               </div>
 
               {/* Diagnostics */}
-              {result.diagnostics.length === 0 ? (
+              {UNSUPPORTED_FRAMEWORKS.has(result.framework) ? (
+                // A zero-violation result for a framework FIGM does not analyze at all must
+                // never be presented as "your code is clean" -- that would misrepresent an
+                // "unchecked" result as a "passed" one. See Task requirement: handle
+                // unsupported frameworks gracefully, without implying a check occurred.
+                <div
+                  style={{
+                    padding: '28px',
+                    background: 'rgba(234,179,8,0.08)',
+                    borderRadius: '10px',
+                    border: '1px solid rgba(234,179,8,0.25)',
+                    textAlign: 'center',
+                  }}
+                >
+                  <div style={{ fontSize: '28px', marginBottom: '6px' }}>⚠️</div>
+                  <strong style={{ color: '#fde68a', fontSize: '15px' }}>
+                    "{result.framework}" Is Not Yet Supported
+                  </strong>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+                    FIGM detected this framework but does not yet run any guideline rules against
+                    it. This is <strong>not</strong> a "no issues found" result — no analysis was
+                    performed. Supported frameworks: React, Next.js, Angular, Vue, and plain
+                    JS/TS.
+                  </div>
+                </div>
+              ) : result.diagnostics.length === 0 ? (
                 <div
                   style={{
                     padding: '28px',
@@ -722,7 +886,7 @@ export default function LiveScanPage() {
                   <div style={{ fontSize: '28px', marginBottom: '6px' }}>🎉</div>
                   <strong style={{ color: '#86efac', fontSize: '15px' }}>No Issues Found!</strong>
                   <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
-                    Your code meets all 23 FIGM quality, performance, and accessibility rules.
+                    Your code meets all 25 FIGM quality, performance, and accessibility rules.
                   </div>
                 </div>
               ) : (
@@ -742,6 +906,12 @@ export default function LiveScanPage() {
                     const isFixing = fixingId === fixKey;
                     const color = SEV_COLOR[d.severity] ?? '#94a3b8';
                     const bg = SEV_BG[d.severity] ?? 'rgba(148,163,184,0.08)';
+                    const isFigmRule = d.ruleId.startsWith('FIGM-');
+                    const statusMeta = fixResult ? FIX_STATUS_META[fixResult.status] : null;
+                    const line = d.location?.start?.line && d.location.start.line > 0 ? d.location.start.line : 1;
+                    const column = d.location?.start?.column;
+                    const endLine = d.location?.end?.line;
+                    const endColumn = d.location?.end?.column;
 
                     return (
                       <div
@@ -750,7 +920,13 @@ export default function LiveScanPage() {
                           padding: '14px',
                           background: '#090d16',
                           borderRadius: '10px',
-                          border: `1px solid ${fixResult ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.07)'}`,
+                          border: `1px solid ${
+                            fixResult
+                              ? fixResult.verified
+                                ? 'rgba(34,197,94,0.3)'
+                                : 'rgba(234,179,8,0.3)'
+                              : 'rgba(255,255,255,0.07)'
+                          }`,
                           display: 'flex',
                           flexDirection: 'column',
                           gap: '9px',
@@ -758,8 +934,8 @@ export default function LiveScanPage() {
                         }}
                       >
                         {/* Violation header */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
                             <span
                               style={{
                                 fontSize: '10px',
@@ -783,27 +959,80 @@ export default function LiveScanPage() {
                             >
                               {d.ruleId}
                             </span>
+                            {d.sourceKind && (
+                              <span
+                                title={
+                                  d.sourceKind === 'REAL_AST'
+                                    ? 'Detected via genuine TypeScript-compiler AST traversal'
+                                    : 'Detected via text/regex pattern matching (not yet AST-migrated for this framework)'
+                                }
+                                style={{
+                                  fontSize: '9px',
+                                  fontWeight: 700,
+                                  color: d.sourceKind === 'REAL_AST' ? '#a855f7' : '#64748b',
+                                  background: d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.1)' : 'rgba(100,116,139,0.1)',
+                                  border: `1px solid ${d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.3)' : 'rgba(100,116,139,0.3)'}`,
+                                  borderRadius: '4px',
+                                  padding: '2px 6px',
+                                }}
+                              >
+                                {d.sourceKind === 'REAL_AST' ? '🌳 AST' : '📝 pattern'}
+                              </span>
+                            )}
                           </div>
-                          <button
-                            onClick={() => jumpToLine(d.location.start.line)}
-                            style={{
-                              background: 'rgba(56,189,248,0.08)',
-                              border: '1px solid rgba(56,189,248,0.25)',
-                              borderRadius: '4px',
-                              color: '#38bdf8',
-                              fontSize: '10px',
-                              padding: '3px 8px',
-                              cursor: 'pointer',
-                              fontFamily: 'JetBrains Mono',
-                            }}
-                          >
-                            📍 Go to Line {d.location.start.line} →
-                          </button>
+                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                            {isFigmRule && (
+                              <a
+                                href={`/guidelines#${d.ruleId}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  background: 'rgba(168,85,247,0.08)',
+                                  border: '1px solid rgba(168,85,247,0.25)',
+                                  borderRadius: '4px',
+                                  color: '#c4b5fd',
+                                  fontSize: '10px',
+                                  padding: '3px 8px',
+                                  cursor: 'pointer',
+                                  fontFamily: 'JetBrains Mono',
+                                  textDecoration: 'none',
+                                }}
+                              >
+                                📖 Rule Guide
+                              </a>
+                            )}
+                            <button
+                              onClick={() => jumpToLine(line)}
+                              style={{
+                                background: 'rgba(56,189,248,0.08)',
+                                border: '1px solid rgba(56,189,248,0.25)',
+                                borderRadius: '4px',
+                                color: '#38bdf8',
+                                fontSize: '10px',
+                                padding: '3px 8px',
+                                cursor: 'pointer',
+                                fontFamily: 'JetBrains Mono',
+                              }}
+                            >
+                              📍 Go to Line {line}
+                              {column != null ? `:${column}` : ''} →
+                            </button>
+                          </div>
                         </div>
 
                         {/* Rule name */}
                         <div style={{ fontSize: '13px', fontWeight: 800, color: '#f8fafc' }}>
                           {d.ruleName}
+                        </div>
+
+                        {/* Source range + standard reference */}
+                        <div style={{ fontSize: '10px', color: '#64748b', display: 'flex', gap: '10px', flexWrap: 'wrap', fontFamily: 'JetBrains Mono' }}>
+                          <span>
+                            Location: L{line}
+                            {column != null ? `:C${column}` : ''}
+                            {endLine ? ` → L${endLine}${endColumn != null ? `:C${endColumn}` : ''}` : ''}
+                          </span>
+                          {d.standardReference && <span>Ref: {d.standardReference}</span>}
                         </div>
 
                         {/* Offending code snippet */}
@@ -824,6 +1053,18 @@ export default function LiveScanPage() {
                           <code>{d.offendingCodeSnippet}</code>
                         </pre>
 
+                        {/* Evidence (what the detector actually matched) */}
+                        {d.evidence && (
+                          <div style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic' }}>
+                            🔍 <strong>Evidence:</strong> {d.evidence}
+                          </div>
+                        )}
+
+                        {/* Explanation */}
+                        <div style={{ fontSize: '12px', color: '#cbd5e1' }}>
+                          {d.message}
+                        </div>
+
                         {/* How-to-fix hint */}
                         <div
                           style={{
@@ -838,30 +1079,43 @@ export default function LiveScanPage() {
                           💡 <strong>How to Fix:</strong> {d.remediation}
                         </div>
 
-                        {/* Diff result (shown after fix applied) */}
-                        {fixResult && (
+                        {/* Fix outcome -- always reflects what the real engine actually verified,
+                            never a blanket "Fixed" independent of that verification. */}
+                        {fixResult && statusMeta && (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                             <div
                               style={{
                                 fontSize: '11px',
                                 fontWeight: 700,
-                                color: '#86efac',
+                                color: statusMeta.color,
                                 display: 'flex',
                                 gap: '8px',
                                 alignItems: 'center',
                               }}
                             >
-                              <span>✅ Fixed by {fixResult.engine}</span>
+                              <span>{statusMeta.icon} {statusMeta.label}{fixResult.verified ? ` (by ${fixResult.engine})` : ''}</span>
                             </div>
                             <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '2px' }}>
-                              {fixResult.description}
+                              {statusMeta.detail}
                             </div>
+                            {fixResult.description && (
+                              <div style={{ fontSize: '11px', color: '#64748b' }}>
+                                {fixResult.description}
+                              </div>
+                            )}
+                            {fixResult.fallbackReason && (
+                              <div style={{ fontSize: '10px', color: '#64748b', fontStyle: 'italic' }}>
+                                ({fixResult.fallbackReason})
+                              </div>
+                            )}
                             <DiffView before={fixResult.beforeCode} after={fixResult.afterCode} />
                           </div>
                         )}
 
-                        {/* Fix button */}
-                        {!fixResult && (
+                        {/* Fix button -- offered again after a non-FIXED outcome so the user can
+                            retry (e.g. after manually adjusting the code) rather than getting
+                            permanently stuck once one attempt didn't verify. */}
+                        {(!fixResult || !fixResult.verified) && (
                           <button
                             onClick={() => applyFix(d)}
                             disabled={isFixing || !!fixingId}
@@ -881,8 +1135,10 @@ export default function LiveScanPage() {
                             }}
                           >
                             {isFixing
-                              ? '⏳ Applying Fix…'
-                              : '✨ Apply Automatic Fix'}
+                              ? '⏳ Applying & Verifying Fix…'
+                              : fixResult
+                              ? '🔁 Retry Fix'
+                              : '✨ Apply & Verify Fix'}
                           </button>
                         )}
                       </div>

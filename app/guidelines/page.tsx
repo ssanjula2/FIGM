@@ -434,6 +434,7 @@ export default function GuidelinesPage() {
   const renderRuleCard = (rule: GuidelineSpec) => (
     <div
       key={rule.id}
+      id={rule.id}
       className="glass-panel"
       style={{
         padding: '24px',
@@ -441,6 +442,7 @@ export default function GuidelinesPage() {
         flexDirection: 'column',
         justifyContent: 'space-between',
         gap: '18px',
+        scrollMarginTop: '80px',
       }}
     >
       <div>
