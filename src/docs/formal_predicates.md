@@ -1,7 +1,7 @@
 # Formal AST Rule Grammar & Predicate Abstraction Specification
 
 ## Executive Overview
-Phase 2 translates the 8 core FIGM guidelines into mathematical first-order logic predicates over Abstract Syntax Tree ($\mathcal{G}_{\text{AST}}$) node sets and Control Flow Graph ($\mathcal{G}_{\text{CFG}}$) reachability paths.
+Phase 2 translates FIGM's 25 core guidelines into mathematical first-order logic predicates over Abstract Syntax Tree ($\mathcal{G}_{\text{AST}}$) node sets and Control Flow Graph ($\mathcal{G}_{\text{CFG}}$) reachability paths. Section 2 below works through 8 representative predicates (the original Performance and Accessibility universal rules) in full first-order-logic derivation detail, as a worked example of the formalization method. The complete, always-current set of all 25 formal predicates -- generated directly from `FORMAL_PREDICATES_MAP` in `src/matrix/four-layer-meta-model.ts`, the same live registry the detection engine itself reads -- is rendered in full in `docs/dissertation/chapter4_implementation.tex` (regenerate via `npm run export-docs`) and in `figm-spec.json`'s `rules[].formalMathematicalPredicate` field (regenerate via `npm run generate-spec`). This file is intentionally not hand-extended to all 25, to avoid a second hand-maintained copy of predicates that could drift from the live registry.
 
 ---
 

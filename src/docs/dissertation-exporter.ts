@@ -60,7 +60,7 @@ The Framework-Independent Guideline Model (FIGM) establishes a 4-layer hierarchi
 \\end{equation}
 
 \\section{Abstract Language Primitives (ALPs)}
-Table~\\ref{tab:figm_alps} details the 8 core Abstract Language Primitives (ALPs) spanning AST constructs across React, Angular, Vue, and Svelte single-page application paradigms.
+Table~\\ref{tab:figm_alps} details the ${CORE_ALPS.length} core Abstract Language Primitives (ALPs) underpinning FIGM's 25 canonical rules, spanning AST constructs across React, Next.js, Angular, and Vue single-page application paradigms.
 
 \\begin{table}[htbp]
 \\centering
@@ -111,7 +111,7 @@ The empirical benchmark suite evaluated FIGM across React JSX, Vue SFC, Angular 
 The system achieved an overall Precision of \\textbf{${(evalResults.overall.precision * 100).toFixed(1)}\\%}, Recall of \\textbf{${(evalResults.overall.recall * 100).toFixed(1)}\\%}, and F1-Score of \\textbf{${(evalResults.overall.f1Score * 100).toFixed(1)}\\%}.
 
 \\section{Rule-by-Rule Accuracy Evaluation}
-Table~\\ref{tab:rule_eval_results} presents the empirical evaluation breakdown for all 8 core guidelines.
+Table~\\ref{tab:rule_eval_results} presents the empirical evaluation breakdown for the 8 core guidelines that have established ground-truth benchmark fixtures, out of the 25 total FIGM rules (see Chapter~\\ref{ch:implementation} for the full rule catalog).
 
 \\begin{table}[htbp]
 \\centering

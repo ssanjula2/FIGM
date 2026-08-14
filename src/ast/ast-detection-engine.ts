@@ -1,6 +1,6 @@
 /**
  * Framework-Independent Guideline Model (FIGM)
- * AST Predicate Evaluator Engine & Diagnostic Error Reporter (Complete 23 Rules)
+ * AST Predicate Evaluator Engine & Diagnostic Error Reporter (Complete 25 Rules)
  */
 
 import { ASTNode, DiagnosticReport, FrameworkType } from '../types/ast-spec.js';
@@ -10,7 +10,7 @@ import { getStandardReference } from '../matrix/standard-clause-mapping.js';
 
 export class ASTDetectionEngine {
   /**
-   * Evaluate a normalized AST Node against all 23 FIGM formal predicates
+   * Evaluate a normalized AST Node against all 25 FIGM formal predicates
    */
   public static evaluateNode(
     rawNode: ASTNode,

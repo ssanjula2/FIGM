@@ -6,7 +6,7 @@ export default function FeaturesGrid() {
   const features = [
     {
       icon: '⚡',
-      title: '23 Canonical Rules (25 Predicates)',
+      title: '25 Canonical Rules & Formal Predicates',
       desc: 'Formally defined static inspection predicates detecting invariant allocations, un-dimensioned elements, missing ARIA names, and RxJS memory leaks.',
       tag: 'AST Engine',
     },

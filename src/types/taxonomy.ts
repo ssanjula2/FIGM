@@ -3,7 +3,27 @@
  * Taxonomy and Schema Definitions for SPA Quality Domains
  */
 
+// Type-only import: taxonomy.ts is imported BY ast-spec.ts for RuleSeverity/DomainType/ConcernType,
+// so this must stay type-only (erased at compile time) to avoid a runtime circular import.
+import type { FrameworkType } from './ast-spec.js';
+
 export type DomainType = 'PERFORMANCE' | 'ACCESSIBILITY';
+
+/**
+ * How confidently an automated fix can be applied for a rule's violations, per
+ * docs/architecture/RULE_ENGINEERING_AUDIT.md section 5 ("Final Rule Matrix" / remediation column),
+ * itself tallied from every `requiresManualReview` assignment in the remediation engine.
+ */
+export type RemediationStatus = 'AUTOMATED_FIX_VERIFIED' | 'AUTOMATED_FIX_WITH_CAVEAT' | 'MANUAL_REVIEW_REQUIRED';
+
+/**
+ * UI-facing rule category bucket. Distinct from `DomainType` (PERFORMANCE/ACCESSIBILITY, the
+ * formal taxonomy axis) -- this is "which framework must this code belong to" for display grouping.
+ * There is no VUE bucket because no rule is Vue-*specific*: Vue files are only ever covered by the
+ * COMMON (framework-independent) rules -- see FourLayerMapping.rule.frameworks for the per-rule
+ * framework applicability that actually determines Vue coverage.
+ */
+export type RuleCategory = 'COMMON' | 'NEXTJS' | 'REACT' | 'ANGULAR';
 
 export type PerformanceConcernType =
   | 'BUNDLE_SIZE'
@@ -95,6 +115,18 @@ export interface FourLayerMapping {
     nonCompliantExample: string;
     compliantExample: string;
     remediation: string;
+    /** Every FrameworkType this rule is actually evaluated against by ASTDetectionEngine.evaluateNode
+     *  (verified against its dispatch conditions in src/ast/ast-detection-engine.ts), not an aspirational list. */
+    frameworks: FrameworkType[];
+    /** True only when the rule fires unconditionally regardless of FrameworkType (the 12 universal
+     *  PERF/A11Y rules). Never true for a rule whose evaluator gates on a specific `framework` value --
+     *  see task requirement "do not label a rule framework-independent if the implementation is
+     *  framework-specific." */
+    isFrameworkIndependent: boolean;
+    remediationStatus: RemediationStatus;
+    /** Known detection limitation/over-approximation, sourced from docs/architecture/RULE_ENGINEERING_AUDIT.md
+     *  section 5 -- never left blank, since every rule in this engine has at least one documented edge case. */
+    knownLimitation: string;
   };
 }
 
@@ -128,6 +160,7 @@ export interface FIGMMasterSpecification {
     id: string;
     domain: DomainType;
     concern: ConcernType;
+    category: RuleCategory;
     alpId: string;
     name: string;
     severity: RuleSeverity;
@@ -143,5 +176,9 @@ export interface FIGMMasterSpecification {
       compliant: string;
     };
     remediation: string;
+    frameworks: FrameworkType[];
+    isFrameworkIndependent: boolean;
+    remediationStatus: RemediationStatus;
+    knownLimitation: string;
   }[];
 }

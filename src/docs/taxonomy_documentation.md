@@ -3,7 +3,7 @@
 ## Executive Overview
 Single Page Applications (SPAs) execute complex state management, client-side routing, dynamic rendering, and event handling within a unified web browser environment. Unlike traditional multi-page architectures where page transitions reload the DOM and reset client state, SPAs preserve long-lived runtime contexts. This persistence creates specific architectural vulnerabilities in both **Performance** and **Accessibility**.
 
-The Framework-Independent Guideline Model (FIGM) establishes a rigorous taxonomy categorizing SPA defects across two primary domains, eight core architectural concerns, and AST-level Abstract Language Primitives (ALPs).
+The Framework-Independent Guideline Model (FIGM) establishes a rigorous taxonomy categorizing SPA defects across two primary domains, ten core architectural concerns (six Performance, four Accessibility), and AST-level Abstract Language Primitives (ALPs) underpinning the 25 canonical FIGM rules.
 
 ---
 
@@ -44,6 +44,18 @@ Performance defects in SPAs degrade runtime responsiveness, increase memory foot
 * **Root Cause**: Instantiating dynamic elements (images, dynamic wrappers, embedded frames) without explicit dimension attributes (`width`, `height`, `aspect-ratio`, or CSS structural placeholders).
 * **Impact**: High Cumulative Layout Shift (CLS) scores, user mis-clicks, poor visual predictability, degradation of Core Web Vitals.
 * **ISO 25010 Mapping**: *Usability & Time Behaviour*.
+
+### 1.5 Resource Utilization (Synchronous Storage Access)
+* **Architectural Concern**: Blocking main-thread reads of synchronous browser storage APIs from inside high-frequency execution paths.
+* **Root Cause**: Calling `localStorage.getItem`/`sessionStorage.getItem` repeatedly inside loop or render-iteration scopes instead of caching the value once.
+* **Impact**: Main-thread stalls proportional to iteration count, degraded input responsiveness during scroll/animation.
+* **ISO 25010 Mapping**: *Resource Utilization (CPU/Main-Thread)*.
+
+### 1.6 Architecture (Framework Contract Violations)
+* **Architectural Concern**: Code that violates a framework's own structural contract for how state, hydration, or caching must be declared -- a category distinct from raw runtime cost, since the defect is architectural non-compliance rather than an allocation or leak.
+* **Root Cause**: Using client-only React hooks in a Next.js file without a `"use client"` directive, an App Router page missing an explicit route-segment revalidation declaration, an Angular component missing an explicit change-detection strategy, or Angular code manipulating the DOM directly instead of through `Renderer2`.
+* **Impact**: Build-time errors, unpredictable hydration behavior, stale cached content, or SSR/security guarantees silently bypassed.
+* **ISO 25010 Mapping**: *Time Behaviour & Maintainability (Architectural Conformance)*.
 
 ---
 

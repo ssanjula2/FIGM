@@ -6,7 +6,7 @@ import { useResearchMetrics } from '../../../src/hooks/useResearchMetrics';
 // ── Fallback static DSRM phase descriptions (structural, not metric-bearing) ─
 const DSRM_PHASES = [
   { num: '01', title: 'Problem Identification', desc: 'Fragmented SPA quality tooling across React, Next.js, Angular, and Vue — no unified framework-independent model exists.' },
-  { num: '02', title: 'Objective Definition', desc: 'Formalized 4-layer meta-model & 23 framework-independent guideline rules (25 AST predicates) aligned with WCAG 2.2.' },
+  { num: '02', title: 'Objective Definition', desc: 'Formalized 4-layer meta-model & 25 canonical guideline rules (12 framework-independent, 13 framework-specific across Next.js, React & Angular) aligned with WCAG 2.2 and ISO 25010.' },
   { num: '03', title: 'Design & Development', desc: 'Implemented SourceParser, AST engine, ALP extraction pipeline & Gemini 2.5 Flash AI remediation.' },
   { num: '04', title: 'Demonstration', desc: 'Deployed interactive Next.js web application and executable CLI runner (figm-analyze).' },
   { num: '05', title: 'Evaluation', desc: '' /* populated dynamically from API */ },

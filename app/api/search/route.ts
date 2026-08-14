@@ -3,7 +3,7 @@ import { authenticateUser } from '../../../src/auth/auth-middleware';
 import { ProjectRepository } from '../../../src/engine/project-repository';
 import { ScanRepository } from '../../../src/engine/scan-repository';
 import { UserRepository } from '../../../src/engine/user-repository';
-import { FOUR_LAYER_MAPPINGS } from '../../../src/matrix/four-layer-meta-model';
+import { RULE_CATALOG } from '../../../src/matrix/rule-registry';
 
 export async function GET(request: Request) {
   const auth = authenticateUser(request);
@@ -33,19 +33,29 @@ export async function GET(request: Request) {
     ? (await ScanRepository.getScanRecords({ userId: isAdmin ? undefined : userId, search: q, pageSize: 20 })).records
     : [];
 
-  // FIGM Specification Rules Search
-  const rules = FOUR_LAYER_MAPPINGS.filter(
-    (m) =>
-      m.rule.ruleId.toLowerCase().includes(q) ||
-      m.rule.ruleName.toLowerCase().includes(q) ||
-      m.domain.toLowerCase().includes(q) ||
-      m.concern.toLowerCase().includes(q) ||
-      m.rule.description.toLowerCase().includes(q)
-  ).map((m) => ({
-    ruleId: m.rule.ruleId,
-    name: m.rule.ruleName,
-    domain: m.domain,
-    description: m.rule.description,
+  // FIGM Specification Rules Search — sourced from RULE_CATALOG (src/matrix/rule-registry.ts),
+  // the same canonical registry the guidelines UI and figm-spec.json generator read, so this
+  // endpoint's rule metadata can never drift from either of them.
+  const rules = RULE_CATALOG.filter(
+    (r) =>
+      r.id.toLowerCase().includes(q) ||
+      r.name.toLowerCase().includes(q) ||
+      r.domain.toLowerCase().includes(q) ||
+      r.concern.toLowerCase().includes(q) ||
+      r.description.toLowerCase().includes(q)
+  ).map((r) => ({
+    ruleId: r.id,
+    name: r.name,
+    category: r.category,
+    domain: r.domain,
+    severity: r.severity,
+    description: r.description,
+    frameworks: r.frameworks,
+    isFrameworkIndependent: r.isFrameworkIndependent,
+    example: r.example,
+    remediation: r.remediation,
+    remediationStatus: r.remediationStatus,
+    knownLimitation: r.knownLimitation,
   }));
 
   // Users Search (Admin Only)

@@ -12,6 +12,7 @@
 import { NextResponse } from 'next/server';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
 
 // ── Dissertation-aligned bibliography (IS303.2, 2025) ─────────────────────
 const REFERENCES = [
@@ -249,9 +250,9 @@ export async function GET() {
 
       // ── FIGM system capabilities ───────────────────────────────────────
       systemCapabilities: {
-        totalGuidelineRules: 25,
-        totalASTPredicates: 25,
-        supportedFrameworks: ['React (JSX/TSX)', 'Next.js App Router', 'Angular Templates', 'Vue 3 SFCs (.vue)'],
+        totalGuidelineRules: TOTAL_RULE_COUNT,
+        totalASTPredicates: TOTAL_RULE_COUNT,
+        supportedFrameworks: ['React (JSX/TSX)', 'Next.js App Router', 'Angular Templates', 'Vue 3 SFCs (.vue)', 'Generic JavaScript/TypeScript'],
         aiRemediationModel: 'Gemini 2.5 Flash',
         evaluationDataset: {
           description: '4 hand-authored, framework-tagged fixture files (React JSX, Vue SFC, Angular template, generic ESTree/vanilla JS)',

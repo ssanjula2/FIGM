@@ -1,35 +1,35 @@
 'use client';
 
 import React, { useState } from 'react';
+import { RULE_CATALOG } from '../../../src/matrix/rule-registry';
+
+// Per-rule static evidence weight from ASTDetectionEngine.createReport's confidenceScore argument
+// (src/ast/ast-detection-engine.ts) -- not part of the canonical rule metadata model (which
+// describes what a rule IS, not a runtime scoring constant), so it stays local to this display.
+const CONFIDENCE_WEIGHT: Record<string, string> = {
+  'FIGM-PERF-01': '95%', 'FIGM-PERF-02': '92%', 'FIGM-PERF-03': '98%', 'FIGM-PERF-04': '88%',
+  'FIGM-PERF-05': '85%', 'FIGM-PERF-06': '90%',
+  'FIGM-A11Y-01': '96%', 'FIGM-A11Y-02': '94%', 'FIGM-A11Y-03': '91%', 'FIGM-A11Y-04': '95%',
+  'FIGM-A11Y-05': '97%', 'FIGM-A11Y-06': '93%',
+  'FIGM-NEXT-01': '99%', 'FIGM-NEXT-02': '90%', 'FIGM-NEXT-03': '85%', 'FIGM-NEXT-04': '92%',
+  'FIGM-REACT-01': '88%', 'FIGM-REACT-02': '96%', 'FIGM-REACT-03': '99%', 'FIGM-REACT-04': '87%',
+  'FIGM-ANG-01': '98%', 'FIGM-ANG-02': '92%', 'FIGM-ANG-03': '95%', 'FIGM-ANG-04': '90%', 'FIGM-ANG-05': '97%',
+};
+
+const DOMAIN_LABEL: Record<string, string> = { PERFORMANCE: 'Performance', ACCESSIBILITY: 'Accessibility' };
 
 export default function FIGMModelSection() {
   const [selectedFramework, setSelectedFramework] = useState<'UNIVERSAL' | 'REACT' | 'NEXTJS' | 'ANGULAR'>('UNIVERSAL');
 
+  // Rule id/name/domain/ALP membership all come live from RULE_CATALOG (src/matrix/rule-registry.ts)
+  // -- this component previously hardcoded its own copy with invented ALP ids that did not match
+  // CORE_ALPS and an Angular bucket that silently omitted FIGM-ANG-04. Deriving live makes both
+  // classes of drift structurally impossible.
   const rulesData = {
-    UNIVERSAL: [
-      { id: 'FIGM-PERF-01', name: 'Invariant Object Allocation in Loops', domain: 'Performance', alp: 'ALP-LOOP-ALLOC', confidence: '95%' },
-      { id: 'FIGM-PERF-02', name: 'Un-dimensioned Dynamic Layout Elements', domain: 'Performance', alp: 'ALP-LAYOUT-ELEMENT', confidence: '92%' },
-      { id: 'FIGM-A11Y-01', name: 'Keyboard Event Parity on Handlers', domain: 'Accessibility', alp: 'ALP-EVENT-KEYBOARD', confidence: '96%' },
-      { id: 'FIGM-A11Y-02', name: 'Accessible Name & Role for Controls', domain: 'Accessibility', alp: 'ALP-ARIA-NAMING', confidence: '94%' },
-    ],
-    REACT: [
-      { id: 'FIGM-REACT-01', name: 'Memoize Derived State Computations', domain: 'Performance', alp: 'ALP-DERIVED-STATE', confidence: '88%' },
-      { id: 'FIGM-REACT-02', name: 'Stable List Key Prop Assignment', domain: 'Performance', alp: 'ALP-KEY-ASSIGNMENT', confidence: '96%' },
-      { id: 'FIGM-REACT-03', name: 'Avoid Direct React State Mutation', domain: 'Architecture', alp: 'ALP-MUTATION-DIRECT', confidence: '99%' },
-      { id: 'FIGM-REACT-04', name: 'Wrap Child Callbacks in useCallback', domain: 'Performance', alp: 'ALP-CALLBACK-MEMO', confidence: '87%' },
-    ],
-    NEXTJS: [
-      { id: 'FIGM-NEXT-01', name: 'Client Hooks Require "use client"', domain: 'Architecture', alp: 'ALP-CLIENT-DIRECTIVE', confidence: '99%' },
-      { id: 'FIGM-NEXT-02', name: 'Dynamic Imports for Heavy Modules', domain: 'Performance', alp: 'ALP-DYNAMIC-IMPORT', confidence: '90%' },
-      { id: 'FIGM-NEXT-03', name: 'App Router Route Revalidation', domain: 'Performance', alp: 'ALP-ROUTE-REVALIDATE', confidence: '85%' },
-      { id: 'FIGM-NEXT-04', name: 'Zero-Layout-Shift Fonts (next/font)', domain: 'Performance', alp: 'ALP-ZERO-SHIFT-FONT', confidence: '92%' },
-    ],
-    ANGULAR: [
-      { id: 'FIGM-ANG-01', name: 'Unsubscribe RxJS Observables', domain: 'Performance', alp: 'ALP-RXJS-DISPOSAL', confidence: '98%' },
-      { id: 'FIGM-ANG-02', name: 'Angular OnPush Change Detection', domain: 'Performance', alp: 'ALP-ONPUSH-STRATEGY', confidence: '92%' },
-      { id: 'FIGM-ANG-03', name: 'Angular *ngFor trackBy Reference', domain: 'Performance', alp: 'ALP-TRACKBY-REF', confidence: '95%' },
-      { id: 'FIGM-ANG-05', name: 'Renderer2 DOM Safety Execution', domain: 'Security', alp: 'ALP-RENDERER2-SAFETY', confidence: '97%' },
-    ],
+    UNIVERSAL: RULE_CATALOG.filter((r) => r.category === 'COMMON'),
+    REACT: RULE_CATALOG.filter((r) => r.category === 'REACT'),
+    NEXTJS: RULE_CATALOG.filter((r) => r.category === 'NEXTJS'),
+    ANGULAR: RULE_CATALOG.filter((r) => r.category === 'ANGULAR'),
   };
 
   return (
@@ -67,10 +67,10 @@ export default function FIGMModelSection() {
                 transition: 'all 0.2s ease',
               }}
             >
-              {fw === 'UNIVERSAL' && '🌐 Universal (12 Rules)'}
-              {fw === 'REACT' && '⚛️ React JSX (4 Rules)'}
-              {fw === 'NEXTJS' && '▲ Next.js App Router (4 Rules)'}
-              {fw === 'ANGULAR' && '🅰️ Angular (.ts) (5 Rules)'}
+              {fw === 'UNIVERSAL' && `🌐 Universal (${rulesData.UNIVERSAL.length} Rules)`}
+              {fw === 'REACT' && `⚛️ React JSX (${rulesData.REACT.length} Rules)`}
+              {fw === 'NEXTJS' && `▲ Next.js App Router (${rulesData.NEXTJS.length} Rules)`}
+              {fw === 'ANGULAR' && `🅰️ Angular (.ts) (${rulesData.ANGULAR.length} Rules)`}
             </button>
           ))}
         </div>
@@ -98,20 +98,20 @@ export default function FIGMModelSection() {
                     {rule.id}
                   </span>
                   <span style={{ fontSize: '11px', fontWeight: 700, color: '#a855f7' }}>
-                    {rule.domain}
+                    {DOMAIN_LABEL[rule.domain]}
                   </span>
                 </div>
                 <div style={{ color: '#f8fafc', fontSize: '14px', fontWeight: 700 }}>
                   {rule.name}
                 </div>
                 <div style={{ color: '#7c8ba6', fontSize: '12px', marginTop: '4px', fontFamily: 'monospace' }}>
-                  ALP Primitive: {rule.alp}
+                  ALP Primitive: {rule.alpId}
                 </div>
               </div>
 
               <div style={{ textAlign: 'right' }} title="A static per-diagnostic weight configured in the detection engine, not a measured empirical accuracy score. See /analytics for live benchmark Precision/Recall/F1.">
                 <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>Detection Weight</div>
-                <div style={{ fontSize: '16px', fontWeight: 900, color: '#10b981' }}>{rule.confidence}</div>
+                <div style={{ fontSize: '16px', fontWeight: 900, color: '#10b981' }}>{CONFIDENCE_WEIGHT[rule.id]}</div>
               </div>
             </div>
           ))}

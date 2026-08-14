@@ -4,8 +4,8 @@
     "version": "2.0.0",
     "description": "Formal 4-Layer Meta-Model & AST Detection Specification Matrix mapping SPA Quality Domains to Formal Mathematical Predicates, Abstract Language Primitives, and Universal AST Query Templates.",
     "framework": "FIGM-Core-v2",
-    "generatedAt": "2026-07-29T08:05:01.835Z",
-    "totalCoreRules": 8
+    "generatedAt": "2026-08-14T10:22:09.028Z",
+    "totalCoreRules": 25
   },
   "taxonomies": {
     "domains": [
@@ -13,63 +13,13 @@
         "id": "PERFORMANCE",
         "name": "Performance Efficiency Domain",
         "description": "Optimizing SPA runtime execution speed, memory footprint, bundle delivery, and visual layout stability.",
-        "concerns": [
-          {
-            "id": "INVARIANT_ALLOCATIONS",
-            "name": "Invariant Allocations",
-            "description": "Eliminating duplicate object/closure instantiations in high-frequency loops and render scopes.",
-            "standardRef": "ISO 25010 Time Behaviour"
-          },
-          {
-            "id": "LAYOUT_INSTABILITY",
-            "name": "Layout Instability",
-            "description": "Preventing Cumulative Layout Shift (CLS) from un-dimensioned dynamic content.",
-            "standardRef": "ISO 25010 Usability / Time Behaviour"
-          },
-          {
-            "id": "ASYNC_LEAKS",
-            "name": "Asynchronous Leaks",
-            "description": "Preventing heap memory expansion caused by un-disposed event listeners and subscriptions.",
-            "standardRef": "ISO 25010 Resource Utilization"
-          },
-          {
-            "id": "BUNDLE_SIZE",
-            "name": "Bundle Size Optimization",
-            "description": "De-duplicating initial payload assets and enforcing lazy module loading boundaries.",
-            "standardRef": "ISO 25010 Resource Utilization"
-          }
-        ]
+        "concerns": []
       },
       {
         "id": "ACCESSIBILITY",
         "name": "Accessibility Domain",
         "description": "Ensuring SPA interfaces comply with normative WCAG 2.2 Success Criteria for assistive technology users.",
-        "concerns": [
-          {
-            "id": "KEYBOARD_ACCESSIBILITY",
-            "name": "Keyboard Accessibility",
-            "description": "Ensuring all interactive UI elements can be operated via keyboard input.",
-            "standardRef": "WCAG 2.2 SC 2.1.1 (Level A)"
-          },
-          {
-            "id": "NAME_ROLE_VALUE",
-            "name": "Name, Role, Value",
-            "description": "Exposing accessible roles and labels on custom interactive components.",
-            "standardRef": "WCAG 2.2 SC 4.1.2 (Level A)"
-          },
-          {
-            "id": "STATUS_MESSAGES",
-            "name": "Status Messages",
-            "description": "Announcing dynamic state changes to screen readers without page reloads.",
-            "standardRef": "WCAG 2.2 SC 4.1.3 (Level AA)"
-          },
-          {
-            "id": "FOCUS_ORDER",
-            "name": "Focus Order & Containment",
-            "description": "Preserving logical keyboard focus traversal during dynamic DOM updates.",
-            "standardRef": "WCAG 2.2 SC 2.4.3 (Level A)"
-          }
-        ]
+        "concerns": []
       }
     ]
   },
@@ -118,6 +68,25 @@
       "semanticConstraint": "Synchronous import statement referencing non-critical or conditionally executed module targets."
     },
     {
+      "id": "ALP-INLINE-CALLBACK",
+      "name": "Inline Callback Declaration Primitive",
+      "description": "Abstract syntax representation of anonymous arrow functions created inside render loop expressions.",
+      "astNodeType": [
+        "ArrowFunctionExpression",
+        "FunctionExpression"
+      ],
+      "semanticConstraint": "Inline anonymous callback defined within loop or render iteration scope."
+    },
+    {
+      "id": "ALP-STORAGE-LOOP",
+      "name": "Synchronous Storage Access Loop Primitive",
+      "description": "Abstract syntax representation of synchronous Web Storage API calls inside loops.",
+      "astNodeType": [
+        "CallExpression[callee.object.name=\"localStorage|sessionStorage\"]"
+      ],
+      "semanticConstraint": "Synchronous storage access invoked repeatedly inside iterative scopes."
+    },
+    {
       "id": "ALP-EVENT-KEYBOARD",
       "name": "Pointer Event Binding without Keyboard Event Primitive",
       "description": "Abstract syntax representation of pointer click listeners attached to AST nodes.",
@@ -156,6 +125,141 @@
         "CallExpression[callee.property.name=\"focus\"]"
       ],
       "semanticConstraint": "Modal or route transition unmounting currently focused element without explicit programmatic focus redirection."
+    },
+    {
+      "id": "ALP-INPUT-LABEL",
+      "name": "Form Input Control Label Association Primitive",
+      "description": "Abstract syntax representation of form input fields lacking associated labels.",
+      "astNodeType": [
+        "JSXElement[name=\"input|textarea|select\"]"
+      ],
+      "semanticConstraint": "Form input missing aria-label, aria-labelledby, or paired label element."
+    },
+    {
+      "id": "ALP-POSITIVE-TABINDEX",
+      "name": "Positive TabIndex Focus Navigation Order Primitive",
+      "description": "Abstract syntax representation of explicit positive tabindex attributes.",
+      "astNodeType": [
+        "JSXAttribute[name=\"tabIndex|tabindex\"]"
+      ],
+      "semanticConstraint": "Element explicitly assigning positive tabindex > 0 overriding natural focus sequence."
+    },
+    {
+      "id": "ALP-NEXT-CLIENT-HOOK",
+      "name": "Client Hook Invocation Without Directive Primitive",
+      "description": "Abstract syntax representation of client state hooks used in Server Components.",
+      "astNodeType": [
+        "CallExpression[callee.name=\"useState|useEffect|useContext|useRef\"]"
+      ],
+      "semanticConstraint": "React client hook called in Next.js file lacking \"use client\" directive."
+    },
+    {
+      "id": "ALP-NEXT-DYNAMIC",
+      "name": "Heavy Component Load Primitive",
+      "description": "Abstract syntax representation of heavy third-party module imports.",
+      "astNodeType": [
+        "ImportDeclaration"
+      ],
+      "semanticConstraint": "Heavy library imported statically in Next.js instead of next/dynamic."
+    },
+    {
+      "id": "ALP-NEXT-REVALIDATE",
+      "name": "Route Segment Revalidation Config Primitive",
+      "description": "Abstract syntax representation of Next.js App Router page caching export.",
+      "astNodeType": [
+        "ExportNamedDeclaration"
+      ],
+      "semanticConstraint": "App Router page missing export const revalidate."
+    },
+    {
+      "id": "ALP-NEXT-FONT",
+      "name": "External Font Loading Primitive",
+      "description": "Abstract syntax representation of Google Fonts link tags.",
+      "astNodeType": [
+        "JSXElement[name=\"link\"]"
+      ],
+      "semanticConstraint": "Fonts loaded via external CSS link instead of next/font."
+    },
+    {
+      "id": "ALP-REACT-USEMEMO",
+      "name": "Derived Computation In Render Primitive",
+      "description": "Abstract syntax representation of inline array sorting or heavy computations.",
+      "astNodeType": [
+        "CallExpression[callee.property.name=\"sort|filter|reduce\"]"
+      ],
+      "semanticConstraint": "Expensive calculation computed during render without useMemo."
+    },
+    {
+      "id": "ALP-REACT-KEY-INDEX",
+      "name": "Array Index Key Assignment Primitive",
+      "description": "Abstract syntax representation of list item key assignment.",
+      "astNodeType": [
+        "JSXAttribute[name=\"key\"]"
+      ],
+      "semanticConstraint": "List item assigning array index as key prop."
+    },
+    {
+      "id": "ALP-REACT-MUTATION",
+      "name": "Direct React State Mutation Primitive",
+      "description": "Abstract syntax representation of direct state object mutation.",
+      "astNodeType": [
+        "ExpressionStatement"
+      ],
+      "semanticConstraint": "Direct mutation of React state variable without state setter."
+    },
+    {
+      "id": "ALP-REACT-USECALLBACK",
+      "name": "Inline Prop Function Primitive",
+      "description": "Abstract syntax representation of inline callback props passed to children.",
+      "astNodeType": [
+        "JSXAttribute[name=\"onClick|onChange\"]"
+      ],
+      "semanticConstraint": "Callback prop passed inline to child component without useCallback."
+    },
+    {
+      "id": "ALP-ANG-UNSUBSCRIBE",
+      "name": "Angular Unsubscribed Observable Primitive",
+      "description": "Abstract syntax representation of RxJS subscriptions.",
+      "astNodeType": [
+        "CallExpression[callee.property.name=\"subscribe\"]"
+      ],
+      "semanticConstraint": "Observable subscription missing unsubscribe or takeUntilDestroyed."
+    },
+    {
+      "id": "ALP-ANG-ONPUSH",
+      "name": "Angular Component Change Detection Primitive",
+      "description": "Abstract syntax representation of Angular @Component metadata.",
+      "astNodeType": [
+        "ClassDeclaration"
+      ],
+      "semanticConstraint": "Angular component missing ChangeDetectionStrategy.OnPush."
+    },
+    {
+      "id": "ALP-ANG-TRACKBY",
+      "name": "Angular *ngFor Directive Primitive",
+      "description": "Abstract syntax representation of *ngFor structural directives.",
+      "astNodeType": [
+        "JSXAttribute[name=\"*ngFor\"]"
+      ],
+      "semanticConstraint": "*ngFor directive lacking trackBy function reference."
+    },
+    {
+      "id": "ALP-ANG-TEMPLATE-FN",
+      "name": "Angular Template Function Invocation Primitive",
+      "description": "Abstract syntax representation of template interpolations.",
+      "astNodeType": [
+        "Interpolation"
+      ],
+      "semanticConstraint": "Method invocation inside Angular template evaluated during change detection."
+    },
+    {
+      "id": "ALP-ANG-RENDERER2",
+      "name": "Angular Direct DOM Access Primitive",
+      "description": "Abstract syntax representation of ElementRef nativeElement property access.",
+      "astNodeType": [
+        "MemberExpression"
+      ],
+      "semanticConstraint": "Direct nativeElement DOM manipulation instead of Renderer2 service."
     }
   ],
   "universalASTQueryTemplates": [
@@ -375,6 +479,7 @@
       "id": "FIGM-PERF-01",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
+      "category": "COMMON",
       "alpId": "ALP-LOOP-ALLOC",
       "name": "Invariant Object Allocation in Iteration Scopes",
       "severity": "HIGH",
@@ -398,15 +503,26 @@
         "evaluatorType": "AST_STRUCTURE"
       },
       "examples": {
-        "nonCompliant": "function renderList(items) {\n  return items.map(item => {\n    const config = { theme: 'dark', padding: 10 }; // Non-compliant: allocated every iteration\n    return transform(item, config);\n  });\n}",
-        "compliant": "const DEFAULT_CONFIG = Object.freeze({ theme: 'dark', padding: 10 }); // Compliant: hoisted invariant\nfunction renderList(items) {\n  return items.map(item => transform(item, DEFAULT_CONFIG));\n}"
+        "nonCompliant": "function renderList(items) {\n  return items.map(item => {\n    const config = { theme: 'dark', padding: 10 };\n    return transform(item, config);\n  });\n}",
+        "compliant": "const DEFAULT_CONFIG = Object.freeze({ theme: 'dark', padding: 10 });\nfunction renderList(items) {\n  return items.map(item => transform(item, DEFAULT_CONFIG));\n}"
       },
-      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations."
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Flags any object/array/function literal in loop or render scope regardless of true invariance -- no data-flow analysis confirms the value is actually invariant."
     },
     {
       "id": "FIGM-PERF-02",
       "domain": "PERFORMANCE",
       "concern": "LAYOUT_INSTABILITY",
+      "category": "COMMON",
       "alpId": "ALP-LAYOUT-ELEMENT",
       "name": "Un-dimensioned Dynamic Layout Elements",
       "severity": "HIGH",
@@ -428,15 +544,26 @@
         "evaluatorType": "AST_STRUCTURE"
       },
       "examples": {
-        "nonCompliant": "<img src={userAvatarUrl} alt=\"User Avatar\" className=\"avatar\" /> // Non-compliant: missing width/height attributes",
+        "nonCompliant": "<img src={userAvatarUrl} alt=\"User Avatar\" className=\"avatar\" />",
         "compliant": "<img src={userAvatarUrl} alt=\"User Avatar\" width={48} height={48} style={{ aspectRatio: '1/1' }} className=\"avatar\" />"
       },
-      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements."
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Dimensions supplied only via an external CSS class (not inline width/height/aspect-ratio) are invisible to this rule."
     },
     {
       "id": "FIGM-PERF-03",
       "domain": "PERFORMANCE",
       "concern": "ASYNC_LEAKS",
+      "category": "COMMON",
       "alpId": "ALP-ASYNC-DISPOSAL",
       "name": "Unbounded Event Listener Disposal",
       "severity": "CRITICAL",
@@ -456,15 +583,26 @@
         "evaluatorType": "AST_STRUCTURE"
       },
       "examples": {
-        "nonCompliant": "function setupResize() {\n  window.addEventListener('resize', handleResize); // Non-compliant: missing teardown\n}",
-        "compliant": "function setupResize() {\n  window.addEventListener('resize', handleResize);\n  return () => window.removeEventListener('resize', handleResize); // Compliant: disposal returned\n}"
+        "nonCompliant": "function setupResize() {\n  window.addEventListener('resize', handleResize);\n}",
+        "compliant": "function setupResize() {\n  window.addEventListener('resize', handleResize);\n  return () => window.removeEventListener('resize', handleResize);\n}"
       },
-      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine."
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "knownLimitation": "Pairs addEventListener/removeEventListener by event-type name across the whole file, not by lexical scope -- assumes a conventional one-listener-per-event-type idiom."
     },
     {
       "id": "FIGM-PERF-04",
       "domain": "PERFORMANCE",
       "concern": "BUNDLE_SIZE",
+      "category": "COMMON",
       "alpId": "ALP-STATIC-IMPORT",
       "name": "Static Imports in Deferred Execution Paths",
       "severity": "MEDIUM",
@@ -485,19 +623,109 @@
         "evaluatorType": "AST_STRUCTURE"
       },
       "examples": {
-        "nonCompliant": "import HeavyChart from 'heavy-chart-library'; // Non-compliant: top-level static import\nfunction showReport(shouldDisplay) {\n  if (shouldDisplay) HeavyChart.render();\n}",
-        "compliant": "async function showReport(shouldDisplay) {\n  if (shouldDisplay) {\n    const { default: HeavyChart } = await import('heavy-chart-library'); // Compliant: lazy load\n    HeavyChart.render();\n  }\n}"
+        "nonCompliant": "import HeavyChart from 'heavy-chart-library';",
+        "compliant": "async function showReport(shouldDisplay) {\n  if (shouldDisplay) {\n    const { default: HeavyChart } = await import('heavy-chart-library');\n  }\n}"
       },
-      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths."
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "No cross-module re-export analysis; only direct identifier references in the same file are checked."
+    },
+    {
+      "id": "FIGM-PERF-05",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "category": "COMMON",
+      "alpId": "ALP-INLINE-CALLBACK",
+      "name": "Inline Anonymous Callbacks in Render Loops",
+      "severity": "MEDIUM",
+      "description": "Inline arrow functions created inside render map loops cause unnecessary re-instantiation.",
+      "formalMathematicalPredicate": "P_PERF_05(n) <=> IsInlineCallback(n) AND Scope(n) in {LOOP, RENDER}",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - INVARIANT_ALLOCATIONS",
+        "title": "ISO 25010 Quality Model for INVARIANT_ALLOCATIONS"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "ArrowFunctionExpression",
+          "FunctionExpression"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Inline anonymous callback defined within loop or render iteration scope.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "items.map(item => <Card onClick={() => handleClick(item.id)} />)",
+        "compliant": "items.map(item => <Card onClick={handleCardClick} id={item.id} />)"
+      },
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "knownLimitation": "Matches any inline JSX handler prop, not only onClick; the correct fix (which item identifier to bind instead) is app-specific, so the suggested fix always requires manual review."
+    },
+    {
+      "id": "FIGM-PERF-06",
+      "domain": "PERFORMANCE",
+      "concern": "RESOURCE_UTILIZATION",
+      "category": "COMMON",
+      "alpId": "ALP-STORAGE-LOOP",
+      "name": "Synchronous Storage Access in Loop Scope",
+      "severity": "HIGH",
+      "description": "Repeated synchronous Web Storage API calls inside loops block main thread execution.",
+      "formalMathematicalPredicate": "P_PERF_06(n) <=> IsSynchronousStorageAccess(n) AND Scope(n) in {LOOP, RENDER}",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - RESOURCE_UTILIZATION",
+        "title": "ISO 25010 Quality Model for RESOURCE_UTILIZATION"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "CallExpression[callee.object.name=\"localStorage|sessionStorage\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Synchronous storage access invoked repeatedly inside iterative scopes.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "for(let i=0; i<items.length; i++) { localStorage.getItem('token'); }",
+        "compliant": "const token = localStorage.getItem('token');\nfor(let i=0; i<items.length; i++) { process(token); }"
+      },
+      "remediation": "Read Web Storage values once outside loop or cache values in memory.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Name-based detection of localStorage/sessionStorage, not a real variable-binding check -- a shadowed identifier with the same name still triggers it."
     },
     {
       "id": "FIGM-A11Y-01",
       "domain": "ACCESSIBILITY",
       "concern": "KEYBOARD_ACCESSIBILITY",
+      "category": "COMMON",
       "alpId": "ALP-EVENT-KEYBOARD",
       "name": "Keyboard Event Parity on Pointer Handlers",
       "severity": "CRITICAL",
-      "description": "Non-interactive elements with pointer click listeners must provide keyboard listeners (onKeyDown/onKeyPress) and focusability.",
+      "description": "Non-interactive elements with pointer click listeners must provide keyboard listeners and focusability.",
       "formalMathematicalPredicate": "P_A11Y_01(n) <=> (IsNonInteractiveElement(n) AND HasPointerHandler(n)) AND NOT (HasKeyboardHandler(n) AND HasTabIndex(n))",
       "standardTraceability": {
         "standard": "WCAG_2_2",
@@ -515,23 +743,34 @@
         "evaluatorType": "CFG_REACHABILITY"
       },
       "examples": {
-        "nonCompliant": "<div onClick={togglePanel}>Toggle Panel</div> // Non-compliant: non-interactive div with click only",
-        "compliant": "<button type=\"button\" onClick={togglePanel}>Toggle Panel</button> // Compliant: native button with built-in keyboard support"
+        "nonCompliant": "<div onClick={togglePanel}>Toggle Panel</div>",
+        "compliant": "<button type=\"button\" onClick={togglePanel}>Toggle Panel</button>"
       },
-      "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler for Enter and Space keys."
+      "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Limited to a fixed non-interactive tag allow-list (div, span, section, article, p)."
     },
     {
       "id": "FIGM-A11Y-02",
       "domain": "ACCESSIBILITY",
       "concern": "NAME_ROLE_VALUE",
+      "category": "COMMON",
       "alpId": "ALP-ARIA-NAMING",
       "name": "Accessible Name and Role for Custom UI Controls",
       "severity": "HIGH",
-      "description": "Custom UI controls must explicitly define an ARIA role and an accessible name (aria-label or aria-labelledby).",
+      "description": "Custom UI controls must explicitly define an ARIA role and an accessible name.",
       "formalMathematicalPredicate": "P_A11Y_02(n) <=> IsCustomControl(n) AND NOT (HasAttr(n, \"role\") AND (HasAttr(n, \"aria-label\") OR HasAttr(n, \"aria-labelledby\")))",
       "standardTraceability": {
         "standard": "WCAG_2_2",
-        "clause": "SC 4.1.2",
+        "clause": "SC 2.1.1",
         "title": "NAME_ROLE_VALUE",
         "level": "A"
       },
@@ -545,25 +784,36 @@
         "evaluatorType": "CFG_REACHABILITY"
       },
       "examples": {
-        "nonCompliant": "<div tabindex=\"0\" onClick={handleSelect}>Custom Select</div> // Non-compliant: missing role and ARIA label",
-        "compliant": "<div role=\"combobox\" aria-label=\"Choose Option\" aria-expanded={isOpen} tabindex=\"0\" onClick={handleSelect}>Custom Select</div>"
+        "nonCompliant": "<div tabindex=\"0\" onClick={handleSelect}>Custom Select</div>",
+        "compliant": "<div role=\"combobox\" aria-label=\"Choose Option\" tabindex=\"0\" onClick={handleSelect}>Custom Select</div>"
       },
-      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby."
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Limited to a fixed custom-control tag allow-list (Custom*/Select*/Dropdown*); the suggested fix inserts placeholder role/label text that still needs a real accessible name filled in."
     },
     {
       "id": "FIGM-A11Y-03",
       "domain": "ACCESSIBILITY",
       "concern": "STATUS_MESSAGES",
+      "category": "COMMON",
       "alpId": "ALP-LIVE-REGION",
       "name": "ARIA Live Announcer for Dynamic Mutations",
       "severity": "HIGH",
-      "description": "Containers populated with dynamic status messages or asynchronous feedback must possess ARIA live attributes.",
+      "description": "Containers populated with dynamic status messages must possess ARIA live attributes.",
       "formalMathematicalPredicate": "P_A11Y_03(n) <=> IsDynamicStatusContainer(n) AND NOT (HasAttr(n, \"aria-live\") OR Role(n) in {\"status\", \"alert\"})",
       "standardTraceability": {
         "standard": "WCAG_2_2",
-        "clause": "SC 4.1.3",
+        "clause": "SC 2.1.1",
         "title": "STATUS_MESSAGES",
-        "level": "AA"
+        "level": "A"
       },
       "detectionStrategy": {
         "astPatterns": [
@@ -575,23 +825,34 @@
         "evaluatorType": "CFG_REACHABILITY"
       },
       "examples": {
-        "nonCompliant": "<div className=\"status-banner\">{statusText}</div> // Non-compliant: dynamic status without live region",
-        "compliant": "<div className=\"status-banner\" role=\"status\" aria-live=\"polite\">{statusText}</div> // Compliant: ARIA live region"
+        "nonCompliant": "<div className=\"status-banner\">{statusText}</div>",
+        "compliant": "<div className=\"status-banner\" role=\"status\" aria-live=\"polite\">{statusText}</div>"
       },
-      "remediation": "Add role=\"status\" or aria-live=\"polite\" (or \"assertive\" for critical alerts) to dynamic output containers."
+      "remediation": "Add role=\"status\" or aria-live=\"polite\" to dynamic output containers.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Detects dynamic status containers by a className/id prefix match (\"status\"), not a semantic dynamic-content analysis."
     },
     {
       "id": "FIGM-A11Y-04",
       "domain": "ACCESSIBILITY",
       "concern": "FOCUS_ORDER",
+      "category": "COMMON",
       "alpId": "ALP-FOCUS-TRAVERSAL",
       "name": "Dynamic Focus Containment and Traversal",
       "severity": "CRITICAL",
-      "description": "Modal overlays and dynamic DOM insertions must trap keyboard focus and restore focus to trigger element upon exit.",
+      "description": "Modal overlays must trap keyboard focus and restore focus to trigger element upon exit.",
       "formalMathematicalPredicate": "P_A11Y_04(n) <=> IsOverlayOrModal(n) AND NOT (HasFocusTrap(n) AND RestoresFocusOnUnmount(n))",
       "standardTraceability": {
         "standard": "WCAG_2_2",
-        "clause": "SC 2.4.3",
+        "clause": "SC 2.1.1",
         "title": "FOCUS_ORDER",
         "level": "A"
       },
@@ -605,10 +866,570 @@
         "evaluatorType": "CFG_REACHABILITY"
       },
       "examples": {
-        "nonCompliant": "function closeModal() {\n  setIsModalOpen(false); // Non-compliant: modal closes without refocusing trigger element\n}",
-        "compliant": "function closeModal() {\n  setIsModalOpen(false);\n  triggerElementRef.current?.focus(); // Compliant: restores focus to trigger element\n}"
+        "nonCompliant": "function closeModal() { setIsModalOpen(false); }",
+        "compliant": "function closeModal() { setIsModalOpen(false); triggerRef.current?.focus(); }"
       },
-      "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically upon unmount."
+      "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Uses the presence of an onClose prop as a proxy signal for focus-restoration handling, not a verified focus-trap implementation."
+    },
+    {
+      "id": "FIGM-A11Y-05",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "category": "COMMON",
+      "alpId": "ALP-INPUT-LABEL",
+      "name": "Form Input Label Association",
+      "severity": "CRITICAL",
+      "description": "Form input elements must be explicitly associated with a label element or aria-label.",
+      "formalMathematicalPredicate": "P_A11Y_05(n) <=> IsFormInput(n) AND NOT (HasLabelAssociation(n) OR HasAriaLabel(n))",
+      "standardTraceability": {
+        "standard": "WCAG_2_2",
+        "clause": "SC 2.1.1",
+        "title": "NAME_ROLE_VALUE",
+        "level": "A"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXElement[name=\"input|textarea|select\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Form input missing aria-label, aria-labelledby, or paired label element.",
+        "evaluatorType": "CFG_REACHABILITY"
+      },
+      "examples": {
+        "nonCompliant": "<input type=\"text\" placeholder=\"Enter name\" />",
+        "compliant": "<label htmlFor=\"name\">Name</label><input id=\"name\" type=\"text\" />"
+      },
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Checks for htmlFor/for presence anywhere in the file, not that it actually matches this input’s id."
+    },
+    {
+      "id": "FIGM-A11Y-06",
+      "domain": "ACCESSIBILITY",
+      "concern": "FOCUS_ORDER",
+      "category": "COMMON",
+      "alpId": "ALP-POSITIVE-TABINDEX",
+      "name": "Avoid Positive TabIndex Values",
+      "severity": "HIGH",
+      "description": "Positive tabindex values (>0) disrupt natural document focus navigation order.",
+      "formalMathematicalPredicate": "P_A11Y_06(n) <=> HasTabIndex(n) AND TabIndexValue(n) > 0",
+      "standardTraceability": {
+        "standard": "WCAG_2_2",
+        "clause": "SC 2.1.1",
+        "title": "FOCUS_ORDER",
+        "level": "A"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXAttribute[name=\"tabIndex|tabindex\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Element explicitly assigning positive tabindex > 0 overriding natural focus sequence.",
+        "evaluatorType": "CFG_REACHABILITY"
+      },
+      "examples": {
+        "nonCompliant": "<button tabindex=\"5\">Submit</button>",
+        "compliant": "<button tabindex=\"0\">Submit</button>"
+      },
+      "remediation": "Set tabindex to 0 for custom interactive controls or -1 to remove from tab sequence.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": true,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Only catches literal tabIndex values; a value computed at runtime is not evaluated."
+    },
+    {
+      "id": "FIGM-NEXT-01",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "category": "NEXTJS",
+      "alpId": "ALP-NEXT-CLIENT-HOOK",
+      "name": "React Hooks Require \"use client\" Directive",
+      "severity": "CRITICAL",
+      "description": "React state or lifecycle hooks inside Next.js App Router files require \"use client\" directive.",
+      "formalMathematicalPredicate": "P_NEXT_01(n) <=> IsReactClientHook(n) AND NOT HasUseClientDirective(File(n))",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - ARCHITECTURE",
+        "title": "ISO 25010 Quality Model for ARCHITECTURE"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "CallExpression[callee.name=\"useState|useEffect|useContext|useRef\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "React client hook called in Next.js file lacking \"use client\" directive.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "import { useState } from 'react';\nexport default function Page() { useState(); }",
+        "compliant": "'use client';\nimport { useState } from 'react';\nexport default function Page() { useState(); }"
+      },
+      "remediation": "Add \"use client\" directive at the top of component files using React hooks.",
+      "frameworks": [
+        "NEXT_JS",
+        "REACT_JSX"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "A custom hook that itself wraps a real React hook is invisible to this rule -- only direct useState/useEffect/useContext/useRef calls are matched."
+    },
+    {
+      "id": "FIGM-NEXT-02",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "category": "NEXTJS",
+      "alpId": "ALP-NEXT-DYNAMIC",
+      "name": "Dynamic Imports for Heavy Browser Modules",
+      "severity": "HIGH",
+      "description": "Heavy client libraries should be imported dynamically using next/dynamic with ssr: false.",
+      "formalMathematicalPredicate": "P_NEXT_02(n) <=> IsHeavyModuleImport(n) AND NOT IsDynamicImport(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - BUNDLE_SIZE",
+        "title": "ISO 25010 Quality Model for BUNDLE_SIZE"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "ImportDeclaration"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Heavy library imported statically in Next.js instead of next/dynamic.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "import MonacoEditor from 'monaco-editor';",
+        "compliant": "import dynamic from 'next/dynamic';\nconst MonacoEditor = dynamic(() => import('monaco-editor'), { ssr: false });"
+      },
+      "remediation": "Use next/dynamic lazy import with ssr: false for heavy client-only packages.",
+      "frameworks": [
+        "NEXT_JS"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "knownLimitation": "Matches a fixed allow-list of known heavy packages, not a general \"is this module heavy\" detector; the correct ssr:false decision is project-specific."
+    },
+    {
+      "id": "FIGM-NEXT-03",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "category": "NEXTJS",
+      "alpId": "ALP-NEXT-REVALIDATE",
+      "name": "App Router Route Segment Revalidation",
+      "severity": "MEDIUM",
+      "description": "App Router pages serving dynamic data must define route segment cache revalidation behavior.",
+      "formalMathematicalPredicate": "P_NEXT_03(n) <=> IsAppRouterPage(File(n)) AND NOT HasRevalidateExport(File(n))",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - ARCHITECTURE",
+        "title": "ISO 25010 Quality Model for ARCHITECTURE"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "ExportNamedDeclaration"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "App Router page missing export const revalidate.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "export default async function Page() { return <div>Data</div>; }",
+        "compliant": "export const revalidate = 3600;\nexport default async function Page() { return <div>Data</div>; }"
+      },
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "frameworks": [
+        "NEXT_JS"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Checks only for the presence of export const revalidate, not whether its value is actually appropriate for the route’s data."
+    },
+    {
+      "id": "FIGM-NEXT-04",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "category": "NEXTJS",
+      "alpId": "ALP-NEXT-FONT",
+      "name": "Zero-Layout-Shift Web Fonts via next/font",
+      "severity": "MEDIUM",
+      "description": "Web fonts loaded via external CSS link tags cause layout shifts; use next/font instead.",
+      "formalMathematicalPredicate": "P_NEXT_04(n) <=> IsExternalFontLink(n) AND NOT IsNextFontImport(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - LAYOUT_INSTABILITY",
+        "title": "ISO 25010 Quality Model for LAYOUT_INSTABILITY"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXElement[name=\"link\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Fonts loaded via external CSS link instead of next/font.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "<link href=\"https://fonts.googleapis.com/css?family=Inter\" rel=\"stylesheet\" />",
+        "compliant": "import { Inter } from 'next/font/google';\nconst inter = Inter({ subsets: ['latin'] });"
+      },
+      "remediation": "Replace external font link tags with next/font/google or next/font/local imports.",
+      "frameworks": [
+        "NEXT_JS",
+        "REACT_JSX"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "knownLimitation": "Matches a narrow Google Fonts href pattern; other external font providers are not recognized, and the correct next/font replacement needs the actual font family filled in manually."
+    },
+    {
+      "id": "FIGM-REACT-01",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "category": "REACT",
+      "alpId": "ALP-REACT-USEMEMO",
+      "name": "Memoize Expensive Derived Computations",
+      "severity": "HIGH",
+      "description": "Expensive array sorting or filtering operations inside render routines should be wrapped in useMemo.",
+      "formalMathematicalPredicate": "P_REACT_01(n) <=> IsDerivedStateComputation(n) AND NOT WrappedInUseMemo(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - INVARIANT_ALLOCATIONS",
+        "title": "ISO 25010 Quality Model for INVARIANT_ALLOCATIONS"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "CallExpression[callee.property.name=\"sort|filter|reduce\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Expensive calculation computed during render without useMemo.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "const sortedData = items.sort((a,b) => a.val - b.val);",
+        "compliant": "const sortedData = useMemo(() => items.sort((a,b) => a.val - b.val), [items]);"
+      },
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "knownLimitation": "No scope restriction -- any .sort/.filter/.reduce call anywhere in the file is flagged, not only ones inside the render path; the useMemo dependency array must be chosen manually."
+    },
+    {
+      "id": "FIGM-REACT-02",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "category": "REACT",
+      "alpId": "ALP-REACT-KEY-INDEX",
+      "name": "Stable List Key Prop Assignment",
+      "severity": "HIGH",
+      "description": "Array indices assigned as list key props cause invalid component re-ordering and state bugs.",
+      "formalMathematicalPredicate": "P_REACT_02(n) <=> IsListItem(n) AND KeyPropValue(n) == ArrayIndex(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - LAYOUT_INSTABILITY",
+        "title": "ISO 25010 Quality Model for LAYOUT_INSTABILITY"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXAttribute[name=\"key\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "List item assigning array index as key prop.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "items.map((item, index) => <Item key={index} />)",
+        "compliant": "items.map(item => <Item key={item.id} />)"
+      },
+      "remediation": "Assign a unique stable identifier (item.id) to list key props instead of array index.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "An index value derived through an intermediate variable (rather than used directly as the key) is not recognized."
+    },
+    {
+      "id": "FIGM-REACT-03",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "category": "REACT",
+      "alpId": "ALP-REACT-MUTATION",
+      "name": "Avoid Direct React State Mutation",
+      "severity": "CRITICAL",
+      "description": "Directly mutating React state variables skips component re-renders and breaks component updates.",
+      "formalMathematicalPredicate": "P_REACT_03(n) <=> IsDirectStateMutation(n) AND NOT UsesStateSetter(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - INVARIANT_ALLOCATIONS",
+        "title": "ISO 25010 Quality Model for INVARIANT_ALLOCATIONS"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "ExpressionStatement"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Direct mutation of React state variable without state setter.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "user.name = 'New Name'; setUser(user);",
+        "compliant": "setUser(prev => ({ ...prev, name: 'New Name' }));"
+      },
+      "remediation": "Use immutable state updates or return new object references inside state setters.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "No true React-state-binding analysis -- any local variable whose mutation shape matches is flagged, whether or not it is actually component state."
+    },
+    {
+      "id": "FIGM-REACT-04",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "category": "REACT",
+      "alpId": "ALP-REACT-USECALLBACK",
+      "name": "Wrap Child Callback Props in useCallback",
+      "severity": "MEDIUM",
+      "description": "Passing inline arrow functions to memoized child components invalidates child re-rendering.",
+      "formalMathematicalPredicate": "P_REACT_04(n) <=> IsChildCallbackProp(n) AND NOT WrappedInUseCallback(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - INVARIANT_ALLOCATIONS",
+        "title": "ISO 25010 Quality Model for INVARIANT_ALLOCATIONS"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXAttribute[name=\"onClick|onChange\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Callback prop passed inline to child component without useCallback.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "<ChildComponent onClick={() => handleAction()} />",
+        "compliant": "const handleClick = useCallback(() => handleAction(), []);\n<ChildComponent onClick={handleClick} />"
+      },
+      "remediation": "Wrap event handler functions passed as props to child components in React.useCallback.",
+      "frameworks": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "knownLimitation": "Limited to a narrow tag allow-list (Custom*/Button*/Card*) and only the onClick prop; the correct useCallback dependency array must be chosen manually."
+    },
+    {
+      "id": "FIGM-ANG-01",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "category": "ANGULAR",
+      "alpId": "ALP-ANG-UNSUBSCRIBE",
+      "name": "Unsubscribe RxJS Subscriptions",
+      "severity": "CRITICAL",
+      "description": "RxJS subscriptions created inside Angular services/components must be cleaned up on destroy.",
+      "formalMathematicalPredicate": "P_ANG_01(n) <=> IsRxJSSubscription(n) AND NOT HasUnsubscribeOrTakeUntil(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - ASYNC_LEAKS",
+        "title": "ISO 25010 Quality Model for ASYNC_LEAKS"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "CallExpression[callee.property.name=\"subscribe\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Observable subscription missing unsubscribe or takeUntilDestroyed.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "ngOnInit() { this.dataService.getStream().subscribe(); }",
+        "compliant": "ngOnInit() { this.dataService.getStream().pipe(takeUntilDestroyed()).subscribe(); }"
+      },
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "frameworks": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Searches file-wide for a teardown keyword (takeUntilDestroyed/unsubscribe), not verified against the specific subscription."
+    },
+    {
+      "id": "FIGM-ANG-02",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "category": "ANGULAR",
+      "alpId": "ALP-ANG-ONPUSH",
+      "name": "Angular OnPush Change Detection Strategy",
+      "severity": "HIGH",
+      "description": "Angular components should specify ChangeDetectionStrategy.OnPush to minimize change detection cycles.",
+      "formalMathematicalPredicate": "P_ANG_02(n) <=> IsAngularComponent(n) AND NOT StrategyEqualsOnPush(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - ARCHITECTURE",
+        "title": "ISO 25010 Quality Model for ARCHITECTURE"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "ClassDeclaration"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Angular component missing ChangeDetectionStrategy.OnPush.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "@Component({ selector: 'app-card', template: '...' })",
+        "compliant": "@Component({ selector: 'app-card', changeDetection: ChangeDetectionStrategy.OnPush })"
+      },
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "frameworks": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Textual check for the ChangeDetectionStrategy.OnPush value, not a full constant evaluator."
+    },
+    {
+      "id": "FIGM-ANG-03",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "category": "ANGULAR",
+      "alpId": "ALP-ANG-TRACKBY",
+      "name": "Angular *ngFor trackBy Function Reference",
+      "severity": "HIGH",
+      "description": "*ngFor structural directives missing trackBy cause full DOM node destruction and re-creation on update.",
+      "formalMathematicalPredicate": "P_ANG_03(n) <=> IsNgForDirective(n) AND NOT HasTrackBy(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - LAYOUT_INSTABILITY",
+        "title": "ISO 25010 Quality Model for LAYOUT_INSTABILITY"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "JSXAttribute[name=\"*ngFor\"]"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "*ngFor directive lacking trackBy function reference.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "<div *ngFor=\"let item of items\">{{ item.name }}</div>",
+        "compliant": "<div *ngFor=\"let item of items; trackBy: trackById\">{{ item.name }}</div>"
+      },
+      "remediation": "Add trackBy function reference to all *ngFor iteration directives.",
+      "frameworks": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "knownLimitation": "Detected via legacy text-heuristic regex matching against Angular template markup on every framework (including Angular itself) -- a dedicated Angular template parser (@angular/compiler) has not yet been integrated, so this rule is not yet real-AST for any framework."
+    },
+    {
+      "id": "FIGM-ANG-04",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "category": "ANGULAR",
+      "alpId": "ALP-ANG-TEMPLATE-FN",
+      "name": "Minimize Method Invocations in Angular Templates",
+      "severity": "HIGH",
+      "description": "Calling component methods inside Angular HTML templates executes the method on every change detection cycle.",
+      "formalMathematicalPredicate": "P_ANG_04(n) <=> IsTemplateInterpolation(n) AND ContainsMethodCall(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - INVARIANT_ALLOCATIONS",
+        "title": "ISO 25010 Quality Model for INVARIANT_ALLOCATIONS"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "Interpolation"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Method invocation inside Angular template evaluated during change detection.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "<span>{{ calculateTotal() }}</span>",
+        "compliant": "<span>{{ total }}</span>"
+      },
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "frameworks": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "knownLimitation": "Detected via legacy text-heuristic regex matching against Angular template markup on every framework (including Angular itself); the correct fix (precompute vs. pure Pipe) is app-specific and always needs manual review."
+    },
+    {
+      "id": "FIGM-ANG-05",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "category": "ANGULAR",
+      "alpId": "ALP-ANG-RENDERER2",
+      "name": "Renderer2 DOM Manipulation Safety",
+      "severity": "HIGH",
+      "description": "Direct ElementRef nativeElement DOM manipulation bypasses Angular security and server-side rendering.",
+      "formalMathematicalPredicate": "P_ANG_05(n) <=> IsNativeElementAccess(n) AND NOT UsesRenderer2(n)",
+      "standardTraceability": {
+        "standard": "ISO_25010",
+        "clause": "ISO 25010 - ARCHITECTURE",
+        "title": "ISO 25010 Quality Model for ARCHITECTURE"
+      },
+      "detectionStrategy": {
+        "astPatterns": [
+          "MemberExpression"
+        ],
+        "universalASTSelector": "",
+        "scopeRequirements": "Direct nativeElement DOM manipulation instead of Renderer2 service.",
+        "evaluatorType": "AST_STRUCTURE"
+      },
+      "examples": {
+        "nonCompliant": "this.el.nativeElement.style.color = 'red';",
+        "compliant": "this.renderer.setStyle(this.el.nativeElement, 'color', 'red');"
+      },
+      "remediation": "Use Renderer2 service methods for all DOM manipulations instead of nativeElement.",
+      "frameworks": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "knownLimitation": "Automated fix is verified safe only for the single-style-property-assignment shape (nativeElement.style.x = y); every other mutation shape (innerHTML, setAttribute, classList) requires manual review. Also a same-line-only proximity check for an existing Renderer2 guard (a guard a few lines away is not recognized)."
     }
   ]
 }

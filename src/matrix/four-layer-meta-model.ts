@@ -1,7 +1,7 @@
 /**
  * Framework-Independent Guideline Model (FIGM)
  * Four-Layer Architecture Meta-Model Implementation (Complete 25 Rules)
- * 
+ *
  * Hierarchy:
  * Domain -> Concern -> Abstract Language Primitive (ALP) -> Rule
  */
@@ -12,6 +12,11 @@ import {
   FIGMMasterSpecification
 } from '../types/taxonomy.js';
 import { QUERY_TEMPLATES, FRAMEWORK_TRANSLATIONS } from '../ast/universal-ast-mapper.js';
+import { deriveRuleCategory } from './rule-category.js';
+
+/** All five FrameworkType values this engine can classify a file as (see src/types/ast-spec.ts).
+ *  The 12 universal PERF/A11Y rules below are evaluated against all five unconditionally. */
+const ALL_FRAMEWORKS = ['REACT_JSX', 'NEXT_JS', 'VUE_SFC', 'ANGULAR_TEMPLATE', 'GENERIC_ESTREE'] as const;
 
 /**
  * Core Abstract Language Primitives (ALPs) Definition for all 25 Rules
@@ -223,7 +228,7 @@ export const FORMAL_PREDICATES_MAP: Record<string, string> = {
 };
 
 /**
- * 4-Layer Meta-Model Mappings for ALL 23 FIGM Rules
+ * 4-Layer Meta-Model Mappings for ALL 25 FIGM Rules
  */
 export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
   {
@@ -237,7 +242,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Objects, arrays, functions, or regex literals must not be instantiated inside loops or render iteration routines.',
       nonCompliantExample: `function renderList(items) {\n  return items.map(item => {\n    const config = { theme: 'dark', padding: 10 };\n    return transform(item, config);\n  });\n}`,
       compliantExample: `const DEFAULT_CONFIG = Object.freeze({ theme: 'dark', padding: 10 });\nfunction renderList(items) {\n  return items.map(item => transform(item, DEFAULT_CONFIG));\n}`,
-      remediation: 'Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.'
+      remediation: 'Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Flags any object/array/function literal in loop or render scope regardless of true invariance -- no data-flow analysis confirms the value is actually invariant.'
     }
   },
   {
@@ -251,7 +260,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Dynamic media and layout container elements must include explicit dimensions or aspect-ratio attributes.',
       nonCompliantExample: `<img src={userAvatarUrl} alt="User Avatar" className="avatar" />`,
       compliantExample: `<img src={userAvatarUrl} alt="User Avatar" width={48} height={48} style={{ aspectRatio: '1/1' }} className="avatar" />`,
-      remediation: 'Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.'
+      remediation: 'Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Dimensions supplied only via an external CSS class (not inline width/height/aspect-ratio) are invisible to this rule.'
     }
   },
   {
@@ -265,7 +278,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Target event listeners registered within component lifecycle scopes must have corresponding disposal handlers.',
       nonCompliantExample: `function setupResize() {\n  window.addEventListener('resize', handleResize);\n}`,
       compliantExample: `function setupResize() {\n  window.addEventListener('resize', handleResize);\n  return () => window.removeEventListener('resize', handleResize);\n}`,
-      remediation: 'Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.'
+      remediation: 'Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_WITH_CAVEAT',
+      knownLimitation: 'Pairs addEventListener/removeEventListener by event-type name across the whole file, not by lexical scope -- assumes a conventional one-listener-per-event-type idiom.'
     }
   },
   {
@@ -279,7 +296,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Modules used only in conditional or deferred execution branches must be dynamically imported.',
       nonCompliantExample: `import HeavyChart from 'heavy-chart-library';`,
       compliantExample: `async function showReport(shouldDisplay) {\n  if (shouldDisplay) {\n    const { default: HeavyChart } = await import('heavy-chart-library');\n  }\n}`,
-      remediation: 'Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.'
+      remediation: 'Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'No cross-module re-export analysis; only direct identifier references in the same file are checked.'
     }
   },
   {
@@ -293,7 +314,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Inline arrow functions created inside render map loops cause unnecessary re-instantiation.',
       nonCompliantExample: `items.map(item => <Card onClick={() => handleClick(item.id)} />)`,
       compliantExample: `items.map(item => <Card onClick={handleCardClick} id={item.id} />)`,
-      remediation: 'Extract callback function or pass item ID to memoized event handler.'
+      remediation: 'Extract callback function or pass item ID to memoized event handler.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'MANUAL_REVIEW_REQUIRED',
+      knownLimitation: 'Matches any inline JSX handler prop, not only onClick; the correct fix (which item identifier to bind instead) is app-specific, so the suggested fix always requires manual review.'
     }
   },
   {
@@ -307,7 +332,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Repeated synchronous Web Storage API calls inside loops block main thread execution.',
       nonCompliantExample: `for(let i=0; i<items.length; i++) { localStorage.getItem('token'); }`,
       compliantExample: `const token = localStorage.getItem('token');\nfor(let i=0; i<items.length; i++) { process(token); }`,
-      remediation: 'Read Web Storage values once outside loop or cache values in memory.'
+      remediation: 'Read Web Storage values once outside loop or cache values in memory.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Name-based detection of localStorage/sessionStorage, not a real variable-binding check -- a shadowed identifier with the same name still triggers it.'
     }
   },
   {
@@ -321,7 +350,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Non-interactive elements with pointer click listeners must provide keyboard listeners and focusability.',
       nonCompliantExample: `<div onClick={togglePanel}>Toggle Panel</div>`,
       compliantExample: `<button type="button" onClick={togglePanel}>Toggle Panel</button>`,
-      remediation: 'Use a native interactive element (<button>) or add tabindex="0" with an onKeyDown handler.'
+      remediation: 'Use a native interactive element (<button>) or add tabindex="0" with an onKeyDown handler.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Limited to a fixed non-interactive tag allow-list (div, span, section, article, p).'
     }
   },
   {
@@ -335,7 +368,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Custom UI controls must explicitly define an ARIA role and an accessible name.',
       nonCompliantExample: `<div tabindex="0" onClick={handleSelect}>Custom Select</div>`,
       compliantExample: `<div role="combobox" aria-label="Choose Option" tabindex="0" onClick={handleSelect}>Custom Select</div>`,
-      remediation: 'Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.'
+      remediation: 'Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Limited to a fixed custom-control tag allow-list (Custom*/Select*/Dropdown*); the suggested fix inserts placeholder role/label text that still needs a real accessible name filled in.'
     }
   },
   {
@@ -349,7 +386,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Containers populated with dynamic status messages must possess ARIA live attributes.',
       nonCompliantExample: `<div className="status-banner">{statusText}</div>`,
       compliantExample: `<div className="status-banner" role="status" aria-live="polite">{statusText}</div>`,
-      remediation: 'Add role="status" or aria-live="polite" to dynamic output containers.'
+      remediation: 'Add role="status" or aria-live="polite" to dynamic output containers.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Detects dynamic status containers by a className/id prefix match ("status"), not a semantic dynamic-content analysis.'
     }
   },
   {
@@ -363,7 +404,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Modal overlays must trap keyboard focus and restore focus to trigger element upon exit.',
       nonCompliantExample: `function closeModal() { setIsModalOpen(false); }`,
       compliantExample: `function closeModal() { setIsModalOpen(false); triggerRef.current?.focus(); }`,
-      remediation: 'Implement focus containment traps inside active modal overlays and restore focus programmatically.'
+      remediation: 'Implement focus containment traps inside active modal overlays and restore focus programmatically.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Uses the presence of an onClose prop as a proxy signal for focus-restoration handling, not a verified focus-trap implementation.'
     }
   },
   {
@@ -377,7 +422,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Form input elements must be explicitly associated with a label element or aria-label.',
       nonCompliantExample: `<input type="text" placeholder="Enter name" />`,
       compliantExample: `<label htmlFor="name">Name</label><input id="name" type="text" />`,
-      remediation: 'Add an associated <label> with htmlFor attribute or set aria-label.'
+      remediation: 'Add an associated <label> with htmlFor attribute or set aria-label.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Checks for htmlFor/for presence anywhere in the file, not that it actually matches this input’s id.'
     }
   },
   {
@@ -391,7 +440,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Positive tabindex values (>0) disrupt natural document focus navigation order.',
       nonCompliantExample: `<button tabindex="5">Submit</button>`,
       compliantExample: `<button tabindex="0">Submit</button>`,
-      remediation: 'Set tabindex to 0 for custom interactive controls or -1 to remove from tab sequence.'
+      remediation: 'Set tabindex to 0 for custom interactive controls or -1 to remove from tab sequence.',
+      frameworks: [...ALL_FRAMEWORKS],
+      isFrameworkIndependent: true,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Only catches literal tabIndex values; a value computed at runtime is not evaluated.'
     }
   },
   {
@@ -405,7 +458,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'React state or lifecycle hooks inside Next.js App Router files require "use client" directive.',
       nonCompliantExample: `import { useState } from 'react';\nexport default function Page() { useState(); }`,
       compliantExample: `'use client';\nimport { useState } from 'react';\nexport default function Page() { useState(); }`,
-      remediation: 'Add "use client" directive at the top of component files using React hooks.'
+      remediation: 'Add "use client" directive at the top of component files using React hooks.',
+      frameworks: ['NEXT_JS', 'REACT_JSX'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'A custom hook that itself wraps a real React hook is invisible to this rule -- only direct useState/useEffect/useContext/useRef calls are matched.'
     }
   },
   {
@@ -419,7 +476,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Heavy client libraries should be imported dynamically using next/dynamic with ssr: false.',
       nonCompliantExample: `import MonacoEditor from 'monaco-editor';`,
       compliantExample: `import dynamic from 'next/dynamic';\nconst MonacoEditor = dynamic(() => import('monaco-editor'), { ssr: false });`,
-      remediation: 'Use next/dynamic lazy import with ssr: false for heavy client-only packages.'
+      remediation: 'Use next/dynamic lazy import with ssr: false for heavy client-only packages.',
+      frameworks: ['NEXT_JS'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'MANUAL_REVIEW_REQUIRED',
+      knownLimitation: 'Matches a fixed allow-list of known heavy packages, not a general "is this module heavy" detector; the correct ssr:false decision is project-specific.'
     }
   },
   {
@@ -433,7 +494,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'App Router pages serving dynamic data must define route segment cache revalidation behavior.',
       nonCompliantExample: `export default async function Page() { return <div>Data</div>; }`,
       compliantExample: `export const revalidate = 3600;\nexport default async function Page() { return <div>Data</div>; }`,
-      remediation: 'Define export const revalidate = <seconds> inside App Router page files.'
+      remediation: 'Define export const revalidate = <seconds> inside App Router page files.',
+      frameworks: ['NEXT_JS'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Checks only for the presence of export const revalidate, not whether its value is actually appropriate for the route’s data.'
     }
   },
   {
@@ -447,7 +512,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Web fonts loaded via external CSS link tags cause layout shifts; use next/font instead.',
       nonCompliantExample: `<link href="https://fonts.googleapis.com/css?family=Inter" rel="stylesheet" />`,
       compliantExample: `import { Inter } from 'next/font/google';\nconst inter = Inter({ subsets: ['latin'] });`,
-      remediation: 'Replace external font link tags with next/font/google or next/font/local imports.'
+      remediation: 'Replace external font link tags with next/font/google or next/font/local imports.',
+      frameworks: ['NEXT_JS', 'REACT_JSX'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'MANUAL_REVIEW_REQUIRED',
+      knownLimitation: 'Matches a narrow Google Fonts href pattern; other external font providers are not recognized, and the correct next/font replacement needs the actual font family filled in manually.'
     }
   },
   {
@@ -461,7 +530,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Expensive array sorting or filtering operations inside render routines should be wrapped in useMemo.',
       nonCompliantExample: `const sortedData = items.sort((a,b) => a.val - b.val);`,
       compliantExample: `const sortedData = useMemo(() => items.sort((a,b) => a.val - b.val), [items]);`,
-      remediation: 'Wrap heavy derived data computations inside React.useMemo.'
+      remediation: 'Wrap heavy derived data computations inside React.useMemo.',
+      frameworks: ['REACT_JSX', 'NEXT_JS', 'GENERIC_ESTREE'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'MANUAL_REVIEW_REQUIRED',
+      knownLimitation: 'No scope restriction -- any .sort/.filter/.reduce call anywhere in the file is flagged, not only ones inside the render path; the useMemo dependency array must be chosen manually.'
     }
   },
   {
@@ -475,7 +548,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Array indices assigned as list key props cause invalid component re-ordering and state bugs.',
       nonCompliantExample: `items.map((item, index) => <Item key={index} />)`,
       compliantExample: `items.map(item => <Item key={item.id} />)`,
-      remediation: 'Assign a unique stable identifier (item.id) to list key props instead of array index.'
+      remediation: 'Assign a unique stable identifier (item.id) to list key props instead of array index.',
+      frameworks: ['REACT_JSX', 'NEXT_JS', 'GENERIC_ESTREE'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'An index value derived through an intermediate variable (rather than used directly as the key) is not recognized.'
     }
   },
   {
@@ -489,7 +566,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Directly mutating React state variables skips component re-renders and breaks component updates.',
       nonCompliantExample: `user.name = 'New Name'; setUser(user);`,
       compliantExample: `setUser(prev => ({ ...prev, name: 'New Name' }));`,
-      remediation: 'Use immutable state updates or return new object references inside state setters.'
+      remediation: 'Use immutable state updates or return new object references inside state setters.',
+      frameworks: ['REACT_JSX', 'NEXT_JS', 'GENERIC_ESTREE'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'No true React-state-binding analysis -- any local variable whose mutation shape matches is flagged, whether or not it is actually component state.'
     }
   },
   {
@@ -503,7 +584,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Passing inline arrow functions to memoized child components invalidates child re-rendering.',
       nonCompliantExample: `<ChildComponent onClick={() => handleAction()} />`,
       compliantExample: `const handleClick = useCallback(() => handleAction(), []);\n<ChildComponent onClick={handleClick} />`,
-      remediation: 'Wrap event handler functions passed as props to child components in React.useCallback.'
+      remediation: 'Wrap event handler functions passed as props to child components in React.useCallback.',
+      frameworks: ['REACT_JSX', 'NEXT_JS', 'GENERIC_ESTREE'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'MANUAL_REVIEW_REQUIRED',
+      knownLimitation: 'Limited to a narrow tag allow-list (Custom*/Button*/Card*) and only the onClick prop; the correct useCallback dependency array must be chosen manually.'
     }
   },
   {
@@ -517,7 +602,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'RxJS subscriptions created inside Angular services/components must be cleaned up on destroy.',
       nonCompliantExample: `ngOnInit() { this.dataService.getStream().subscribe(); }`,
       compliantExample: `ngOnInit() { this.dataService.getStream().pipe(takeUntilDestroyed()).subscribe(); }`,
-      remediation: 'Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.'
+      remediation: 'Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.',
+      frameworks: ['ANGULAR_TEMPLATE', 'GENERIC_ESTREE'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Searches file-wide for a teardown keyword (takeUntilDestroyed/unsubscribe), not verified against the specific subscription.'
     }
   },
   {
@@ -531,7 +620,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Angular components should specify ChangeDetectionStrategy.OnPush to minimize change detection cycles.',
       nonCompliantExample: `@Component({ selector: 'app-card', template: '...' })`,
       compliantExample: `@Component({ selector: 'app-card', changeDetection: ChangeDetectionStrategy.OnPush })`,
-      remediation: 'Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.'
+      remediation: 'Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.',
+      frameworks: ['ANGULAR_TEMPLATE', 'GENERIC_ESTREE'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Textual check for the ChangeDetectionStrategy.OnPush value, not a full constant evaluator.'
     }
   },
   {
@@ -545,7 +638,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: '*ngFor structural directives missing trackBy cause full DOM node destruction and re-creation on update.',
       nonCompliantExample: `<div *ngFor="let item of items">{{ item.name }}</div>`,
       compliantExample: `<div *ngFor="let item of items; trackBy: trackById">{{ item.name }}</div>`,
-      remediation: 'Add trackBy function reference to all *ngFor iteration directives.'
+      remediation: 'Add trackBy function reference to all *ngFor iteration directives.',
+      frameworks: ['ANGULAR_TEMPLATE', 'GENERIC_ESTREE'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
+      knownLimitation: 'Detected via legacy text-heuristic regex matching against Angular template markup on every framework (including Angular itself) -- a dedicated Angular template parser (@angular/compiler) has not yet been integrated, so this rule is not yet real-AST for any framework.'
     }
   },
   {
@@ -559,7 +656,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Calling component methods inside Angular HTML templates executes the method on every change detection cycle.',
       nonCompliantExample: `<span>{{ calculateTotal() }}</span>`,
       compliantExample: `<span>{{ total }}</span>`,
-      remediation: 'Pre-calculate template values or use pure Angular Pipes instead of method calls.'
+      remediation: 'Pre-calculate template values or use pure Angular Pipes instead of method calls.',
+      frameworks: ['ANGULAR_TEMPLATE', 'GENERIC_ESTREE'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'MANUAL_REVIEW_REQUIRED',
+      knownLimitation: 'Detected via legacy text-heuristic regex matching against Angular template markup on every framework (including Angular itself); the correct fix (precompute vs. pure Pipe) is app-specific and always needs manual review.'
     }
   },
   {
@@ -573,7 +674,11 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       description: 'Direct ElementRef nativeElement DOM manipulation bypasses Angular security and server-side rendering.',
       nonCompliantExample: `this.el.nativeElement.style.color = 'red';`,
       compliantExample: `this.renderer.setStyle(this.el.nativeElement, 'color', 'red');`,
-      remediation: 'Use Renderer2 service methods for all DOM manipulations instead of nativeElement.'
+      remediation: 'Use Renderer2 service methods for all DOM manipulations instead of nativeElement.',
+      frameworks: ['ANGULAR_TEMPLATE', 'GENERIC_ESTREE'],
+      isFrameworkIndependent: false,
+      remediationStatus: 'AUTOMATED_FIX_WITH_CAVEAT',
+      knownLimitation: 'Automated fix is verified safe only for the single-style-property-assignment shape (nativeElement.style.x = y); every other mutation shape (innerHTML, setAttribute, classList) requires manual review. Also a same-line-only proximity check for an existing Renderer2 guard (a guard a few lines away is not recognized).'
     }
   }
 ];
@@ -617,6 +722,7 @@ export function generateMasterSpecification(): FIGMMasterSpecification & {
         id: m.rule.ruleId,
         domain: m.domain,
         concern: m.concern,
+        category: deriveRuleCategory(m.rule.ruleId),
         alpId: m.abstractLanguagePrimitive.id,
         name: m.rule.ruleName,
         severity: m.rule.severity,
@@ -644,7 +750,11 @@ export function generateMasterSpecification(): FIGMMasterSpecification & {
           nonCompliant: m.rule.nonCompliantExample,
           compliant: m.rule.compliantExample
         },
-        remediation: m.rule.remediation
+        remediation: m.rule.remediation,
+        frameworks: m.rule.frameworks,
+        isFrameworkIndependent: m.rule.isFrameworkIndependent,
+        remediationStatus: m.rule.remediationStatus,
+        knownLimitation: m.rule.knownLimitation
       };
     })
   };
