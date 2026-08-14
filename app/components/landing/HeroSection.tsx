@@ -2,9 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useResearchMetrics } from '../../../src/hooks/useResearchMetrics';
 
 export default function HeroSection() {
   const [activeTab, setActiveTab] = useState<'nonCompliant' | 'compliant'>('nonCompliant');
+  const { data } = useResearchMetrics();
+  const f1 = data?.benchmarkMetrics?.f1Score;
+  const benchmarkStatsLabel = typeof f1 === 'number' ? `Benchmark Stats (F1 = ${(f1 * 100).toFixed(1)}%)` : 'Benchmark Stats';
 
   const nonCompliantCode = `// ❌ FIGM-REACT-03 & FIGM-PERF-05 Violation
 function UserList({ users }) {
@@ -26,7 +30,7 @@ function UserList({ users }) {
   );
 }`;
 
-  const compliantCode = `// ✅ FIGM Compliant Implementation (F1 = 90.0%)
+  const compliantCode = `// ✅ FIGM Compliant Implementation
 function UserList({ users }) {
   const [userState, setUserState] = useState(users);
   
@@ -194,7 +198,7 @@ function UserList({ users }) {
             }}
           >
             <span>📊</span>
-            <span>Benchmark Stats (F1 = 90.0%)</span>
+            <span>{benchmarkStatsLabel}</span>
           </Link>
         </div>
 

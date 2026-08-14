@@ -1,5 +1,39 @@
 {
-  "timestamp": "2026-08-13T13:12:13.254Z",
+  "timestamp": "2026-08-14T07:36:54.883Z",
+  "calculationMethod": "TP/FP/FN computed by dynamically re-running RuleExecutionEngine.analyzeFile against every file in benchmarks/testbed and diffing the resulting diagnostics against benchmarks/ground-truth.json (exact filePath+ruleId match). Precision = TP/(TP+FP), Recall = TP/(TP+FN), F1 = 2*P*R/(P+R). No cached or hand-typed confusion matrix is used at any step.",
+  "ruleCoverage": {
+    "totalFigmRules": 25,
+    "rulesWithGroundTruth": 8,
+    "coveredRuleIds": [
+      "FIGM-A11Y-01",
+      "FIGM-A11Y-02",
+      "FIGM-A11Y-03",
+      "FIGM-A11Y-04",
+      "FIGM-PERF-01",
+      "FIGM-PERF-02",
+      "FIGM-PERF-03",
+      "FIGM-PERF-04"
+    ],
+    "uncoveredRuleIds": [
+      "FIGM-A11Y-05",
+      "FIGM-A11Y-06",
+      "FIGM-ANG-01",
+      "FIGM-ANG-02",
+      "FIGM-ANG-03",
+      "FIGM-ANG-04",
+      "FIGM-ANG-05",
+      "FIGM-NEXT-01",
+      "FIGM-NEXT-02",
+      "FIGM-NEXT-03",
+      "FIGM-NEXT-04",
+      "FIGM-PERF-05",
+      "FIGM-PERF-06",
+      "FIGM-REACT-01",
+      "FIGM-REACT-02",
+      "FIGM-REACT-03",
+      "FIGM-REACT-04"
+    ]
+  },
   "overall": {
     "truePositives": 19,
     "falsePositives": 2,
@@ -9,46 +43,6 @@
     "f1Score": 0.9500000000000001
   },
   "ruleMetrics": [
-    {
-      "ruleId": "FIGM-PERF-01",
-      "domain": "PERFORMANCE",
-      "truePositives": 2,
-      "falsePositives": 0,
-      "falseNegatives": 0,
-      "precision": 1,
-      "recall": 1,
-      "f1Score": 1
-    },
-    {
-      "ruleId": "FIGM-PERF-02",
-      "domain": "PERFORMANCE",
-      "truePositives": 3,
-      "falsePositives": 0,
-      "falseNegatives": 0,
-      "precision": 1,
-      "recall": 1,
-      "f1Score": 1
-    },
-    {
-      "ruleId": "FIGM-PERF-03",
-      "domain": "PERFORMANCE",
-      "truePositives": 4,
-      "falsePositives": 0,
-      "falseNegatives": 0,
-      "precision": 1,
-      "recall": 1,
-      "f1Score": 1
-    },
-    {
-      "ruleId": "FIGM-PERF-04",
-      "domain": "PERFORMANCE",
-      "truePositives": 2,
-      "falsePositives": 0,
-      "falseNegatives": 0,
-      "precision": 1,
-      "recall": 1,
-      "f1Score": 1
-    },
     {
       "ruleId": "FIGM-A11Y-01",
       "domain": "ACCESSIBILITY",
@@ -83,6 +77,46 @@
       "ruleId": "FIGM-A11Y-04",
       "domain": "ACCESSIBILITY",
       "truePositives": 1,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "domain": "PERFORMANCE",
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "domain": "PERFORMANCE",
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "domain": "PERFORMANCE",
+      "truePositives": 4,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "domain": "PERFORMANCE",
+      "truePositives": 2,
       "falsePositives": 0,
       "falseNegatives": 0,
       "precision": 1,
@@ -133,11 +167,11 @@
     }
   ],
   "performanceMetrics": {
-    "totalScanDurationMs": 296.51200000000017,
+    "totalScanDurationMs": 213.28970000000027,
     "totalLinesOfCode": 147,
-    "totalASTNodes": 276,
-    "scanSpeedLOCPerSec": 495.76408374703186,
-    "astNodesPerSec": 930.8223613209578,
-    "peakMemoryMB": 9.678108215332031
+    "totalASTNodes": 300,
+    "scanSpeedLOCPerSec": 689.203463645923,
+    "astNodesPerSec": 1406.537680910047,
+    "peakMemoryMB": 18.550048828125
   }
 }

@@ -41,8 +41,12 @@ export default function FIGMModelSection() {
         <h2 style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', margin: '0 0 16px 0', letterSpacing: '-0.5px' }}>
           Abstract Language Primitives (ALPs)
         </h2>
-        <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '720px', margin: '0 auto 40px auto', lineHeight: 1.6 }}>
+        <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '720px', margin: '0 auto 12px auto', lineHeight: 1.6 }}>
           Mapping framework-specific syntax to formal mathematical predicates (<strong style={{ color: '#38bdf8' }}>Domain → Concern → ALP → Rule</strong>).
+        </p>
+        <p style={{ color: '#64748b', fontSize: '12px', maxWidth: '720px', margin: '0 auto 40px auto', lineHeight: 1.5 }}>
+          &quot;Detection Weight&quot; below is a static per-rule confidence value configured in the detection engine's evidence
+          scoring, not a measured empirical accuracy figure — see <a href="/analytics" style={{ color: '#38bdf8' }}>/analytics</a> for live benchmark Precision/Recall/F1.
         </p>
 
         {/* Framework Tabs */}
@@ -105,8 +109,8 @@ export default function FIGMModelSection() {
                 </div>
               </div>
 
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>Confidence</div>
+              <div style={{ textAlign: 'right' }} title="A static per-diagnostic weight configured in the detection engine, not a measured empirical accuracy score. See /analytics for live benchmark Precision/Recall/F1.">
+                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>Detection Weight</div>
                 <div style={{ fontSize: '16px', fontWeight: 900, color: '#10b981' }}>{rule.confidence}</div>
               </div>
             </div>

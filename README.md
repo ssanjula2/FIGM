@@ -1,11 +1,11 @@
 # FIGM Code Inspector — Multi-Tenant SaaS Platform & Research Prototype
 
-[![Tests Passing](https://img.shields.io/badge/tests-271%2F271%20passed-success.svg)](https://github.com/ssanjula2/FIGM)
+[![Tests Passing](https://img.shields.io/badge/tests-543%2F543%20passed-success.svg)](https://github.com/ssanjula2/FIGM)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ssanjula2/FIGM)
 
 > The "Code Quality 96/100", "Security 94/100", "Build: passing", and "Dissertation: 100% compliant" badges previously shown here traced to no computation anywhere in this codebase and have been removed rather than replaced with different unverified numbers. The test-count badge above is the actual count from the last `npm test` run (see Validation below); the workflow at `.github/workflows/figm-scan.yml` runs static analysis on push/PR but has not yet run on a public remote, so no CI status badge is shown until it has real run history to report.
 
-**FIGM Code Inspector** is a multi-tenant SaaS-architected code inspection platform and undergraduate research prototype (NSBM Green University, IS303.2 Research Methodology coursework) built upon the **Framework-Independent Guideline Model (FIGM)**. It analyzes component source code (React JSX/TSX, Next.js App Router, Angular Components, Vue SFCs) against 25 Performance and Accessibility guideline rules, and generates AI-assisted remediation patches via the Gemini API. 15 of the 25 rules are detected via genuine TypeScript-compiler AST traversal for the frameworks where that syntax is real (React, Next.js, plain JS/TS, and Angular's TypeScript class body); the remainder, plus every rule on Vue SFCs and Angular's template markup (which the TypeScript compiler cannot parse), use a text/regex heuristic detector. Every finding is labeled with which detection mechanism produced it — see `docs/architecture/AST_MIGRATION_MAP.md` for the full rule-by-rule breakdown and the reasoning behind what is and isn't AST-based today.
+**FIGM Code Inspector** is a multi-tenant SaaS-architected code inspection platform and undergraduate research prototype (NSBM Green University, IS303.2 Research Methodology coursework) built upon the **Framework-Independent Guideline Model (FIGM)**. It analyzes component source code (React JSX/TSX, Next.js App Router, Angular Components, Vue SFCs) against 25 Performance and Accessibility guideline rules, and generates AI-assisted remediation patches via the Gemini API. 23 of the 25 rules are detected via genuine TypeScript-compiler AST traversal for the frameworks where that syntax is real (React, Next.js, plain JS/TS, and Angular's TypeScript class body); the remaining 2 rules (Angular template markup: `*ngFor` trackBy and template method-call detection), plus every rule on Vue SFCs (which the TypeScript compiler cannot parse), use a text/regex heuristic detector. Every finding is labeled with which detection mechanism produced it — see `docs/architecture/AST_MIGRATION_MAP.md` for the full rule-by-rule breakdown and the reasoning behind what is and isn't AST-based today.
 
 ---
 
@@ -44,7 +44,7 @@ cp .env.example .env
 ```bash
 npm test
 ```
-*Executes all 103 automated tests across 12 test suites with 100% pass rate.*
+*Executes all 543 automated tests across 66 test suites with 100% pass rate (last verified `npm test` run).*
 
 ### 4. Launch Development Server
 ```bash

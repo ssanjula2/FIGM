@@ -157,7 +157,7 @@ export default function BenchmarkSection() {
             textAlign: 'left',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
             <h3 style={{ color: '#f8fafc', fontSize: '18px', fontWeight: 800, margin: 0 }}>
               Comparative Rule Coverage Matrix (FIGM vs Industrial Tools)
             </h3>
@@ -165,6 +165,12 @@ export default function BenchmarkSection() {
               FIGM Coverage: 25/25 Rules
             </span>
           </div>
+          <p style={{ color: '#f59e0b', fontSize: '12px', margin: '0 0 16px 0', lineHeight: 1.5 }}>
+            ⚠ Qualitative estimate, not an empirical benchmark: no competitor tool listed below was run against this
+            codebase. Percentages reflect a manual judgment of which rule domains each tool&apos;s documented
+            capabilities could plausibly cover, not a measured detection rate. Only the stats above (F1-Score,
+            Precision, Recall, LOC/Second) are live benchmark measurements.
+          </p>
 
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>

@@ -69,8 +69,14 @@ describe('Source-Level Anti-Hardcoding Guard Suite', () => {
     const engineDir = path.join(rootDir, 'src/engine');
     const targetFiles = [...getAllTsFiles(evalDir), ...getAllTsFiles(engineDir)];
 
-    // Ignore documentation exporters (like thesis-gap-exporter) which reference benchmark ground truth for thesis formatting
-    const prodFiles = targetFiles.filter(f => !f.includes('thesis-gap-exporter.ts') && !f.includes('benchmark-data-loader.ts'));
+    // thesis-gap-exporter.ts no longer needs an exemption: it now sources its dissertation
+    // chapter content from a live EvaluationRunner.runEvaluation() call, not a hardcoded matrix
+    // (see docs/architecture/RESEARCH_METRICS_PIPELINE.md), so it is scanned like every other
+    // production file below. benchmark-data-loader.ts is still exempted because it legitimately
+    // READS the ground-truth JSON's own numeric fields at runtime (a real file read, not a
+    // hardcoded literal) and its variable names alone can otherwise superficially resemble the
+    // banned patterns.
+    const prodFiles = targetFiles.filter(f => !f.includes('benchmark-data-loader.ts'));
 
     const suspiciousPatterns = [
       { name: 'Hardcoded Precision Return', regex: /precision\s*:\s*85\.71/i },
@@ -81,7 +87,11 @@ describe('Source-Level Anti-Hardcoding Guard Suite', () => {
       { name: 'Hardcoded Fallback Branch', regex: /if\s*\(\s*!matrix\s*\)\s*\{\s*return\s*\{\s*precision\s*:\s*85/i },
       { name: 'Hardcoded Metric Array', regex: /\[\s*85\.71\s*,\s*94\.74\s*,\s*90\.0\s*\]/i },
       { name: 'Hardcoded JSON String Metric', regex: /JSON\.parse\s*\(\s*['"`].*precision.*85\.71/i },
-      { name: 'Hardcoded Confusion Matrix Constant', regex: /\{\s*tp\s*:\s*18\s*,\s*fp\s*:\s*3\s*,\s*fn\s*:\s*1\s*,\s*tn\s*:\s*25\s*\}/i },
+      // Trailing-comma-tolerant (a prior version of this regex required the closing "}" to
+      // immediately follow "tn: 25" with no comma in between -- the real EMPIRICAL_EXPERT_GROUND_TRUTH
+      // constant this guards against was formatted with a trailing comma before "}" and so slipped
+      // past the original regex undetected; fixed here as part of retiring that constant for real).
+      { name: 'Hardcoded Confusion Matrix Constant', regex: /\{\s*tp\s*:\s*18\s*,\s*fp\s*:\s*3\s*,\s*fn\s*:\s*1\s*,\s*tn\s*:\s*25\s*,?\s*\}/i },
       { name: 'Nullish Fallback to Research Value', regex: /(\?\?|\|\|)\s*(85\.71|94\.74|90\.00|90\.0)/i }
     ];
 

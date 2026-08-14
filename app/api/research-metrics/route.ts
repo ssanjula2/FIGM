@@ -229,12 +229,18 @@ export async function GET() {
       benchmarkMetrics: benchmarkData
         ? {
             timestamp: (benchmarkData as Record<string, string>).timestamp,
+            calculationMethod: (benchmarkData as Record<string, string>).calculationMethod ?? null,
             precision: overall?.precision ?? null,
             recall: overall?.recall ?? null,
             f1Score: overall?.f1Score ?? null,
             truePositives: overall?.truePositives ?? null,
             falsePositives: overall?.falsePositives ?? null,
             falseNegatives: overall?.falseNegatives ?? null,
+            // Explicit rule-coverage scope: never let a UI consumer imply "all 25 rules" from
+            // these Precision/Recall/F1 figures. See src/eval/evaluation-runner.ts's
+            // RuleCoverageProvenance -- derived from benchmarks/ground-truth.json's actual
+            // contents, not a hardcoded literal.
+            ruleCoverage: (benchmarkData as Record<string, unknown>).ruleCoverage ?? null,
             ruleMetrics: (benchmarkData as Record<string, unknown[]>).ruleMetrics ?? [],
             frameworkMetrics: (benchmarkData as Record<string, unknown[]>).frameworkMetrics ?? [],
             performanceMetrics: (benchmarkData as Record<string, unknown>).performanceMetrics ?? {},

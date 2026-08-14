@@ -12,6 +12,7 @@ interface ResearchMetricsResponse {
     truePositives: number | null;
     falsePositives: number | null;
     falseNegatives: number | null;
+    ruleCoverage: { totalFigmRules: number; rulesWithGroundTruth: number; coveredRuleIds: string[]; uncoveredRuleIds: string[] } | null;
     ruleMetrics: any[];
     frameworkMetrics: any[];
     performanceMetrics: Record<string, unknown>;
@@ -173,9 +174,19 @@ export default function AnalyticsPage() {
               Per-Rule Detection Metrics
             </h2>
             <span style={{ fontSize: '11px', fontWeight: 700, color: '#38bdf8', background: 'rgba(56, 189, 248, 0.15)', padding: '2px 8px', borderRadius: '6px' }}>
-              {data ? `${data.systemCapabilities.totalGuidelineRules} Rules` : '—'}
+              {bm?.ruleCoverage
+                ? `${bm.ruleCoverage.rulesWithGroundTruth} / ${bm.ruleCoverage.totalFigmRules} Rules Empirically Measured`
+                : data
+                  ? `${data.systemCapabilities.totalGuidelineRules} Rules Defined`
+                  : '—'}
             </span>
           </div>
+
+          {bm?.ruleCoverage && bm.ruleCoverage.uncoveredRuleIds.length > 0 && (
+            <div style={{ padding: '10px 14px', background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)', borderRadius: '8px', fontSize: '12px', color: '#fbbf24', lineHeight: 1.5 }}>
+              ⚠ This table only covers the {bm.ruleCoverage.rulesWithGroundTruth} rules with hand-labelled ground truth in <code>benchmarks/ground-truth.json</code>. The other {bm.ruleCoverage.uncoveredRuleIds.length} rules ({bm.ruleCoverage.uncoveredRuleIds.join(', ')}) are verified only by unit-level positive/negative fixture tests, not by this empirical benchmark.
+            </div>
+          )}
 
           <div style={{ overflowX: 'auto' }}>
             {ruleMetrics.length === 0 ? (
