@@ -458,6 +458,220 @@ function buildReact03(ctx: BuilderContext, node: ts.Node): void {
 }
 
 // ---------------------------------------------------------------------------------------------
+// Group 4 (this pass): FIGM-PERF-03, FIGM-PERF-05, FIGM-PERF-06, FIGM-A11Y-05, FIGM-A11Y-06,
+// FIGM-REACT-01, FIGM-REACT-04. All seven were classified "Yes, feasible" (no new dependency
+// needed) in docs/architecture/AST_MIGRATION_MAP.md §2 but explicitly deferred to "Groups 4+" in
+// §5/§6. See docs/architecture/RULE_ENGINEERING_AUDIT.md for the full rule-by-rule rationale,
+// including every deliberate, documented semantic refinement made below (never a silent one).
+// ---------------------------------------------------------------------------------------------
+
+function stringLiteralArg0(call: ts.CallExpression): string | undefined {
+  const arg0 = call.arguments[0];
+  return arg0 && ts.isStringLiteral(arg0) ? arg0.text : undefined;
+}
+
+/** File-wide search for a `removeEventListener` call matching `eventName` (or, when the
+ *  triggering `addEventListener`'s own event-type argument isn't a string literal, ANY
+ *  `removeEventListener` call at all) -- byte-identical semantics to the legacy detector's
+ *  regex-based pairing (deliberately NOT upgraded to true lexical/data-flow scope pairing, which
+ *  would be a real, undocumented behavior change -- see AST_MIGRATION_MAP.md §8 precedent). */
+function hasPairedRemovalForEventType(ctx: BuilderContext, eventName: string | undefined): boolean {
+  let found = false;
+  const visit = (node: ts.Node) => {
+    if (found) return;
+    if (
+      ts.isCallExpression(node) &&
+      isPropertyAccessChain(node.expression) &&
+      node.expression.name.text === 'removeEventListener'
+    ) {
+      const removedEvent = stringLiteralArg0(node);
+      if (eventName === undefined || removedEvent === eventName) {
+        found = true;
+        return;
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(ctx.sourceFile);
+  return found;
+}
+
+function buildPerf03(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isCallExpression(node)) return;
+  if (!isPropertyAccessChain(node.expression) || node.expression.name.text !== 'addEventListener') return;
+  const eventName = stringLiteralArg0(node);
+  const hasCleanup = hasPairedRemovalForEventType(ctx, eventName);
+  pushNode(ctx, node, {
+    type: 'CallExpression',
+    name: 'addEventListener',
+    scopeType: classifyScope(node),
+    attributes: { method: 'addEventListener', hasPairedRemoval: hasCleanup, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+/** Matches a React event-handler-shaped JSX attribute name (`onClick`, `onChange`, `onKeyDown`,
+ *  ...). DOCUMENTED SCOPE REFINEMENT: the legacy detector only ever matched the literal substring
+ *  `onClick={` -- an inline arrow passed to `onMouseDown`/`onChange`/any other handler prop inside
+ *  a loop was invisible to this rule even though it is the exact same anti-pattern the rule (and
+ *  its formal predicate `IsInlineCallback(n) AND Scope(n) in {LOOP, RENDER}`, which is not
+ *  onClick-specific) describes. See RULE_ENGINEERING_AUDIT.md §FIGM-PERF-05. */
+function isJsxHandlerAttributeName(name: string): boolean {
+  return /^on[A-Z]/.test(name);
+}
+
+function buildPerf05(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isArrowFunction(node)) return;
+  const parent = node.parent;
+  if (!parent || !ts.isJsxExpression(parent)) return;
+  const grandparent = parent.parent;
+  if (!grandparent || !ts.isJsxAttribute(grandparent)) return;
+  if (!isJsxHandlerAttributeName(grandparent.name.getText())) return;
+  const scope = classifyScope(node);
+  if (scope !== 'LOOP' && scope !== 'RENDER') return;
+  pushNode(ctx, node, {
+    type: 'ArrowFunctionExpression',
+    scopeType: scope,
+    attributes: { isInlineCallback: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+const STORAGE_OBJECTS = new Set(['localStorage', 'sessionStorage']);
+
+function buildPerf06(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isCallExpression(node)) return;
+  if (!isPropertyAccessChain(node.expression)) return;
+  const obj = node.expression.expression;
+  if (!ts.isIdentifier(obj) || !STORAGE_OBJECTS.has(obj.text)) return;
+  const scope = classifyScope(node);
+  if (scope !== 'LOOP' && scope !== 'RENDER') return;
+  pushNode(ctx, node, {
+    type: 'CallExpression',
+    name: obj.text,
+    scopeType: scope,
+    attributes: { isStorageInLoop: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+const LABELABLE_TAGS = new Set(['input', 'textarea', 'select']);
+
+/** Same crude, non-value-matched presence check as the legacy detector: true if `htmlFor=` or
+ *  `for=` appears ANYWHERE in the file, without verifying it actually pairs with THIS element's
+ *  `id`. Deliberately NOT upgraded to true id/htmlFor value-matching in this pass -- see
+ *  RULE_ENGINEERING_AUDIT.md §FIGM-A11Y-05 for why that stays a documented, preserved
+ *  over-approximation rather than a silent scope change. */
+function fileWideIncludesHtmlForOrFor(ctx: BuilderContext): boolean {
+  return ctx.code.includes('htmlFor=') || ctx.code.includes('for=');
+}
+
+function buildA11y05(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isJsxOpeningElement(node) && !ts.isJsxSelfClosingElement(node)) return;
+  const tag = jsxTagName(node);
+  if (!LABELABLE_TAGS.has(tag)) return;
+  const attrs = jsxAttributes(node);
+  if (attributeHasKey(attrs, 'aria-label', 'aria-labelledby')) return;
+  const hasId = attributeHasKey(attrs, 'id');
+  if (hasId && fileWideIncludesHtmlForOrFor(ctx)) return;
+  pushNode(ctx, node, {
+    type: 'JSXElement',
+    name: tag,
+    scopeType: classifyScope(node),
+    attributes: { isUnlabeledInput: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+/** Real numeric value of a `tabIndex`/`tabindex` JSX attribute from either shape
+ *  (`tabIndex="5"` or `tabIndex={5}`); `undefined` for anything not a plain literal (e.g. a
+ *  variable or `{-1}`'s PrefixUnaryExpression, which the legacy regex also never matched). */
+function tabIndexNumericValue(attr: ts.JsxAttribute): number | undefined {
+  const init = attr.initializer;
+  if (!init) return undefined;
+  const literalTextToNumber = (text: string): number | undefined => {
+    const n = Number(text);
+    return Number.isFinite(n) ? n : undefined;
+  };
+  if (ts.isStringLiteral(init)) return literalTextToNumber(init.text);
+  if (ts.isJsxExpression(init) && init.expression) {
+    if (ts.isNumericLiteral(init.expression)) return literalTextToNumber(init.expression.text);
+    if (ts.isStringLiteral(init.expression)) return literalTextToNumber(init.expression.text);
+  }
+  return undefined;
+}
+
+function buildA11y06(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isJsxAttribute(node)) return;
+  const attrName = node.name.getText();
+  if (attrName !== 'tabIndex' && attrName !== 'tabindex') return;
+  const numeric = tabIndexNumericValue(node);
+  if (numeric === undefined || !(numeric > 0)) return;
+  const owner = node.parent?.parent;
+  const tag = owner && (ts.isJsxOpeningElement(owner) || ts.isJsxSelfClosingElement(owner)) ? jsxTagName(owner) : 'element';
+  pushNode(ctx, node, {
+    type: 'JSXElement',
+    name: tag,
+    scopeType: classifyScope(node),
+    attributes: { codeSnippet: lineTextFor(ctx, node), tabIndex: numeric, positiveTabIndex: true },
+  });
+}
+
+const DERIVED_COMPUTATION_METHODS = new Set(['sort', 'filter', 'reduce']);
+
+/** True if `node` is lexically nested inside a `useMemo(...)`/`React.useMemo(...)` call's
+ *  arguments. DOCUMENTED IMPROVEMENT over the legacy same-PHYSICAL-LINE substring check
+ *  (`!cTrimmed.includes('useMemo')`): a real ancestor walk correctly recognizes a multi-line
+ *  `useMemo(() => {\n  ...\n  items.sort(...)\n}, [items])` body (a false positive under the old
+ *  same-line check) and is immune to an unrelated `useMemo` appearing elsewhere on the same
+ *  physical line as an unmemoized computation (a false negative under the old check). See
+ *  RULE_ENGINEERING_AUDIT.md §FIGM-REACT-01. */
+function hasUseMemoAncestor(node: ts.Node): boolean {
+  let current: ts.Node | undefined = node.parent;
+  while (current) {
+    if (ts.isCallExpression(current)) {
+      const callee = current.expression;
+      const calleeName = ts.isIdentifier(callee) ? callee.text : isPropertyAccessChain(callee) ? callee.name.text : undefined;
+      if (calleeName === 'useMemo') return true;
+    }
+    current = current.parent;
+  }
+  return false;
+}
+
+function buildReact01(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isCallExpression(node)) return;
+  if (!isPropertyAccessChain(node.expression)) return;
+  if (!DERIVED_COMPUTATION_METHODS.has(node.expression.name.text)) return;
+  if (hasUseMemoAncestor(node)) return;
+  pushNode(ctx, node, {
+    type: 'CallExpression',
+    name: node.expression.name.text,
+    scopeType: classifyScope(node),
+    attributes: { isExpensiveDerivedStateWithoutMemo: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+/** Same tag-prefix allow-list as the legacy detector (`<Custom*>`/`<Button*>`/`<Card*>`), scoped
+ *  to `onClick` only (not generalized to other handler props -- unlike FIGM-PERF-05 above, the
+ *  rule's own nonCompliantExample and every existing ground-truth fixture are onClick-specific,
+ *  so broadening here would be an undocumented scope change, not a demonstrable bug fix). */
+const REACT04_TAG_PREFIXES = ['Custom', 'Button', 'Card'];
+
+function buildReact04(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isJsxAttribute(node)) return;
+  if (node.name.getText() !== 'onClick') return;
+  const init = node.initializer;
+  if (!init || !ts.isJsxExpression(init) || !init.expression || !ts.isArrowFunction(init.expression)) return;
+  const owner = node.parent?.parent;
+  if (!owner || (!ts.isJsxOpeningElement(owner) && !ts.isJsxSelfClosingElement(owner))) return;
+  const tag = jsxTagName(owner);
+  if (!startsWithAny(tag, REACT04_TAG_PREFIXES)) return;
+  pushNode(ctx, node, {
+    type: 'JSXAttribute',
+    name: 'onClick',
+    scopeType: classifyScope(node),
+    attributes: { isInlineCallbackProp: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
 // Group 2: FIGM-ANG-01, FIGM-ANG-02, FIGM-ANG-05 (Angular component class body only --
 // FIGM-ANG-03/04 need real Angular *template* markup parsing, which stays LEGACY_TEXT_HEURISTIC;
 // see docs/architecture/AST_MIGRATION_MAP.md §5).
@@ -669,6 +883,9 @@ export function buildRealSyntaxNodes(code: string, filePath: string, framework: 
       buildPerf01(ctx, node);
       buildPerf04(ctx, node);
       buildReact03(ctx, node);
+      buildPerf03(ctx, node);
+      buildPerf06(ctx, node);
+      buildReact01(ctx, node);
     }
     if (jsxEligible) {
       buildPerf02(ctx, node);
@@ -676,6 +893,10 @@ export function buildRealSyntaxNodes(code: string, filePath: string, framework: 
       buildA11y02(ctx, node);
       buildA11y03(ctx, node);
       buildA11y04(ctx, node);
+      buildPerf05(ctx, node);
+      buildA11y05(ctx, node);
+      buildA11y06(ctx, node);
+      buildReact04(ctx, node);
     }
     if (angularEligible) {
       buildAng01(ctx, node);

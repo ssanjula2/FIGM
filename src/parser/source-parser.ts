@@ -480,6 +480,18 @@ export class SourceParser {
     const useRealAstNext01 = framework === 'NEXT_JS';
     const useRealAstNext04 = REAL_AST_NEXT01_04_FRAMEWORKS.includes(framework);
     const useRealAstNext02 = framework === 'NEXT_JS';
+    // AST Migration Group 4 (docs/architecture/AST_MIGRATION_MAP.md §5/§6, implemented in
+    // docs/architecture/RULE_ENGINEERING_AUDIT.md): the seven rules deferred from Groups 1-3.
+    // Named aliases (rather than reusing useRealAstGeneral/useRealAstJsx directly at each call
+    // site) match this file's existing useRealAstNext01/02/04 convention and keep each rule's
+    // real-AST eligibility self-documenting at its own gate.
+    const useRealAstPerf03 = useRealAstGeneral;
+    const useRealAstPerf05 = useRealAstJsx;
+    const useRealAstPerf06 = useRealAstGeneral;
+    const useRealAstA11y05 = useRealAstJsx;
+    const useRealAstA11y06 = useRealAstJsx;
+    const useRealAstReact01 = useRealAstGeneral;
+    const useRealAstReact04 = useRealAstJsx;
 
     // Check App Router missing revalidate (FIGM-NEXT-03) -- superseded by buildNext03Root inside
     // buildRealSyntaxNodes for NEXT_JS (see real-syntax-node-builder.ts); this legacy check now
@@ -585,7 +597,9 @@ export class SourceParser {
       }
 
       // 3. Inline Callback in Render/Map Loop (FIGM-PERF-05)
-      if (currentScope === 'LOOP' || currentScope === 'RENDER') {
+      // Real-AST-migrated (buildPerf05) for useRealAstPerf05 (== useRealAstJsx) frameworks;
+      // unchanged for VUE_SFC/ANGULAR_TEMPLATE/GENERIC_ESTREE.
+      if (!useRealAstPerf05 && (currentScope === 'LOOP' || currentScope === 'RENDER')) {
         if (cTrimmed.includes('onClick={() =>') || cTrimmed.includes('onClick={(') || (cTrimmed.includes('map(') && (cTrimmed.includes('() =>') || cTrimmed.includes('()=>')))) {
           root.children!.push({
             type: 'ArrowFunctionExpression',
@@ -600,7 +614,9 @@ export class SourceParser {
       }
 
       // 4. Synchronous Storage Access in Loop (FIGM-PERF-06)
-      if (currentScope === 'LOOP' || currentScope === 'RENDER') {
+      // Real-AST-migrated (buildPerf06) for useRealAstPerf06 (== useRealAstGeneral) frameworks;
+      // unchanged for VUE_SFC.
+      if (!useRealAstPerf06 && (currentScope === 'LOOP' || currentScope === 'RENDER')) {
         if (cTrimmed.includes('localStorage.') || cTrimmed.includes('sessionStorage.')) {
           root.children!.push({
             type: 'CallExpression',
@@ -643,7 +659,9 @@ export class SourceParser {
       }
 
       // 6. addEventListener Cleanup (FIGM-PERF-03)
-      if (cTrimmed.includes('.addEventListener(')) {
+      // Real-AST-migrated (buildPerf03) for useRealAstPerf03 (== useRealAstGeneral) frameworks;
+      // unchanged for VUE_SFC.
+      if (!useRealAstPerf03 && cTrimmed.includes('.addEventListener(')) {
         // Bug found via QA matrix adversarial testing: checking `cleanCode.includes('.removeEventListener(')`
         // treats ANY removeEventListener call anywhere in the file as cleanup for EVERY
         // addEventListener call, regardless of event type -- so a component with both a 'scroll'
@@ -696,15 +714,18 @@ export class SourceParser {
         // frameworks (buildA11y01 in real-syntax-node-builder.ts) -- this legacy path no longer
         // sets onClick/onKeyDown for those frameworks, to avoid a duplicate diagnostic. It still
         // fully applies for VUE_SFC/ANGULAR_TEMPLATE (@click/(click) are not real JSX/TS syntax
-        // the TypeScript parser understands). FIGM-A11Y-06 (positiveTabIndex) is NOT migrated in
-        // this pass and stays legacy for every framework, including React/Next.
+        // the TypeScript parser understands). FIGM-A11Y-06 (positiveTabIndex) is now also
+        // real-AST-migrated (buildA11y06) for useRealAstA11y06 (== useRealAstJsx) frameworks --
+        // both flags below are forced false for JSX frameworks, so this entire push becomes
+        // inert for them (both rules it used to serve are now produced by real-syntax-node-builder
+        // instead); still fully applies for VUE_SFC/ANGULAR_TEMPLATE.
         const hasOnClick = !useRealAstJsx && (attrsText.includes('onClick') || attrsText.includes('v-on:click') || attrsText.includes('@click') || attrsText.includes('(click)'));
         const hasOnKeyDown = !useRealAstJsx && (attrsText.includes('onKeyDown') || attrsText.includes('v-on:keydown') || attrsText.includes('@keydown') || attrsText.includes('(keydown)'));
         const hasTabIndex = attrsText.includes('tabIndex') || attrsText.includes('tabindex');
 
         // Check positive tabIndex > 0 (FIGM-A11Y-06)
         const tabMatch = attrsText.match(/tab[I|i]ndex=["'{]?([1-9]\d*)["'}]?/);
-        const positiveVal = tabMatch ? parseInt(tabMatch[1], 10) : 0;
+        const positiveVal = !useRealAstA11y06 && tabMatch ? parseInt(tabMatch[1], 10) : 0;
 
         if (hasOnClick || positiveVal > 0) {
           const attrs: Record<string, unknown> = { codeSnippet: trimmed };
@@ -721,10 +742,12 @@ export class SourceParser {
             loc: { start: { line: lineNum, column: Math.max(0, lineText.indexOf('<' + tagName)) }, end: { line: lineNum, column: lineText.length } }
           });
         }
-      } else if (cTrimmed.includes('tabIndex') || cTrimmed.includes('tabindex')) {
+      } else if (!useRealAstA11y06 && (cTrimmed.includes('tabIndex') || cTrimmed.includes('tabindex'))) {
         // Positive tabIndex on an element that isn't div/span/section is still relevant to
         // FIGM-A11Y-06 (but, unlike before, is no longer mislabeled as a div/span/section for
         // FIGM-A11Y-01 purposes just because tabIndex text appeared somewhere on the line).
+        // Real-AST-migrated (buildA11y06) for useRealAstA11y06 (== useRealAstJsx) frameworks;
+        // unchanged for VUE_SFC/ANGULAR_TEMPLATE.
         const tabMatch = cTrimmed.match(/tab[I|i]ndex=["'{]?([1-9]\d*)["'}]?/);
         const positiveVal = tabMatch ? parseInt(tabMatch[1], 10) : 0;
         if (positiveVal > 0) {
@@ -739,7 +762,9 @@ export class SourceParser {
       }
 
       // 8. Unlabeled Form Inputs (FIGM-A11Y-05)
-      if (cTrimmed.includes('<input') || cTrimmed.includes('<textarea') || cTrimmed.includes('<select')) {
+      // Real-AST-migrated (buildA11y05) for useRealAstA11y05 (== useRealAstJsx) frameworks;
+      // unchanged for VUE_SFC/ANGULAR_TEMPLATE.
+      if (!useRealAstA11y05 && (cTrimmed.includes('<input') || cTrimmed.includes('<textarea') || cTrimmed.includes('<select'))) {
         const tag = trimmed.includes('<input') ? 'input' : trimmed.includes('<textarea') ? 'textarea' : 'select';
         const hasAriaLabel = cTrimmed.includes('aria-label=') || cTrimmed.includes('aria-labelledby=');
         const hasId = cTrimmed.includes('id=');
@@ -861,7 +886,9 @@ export class SourceParser {
       }
 
       // 14. Expensive Derived Computation without useMemo (FIGM-REACT-01)
-      if (cTrimmed.includes('.sort(') || cTrimmed.includes('.filter(') || cTrimmed.includes('.reduce(')) {
+      // Real-AST-migrated (buildReact01) for useRealAstReact01 (== useRealAstGeneral) frameworks;
+      // unchanged for VUE_SFC.
+      if (!useRealAstReact01 && (cTrimmed.includes('.sort(') || cTrimmed.includes('.filter(') || cTrimmed.includes('.reduce('))) {
         if (!cTrimmed.includes('useMemo')) {
           root.children!.push({
             type: 'CallExpression',
@@ -919,7 +946,9 @@ export class SourceParser {
       }
 
       // 17. Inline Callback Prop to Child Component without useCallback (FIGM-REACT-04)
-      if ((cTrimmed.includes('<Custom') || cTrimmed.includes('<Button') || cTrimmed.includes('<Card')) && cTrimmed.includes('onClick={() =>')) {
+      // Real-AST-migrated (buildReact04) for useRealAstReact04 (== useRealAstJsx) frameworks;
+      // unchanged for VUE_SFC/ANGULAR_TEMPLATE.
+      if (!useRealAstReact04 && (cTrimmed.includes('<Custom') || cTrimmed.includes('<Button') || cTrimmed.includes('<Card')) && cTrimmed.includes('onClick={() =>')) {
         root.children!.push({
           type: 'JSXAttribute',
           name: 'onClick',

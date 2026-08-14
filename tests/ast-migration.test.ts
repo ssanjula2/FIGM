@@ -88,13 +88,28 @@ test('AST Migration — sourceKind provenance labeling (Phase 8)', async (t) => 
     assert.match(perf01!.evidence ?? '', /^Real AST \(TypeScript compiler\)/);
   });
 
-  await t.test('a rule not yet migrated (e.g. FIGM-A11Y-05) is labeled LEGACY_TEXT_HEURISTIC, never REAL_AST', () => {
-    const code = `<input type="text" />`;
+  // FIGM-A11Y-05 was migrated to real AST in Group 4 (docs/architecture/RULE_ENGINEERING_AUDIT.md)
+  // -- see 'FIGM-A11Y-05: unlabeled <input> fires, via real AST' below for its current REAL_AST
+  // coverage. FIGM-ANG-03/04 (Angular *template markup*) are the rules that remain permanently
+  // LEGACY_TEXT_HEURISTIC on every framework (they need @angular/compiler, a deliberately
+  // undeployed new dependency -- see AST_MIGRATION_MAP.md §5), so this "not yet migrated" example
+  // now uses one of those instead.
+  await t.test('a rule that can never be real-AST-migrated without a new parser dependency (e.g. FIGM-ANG-04) is labeled LEGACY_TEXT_HEURISTIC, never REAL_AST', () => {
+    const code = `import { Component } from '@angular/core';\n@Component({ selector: 'app-x', changeDetection: 0, template: \`<span>{{ computeTotal() }}</span>\` })\nexport class WidgetComponent {}`;
+    const diags = diagnosticsFor(code, 'widget.component.ts');
+    const ang04 = diags.find((d) => d.ruleId === 'FIGM-ANG-04');
+    assert.ok(ang04, 'expected FIGM-ANG-04 to fire (template method call)');
+    assert.equal(ang04!.sourceKind, 'LEGACY_TEXT_HEURISTIC');
+    assert.match(ang04!.evidence ?? '', /^Legacy text-heuristic pattern match/);
+  });
+
+  await t.test('FIGM-A11Y-05: unlabeled <input> fires, via real AST', () => {
+    const code = `function Field() {\n  return <input type="text" placeholder="Name" />;\n}`;
     const diags = diagnosticsFor(code, 'component.jsx');
     const a11y05 = diags.find((d) => d.ruleId === 'FIGM-A11Y-05');
     assert.ok(a11y05, 'expected FIGM-A11Y-05 to fire (unlabeled input)');
-    assert.equal(a11y05!.sourceKind, 'LEGACY_TEXT_HEURISTIC');
-    assert.match(a11y05!.evidence ?? '', /^Legacy text-heuristic pattern match/);
+    assert.equal(a11y05!.sourceKind, 'REAL_AST');
+    assert.match(a11y05!.evidence ?? '', /^Real AST \(TypeScript compiler\)/);
   });
 
   await t.test('every rule fired on a VUE_SFC file is labeled LEGACY_TEXT_HEURISTIC (Vue is never real-AST-parsed)', () => {

@@ -22,6 +22,14 @@ import { RuleExecutionEngine } from '../src/engine/rule-execution-engine.js';
  *      masked a genuinely leaking addEventListener('scroll', ...).
  *   3. FIGM-PERF-04's conditional-only-import check excluded an ENTIRE `if (...)` line from usage
  *      counting, missing the common single-line-body shape `if (cond) { Heavy.load(); }`.
+ *   4. FIGM-PERF-05's real-AST migration (docs/architecture/RULE_ENGINEERING_AUDIT.md, Group 4)
+ *      closed a KNOWN LIMITATION this file used to pin down: the legacy line-based heuristic
+ *      textually matched "map(" + "() =>" substrings anywhere on one physical line, so an inline
+ *      arrow already wrapped in `useCallback` and referenced by name (`onClick={cb}`) was still
+ *      (wrongly) flagged, because the unrelated `useCallback(() => ...)` on the same line also
+ *      contains an "() =>" substring. Real AST only flags an ArrowFunctionExpression that is
+ *      itself the DIRECT initializer of a JSX handler attribute, so a named reference to an
+ *      already-memoized callback is correctly no longer flagged -- see the updated case below.
  * Where a case instead documents a genuine, currently-unfixed architectural limitation of the
  * line/regex-based detection layer (no data-flow analysis), the assertion pins down CURRENT
  * behavior honestly and the rationale says so explicitly — these are reported as remaining
@@ -115,8 +123,8 @@ const CASES: BoundaryAdversarialCase[] = [
     ruleId: 'FIGM-PERF-05', kind: 'adversarial',
     label: 'inline arrow wrapped in useCallback inside .map()',
     code: `items.map((item) => { const cb = useCallback(() => doThing(item), [item]); return <div onClick={cb}>{item}</div>; });`,
-    filePath: 'a.jsx', expectFire: true,
-    rationale: 'KNOWN LIMITATION: the heuristic textually matches "map(" + "() =>" substrings on the same line without recognizing that the arrow is immediately wrapped in useCallback; documented over-approximation, not fixed in this pass.',
+    filePath: 'a.jsx', expectFire: false,
+    rationale: 'REGRESSION for a fixed bug (Group 4 real-AST migration): onClick={cb} is a named reference to an already-memoized callback, not an inline arrow literal -- real AST correctly sees the JSX attribute\'s initializer is an Identifier, not an ArrowFunctionExpression, so it is no longer flagged. Previously a KNOWN LIMITATION (the legacy line-based heuristic matched "map(" + "() =>" substrings on the same physical line, including the unrelated arrow inside useCallback(...)).',
   },
 
   // --- FIGM-PERF-06 ---
