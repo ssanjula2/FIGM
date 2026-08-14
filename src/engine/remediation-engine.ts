@@ -215,7 +215,14 @@ export class RemediationEngine {
       case 'FIGM-A11Y-03': {
         // Add aria-live="polite" and role="status"
         if (code.includes(snippet)) {
-          const fixedSnippet = snippet.replace(/<div\b/, '<div role="status" aria-live="polite" ');
+          // Match the snippet's ACTUAL opening tag name, not a hardcoded `<div`. The rule fires on
+          // any dynamic status container, not only <div> (e.g. a Vue/React `<span class="status-...">`
+          // -- live-reproduced: a `<div\b` regex against a `<span ...>` snippet never matches, so
+          // `fixedSnippet === snippet` and the subsequent `code.replace(snippet, fixedSnippet)` is a
+          // silent no-op that changes nothing, while still reporting an appliedFixDescription as if
+          // it had worked (the pipeline's own re-scan does correctly catch this as `verified: false`,
+          // but the code itself was never patched).
+          const fixedSnippet = snippet.replace(/<(\w+)\b/, '<$1 role="status" aria-live="polite"');
           remediatedCode = code.replace(snippet, fixedSnippet);
           appliedFixDescription = 'Annotated dynamic output status container with role="status" and aria-live="polite".';
         } else {
@@ -499,7 +506,14 @@ export class RemediationEngine {
             /@Component\(\{/,
             '@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush,'
           );
-          if (!remediatedCode.includes('ChangeDetectionStrategy')) {
+          // Must check the ORIGINAL `code`, not `remediatedCode` -- the decorator edit just above
+          // already inserted the literal text "ChangeDetectionStrategy.OnPush" into remediatedCode,
+          // so checking remediatedCode here was always trivially true and this import-injection
+          // block could never run, live-reproduced as broken output (`ChangeDetectionStrategy` used
+          // in the decorator but never imported, so the "fixed" file does not compile) even though
+          // FIGM's own re-scan reported `verified: true` (its ANG-02 detector only checks for the
+          // decorator property's text, not import correctness).
+          if (!code.includes('ChangeDetectionStrategy')) {
             if (/from\s+['"]@angular\/core['"]/.test(remediatedCode)) {
               remediatedCode = remediatedCode.replace(
                 /import\s*\{([^}]*)\}\s*from\s*['"]@angular\/core['"]/,

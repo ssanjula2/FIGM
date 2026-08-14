@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "description": "Formal 4-Layer Meta-Model & AST Detection Specification Matrix mapping SPA Quality Domains to Formal Mathematical Predicates, Abstract Language Primitives, and Universal AST Query Templates.",
     "framework": "FIGM-Core-v2",
-    "generatedAt": "2026-08-14T10:22:09.028Z",
+    "generatedAt": "2026-08-14T13:06:39.314Z",
     "totalCoreRules": 25
   },
   "taxonomies": {
