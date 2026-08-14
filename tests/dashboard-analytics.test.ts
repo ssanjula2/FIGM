@@ -56,15 +56,32 @@ test('Dashboard Analytics & Repository Suite', async (t) => {
     assert.equal(summary.frameworkDistribution.react, 1);
   });
 
-  await t.test('DashboardRepository.getActivityFeed returns activity timeline items', async () => {
+  await t.test('DashboardRepository.getActivityFeed returns real audit-log-derived items when they exist', async () => {
+    // Previously this fell back to 3 hardcoded fake entries (fabricated users, fabricated
+    // timestamps computed to look recent, and one description referencing the fabricated
+    // "30-repository evaluation" claim) whenever no real audit logs existed yet -- presented to
+    // real, unauthenticated visitors on the public dashboard as if it were real platform
+    // activity. Removed for the same reason getSummary's fabricated floor was removed above: an
+    // empty feed must show as empty, not padded with invented events.
     const activity = await DashboardRepository.getActivityFeed(5);
     assert.ok(Array.isArray(activity));
-    assert.ok(activity.length > 0);
+    // May be empty (honest) or non-empty (real audit log entries written by other tests sharing
+    // this process's storage) -- either is valid; only shape is asserted when items exist.
+    for (const item of activity) {
+      assert.ok(item.id !== undefined);
+      assert.ok(item.title !== undefined);
+      assert.ok(item.badgeColor !== undefined);
+    }
+  });
 
-    const first = activity[0];
-    assert.ok(first.id !== undefined);
-    assert.ok(first.title !== undefined);
-    assert.ok(first.badgeColor !== undefined);
+  await t.test('DashboardRepository.getActivityFeed returns an honest empty array, never fabricated demo entries, when no real audit logs exist', async () => {
+    const activity = await DashboardRepository.getActivityFeed(1000);
+    for (const item of activity) {
+      assert.notEqual(item.id, 'act_1', 'the retired hardcoded demo activity entries must never be reintroduced');
+      assert.notEqual(item.id, 'act_2', 'the retired hardcoded demo activity entries must never be reintroduced');
+      assert.notEqual(item.id, 'act_3', 'the retired hardcoded demo activity entries must never be reintroduced');
+      assert.ok(!item.description?.includes('30-repository'), 'the fabricated 30-repository claim must never appear in the activity feed');
+    }
   });
 
   await t.test('DashboardRepository.getRecentReports returns report items', async () => {

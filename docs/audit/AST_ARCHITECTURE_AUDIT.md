@@ -183,9 +183,13 @@ rest are scoped and ready to repeat the same pattern.
   the new path doesn't), 4 end-to-end `RuleExecutionEngine` regression tests (`.jsx`, `.tsx`, Vue/
   Angular unaffected, existing fixture agreement).
 - Full existing suite: **300/300 passing** (287 pre-existing + 13 new), zero regressions.
-- Canonical ground-truth benchmark (`npm run research:evaluate`) re-run: **unchanged**
-  (TP=18/FP=3/FN=1, P=85.7%/R=94.7%/F1=90.0%) — the fixture testbed doesn't exercise
-  FIGM-REACT-02, so this migration has no effect on the dissertation's headline accuracy numbers.
+- Canonical ground-truth benchmark (`npm run research:evaluate`) re-run: **unchanged relative to
+  this migration's own before/after comparison** (the fixture testbed doesn't exercise
+  FIGM-REACT-02, so this specific migration had no effect on the accuracy numbers of that day).
+  The absolute figures quoted in the original version of this line (TP=18/FP=3/FN=1, P=85.7%/
+  R=94.7%/F1=90.0%) have since been superseded by an unrelated fix to the metrics pipeline itself
+  (see `docs/evidence/research-claim-traceability.md`); current canonical figures live only in
+  `docs/evidence/canonical-evaluation.json`.
 - Live verification against the actual `next build && next start` production server via
   `POST /api/scan`: confirmed the real-AST path fires on a non-standard index parameter name
   (`position`) that the regex path misses, and correctly does *not* fire on an unrelated local

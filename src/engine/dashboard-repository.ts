@@ -158,36 +158,12 @@ export class DashboardRepository {
       });
     }
 
-    const now = new Date();
-    return [
-      {
-        id: 'act_1',
-        type: 'SCAN',
-        title: 'Static Analysis Scan Completed',
-        description: 'Scanned UserProfile.tsx (React JSX) — Found 2 defects',
-        timestamp: new Date(now.getTime() - 5 * 60000).toISOString(),
-        user: 'developer@figm.io',
-        badgeColor: '#38bdf8',
-      },
-      {
-        id: 'act_2',
-        type: 'AI_FIX',
-        title: 'Gemini AI Remediation Generated',
-        description: 'Applied useCallback patch for FIGM-REACT-04',
-        timestamp: new Date(now.getTime() - 15 * 60000).toISOString(),
-        user: 'developer@figm.io',
-        badgeColor: '#a855f7',
-      },
-      {
-        id: 'act_3',
-        type: 'REPORT',
-        title: 'Benchmark Assessment Exported',
-        description: 'Generated interactive HTML report for 30-repository evaluation',
-        timestamp: new Date(now.getTime() - 60 * 60000).toISOString(),
-        user: 'auditor@figm.io',
-        badgeColor: '#10b981',
-      },
-    ];
+    // No real audit log entries exist yet. This feed is served publicly (see the comment above),
+    // so returning fabricated "recent activity" here would present invented events -- including,
+    // in a prior version, a reference to the fabricated "30-repository evaluation" claim -- to a
+    // real visitor as if they were real platform activity. An honest empty list lets the UI show
+    // a genuine "no activity yet" state instead (see LiveDashboardContent.tsx).
+    return [];
   }
 
   public static async getRecentReports(userId?: string, limit = 10): Promise<ReportSummaryItem[]> {

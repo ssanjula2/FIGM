@@ -1,6 +1,6 @@
 # FIGM Code Inspector — Multi-Tenant SaaS Platform & Research Prototype
 
-[![Tests Passing](https://img.shields.io/badge/tests-543%2F543%20passed-success.svg)](https://github.com/ssanjula2/FIGM)
+[![Tests Passing](https://img.shields.io/badge/tests-544%2F544%20passed-success.svg)](https://github.com/ssanjula2/FIGM)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ssanjula2/FIGM)
 
 > The "Code Quality 96/100", "Security 94/100", "Build: passing", and "Dissertation: 100% compliant" badges previously shown here traced to no computation anywhere in this codebase and have been removed rather than replaced with different unverified numbers. The test-count badge above is the actual count from the last `npm test` run (see Validation below); the workflow at `.github/workflows/figm-scan.yml` runs static analysis on push/PR but has not yet run on a public remote, so no CI status badge is shown until it has real run history to report.
@@ -44,7 +44,7 @@ cp .env.example .env
 ```bash
 npm test
 ```
-*Executes all 543 automated tests across 66 test suites with 100% pass rate (last verified `npm test` run).*
+*Executes all 544 automated tests across 66 test suites with 100% pass rate (last verified `npm test` run).*
 
 ### 4. Launch Development Server
 ```bash

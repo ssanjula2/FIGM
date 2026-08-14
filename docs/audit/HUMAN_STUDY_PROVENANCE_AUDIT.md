@@ -13,7 +13,7 @@ Method: Direct inspection of `research/`, `scripts/import-user-study.ts`, `scrip
   { "isRealHumanData": false, "collectionStatus": "NOT_COLLECTED", "validParticipantCount": 0 }
   ```
 - **`targetSampleSize: 85` is a target, not a count.** No code path anywhere in `src/eval` or `scripts/` conflates the two — confirmed by direct reading of `import-user-study.ts`'s output-building logic and by the honest `NOT_COLLECTED` state above.
-- **REAL HUMAN PARTICIPANTS = 0 / 85.** This is the correct, current, honestly-reported status everywhere it is surfaced in the live application (`research/analysis/usability-results.json`, `/api/research-metrics`'s `userStudy` block, and — after this session's fix — `docs/evidence/user-study/user-study-results.json`, which previously contradicted this with fabricated figures; see `docs/audit/FINAL_PRODUCTION_FORENSIC_AUDIT.md` §6).
+- **REAL HUMAN PARTICIPANTS = 0 / 85.** This is the correct, current, honestly-reported status everywhere it is surfaced in the live application (`research/analysis/usability-results.json`, `/api/research-metrics`'s `userStudy` block, and — after this session's fix — `docs/evidence/user-study/user-study-results.json`, which previously contradicted this with fabricated figures; see `docs/audit/archive/FINAL_PRODUCTION_FORENSIC_AUDIT.md` §6).
 
 ## 2. Import pipeline validation rules (`scripts/import-user-study.ts`)
 
@@ -37,7 +37,7 @@ Verified by direct source reading:
 
 ## 4. Fixed this session
 
-`docs/evidence/user-study/user-study-results.json` was found presenting fabricated `meanSUSScore: 86.4`, `cronbachAlpha: 0.89`, and a fabricated institution name with no synthetic disclaimer — directly contradicting the honest state described above. It has been corrected to `NOT_COLLECTED` / `validParticipantCount: 0`, consistent with every other provenance surface in the system. See `docs/audit/FINAL_PRODUCTION_FORENSIC_AUDIT.md` §6 for full detail.
+`docs/evidence/user-study/user-study-results.json` was found presenting fabricated `meanSUSScore: 86.4`, `cronbachAlpha: 0.89`, and a fabricated institution name with no synthetic disclaimer — directly contradicting the honest state described above. It has been corrected to `NOT_COLLECTED` / `validParticipantCount: 0`, consistent with every other provenance surface in the system. See `docs/audit/archive/FINAL_PRODUCTION_FORENSIC_AUDIT.md` §6 for full detail.
 
 ## 5. Outstanding items (not fixed this session)
 

@@ -1,9 +1,12 @@
 # 📜 FIGM Research Evidence & Evaluation Vault
-**Module**: IS303.2 Research Methodology Repeat Coursework 2025  
-**Candidate**: A P H D S Sanjula (ID: 28256)  
-**Institution**: NSBM Green University Town  
+**Module**: IS303.2 Research Methodology Repeat Coursework 2025
+**Candidate**: A P H D S Sanjula (ID: 28256)
+**Institution**: NSBM Green University
 
-This directory serves as the centralized empirical evidence vault containing all raw evaluation datasets, statistical metrics, LaTeX tables, survey usability scores, and CI/CD quality gate reports for the **Framework-Independent Guideline Model (FIGM)** research.
+This directory is the centralized empirical evidence vault for the **Framework-Independent
+Guideline Model (FIGM)** research. Every artifact listed below is either regenerated live by a
+real command, or explicitly labeled as not-yet-collected — nothing here is a static hand-typed
+number.
 
 ---
 
@@ -11,34 +14,46 @@ This directory serves as the centralized empirical evidence vault containing all
 
 ```text
 docs/evidence/
-├── EVIDENCE_INDEX.md                  <-- Master evidence directory & index (This File)
-├── benchmarks/
-│   ├── benchmark-results.csv          <-- Precision, Recall, F1 metrics across 30 SPA repos
-│   ├── benchmark-results.md           <-- Markdown benchmark evaluation tables
-│   └── eval-summary.json              <-- Raw JSON statistical evaluation summary
+├── EVIDENCE_INDEX.md                  <-- Master evidence directory & index (this file)
+├── canonical-evaluation.json          <-- THE canonical empirical benchmark result (see below)
+├── reproducibility-manifest.json      <-- Exact commands to reproduce every figure below
+├── research-claim-traceability.md     <-- Claim-by-claim VERIFIED/SUPPORTED/PLANNED/... ledger
 ├── user-study/
-│   └── user-study-results.json        <-- N=85 developer survey (SUS & Cronbach's Alpha)
-├── latex-tables/
-│   └── latex-tables.tex               <-- Publication-ready LaTeX tables for dissertation
+│   └── user-study-results.json        <-- Human usability study status (currently NOT_COLLECTED)
 └── ci-cd-reports/
-    ├── figm-ci-report.json            <-- DevSecOps CI inspection raw JSON log
-    └── figm-ci-report.md              <-- DevSecOps CI quality gate markdown report
+    ├── figm-ci-report.json            <-- Self-scan (FIGM scanning its own codebase) raw JSON
+    └── figm-ci-report.md              <-- Self-scan quality-gate markdown report
 ```
+
+A prior version of this vault also contained `benchmarks/` and `latex-tables/` subdirectories —
+frozen, hand-committed snapshots from 2026-08-05 that were never regenerated after that date and
+had silently drifted from the real benchmark (they still reported the retired 18 TP / 3 FP / 1 FN
+/ 85.7%/94.7%/90.0% figures long after the live pipeline had moved on). They have been deleted;
+`benchmarks/eval-summary.json` (repository root) and `canonical-evaluation.json` (this directory)
+are the only benchmark artifacts now, and both are regenerated together by the same command.
 
 ---
 
 ## 📊 Summary of Empirical Evidence Artifacts
 
-| Evidence Artifact | Description | Target Research Question / Objective | Verification File |
+| Evidence Artifact | Description | Current Status | Regenerate with |
 | :--- | :--- | :--- | :--- |
-| **30-Repository Benchmark** | Precision ($85.7\%$), Recall ($94.7\%$), F1 ($90.0\%$) over representative benchmark vectors. | **RQ4 & Objective 4** | `docs/evidence/benchmarks/benchmark-results.csv` |
-| **Primary User Study** | $N=85$ cohort, SUS Score ($86.4/100$), Cronbach's $\alpha = 0.89$. | **Section 4.3 Primary Data** | `docs/evidence/user-study/user-study-results.json` |
-| **LaTeX Dissertation Tables** | Publication-ready LaTeX statistical tables. | **Dissertation Chapter 4 & 5** | `docs/evidence/latex-tables/latex-tables.tex` |
-| **DevSecOps CI Inspection** | Automated static quality gate scan ($90\%$ Quality Score). | **RQ3 & Objective 3** | `docs/evidence/ci-cd-reports/figm-ci-report.md` |
+| **Ground-Truth Benchmark** | Precision/Recall/F1 computed by re-running the real scanner against `benchmarks/testbed`, scored against `benchmarks/ground-truth.json`. Covers **8 of FIGM's 25 rules** (those with hand-labelled ground truth) — see `ruleCoverage` in `canonical-evaluation.json` for exactly which. | Live, dynamic | `npm run research:evaluate` |
+| **Large-Scale / Multi-Repository Evaluation** | A claim of "30 repositories" / "755k LOC" evaluated previously existed in this project's history. No repository was ever cloned or scanned to produce it — the dataset and its generator (`src/eval/repo-evaluator.ts`) were fabricated and have been deleted. | **Does not exist.** No large-scale evaluation has been performed. | — (future work) |
+| **Primary User Study** | Developer usability survey, target N=85. | **0/85 collected.** No SUS score or Cronbach's α can currently be reported; the scoring formulas are verified against explicitly-labelled synthetic test data only. | `npm run research:user-study:import` once real responses exist |
+| **DevSecOps Self-Scan** | FIGM scanning its own codebase (not a benchmark accuracy measure — a dogfooding quality-gate report). | See `ci-cd-reports/figm-ci-report.md` for its own date/figures. | `npm run ci:scan` |
 
 ---
 
 ## 🎓 Evidence Verification Status
 
-- **Zero Hardcoded Static Mocks**: All metric artifacts are generated dynamically by execution of `evaluation-runner.ts` and `user-study-evaluator.ts`.
-- **Reproducibility**: Run `npm test` or `npx tsx src/eval/evaluation-runner.ts` to re-generate all evidence files dynamically.
+- **No hardcoded metric literals in the live pipeline**: `src/eval/evaluation-runner.ts` computes
+  every figure by re-running `RuleExecutionEngine.analyzeFile` against real fixtures and diffing
+  against real ground truth — never a cached/hand-typed matrix. This is enforced by
+  `tests/anti-hardcoding-guard.test.ts` and `tests/research-integrity.test.ts`.
+- **Reproducibility**: run `npm run research:evaluate` (regenerates `canonical-evaluation.json` and
+  `benchmarks/eval-summary.json` together, always in sync) or `npm test` (also exercises the full
+  pipeline). See `reproducibility-manifest.json` for the exact command list.
+- **Claim-by-claim traceability**: see `research-claim-traceability.md` in this directory for every
+  research claim's classification (VERIFIED / SUPPORTED / PLANNED / NOT VERIFIED / UNSUPPORTED /
+  CONTRADICTED) and its evidence source.

@@ -3,7 +3,7 @@
 Date: 2026-08-12
 Method: Zero-trust — every claim below is backed by direct source inspection, not by any pre-existing `docs/*.md` or `FINAL_*.md` file in this repository. Those existing documents (~30 files at repo root: `FINAL_ZERO_TRUST_*`, `FINAL_ULTIMATE_*`, etc.) are treated as **unverified prior claims**, not evidence.
 
-This document is the Phase 0 baseline. It records architecture as it actually is, and flags integrity issues to be resolved in later phases. It does not yet reflect fixes applied afterward — see `FINAL_PRODUCTION_FORENSIC_AUDIT.md` for post-fix state.
+This document is the Phase 0 baseline. It records architecture as it actually is, and flags integrity issues to be resolved in later phases. It does not yet reflect fixes applied afterward — see `archive/FINAL_PRODUCTION_FORENSIC_AUDIT.md` for post-fix state.
 
 ---
 
@@ -128,7 +128,9 @@ Confirmed **not** fabricated: `research/raw/real/`, `research/processed/real/`, 
 | `npm run ci:scan` (self-scan of 132 app source files) | **FAILED** (exit 1) — Quality Score 67% < 70% threshold, 713 violations. Materially inflated by two confirmed tool bugs: (a) isolated `TypeCheckerService` missing ES2015+/DOM lib config → spurious `TYPE-TS-2583 "Cannot find name Promise/Map/Set/URL"` across dozens of files, despite real `tsc --noEmit` passing clean; (b) `FIGM-PERF-04` firing on essentially every plain top-level `import` statement (not actually inside a conditional/deferred scope) across ~30 files. |
 | `npm --prefix vscode-extension run compile` | **PASS**, 0 errors |
 
-**Key implication**: the tool's own self-scan quality score (67%, FAILED) is not directly comparable to the headline research precision/recall numbers (85.7%/94.7%, computed against a small curated 18-item fixture set) — running the tool against a large, real, diverse codebase surfaces materially more false positives than the curated benchmark reflects. This gap is itself a finding worth stating plainly in the dissertation rather than obscuring.
+> **Superseded values (as of this 2026-08-12 snapshot):** the 85.7%/94.7%/90.0% (TP=18/FP=3/FN=1) figures above were the real canonical numbers *at the time this table was recorded*, from a ground-truth set that then had 19 labelled violations across a smaller rule subset. Both the ground-truth benchmark and its consuming pipeline (`src/eval/precision-recall-engine.ts`, `src/eval/thesis-gap-exporter.ts`) were substantially reworked afterward to eliminate a since-discovered dead-parallel-metrics-pipeline bug (see `docs/evidence/research-claim-traceability.md`). The current canonical figures live only in `docs/evidence/canonical-evaluation.json` (regenerated on every `npm run research:evaluate`) — do not treat the numbers in this row as current.
+
+**Key implication** (test count/quality-score comparison, unaffected by the above): the tool's own self-scan quality score (67%, FAILED) is not directly comparable to the headline research precision/recall numbers (computed against a small curated ground-truth fixture set) — running the tool against a large, real, diverse codebase surfaces materially more false positives than the curated benchmark reflects. This gap is itself a finding worth stating plainly in the dissertation rather than obscuring.
 
 ## 14. Recommended fix priority for Phase 16/17
 

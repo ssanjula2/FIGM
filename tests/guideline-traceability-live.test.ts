@@ -7,7 +7,7 @@ import { RuleExecutionEngine } from '../src/engine/rule-execution-engine.js';
  * ('ISO 25010' or 'WCAG 2.2') for every diagnostic — confirmed by direct inspection of
  * ASTDetectionEngine.createReport() and by calling the live production API (see
  * docs/audit/GUIDELINE_FORENSIC_TRACEABILITY.md and the live E2E evidence in
- * docs/audit/FINAL_PRODUCTION_FORENSIC_AUDIT.md). A richer per-concern clause mapping existed
+ * docs/audit/archive/FINAL_PRODUCTION_FORENSIC_AUDIT.md). A richer per-concern clause mapping existed
  * only in an unwired design artifact (four-layer-meta-model.ts / guideline-filtering.ts).
  *
  * Fixed via src/matrix/standard-clause-mapping.ts, which maps each diagnostic's `concern` to a

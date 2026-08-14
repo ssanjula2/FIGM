@@ -1,9 +1,17 @@
 /**
  * Framework-Independent Guideline Model (FIGM)
  * Independent Verification Engine & Functional Research Validator
- * 
- * Verifies all 23 FIGM Rules across Sample A (Violation) and Sample B (Compliant),
- * evaluating Framework Isolation, AI Patch Generation, and Dynamic Runtime Profiling.
+ *
+ * Verifies FIGM Rules with a paired-sample fixture (VALIDATION_TESTBED) across Sample A
+ * (Violation) and Sample B (Compliant), evaluating Framework Isolation, AI Patch Generation, and
+ * Dynamic Runtime Profiling. This is a synthetic unit-level correctness check (does each
+ * predicate fire/not-fire on a minimal paired example) -- a different, narrower methodology than
+ * the empirical ground-truth benchmark in `src/eval/evaluation-runner.ts` (which scores against
+ * real hand-labelled violations in `benchmarks/ground-truth.json`). Coverage below is always
+ * computed from `VALIDATION_TESTBED.length` and `FOUR_LAYER_MAPPINGS.length` directly, never a
+ * separately-maintained literal, so it cannot silently drift as the rule set grows (a prior
+ * version hardcoded "23" in three places, producing a nonsensical "25 / 23 (100% Coverage)" line
+ * once a 24th and 25th rule were added to VALIDATION_TESTBED without updating the literal).
  */
 
 import fs from 'node:fs';
@@ -13,6 +21,7 @@ import { ASTDetectionEngine } from '../ast/ast-detection-engine.js';
 import { AIRemediationPipeline } from '../ai/ai-remediation-pipeline.js';
 import { DynamicProfiler } from '../engine/dynamic-profiler.js';
 import { FrameworkType } from '../types/ast-spec.js';
+import { FOUR_LAYER_MAPPINGS } from '../matrix/four-layer-meta-model.js';
 
 export interface RuleTestCase {
   ruleId: string;
@@ -252,7 +261,7 @@ export const VALIDATION_TESTBED: RuleTestCase[] = [
 
 export class FunctionalValidator {
   public static async executeFullValidation() {
-    console.log('[VALIDATOR] Starting Independent Verification & Research Validation across 23 Rules...');
+    console.log(`[VALIDATOR] Starting Independent Verification & Research Validation across ${VALIDATION_TESTBED.length} Rules...`);
 
     const results: RuleValidationResult[] = [];
     let globalTP = 0;
@@ -325,11 +334,23 @@ export class FunctionalValidator {
     const f1Score = precision + recall === 0 ? 0.0 : (2 * precision * recall) / (precision + recall);
     const accuracy = (globalTP + globalTN) / (globalTP + globalTN + globalFP + globalFN);
 
+    // Real counts of how many rules triggered a defect at all (aiFixGenerated/aiFixValid are only
+    // ever computed for a triggering rule -- see the loop above) -- used to report an honest
+    // fraction below instead of an assumed, unconditional "100%".
+    const rulesWithDefectTriggered = results.filter(r => r.sampleATriggered).length;
+    const aiFixGeneratedCount = results.filter(r => r.aiFixGenerated).length;
+    const aiFixValidCount = results.filter(r => r.aiFixValid).length;
+
     return {
       timestamp: new Date().toISOString(),
       totalRulesTested: VALIDATION_TESTBED.length,
       passedRulesCount: results.filter(r => r.pass).length,
       failedRulesCount: results.filter(r => !r.pass).length,
+      aiRemediation: {
+        rulesWithDefectTriggered,
+        aiFixGeneratedCount,
+        aiFixValidCount,
+      },
       globalMetrics: {
         tp: globalTP,
         fp: globalFP,
@@ -353,8 +374,8 @@ export class FunctionalValidator {
 
 **System Name**: Framework-Independent Guideline Model (FIGM) Code Inspector  
 **Evaluator**: Independent Software Verification Engineer  
-**Timestamp**: ${valSummary.timestamp}  
-**Total Rules Evaluated**: ${valSummary.totalRulesTested} / 23 (100% Coverage)  
+**Timestamp**: ${valSummary.timestamp}
+**Total Rules Evaluated**: ${valSummary.totalRulesTested} / ${FOUR_LAYER_MAPPINGS.length} (${((valSummary.totalRulesTested / FOUR_LAYER_MAPPINGS.length) * 100).toFixed(1)}% Coverage)
 
 ---
 
@@ -400,7 +421,7 @@ ${valSummary.results.map(r => `| \`${r.ruleId}\` | ${r.ruleName} | \`${r.framewo
 
 ## 5. AI Remediation & Dynamic Runtime Profiler Validation
 
-- **AI Remediation Subsystem**: Verified across all 23 rule violations. Generated clean unified git diffs with 100% compilation/syntax validity and deterministic fallback protection.
+- **AI Remediation Subsystem**: Of ${valSummary.aiRemediation.rulesWithDefectTriggered} rules whose Sample A actually triggered a defect, ${valSummary.aiRemediation.aiFixGeneratedCount} produced a non-empty remediation diff and ${valSummary.aiRemediation.aiFixValidCount} of those were confirmed to actually change the source (a real patch, not a no-op fallback). This is a real-time computed count, not an assumed 100%.
 - **Dynamic Profiler Results**:
   - **Execution Time**: ${valSummary.runtimeProfile.executionTimeMs} ms (Real Node.js performance.now())
   - **Peak Memory**: ${valSummary.runtimeProfile.peakMemoryMb} MB (Real process.memoryUsage().heapUsed)

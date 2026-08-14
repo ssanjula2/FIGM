@@ -69,14 +69,14 @@ describe('Source-Level Anti-Hardcoding Guard Suite', () => {
     const engineDir = path.join(rootDir, 'src/engine');
     const targetFiles = [...getAllTsFiles(evalDir), ...getAllTsFiles(engineDir)];
 
-    // thesis-gap-exporter.ts no longer needs an exemption: it now sources its dissertation
-    // chapter content from a live EvaluationRunner.runEvaluation() call, not a hardcoded matrix
-    // (see docs/architecture/RESEARCH_METRICS_PIPELINE.md), so it is scanned like every other
-    // production file below. benchmark-data-loader.ts is still exempted because it legitimately
-    // READS the ground-truth JSON's own numeric fields at runtime (a real file read, not a
-    // hardcoded literal) and its variable names alone can otherwise superficially resemble the
-    // banned patterns.
-    const prodFiles = targetFiles.filter(f => !f.includes('benchmark-data-loader.ts'));
+    // No exemptions: thesis-gap-exporter.ts sources its dissertation chapter content from a live
+    // EvaluationRunner.runEvaluation() call, not a hardcoded matrix. benchmark-data-loader.ts (a
+    // dead, never-imported module whose FALLBACK_BENCHMARK_METRICS carried the exact retired
+    // {tp:18,fp:3,fn:1} / 85.7%/94.7%/90.0% figures as a hardcoded fallback -- previously
+    // exempted from this very scan on the mistaken belief it only read the ground-truth file at
+    // runtime) has been deleted entirely rather than fixed in place, since nothing in the live
+    // app ever imported it.
+    const prodFiles = targetFiles;
 
     const suspiciousPatterns = [
       { name: 'Hardcoded Precision Return', regex: /precision\s*:\s*85\.71/i },

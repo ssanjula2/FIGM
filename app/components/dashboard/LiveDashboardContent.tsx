@@ -374,26 +374,33 @@ export default function LiveDashboardContent() {
             Live inspection & user events
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {activity.slice(0, 4).map((act) => (
-              <div key={act.id} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                <span
-                  style={{
-                    width: '10px',
-                    height: '10px',
-                    borderRadius: '50%',
-                    background: act.badgeColor || '#38bdf8',
-                    marginTop: '4px',
-                    flexShrink: 0,
-                  }}
-                />
-                <div>
-                  <div style={{ fontSize: '13px', color: '#f8fafc', fontWeight: 700 }}>{act.title}</div>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{act.description}</div>
+          {activity.length === 0 ? (
+            <div style={{ padding: '24px 0', textAlign: 'center', color: '#94a3b8' }}>
+              <span style={{ fontSize: '22px' }}>🕓</span>
+              <p style={{ marginTop: '6px', fontSize: '12px' }}>No recent activity yet.</p>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {activity.slice(0, 4).map((act) => (
+                <div key={act.id} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                  <span
+                    style={{
+                      width: '10px',
+                      height: '10px',
+                      borderRadius: '50%',
+                      background: act.badgeColor || '#38bdf8',
+                      marginTop: '4px',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div>
+                    <div style={{ fontSize: '13px', color: '#f8fafc', fontWeight: 700 }}>{act.title}</div>
+                    <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{act.description}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

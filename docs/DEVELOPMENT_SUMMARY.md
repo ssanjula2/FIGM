@@ -116,20 +116,27 @@ The Rule Book is categorized into **Universal Common Rules** alongside framework
 
 ## 5. Empirical Research & Dissertation Validation
 
-> **Note**: GAP 1 below was previously marked "100% Completed" on the strength of a fabricated 30-repository dataset. That dataset has since been deleted (see `docs/dissertation/chapter6_conclusion.md` for the retraction) and GAP 1 is now honestly reported as not performed. Several of the numeric figures in GAPs 2, 5, 7, and 8 below have not been independently re-verified against current live output as part of this pass and should be checked against `/api/research-metrics` and `benchmarks/eval-summary.json` before being cited.
+> **Note**: this table was fully re-verified against live output as part of a repository-wide claim
+> reconciliation pass (see `docs/evidence/research-claim-traceability.md`). GAP 1 was previously
+> marked "100% Completed" on the strength of a fabricated 30-repository dataset — deleted, now
+> honestly reported as not performed. GAPs 2, 3, 5, 7, and 8 previously showed numbers that did not
+> match any reproducible computation in the codebase (each apparently hand-typed independently, no
+> two matching each other) — corrected below to either the real live figure or an honest
+> not-yet-measured status. Before citing any row, re-run `npm run research:evaluate` or check
+> `/api/research-metrics` — these are regenerated live and this table is not.
 
 | Research Gap | Status | Key Deliverables & Output Metrics |
 | :--- | :--- | :--- |
 | **GAP 1: Large-Scale Repository Evaluation** | ❌ Not performed — prior claim retracted | The previously claimed "30 public production repos" dataset (`src/eval/repo-evaluator.ts`) was a hardcoded array of fabricated repository records (invented repo names/URLs, e.g. `exchangerates/dashboard`, which does not exist); it has been deleted. No repositories were ever cloned or scanned. Remains future work — see `docs/dissertation/chapter6_conclusion.md` §6.4. |
-| **GAP 2: Precision, Recall & F1** | ✅ 100% Completed | Tested against expert manual review: **Precision = 92.45%**, **Recall = 91.42%**, **F1 = 91.93%**, **Accuracy = 93.56%** in [precision-recall-engine.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/eval/precision-recall-engine.ts). |
-| **GAP 3: Guideline Coverage** | ✅ 100% Completed | 23 total rules categorized into universal common & framework-specific rules in [tool-benchmark.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/eval/tool-benchmark.ts). |
-| **GAP 4: Enhanced Runtime Profiling** | ✅ 100% Completed | Sandboxed runtime profiling measuring execution latency (ms) and peak heap memory in [dynamic-profiler.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/engine/dynamic-profiler.ts). |
-| **GAP 5: AI Patch Evaluation** | ✅ 100% Completed | **Patch Gen Success = 96.4%**, **Compilation Pass = 98.1%**, **Violation Removal = 94.8%**, Tech Debt Saved = 4.5 hrs/1k LOC in [ai-patch-evaluator.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/eval/ai-patch-evaluator.ts). |
-| **GAP 6: Benchmark vs Tools** | ✅ 100% Completed | Benchmark matrix contrasting FIGM against ESLint, SonarQube, Google Lighthouse, Angular ESLint, React ESLint. |
-| **GAP 7: Statistical Analysis** | ✅ 100% Completed | Mean LOC (${24,100}$), Mean Scan Time (${7.2}$s), Mean Violation Density (${1.08}$ / 1k LOC), 95% Confidence Interval (${[22.4, 34.8]}$). |
-| **GAP 8: User Usability Study** | ✅ 100% Completed | Evaluated $N = 92$ participants ($65$ student devs, $27$ senior devs): Satisfaction Mean = **4.72 / 5.00**, Cronbach's Alpha ($\alpha$) = **0.892**. |
-| **GAP 9: Threats to Validity** | ✅ 100% Completed | Formal analysis of Internal, External, Construct, and Reliability threats. |
-| **GAP 10: 3-Stage Extraction** | ✅ 100% Completed | Literature Review -> Candidate Pool -> Rule Extraction -> AST Mapping -> Execution Engine. |
+| **GAP 2: Precision, Recall & F1** | ⚠ Completed, scope-limited | Ground-truth benchmark (`npm run research:evaluate`) against 19 hand-labelled violations covering 8 of 25 rules: **Precision = 90.5%, Recall = 100%, F1 = 95.0%** (live in `docs/evidence/canonical-evaluation.json`). No "Accuracy" figure is reported — true negatives are not well-defined for this benchmark, so accuracy/specificity are intentionally not computed. Prior figures here (92.45%/91.42%/91.93%/93.56%) traced to no reproducible source and have been removed. |
+| **GAP 3: Guideline Coverage** | ✅ Completed | **25 total rules** (not 23 — a prior stale count here predated FIGM-A11Y-05/06 being added to the tracked matrix), categorized into 12 universal (cross-framework) and 13 framework-specific rules, derived live from `src/matrix/four-layer-meta-model.ts` via `src/eval/tool-benchmark.ts::RULE_COVERAGE_MATRIX`. |
+| **GAP 4: Enhanced Runtime Profiling** | ✅ Completed | Sandboxed runtime profiling measuring execution latency (ms) and peak heap memory in `src/engine/dynamic-profiler.ts`. |
+| **GAP 5: AI Patch Evaluation** | ⚠ Mechanism implemented and tested; aggregate rate not measured | Per-fix verification (re-scan confirms the violation is gone before reporting success) is real and tested (`tests/live-scan-e2e.test.ts`, `tests/ai-remediation.test.ts`). The previously-cited 96.4%/98.1%/94.8%/4.5hrs figures traced to hardcoded literals in the now-deleted `src/eval/ai-patch-evaluator.ts` with no real remediation run behind them. No aggregate success-rate benchmark currently exists — future work. |
+| **GAP 6: Benchmark vs Tools** | ⚠ Qualitative only | Capability comparison matrix (does each tool do static analysis / dynamic profiling / AI remediation / framework-independent detection — yes/no) against ESLint, SonarQube, Google Lighthouse, eslint-plugin-react, angular-eslint. No competitor tool was actually executed against this codebase; no quantitative score/latency is claimed for any of them. |
+| **GAP 7: Statistical Analysis** | ❌ Not performed — prior claim retracted | The previously-cited Mean LOC/Scan Time/Violation Density/Confidence Interval figures traced to no reproducible computation anywhere in the codebase (consistent with the deleted 30-repository dataset's shape). No such repository-scale statistical analysis currently exists. |
+| **GAP 8: User Usability Study** | ❌ Not performed — prior claim retracted | **0 of 85 target participants collected.** No Satisfaction Mean or Cronbach's Alpha can currently be reported. The previously-cited N=92/4.72/0.892 figures were fabricated (N=92 does not even match the documented N=85 target) and have been removed. The scoring pipeline exists and its formulas are verified against explicitly-labelled synthetic test data only — see `research/analysis/usability-results.json`. |
+| **GAP 9: Threats to Validity** | ✅ Completed | Formal analysis of Internal, External, Construct, and Reliability threats — see `docs/dissertation/chapter6_conclusion.md`/`chapter6_user_study_and_validity.md`. |
+| **GAP 10: 3-Stage Extraction** | ✅ Completed | Literature Review → Candidate Pool → Rule Extraction → AST Mapping → Execution Engine. |
 
 ---
 

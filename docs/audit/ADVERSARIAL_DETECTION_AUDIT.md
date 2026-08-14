@@ -110,7 +110,7 @@ test fixtures are excluded from this scan by the script itself):
 
 | | Violations | Quality |
 |---|---|---|
-| Before this fix (prior session's baseline, `FINAL_PRODUCTION_FORENSIC_AUDIT.md` §8) | 394 | 76% |
+| Before this fix (prior session's baseline, `archive/FINAL_PRODUCTION_FORENSIC_AUDIT.md` §8) | 394 | 76% |
 | After the core fix, before the 2 new-FP fixes above | 451 | 73% |
 | After the 2 new-FP fixes | 443 | 74% |
 | After remediating the 4 real violations found (`role="button"`/`tabIndex`/`onKeyDown`) | 439 | 74% |
@@ -122,7 +122,7 @@ suppressed only because a comment happened to contain an unrelated suppression-r
 correctly firing, and (c) this codebase's already-documented, unrelated rule-breadth limitations
 (`FIGM-REACT-03` firing on any `this.x = y` assignment regardless of framework, `FIGM-REACT-01` on
 any `.filter()`/`.sort()`/`.reduce()` call — both pre-existing, both unaffected by this fix, both
-already flagged as remaining risks in `FINAL_PRODUCTION_FORENSIC_AUDIT.md` §12). This audit did not
+already flagged as remaining risks in `archive/FINAL_PRODUCTION_FORENSIC_AUDIT.md` §12). This audit did not
 attempt to fix (c); it is a distinct, already-documented limitation of the rule design itself, not
 of comment/string handling. The 439 remaining after remediation reflects (b) and (c) only — a full
 per-rule re-classification of those (TP vs. pre-existing-broad-match noise) was not performed, out
