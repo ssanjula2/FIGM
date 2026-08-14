@@ -17,12 +17,49 @@ export interface BenchmarkOverall {
   falseNegatives: number;
 }
 
+export interface UserStudyMetrics {
+  susMean: number;
+  susMedian: number;
+  susStdDev: number;
+  susMin: number;
+  susMax: number;
+  cronbachAlpha: number;
+  taskCompletionRatePercent: number;
+  taskConfidenceMean: number;
+  taskDifficultyMean: number;
+  usefulnessMean: number;
+  ruleIdentificationDistribution: Record<string, number>;
+}
+
+export interface UserStudyProvenance {
+  datasetId: string;
+  datasetType: 'REAL_HUMAN_DATA' | 'SYNTHETIC';
+  isRealHumanData: boolean;
+  collectionStatus: 'COLLECTED' | 'NOT_COLLECTED';
+  targetSampleSize: number;
+  validParticipantCount: number;
+  targetReached: boolean;
+  anonymizedParticipantIds: string[];
+  totalResponsesIngested: number;
+  excludedResponsesCount: number;
+  processedAt: string;
+}
+
 export interface UserStudyStatus {
   targetParticipants: number;
   collectedParticipants: number;
-  collectionStatus: 'PENDING' | 'COMPLETE';
+  /** Matches scripts/import-user-study.ts's ProcessedUsabilityReport.provenance.collectionStatus
+   *  verbatim -- this is the canonical real-study data flow's own status, not a re-derived one. */
+  collectionStatus: 'COLLECTED' | 'NOT_COLLECTED';
+  /** True only once a real CSV import has produced at least one valid participant. Never true for
+   *  synthetic/formula-verification data -- see src/eval/user-study-evaluator.ts, which this field
+   *  is never sourced from. */
+  isRealHumanData: boolean;
   note: string;
   reliabilityMeasure: string;
+  /** null until isRealHumanData is true -- never a synthetic/placeholder metrics object. */
+  metrics: UserStudyMetrics | null;
+  provenance: UserStudyProvenance;
 }
 
 export interface ResearchMetricsPayload {

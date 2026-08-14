@@ -189,6 +189,16 @@ function main() {
   const presenceResult = computeAgreement(presencePairs);
 
   // --- Rule-classification agreement, restricted to items both raters agree are present ---
+  // NOTE (verified via tests/independent-annotation-pipeline.test.ts): this match is deliberately
+  // NOT ruleId-prefiltered -- it can't require ruleId equality as a precondition when ruleId
+  // equality is the very thing being measured. It locates the corresponding annotator row purely
+  // by (fixture_file, line proximity), which means two ground-truth items in the same file sitting
+  // within LINE_TOLERANCE of each other can cause `findIndex` to resolve to the "wrong" nearby row
+  // instead of the one that should self-match. On this benchmark's compact fixtures (several items
+  // per file within a few lines of each other) this is a real, observed effect, not merely
+  // theoretical -- interpret a low rule-classification kappa with that in mind before concluding
+  // annotators disagree on rule identity more than they actually do; check the item-level detail
+  // below for suspicious close-line collisions first.
   const ruleClassificationPairs: RatingPair[] = [];
   groundTruth.groundTruthViolations.forEach((gt, gtIdx) => {
     const matchIdx = realAnnotatorRows.findIndex((row) => row.fixture_file === gt.filePath && row.rule_id && (row.violation_present || 'yes').toLowerCase() !== 'no' && Math.abs((Number(row.line_number) || 0) - (gt.blindedLine ?? 0)) <= LINE_TOLERANCE);

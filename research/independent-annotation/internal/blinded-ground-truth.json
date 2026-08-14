@@ -1,6 +1,6 @@
 {
   "_generatedBy": "scripts/generate-annotation-package.ts",
-  "_generatedAt": "2026-08-13T11:41:01.810Z",
+  "_generatedAt": "2026-08-14T11:51:03.725Z",
   "_warning": "INTERNAL USE ONLY -- never copy this file into research/independent-annotation/package/. It contains the real answers.",
   "_matchingNote": "The real evaluation pipeline (src/eval/evaluation-runner.ts) matches ground truth to detections by (filePath, ruleId) only, never by line number. blindedLine below is documentary/for human sanity-checking only, not a match key.",
   "groundTruthViolations": [

@@ -51,10 +51,10 @@ export default function BenchmarkSection() {
           value: us?.collectedParticipants ?? 0,
           label: 'Human Participants',
           sub:
-            us?.collectionStatus === 'COMPLETE'
+            us?.collectionStatus === 'COLLECTED'
               ? "Cronbach's α computed"
               : "Cronbach's α — pending data",
-          highlight: us?.collectionStatus !== 'COMPLETE',
+          highlight: us?.collectionStatus !== 'COLLECTED',
         },
       ]
     : null;
@@ -124,7 +124,7 @@ export default function BenchmarkSection() {
         )}
 
         {/* Human study data notice */}
-        {!loading && us && us.collectionStatus !== 'COMPLETE' && (
+        {!loading && us && us.collectionStatus !== 'COLLECTED' && (
           <div
             style={{
               background: 'rgba(245, 158, 11, 0.08)',

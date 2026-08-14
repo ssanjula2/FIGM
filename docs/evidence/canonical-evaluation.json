@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-14T11:38:56.250Z",
+  "generatedAt": "2026-08-14T12:19:09.600Z",
   "provenance": {
     "generatedBy": "src/eval/evaluation-runner.ts",
     "groundTruth": "benchmarks/ground-truth.json",
@@ -60,10 +60,10 @@
     "humanStudyStatusSource": "research/analysis/usability-results.json (see that file for real participant count / collection status — never this artifact)"
   },
   "performance": {
-    "totalScanDurationMs": 218.99,
+    "totalScanDurationMs": 219.52,
     "totalLinesOfCode": 147,
-    "scanSpeedLOCPerSec": 671.3,
-    "peakMemoryMB": 18.22
+    "scanSpeedLOCPerSec": 669.6,
+    "peakMemoryMB": 18.32
   },
   "evidenceStatus": "CANONICAL_GROUND_TRUTH_VERIFIED"
 }

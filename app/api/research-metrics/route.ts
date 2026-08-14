@@ -13,6 +13,7 @@ import { NextResponse } from 'next/server';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
+import type { ProcessedUsabilityReport } from '../../../scripts/import-user-study';
 
 // ── Dissertation-aligned bibliography (IS303.2, 2025) ─────────────────────
 const REFERENCES = [
@@ -185,19 +186,35 @@ export async function GET() {
   }
 
   // ── Compute human study status ─────────────────────────────────────────
-  const userStudyPath = join(process.cwd(), 'data', 'user-study-responses.json');
-  let humanParticipants = 0;
-  const targetParticipants = 85;
+  // Canonical real-study data flow: raw responses (research/raw/real/responses.csv)
+  // -> validation + anonymization + analysis (scripts/import-user-study.ts,
+  //    `npm run research:user-study:import`)
+  // -> canonical results (research/analysis/usability-results.json, written by that script)
+  // -> here (API/UI).
+  // This MUST read the exact same path the import script writes to. It previously read
+  // `data/user-study-responses.json`, a path nothing in this codebase ever wrote to (`data/`
+  // doesn't exist anywhere in the repo) -- silently and permanently stuck at humanParticipants=0
+  // even after a real CSV import, because it was watching the wrong file. Fixed 2026-08-14; see
+  // docs/audit/HUMAN_STUDY_PROVENANCE_AUDIT.md and tests/user-study-canonical-path.test.ts.
+  const userStudyPath = join(process.cwd(), 'research', 'analysis', 'usability-results.json');
+  let usabilityReport: ProcessedUsabilityReport | null = null;
 
   if (existsSync(userStudyPath)) {
     try {
-      const raw = readFileSync(userStudyPath, 'utf-8');
-      const parsed = JSON.parse(raw);
-      humanParticipants = Array.isArray(parsed) ? parsed.length : (parsed.count ?? 0);
+      usabilityReport = JSON.parse(readFileSync(userStudyPath, 'utf-8')) as ProcessedUsabilityReport;
     } catch {
-      humanParticipants = 0;
+      usabilityReport = null;
     }
   }
+
+  // Planned sample size and actual collected count are kept as two distinct fields end-to-end --
+  // never conflated. `targetParticipants` falls back to the pipeline's own default (85, matching
+  // scripts/import-user-study.ts's TARGET_SAMPLE_SIZE) only when the canonical file doesn't exist
+  // yet at all (e.g. a fresh checkout before the import script has ever been run); once it exists,
+  // its own recorded target is authoritative, not a second hardcoded literal here.
+  const targetParticipants = usabilityReport?.provenance.targetSampleSize ?? 85;
+  const humanParticipants = usabilityReport?.provenance.validParticipantCount ?? 0;
+  const isRealHumanData = usabilityReport?.provenance.isRealHumanData ?? false;
 
   // ── Build response ─────────────────────────────────────────────────────
   const overall = (benchmarkData as Record<string, Record<string, number>> | null)?.overall ?? null;
@@ -263,17 +280,39 @@ export async function GET() {
       },
 
       // ── Human usability study status ──────────────────────────────────
+      // Provenance is passed through verbatim from the canonical results file rather than
+      // re-derived here, so this block can never assert something the canonical pipeline itself
+      // didn't compute. `isRealHumanData: false` / `collectedParticipants: 0` is the correct,
+      // honest state until a real CSV has been imported -- see
+      // research/DATA_COLLECTION_PROTOCOL.md and docs/audit/HUMAN_STUDY_PROVENANCE_AUDIT.md.
       userStudy: {
         targetParticipants,
         collectedParticipants: humanParticipants,
-        collectionStatus: humanParticipants >= targetParticipants ? 'COMPLETE' : 'PENDING',
+        collectionStatus: usabilityReport?.provenance.collectionStatus ?? 'NOT_COLLECTED',
+        isRealHumanData,
         cohort: 'Controlled cohort of student developers at NSBM Green University',
         instrument: 'Post-interaction usability feedback survey',
         reliabilityMeasure: "Cronbach's α (computed only after real data is collected)",
-        note:
-          humanParticipants === 0
-            ? 'No real human participant data has been collected yet. Cronbach α will be computed once responses arrive.'
-            : `${humanParticipants}/${targetParticipants} real human participants collected.`,
+        note: !isRealHumanData
+          ? 'No real human participant data has been collected yet. Cronbach α will be computed once responses arrive.'
+          : `${humanParticipants}/${targetParticipants} real human participants collected.`,
+        metrics: isRealHumanData ? usabilityReport!.metrics : null,
+        provenance: usabilityReport?.provenance ?? {
+          datasetId: 'FIGM-REAL-HUMAN-USER-STUDY-V1',
+          datasetType: 'SYNTHETIC' as const,
+          isRealHumanData: false,
+          collectionStatus: 'NOT_COLLECTED' as const,
+          targetSampleSize: targetParticipants,
+          validParticipantCount: 0,
+          targetReached: false,
+          anonymizedParticipantIds: [],
+          totalResponsesIngested: 0,
+          excludedResponsesCount: 0,
+          // Empty, not a real timestamp: the canonical results file has never been generated at
+          // all (not even the NOT_COLLECTED baseline scripts/import-user-study.ts writes on a
+          // clean run). Run `npm run research:user-study:import` to produce it.
+          processedAt: '',
+        },
       },
 
       // ── Dissertation references ────────────────────────────────────────
