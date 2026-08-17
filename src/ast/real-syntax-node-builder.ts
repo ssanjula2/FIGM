@@ -429,6 +429,51 @@ function isPropertyAccessChain(expr: ts.Expression): expr is ts.PropertyAccessEx
   return ts.isPropertyAccessExpression(expr);
 }
 
+// Root identifiers this rule must never attribute a mutation to, because they are unambiguously
+// NOT a React state variable no matter what gets assigned on them or called on them -- found via
+// live black-box testing on FIGM's own codebase: `router.push('/guidelines')` (the standard
+// Next.js/React Router navigation call, matched because `.push` is also an array-mutation method
+// name) and `document.body.style.overflow = 'hidden'` (a standard scroll-lock pattern, matched
+// because it's a plain `obj.prop = value` assignment) were both flagged CRITICAL "direct state
+// mutation" -- a false positive severe enough to spam warnings in almost any real Next.js app,
+// since `router.push` is one of the most common calls in the framework.
+const NON_STATE_ROOT_IDENTIFIERS = new Set([
+  'document', 'window', 'navigator', 'location', 'history',
+  'localStorage', 'sessionStorage', 'router',
+]);
+
+/** Walks a (possibly chained) member-access expression down to its root identifier, e.g.
+ *  `document.body.style` -> "document", `router.push` -> "router", `user.profile.name` ->
+ *  "user". Returns undefined for anything that doesn't bottom out at a plain identifier (a call
+ *  result, `this`, etc.), which this rule already didn't have a meaningful root-name check for. */
+function getRootIdentifierName(expr: ts.Expression): string | undefined {
+  let current: ts.Expression = expr;
+  while (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) {
+    current = current.expression;
+  }
+  return ts.isIdentifier(current) ? current.text : undefined;
+}
+
+/** `somethingRef.current.foo = value` / `somethingRef.current.method()` is the standard React
+ *  idiom for imperatively driving a DOM node or mutable ref container (video playback position,
+ *  focus, scroll position, a timer handle...) -- categorically not React state, regardless of
+ *  the ref variable's own name, which (unlike `document`/`router`) can't be captured by a fixed
+ *  identifier allow-list. */
+function isRefCurrentAccess(expr: ts.Expression): boolean {
+  let current: ts.Expression = expr;
+  while (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) {
+    if (ts.isPropertyAccessExpression(current) && current.name.text === 'current') return true;
+    current = current.expression;
+  }
+  return false;
+}
+
+function isExcludedMutationTarget(expr: ts.Expression): boolean {
+  const root = getRootIdentifierName(expr);
+  if (root && NON_STATE_ROOT_IDENTIFIERS.has(root)) return true;
+  return isRefCurrentAccess(expr);
+}
+
 function buildReact03(ctx: BuilderContext, node: ts.Node): void {
   if (!ts.isExpressionStatement(node)) return;
   const expr = node.expression;
@@ -436,6 +481,7 @@ function buildReact03(ctx: BuilderContext, node: ts.Node): void {
   // Shape A: arr.push(x) / arr.splice(...) / etc.
   if (ts.isCallExpression(expr) && isPropertyAccessChain(expr.expression) && ARRAY_MUTATION_METHODS.has(expr.expression.name.text)) {
     if (node.getText(ctx.sourceFile).includes('setState')) return; // preserved legacy exclusion
+    if (isExcludedMutationTarget(expr.expression.expression)) return;
     pushNode(ctx, node, {
       type: 'ExpressionStatement',
       name: 'mutateState',
@@ -454,6 +500,7 @@ function buildReact03(ctx: BuilderContext, node: ts.Node): void {
     isPropertyAccessChain(expr.left)
   ) {
     if (node.getText(ctx.sourceFile).includes('setState')) return; // preserved legacy exclusion
+    if (isExcludedMutationTarget(expr.left)) return;
     pushNode(ctx, node, {
       type: 'ExpressionStatement',
       name: 'mutateState',
