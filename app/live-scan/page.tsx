@@ -2,7 +2,17 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import Editor, { useMonaco, OnMount } from '@monaco-editor/react';
+import dynamic from 'next/dynamic';
+import type { OnMount } from '@monaco-editor/react';
+
+// Monaco is a heavy browser-only editor bundle (FIGM's own FIGM-NEXT-02 rule: "Heavy browser
+// module imported statically in Next.js instead of next/dynamic with ssr: false"). Code-split it
+// into its own chunk, loaded only when this page actually renders the editor, rather than bundled
+// into this page's main chunk. `useMonaco()` is deliberately NOT imported here (that would defeat
+// the point -- it's a named export of the same module, so importing it statically re-introduces
+// the exact static-import problem this fixes); the monaco instance is instead captured from
+// `onMount`'s second argument below and stored in a ref.
+const Editor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
 // ── Sample presets (only for the "Try Sample" buttons — not hardcoded results) ─
 const SAMPLE_REACT_CODE = `import React from 'react';
@@ -344,7 +354,7 @@ export default function LiveScanPage() {
   const [saveHistoryStatus, setSaveHistoryStatus] = useState<{ kind: 'success' | 'error' | 'auth'; message: string } | null>(null);
 
   const editorRef = useRef<any>(null);
-  const monaco = useMonaco();
+  const monacoRef = useRef<any>(null);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastScannedCode = useRef<string>('');
 
@@ -488,7 +498,12 @@ export default function LiveScanPage() {
   }, []);
 
   // ── Monaco markers sync ────────────────────────────────────────────────
+  // `monacoRef` (not the `useMonaco()` hook -- deliberately not imported, see the dynamic Editor
+  // import above) is a plain ref, so it can't drive this effect's dependency array the way a
+  // reactive `monaco` value could; the `editorRef.current`/`result` dependency below is already
+  // the same established pattern this effect used for `editorRef` (also a ref) before this change.
   useEffect(() => {
+    const monaco = monacoRef.current;
     if (monaco && editorRef.current && result) {
       const model = editorRef.current.getModel();
       if (model) {
@@ -507,10 +522,11 @@ export default function LiveScanPage() {
         monaco.editor.setModelMarkers(model, 'figm-analyzer', markers);
       }
     }
-  }, [monaco, result]);
+  }, [result]);
 
-  const handleEditorMount: OnMount = (editor) => {
+  const handleEditorMount: OnMount = (editor, monacoInstance) => {
     editorRef.current = editor;
+    monacoRef.current = monacoInstance;
   };
 
   // ── Debounced auto-scan while user types ──────────────────────────────
