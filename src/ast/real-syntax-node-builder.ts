@@ -846,6 +846,14 @@ function buildNext03Root(ctx: BuilderContext): void {
   if (ctx.framework !== 'NEXT_JS') return;
   if (!isAppRouterPageFile(ctx.sourceFile.fileName)) return;
   if (hasRevalidateExport(ctx.sourceFile)) return;
+  // Route segment config exports (`revalidate`, `dynamic`, etc.) are only valid in a Server
+  // Component page -- Next.js rejects them entirely from a file marked 'use client' ("You are
+  // attempting to export ... from a component marked with 'use client'"). Flagging a Client
+  // Component page for a "missing" export it is not even allowed to have is a false positive:
+  // there is no single-line fix that makes the file correct, only an architecture change (move
+  // the data fetch/revalidate config to a Server Component page/layout that renders this client
+  // component), which is a human decision, not something this rule can safely auto-detect here.
+  if (hasUseClientDirective(ctx.sourceFile)) return;
   ctx.nodes.push({
     type: 'ExportNamedDeclaration',
     name: 'revalidate',

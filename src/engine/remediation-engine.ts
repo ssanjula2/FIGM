@@ -371,11 +371,32 @@ export class RemediationEngine {
       case 'FIGM-NEXT-03': {
         // Missing `export const revalidate` on an App Router page. The diagnostic's snippet is a
         // synthetic marker ('export const revalidate'), not a real source line — the whole point
-        // is that the real line is absent — so the fix always inserts it at the top of the file.
-        // 60 seconds is a conservative, commonly-recommended default; the developer should tune
-        // it to the page's real staleness tolerance.
-        remediatedCode = `export const revalidate = 60; // [FIGM Quick-Fix]: adjust to this page's real staleness tolerance\n\n${code}`;
-        appliedFixDescription = 'Added export const revalidate = 60 route segment configuration — adjust the value to this page\'s real staleness tolerance.';
+        // is that the real line is absent — so the fix normally inserts it at the top of the
+        // file. 60 seconds is a conservative, commonly-recommended default; the developer should
+        // tune it to the page's real staleness tolerance.
+        //
+        // Guard: route segment config exports are only valid in a Server Component. A file that
+        // starts with 'use client' cannot have `export const revalidate` inserted at all — Next.js
+        // rejects the export outright when the file is a Client Component, and prepending it
+        // above the directive would also push 'use client' off line 1, which silently breaks the
+        // directive itself (it must be the first statement in the file). The detection rule
+        // (buildNext03Root/legacy check) already excludes 'use client' files for the same reason,
+        // so this should be unreachable in practice; kept as defense-in-depth in case a diagnostic
+        // reaches this path from a caller that skipped that gate.
+        const hasUseClientDirective = /^\s*['"]use client['"]\s*;?/.test(code);
+        if (hasUseClientDirective) {
+          requiresManualReview = true;
+          appliedFixDescription =
+            "Cannot auto-fix: this file is a Client Component ('use client'), and route segment config " +
+            "(export const revalidate) is not valid there — Next.js rejects it, and inserting it would also " +
+            "displace 'use client' from being the file's first statement. Route-level revalidation for a " +
+            "Client Component page has to be configured on the Server Component that owns the route " +
+            "(e.g. a parent layout.tsx, or by keeping page.tsx as an async Server Component that renders " +
+            "this component as a child) — decide the right shape for this route and apply it manually.";
+        } else {
+          remediatedCode = `export const revalidate = 60; // [FIGM Quick-Fix]: adjust to this page's real staleness tolerance\n\n${code}`;
+          appliedFixDescription = 'Added export const revalidate = 60 route segment configuration — adjust the value to this page\'s real staleness tolerance.';
+        }
         break;
       }
 

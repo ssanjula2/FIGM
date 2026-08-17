@@ -528,7 +528,12 @@ export class SourceParser {
     // isAppRouterPage set, which cannot occur given how detectFramework assigns NEXT_JS, but is
     // left as a harmless no-op guard rather than deleted, to avoid asserting a stronger invariant
     // than the rest of this file currently guarantees elsewhere.
-    if (framework === 'NEXT_JS' && root.attributes?.isAppRouterPage && !root.attributes?.hasRevalidateExport) {
+    if (
+      framework === 'NEXT_JS' &&
+      root.attributes?.isAppRouterPage &&
+      !root.attributes?.hasRevalidateExport &&
+      !root.attributes?.hasUseClientDirective
+    ) {
       if (!useRealAstNext02) {
         root.children!.push({
           type: 'ExportNamedDeclaration',
