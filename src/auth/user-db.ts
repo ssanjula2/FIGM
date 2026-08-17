@@ -294,7 +294,10 @@ export const UserDB = {
       passwordHash: user.passwordHash,
       fullName: user.fullName,
       role: user.role || 'DEVELOPER',
-      apiKey: `figm_key_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`,
+      // NEW-01: was `Date.now()_${Math.random()...}` -- guessable, non-cryptographic randomness
+      // for a live, usable API key. Matches the admin-bootstrap path's already-correct pattern
+      // above (line 187).
+      apiKey: `figm_key_${crypto.randomBytes(16).toString('hex')}`,
       createdAt: new Date().toISOString(),
     };
     db.users.push(newUser);

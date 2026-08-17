@@ -1,5 +1,18 @@
 import { DBScanRecord } from '../auth/user-db';
 
+/** Neutralizes CSV formula injection (SEC-07): a cell value opening with `=`, `+`, `-`, or `@` is
+ *  interpreted as a formula by Excel/Sheets when the exported file is opened, not as literal text
+ *  -- a real code-execution vector if a malicious `offendingCodeSnippet`/`ruleName`/`remediation`
+ *  string (all ultimately derived from analyzed source code, which is attacker-influenceable) is
+ *  exported and opened. Prefixing a `'` forces spreadsheet applications to render the cell as
+ *  plain text instead of evaluating it. Applied to every interpolated CSV field below, not just
+ *  the two that were already quote-escaped -- `ruleId`/`severity`/`domain` are normally
+ *  engine-controlled enum values that could never start with these characters in practice, but
+ *  sanitizing them too costs nothing and removes any dependency on that assumption holding. */
+function sanitizeCsvCell(value: string): string {
+  return /^[=+\-@]/.test(value) ? `'${value}` : value;
+}
+
 function escapeHtml(str: string): string {
   if (!str) return '';
   return str
@@ -51,10 +64,14 @@ export class ExportService {
     diagnostics.forEach((d: any) => {
       const lineNum = d.location?.start?.line || 1;
       const colNum = d.location?.start?.column || 1;
-      const cleanSnippet = `"${(d.offendingCodeSnippet || '').replace(/"/g, '""')}"`;
-      const cleanRemediation = `"${(d.remediation || '').replace(/"/g, '""')}"`;
+      const ruleId = sanitizeCsvCell(d.ruleId || '');
+      const ruleName = sanitizeCsvCell(d.ruleName || '');
+      const severity = sanitizeCsvCell(d.severity || 'MEDIUM');
+      const domain = sanitizeCsvCell(d.domain || 'PERFORMANCE');
+      const cleanSnippet = `"${sanitizeCsvCell(d.offendingCodeSnippet || '').replace(/"/g, '""')}"`;
+      const cleanRemediation = `"${sanitizeCsvCell(d.remediation || '').replace(/"/g, '""')}"`;
       lines.push(
-        `${d.ruleId || ''},"${d.ruleName || ''}",${d.severity || 'MEDIUM'},${d.domain || 'PERFORMANCE'},${lineNum},${colNum},${cleanSnippet},${cleanRemediation}`
+        `${ruleId},"${ruleName}",${severity},${domain},${lineNum},${colNum},${cleanSnippet},${cleanRemediation}`
       );
     });
 

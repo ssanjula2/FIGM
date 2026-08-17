@@ -3,6 +3,17 @@ import { authorizeRole } from '../../../../src/auth/auth-middleware';
 import { UserRepository } from '../../../../src/engine/user-repository';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
+/** SEC-08: an admin listing every OTHER user's API key in plaintext broadens the blast radius of
+ *  any single admin-account compromise to every user's key at once. A user views their OWN key in
+ *  full via GET /api/profile (a different, self-service-only route this doesn't touch) -- admins
+ *  only need enough of the key to identify/confirm it, e.g. when a user reports "my key doesn't
+ *  work," not the ability to read/reuse it themselves. */
+function maskApiKey(apiKey: string | null | undefined): string | null {
+  if (!apiKey) return null;
+  if (apiKey.length <= 4) return '*'.repeat(apiKey.length);
+  return `${'*'.repeat(apiKey.length - 4)}${apiKey.slice(-4)}`;
+}
+
 export async function GET(request: Request) {
   const auth = authorizeRole(request, ['ADMIN']);
   if (auth.errorResponse || !auth.user) {
@@ -15,7 +26,7 @@ export async function GET(request: Request) {
     email: u.email,
     fullName: u.fullName,
     role: u.role,
-    apiKey: u.apiKey,
+    apiKey: maskApiKey(u.apiKey),
     createdAt: u.createdAt,
     lastLoginAt: u.lastLoginAt || u.createdAt,
   }));

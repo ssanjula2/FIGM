@@ -16,6 +16,8 @@ import { POST as duplicatePOST } from '../app/api/projects/[id]/duplicate/route'
 import { PATCH as notificationsPATCH } from '../app/api/notifications/route';
 import { GET as dashboardSummaryGET } from '../app/api/dashboard/summary/route';
 import { PATCH as profilePATCH } from '../app/api/profile/route';
+import { GET as adminUsersGET } from '../app/api/admin/users/route';
+import { UserDB } from '../src/auth/user-db';
 
 function authedRequest(url: string, opts: RequestInit, jwt: string): Request {
   const headers = new Headers(opts.headers);
@@ -287,6 +289,63 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
     // platform-aggregate data) -- the regression this guards is the `role` variable silently
     // defaulting to 'ADMIN' for an anonymous caller.
     assert.equal(res.status, 200);
+  });
+
+  await t.test('SEC-08: GET /api/admin/users never returns a plaintext apiKey', async () => {
+    // Every admin being able to read every OTHER user's real, usable API key in plaintext
+    // broadens the blast radius of any single admin-account compromise to every user's key at
+    // once. An admin only needs enough of the key to identify/confirm it (e.g. "does this match
+    // what the user says they're using"), not the ability to read/reuse it themselves.
+    const target = UserDB.createUser({
+      email: `sec08_target_${Date.now()}_${Math.random().toString(36).slice(2, 7)}@figm.io`,
+      passwordHash: 'unused-in-this-test',
+      fullName: 'SEC-08 Target',
+      role: 'DEVELOPER',
+    });
+    assert.ok(target.apiKey, 'sanity check: the created user actually has a real apiKey to try to leak');
+
+    const adminToken = tokenFor('usr_sec08_admin', 'ADMIN');
+    const req = authedRequest('http://localhost:3000/api/admin/users', {}, adminToken);
+    const res = await adminUsersGET(req);
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    const listed = body.users.find((u: any) => u.id === target.id);
+    assert.ok(listed, 'the target user must appear in the admin listing');
+    assert.notEqual(listed.apiKey, target.apiKey, 'the real apiKey value must never be returned verbatim');
+    assert.ok(listed.apiKey.includes('*'), 'the returned apiKey must be masked');
+    assert.ok(listed.apiKey.endsWith(target.apiKey.slice(-4)), 'only the last 4 characters may be revealed');
+  });
+
+  await t.test('NEW-01: UserDB.createUser generates apiKey with cryptographically secure randomness, not Date.now()+Math.random()', () => {
+    // Was `figm_key_${Date.now()}_${Math.random().toString(36).substring(2, 10)}` -- Math.random()
+    // is not cryptographically secure and Date.now() is guessable/narrow, together making a live,
+    // usable API key meaningfully easier to predict/brute-force than it should be. The admin
+    // bootstrap path (getDefaultUsers) already used crypto.randomBytes(16).toString('hex') --
+    // this brings createUser (the path every normal registration goes through) in line with it.
+    const user = UserDB.createUser({
+      email: `new01_${Date.now()}_${Math.random().toString(36).slice(2, 7)}@figm.io`,
+      passwordHash: 'unused-in-this-test',
+      fullName: 'NEW-01 Regression',
+      role: 'DEVELOPER',
+    });
+    assert.ok(user.apiKey.startsWith('figm_key_'));
+    const suffix = user.apiKey.slice('figm_key_'.length);
+    // crypto.randomBytes(16).toString('hex') is always exactly 32 lowercase hex characters --
+    // structurally distinct from the old `${timestamp}_${base36}` shape, which always contained
+    // an underscore and was far shorter/narrower in its actual entropy.
+    assert.match(suffix, /^[0-9a-f]{32}$/, `apiKey suffix must be 32 hex chars from crypto.randomBytes, got: ${suffix}`);
+    assert.ok(!suffix.includes('_'), 'must not be the old timestamp_base36 shape');
+
+    // Two keys generated back-to-back (same millisecond is plausible) must still be distinct --
+    // the old Date.now()-based scheme could theoretically collide within the same tick if
+    // Math.random() also happened to match, whereas 128 bits of real randomness practically can't.
+    const user2 = UserDB.createUser({
+      email: `new01b_${Date.now()}_${Math.random().toString(36).slice(2, 7)}@figm.io`,
+      passwordHash: 'unused-in-this-test',
+      fullName: 'NEW-01 Regression 2',
+      role: 'DEVELOPER',
+    });
+    assert.notEqual(user.apiKey, user2.apiKey);
   });
 
   await t.test('checkRateLimit blocks after the configured threshold and returns 429 with Retry-After', async () => {

