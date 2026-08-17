@@ -206,36 +206,64 @@ const FIX_STATUS_META: Record<VerificationStatus, { icon: string; label: string;
 };
 
 // ── Diff viewer helper ──────────────────────────────────────────────────────
-function DiffView({ before, after }: { before: string; after: string }) {
-  const beforeLines = before.split('\n');
-  const afterLines = after.split('\n');
+type DiffRow = { type: 'same' | 'removed' | 'added'; text: string };
 
-  // Simple line-level diff: mark lines that differ
-  const maxLen = Math.max(beforeLines.length, afterLines.length);
-  const rows: Array<{ type: 'same' | 'removed' | 'added'; text: string }> = [];
+// Real LCS-based line diff (dynamic programming), not a naive index-paired comparison. The
+// naive version -- walk both files in lockstep, marking a pair "changed" whenever line[i] !==
+// line[j] at the SAME position -- breaks the instant a fix inserts or deletes even one line
+// (e.g. adding a `'use client'` directive): every following line then compares against its
+// neighbor-shifted-by-one, mismatches, and the whole rest of the file renders as 100% removed
+// + 100% added -- a real, live-reproduced bug (confirmed against FIGM's own FIGM-NEXT-01 fix,
+// which inserts exactly one directive line and one blank line: the naive diff marked all 44
+// rows of a 21-line file as changed). LCS alignment instead finds the actual common
+// subsequence, so only the lines that truly differ are marked.
+function computeLineDiff(beforeLines: string[], afterLines: string[]): DiffRow[] {
+  const n = beforeLines.length;
+  const m = afterLines.length;
 
-  let bi = 0;
-  let ai = 0;
-  while (bi < beforeLines.length || ai < afterLines.length) {
-    const bl = beforeLines[bi] ?? null;
-    const al = afterLines[ai] ?? null;
+  // Guard against the O(n*m) DP table blowing up on pathologically large pasted files -- fall
+  // back to a coarse whole-block replacement rather than hang the tab.
+  if (n * m > 4_000_000) {
+    const rows: DiffRow[] = [];
+    for (const l of beforeLines) rows.push({ type: 'removed', text: l });
+    for (const l of afterLines) rows.push({ type: 'added', text: l });
+    return rows;
+  }
 
-    if (bl === al) {
-      rows.push({ type: 'same', text: bl ?? '' });
-      bi++;
-      ai++;
-    } else {
-      if (bl !== null) rows.push({ type: 'removed', text: bl });
-      if (al !== null) rows.push({ type: 'added', text: al });
-      bi++;
-      ai++;
+  const dp: number[][] = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+  for (let i = n - 1; i >= 0; i--) {
+    for (let j = m - 1; j >= 0; j--) {
+      dp[i][j] = beforeLines[i] === afterLines[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
     }
   }
 
-  void maxLen; // suppress unused warning
+  const rows: DiffRow[] = [];
+  let i = 0;
+  let j = 0;
+  while (i < n && j < m) {
+    if (beforeLines[i] === afterLines[j]) {
+      rows.push({ type: 'same', text: beforeLines[i] });
+      i++;
+      j++;
+    } else if (dp[i + 1][j] >= dp[i][j + 1]) {
+      rows.push({ type: 'removed', text: beforeLines[i] });
+      i++;
+    } else {
+      rows.push({ type: 'added', text: afterLines[j] });
+      j++;
+    }
+  }
+  while (i < n) rows.push({ type: 'removed', text: beforeLines[i++] });
+  while (j < m) rows.push({ type: 'added', text: afterLines[j++] });
+  return rows;
+}
 
-  const changedCount = rows.filter((r) => r.type !== 'same').length;
-  if (changedCount === 0) return null;
+function DiffView({ before, after }: { before: string; after: string }) {
+  const rows = computeLineDiff(before.split('\n'), after.split('\n'));
+
+  const addedCount = rows.filter((r) => r.type === 'added').length;
+  const removedCount = rows.filter((r) => r.type === 'removed').length;
+  if (addedCount === 0 && removedCount === 0) return null;
 
   return (
     <div
@@ -263,7 +291,7 @@ function DiffView({ before, after }: { before: string; after: string }) {
       >
         <span style={{ color: '#ef4444' }}>− removed</span>
         <span style={{ color: '#22c55e' }}>+ added</span>
-        <span style={{ marginLeft: 'auto' }}>{changedCount / 2} line(s) changed</span>
+        <span style={{ marginLeft: 'auto' }}>+{addedCount} −{removedCount}</span>
       </div>
       {rows.map((row, i) => (
         <div
@@ -339,7 +367,22 @@ export default function LiveScanPage() {
       if (!res.ok) throw new Error(`Server returned status ${res.status}`);
       const data: ScanResultResponse = await res.json();
       setResult(data);
-      setFixResults({});
+      // Drop fix-attempt state only for violations that are no longer at the same (ruleId,
+      // line) key -- not everything. A blanket reset here was wiping every OTHER still-open
+      // violation's fix badge/diff whenever ANY single violation's fix succeeded, since a
+      // successful fix triggers exactly this same re-scan (see applyFix below): fix violation
+      // B, then fix violation A -- B's "Manual Review Required" card, still open and unrelated
+      // to A's patch, silently reverted to a blank "Apply Fix" button the instant A's rescan
+      // landed. A violation whose key really did shift (line moved) is still safely dropped,
+      // since we can no longer be sure the old fix attempt still describes the same content.
+      setFixResults((prev) => {
+        const stillPresentKeys = new Set(data.diagnostics.map((d) => d.ruleId + '_' + d.location.start.line));
+        const next: Record<string, FixOutcome> = {};
+        for (const [key, outcome] of Object.entries(prev)) {
+          if (stillPresentKeys.has(key)) next[key] = outcome;
+        }
+        return next;
+      });
     } catch (err: any) {
       setScanError(err.message || 'Failed to inspect code');
     } finally {

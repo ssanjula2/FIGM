@@ -5,7 +5,7 @@
 ## 5.0 Provenance
 
 - **Dataset**: `benchmarks/ground-truth.json` (8 rules, hand-labelled) scored against fixture files in `benchmarks/testbed`
-- **Generated at**: 2026-08-17T06:24:00.240Z
+- **Generated at**: 2026-08-17T06:33:37.632Z
 - **Calculation method**: TP/FP/FN computed by dynamically re-running RuleExecutionEngine.analyzeFile against every file in benchmarks/testbed and diffing the resulting diagnostics against benchmarks/ground-truth.json (exact filePath+ruleId match). Precision = TP/(TP+FP), Recall = TP/(TP+FN), F1 = 2*P*R/(P+R). No cached or hand-typed confusion matrix is used at any step.
 - **Rule coverage**: 8 of 25 FIGM rules have empirical ground-truth coverage (FIGM-A11Y-01, FIGM-A11Y-02, FIGM-A11Y-03, FIGM-A11Y-04, FIGM-PERF-01, FIGM-PERF-02, FIGM-PERF-03, FIGM-PERF-04). The remaining 17 rules (FIGM-A11Y-05, FIGM-A11Y-06, FIGM-ANG-01, FIGM-ANG-02, FIGM-ANG-03, FIGM-ANG-04, FIGM-ANG-05, FIGM-NEXT-01, FIGM-NEXT-02, FIGM-NEXT-03, FIGM-NEXT-04, FIGM-PERF-05, FIGM-PERF-06, FIGM-REACT-01, FIGM-REACT-02, FIGM-REACT-03, FIGM-REACT-04) are verified only by unit-level positive/negative fixture tests, not by this benchmark -- see Section 5.1.1.
 
