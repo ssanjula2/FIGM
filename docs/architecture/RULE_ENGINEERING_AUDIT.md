@@ -342,19 +342,50 @@ Each rule below answers: (1) exact pattern detected, (2) syntax structure provin
 
 **FIGM-REACT-03 — Avoid Direct React State Mutation**
 1. An array in-place mutation method call (`.push`/`.splice`/`.pop`/`.shift`/`.unshift`/`.sort`) or
-   a direct property assignment (`obj.prop = value`), excluding `setState`/declaration lines.
+   a direct property assignment (`obj.prop = value`), on a target the file has positive evidence is
+   React state — see #4 below. Excludes `setState`/declaration lines.
 2. Real AST: `ts.ExpressionStatement` wrapping either a matching `CallExpression` or a real
    `BinaryExpression` with `=` operator and a `PropertyAccessExpression` LHS (structurally distinct
    from `==`/`===`/object-literal properties by `SyntaxKind` — no text-based exclusion needed, unlike
    the regex version it replaced).
-3. **Yes — migrated (Group 1).**
-4. FP: **documented, preserved KNOWN LIMITATION** — cannot distinguish a plain local array/object
-   mutation from genuine React state without real state-binding/data-flow analysis; flags any
-   matching shape not guarded by a `setState`/declaration exclusion.
-5. FN: a mutation performed through an intermediate alias (`const ref = state; ref.push(x)`) is
-   invisible.
+3. **Yes — migrated (Group 1); state-target evidence gate added in a later pass (see below).**
+4. FP: **fixed (was a documented KNOWN LIMITATION until commit `31c56c28`)**. The rule used to flag
+   ANY `obj.prop = value`/array-mutation-method shape with no check that `obj` is actually bound to
+   React state — confirmed as a real, live false-positive class by the real-world benchmark spot
+   check (`Button.defaultProps =`, `module.exports =`, a Karma config's `module.exports = function
+   (config)`, `ctx.fillStyle =`, none of them React) and by FIGM dogfooding its own
+   `app/live-scan/page.tsx` (`computeLineDiff()`'s plain local `rows.push(...)`, flagged 7 times).
+   `buildReact03` now requires the mutation target to pass `isProvableStateTarget`, which is true
+   only if:
+     - `isThisStateAccess` — the target is a `this.state...` chain in a class component (structural,
+       reserved-name check, no search needed), **or**
+     - the target's root identifier is in `findStateLikeNames(sourceFile)`, a real, file-wide AST
+       search (`real-syntax-node-builder.ts`) for names with positive state evidence: the first
+       element of a `const [x, setX] = useState(...)` destructuring (including a renamed/aliased
+       `useState` import or the `React.useState(...)`/namespace-import form, resolved via the file's
+       actual `ImportDeclaration`s, not text matching), **or** a call to `set${Capitalize(x)}(...)`
+       found anywhere in the file (React's setter-naming convention, kept as a second signal because
+       a hook can come from an untraceable custom wrapper).
+   Additionally, `isExcludedMutationTarget` categorically excludes `document`/`window`/`navigator`/
+   `location`/`history`/`localStorage`/`sessionStorage`/`router` root identifiers and any
+   `*.current.*` ref-access chain, checked BEFORE the state-evidence gate — these are never state
+   regardless of what evidence the rest of the file happens to contain (added earlier, commit
+   `bb01d1c1`, for `router.push()`/`document.body.style`/`ref.current`, the single most common false
+   positives in real Next.js apps).
+   **Residual, disclosed limitation**: this is a file-wide *name* search, not lexical-scope/type-
+   checker binding resolution. Two unrelated functions in the same file that happen to reuse an
+   identifier name (e.g. a real `const [count, setCount] = useState(0)` in one component and an
+   unrelated local `const count = { value: 0 }` in a different function in the same file) can still
+   cause the unrelated one to over-match — see the dedicated "[Known limitation, documented]" test in
+   `tests/qa-matrix-cross-cutting.test.ts`. This is a bounded, accepted tradeoff versus the previous
+   "flag everything" behavior, not a claim of full data-flow analysis.
+5. FN: a mutation performed through an intermediate alias (`const ref = state; ref.push(x)`) or a
+   destructured sub-object (`const { user } = state; user.name = x`) is invisible — both require
+   real data-flow tracing this AST-only, name-based pass doesn't do. Documented and regression-tested
+   (`tests/qa-matrix-cross-cutting.test.ts`, alias case under the "no evidence" regression test).
 6. React/Next/Generic (Angular class bodies produce a harmless unevaluated node, same as
-   FIGM-REACT-01/§ above).
+   FIGM-REACT-01/§ above; a `.vue` file's Options API `this.count = ...` is out of `evalReact03`'s
+   framework gate entirely and never evaluated, by design — see FIGM-REACT-03's dedicated Vue test).
 7. Remediation: **safe**, per-shape (immutable spread-append for `.push`, `.slice(0,-1)` for `.pop`,
    `.filter` for `.splice`, spread-copy for `.sort`/`.reverse`, spread-object update for property
    assignment), with a generic annotate-only fallback for unrecognized shapes.
@@ -507,7 +538,7 @@ the codebase after this pass, plus Vue/Svelte's blanket framework-level exclusio
 | FIGM-NEXT-04 | TS Compiler | `JsxOpeningElement` (`<link>` Google Fonts) | 10 | Narrow href-pattern match | Manual review |
 | FIGM-REACT-01 | TS Compiler *(Group 4)* | `CallExpression` (.sort/.filter/.reduce) | 19 | No scope restriction (any occurrence in file, matches legacy) | Manual review |
 | FIGM-REACT-02 | TS Compiler (bespoke module, Phase 5-relocated) | `JsxAttribute` `key` + map-callback index binding | 28 | Index derived via an intermediate variable is invisible | Safe |
-| FIGM-REACT-03 | TS Compiler | `ExpressionStatement` (mutation call / prop assignment) | 15 | No real state-binding analysis (any matching local var flagged) | Safe (per-shape) |
+| FIGM-REACT-03 | TS Compiler | `ExpressionStatement` (mutation call / prop assignment), gated by file-wide `useState`/setter/`this.state` evidence | 33 | Name-based (not lexical-scope) state-evidence search; alias/destructure indirection invisible | Safe (per-shape) |
 | FIGM-REACT-04 | TS Compiler *(Group 4)* | `JsxAttribute` onClick (Custom\*/Button\*/Card\*) | 18 | Narrow tag allow-list + onClick-only scope (deliberately preserved) | Manual review |
 | FIGM-ANG-01 | TS Compiler | `CallExpression` (.subscribe) | 14 | File-wide teardown-keyword search, not verified same-subscription | Safe |
 | FIGM-ANG-02 | TS Compiler | `Decorator` (@Component argument) | 10 | Text-value check, not a full constant evaluator | Safe |

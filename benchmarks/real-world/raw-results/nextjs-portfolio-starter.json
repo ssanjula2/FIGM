@@ -5,15 +5,13 @@
   "primaryFrameworkLabel": "Next.js",
   "filesScanned": 5,
   "totalLOC": 128,
-  "scanDurationMs": 364.77880000000005,
-  "totalFigmFindings": 5,
+  "scanDurationMs": 436.7394999999997,
+  "totalFigmFindings": 2,
   "findingsByRule": {
-    "FIGM-REACT-03": 3,
     "FIGM-PERF-01": 1,
     "FIGM-REACT-01": 1
   },
   "findingsBySeverity": {
-    "CRITICAL": 3,
     "HIGH": 2
   },
   "frameworksDetected": {
@@ -31,7 +29,7 @@
       "relativePath": "next.config.js",
       "framework": "GENERIC_ESTREE",
       "loc": 3,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -55,7 +53,7 @@
       "relativePath": "scripts/gen-rss.js",
       "framework": "GENERIC_ESTREE",
       "loc": 43,
-      "figmFindingCount": 3,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -69,31 +67,6 @@
     }
   ],
   "rawDiagnostics": [
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "next.config.js",
-      "location": {
-        "start": {
-          "line": 2,
-          "column": 0
-        },
-        "end": {
-          "line": 2,
-          "column": 29
-        }
-      },
-      "offendingCodeSnippet": "module.exports = withNextra()",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 2"
-    },
     {
       "ruleId": "FIGM-PERF-01",
       "ruleName": "Invariant Object Allocation in Iteration Scopes",
@@ -118,56 +91,6 @@
       "confidenceScore": 95,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 4"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "scripts/gen-rss.js",
-      "location": {
-        "start": {
-          "line": 24,
-          "column": 6
-        },
-        "end": {
-          "line": 31,
-          "column": 8
-        }
-      },
-      "offendingCodeSnippet": "allPosts.push({",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 24"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "scripts/gen-rss.js",
-      "location": {
-        "start": {
-          "line": 35,
-          "column": 2
-        },
-        "end": {
-          "line": 35,
-          "column": 62
-        }
-      },
-      "offendingCodeSnippet": "allPosts.sort((a, b) => new Date(b.date) - new Date(a.date))",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 35"
     },
     {
       "ruleId": "FIGM-REACT-01",

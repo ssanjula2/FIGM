@@ -5,19 +5,18 @@
   "primaryFrameworkLabel": "React",
   "filesScanned": 10,
   "totalLOC": 340,
-  "scanDurationMs": 1128.2517000000007,
-  "totalFigmFindings": 15,
+  "scanDurationMs": 1204.1961999999999,
+  "totalFigmFindings": 11,
   "findingsByRule": {
     "FIGM-REACT-01": 1,
     "FIGM-PERF-05": 5,
     "FIGM-A11Y-05": 4,
-    "FIGM-REACT-03": 4,
     "FIGM-REACT-02": 1
   },
   "findingsBySeverity": {
     "HIGH": 2,
     "MEDIUM": 5,
-    "CRITICAL": 8
+    "CRITICAL": 4
   },
   "frameworksDetected": {
     "REACT_JSX": 3,
@@ -57,7 +56,7 @@
       "relativePath": "src/components/Button.js",
       "framework": "GENERIC_ESTREE",
       "loc": 26,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -73,7 +72,7 @@
       "relativePath": "src/components/Header.js",
       "framework": "GENERIC_ESTREE",
       "loc": 37,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -335,106 +334,6 @@
       "confidenceScore": 97,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 53"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "src/components/Button.js",
-      "location": {
-        "start": {
-          "line": 15,
-          "column": 0
-        },
-        "end": {
-          "line": 17,
-          "column": 1
-        }
-      },
-      "offendingCodeSnippet": "Button.defaultProps = {",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 15"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "src/components/Button.js",
-      "location": {
-        "start": {
-          "line": 19,
-          "column": 0
-        },
-        "end": {
-          "line": 23,
-          "column": 1
-        }
-      },
-      "offendingCodeSnippet": "Button.propTypes = {",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 19"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "src/components/Header.js",
-      "location": {
-        "start": {
-          "line": 22,
-          "column": 0
-        },
-        "end": {
-          "line": 24,
-          "column": 1
-        }
-      },
-      "offendingCodeSnippet": "Header.defaultProps = {",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 22"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "src/components/Header.js",
-      "location": {
-        "start": {
-          "line": 26,
-          "column": 0
-        },
-        "end": {
-          "line": 28,
-          "column": 1
-        }
-      },
-      "offendingCodeSnippet": "Header.propTypes = {",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 26"
     },
     {
       "ruleId": "FIGM-PERF-05",

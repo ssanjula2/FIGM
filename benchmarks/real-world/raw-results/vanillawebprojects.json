@@ -5,16 +5,15 @@
   "primaryFrameworkLabel": "Generic JavaScript",
   "filesScanned": 21,
   "totalLOC": 2259,
-  "scanDurationMs": 472.42149999999674,
-  "totalFigmFindings": 214,
+  "scanDurationMs": 432.27560000000085,
+  "totalFigmFindings": 81,
   "findingsByRule": {
-    "FIGM-REACT-03": 133,
     "FIGM-PERF-03": 69,
     "FIGM-REACT-01": 11,
     "FIGM-PERF-02": 1
   },
   "findingsBySeverity": {
-    "CRITICAL": 202,
+    "CRITICAL": 69,
     "HIGH": 12
   },
   "frameworksDetected": {
@@ -30,7 +29,7 @@
       "relativePath": "breakout-game/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 241,
-      "figmFindingCount": 23,
+      "figmFindingCount": 4,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -38,7 +37,7 @@
       "relativePath": "custom-video-player/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 66,
-      "figmFindingCount": 13,
+      "figmFindingCount": 7,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -46,7 +45,7 @@
       "relativePath": "dom-array-methods/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 97,
-      "figmFindingCount": 13,
+      "figmFindingCount": 8,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -54,7 +53,7 @@
       "relativePath": "exchange-rate/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 36,
-      "figmFindingCount": 9,
+      "figmFindingCount": 5,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -62,7 +61,7 @@
       "relativePath": "expense-tracker/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 121,
-      "figmFindingCount": 15,
+      "figmFindingCount": 7,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -70,7 +69,7 @@
       "relativePath": "form-validator/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 87,
-      "figmFindingCount": 4,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -78,7 +77,7 @@
       "relativePath": "hangman/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 129,
-      "figmFindingCount": 17,
+      "figmFindingCount": 2,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -86,7 +85,7 @@
       "relativePath": "infinite_scroll_blog/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 81,
-      "figmFindingCount": 5,
+      "figmFindingCount": 2,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -94,7 +93,7 @@
       "relativePath": "lyrics-search/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 100,
-      "figmFindingCount": 8,
+      "figmFindingCount": 2,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -102,7 +101,7 @@
       "relativePath": "meal-finder/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 127,
-      "figmFindingCount": 13,
+      "figmFindingCount": 4,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -110,7 +109,7 @@
       "relativePath": "memory-cards/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 158,
-      "figmFindingCount": 18,
+      "figmFindingCount": 7,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -126,7 +125,7 @@
       "relativePath": "movie-seat-booking/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 73,
-      "figmFindingCount": 5,
+      "figmFindingCount": 2,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -134,7 +133,7 @@
       "relativePath": "music-player/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 179,
-      "figmFindingCount": 14,
+      "figmFindingCount": 7,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -142,7 +141,7 @@
       "relativePath": "new-year-countdown/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 41,
-      "figmFindingCount": 6,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -150,7 +149,7 @@
       "relativePath": "product-filtering/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 181,
-      "figmFindingCount": 10,
+      "figmFindingCount": 4,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -158,7 +157,7 @@
       "relativePath": "relaxer-app/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 25,
-      "figmFindingCount": 5,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -166,7 +165,7 @@
       "relativePath": "sortable-list/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 119,
-      "figmFindingCount": 9,
+      "figmFindingCount": 7,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -174,7 +173,7 @@
       "relativePath": "speak-number-guess/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 77,
-      "figmFindingCount": 6,
+      "figmFindingCount": 3,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -182,7 +181,7 @@
       "relativePath": "speech-text-reader/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 143,
-      "figmFindingCount": 11,
+      "figmFindingCount": 6,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -190,487 +189,12 @@
       "relativePath": "typing-game/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 137,
-      "figmFindingCount": 10,
+      "figmFindingCount": 3,
       "parseErrorCount": 0,
       "engineCrash": null
     }
   ],
   "rawDiagnostics": [
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 60,
-          "column": 2
-        },
-        "end": {
-          "line": 60,
-          "column": 59
-        }
-      },
-      "offendingCodeSnippet": "ctx.fillStyle = ball.visible ? '#0095dd' : 'transparent';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 60"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 69,
-          "column": 2
-        },
-        "end": {
-          "line": 69,
-          "column": 61
-        }
-      },
-      "offendingCodeSnippet": "ctx.fillStyle = paddle.visible ? '#0095dd' : 'transparent';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 69"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 76,
-          "column": 2
-        },
-        "end": {
-          "line": 76,
-          "column": 26
-        }
-      },
-      "offendingCodeSnippet": "ctx.font = '20px Arial';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 76"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 86,
-          "column": 6
-        },
-        "end": {
-          "line": 86,
-          "column": 64
-        }
-      },
-      "offendingCodeSnippet": "ctx.fillStyle = brick.visible ? '#0095dd' : 'transparent';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 86"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 99,
-          "column": 4
-        },
-        "end": {
-          "line": 99,
-          "column": 39
-        }
-      },
-      "offendingCodeSnippet": "paddle.x = canvas.width - paddle.w;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 99"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 103,
-          "column": 4
-        },
-        "end": {
-          "line": 103,
-          "column": 17
-        }
-      },
-      "offendingCodeSnippet": "paddle.x = 0;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 103"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 130,
-          "column": 4
-        },
-        "end": {
-          "line": 130,
-          "column": 26
-        }
-      },
-      "offendingCodeSnippet": "ball.dy = -ball.speed;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 130"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 144,
-          "column": 10
-        },
-        "end": {
-          "line": 144,
-          "column": 32
-        }
-      },
-      "offendingCodeSnippet": "brick.visible = false;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 144"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 165,
-          "column": 6
-        },
-        "end": {
-          "line": 165,
-          "column": 27
-        }
-      },
-      "offendingCodeSnippet": "ball.visible = false;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 165"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 166,
-          "column": 6
-        },
-        "end": {
-          "line": 166,
-          "column": 29
-        }
-      },
-      "offendingCodeSnippet": "paddle.visible = false;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 166"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 172,
-          "column": 10
-        },
-        "end": {
-          "line": 172,
-          "column": 43
-        }
-      },
-      "offendingCodeSnippet": "paddle.x = canvas.width / 2 - 40;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 172"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 173,
-          "column": 10
-        },
-        "end": {
-          "line": 173,
-          "column": 40
-        }
-      },
-      "offendingCodeSnippet": "paddle.y = canvas.height - 20;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 173"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 174,
-          "column": 10
-        },
-        "end": {
-          "line": 174,
-          "column": 36
-        }
-      },
-      "offendingCodeSnippet": "ball.x = canvas.width / 2;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 174"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 175,
-          "column": 10
-        },
-        "end": {
-          "line": 175,
-          "column": 37
-        }
-      },
-      "offendingCodeSnippet": "ball.y = canvas.height / 2;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 175"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 176,
-          "column": 10
-        },
-        "end": {
-          "line": 176,
-          "column": 30
-        }
-      },
-      "offendingCodeSnippet": "ball.visible = true;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 176"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 177,
-          "column": 10
-        },
-        "end": {
-          "line": 177,
-          "column": 32
-        }
-      },
-      "offendingCodeSnippet": "paddle.visible = true;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 177"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 216,
-          "column": 4
-        },
-        "end": {
-          "line": 216,
-          "column": 29
-        }
-      },
-      "offendingCodeSnippet": "paddle.dx = paddle.speed;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 216"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 218,
-          "column": 4
-        },
-        "end": {
-          "line": 218,
-          "column": 30
-        }
-      },
-      "offendingCodeSnippet": "paddle.dx = -paddle.speed;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 218"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "breakout-game/script.js",
-      "location": {
-        "start": {
-          "line": 230,
-          "column": 4
-        },
-        "end": {
-          "line": 230,
-          "column": 18
-        }
-      },
-      "offendingCodeSnippet": "paddle.dx = 0;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 230"
-    },
     {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
@@ -770,156 +294,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 240"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "custom-video-player/script.js",
-      "location": {
-        "start": {
-          "line": 19,
-          "column": 4
-        },
-        "end": {
-          "line": 19,
-          "column": 56
-        }
-      },
-      "offendingCodeSnippet": "play.innerHTML = '<i class=\"fa fa-play fa-2x\"></i>';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 19"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "custom-video-player/script.js",
-      "location": {
-        "start": {
-          "line": 21,
-          "column": 4
-        },
-        "end": {
-          "line": 21,
-          "column": 57
-        }
-      },
-      "offendingCodeSnippet": "play.innerHTML = '<i class=\"fa fa-pause fa-2x\"></i>';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 21"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "custom-video-player/script.js",
-      "location": {
-        "start": {
-          "line": 27,
-          "column": 2
-        },
-        "end": {
-          "line": 27,
-          "column": 62
-        }
-      },
-      "offendingCodeSnippet": "progress.value = (video.currentTime / video.duration) * 100;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 27"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "custom-video-player/script.js",
-      "location": {
-        "start": {
-          "line": 41,
-          "column": 2
-        },
-        "end": {
-          "line": 41,
-          "column": 42
-        }
-      },
-      "offendingCodeSnippet": "timestamp.innerHTML = `${mins}:${secs}`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 41"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "custom-video-player/script.js",
-      "location": {
-        "start": {
-          "line": 46,
-          "column": 2
-        },
-        "end": {
-          "line": 46,
-          "column": 63
-        }
-      },
-      "offendingCodeSnippet": "video.currentTime = (+progress.value * video.duration) / 100;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 46"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "custom-video-player/script.js",
-      "location": {
-        "start": {
-          "line": 51,
-          "column": 2
-        },
-        "end": {
-          "line": 51,
-          "column": 24
-        }
-      },
-      "offendingCodeSnippet": "video.currentTime = 0;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 51"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1097,31 +471,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 65"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "dom-array-methods/script.js",
-      "location": {
-        "start": {
-          "line": 41,
-          "column": 2
-        },
-        "end": {
-          "line": 41,
-          "column": 41
-        }
-      },
-      "offendingCodeSnippet": "data.sort((a, b) => b.money - a.money);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 41"
-    },
-    {
       "ruleId": "FIGM-REACT-01",
       "ruleName": "Memoize Expensive Derived Computations",
       "domain": "PERFORMANCE",
@@ -1195,106 +544,6 @@
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 55"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "dom-array-methods/script.js",
-      "location": {
-        "start": {
-          "line": 58,
-          "column": 2
-        },
-        "end": {
-          "line": 60,
-          "column": 20
-        }
-      },
-      "offendingCodeSnippet": "wealthEl.innerHTML = `<h3>Total Wealth: <strong>${formatMoney(",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 58"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "dom-array-methods/script.js",
-      "location": {
-        "start": {
-          "line": 66,
-          "column": 2
-        },
-        "end": {
-          "line": 66,
-          "column": 17
-        }
-      },
-      "offendingCodeSnippet": "data.push(obj);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 66"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "dom-array-methods/script.js",
-      "location": {
-        "start": {
-          "line": 74,
-          "column": 2
-        },
-        "end": {
-          "line": 74,
-          "column": 61
-        }
-      },
-      "offendingCodeSnippet": "main.innerHTML = '<h2><strong>Person</strong> Wealth</h2>';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 74"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "dom-array-methods/script.js",
-      "location": {
-        "start": {
-          "line": 79,
-          "column": 4
-        },
-        "end": {
-          "line": 81,
-          "column": 8
-        }
-      },
-      "offendingCodeSnippet": "element.innerHTML = `<strong>${item.name}</strong> ${formatMoney(",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 79"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1422,56 +671,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 96"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "exchange-rate/script.js",
-      "location": {
-        "start": {
-          "line": 16,
-          "column": 6
-        },
-        "end": {
-          "line": 16,
-          "column": 71
-        }
-      },
-      "offendingCodeSnippet": "rateEl.innerText = `1 ${currency_one} = ${rate} ${currency_two}`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 16"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "exchange-rate/script.js",
-      "location": {
-        "start": {
-          "line": 17,
-          "column": 6
-        },
-        "end": {
-          "line": 17,
-          "column": 68
-        }
-      },
-      "offendingCodeSnippet": "amountEl_two.value = (amountEl_one.value * (rate)).toFixed(2);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 17"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -1595,156 +794,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 28"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "exchange-rate/script.js",
-      "location": {
-        "start": {
-          "line": 30,
-          "column": 2
-        },
-        "end": {
-          "line": 30,
-          "column": 46
-        }
-      },
-      "offendingCodeSnippet": "currencyEl_one.value = currencyEl_two.value;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 30"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "exchange-rate/script.js",
-      "location": {
-        "start": {
-          "line": 31,
-          "column": 2
-        },
-        "end": {
-          "line": 31,
-          "column": 30
-        }
-      },
-      "offendingCodeSnippet": "currencyEl_two.value = temp;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 31"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 36,
-          "column": 4
-        },
-        "end": {
-          "line": 36,
-          "column": 35
-        }
-      },
-      "offendingCodeSnippet": "transactions.push(transaction);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 36"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 44,
-          "column": 4
-        },
-        "end": {
-          "line": 44,
-          "column": 20
-        }
-      },
-      "offendingCodeSnippet": "text.value = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 44"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 45,
-          "column": 4
-        },
-        "end": {
-          "line": 45,
-          "column": 22
-        }
-      },
-      "offendingCodeSnippet": "amount.value = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 45"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 64,
-          "column": 2
-        },
-        "end": {
-          "line": 70,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "item.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 64"
     },
     {
       "ruleId": "FIGM-REACT-01",
@@ -1872,81 +921,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 87"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 91,
-          "column": 2
-        },
-        "end": {
-          "line": 91,
-          "column": 34
-        }
-      },
-      "offendingCodeSnippet": "balance.innerText = `$${total}`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 91"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 92,
-          "column": 2
-        },
-        "end": {
-          "line": 92,
-          "column": 38
-        }
-      },
-      "offendingCodeSnippet": "money_plus.innerText = `$${income}`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 92"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 93,
-          "column": 2
-        },
-        "end": {
-          "line": 93,
-          "column": 40
-        }
-      },
-      "offendingCodeSnippet": "money_minus.innerText = `$${expense}`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 93"
-    },
-    {
       "ruleId": "FIGM-REACT-01",
       "ruleName": "Memoize Expensive Derived Computations",
       "domain": "PERFORMANCE",
@@ -1970,31 +944,6 @@
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 98"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 112,
-          "column": 2
-        },
-        "end": {
-          "line": 112,
-          "column": 22
-        }
-      },
-      "offendingCodeSnippet": "list.innerHTML = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 112"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2022,81 +971,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 120"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "form-validator/script.js",
-      "location": {
-        "start": {
-          "line": 10,
-          "column": 2
-        },
-        "end": {
-          "line": 10,
-          "column": 47
-        }
-      },
-      "offendingCodeSnippet": "formControl.className = 'form-control error';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 10"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "form-validator/script.js",
-      "location": {
-        "start": {
-          "line": 12,
-          "column": 2
-        },
-        "end": {
-          "line": 12,
-          "column": 28
-        }
-      },
-      "offendingCodeSnippet": "small.innerText = message;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 12"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "form-validator/script.js",
-      "location": {
-        "start": {
-          "line": 18,
-          "column": 2
-        },
-        "end": {
-          "line": 18,
-          "column": 49
-        }
-      },
-      "offendingCodeSnippet": "formControl.className = 'form-control success';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 18"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -2120,256 +994,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 76"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 22,
-          "column": 1
-        },
-        "end": {
-          "line": 33,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "wordEl.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 22"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 38,
-          "column": 2
-        },
-        "end": {
-          "line": 38,
-          "column": 58
-        }
-      },
-      "offendingCodeSnippet": "finalMessage.innerText = 'Congratulations! You won! 😃';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 38"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 39,
-          "column": 2
-        },
-        "end": {
-          "line": 39,
-          "column": 40
-        }
-      },
-      "offendingCodeSnippet": "finalMessageRevealWord.innerText = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 39"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 40,
-          "column": 2
-        },
-        "end": {
-          "line": 40,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "popup.style.display = 'flex';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 40"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 49,
-          "column": 1
-        },
-        "end": {
-          "line": 52,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "wrongLettersEl.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 49"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 59,
-          "column": 3
-        },
-        "end": {
-          "line": 59,
-          "column": 32
-        }
-      },
-      "offendingCodeSnippet": "part.style.display = 'block';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 59"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 61,
-          "column": 3
-        },
-        "end": {
-          "line": 61,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "part.style.display = 'none';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 61"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 67,
-          "column": 2
-        },
-        "end": {
-          "line": 67,
-          "column": 56
-        }
-      },
-      "offendingCodeSnippet": "finalMessage.innerText = 'Unfortunately you lost. 😕';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 67"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 68,
-          "column": 2
-        },
-        "end": {
-          "line": 68,
-          "column": 72
-        }
-      },
-      "offendingCodeSnippet": "finalMessageRevealWord.innerText = `...the word was: ${selectedWord}`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 68"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 69,
-          "column": 2
-        },
-        "end": {
-          "line": 69,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "popup.style.display = 'flex';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 69"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2397,56 +1021,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 85"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 92,
-          "column": 5
-        },
-        "end": {
-          "line": 92,
-          "column": 33
-        }
-      },
-      "offendingCodeSnippet": "correctLetters.push(letter);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 92"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 100,
-          "column": 5
-        },
-        "end": {
-          "line": 100,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "wrongLetters.push(letter);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 100"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -2470,156 +1044,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 112"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 116,
-          "column": 1
-        },
-        "end": {
-          "line": 116,
-          "column": 26
-        }
-      },
-      "offendingCodeSnippet": "correctLetters.splice(0);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 116"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 117,
-          "column": 1
-        },
-        "end": {
-          "line": 117,
-          "column": 24
-        }
-      },
-      "offendingCodeSnippet": "wrongLetters.splice(0);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 117"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "hangman/script.js",
-      "location": {
-        "start": {
-          "line": 125,
-          "column": 1
-        },
-        "end": {
-          "line": 125,
-          "column": 30
-        }
-      },
-      "offendingCodeSnippet": "popup.style.display = 'none';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 125"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "infinite_scroll_blog/script.js",
-      "location": {
-        "start": {
-          "line": 26,
-          "column": 4
-        },
-        "end": {
-          "line": 32,
-          "column": 6
-        }
-      },
-      "offendingCodeSnippet": "postEl.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 26"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "infinite_scroll_blog/script.js",
-      "location": {
-        "start": {
-          "line": 62,
-          "column": 6
-        },
-        "end": {
-          "line": 62,
-          "column": 34
-        }
-      },
-      "offendingCodeSnippet": "post.style.display = 'flex';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 62"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "infinite_scroll_blog/script.js",
-      "location": {
-        "start": {
-          "line": 64,
-          "column": 6
-        },
-        "end": {
-          "line": 64,
-          "column": 34
-        }
-      },
-      "offendingCodeSnippet": "post.style.display = 'none';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 64"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2670,156 +1094,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 80"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "lyrics-search/script.js",
-      "location": {
-        "start": {
-          "line": 18,
-          "column": 2
-        },
-        "end": {
-          "line": 29,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "result.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 18"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "lyrics-search/script.js",
-      "location": {
-        "start": {
-          "line": 32,
-          "column": 4
-        },
-        "end": {
-          "line": 43,
-          "column": 6
-        }
-      },
-      "offendingCodeSnippet": "more.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 32"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "lyrics-search/script.js",
-      "location": {
-        "start": {
-          "line": 45,
-          "column": 4
-        },
-        "end": {
-          "line": 45,
-          "column": 24
-        }
-      },
-      "offendingCodeSnippet": "more.innerHTML = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 45"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "lyrics-search/script.js",
-      "location": {
-        "start": {
-          "line": 63,
-          "column": 8
-        },
-        "end": {
-          "line": 63,
-          "column": 38
-        }
-      },
-      "offendingCodeSnippet": "result.innerHTML = data.error;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 63"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "lyrics-search/script.js",
-      "location": {
-        "start": {
-          "line": 67,
-          "column": 8
-        },
-        "end": {
-          "line": 70,
-          "column": 10
-        }
-      },
-      "offendingCodeSnippet": "result.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 67"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "lyrics-search/script.js",
-      "location": {
-        "start": {
-          "line": 73,
-          "column": 2
-        },
-        "end": {
-          "line": 73,
-          "column": 22
-        }
-      },
-      "offendingCodeSnippet": "more.innerHTML = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 73"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2897,231 +1171,6 @@
       "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 33"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "meal-finder/script.js",
-      "location": {
-        "start": {
-          "line": 13,
-          "column": 2
-        },
-        "end": {
-          "line": 13,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "single_mealEl.innerHTML = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 13"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "meal-finder/script.js",
-      "location": {
-        "start": {
-          "line": 24,
-          "column": 8
-        },
-        "end": {
-          "line": 24,
-          "column": 75
-        }
-      },
-      "offendingCodeSnippet": "resultHeading.innerHTML = `<h2>Search results for '${term}':</h2>`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 24"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "meal-finder/script.js",
-      "location": {
-        "start": {
-          "line": 27,
-          "column": 10
-        },
-        "end": {
-          "line": 27,
-          "column": 84
-        }
-      },
-      "offendingCodeSnippet": "resultHeading.innerHTML = `<p>There are no search results. Try again!<p>`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 27"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "meal-finder/script.js",
-      "location": {
-        "start": {
-          "line": 29,
-          "column": 10
-        },
-        "end": {
-          "line": 40,
-          "column": 22
-        }
-      },
-      "offendingCodeSnippet": "mealsEl.innerHTML = data.meals",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 29"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "meal-finder/script.js",
-      "location": {
-        "start": {
-          "line": 44,
-          "column": 4
-        },
-        "end": {
-          "line": 44,
-          "column": 22
-        }
-      },
-      "offendingCodeSnippet": "search.value = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 44"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "meal-finder/script.js",
-      "location": {
-        "start": {
-          "line": 64,
-          "column": 2
-        },
-        "end": {
-          "line": 64,
-          "column": 25
-        }
-      },
-      "offendingCodeSnippet": "mealsEl.innerHTML = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 64"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "meal-finder/script.js",
-      "location": {
-        "start": {
-          "line": 65,
-          "column": 2
-        },
-        "end": {
-          "line": 65,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "resultHeading.innerHTML = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 65"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "meal-finder/script.js",
-      "location": {
-        "start": {
-          "line": 82,
-          "column": 6
-        },
-        "end": {
-          "line": 84,
-          "column": 8
-        }
-      },
-      "offendingCodeSnippet": "ingredients.push(",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 82"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "meal-finder/script.js",
-      "location": {
-        "start": {
-          "line": 90,
-          "column": 2
-        },
-        "end": {
-          "line": 106,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "single_mealEl.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 90"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -3197,31 +1246,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 113"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 51,
-          "column": 2
-        },
-        "end": {
-          "line": 64,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "card.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 51"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -3245,56 +1269,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 66"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 69,
-          "column": 2
-        },
-        "end": {
-          "line": 69,
-          "column": 21
-        }
-      },
-      "offendingCodeSnippet": "cardsEl.push(card);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 69"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 78,
-          "column": 2
-        },
-        "end": {
-          "line": 78,
-          "column": 69
-        }
-      },
-      "offendingCodeSnippet": "currentEl.innerText = `${currentActiveCard + 1}/${cardsEl.length}`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 78"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -3322,56 +1296,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 98"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 99,
-          "column": 2
-        },
-        "end": {
-          "line": 99,
-          "column": 53
-        }
-      },
-      "offendingCodeSnippet": "cardsEl[currentActiveCard].className = 'card left';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 99"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 107,
-          "column": 2
-        },
-        "end": {
-          "line": 107,
-          "column": 55
-        }
-      },
-      "offendingCodeSnippet": "cardsEl[currentActiveCard].className = 'card active';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 107"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -3395,56 +1319,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 113"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 114,
-          "column": 2
-        },
-        "end": {
-          "line": 114,
-          "column": 54
-        }
-      },
-      "offendingCodeSnippet": "cardsEl[currentActiveCard].className = 'card right';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 114"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 122,
-          "column": 2
-        },
-        "end": {
-          "line": 122,
-          "column": 55
-        }
-      },
-      "offendingCodeSnippet": "cardsEl[currentActiveCard].className = 'card active';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 122"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -3522,81 +1396,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 133"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 142,
-          "column": 4
-        },
-        "end": {
-          "line": 142,
-          "column": 26
-        }
-      },
-      "offendingCodeSnippet": "questionEl.value = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 142"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 143,
-          "column": 4
-        },
-        "end": {
-          "line": 143,
-          "column": 24
-        }
-      },
-      "offendingCodeSnippet": "answerEl.value = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 143"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 147,
-          "column": 4
-        },
-        "end": {
-          "line": 147,
-          "column": 28
-        }
-      },
-      "offendingCodeSnippet": "cardsData.push(newCard);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 147"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -3620,106 +1419,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 153"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "memory-cards/script.js",
-      "location": {
-        "start": {
-          "line": 155,
-          "column": 2
-        },
-        "end": {
-          "line": 155,
-          "column": 32
-        }
-      },
-      "offendingCodeSnippet": "cardsContainer.innerHTML = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 155"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "movie-seat-booking/script.js",
-      "location": {
-        "start": {
-          "line": 27,
-          "column": 2
-        },
-        "end": {
-          "line": 27,
-          "column": 39
-        }
-      },
-      "offendingCodeSnippet": "count.innerText = selectedSeatsCount;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 27"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "movie-seat-booking/script.js",
-      "location": {
-        "start": {
-          "line": 28,
-          "column": 2
-        },
-        "end": {
-          "line": 28,
-          "column": 53
-        }
-      },
-      "offendingCodeSnippet": "total.innerText = selectedSeatsCount * ticketPrice;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 28"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "movie-seat-booking/script.js",
-      "location": {
-        "start": {
-          "line": 48,
-          "column": 4
-        },
-        "end": {
-          "line": 48,
-          "column": 51
-        }
-      },
-      "offendingCodeSnippet": "movieSelect.selectedIndex = selectedMovieIndex;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 48"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -3770,181 +1469,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 60"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "music-player/script.js",
-      "location": {
-        "start": {
-          "line": 25,
-          "column": 2
-        },
-        "end": {
-          "line": 25,
-          "column": 25
-        }
-      },
-      "offendingCodeSnippet": "title.innerText = song;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 25"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "music-player/script.js",
-      "location": {
-        "start": {
-          "line": 26,
-          "column": 2
-        },
-        "end": {
-          "line": 26,
-          "column": 34
-        }
-      },
-      "offendingCodeSnippet": "audio.src = `music/${song}.mp3`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 26"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "music-player/script.js",
-      "location": {
-        "start": {
-          "line": 27,
-          "column": 2
-        },
-        "end": {
-          "line": 27,
-          "column": 35
-        }
-      },
-      "offendingCodeSnippet": "cover.src = `images/${song}.jpg`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 27"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "music-player/script.js",
-      "location": {
-        "start": {
-          "line": 78,
-          "column": 2
-        },
-        "end": {
-          "line": 78,
-          "column": 47
-        }
-      },
-      "offendingCodeSnippet": "progress.style.width = `${progressPercent}%`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 78"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "music-player/script.js",
-      "location": {
-        "start": {
-          "line": 87,
-          "column": 2
-        },
-        "end": {
-          "line": 87,
-          "column": 50
-        }
-      },
-      "offendingCodeSnippet": "audio.currentTime = (clickX / width) * duration;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 87"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "music-player/script.js",
-      "location": {
-        "start": {
-          "line": 120,
-          "column": 1
-        },
-        "end": {
-          "line": 120,
-          "column": 36
-        }
-      },
-      "offendingCodeSnippet": "currTime.innerHTML = min +':'+ sec;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 120"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "music-player/script.js",
-      "location": {
-        "start": {
-          "line": 149,
-          "column": 1
-        },
-        "end": {
-          "line": 149,
-          "column": 39
-        }
-      },
-      "offendingCodeSnippet": "durTime.innerHTML = min_d +':'+ sec_d;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 149"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -4122,181 +1646,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 178"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "new-year-countdown/script.js",
-      "location": {
-        "start": {
-          "line": 14,
-          "column": 0
-        },
-        "end": {
-          "line": 14,
-          "column": 33
-        }
-      },
-      "offendingCodeSnippet": "year.innerText = currentYear + 1;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 14"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "new-year-countdown/script.js",
-      "location": {
-        "start": {
-          "line": 27,
-          "column": 2
-        },
-        "end": {
-          "line": 27,
-          "column": 21
-        }
-      },
-      "offendingCodeSnippet": "days.innerHTML = d;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 27"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "new-year-countdown/script.js",
-      "location": {
-        "start": {
-          "line": 28,
-          "column": 2
-        },
-        "end": {
-          "line": 28,
-          "column": 41
-        }
-      },
-      "offendingCodeSnippet": "hours.innerHTML = h < 10 ? '0' + h : h;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 28"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "new-year-countdown/script.js",
-      "location": {
-        "start": {
-          "line": 29,
-          "column": 2
-        },
-        "end": {
-          "line": 29,
-          "column": 43
-        }
-      },
-      "offendingCodeSnippet": "minutes.innerHTML = m < 10 ? '0' + m : m;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 29"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "new-year-countdown/script.js",
-      "location": {
-        "start": {
-          "line": 30,
-          "column": 2
-        },
-        "end": {
-          "line": 30,
-          "column": 43
-        }
-      },
-      "offendingCodeSnippet": "seconds.innerHTML = s < 10 ? '0' + s : s;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 30"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "new-year-countdown/script.js",
-      "location": {
-        "start": {
-          "line": 36,
-          "column": 2
-        },
-        "end": {
-          "line": 36,
-          "column": 35
-        }
-      },
-      "offendingCodeSnippet": "countdown.style.display = 'flex';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 36"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "product-filtering/script.js",
-      "location": {
-        "start": {
-          "line": 93,
-          "column": 2
-        },
-        "end": {
-          "line": 93,
-          "column": 30
-        }
-      },
-      "offendingCodeSnippet": "productsEls.push(productEl);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 93"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -4347,56 +1696,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 99"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "product-filtering/script.js",
-      "location": {
-        "start": {
-          "line": 105,
-          "column": 2
-        },
-        "end": {
-          "line": 105,
-          "column": 41
-        }
-      },
-      "offendingCodeSnippet": "productEl.className = 'item space-y-2';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 105"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "product-filtering/script.js",
-      "location": {
-        "start": {
-          "line": 107,
-          "column": 2
-        },
-        "end": {
-          "line": 121,
-          "column": 53
-        }
-      },
-      "offendingCodeSnippet": "productEl.innerHTML = `<div",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 107"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -4420,81 +1719,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 123"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "product-filtering/script.js",
-      "location": {
-        "start": {
-          "line": 135,
-          "column": 4
-        },
-        "end": {
-          "line": 135,
-          "column": 39
-        }
-      },
-      "offendingCodeSnippet": "statusEl.innerText = 'Add To Cart';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 135"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "product-filtering/script.js",
-      "location": {
-        "start": {
-          "line": 143,
-          "column": 4
-        },
-        "end": {
-          "line": 143,
-          "column": 44
-        }
-      },
-      "offendingCodeSnippet": "statusEl.innerText = 'Remove From Cart';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 143"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "product-filtering/script.js",
-      "location": {
-        "start": {
-          "line": 151,
-          "column": 2
-        },
-        "end": {
-          "line": 151,
-          "column": 49
-        }
-      },
-      "offendingCodeSnippet": "cartCount.innerText = cartItemCount.toString();",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 151"
     },
     {
       "ruleId": "FIGM-REACT-01",
@@ -4522,131 +1746,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 159"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "relaxer-app/script.js",
-      "location": {
-        "start": {
-          "line": 11,
-          "column": 2
-        },
-        "end": {
-          "line": 11,
-          "column": 33
-        }
-      },
-      "offendingCodeSnippet": "text.innerText = 'Breathe In!';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 11"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "relaxer-app/script.js",
-      "location": {
-        "start": {
-          "line": 12,
-          "column": 2
-        },
-        "end": {
-          "line": 12,
-          "column": 41
-        }
-      },
-      "offendingCodeSnippet": "container.className = 'container grow';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 12"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "relaxer-app/script.js",
-      "location": {
-        "start": {
-          "line": 15,
-          "column": 4
-        },
-        "end": {
-          "line": 15,
-          "column": 28
-        }
-      },
-      "offendingCodeSnippet": "text.innerText = 'Hold';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 15"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "relaxer-app/script.js",
-      "location": {
-        "start": {
-          "line": 18,
-          "column": 6
-        },
-        "end": {
-          "line": 18,
-          "column": 38
-        }
-      },
-      "offendingCodeSnippet": "text.innerText = 'Breathe Out!';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 18"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "relaxer-app/script.js",
-      "location": {
-        "start": {
-          "line": 19,
-          "column": 6
-        },
-        "end": {
-          "line": 19,
-          "column": 47
-        }
-      },
-      "offendingCodeSnippet": "container.className = 'container shrink';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 19"
-    },
-    {
       "ruleId": "FIGM-REACT-01",
       "ruleName": "Memoize Expensive Derived Computations",
       "domain": "PERFORMANCE",
@@ -4670,56 +1769,6 @@
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 26"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "sortable-list/script.js",
-      "location": {
-        "start": {
-          "line": 35,
-          "column": 6
-        },
-        "end": {
-          "line": 41,
-          "column": 8
-        }
-      },
-      "offendingCodeSnippet": "listItem.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 35"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "sortable-list/script.js",
-      "location": {
-        "start": {
-          "line": 43,
-          "column": 6
-        },
-        "end": {
-          "line": 43,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "listItems.push(listItem);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 43"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -4872,81 +1921,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 118"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "speak-number-guess/script.js",
-      "location": {
-        "start": {
-          "line": 7,
-          "column": 0
-        },
-        "end": {
-          "line": 8,
-          "column": 61
-        }
-      },
-      "offendingCodeSnippet": "window.SpeechRecognition =",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 7"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "speak-number-guess/script.js",
-      "location": {
-        "start": {
-          "line": 25,
-          "column": 2
-        },
-        "end": {
-          "line": 28,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "msgEl.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 25"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "speak-number-guess/script.js",
-      "location": {
-        "start": {
-          "line": 49,
-          "column": 4
-        },
-        "end": {
-          "line": 53,
-          "column": 6
-        }
-      },
-      "offendingCodeSnippet": "document.body.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 49"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -5022,31 +1996,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 72"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "speech-text-reader/script.js",
-      "location": {
-        "start": {
-          "line": 69,
-          "column": 2
-        },
-        "end": {
-          "line": 72,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "box.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 69"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -5070,106 +2019,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 74"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "speech-text-reader/script.js",
-      "location": {
-        "start": {
-          "line": 98,
-          "column": 4
-        },
-        "end": {
-          "line": 98,
-          "column": 30
-        }
-      },
-      "offendingCodeSnippet": "option.value = voice.name;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 98"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "speech-text-reader/script.js",
-      "location": {
-        "start": {
-          "line": 99,
-          "column": 4
-        },
-        "end": {
-          "line": 99,
-          "column": 53
-        }
-      },
-      "offendingCodeSnippet": "option.innerText = `${voice.name} ${voice.lang}`;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 99"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "speech-text-reader/script.js",
-      "location": {
-        "start": {
-          "line": 107,
-          "column": 2
-        },
-        "end": {
-          "line": 107,
-          "column": 22
-        }
-      },
-      "offendingCodeSnippet": "message.text = text;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 107"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "speech-text-reader/script.js",
-      "location": {
-        "start": {
-          "line": 117,
-          "column": 2
-        },
-        "end": {
-          "line": 117,
-          "column": 70
-        }
-      },
-      "offendingCodeSnippet": "message.voice = voices.find(voice => voice.name === e.target.value);",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 117"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -5297,156 +2146,6 @@
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 137"
     },
     {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "typing-game/script.js",
-      "location": {
-        "start": {
-          "line": 51,
-          "column": 0
-        },
-        "end": {
-          "line": 54,
-          "column": 15
-        }
-      },
-      "offendingCodeSnippet": "difficultySelect.value =",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 51"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "typing-game/script.js",
-      "location": {
-        "start": {
-          "line": 70,
-          "column": 2
-        },
-        "end": {
-          "line": 70,
-          "column": 30
-        }
-      },
-      "offendingCodeSnippet": "word.innerHTML = randomWord;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 70"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "typing-game/script.js",
-      "location": {
-        "start": {
-          "line": 76,
-          "column": 2
-        },
-        "end": {
-          "line": 76,
-          "column": 28
-        }
-      },
-      "offendingCodeSnippet": "scoreEl.innerHTML = score;",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 76"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "typing-game/script.js",
-      "location": {
-        "start": {
-          "line": 82,
-          "column": 2
-        },
-        "end": {
-          "line": 82,
-          "column": 32
-        }
-      },
-      "offendingCodeSnippet": "timeEl.innerHTML = time + 's';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 82"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "typing-game/script.js",
-      "location": {
-        "start": {
-          "line": 93,
-          "column": 2
-        },
-        "end": {
-          "line": 97,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "endgameEl.innerHTML = `",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 93"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "typing-game/script.js",
-      "location": {
-        "start": {
-          "line": 99,
-          "column": 2
-        },
-        "end": {
-          "line": 99,
-          "column": 35
-        }
-      },
-      "offendingCodeSnippet": "endgameEl.style.display = 'flex';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 99"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -5470,31 +2169,6 @@
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 107"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "typing-game/script.js",
-      "location": {
-        "start": {
-          "line": 115,
-          "column": 4
-        },
-        "end": {
-          "line": 115,
-          "column": 24
-        }
-      },
-      "offendingCodeSnippet": "e.target.value = '';",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 115"
     },
     {
       "ruleId": "FIGM-PERF-03",

@@ -1212,7 +1212,7 @@
       ],
       "isFrameworkIndependent": false,
       "remediationStatus": "AUTOMATED_FIX_VERIFIED",
-      "knownLimitation": "No true React-state-binding analysis -- any local variable whose mutation shape matches is flagged, whether or not it is actually component state."
+      "knownLimitation": "State-binding evidence is a file-wide identifier-name search (a useState-destructured binding, a matching setX(...) setter call, or a this.state chain), not full lexical-scope/type-checker binding resolution: an unrelated non-state variable elsewhere in the file that happens to reuse a state variable's name can still be over-matched, and a mutation reached through an intermediate alias or a destructured sub-object (const ref = state; ref.push(x)) is invisible. Categorically excluded regardless of evidence: document/window/navigator/location/history/localStorage/sessionStorage/router root identifiers and any *.current ref-access chain."
     },
     {
       "id": "FIGM-REACT-04",

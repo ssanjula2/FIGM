@@ -499,12 +499,14 @@ function isThisStateAccess(expr: ts.Expression): boolean {
  *  can equally validly call it as `React.useState(...)`/`SomeAlias.useState(...)` via a default or
  *  namespace import. Reading only the literal text `"useState"` (as a regex/text heuristic would)
  *  misses the aliased-import case entirely -- this walks the real import declarations instead. */
-function collectReactHookBindings(sourceFile: ts.SourceFile): { hookCallNames: Set<string>; namespaceNames: Set<string> } {
+function collectReactHookBindings(sourceFile: ts.SourceFile): { hookCallNames: Set<string>; namespaceNames: Set<string>; hasRealReactImport: boolean } {
   const hookCallNames = new Set<string>(['useState']); // bare fallback if no traceable 'react' import exists
   const namespaceNames = new Set<string>();
+  let hasRealReactImport = false;
 
   const visit = (node: ts.Node) => {
     if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier) && node.moduleSpecifier.text === 'react') {
+      hasRealReactImport = true;
       const clause = node.importClause;
       if (clause) {
         if (clause.name) namespaceNames.add(clause.name.text); // import React from 'react'
@@ -521,7 +523,25 @@ function collectReactHookBindings(sourceFile: ts.SourceFile): { hookCallNames: S
     ts.forEachChild(node, visit);
   };
   visit(sourceFile);
-  return { hookCallNames, namespaceNames };
+  return { hookCallNames, namespaceNames, hasRealReactImport };
+}
+
+/** True if the file contains any real JSX syntax node at all (`<Foo/>`, `<div>...</div>`,
+ *  `<>...</>`). Used, alongside `hasRealReactImport`, as the minimum-bar React-context check
+ *  before trusting the weaker `setX(...)` naming-convention state-evidence signal below --
+ *  a real AST check, not a text/substring heuristic. */
+function containsJsx(sourceFile: ts.SourceFile): boolean {
+  let found = false;
+  const visit = (node: ts.Node) => {
+    if (found) return;
+    if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node) || ts.isJsxFragment(node)) {
+      found = true;
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return found;
 }
 
 /** Real, file-wide search for every local identifier this file has actual positive evidence is
@@ -546,9 +566,29 @@ function collectReactHookBindings(sourceFile: ts.SourceFile): { hookCallNames: S
  *  content" (the confirmed real-world-benchmark finding: `Button.defaultProps =`, `module.exports
  *  =`, a Karma config, `ctx.fillStyle =`, and FIGM's own `rows.push()` local-array diff builder)
  *  down to "an identifier this file has actual evidence is state," which is a bounded, principled
- *  improvement even though it is not a perfect binder. */
-function findStateLikeNames(sourceFile: ts.SourceFile): Set<string> {
-  const { hookCallNames, namespaceNames } = collectReactHookBindings(sourceFile);
+ *  improvement even though it is not a perfect binder.
+ *
+ *  The `setX(...)` naming-convention signal (evidence kind 2) is additionally gated on the file
+ *  having SOME real React/JSX context (`hasReactContext` below) -- without this gate, a plain
+ *  vanilla-JS file that merely happens to define its own unrelated `function setCardsData(cards)
+ *  {...}` (a common, entirely non-React naming convention: `setX` for "the function that updates
+ *  X", not React's hook setter) got misclassified as React state evidence purely by name
+ *  coincidence. Confirmed live: `benchmarks/real-world` re-scan of `bradtraversy/vanillawebprojects`
+ *  found exactly this in `memory-cards/script.js` (`cardsData.push(newCard); setCardsData(cardsData)`,
+ *  zero JSX, zero React import, GENERIC_ESTREE framework) after the file-wide-evidence fix above
+ *  otherwise eliminated the rest of that benchmark's FIGM-REACT-03 false positives. The
+ *  `useState`-destructuring signal (evidence kind 1) needs no such gate -- it already requires an
+ *  actual call to something literally named/aliased `useState` in a destructuring-assignment shape,
+ *  which is not a pattern vanilla JS/config files produce by accident. */
+function findStateLikeNames(sourceFile: ts.SourceFile, framework: FrameworkType): Set<string> {
+  const { hookCallNames, namespaceNames, hasRealReactImport } = collectReactHookBindings(sourceFile);
+  // REACT_JSX/NEXT_JS is itself already real React context: it's only reached via a `.jsx`/`.tsx`
+  // file extension or a real React-content marker in detectFramework (source-parser.ts) -- e.g. a
+  // literal `.jsx` fixture with no import statement in the snippet (several of this rule's own
+  // committed test fixtures) still deserves the setX(...) naming-convention signal, since the file
+  // extension itself is deliberate, explicit React authoring intent, not a coincidence. GENERIC_
+  // ESTREE (plain .js/.ts with none of those markers) gets no such benefit of the doubt.
+  const hasReactContext = framework === 'REACT_JSX' || framework === 'NEXT_JS' || hasRealReactImport || containsJsx(sourceFile);
   const names = new Set<string>();
 
   const isHookCall = (callee: ts.Expression): boolean => {
@@ -571,7 +611,7 @@ function findStateLikeNames(sourceFile: ts.SourceFile): Set<string> {
       if (first && ts.isBindingElement(first) && ts.isIdentifier(first.name)) {
         names.add(first.name.text);
       }
-    } else if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
+    } else if (hasReactContext && ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
       const calleeName = node.expression.text;
       if (/^set[A-Z]/.test(calleeName)) {
         names.add(calleeName[3].toLowerCase() + calleeName.slice(4));
@@ -1037,7 +1077,7 @@ export function buildRealSyntaxNodes(code: string, filePath: string, framework: 
     lines: code.split(/\r?\n/),
     framework,
     nodes: [],
-    stateLikeNames: findStateLikeNames(root as ts.SourceFile),
+    stateLikeNames: findStateLikeNames(root as ts.SourceFile, framework),
   };
 
   const jsxEligible = isJsxRealAstEligible(framework);

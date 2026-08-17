@@ -5,17 +5,16 @@
   "primaryFrameworkLabel": "Angular",
   "filesScanned": 21,
   "totalLOC": 609,
-  "scanDurationMs": 633.5619000000006,
-  "totalFigmFindings": 15,
+  "scanDurationMs": 647.8199000000004,
+  "totalFigmFindings": 12,
   "findingsByRule": {
-    "FIGM-REACT-03": 3,
     "FIGM-ANG-02": 5,
     "FIGM-ANG-01": 5,
     "FIGM-PERF-04": 2
   },
   "findingsBySeverity": {
-    "CRITICAL": 8,
     "HIGH": 5,
+    "CRITICAL": 5,
     "MEDIUM": 2
   },
   "frameworksDetected": {
@@ -48,7 +47,7 @@
       "relativePath": "karma.conf.js",
       "framework": "GENERIC_ESTREE",
       "loc": 34,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -56,7 +55,7 @@
       "relativePath": "protractor.conf.js",
       "framework": "GENERIC_ESTREE",
       "loc": 27,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -184,7 +183,7 @@
       "relativePath": "src/test.ts",
       "framework": "GENERIC_ESTREE",
       "loc": 27,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -198,56 +197,6 @@
     }
   ],
   "rawDiagnostics": [
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "karma.conf.js",
-      "location": {
-        "start": {
-          "line": 4,
-          "column": 0
-        },
-        "end": {
-          "line": 33,
-          "column": 2
-        }
-      },
-      "offendingCodeSnippet": "module.exports = function(config) {",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 4"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "protractor.conf.js",
-      "location": {
-        "start": {
-          "line": 6,
-          "column": 0
-        },
-        "end": {
-          "line": 26,
-          "column": 2
-        }
-      },
-      "offendingCodeSnippet": "exports.config = {",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 6"
-    },
     {
       "ruleId": "FIGM-ANG-02",
       "ruleName": "Angular OnPush Change Detection Strategy",
@@ -547,31 +496,6 @@
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 5"
-    },
-    {
-      "ruleId": "FIGM-REACT-03",
-      "ruleName": "Avoid Direct React State Mutation",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "CRITICAL",
-      "filePath": "src/test.ts",
-      "location": {
-        "start": {
-          "line": 17,
-          "column": 0
-        },
-        "end": {
-          "line": 17,
-          "column": 33
-        }
-      },
-      "offendingCodeSnippet": "__karma__.loaded = function() {};",
-      "message": "Direct mutation of React state variable skips component re-renders.",
-      "remediation": "Use immutable state updates or return new object references inside state setters.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 99,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 17"
     }
   ]
 }
