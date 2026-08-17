@@ -328,6 +328,45 @@ test('QA Matrix — cross-cutting robustness', async (t) => {
     }
   });
 
+  await t.test('[Coverage gap] React.useState(...) namespace-import form is recognized as real state-binding evidence (FIGM-REACT-03)', () => {
+    // findStateLikeNames' isHookCall already resolves the `React.useState(...)` property-access
+    // form via namespaceNames (collectReactHookBindings), but no existing test exercised it --
+    // every prior REACT-03 positive fixture used the bare `import { useState } from 'react'` form.
+    // Closes a genuine gap identified while auditing this rule's regression coverage.
+    const code = `import React from 'react';\nfunction A() {\n  const [user, setUser] = React.useState({ name: '' });\n  function rename() { user.name = 'x'; }\n  return null;\n}`;
+    const result = RuleExecutionEngine.analyzeFile('a.tsx', code);
+    assert.ok(result.diagnostics.some((d) => d.ruleId === 'FIGM-REACT-03'), 'a mutation of a React.useState(...)-namespace-form-bound variable must be detected');
+  });
+
+  await t.test('[Coverage gap] the identical setX(...)-only snippet is judged differently by file extension alone, isolating React/JSX context as the deciding variable (FIGM-REACT-03)', () => {
+    // Existing tests proved the setX(...) naming-convention signal is gated on React/JSX context,
+    // but each used DIFFERENT code in the positive and negative case (setCardsData vs setUser).
+    // This isolates the file extension/framework-context as the only variable, holding the code
+    // byte-for-byte identical, to directly prove the gate is about context, not code shape.
+    const code = `function update() {\n  user.name = 'John';\n  setUser(user);\n}`;
+    const jsResult = RuleExecutionEngine.analyzeFile('plain.js', code);
+    assert.equal(jsResult.diagnostics.filter((d) => d.ruleId === 'FIGM-REACT-03').length, 0, 'a plain .js file gets no benefit of the doubt from the setX(...) naming convention alone');
+    const jsxResult = RuleExecutionEngine.analyzeFile('plain.jsx', code);
+    assert.ok(jsxResult.diagnostics.some((d) => d.ruleId === 'FIGM-REACT-03'), 'the identical code in a .jsx file is real React/JSX context, so the same setX(...) evidence is trusted');
+  });
+
+  await t.test('[Coverage gap] a non-Vue bare-uppercase-identifier receiver is suppressed the same way Vue.filter() is (FIGM-REACT-01)', () => {
+    // The existing regression test only exercises Vue specifically. This proves
+    // isLikelyNonArrayNamespaceReceiver is a real structural/naming-convention check, not an
+    // undisclosed Vue-specific special case.
+    const code = `Lodash.sort(list, comparator);`;
+    const result = RuleExecutionEngine.analyzeFile('a.js', code);
+    assert.equal(result.diagnostics.filter((d) => d.ruleId === 'FIGM-REACT-01').length, 0, 'any bare capitalized-identifier receiver, not just Vue, must be excluded from .sort/.filter/.reduce matching');
+  });
+
+  await t.test('[Coverage gap] a genuine lowercase-receiver .reduce() with no useMemo actually fires (FIGM-REACT-01)', () => {
+    // .reduce() previously only appeared in a malformed-syntax crash-safety test, never in a
+    // positive-fire assertion -- this closes that gap for the third of the three tracked methods.
+    const code = `function Component({ items }) {\n  const total = items.reduce((acc, x) => acc + x, 0);\n  return total;\n}`;
+    const result = RuleExecutionEngine.analyzeFile('a.jsx', code);
+    assert.ok(result.diagnostics.some((d) => d.ruleId === 'FIGM-REACT-01'), 'a genuine unmemoized .reduce() call must be detected');
+  });
+
   await t.test('[String containing code-like text] a display string that looks like a violation is not flagged (regression: see docs/audit/ADVERSARIAL_DETECTION_AUDIT.md)', () => {
     const code = `const helpText = "Example: window.addEventListener('scroll', fn) needs cleanup";\nfunction Widget() { return <div>{helpText}</div>; }`;
     const result = RuleExecutionEngine.analyzeFile('StringText.jsx', code);
