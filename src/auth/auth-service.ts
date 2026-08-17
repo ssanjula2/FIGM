@@ -97,24 +97,72 @@ function safeCompare(a: string, b: string): boolean {
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
-/**
- * Hash password securely using PBKDF2 with SHA-512 and salt
- */
-export function hashPassword(password: string): string {
-  const salt = crypto.randomBytes(16).toString('hex');
-  const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
-  return `${salt}:${hash}`;
+// SEC-06: scrypt (Node's built-in crypto.scryptSync, no new dependency and no native-binding
+// build step -- important for serverless/Vercel deployment). N=2^16, r=8, p=1 is OWASP's own
+// explicitly-endorsed lighter alternative to N=2^17 for resource/latency-constrained deployments
+// (serverless function execution time and cold-start latency both cost real money/UX here) --
+// still ~64MB working memory and a large, deliberate improvement over PBKDF2 at only 10,000
+// iterations (well below current OWASP guidance for PBKDF2-SHA512, which calls for >=600,000).
+// New hashes are tagged with a `scrypt:` prefix so the format is self-describing -- no separate DB
+// column/migration needed. verifyPassword still accepts the old, untagged `salt:hash` PBKDF2
+// format so every existing stored hash keeps working; needsRehash below lets the login route
+// transparently upgrade a legacy hash to scrypt once the user's real password is available (i.e.
+// right after a successful login), never forcing a reset or destroying accounts.
+const SCRYPT_PREFIX = 'scrypt:';
+const SCRYPT_KEYLEN = 64;
+// maxmem must be strictly greater than the ~64MiB (128*N*r bytes) N=65536,r=8 actually needs --
+// 128MiB gives generous headroom rather than sitting exactly on the boundary.
+const SCRYPT_OPTIONS: crypto.ScryptOptions = { N: 65536, r: 8, p: 1, maxmem: 128 * 1024 * 1024 };
+
+function scryptHashHex(password: string, salt: string): string {
+  return (crypto.scryptSync(password, salt, SCRYPT_KEYLEN, SCRYPT_OPTIONS) as Buffer).toString('hex');
 }
 
 /**
- * Verify plaintext password against stored salt:hash
+ * Hash password securely using scrypt (N=2^17, r=8, p=1) with a random salt.
+ */
+export function hashPassword(password: string): string {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = scryptHashHex(password, salt);
+  return `${SCRYPT_PREFIX}${salt}:${hash}`;
+}
+
+/**
+ * Verify plaintext password against a stored hash -- either the current `scrypt:salt:hash`
+ * format, or a legacy, untagged `salt:hash` PBKDF2-SHA512 (10,000 iterations) hash from before
+ * this fix, which must keep verifying correctly for every already-registered user.
  */
 export function verifyPassword(password: string, storedHash: string): boolean {
-  if (!storedHash || !storedHash.includes(':')) return false;
+  if (!storedHash) return false;
+
+  if (storedHash.startsWith(SCRYPT_PREFIX)) {
+    const [salt, originalHash] = storedHash.slice(SCRYPT_PREFIX.length).split(':');
+    if (!salt || !originalHash) return false;
+    const hash = scryptHashHex(password, salt);
+    const hashBuf = Buffer.from(hash, 'hex');
+    const originalBuf = Buffer.from(originalHash, 'hex');
+    if (hashBuf.length !== originalBuf.length) return false;
+    return crypto.timingSafeEqual(hashBuf, originalBuf);
+  }
+
+  if (!storedHash.includes(':')) return false;
   const [salt, originalHash] = storedHash.split(':');
   if (!salt || !originalHash) return false;
   const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
-  return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(originalHash));
+  const hashBuf = Buffer.from(hash, 'hex');
+  const originalBuf = Buffer.from(originalHash, 'hex');
+  if (hashBuf.length !== originalBuf.length) return false;
+  return crypto.timingSafeEqual(hashBuf, originalBuf);
+}
+
+/**
+ * True if `storedHash` is in the legacy, untagged PBKDF2 format -- i.e. it should be transparently
+ * rehashed to scrypt the next time the caller has the real plaintext password available (right
+ * after a successful verifyPassword call, e.g. in the login route). Never true for an already
+ * scrypt-hashed value, so this never causes needless re-hashing work on every login.
+ */
+export function needsRehash(storedHash: string): boolean {
+  return !!storedHash && !storedHash.startsWith(SCRYPT_PREFIX);
 }
 
 /**

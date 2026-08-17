@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
 import {
   hashPassword,
   verifyPassword,
+  needsRehash,
   signJWT,
   verifyJWT,
   signRefreshToken,
@@ -17,13 +19,28 @@ import { checkRateLimit } from '../src/auth/rate-limiter';
 import { AuditLogger } from '../src/auth/audit-logger';
 
 test('Production Auth System Suite', async (t) => {
-  await t.test('Password Hashing and PBKDF2 SHA-512 Verification', () => {
+  await t.test('Password Hashing (scrypt, SEC-06) and Verification', () => {
     const password = 'SecretPassword123!';
     const hash = hashPassword(password);
 
+    assert.ok(hash.startsWith('scrypt:'), 'new hashes must be tagged with the scrypt: format prefix');
     assert.ok(hash.includes(':'), 'Hash must contain salt delimiter');
     assert.strictEqual(verifyPassword(password, hash), true, 'Password should match stored hash');
     assert.strictEqual(verifyPassword('WrongPassword123!', hash), false, 'Incorrect password must fail');
+  });
+
+  await t.test('SEC-06: a legacy, untagged PBKDF2 hash from before the scrypt migration still verifies correctly', () => {
+    // Every already-registered user's stored passwordHash is in this exact untagged `salt:hash`
+    // PBKDF2-SHA512 shape -- it must keep working forever, not just until the next deploy.
+    const password = 'LegacyPassword123!';
+    const legacySalt = crypto.randomBytes(16).toString('hex');
+    const legacyHash = `${legacySalt}:${crypto.pbkdf2Sync(password, legacySalt, 10000, 64, 'sha512').toString('hex')}`;
+    assert.ok(!legacyHash.startsWith('scrypt:'));
+
+    assert.strictEqual(verifyPassword(password, legacyHash), true, 'a legacy PBKDF2 hash must still verify with the correct password');
+    assert.strictEqual(verifyPassword('WrongPassword123!', legacyHash), false, 'a legacy PBKDF2 hash must still reject the wrong password');
+    assert.strictEqual(needsRehash(legacyHash), true, 'a legacy hash must be flagged for rehashing');
+    assert.strictEqual(needsRehash(hashPassword(password)), false, 'a freshly-hashed scrypt password must not be flagged for rehashing');
   });
 
   await t.test('Input Validation Utilities', () => {

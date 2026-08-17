@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import {
   verifyPassword,
+  hashPassword,
+  needsRehash,
   signJWT,
   signRefreshToken,
   validateEmail,
@@ -57,9 +59,15 @@ export async function POST(request: Request) {
     const accessToken = signJWT(payload, 3600); // 1 hr
     const refreshToken = signRefreshToken(payload, 604800); // 7 days
 
+    // SEC-06: transparently upgrade a legacy PBKDF2 hash to scrypt now that the real plaintext
+    // password (just verified above) is available -- no forced reset, no destroyed accounts. A
+    // no-op for every user who has already logged in once since this migration shipped.
+    const rehashedPassword = needsRehash(user.passwordHash) ? hashPassword(password) : undefined;
+
     await provider.updateUser(user.id, {
       refreshToken,
       lastLoginAt: new Date().toISOString(),
+      ...(rehashedPassword ? { passwordHash: rehashedPassword } : {}),
     });
 
     await AuditLogger.logEvent('LOGIN', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
