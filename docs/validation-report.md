@@ -2,7 +2,7 @@
 
 **System Name**: Framework-Independent Guideline Model (FIGM) Code Inspector  
 **Evaluator**: Independent Software Verification Engineer  
-**Timestamp**: 2026-08-17T06:33:13.279Z
+**Timestamp**: 2026-08-17T06:53:18.409Z
 **Total Rules Evaluated**: 25 / 25 (100.0% Coverage)
 
 ---
@@ -25,31 +25,31 @@
 
 | Rule ID | Rule Name | Target Framework | Sample A (Violation) | Sample B (Clean) | Verification | Confidence | AI Fix Valid | Execution Time |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `FIGM-PERF-01` | Invariant Object Allocation in Iteration Scopes | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 95% | ✅ Valid | 13.52 ms |
-| `FIGM-PERF-02` | Un-dimensioned Dynamic Layout Elements | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 2 ms |
-| `FIGM-PERF-03` | Unbounded Event Listener Disposal | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 98% | ✅ Valid | 0.94 ms |
-| `FIGM-PERF-04` | Static Imports in Deferred Execution Paths | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 88% | ✅ Valid | 1.3 ms |
-| `FIGM-PERF-05` | Inline Anonymous Callbacks in Render Loops | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 87% | ✅ Valid | 0.92 ms |
-| `FIGM-PERF-06` | Synchronous Web Storage Access in Loop Scope | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 90% | ✅ Valid | 0.83 ms |
-| `FIGM-A11Y-01` | Keyboard Event Parity on Pointer Handlers | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 96% | ✅ Valid | 1.17 ms |
-| `FIGM-A11Y-02` | Accessible Name and Role for Custom Controls | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 94% | ✅ Valid | 0.39 ms |
-| `FIGM-A11Y-03` | ARIA Live Announcer for Dynamic Mutations | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 91% | ✅ Valid | 0.45 ms |
-| `FIGM-A11Y-04` | Dynamic Focus Containment and Traversal | `REACT_JSX` | ✅ Detected | ❌ False Positive | **FAIL** | 94% | ✅ Valid | 0.36 ms |
-| `FIGM-A11Y-05` | Form Input Control Label Association | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 97% | ✅ Valid | 0.5 ms |
+| `FIGM-PERF-01` | Invariant Object Allocation in Iteration Scopes | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 95% | ✅ Valid | 13.44 ms |
+| `FIGM-PERF-02` | Un-dimensioned Dynamic Layout Elements | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 2.19 ms |
+| `FIGM-PERF-03` | Unbounded Event Listener Disposal | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 98% | ✅ Valid | 0.98 ms |
+| `FIGM-PERF-04` | Static Imports in Deferred Execution Paths | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 88% | ✅ Valid | 1.39 ms |
+| `FIGM-PERF-05` | Inline Anonymous Callbacks in Render Loops | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 87% | ✅ Valid | 0.91 ms |
+| `FIGM-PERF-06` | Synchronous Web Storage Access in Loop Scope | `GENERIC_ESTREE` | ✅ Detected | ✅ Clean | **PASS** | 90% | ✅ Valid | 0.76 ms |
+| `FIGM-A11Y-01` | Keyboard Event Parity on Pointer Handlers | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 96% | ✅ Valid | 1.19 ms |
+| `FIGM-A11Y-02` | Accessible Name and Role for Custom Controls | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 94% | ✅ Valid | 0.46 ms |
+| `FIGM-A11Y-03` | ARIA Live Announcer for Dynamic Mutations | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 91% | ✅ Valid | 0.47 ms |
+| `FIGM-A11Y-04` | Dynamic Focus Containment and Traversal | `REACT_JSX` | ✅ Detected | ❌ False Positive | **FAIL** | 94% | ✅ Valid | 0.41 ms |
+| `FIGM-A11Y-05` | Form Input Control Label Association | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 97% | ✅ Valid | 0.51 ms |
 | `FIGM-A11Y-06` | Avoid Positive TabIndex Values (>0) | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 93% | ✅ Valid | 0.29 ms |
-| `FIGM-NEXT-01` | React Client Hooks Require "use client" Directive | `NEXT_JS` | ✅ Detected | ✅ Clean | **PASS** | 85% | ✅ Valid | 1.24 ms |
-| `FIGM-NEXT-02` | Dynamic Imports for Heavy Browser Modules | `NEXT_JS` | ✅ Detected | ✅ Clean | **PASS** | 85% | ✅ Valid | 0.73 ms |
-| `FIGM-NEXT-03` | App Router Route Segment Revalidation | `NEXT_JS` | ✅ Detected | ✅ Clean | **PASS** | 85% | ✅ Valid | 0.46 ms |
-| `FIGM-NEXT-04` | Zero-Layout-Shift Web Fonts via next/font | `NEXT_JS` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 0.97 ms |
-| `FIGM-REACT-01` | Memoize Expensive Derived Computations | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 88% | ✅ Valid | 1.26 ms |
-| `FIGM-REACT-02` | Stable List Key Prop Assignment | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 96% | ✅ Valid | 0.5 ms |
-| `FIGM-REACT-03` | Avoid Direct React State Mutation | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 99% | ✅ Valid | 0.64 ms |
-| `FIGM-REACT-04` | Wrap Child Callback Props in useCallback | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 94% | ✅ Valid | 0.69 ms |
-| `FIGM-ANG-01` | Unsubscribe RxJS Observables | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 0.85 ms |
-| `FIGM-ANG-02` | Angular OnPush Change Detection Strategy | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 0.43 ms |
-| `FIGM-ANG-03` | Angular *ngFor trackBy Function Reference | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 95% | ✅ Valid | 0.61 ms |
-| `FIGM-ANG-04` | Minimize Method Invocations in Angular Templates | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 90% | ✅ Valid | 0.36 ms |
-| `FIGM-ANG-05` | Renderer2 DOM Manipulation Safety | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 99% | ✅ Valid | 0.48 ms |
+| `FIGM-NEXT-01` | React Client Hooks Require "use client" Directive | `NEXT_JS` | ✅ Detected | ✅ Clean | **PASS** | 85% | ✅ Valid | 1.46 ms |
+| `FIGM-NEXT-02` | Dynamic Imports for Heavy Browser Modules | `NEXT_JS` | ✅ Detected | ✅ Clean | **PASS** | 85% | ✅ Valid | 0.77 ms |
+| `FIGM-NEXT-03` | App Router Route Segment Revalidation | `NEXT_JS` | ✅ Detected | ✅ Clean | **PASS** | 85% | ✅ Valid | 0.48 ms |
+| `FIGM-NEXT-04` | Zero-Layout-Shift Web Fonts via next/font | `NEXT_JS` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 0.98 ms |
+| `FIGM-REACT-01` | Memoize Expensive Derived Computations | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 88% | ✅ Valid | 0.81 ms |
+| `FIGM-REACT-02` | Stable List Key Prop Assignment | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 96% | ✅ Valid | 0.53 ms |
+| `FIGM-REACT-03` | Avoid Direct React State Mutation | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 99% | ✅ Valid | 0.45 ms |
+| `FIGM-REACT-04` | Wrap Child Callback Props in useCallback | `REACT_JSX` | ✅ Detected | ✅ Clean | **PASS** | 94% | ✅ Valid | 0.56 ms |
+| `FIGM-ANG-01` | Unsubscribe RxJS Observables | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 0.78 ms |
+| `FIGM-ANG-02` | Angular OnPush Change Detection Strategy | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 92% | ✅ Valid | 0.41 ms |
+| `FIGM-ANG-03` | Angular *ngFor trackBy Function Reference | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 95% | ✅ Valid | 0.64 ms |
+| `FIGM-ANG-04` | Minimize Method Invocations in Angular Templates | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 90% | ✅ Valid | 0.3 ms |
+| `FIGM-ANG-05` | Renderer2 DOM Manipulation Safety | `ANGULAR_TEMPLATE` | ✅ Detected | ✅ Clean | **PASS** | 99% | ✅ Valid | 0.43 ms |
 
 ---
 
@@ -75,7 +75,7 @@
 
 - **AI Remediation Subsystem**: Of 25 rules whose Sample A actually triggered a defect, 25 produced a non-empty remediation diff and 25 of those were confirmed to actually change the source (a real patch, not a no-op fallback). This is a real-time computed count, not an assumed 100%.
 - **Dynamic Profiler Results**:
-  - **Execution Time**: 0.66 ms (Real Node.js performance.now())
+  - **Execution Time**: 0.64 ms (Real Node.js performance.now())
   - **Peak Memory**: 0.28 MB (Real process.memoryUsage().heapUsed)
   - **Simulated Metrics**: Division-by-zero checks and error boundary catching.
 
