@@ -178,7 +178,7 @@ function UserList({ users }) {
             }}
           >
             <span>🔍</span>
-            <span>Explore 25 Rules</span>
+            <span>Explore {data?.systemCapabilities?.totalGuidelineRules ?? 25} Rules</span>
           </Link>
 
           <Link

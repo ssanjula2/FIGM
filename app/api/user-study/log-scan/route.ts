@@ -31,6 +31,14 @@ async function ensureParticipantUser(provider: ReturnType<typeof RepositoryFacto
   });
 }
 
+// GET() never reads `request`, so Next.js treats this as static-eligible and executes it once at
+// `next build` time, freezing whatever `nextParticipantId` it computed on the build machine into
+// the deployed output forever -- every real participant hitting the frozen build would then be
+// handed that SAME stale id, colliding on the same synthetic user record instead of each getting
+// a distinct one. Confirmed live: sibling dashboard routes with the same no-request-param shape
+// were actually baked into static JSON by `npm run build` (marked "○ Static" in its route summary).
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const provider = RepositoryFactory.getStorageProvider();

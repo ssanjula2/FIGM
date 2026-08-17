@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { DBScanRecord } from '../../../src/auth/user-db';
+import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
 
 export default function ReportViewerPage({ params }: { params: { id: string } }) {
   const [record, setRecord] = useState<DBScanRecord | null>(null);
@@ -151,7 +152,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
           <div style={{ fontSize: '36px', fontWeight: 900, color: '#f8fafc', marginTop: '6px' }}>
             {record.ruleCount}
           </div>
-          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Across 25 FIGM Rules</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Across {TOTAL_RULE_COUNT} FIGM Rules</div>
         </div>
 
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
@@ -393,13 +394,22 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
               <div style={{ fontSize: '12px', color: '#94a3b8' }}>Parsed {record.fileName} into an AST-shaped intermediate representation.</div>
             </div>
             <div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8' }}>0.12ms — Rule Execution Engine</div>
-              <div style={{ fontSize: '12px', color: '#94a3b8' }}>Executed 25 FIGM rules against target framework: {record.framework}.</div>
+              {/* record.scanTimeMs is the one real, persisted duration measurement for this scan
+                  (from DynamicProfiler, covering parsing through rule evaluation) -- there is no
+                  per-stage breakdown actually captured, so this step must not invent one (a fixed
+                  "0.12ms" literal previously stood in here regardless of the real scan's actual
+                  duration, and the real scanTimeMs value was mislabeled two steps down as when the
+                  "AI Remediation Engine Finished", even though AI remediation is a separate,
+                  often-never-invoked action -- see aiFixCount below). */}
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8' }}>{record.scanTimeMs}ms — Rule Execution Engine Completed</div>
+              <div style={{ fontSize: '12px', color: '#94a3b8' }}>Executed {TOTAL_RULE_COUNT} FIGM rules against target framework: {record.framework}. Found {record.ruleCount} diagnostic{record.ruleCount === 1 ? '' : 's'}. Overall score: {record.qualityScore}%.</div>
             </div>
-            <div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#a855f7' }}>{record.scanTimeMs}ms — AI Remediation Engine Finished</div>
-              <div style={{ fontSize: '12px', color: '#94a3b8' }}>Generated {record.aiFixCount} automated patch diffs. Overall score: {record.qualityScore}%.</div>
-            </div>
+            {record.aiFixCount > 0 && (
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: '#a855f7' }}>AI Remediation Engine</div>
+                <div style={{ fontSize: '12px', color: '#94a3b8' }}>Generated {record.aiFixCount} automated patch diff{record.aiFixCount === 1 ? '' : 's'} for this scan.</div>
+              </div>
+            )}
           </div>
         </div>
       )}

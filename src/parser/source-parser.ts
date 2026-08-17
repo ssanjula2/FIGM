@@ -69,7 +69,7 @@ function extractImportedBindingNames(importLine: string): string[] {
 function stripCommentsAndStrings(code: string): string {
   const n = code.length;
   const out: string[] = new Array(n);
-  type State = 'CODE' | 'LINE_COMMENT' | 'BLOCK_COMMENT' | 'STRING';
+  type State = 'CODE' | 'LINE_COMMENT' | 'BLOCK_COMMENT' | 'STRING' | 'HTML_COMMENT';
   let state: State = 'CODE';
   let stringQuote = '';
   let stringBlank = true;
@@ -90,6 +90,18 @@ function stripCommentsAndStrings(code: string): string {
         out[i] = ' '; out[i + 1] = ' ';
         state = 'BLOCK_COMMENT';
         i += 2;
+        continue;
+      }
+      // Vue SFC `<template>` blocks (and Angular inline HTML) use HTML comments, not `//`/`/*
+      // */` -- without this, example/demo markup inside `<!-- ... -->` survives into cleanLines
+      // and the legacy text-heuristic rules (e.g. FIGM-A11Y-01's `@click=` match) fire on text
+      // that was never live markup (found via live black-box "code with comments" testing on a
+      // Vue fixture: a `<!-- demo: <div @click="x"> ... -->` comment was reported as a real
+      // CRITICAL violation).
+      if (ch === '<' && code.slice(i, i + 4) === '<!--') {
+        for (let k = 0; k < 4; k++) out[i + k] = ' ';
+        state = 'HTML_COMMENT';
+        i += 4;
         continue;
       }
       if (ch === '"' || ch === "'" || ch === '`') {
@@ -162,6 +174,18 @@ function stripCommentsAndStrings(code: string): string {
         out[i] = ' '; out[i + 1] = ' ';
         state = 'CODE';
         i += 2;
+        continue;
+      }
+      out[i] = (ch === '\n' || ch === '\r') ? ch : ' ';
+      i++;
+      continue;
+    }
+
+    if (state === 'HTML_COMMENT') {
+      if (ch === '-' && code.slice(i, i + 3) === '-->') {
+        out[i] = ' '; out[i + 1] = ' '; out[i + 2] = ' ';
+        state = 'CODE';
+        i += 3;
         continue;
       }
       out[i] = (ch === '\n' || ch === '\r') ? ch : ' ';
@@ -720,7 +744,15 @@ export class SourceParser {
         // inert for them (both rules it used to serve are now produced by real-syntax-node-builder
         // instead); still fully applies for VUE_SFC/ANGULAR_TEMPLATE.
         const hasOnClick = !useRealAstJsx && (attrsText.includes('onClick') || attrsText.includes('v-on:click') || attrsText.includes('@click') || attrsText.includes('(click)'));
-        const hasOnKeyDown = !useRealAstJsx && (attrsText.includes('onKeyDown') || attrsText.includes('v-on:keydown') || attrsText.includes('@keydown') || attrsText.includes('(keydown)'));
+        // Angular's idiomatic keyboard-activation pattern uses the event-filter modifier syntax
+        // `(keydown.enter)`/`(keydown.space)` rather than a bare `(keydown)` -- a real Angular
+        // dev following that (very common) convention was previously still flagged by
+        // FIGM-A11Y-01 as having NO keyboard handler at all, since the exact-substring check
+        // `includes('(keydown)')` (with the closing paren immediately after "keydown") never
+        // matches `(keydown.enter)` (found via live black-box fix-and-rescan testing: applying
+        // RemediationEngine's own Angular FIGM-A11Y-01 fix template, which emits exactly this
+        // modifier syntax, left the rule re-firing as UNRESOLVED against its own patch).
+        const hasOnKeyDown = !useRealAstJsx && (attrsText.includes('onKeyDown') || attrsText.includes('v-on:keydown') || attrsText.includes('@keydown') || attrsText.includes('(keydown)') || attrsText.includes('(keydown.'));
         const hasTabIndex = attrsText.includes('tabIndex') || attrsText.includes('tabindex');
 
         // Check positive tabIndex > 0 (FIGM-A11Y-06)

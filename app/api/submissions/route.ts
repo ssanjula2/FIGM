@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { authenticateUser } from '../../../src/auth/auth-middleware';
 import { UserDB } from '../../../src/auth/user-db';
 import { RuleExecutionEngine } from '../../../src/engine/rule-execution-engine';
+import { calculateQualityScore } from '../../../src/engine/quality-score';
 
 export async function GET(request: Request) {
   const { user, errorResponse } = authenticateUser(request);
@@ -43,7 +44,7 @@ export async function POST(request: Request) {
       framework: result.framework,
       codeContent: code,
       executionTimeMs: result.profile.executionTimeMs,
-      qualityScore: Math.max(0, 100 - result.totalErrors * 15 - result.totalWarnings * 5),
+      qualityScore: result.qualityScore ?? calculateQualityScore(result.diagnostics),
       diagnosticsCount: result.diagnostics.length,
     });
 

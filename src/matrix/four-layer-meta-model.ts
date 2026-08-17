@@ -641,8 +641,8 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       remediation: 'Add trackBy function reference to all *ngFor iteration directives.',
       frameworks: ['ANGULAR_TEMPLATE', 'GENERIC_ESTREE'],
       isFrameworkIndependent: false,
-      remediationStatus: 'AUTOMATED_FIX_VERIFIED',
-      knownLimitation: 'Detected via legacy text-heuristic regex matching against Angular template markup on every framework (including Angular itself) -- a dedicated Angular template parser (@angular/compiler) has not yet been integrated, so this rule is not yet real-AST for any framework.'
+      remediationStatus: 'AUTOMATED_FIX_WITH_CAVEAT',
+      knownLimitation: 'Detected via legacy text-heuristic regex matching against Angular template markup on every framework (including Angular itself) -- a dedicated Angular template parser (@angular/compiler) has not yet been integrated, so this rule is not yet real-AST for any framework. The automatic fix only rewrites the template to reference `trackBy: trackById` -- it does not generate the matching `trackById(index, item)` method on the component class, so the patch will not compile/run until that method is added by hand (found via live black-box fix-and-rescan testing: the isolated single-file TS checker does not type-check Angular template strings, so this dangling reference is invisible to automated re-scan verification).'
     }
   },
   {

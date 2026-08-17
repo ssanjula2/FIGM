@@ -9,4 +9,4 @@ No raw agreement, Cohen's kappa, or confusion matrix is reported, because none h
 computed from real annotation data. See research/independent-annotation/README.md for the
 workflow to collect one.
 
-_Last checked: 2026-08-14T13:17:15.008Z_
+_Last checked: 2026-08-17T05:57:45.557Z_

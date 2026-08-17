@@ -15,6 +15,14 @@ import { join } from 'path';
 import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
 import type { ProcessedUsabilityReport } from '../../../scripts/import-user-study';
 
+// GET() never reads `request`, so Next.js treats this as static-eligible and executes it once at
+// `next build` time, freezing `generatedAt` and every metric below into the deployed output
+// forever -- directly contradicting this file's own "Serves LIVE research metrics ... so the UI
+// always reflects the actual test output" contract above. Confirmed live: sibling dashboard
+// routes with the same no-request-param shape were actually baked into static JSON by
+// `npm run build` (marked "○ Static" in its route summary).
+export const dynamic = 'force-dynamic';
+
 // ── Dissertation-aligned bibliography (IS303.2, 2025) ─────────────────────
 const REFERENCES = [
   {

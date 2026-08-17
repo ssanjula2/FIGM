@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import SkeletonLoader from './SkeletonLoader';
+import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
 
 interface SummaryData {
   totalProjects: number;
@@ -233,7 +234,7 @@ export default function LiveDashboardContent() {
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Rules Triggered</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalRulesTriggered ?? 0}</span>
-            <span className="badge-trend-green">25 Rules</span>
+            <span className="badge-trend-green">{TOTAL_RULE_COUNT} Rules</span>
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.35) 100%)', borderTop: '1px solid #f59e0b' }} />
         </div>

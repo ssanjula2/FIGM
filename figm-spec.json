@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "description": "Formal 4-Layer Meta-Model & AST Detection Specification Matrix mapping SPA Quality Domains to Formal Mathematical Predicates, Abstract Language Primitives, and Universal AST Query Templates.",
     "framework": "FIGM-Core-v2",
-    "generatedAt": "2026-08-14T13:06:39.314Z",
+    "generatedAt": "2026-08-17T05:43:38.743Z",
     "totalCoreRules": 25
   },
   "taxonomies": {
@@ -1356,8 +1356,8 @@
         "GENERIC_ESTREE"
       ],
       "isFrameworkIndependent": false,
-      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
-      "knownLimitation": "Detected via legacy text-heuristic regex matching against Angular template markup on every framework (including Angular itself) -- a dedicated Angular template parser (@angular/compiler) has not yet been integrated, so this rule is not yet real-AST for any framework."
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "knownLimitation": "Detected via legacy text-heuristic regex matching against Angular template markup on every framework (including Angular itself) -- a dedicated Angular template parser (@angular/compiler) has not yet been integrated, so this rule is not yet real-AST for any framework. The automatic fix only rewrites the template to reference `trackBy: trackById` -- it does not generate the matching `trackById(index, item)` method on the component class, so the patch will not compile/run until that method is added by hand (found via live black-box fix-and-rescan testing: the isolated single-file TS checker does not type-check Angular template strings, so this dangling reference is invisible to automated re-scan verification)."
     },
     {
       "id": "FIGM-ANG-04",

@@ -151,8 +151,40 @@ export class RemediationEngine {
       }
 
       case 'FIGM-A11Y-01': {
-        // Add keyboard listener and tabIndex to click handler
-        if (code.includes(snippet)) {
+        // Add keyboard listener and tabindex/tabIndex to click handler. The three frameworks
+        // this rule covers spell both the click prop AND the ARIA attributes differently
+        // (`onClick={...}` + `tabIndex={0}` in JSX vs. `@click="..."` + `tabindex="0"` in Vue vs.
+        // `(click)="..."` + `tabindex="0"` in Angular) -- a JSX-shaped patch applied to a Vue/
+        // Angular snippet is not merely stylistically wrong, it silently fails to add ANY keyboard
+        // handler at all (the onClick={...} regex below never matches `@click="..."`), so the
+        // rule re-fires as UNRESOLVED after a patch that claimed to add one (found via live
+        // black-box fix-and-rescan testing on a Vue fixture).
+        const vueClickMatch = snippet.match(/(?:@click|v-on:click)="([^"]*)"/);
+        const angularClickMatch = snippet.match(/\(click\)="([^"]*)"/);
+
+        if (vueClickMatch) {
+          const handlerExpr = vueClickMatch[1];
+          let fixedSnippet = snippet.replace(/<(\w+)\b/, '<$1 role="button" tabindex="0"');
+          if (!fixedSnippet.includes('@keydown')) {
+            fixedSnippet = fixedSnippet.replace(
+              /(?:@click|v-on:click)="([^"]*)"/,
+              `@click="$1" @keydown.enter="${handlerExpr}" @keydown.space.prevent="${handlerExpr}"`
+            );
+          }
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = 'Annotated clickable element with role="button", tabindex="0", and @keydown.enter/@keydown.space handlers (Vue template syntax).';
+        } else if (angularClickMatch) {
+          const handlerExpr = angularClickMatch[1];
+          let fixedSnippet = snippet.replace(/<(\w+)\b/, '<$1 role="button" tabindex="0"');
+          if (!fixedSnippet.includes('(keydown')) {
+            fixedSnippet = fixedSnippet.replace(
+              /\(click\)="([^"]*)"/,
+              `(click)="$1" (keydown.enter)="${handlerExpr}" (keydown.space)="${handlerExpr}"`
+            );
+          }
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = 'Annotated clickable element with role="button", tabindex="0", and (keydown.enter)/(keydown.space) handlers (Angular template syntax).';
+        } else if (code.includes(snippet)) {
           let fixedSnippet = snippet.replace(/<div\b/, '<div role="button" tabIndex={0}');
           if (!fixedSnippet.includes('onKeyDown')) {
             // The captured group ($1) is the onClick attribute's VALUE expression, which is
@@ -772,6 +804,22 @@ export class RemediationEngine {
       (d: DiagnosticReport) => d.category === 'TYPE_COMPILE_ERROR' && !originalTypeErrorCodes.has(d.ruleId)
     );
     if (newTypeErrors.length > 0) {
+      return { isValid: false, status: 'PATCH_REJECTED', remainingDiagnostics: res.diagnostics };
+    }
+
+    // Reject patches that resolve the target defect but introduce a DIFFERENT FIGM guideline
+    // violation that wasn't present before (e.g. the FIGM-A11Y-01 keyboard-parity fix wrapping the
+    // handler in a fresh inline arrow function, which FIGM-PERF-05 then flags as a new "inline
+    // anonymous callback" violation on the very same element -- found via live black-box testing).
+    // "The target ruleId is gone" is not sufficient on its own; the patch must not trade one
+    // violation for another. Syntax/type-compile diagnostics are excluded here since they're
+    // already covered by the checks above with their own comparison semantics.
+    const originalRuleIds = new Set(originalRes.diagnostics.map((d: DiagnosticReport) => d.ruleId));
+    const newGuidelineViolations = res.diagnostics.filter(
+      (d: DiagnosticReport) =>
+        d.category !== 'SYNTAX_ERROR' && d.category !== 'TYPE_COMPILE_ERROR' && !originalRuleIds.has(d.ruleId)
+    );
+    if (newGuidelineViolations.length > 0) {
       return { isValid: false, status: 'PATCH_REJECTED', remainingDiagnostics: res.diagnostics };
     }
 
