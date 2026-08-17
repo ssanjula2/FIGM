@@ -270,13 +270,18 @@ function isReferencedInsideConditionalBlock(fullCode: string, bindingNames: stri
   const nameRegexes = bindingNames.map((n) => new RegExp(`\\b${n}\\b`));
   const lines = fullCode.split(/\r?\n/);
   let depth = 0;
-  let conditionalFloor = -1; // depth at which we entered the current `if` block; -1 = not inside one
+  let conditionalFloor = -1; // depth at which we entered the current `if`/`catch` block; -1 = not inside one
   let sawConditionalUsage = false;
   let sawUnconditionalUsage = false;
 
   for (const line of lines) {
     const isImportLine = /^\s*import\s/.test(line);
-    const isIfLine = /\bif\s*\(/.test(line);
+    // A `catch` block is exactly as conditional/deferred as an `if` block -- it only executes
+    // when the guarded `try` throws -- but was invisible here (found via live black-box testing:
+    // FIGM's own live-scan page statically imported RemediationEngine, used only inside a catch
+    // block, adding ~1MB to that page's client bundle; this rule should have caught it and
+    // didn't). `catch {` (no binding) and `catch (e) {` both match.
+    const isIfLine = /\bif\s*\(/.test(line) || /\bcatch\s*[({]/.test(line);
     if (conditionalFloor === -1 && isIfLine) {
       conditionalFloor = depth;
     }

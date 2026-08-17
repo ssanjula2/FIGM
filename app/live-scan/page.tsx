@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Editor, { useMonaco, OnMount } from '@monaco-editor/react';
-import { RemediationEngine } from '../../src/engine/remediation-engine';
 
 // ── Sample presets (only for the "Try Sample" buttons — not hardcoded results) ─
 const SAMPLE_REACT_CODE = `import React from 'react';
@@ -476,7 +475,15 @@ export default function LiveScanPage() {
       // The /api/scan round-trip itself failed (e.g. genuinely offline) -- fall back to the
       // deterministic engine running locally, but it must still be verified before being
       // trusted, not assumed to have worked just because it ran without throwing.
+      //
+      // Dynamically imported (not a top-level import) because RemediationEngine pulls in the
+      // full server-side rule/AST/TypeScript-compiler stack via its sibling validatePatch()
+      // method -- a static top-level import of this module was adding ~1MB to this page's
+      // initial client bundle (999 kB page-own JS vs. 1.6-15.8 kB on every sibling page,
+      // confirmed live via `npm run build`'s route size report) for a fallback branch that only
+      // ever runs when the network request above has already failed.
       try {
+        const { RemediationEngine } = await import('../../src/engine/remediation-engine');
         const localResult = RemediationEngine.applyQuickFix(code, defect as any);
         const { remediatedCode, appliedFixDescription, requiresManualReview } = localResult;
 

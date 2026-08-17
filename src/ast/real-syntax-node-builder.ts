@@ -295,10 +295,16 @@ function isExclusivelyConditionallyReferenced(ctx: BuilderContext, decl: ts.Impo
     return false;
   };
 
+  // A `catch` clause is exactly as conditional/deferred as an `if` block -- it only executes
+  // when the guarded `try` throws -- but was invisible here (found via live black-box testing:
+  // FIGM's own live-scan page statically imported RemediationEngine, used only inside a catch
+  // block, adding ~1MB to that page's client bundle; this rule should have caught it and
+  // didn't, on the very framework -- GENERIC_ESTREE/REACT_JSX/NEXT_JS -- that routes through
+  // this real-AST path rather than the legacy line-heuristic one).
   const hasIfStatementAncestor = (node: ts.Node): boolean => {
     let current: ts.Node | undefined = node.parent;
     while (current) {
-      if (ts.isIfStatement(current)) return true;
+      if (ts.isIfStatement(current) || ts.isCatchClause(current)) return true;
       current = current.parent;
     }
     return false;
