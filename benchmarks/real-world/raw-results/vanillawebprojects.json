@@ -5,7 +5,7 @@
   "primaryFrameworkLabel": "Generic JavaScript",
   "filesScanned": 21,
   "totalLOC": 2259,
-  "scanDurationMs": 432.27560000000085,
+  "scanDurationMs": 512.5722999999998,
   "totalFigmFindings": 81,
   "findingsByRule": {
     "FIGM-PERF-03": 69,

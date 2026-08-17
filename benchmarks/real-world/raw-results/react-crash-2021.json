@@ -5,7 +5,7 @@
   "primaryFrameworkLabel": "React",
   "filesScanned": 10,
   "totalLOC": 340,
-  "scanDurationMs": 1204.1961999999999,
+  "scanDurationMs": 1242.9581000000003,
   "totalFigmFindings": 11,
   "findingsByRule": {
     "FIGM-REACT-01": 1,

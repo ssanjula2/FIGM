@@ -1138,7 +1138,7 @@
       ],
       "isFrameworkIndependent": false,
       "remediationStatus": "MANUAL_REVIEW_REQUIRED",
-      "knownLimitation": "No scope restriction -- any .sort/.filter/.reduce call anywhere in the file is flagged, not only ones inside the render path; the useMemo dependency array must be chosen manually."
+      "knownLimitation": "No scope restriction -- any .sort/.filter/.reduce call anywhere in the file is flagged, not only ones inside the render path; the useMemo dependency array must be chosen manually. The receiver is excluded when it is a bare, capitalized identifier (e.g. Vue, Array, Object -- the near-universal naming convention for a class/namespace/static-API object, never a plain array variable), which rules out method-name-only false positives like Vue's Vue.filter(name, fn) global filter registration API; a receiver reached via a property chain or call expression (e.g. Array.from(x).filter(...)) is not covered by this exclusion and is still evaluated normally."
     },
     {
       "id": "FIGM-REACT-02",

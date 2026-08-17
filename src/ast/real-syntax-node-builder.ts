@@ -845,10 +845,25 @@ function hasUseMemoAncestor(node: ts.Node): boolean {
   return false;
 }
 
+/** True if `receiver` is a bare identifier starting with an uppercase letter -- the near-universal
+ *  JS/TS convention for a class, namespace, or static-API object (`Vue`, `Array`, `Object`, `Math`,
+ *  `React`, a component reference), never a plain array-holding variable (which would be camelCase
+ *  by the same near-universal convention). Real, reproducible false positive found via
+ *  `benchmarks/real-world/SPOT_CHECK.md` #14: `Vue.filter(key, filters[key])` -- Vue's global
+ *  filter-*registration* API (`Vue.filter(name, fn)`), not `Array.prototype.filter` -- was matched
+ *  purely because the property name `filter` matched, with no check that the receiver could
+ *  plausibly be an array. Deliberately narrow and structural (a naming-convention check on the
+ *  immediate receiver, not a hardcoded list of specific library names): `Array.from(x).filter(fn)`
+ *  is unaffected, since its `.filter` receiver is a `CallExpression`, not a bare identifier. */
+function isLikelyNonArrayNamespaceReceiver(receiver: ts.Expression): boolean {
+  return ts.isIdentifier(receiver) && /^[A-Z]/.test(receiver.text);
+}
+
 function buildReact01(ctx: BuilderContext, node: ts.Node): void {
   if (!ts.isCallExpression(node)) return;
   if (!isPropertyAccessChain(node.expression)) return;
   if (!DERIVED_COMPUTATION_METHODS.has(node.expression.name.text)) return;
+  if (isLikelyNonArrayNamespaceReceiver(node.expression.expression)) return;
   if (hasUseMemoAncestor(node)) return;
   pushNode(ctx, node, {
     type: 'CallExpression',

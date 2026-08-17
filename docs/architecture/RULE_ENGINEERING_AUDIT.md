@@ -310,10 +310,18 @@ Each rule below answers: (1) exact pattern detected, (2) syntax structure provin
    via a real ancestor walk for a `useMemo`/`*.useMemo` call wrapping it anywhere above it in the
    tree (not merely on the same physical line).
 3. **Yes — migrated (Group 4, this pass).**
-4. FP: **documented, preserved KNOWN LIMITATION** — no scope restriction at all (matches legacy):
-   a module-level utility function's `.sort()` far from any component render is still flagged, even
-   though `useMemo` would be meaningless there. Not narrowed in this pass (a scope restriction would
-   itself be an undocumented, unapproved semantic change).
+4. FP: **partially fixed (follow-up commit, 2026-08-18), partially preserved KNOWN LIMITATION**.
+   Fixed: the receiver is now excluded when it is a bare identifier starting with an uppercase
+   letter (`isLikelyNonArrayNamespaceReceiver`) — the near-universal JS/TS naming convention for a
+   class/namespace/static-API object, never a plain array variable. This closes a confirmed
+   real-world false positive (`benchmarks/real-world/SPOT_CHECK.md` #14: Vue's global
+   `Vue.filter(name, fn)` filter-*registration* API, matched purely because the property name
+   `filter` matched with no receiver check at all) without a hardcoded per-library list — a receiver
+   reached via a property chain or call expression (`Array.from(x).filter(...)`) isn't a bare
+   identifier and is unaffected. Still preserved as a KNOWN LIMITATION: no scope restriction at all
+   (matches legacy) — a module-level utility function's `.sort()` far from any component render is
+   still flagged, even though `useMemo` would be meaningless there; not narrowed in this pass (a
+   scope restriction would itself be an undocumented, unapproved semantic change).
 5. FN: **fixed** — the legacy same-physical-line text check missed a multi-line `useMemo(() => {
    ...\n items.sort(...) \n}, [deps])` body (false positive: correctly-memoized code was flagged)
    and could be fooled by an unrelated `"useMemo"` substring anywhere on the same line as a
@@ -536,7 +544,7 @@ the codebase after this pass, plus Vue/Svelte's blanket framework-level exclusio
 | FIGM-NEXT-02 | TS Compiler | `ImportDeclaration` (heavy-module allow-list) | 10 | Fixed allow-list, not general "heavy package" detection | Manual review |
 | FIGM-NEXT-03 | TS Compiler | Whole-file structural check (no single node) | 8 | Presence-only; doesn't validate the value | Safe |
 | FIGM-NEXT-04 | TS Compiler | `JsxOpeningElement` (`<link>` Google Fonts) | 10 | Narrow href-pattern match | Manual review |
-| FIGM-REACT-01 | TS Compiler *(Group 4)* | `CallExpression` (.sort/.filter/.reduce) | 19 | No scope restriction (any occurrence in file, matches legacy) | Manual review |
+| FIGM-REACT-01 | TS Compiler *(Group 4)* | `CallExpression` (.sort/.filter/.reduce), capitalized-bare-identifier receivers excluded | 23 | No scope restriction (any occurrence in file, matches legacy) | Manual review |
 | FIGM-REACT-02 | TS Compiler (bespoke module, Phase 5-relocated) | `JsxAttribute` `key` + map-callback index binding | 28 | Index derived via an intermediate variable is invisible | Safe |
 | FIGM-REACT-03 | TS Compiler | `ExpressionStatement` (mutation call / prop assignment), gated by file-wide `useState`/setter/`this.state` evidence | 33 | Name-based (not lexical-scope) state-evidence search; alias/destructure indirection invisible | Safe (per-shape) |
 | FIGM-REACT-04 | TS Compiler *(Group 4)* | `JsxAttribute` onClick (Custom\*/Button\*/Card\*) | 18 | Narrow tag allow-list + onClick-only scope (deliberately preserved) | Manual review |

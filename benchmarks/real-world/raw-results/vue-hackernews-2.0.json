@@ -5,17 +5,17 @@
   "primaryFrameworkLabel": "Vue",
   "filesScanned": 23,
   "totalLOC": 1396,
-  "scanDurationMs": 690.9215999999997,
-  "totalFigmFindings": 9,
+  "scanDurationMs": 745.4339,
+  "totalFigmFindings": 8,
   "findingsByRule": {
     "FIGM-PERF-04": 2,
-    "FIGM-REACT-01": 5,
     "FIGM-PERF-02": 1,
+    "FIGM-REACT-01": 4,
     "FIGM-PERF-05": 1
   },
   "findingsBySeverity": {
     "MEDIUM": 3,
-    "HIGH": 6
+    "HIGH": 5
   },
   "frameworksDetected": {
     "GENERIC_ESTREE": 15,
@@ -63,7 +63,7 @@
       "relativePath": "src/app.js",
       "framework": "GENERIC_ESTREE",
       "loc": 42,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -262,31 +262,6 @@
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/app.js",
-      "location": {
-        "start": {
-          "line": 14,
-          "column": 2
-        },
-        "end": {
-          "line": 14,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "Vue.filter(key, filters[key])",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 14"
     },
     {
       "ruleId": "FIGM-PERF-02",

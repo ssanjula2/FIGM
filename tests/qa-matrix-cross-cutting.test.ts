@@ -302,6 +302,32 @@ test('QA Matrix — cross-cutting robustness', async (t) => {
     assert.ok(reactResult.diagnostics.some((d) => d.ruleId === 'FIGM-REACT-03'), 'setUser(...) naming-convention evidence must still fire inside a real .jsx React file');
   });
 
+  await t.test('[Regression] Vue.filter(...) global filter registration is not misclassified as an unmemoized Array.prototype.filter() call, but a real array .sort()/.filter()/.reduce() with a capitalized-receiver ancestor chain still fires (FIGM-REACT-01)', () => {
+    // Found via benchmarks/real-world/SPOT_CHECK.md #14 (vuejs/vue-hackernews-2.0
+    // src/app.js:14): `Object.keys(filters).forEach(key => { Vue.filter(key, filters[key]); });` --
+    // Vue's global filter-*registration* API (`Vue.filter(name, fn)`), not `Array.prototype.filter`.
+    // FIGM-REACT-01 matched on the method name `filter` alone, with no check that the receiver
+    // could plausibly be an array. Fixed by suppressing the match when the immediate receiver of
+    // `.sort`/`.filter`/`.reduce` is a bare identifier starting with an uppercase letter -- the
+    // near-universal JS/TS convention for a class/namespace/static-API object, never a plain array
+    // variable (which would be camelCase by that same convention). Deliberately structural, not a
+    // hardcoded list of specific library names: `Array.from(x).filter(...)`'s `.filter` receiver is
+    // a CallExpression, not a bare identifier, so it is correctly unaffected and still fires.
+    const vueCode = `Object.keys(filters).forEach(key => {\n  Vue.filter(key, filters[key]);\n});`;
+    const vueResult = RuleExecutionEngine.analyzeFile('app.js', vueCode);
+    assert.equal(vueResult.diagnostics.filter((d) => d.ruleId === 'FIGM-REACT-01').length, 0, 'Vue.filter(...) global filter registration must not be misclassified as an unmemoized array method call');
+
+    const genuineCases = [
+      { label: 'items.sort() with no useMemo', code: `function Component({ items }) {\n  const sorted = items.sort((a,b) => a - b);\n  return sorted;\n}` },
+      { label: 'items.filter() with no useMemo', code: `function Component({ items }) {\n  const active = items.filter(x => x.active);\n  return active;\n}` },
+      { label: 'Array.from(x).filter() -- receiver is a CallExpression, not a bare capitalized identifier', code: `function Component({ items }) {\n  const arr = Array.from(items).filter(x => x.active);\n  return arr;\n}` },
+    ];
+    for (const { label, code } of genuineCases) {
+      const result = RuleExecutionEngine.analyzeFile('a.jsx', code);
+      assert.ok(result.diagnostics.some((d) => d.ruleId === 'FIGM-REACT-01'), `${label} must still be flagged`);
+    }
+  });
+
   await t.test('[String containing code-like text] a display string that looks like a violation is not flagged (regression: see docs/audit/ADVERSARIAL_DETECTION_AUDIT.md)', () => {
     const code = `const helpText = "Example: window.addEventListener('scroll', fn) needs cleanup";\nfunction Widget() { return <div>{helpText}</div>; }`;
     const result = RuleExecutionEngine.analyzeFile('StringText.jsx', code);
