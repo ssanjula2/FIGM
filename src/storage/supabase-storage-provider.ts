@@ -1,15 +1,18 @@
 import crypto from 'node:crypto';
-import { IStorageProvider } from './storage-provider';
+import { IStorageProvider, ScanListQuery, ScanListResult } from './storage-provider';
 import { JsonStorageProvider } from './json-storage-provider';
 import { getPrismaClient } from '../db/prisma-client';
 import {
   DBUser,
   DBProject,
   DBScanRecord,
+  DBScanRecordSummary,
+  ScanRecordInput,
   DBNotification,
   DBSettings,
   DBAuditLog,
 } from '../auth/user-db';
+import { severityCountsFromDiagnostics } from '../engine/quality-score';
 
 function toIso(d: Date | null | undefined): string | undefined {
   return d ? d.toISOString() : undefined;
@@ -60,12 +63,104 @@ function mapScan(s: any): DBScanRecord {
     memoryUsageMb: s.memoryUsageMb,
     qualityScore: s.qualityScore,
     ruleCount: s.ruleCount,
+    criticalCount: s.criticalCount ?? 0,
+    highCount: s.highCount ?? 0,
+    mediumCount: s.mediumCount ?? 0,
+    lowCount: s.lowCount ?? 0,
     aiFixCount: s.aiFixCount,
     diagnostics: (s.diagnostics as any[]) || [],
     isFavorite: s.isFavorite,
     createdAt: s.createdAt.toISOString(),
   };
 }
+
+/** Same shape as mapScan but for rows fetched with `diagnostics` excluded from `select` -- kept
+ *  as a separate function (rather than mapScan(s) then deleting the key) so a `select` that
+ *  genuinely never asked Postgres for the diagnostics column can never accidentally reference it. */
+function mapScanSummary(s: any): DBScanRecordSummary {
+  return {
+    id: s.id,
+    userId: s.userId,
+    projectId: s.projectId ?? undefined,
+    fileName: s.fileName,
+    framework: s.framework,
+    repositoryUrl: s.repositoryUrl,
+    scanTimeMs: s.scanTimeMs,
+    memoryUsageMb: s.memoryUsageMb,
+    qualityScore: s.qualityScore,
+    ruleCount: s.ruleCount,
+    criticalCount: s.criticalCount ?? 0,
+    highCount: s.highCount ?? 0,
+    mediumCount: s.mediumCount ?? 0,
+    lowCount: s.lowCount ?? 0,
+    aiFixCount: s.aiFixCount,
+    isFavorite: s.isFavorite,
+    createdAt: s.createdAt.toISOString(),
+  };
+}
+
+/** Builds a real Prisma `where` clause for the scan-history list query -- the framework
+ *  special-casing (react/next substring matches) mirrors the legacy in-memory filter's semantics
+ *  exactly, so switching a deployment from the JSON fallback to Postgres never changes what a
+ *  given filter returns. */
+function buildScanWhere(query: ScanListQuery): Record<string, any> {
+  const where: Record<string, any> = {};
+  if (query.userId) where.userId = query.userId;
+  if (query.projectId) where.projectId = query.projectId;
+  if (query.onlyFavorites) where.isFavorite = true;
+
+  if (query.framework && query.framework !== 'ALL') {
+    const fw = query.framework.toLowerCase();
+    if (fw.includes('react')) where.framework = { contains: 'react', mode: 'insensitive' };
+    else if (fw.includes('next')) where.framework = { contains: 'next', mode: 'insensitive' };
+    else where.framework = { equals: query.framework, mode: 'insensitive' };
+  }
+
+  if (query.minScore !== undefined || query.maxScore !== undefined) {
+    where.qualityScore = {};
+    if (query.minScore !== undefined) where.qualityScore.gte = query.minScore;
+    if (query.maxScore !== undefined) where.qualityScore.lte = query.maxScore;
+  }
+
+  if (query.from || query.to) {
+    where.createdAt = {};
+    if (query.from) where.createdAt.gte = new Date(query.from);
+    if (query.to) where.createdAt.lte = new Date(query.to);
+  }
+
+  if (query.search && query.search.trim() !== '') {
+    const q = query.search.trim();
+    where.OR = [
+      { fileName: { contains: q, mode: 'insensitive' } },
+      { framework: { contains: q, mode: 'insensitive' } },
+      { repositoryUrl: { contains: q, mode: 'insensitive' } },
+    ];
+  }
+
+  return where;
+}
+
+const SCAN_SUMMARY_SELECT = {
+  id: true,
+  userId: true,
+  projectId: true,
+  fileName: true,
+  framework: true,
+  repositoryUrl: true,
+  scanTimeMs: true,
+  memoryUsageMb: true,
+  qualityScore: true,
+  ruleCount: true,
+  criticalCount: true,
+  highCount: true,
+  mediumCount: true,
+  lowCount: true,
+  aiFixCount: true,
+  isFavorite: true,
+  createdAt: true,
+  // `diagnostics` deliberately omitted -- this is the list-view query, see ScanListQuery's doc
+  // comment. Postgres never even reads/transfers that column for this query.
+};
 
 function mapNotification(n: any): DBNotification {
   return {
@@ -304,8 +399,9 @@ export class SupabaseStorageProvider implements IStorageProvider {
   }
 
   // --- SCAN RECORDS ---
-  async createScanRecord(scan: Omit<DBScanRecord, 'id' | 'createdAt'>): Promise<DBScanRecord> {
+  async createScanRecord(scan: ScanRecordInput): Promise<DBScanRecord> {
     if (!this.prisma) return this.fallback!.createScanRecord(scan);
+    const severity = severityCountsFromDiagnostics(scan.diagnostics || []);
     const created = await this.db().scanReport.create({
       data: {
         userId: scan.userId,
@@ -317,6 +413,10 @@ export class SupabaseStorageProvider implements IStorageProvider {
         memoryUsageMb: scan.memoryUsageMb,
         qualityScore: scan.qualityScore,
         ruleCount: scan.ruleCount,
+        criticalCount: severity.criticalCount,
+        highCount: severity.highCount,
+        mediumCount: severity.mediumCount,
+        lowCount: severity.lowCount,
         aiFixCount: scan.aiFixCount,
         diagnostics: (scan.diagnostics || []) as any,
         isFavorite: scan.isFavorite || false,
@@ -342,6 +442,22 @@ export class SupabaseStorageProvider implements IStorageProvider {
       orderBy: { createdAt: 'desc' },
     });
     return scans.map(mapScan);
+  }
+
+  async queryScanRecords(query: ScanListQuery): Promise<ScanListResult> {
+    if (!this.prisma) return this.fallback!.queryScanRecords(query);
+    const where = buildScanWhere(query);
+    const [rows, total] = await Promise.all([
+      this.db().scanReport.findMany({
+        where,
+        select: SCAN_SUMMARY_SELECT,
+        orderBy: { [query.sortBy]: query.sortOrder },
+        skip: (query.page - 1) * query.pageSize,
+        take: query.pageSize,
+      }),
+      this.db().scanReport.count({ where }),
+    ]);
+    return { records: rows.map(mapScanSummary), total };
   }
 
   async getScanRecordById(id: string): Promise<DBScanRecord | undefined> {

@@ -7,6 +7,39 @@ import { RuleExecutionEngine } from '../../../src/engine/rule-execution-engine';
 import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 
 const MAX_CODE_LENGTH = 500000; // 500KB, matches /api/scan's limit
+const MAX_PAGE_SIZE = 100;
+const VALID_SORT_FIELDS = new Set(['createdAt', 'qualityScore', 'scanTimeMs', 'memoryUsageMb', 'ruleCount']);
+
+/** Parses and validates a query-string integer parameter. Returns `undefined` if the parameter
+ *  is absent, or an error message string if present but not a positive integer -- callers use the
+ *  string/undefined distinction to short-circuit with a 400 rather than silently substituting a
+ *  default for a malformed value a client actually sent. */
+function parsePositiveInt(raw: string | null, label: string): { value?: number; error?: string } {
+  if (raw === null) return {};
+  const n = Number(raw);
+  if (!Number.isFinite(n) || !Number.isInteger(n) || n <= 0) {
+    return { error: `${label} must be a positive integer` };
+  }
+  return { value: n };
+}
+
+function parseScore(raw: string | null, label: string): { value?: number; error?: string } {
+  if (raw === null) return {};
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n < 0 || n > 100) {
+    return { error: `${label} must be a number between 0 and 100` };
+  }
+  return { value: n };
+}
+
+function parseDate(raw: string | null, label: string): { value?: string; error?: string } {
+  if (raw === null) return {};
+  const t = new Date(raw).getTime();
+  if (!Number.isFinite(t)) {
+    return { error: `${label} must be a valid ISO-8601 date` };
+  }
+  return { value: raw };
+}
 
 export async function GET(request: Request) {
   const auth = authenticateUser(request);
@@ -15,16 +48,45 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
+
+  const page = parsePositiveInt(searchParams.get('page'), 'page');
+  const pageSize = parsePositiveInt(searchParams.get('pageSize') ?? searchParams.get('limit'), 'pageSize/limit');
+  const minScore = parseScore(searchParams.get('minScore'), 'minScore');
+  const maxScore = parseScore(searchParams.get('maxScore'), 'maxScore');
+  const from = parseDate(searchParams.get('from'), 'from');
+  const to = parseDate(searchParams.get('to'), 'to');
+
+  const firstError = page.error || pageSize.error || minScore.error || maxScore.error || from.error || to.error;
+  if (firstError) {
+    return NextResponse.json({ error: firstError, code: 'INVALID_QUERY_PARAM' }, { status: 400 });
+  }
+
+  if (pageSize.value !== undefined && pageSize.value > MAX_PAGE_SIZE) {
+    return NextResponse.json(
+      { error: `pageSize/limit must not exceed ${MAX_PAGE_SIZE}`, code: 'INVALID_QUERY_PARAM' },
+      { status: 400 }
+    );
+  }
+
+  const sortByRaw = searchParams.get('sortBy');
+  if (sortByRaw && !VALID_SORT_FIELDS.has(sortByRaw)) {
+    return NextResponse.json(
+      { error: `sortBy must be one of: ${[...VALID_SORT_FIELDS].join(', ')}`, code: 'INVALID_QUERY_PARAM' },
+      { status: 400 }
+    );
+  }
+
+  const sortOrderRaw = searchParams.get('sortOrder');
+  if (sortOrderRaw && sortOrderRaw !== 'asc' && sortOrderRaw !== 'desc') {
+    return NextResponse.json({ error: 'sortOrder must be "asc" or "desc"', code: 'INVALID_QUERY_PARAM' }, { status: 400 });
+  }
+
   const projectId = searchParams.get('projectId') || undefined;
   const search = searchParams.get('search') || undefined;
   const framework = searchParams.get('framework') || undefined;
-  const minScore = searchParams.has('minScore') ? Number(searchParams.get('minScore')) : undefined;
-  const maxScore = searchParams.has('maxScore') ? Number(searchParams.get('maxScore')) : undefined;
   const onlyFavorites = searchParams.get('onlyFavorites') === 'true';
-  const sortBy = (searchParams.get('sortBy') as any) || undefined;
-  const sortOrder = (searchParams.get('sortOrder') as any) || undefined;
-  const page = searchParams.has('page') ? Number(searchParams.get('page')) : 1;
-  const pageSize = searchParams.has('pageSize') ? Number(searchParams.get('pageSize')) : 100;
+  const sortBy = (sortByRaw as any) || undefined;
+  const sortOrder = (sortOrderRaw as any) || undefined;
 
   // Regular users see only their own scans; ADMIN can see across all users.
   const userId = auth.user.role === 'ADMIN' ? undefined : auth.user.userId;
@@ -34,13 +96,15 @@ export async function GET(request: Request) {
     projectId,
     search,
     framework,
-    minScore,
-    maxScore,
+    minScore: minScore.value,
+    maxScore: maxScore.value,
     onlyFavorites,
+    from: from.value,
+    to: to.value,
     sortBy,
     sortOrder,
-    page,
-    pageSize,
+    page: page.value,
+    pageSize: pageSize.value,
   });
 
   return NextResponse.json(result);
@@ -66,8 +130,9 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { code, fileName, framework, projectId, repositoryUrl } = body;
 
-    // participantId/qualityScore/diagnostics/ruleCount/aiFixCount are deliberately NOT read from
-    // the request body at all -- there is no "trusted" client-supplied override for any of them.
+    // participantId/qualityScore/diagnostics/ruleCount/aiFixCount/severity counts are deliberately
+    // NOT read from the request body at all -- there is no "trusted" client-supplied override for
+    // any of them.
     if (!code || typeof code !== 'string') {
       return NextResponse.json({ error: 'code is required' }, { status: 400 });
     }
@@ -100,6 +165,9 @@ export async function POST(request: Request) {
       // Server-derived, not client-supplied: this is the entire point of the fix.
       qualityScore: analysis.qualityScore ?? 0,
       ruleCount: analysis.diagnostics.length,
+      // criticalCount/highCount/mediumCount/lowCount are deliberately not set here -- ScanRepository
+      // .createScanRecord always derives them server-side from `diagnostics` (see ScanRecordInput's
+      // doc comment), so there is no separate step here to keep in sync.
       aiFixCount: 0,
       diagnostics: analysis.diagnostics as any,
       isFavorite: false,

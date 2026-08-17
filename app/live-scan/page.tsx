@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Link from 'next/link';
 import Editor, { useMonaco, OnMount } from '@monaco-editor/react';
 
 // ── Sample presets (only for the "Try Sample" buttons — not hardcoded results) ─
@@ -334,10 +335,60 @@ export default function LiveScanPage() {
   const [fixingId, setFixingId] = useState<string | null>(null);
   const [fixResults, setFixResults] = useState<Record<string, FixOutcome>>({});
 
+  // Save-to-history state. Whether the button is even shown to a signed-out visitor is a pure UI
+  // nicety (this app has no client-side auth-state hook anywhere -- see HeaderBar.tsx, which
+  // doesn't reflect login state either); the REAL authorization decision is made server-side by
+  // POST /api/scans itself (via the same httpOnly session cookie every same-origin fetch already
+  // carries automatically), which is what this button's 401 handling below actually relies on.
+  const [savingToHistory, setSavingToHistory] = useState<boolean>(false);
+  const [saveHistoryStatus, setSaveHistoryStatus] = useState<{ kind: 'success' | 'error' | 'auth'; message: string } | null>(null);
+
   const editorRef = useRef<any>(null);
   const monaco = useMonaco();
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastScannedCode = useRef<string>('');
+
+  // ── Uncaught-error/rejection observability ─────────────────────────────
+  // This page mounts a real Monaco Editor instance, whose language mode is swapped live as the
+  // sample/filename changes (see the `language={...}` prop below) and whose model/worker
+  // lifecycle is torn down and recreated across React fast-refresh reloads in dev. Both are known
+  // sources of Monaco throwing/rejecting with a bare, non-Error object from its own internal
+  // worker message-handling code -- which DevTools then reports as an unattributable
+  // "[EXCEPTION] Object" with no message or stack, exactly what live black-box testing on this
+  // page observed once, unreproducibly, across two separate audit sessions (no code path in this
+  // file, RemediationEngine, or the /api/scan route was found to throw/reject a non-Error value;
+  // extensive targeted reproduction attempts -- rapid sample-tab switching, rapid typed input,
+  // burst fix-apply clicks, forced HMR reloads -- did not reproduce it again). Rather than leave a
+  // future occurrence equally unattributable, capture it with full context the moment it happens.
+  useEffect(() => {
+    const describe = (value: unknown): string => {
+      if (value instanceof Error) return value.stack || value.message;
+      try {
+        return JSON.stringify(value);
+      } catch {
+        return String(value);
+      }
+    };
+    const onError = (e: ErrorEvent) => {
+      // eslint-disable-next-line no-console
+      console.error('[FIGM live-scan] Uncaught error:', e.message || describe(e.error), {
+        filename: e.filename,
+        line: e.lineno,
+        column: e.colno,
+        error: e.error,
+      });
+    };
+    const onRejection = (e: PromiseRejectionEvent) => {
+      // eslint-disable-next-line no-console
+      console.error('[FIGM live-scan] Unhandled promise rejection:', describe(e.reason), { reason: e.reason });
+    };
+    window.addEventListener('error', onError);
+    window.addEventListener('unhandledrejection', onRejection);
+    return () => {
+      window.removeEventListener('error', onError);
+      window.removeEventListener('unhandledrejection', onRejection);
+    };
+  }, []);
 
   // ── Core scan function (always uses current editor code — no hardcode) ──
   const handleScan = useCallback(async (codeToScan?: string, fileToScan?: string) => {
@@ -389,6 +440,46 @@ export default function LiveScanPage() {
       setScanning(false);
     }
   }, [code, fileName]);
+
+  // ── Save the current scan to the authenticated user's persistent history ──
+  // POSTs to the real, authoritative persistence endpoint (see app/api/scans/route.ts) -- the
+  // server re-runs the real engine and derives the quality score/diagnostics/severity counts
+  // itself; nothing about the result this page already computed and displayed is trusted or
+  // resubmitted verbatim. A 401 here is not an error state to report generically -- it is the
+  // server's real, authoritative answer to "is this caller actually signed in," which this page
+  // has no reliable way to know in advance (see the state declaration's comment above).
+  const handleSaveToHistory = async () => {
+    if (!code.trim()) return;
+    setSavingToHistory(true);
+    setSaveHistoryStatus(null);
+    try {
+      const res = await fetch('/api/scans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, fileName }),
+      });
+
+      if (res.status === 401) {
+        setSaveHistoryStatus({ kind: 'auth', message: 'Log in to save this scan to your history.' });
+        return;
+      }
+
+      const data = await res.json();
+      if (!res.ok) {
+        setSaveHistoryStatus({ kind: 'error', message: data.error || 'Failed to save scan.' });
+        return;
+      }
+
+      setSaveHistoryStatus({
+        kind: 'success',
+        message: `Saved to your history — quality score ${data.record.qualityScore}/100.`,
+      });
+    } catch (err: any) {
+      setSaveHistoryStatus({ kind: 'error', message: err.message || 'Failed to save scan.' });
+    } finally {
+      setSavingToHistory(false);
+    }
+  };
 
   // ── Auto-scan the default sample on first mount ────────────────────────
   useEffect(() => {
@@ -899,6 +990,53 @@ export default function LiveScanPage() {
                     {result.diagnostics.length}
                   </strong>
                 </span>
+              </div>
+
+              {/* Save to history */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <button
+                  onClick={handleSaveToHistory}
+                  disabled={savingToHistory}
+                  style={{
+                    padding: '8px',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(56, 189, 248, 0.3)',
+                    background: 'rgba(56, 189, 248, 0.1)',
+                    color: '#38bdf8',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: savingToHistory ? 'not-allowed' : 'pointer',
+                    opacity: savingToHistory ? 0.6 : 1,
+                  }}
+                >
+                  {savingToHistory ? '💾 Saving…' : '💾 Save to History'}
+                </button>
+                {saveHistoryStatus && (
+                  <div
+                    role="status"
+                    style={{
+                      fontSize: '11px',
+                      padding: '6px 10px',
+                      borderRadius: '6px',
+                      color: saveHistoryStatus.kind === 'success' ? '#4ade80' : saveHistoryStatus.kind === 'auth' ? '#eab308' : '#f87171',
+                      background: saveHistoryStatus.kind === 'success' ? 'rgba(34,197,94,0.1)' : saveHistoryStatus.kind === 'auth' ? 'rgba(234,179,8,0.1)' : 'rgba(239,68,68,0.1)',
+                    }}
+                  >
+                    {saveHistoryStatus.message}
+                    {saveHistoryStatus.kind === 'auth' && (
+                      <>
+                        {' '}
+                        <Link href="/auth/login" style={{ color: '#38bdf8', fontWeight: 700 }}>Log in</Link>
+                      </>
+                    )}
+                    {saveHistoryStatus.kind === 'success' && (
+                      <>
+                        {' '}
+                        <Link href="/history" style={{ color: '#4ade80', fontWeight: 700, textDecoration: 'underline' }}>View history →</Link>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Diagnostics */}

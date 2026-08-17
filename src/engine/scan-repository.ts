@@ -1,5 +1,6 @@
-import { DBScanRecord } from '../auth/user-db';
+import { DBScanRecord, DBScanRecordSummary, ScanRecordInput } from '../auth/user-db';
 import { RepositoryFactory } from '../storage/repository-factory';
+import { ScanListQuery } from '../storage/storage-provider';
 
 export interface ScanFilterOptions {
   userId?: string;
@@ -9,6 +10,10 @@ export interface ScanFilterOptions {
   minScore?: number;
   maxScore?: number;
   onlyFavorites?: boolean;
+  /** Inclusive lower bound on createdAt, as an ISO-8601 string. */
+  from?: string;
+  /** Inclusive upper bound on createdAt, as an ISO-8601 string. */
+  to?: string;
   sortBy?: 'createdAt' | 'qualityScore' | 'scanTimeMs' | 'memoryUsageMb' | 'ruleCount';
   sortOrder?: 'asc' | 'desc';
   page?: number;
@@ -16,19 +21,21 @@ export interface ScanFilterOptions {
 }
 
 export interface PaginatedScanResult {
-  records: DBScanRecord[];
+  records: DBScanRecordSummary[];
   total: number;
   page: number;
   pageSize: number;
   totalPages: number;
 }
 
+const MAX_PAGE_SIZE = 100;
+
 export class ScanRepository {
   private static get provider() {
     return RepositoryFactory.getStorageProvider();
   }
 
-  public static async createScanRecord(scan: Omit<DBScanRecord, 'id' | 'createdAt'>): Promise<DBScanRecord> {
+  public static async createScanRecord(scan: ScanRecordInput): Promise<DBScanRecord> {
     return ScanRepository.provider.createScanRecord(scan) as Promise<DBScanRecord>;
   }
 
@@ -36,73 +43,41 @@ export class ScanRepository {
     return ScanRepository.provider.getScanRecordById(id) as Promise<DBScanRecord | undefined>;
   }
 
+  /**
+   * The scan-history LIST query. Filtering, sorting, and pagination are pushed all the way down
+   * to the storage provider (a real WHERE/ORDER BY/LIMIT/OFFSET query against Postgres in
+   * production) rather than loading every one of a user's scan records into memory and slicing
+   * them here -- the previous implementation fetched the caller's ENTIRE scan history, including
+   * every row's full `diagnostics` JSON blob, on every single page load. `pageSize` is clamped
+   * server-side (MAX_PAGE_SIZE) regardless of what a caller requests, so this can never become an
+   * unbounded query no matter what a client sends.
+   */
   public static async getScanRecords(options: ScanFilterOptions = {}): Promise<PaginatedScanResult> {
-    let records = ((await ScanRepository.provider.getScanRecords(options.userId)) as DBScanRecord[]) || [];
+    const page = options.page && options.page > 0 ? Math.floor(options.page) : 1;
+    const pageSize = options.pageSize && options.pageSize > 0
+      ? Math.min(Math.floor(options.pageSize), MAX_PAGE_SIZE)
+      : 10;
 
-    if (options.projectId) {
-      records = records.filter((r) => r.projectId === options.projectId);
-    }
-
-    if (options.framework && options.framework !== 'ALL') {
-      const fw = options.framework.toLowerCase();
-      records = records.filter((r) => {
-        const itemFw = r.framework.toLowerCase();
-        if (fw.includes('react') && itemFw.includes('react')) return true;
-        if (fw.includes('next') && itemFw.includes('next')) return true;
-        return itemFw === fw;
-      });
-    }
-
-    if (options.onlyFavorites) {
-      records = records.filter((r) => r.isFavorite === true);
-    }
-
-    if (options.minScore !== undefined) {
-      records = records.filter((r) => r.qualityScore >= options.minScore!);
-    }
-
-    if (options.maxScore !== undefined) {
-      records = records.filter((r) => r.qualityScore <= options.maxScore!);
-    }
-
-    if (options.search && options.search.trim() !== '') {
-      const q = options.search.toLowerCase().trim();
-      records = records.filter(
-        (r) =>
-          r.fileName.toLowerCase().includes(q) ||
-          r.framework.toLowerCase().includes(q) ||
-          (r.repositoryUrl && r.repositoryUrl.toLowerCase().includes(q))
-      );
-    }
-
-    const sortBy = options.sortBy || 'createdAt';
-    const sortOrder = options.sortOrder || 'desc';
-
-    records.sort((a, b) => {
-      let valA: any = (a as any)[sortBy];
-      let valB: any = (b as any)[sortBy];
-
-      valA = valA ? new Date(valA).getTime() || valA : 0;
-      valB = valB ? new Date(valB).getTime() || valB : 0;
-
-      return sortOrder === 'asc' ? valA - valB : valB - valA;
-    });
-
-    const total = records.length;
-    const page = options.page || 1;
-    const pageSize = options.pageSize || 10;
-    const totalPages = Math.ceil(total / pageSize) || 1;
-
-    const startIndex = (page - 1) * pageSize;
-    const paginatedRecords = records.slice(startIndex, startIndex + pageSize);
-
-    return {
-      records: paginatedRecords,
-      total,
+    const query: ScanListQuery = {
+      userId: options.userId,
+      projectId: options.projectId,
+      search: options.search,
+      framework: options.framework,
+      minScore: options.minScore,
+      maxScore: options.maxScore,
+      onlyFavorites: options.onlyFavorites,
+      from: options.from,
+      to: options.to,
+      sortBy: options.sortBy || 'createdAt',
+      sortOrder: options.sortOrder || 'desc',
       page,
       pageSize,
-      totalPages,
     };
+
+    const { records, total } = await ScanRepository.provider.queryScanRecords(query);
+    const totalPages = Math.ceil(total / pageSize) || 1;
+
+    return { records, total, page, pageSize, totalPages };
   }
 
   public static async toggleFavorite(id: string): Promise<DBScanRecord | undefined> {

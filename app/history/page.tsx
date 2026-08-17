@@ -240,15 +240,13 @@ export default function HistoryPage() {
             </thead>
             <tbody>
               {records.map((r) => {
-                const formattedUserId = r.userId.startsWith('P') 
-                  ? r.userId 
-                  : r.userId.includes('admin') || r.userId.includes('sanjula') 
-                  ? 'ADMIN' 
-                  : r.userId === 'usr_developer_default' 
-                  ? 'DEV' 
-                  : 'P001';
-
-                const isParticipant = formattedUserId.startsWith('P');
+                // Real userId, truncated for display -- never a guessed/fabricated label. Every
+                // non-ADMIN caller of GET /api/scans is already scoped server-side to only their
+                // own records (see app/api/scans/route.ts), so this column is mainly meaningful
+                // for an ADMIN browsing across users; it must show who a scan genuinely belongs
+                // to, not a heuristic re-branding of their real ID into a fake "P001" participant
+                // label whenever it doesn't happen to match a hardcoded pattern.
+                const shortUserId = r.userId.length > 12 ? `${r.userId.slice(0, 10)}…` : r.userId;
 
                 return (
                 <tr key={r.id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', transition: 'background 0.2s ease' }}>
@@ -261,18 +259,20 @@ export default function HistoryPage() {
                       >
                         {r.isFavorite ? '⭐' : '☆'}
                       </button>
-                      <span style={{
-                        padding: '4px 10px',
-                        borderRadius: '6px',
-                        fontSize: '11px',
-                        fontWeight: 800,
-                        fontFamily: 'JetBrains Mono, monospace',
-                        background: isParticipant ? 'rgba(6, 182, 212, 0.15)' : 'rgba(168, 85, 247, 0.15)',
-                        color: isParticipant ? '#22d3ee' : '#c084fc',
-                        border: isParticipant ? '1px solid rgba(6, 182, 212, 0.35)' : '1px solid rgba(168, 85, 247, 0.35)',
-                        letterSpacing: '0.5px'
-                      }}>
-                        {formattedUserId}
+                      <span
+                        title={r.userId}
+                        style={{
+                          padding: '4px 10px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          fontWeight: 800,
+                          fontFamily: 'JetBrains Mono, monospace',
+                          background: 'rgba(168, 85, 247, 0.15)',
+                          color: '#c084fc',
+                          border: '1px solid rgba(168, 85, 247, 0.35)',
+                          letterSpacing: '0.5px'
+                        }}>
+                        {shortUserId}
                       </span>
                     </div>
                   </td>

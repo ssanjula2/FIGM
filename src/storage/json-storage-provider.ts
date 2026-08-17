@@ -1,9 +1,11 @@
-import { IStorageProvider } from './storage-provider';
+import { IStorageProvider, ScanListQuery, ScanListResult } from './storage-provider';
 import {
   UserDB,
   DBUser,
   DBProject,
   DBScanRecord,
+  DBScanRecordSummary,
+  ScanRecordInput,
   DBNotification,
   DBSettings,
   DBAuditLog,
@@ -71,7 +73,7 @@ export class JsonStorageProvider implements IStorageProvider {
   }
 
   // Scan Records
-  createScanRecord(scan: Omit<DBScanRecord, 'id' | 'createdAt'>): DBScanRecord {
+  createScanRecord(scan: ScanRecordInput): DBScanRecord {
     return UserDB.createScanRecord(scan);
   }
 
@@ -89,6 +91,75 @@ export class JsonStorageProvider implements IStorageProvider {
 
   deleteScanRecord(id: string): boolean {
     return UserDB.deleteScanRecord(id);
+  }
+
+  // The JSON fallback has no real query engine, so this still filters/sorts/paginates in memory
+  // (fine at the small scale this fallback is ever used at -- local dev/test only) -- but it
+  // returns the SAME lightweight, diagnostics-stripped shape the Postgres-backed provider does,
+  // so callers never see a different response contract depending on which provider is active.
+  queryScanRecords(query: ScanListQuery): ScanListResult {
+    let records = UserDB.getScanRecords(query.userId);
+
+    if (query.projectId) {
+      records = records.filter((r) => r.projectId === query.projectId);
+    }
+
+    if (query.framework && query.framework !== 'ALL') {
+      const fw = query.framework.toLowerCase();
+      records = records.filter((r) => {
+        const itemFw = r.framework.toLowerCase();
+        if (fw.includes('react') && itemFw.includes('react')) return true;
+        if (fw.includes('next') && itemFw.includes('next')) return true;
+        return itemFw === fw;
+      });
+    }
+
+    if (query.onlyFavorites) {
+      records = records.filter((r) => r.isFavorite === true);
+    }
+
+    if (query.minScore !== undefined) {
+      records = records.filter((r) => r.qualityScore >= query.minScore!);
+    }
+
+    if (query.maxScore !== undefined) {
+      records = records.filter((r) => r.qualityScore <= query.maxScore!);
+    }
+
+    if (query.from) {
+      const fromMs = new Date(query.from).getTime();
+      records = records.filter((r) => new Date(r.createdAt).getTime() >= fromMs);
+    }
+
+    if (query.to) {
+      const toMs = new Date(query.to).getTime();
+      records = records.filter((r) => new Date(r.createdAt).getTime() <= toMs);
+    }
+
+    if (query.search && query.search.trim() !== '') {
+      const q = query.search.toLowerCase().trim();
+      records = records.filter(
+        (r) =>
+          r.fileName.toLowerCase().includes(q) ||
+          r.framework.toLowerCase().includes(q) ||
+          (r.repositoryUrl && r.repositoryUrl.toLowerCase().includes(q))
+      );
+    }
+
+    records = [...records].sort((a, b) => {
+      let valA: any = (a as any)[query.sortBy];
+      let valB: any = (b as any)[query.sortBy];
+      valA = valA ? new Date(valA).getTime() || valA : 0;
+      valB = valB ? new Date(valB).getTime() || valB : 0;
+      return query.sortOrder === 'asc' ? valA - valB : valB - valA;
+    });
+
+    const total = records.length;
+    const startIndex = (query.page - 1) * query.pageSize;
+    const page = records.slice(startIndex, startIndex + query.pageSize);
+    const summaries: DBScanRecordSummary[] = page.map(({ diagnostics, ...rest }) => rest);
+
+    return { records: summaries, total };
   }
 
   // Notifications

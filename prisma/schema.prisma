@@ -112,6 +112,15 @@ model ScanReport {
   memoryUsageMb Float    @default(0.0) @map("memory_usage_mb")
   qualityScore  Int      @default(100) @map("quality_score")
   ruleCount     Int      @default(0) @map("rule_count")
+  // Per-severity finding counts, computed server-side at scan-persistence time from the same
+  // diagnostics array (see src/engine/quality-score.ts's severityCountsFromDiagnostics -- the
+  // single canonical source, never duplicated) and stored as first-class columns so the history
+  // LIST endpoint can show a severity breakdown without loading/parsing the (potentially large)
+  // `diagnostics` JSON blob for every row on every page load.
+  criticalCount Int      @default(0) @map("critical_count")
+  highCount     Int      @default(0) @map("high_count")
+  mediumCount   Int      @default(0) @map("medium_count")
+  lowCount      Int      @default(0) @map("low_count")
   aiFixCount    Int      @default(0) @map("ai_fix_count")
   diagnostics   Json     @default("[]")
   isFavorite    Boolean  @default(false) @map("is_favorite")

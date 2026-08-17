@@ -2,10 +2,40 @@ import {
   DBUser,
   DBProject,
   DBScanRecord,
+  DBScanRecordSummary,
+  ScanRecordInput,
   DBNotification,
   DBSettings,
   DBAuditLog,
 } from '../auth/user-db';
+
+/** Filter/sort/pagination options for the scan-history LIST view -- pushed all the way down to
+ *  the storage layer so a Postgres-backed provider can do the filtering, sorting, and pagination
+ *  as a real database query (WHERE/ORDER BY/LIMIT/OFFSET) instead of loading every one of a
+ *  user's scan records into memory first. `page`/`pageSize` are required and must already be
+ *  validated (positive integers, pageSize capped) by the caller -- this layer trusts them. */
+export interface ScanListQuery {
+  userId?: string;
+  projectId?: string;
+  search?: string;
+  framework?: string;
+  minScore?: number;
+  maxScore?: number;
+  onlyFavorites?: boolean;
+  /** Inclusive lower bound on createdAt, as an ISO-8601 string. */
+  from?: string;
+  /** Inclusive upper bound on createdAt, as an ISO-8601 string. */
+  to?: string;
+  sortBy: 'createdAt' | 'qualityScore' | 'scanTimeMs' | 'memoryUsageMb' | 'ruleCount';
+  sortOrder: 'asc' | 'desc';
+  page: number;
+  pageSize: number;
+}
+
+export interface ScanListResult {
+  records: DBScanRecordSummary[];
+  total: number;
+}
 
 export interface IStorageProvider {
   name: 'json' | 'supabase';
@@ -29,11 +59,14 @@ export interface IStorageProvider {
   deleteProject(id: string): Promise<boolean> | boolean;
 
   // Scan Records
-  createScanRecord(scan: Omit<DBScanRecord, 'id' | 'createdAt'>): Promise<DBScanRecord> | DBScanRecord;
+  createScanRecord(scan: ScanRecordInput): Promise<DBScanRecord> | DBScanRecord;
   getScanRecords(userId?: string): Promise<DBScanRecord[]> | DBScanRecord[];
   getScanRecordById(id: string): Promise<DBScanRecord | undefined> | DBScanRecord | undefined;
   toggleFavoriteScan(id: string): Promise<DBScanRecord | undefined> | DBScanRecord | undefined;
   deleteScanRecord(id: string): Promise<boolean> | boolean;
+  /** The scan-history LIST endpoint's real query path -- filtered, sorted, paginated, and
+   *  lightweight (no `diagnostics`) at the storage layer itself. See ScanListQuery's doc comment. */
+  queryScanRecords(query: ScanListQuery): Promise<ScanListResult> | ScanListResult;
 
   // Notifications
   createNotification(notif: Omit<DBNotification, 'id' | 'createdAt' | 'read'>): Promise<DBNotification> | DBNotification;

@@ -74,6 +74,10 @@ CREATE TABLE IF NOT EXISTS scan_reports (
     memory_usage_mb NUMERIC(10, 2) DEFAULT 0.0,
     quality_score INT DEFAULT 100,
     rule_count INT DEFAULT 0,
+    critical_count INT DEFAULT 0,
+    high_count INT DEFAULT 0,
+    medium_count INT DEFAULT 0,
+    low_count INT DEFAULT 0,
     ai_fix_count INT DEFAULT 0,
     diagnostics JSONB DEFAULT '[]'::jsonb,
     is_favorite BOOLEAN DEFAULT FALSE,
@@ -82,6 +86,14 @@ CREATE TABLE IF NOT EXISTS scan_reports (
 CREATE INDEX IF NOT EXISTS idx_scan_reports_user_id ON scan_reports(user_id);
 CREATE INDEX IF NOT EXISTS idx_scan_reports_project_id ON scan_reports(project_id);
 CREATE INDEX IF NOT EXISTS idx_scan_reports_created_at ON scan_reports(created_at DESC);
+
+-- Additive, non-destructive migration for a scan_reports table that was already provisioned
+-- before the severity-count columns existed -- ADD COLUMN IF NOT EXISTS never drops or alters
+-- existing rows/columns, safe to re-run any number of times against a live database.
+ALTER TABLE scan_reports ADD COLUMN IF NOT EXISTS critical_count INT DEFAULT 0;
+ALTER TABLE scan_reports ADD COLUMN IF NOT EXISTS high_count INT DEFAULT 0;
+ALTER TABLE scan_reports ADD COLUMN IF NOT EXISTS medium_count INT DEFAULT 0;
+ALTER TABLE scan_reports ADD COLUMN IF NOT EXISTS low_count INT DEFAULT 0;
 
 -- 4. Notifications Table
 CREATE TABLE IF NOT EXISTS notifications (

@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { hashPassword, isInsecureFallbackAllowed } from './auth-service';
+import { severityCountsFromDiagnostics } from '../engine/quality-score';
 
 export type UserRole = 'ADMIN' | 'DEVELOPER' | 'AUDITOR';
 
@@ -57,11 +58,31 @@ export interface DBScanRecord {
   memoryUsageMb: number;
   qualityScore: number;
   ruleCount: number;
+  // Server-computed at persistence time (see src/engine/quality-score.ts's
+  // severityCountsFromDiagnostics) -- never client-supplied, never derived from anywhere but the
+  // same diagnostics array `ruleCount`/`qualityScore` themselves come from.
+  criticalCount: number;
+  highCount: number;
+  mediumCount: number;
+  lowCount: number;
   aiFixCount: number;
   diagnostics: any[];
   isFavorite?: boolean;
   createdAt: string;
 }
+
+/** The history LIST view never needs the (potentially large) `diagnostics` JSON blob -- only the
+ *  single-scan detail endpoint does. Every list-returning query path returns this shape instead. */
+export type DBScanRecordSummary = Omit<DBScanRecord, 'diagnostics'>;
+
+/** What a caller provides to persist a new scan. `criticalCount`/`highCount`/`mediumCount`/
+ *  `lowCount` are deliberately excluded here (alongside `id`/`createdAt`) -- like those two, they
+ *  are always server-derived, computed from the SAME `diagnostics` array the caller does supply
+ *  (via src/engine/quality-score.ts's severityCountsFromDiagnostics, the single canonical
+ *  formula), never accepted as caller input. This means every current and future caller of
+ *  createScanRecord gets correct severity counts automatically -- there is no separate step to
+ *  remember or get wrong. */
+export type ScanRecordInput = Omit<DBScanRecord, 'id' | 'createdAt' | 'criticalCount' | 'highCount' | 'mediumCount' | 'lowCount'>;
 
 export interface DBNotification {
   id: string;
@@ -105,99 +126,6 @@ export interface DBUserStore {
 }
 
 const DB_FILE = path.resolve(process.cwd(), 'figm-user-db.json');
-
-function getDefaultScanRecords(): DBScanRecord[] {
-  return [
-    {
-      id: 'scn_default_01',
-      userId: 'usr_developer_default',
-      projectId: 'proj_1786005070498_vbbyi',
-      fileName: 'DashboardPage.tsx',
-      framework: 'Next.js',
-      qualityScore: 88,
-      scanTimeMs: 7.14,
-      memoryUsageMb: 1.52,
-      ruleCount: 3,
-      aiFixCount: 1,
-      isFavorite: true,
-      createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-      diagnostics: [
-        {
-          ruleId: 'FIGM-PERF-01',
-          ruleName: 'Invariant Object Allocation in Iteration Scopes',
-          domain: 'PERFORMANCE',
-          concern: 'INVARIANT_ALLOCATIONS',
-          severity: 'HIGH',
-          filePath: 'DashboardPage.tsx',
-          location: { start: { line: 10, column: 24 } },
-          offendingCodeSnippet: 'const defaultMeta = { status: "active", tier: "premium" };',
-          remediation: 'Hoist invariant object out of iteration scope.',
-          standardReference: 'FIGM-PERF-01',
-        },
-      ],
-    },
-    {
-      id: 'scn_default_02',
-      userId: 'usr_developer_default',
-      projectId: 'proj_1786005070498_vbbyi',
-      fileName: 'UserProfile.jsx',
-      framework: 'React',
-      qualityScore: 92,
-      scanTimeMs: 5.82,
-      memoryUsageMb: 1.28,
-      ruleCount: 2,
-      aiFixCount: 1,
-      isFavorite: true,
-      createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-      diagnostics: [],
-    },
-    {
-      id: 'scn_default_03',
-      userId: 'usr_developer_default',
-      projectId: 'proj_1786005070501_1u7hd',
-      fileName: 'SearchPanel.component.ts',
-      framework: 'Angular',
-      qualityScore: 84,
-      scanTimeMs: 9.45,
-      memoryUsageMb: 2.15,
-      ruleCount: 4,
-      aiFixCount: 2,
-      isFavorite: false,
-      createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
-      diagnostics: [],
-    },
-    {
-      id: 'scn_default_04',
-      userId: 'usr_developer_default',
-      projectId: 'proj_1786005070501_1u7hd',
-      fileName: 'AnalyticsCard.vue',
-      framework: 'Vue',
-      qualityScore: 95,
-      scanTimeMs: 4.12,
-      memoryUsageMb: 0.98,
-      ruleCount: 1,
-      aiFixCount: 0,
-      isFavorite: false,
-      createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-      diagnostics: [],
-    },
-    {
-      id: 'scn_default_05',
-      userId: 'usr_developer_default',
-      projectId: 'proj_1786005070498_vbbyi',
-      fileName: 'HeaderBar.tsx',
-      framework: 'Next.js',
-      qualityScore: 90,
-      scanTimeMs: 6.30,
-      memoryUsageMb: 1.40,
-      ruleCount: 2,
-      aiFixCount: 1,
-      isFavorite: true,
-      createdAt: new Date(Date.now() - 3600000 * 36).toISOString(),
-      diagnostics: [],
-    },
-  ];
-}
 
 export interface DefaultAdminAccount {
   id: string;
@@ -498,10 +426,11 @@ export const UserDB = {
   },
 
   // --- SCAN RECORDS ---
-  createScanRecord(scan: Omit<DBScanRecord, 'id' | 'createdAt'>): DBScanRecord {
+  createScanRecord(scan: ScanRecordInput): DBScanRecord {
     const db = loadDB();
     const newScan: DBScanRecord = {
       ...scan,
+      ...severityCountsFromDiagnostics(scan.diagnostics || []),
       id: `scan_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       createdAt: new Date().toISOString(),
     };
@@ -536,6 +465,10 @@ export const UserDB = {
           memory_usage_mb: newScan.memoryUsageMb,
           quality_score: newScan.qualityScore,
           rule_count: newScan.ruleCount,
+          critical_count: newScan.criticalCount,
+          high_count: newScan.highCount,
+          medium_count: newScan.mediumCount,
+          low_count: newScan.lowCount,
           ai_fix_count: newScan.aiFixCount,
           diagnostics: newScan.diagnostics,
           is_favorite: newScan.isFavorite,
