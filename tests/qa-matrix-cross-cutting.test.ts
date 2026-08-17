@@ -157,6 +157,44 @@ test('QA Matrix — cross-cutting robustness', async (t) => {
     assert.equal(result.diagnostics.filter((d) => d.ruleId === 'FIGM-REACT-03').length, 0, 'a JSX read of item.name must not be misclassified as a direct state mutation');
   });
 
+  await t.test('[Regression] a property assignment/array mutation with no React-state evidence anywhere in the file is not flagged (FIGM-REACT-03)', () => {
+    // Found via the real-world benchmark (benchmarks/real-world/SPOT_CHECK.md #3, #5, #8, #15,
+    // scanning 5 genuine public GitHub repos): the old check fired on ANY `obj.prop = value`
+    // assignment or array-mutation-method call, with no check that `obj`/the array is actually
+    // bound to React state -- 4 of the spot-check's 5 false positives all traced to this one root
+    // cause: `Button.defaultProps = {...}` (a static React class property, not state),
+    // `module.exports = withNextra()` and a Karma config's `module.exports = function(config)`
+    // (plain CommonJS exports, zero React), and `ctx.fillStyle = ...` (a Canvas 2D context
+    // property in a file with no React at all). Independently reconfirmed by FIGM dogfooding its
+    // own source: app/live-scan/page.tsx's computeLineDiff() mutates a plain local `rows` array
+    // (`const rows = []; rows.push(...)`) with no relation to React state, and used to be flagged
+    // 7 times. Fixed by requiring positive, file-wide evidence the mutated identifier is actually
+    // state (a useState-destructured binding -- including through a renamed/aliased import or the
+    // React.useState namespace form --, a matching setX(...) setter call, or a this.state chain)
+    // before firing at all, replacing the old "flag everything except a fixed denylist" behavior.
+    const nonReactCases = [
+      { label: 'static defaultProps assignment', code: `Button.defaultProps = { color: 'steelblue' };` },
+      { label: 'CommonJS module.exports assignment', code: `module.exports = withNextra();` },
+      { label: 'Canvas 2D context property assignment', code: `ctx.fillStyle = ball.visible ? '#0095dd' : 'transparent';` },
+      { label: 'plain local array .push() with no state binding anywhere', code: `function computeLineDiff() {\n  const rows = [];\n  rows.push({ type: 'removed' });\n  return rows;\n}` },
+    ];
+    for (const { label, code } of nonReactCases) {
+      const result = RuleExecutionEngine.analyzeFile('NonReact.js', code);
+      assert.equal(result.diagnostics.filter((d) => d.ruleId === 'FIGM-REACT-03').length, 0, `${label} must not be misclassified as a direct state mutation`);
+    }
+
+    // The same shapes, on genuinely useState-bound identifiers, must still fire -- the fix narrows
+    // the false-positive surface without losing the rule's real detection capability.
+    const genuineStateCases = [
+      { label: 'useState-bound array .push()', code: `import { useState } from 'react';\nfunction Add() {\n  const [list, setList] = useState([]);\n  function add(item) { list.push(item); }\n  return list;\n}` },
+      { label: 'this.state.list.push() in a class component', code: `class Foo extends React.Component {\n  add(x) {\n    this.state.list.push(x);\n  }\n}` },
+    ];
+    for (const { label, code } of genuineStateCases) {
+      const result = RuleExecutionEngine.analyzeFile('GenuineState.jsx', code);
+      assert.ok(result.diagnostics.some((d) => d.ruleId === 'FIGM-REACT-03'), `${label} must still be flagged as a direct state mutation`);
+    }
+  });
+
   await t.test('[String containing code-like text] a display string that looks like a violation is not flagged (regression: see docs/audit/ADVERSARIAL_DETECTION_AUDIT.md)', () => {
     const code = `const helpText = "Example: window.addEventListener('scroll', fn) needs cleanup";\nfunction Widget() { return <div>{helpText}</div>; }`;
     const result = RuleExecutionEngine.analyzeFile('StringText.jsx', code);

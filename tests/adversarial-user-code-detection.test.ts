@@ -58,8 +58,17 @@ describe('Adversarial User Code Detection Suite', () => {
   // C. REACT VIOLATIONS
   describe('C. React Guideline Violations', () => {
     test('must detect direct state mutation (FIGM-REACT-03)', () => {
+      // Includes a real useState binding for `user` -- the fix that closed FIGM-REACT-03's
+      // over-broad property-assignment false positives (confirmed live on real-world code:
+      // Button.defaultProps=, module.exports=, ctx.fillStyle=, none of them React state) now
+      // requires positive evidence the mutated identifier is actually state before firing, so a
+      // bare `user.profile.active = true` with no useState/setter/this.state anywhere in the file
+      // is (correctly) no longer flagged. This fixture is updated to test the rule's real intent:
+      // a genuine React state variable mutated directly instead of via its setter.
       const code = `
-        function UserProfile({ user }) {
+        import { useState } from 'react';
+        function UserProfile({ initialUser }) {
+          const [user, setUser] = useState(initialUser);
           const handleClick = () => {
             user.profile.active = true;
           };

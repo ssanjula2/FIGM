@@ -152,6 +152,10 @@ interface BuilderContext {
   lines: string[];
   framework: FrameworkType;
   nodes: ASTNode[];
+  /** Names FIGM-REACT-03 (buildReact03) has positive, file-wide evidence are React state --
+   *  see findStateLikeNames' doc comment for exactly what counts as evidence. Computed once per
+   *  file, not per mutation site. */
+  stateLikeNames: Set<string>;
 }
 
 function lineTextFor(ctx: BuilderContext, node: ts.Node): string {
@@ -474,6 +478,117 @@ function isExcludedMutationTarget(expr: ts.Expression): boolean {
   return isRefCurrentAccess(expr);
 }
 
+/** `this.state.foo = x` / `this.state.list.push(x)` / bare `this.state = x` -- the classic
+ *  class-component direct-state-mutation anti-pattern (the idiomatic fix is `this.setState(...)`).
+ *  Unlike a hook-based `useState` variable, `this.state` is a fixed, reserved property name, so
+ *  this needs no file-wide search -- it's structurally decidable from the expression alone: walk
+ *  down to the segment immediately adjacent to `this` and check it's literally `state`. */
+function isThisStateAccess(expr: ts.Expression): boolean {
+  const segments: string[] = [];
+  let current: ts.Expression = expr;
+  while (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) {
+    if (ts.isPropertyAccessExpression(current)) segments.push(current.name.text);
+    current = current.expression;
+  }
+  return current.kind === ts.SyntaxKind.ThisKeyword && segments[segments.length - 1] === 'state';
+}
+
+/** Real (aliasing-aware) resolution of which local call-expression names are actually React's
+ *  `useState` hook -- both a bare `import { useState } from 'react'` and a renamed
+ *  `import { useState as useLocalState } from 'react'` resolve to the SAME hook, and a codebase
+ *  can equally validly call it as `React.useState(...)`/`SomeAlias.useState(...)` via a default or
+ *  namespace import. Reading only the literal text `"useState"` (as a regex/text heuristic would)
+ *  misses the aliased-import case entirely -- this walks the real import declarations instead. */
+function collectReactHookBindings(sourceFile: ts.SourceFile): { hookCallNames: Set<string>; namespaceNames: Set<string> } {
+  const hookCallNames = new Set<string>(['useState']); // bare fallback if no traceable 'react' import exists
+  const namespaceNames = new Set<string>();
+
+  const visit = (node: ts.Node) => {
+    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier) && node.moduleSpecifier.text === 'react') {
+      const clause = node.importClause;
+      if (clause) {
+        if (clause.name) namespaceNames.add(clause.name.text); // import React from 'react'
+        const bindings = clause.namedBindings;
+        if (bindings && ts.isNamespaceImport(bindings)) {
+          namespaceNames.add(bindings.name.text); // import * as React from 'react'
+        } else if (bindings && ts.isNamedImports(bindings)) {
+          for (const el of bindings.elements) {
+            if ((el.propertyName ?? el.name).text === 'useState') hookCallNames.add(el.name.text); // local (possibly aliased) name
+          }
+        }
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return { hookCallNames, namespaceNames };
+}
+
+/** Real, file-wide search for every local identifier this file has actual positive evidence is
+ *  React state -- the allowlist that replaces the old "flag every property assignment/array
+ *  mutation unless the root name is on a fixed denylist" behavior. Two independent kinds of
+ *  evidence, either sufficient on its own:
+ *
+ *  1. The identifier is the FIRST element of a `const [x, setX] = useState(...)` (or aliased/
+ *     `React.useState(...)`) destructuring, found anywhere in the file -- the real hook binding.
+ *  2. A call to `set${Capitalize(x)}(...)` exists anywhere in the file -- React's near-universal
+ *     naming convention for a state setter, kept as a second signal because a hook can also come
+ *     from a custom wrapper (`const [x, setX] = useMyHook()`) this function can't trace to a real
+ *     `useState` call, and because several of this rule's own committed regression-test fixtures
+ *     exercise `setX(x)` immediately after the mutation without an explicit `useState(...)` call
+ *     in the same snippet -- both are real signals a maintainer would recognize as "this is state,"
+ *     not merely least-effort test-fixture compatibility.
+ *
+ *  This is a documented, file-wide *name* search, not full lexical-scope/type-checker binding
+ *  resolution (which this AST-only pass doesn't have) -- it can still under- or over-match if two
+ *  unrelated functions in the same file happen to reuse an identifier name, but it converts the
+ *  false-positive surface from "any property assignment anywhere, including files with zero React
+ *  content" (the confirmed real-world-benchmark finding: `Button.defaultProps =`, `module.exports
+ *  =`, a Karma config, `ctx.fillStyle =`, and FIGM's own `rows.push()` local-array diff builder)
+ *  down to "an identifier this file has actual evidence is state," which is a bounded, principled
+ *  improvement even though it is not a perfect binder. */
+function findStateLikeNames(sourceFile: ts.SourceFile): Set<string> {
+  const { hookCallNames, namespaceNames } = collectReactHookBindings(sourceFile);
+  const names = new Set<string>();
+
+  const isHookCall = (callee: ts.Expression): boolean => {
+    if (ts.isIdentifier(callee)) return hookCallNames.has(callee.text);
+    if (ts.isPropertyAccessExpression(callee) && callee.name.text === 'useState') {
+      return ts.isIdentifier(callee.expression) && namespaceNames.has(callee.expression.text);
+    }
+    return false;
+  };
+
+  const visit = (node: ts.Node) => {
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isArrayBindingPattern(node.name) &&
+      node.initializer &&
+      ts.isCallExpression(node.initializer) &&
+      isHookCall(node.initializer.expression)
+    ) {
+      const first = node.name.elements[0];
+      if (first && ts.isBindingElement(first) && ts.isIdentifier(first.name)) {
+        names.add(first.name.text);
+      }
+    } else if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
+      const calleeName = node.expression.text;
+      if (/^set[A-Z]/.test(calleeName)) {
+        names.add(calleeName[3].toLowerCase() + calleeName.slice(4));
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return names;
+}
+
+function isProvableStateTarget(ctx: BuilderContext, expr: ts.Expression): boolean {
+  if (isThisStateAccess(expr)) return true;
+  const root = getRootIdentifierName(expr);
+  return !!root && ctx.stateLikeNames.has(root);
+}
+
 function buildReact03(ctx: BuilderContext, node: ts.Node): void {
   if (!ts.isExpressionStatement(node)) return;
   const expr = node.expression;
@@ -482,6 +597,7 @@ function buildReact03(ctx: BuilderContext, node: ts.Node): void {
   if (ts.isCallExpression(expr) && isPropertyAccessChain(expr.expression) && ARRAY_MUTATION_METHODS.has(expr.expression.name.text)) {
     if (node.getText(ctx.sourceFile).includes('setState')) return; // preserved legacy exclusion
     if (isExcludedMutationTarget(expr.expression.expression)) return;
+    if (!isProvableStateTarget(ctx, expr.expression.expression)) return;
     pushNode(ctx, node, {
       type: 'ExpressionStatement',
       name: 'mutateState',
@@ -501,6 +617,7 @@ function buildReact03(ctx: BuilderContext, node: ts.Node): void {
   ) {
     if (node.getText(ctx.sourceFile).includes('setState')) return; // preserved legacy exclusion
     if (isExcludedMutationTarget(expr.left)) return;
+    if (!isProvableStateTarget(ctx, expr.left)) return;
     pushNode(ctx, node, {
       type: 'ExpressionStatement',
       name: 'mutateState',
@@ -920,6 +1037,7 @@ export function buildRealSyntaxNodes(code: string, filePath: string, framework: 
     lines: code.split(/\r?\n/),
     framework,
     nodes: [],
+    stateLikeNames: findStateLikeNames(root as ts.SourceFile),
   };
 
   const jsxEligible = isJsxRealAstEligible(framework);

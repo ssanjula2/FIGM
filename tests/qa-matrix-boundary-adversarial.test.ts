@@ -345,10 +345,10 @@ const CASES: BoundaryAdversarialCase[] = [
   },
   {
     ruleId: 'FIGM-REACT-03', kind: 'adversarial',
-    label: 'a plain local array is mutated with .push(), indistinguishable from React state without real binding analysis',
+    label: 'a plain local array with no state-binding evidence anywhere in the file is mutated with .push() — FIXED (was a confirmed real-world false positive)',
     code: `function add(item) { list.push(item); }`,
-    filePath: 'a.jsx', expectFire: true,
-    rationale: 'KNOWN LIMITATION: the heuristic cannot distinguish a plain local array mutation from a React state array mutation without real state-binding analysis; it flags any push/splice/pop/etc. shape not guarded by a setState/declaration pattern. Documented over-approximation, not fixed in this pass.',
+    filePath: 'a.jsx', expectFire: false,
+    rationale: 'Was previously a documented KNOWN LIMITATION (flagged unconditionally, since the heuristic could not distinguish a plain local array from React state). Confirmed as a real, live false-positive class by the real-world benchmark spot-check (benchmarks/real-world/SPOT_CHECK.md #3/#5/#8/#15: Button.defaultProps=, module.exports=, a Karma config, ctx.fillStyle= were all misflagged this exact way) and independently by FIGM dogfooding its own live-scan page (app/live-scan/page.tsx computeLineDiff()\'s local `rows.push(...)`). Fixed by requiring positive file-wide evidence the mutated identifier is actually React state (a useState-destructured binding, a matching setX(...) setter call, or a this.state chain) before firing — `list` here has none of the three, so it is correctly no longer flagged. The companion "same shape, but genuinely state-bound, still fires" case lives in tests/qa-matrix-cross-cutting.test.ts (this file enforces exactly one boundary + one adversarial case per rule).',
   },
 
   // --- FIGM-REACT-04 ---
