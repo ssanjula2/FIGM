@@ -534,7 +534,7 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       frameworks: ['REACT_JSX', 'NEXT_JS', 'GENERIC_ESTREE'],
       isFrameworkIndependent: false,
       remediationStatus: 'MANUAL_REVIEW_REQUIRED',
-      knownLimitation: 'No scope restriction -- any .sort/.filter/.reduce call anywhere in the file is flagged, not only ones inside the render path; the useMemo dependency array must be chosen manually.'
+      knownLimitation: 'No scope restriction -- any .sort/.filter/.reduce call anywhere in the file is flagged, not only ones inside the render path; the useMemo dependency array must be chosen manually. The receiver is excluded when it is a bare, capitalized identifier (e.g. Vue, Array, Object -- the near-universal naming convention for a class/namespace/static-API object, never a plain array variable), which rules out method-name-only false positives like Vue\'s Vue.filter(name, fn) global filter registration API; a receiver reached via a property chain or call expression (e.g. Array.from(x).filter(...)) is not covered by this exclusion and is still evaluated normally.'
     }
   },
   {
@@ -570,7 +570,7 @@ export const FOUR_LAYER_MAPPINGS: FourLayerMapping[] = [
       frameworks: ['REACT_JSX', 'NEXT_JS', 'GENERIC_ESTREE'],
       isFrameworkIndependent: false,
       remediationStatus: 'AUTOMATED_FIX_VERIFIED',
-      knownLimitation: 'No true React-state-binding analysis -- any local variable whose mutation shape matches is flagged, whether or not it is actually component state.'
+      knownLimitation: 'State-binding evidence is a file-wide identifier-name search (a useState-destructured binding, a matching setX(...) setter call, or a this.state chain), not full lexical-scope/type-checker binding resolution: an unrelated non-state variable elsewhere in the file that happens to reuse a state variable\'s name can still be over-matched, and a mutation reached through an intermediate alias or a destructured sub-object (const ref = state; ref.push(x)) is invisible. Categorically excluded regardless of evidence: document/window/navigator/location/history/localStorage/sessionStorage/router root identifiers and any *.current ref-access chain.'
     }
   },
   {
