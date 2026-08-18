@@ -32,20 +32,42 @@ This guide details the step-by-step procedure for migrating the **Framework-Inde
 
 ## 2. Database DDL & Prisma Migration
 
-### Option A: Standard SQL DDL Migration (Supabase SQL Editor)
-1. Open **Supabase SQL Editor**.
-2. Paste the contents of `docs/multi_tenant_schema.sql` (contains all 12 normalized tables, indexes, and Row-Level Security policies).
-3. Click **Run**.
-
-### Option B: Prisma Migration CLI
-Execute Prisma migrations using the Direct URL:
+**Setting up a brand-new database** (nothing exists yet): run the tracked migration history in
+`prisma/migrations/` against it directly --
 ```bash
-npx prisma migrate dev --name init_supabase_schema
+npx prisma migrate deploy
 ```
-Generate Prisma Client:
+then generate the client:
 ```bash
 npx prisma generate
 ```
+This applies every migration in `prisma/migrations/` in order and is safe to re-run (a no-op once
+the database is already up to date, confirmed via `npx prisma migrate status`).
+
+**Making a schema change going forward**: edit `prisma/schema.prisma`, then run
+```bash
+npx prisma migrate dev --name <describe-the-change>
+```
+against a development database. This generates a new numbered folder under `prisma/migrations/`
+with the real DDL diff -- commit that folder alongside the schema change. Never hand-edit
+`prisma/schema.prisma` and apply it via `prisma db push`/the Supabase SQL Editor directly in a
+production environment going forward; that's exactly what left this project with no migration
+history for its first stretch (PROD-02) -- the schema was live and correct, but not reproducible
+from a clean database without a manual baseline step (see below).
+
+**Historical note (PROD-02, closed):** this project's database was originally provisioned via
+`prisma db push`/hand-run SQL, with no `prisma/migrations/` history at all -- functionally correct,
+but not reproducible from an empty database, and `prisma migrate status` reported "the current
+database is not managed by Prisma Migrate." Fixed via Prisma's own documented baseline procedure
+(https://pris.ly/d/migrate-baseline): a migration representing the schema already live was
+generated with `prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script`
+(a read-only diff against the schema file, no database connection required), committed as
+`prisma/migrations/<timestamp>_init_baseline/`, then marked as already-applied with
+`prisma migrate resolve --applied <name>` -- this only inserts one tracking row into Prisma's own
+`_prisma_migrations` table, it does not touch any application table or data (verified live: user
+count identical before and after, `prisma migrate deploy` confirmed a genuine no-op immediately
+after). Every schema change from this point forward goes through `prisma migrate dev`, so the
+migration history stays real and reproducible.
 
 ---
 
@@ -76,4 +98,4 @@ Run full automated verification suite:
 ```bash
 npm test
 ```
-All 96 tests validate static AST detection, dynamic profiling, AI remediation, multi-tenant RBAC, research evaluation benchmarks, and SaaS repository workflows.
+The suite validates static AST detection, dynamic profiling, AI remediation, multi-tenant RBAC, research evaluation benchmarks, and SaaS repository workflows -- run it locally for the current, live test count rather than trusting a number written down here, which will drift as the suite grows.
