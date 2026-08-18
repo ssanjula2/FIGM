@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -12,6 +12,15 @@ export default function RegisterPage() {
   const [role, setRole] = useState<'DEVELOPER' | 'AUDITOR'>('DEVELOPER');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
+
+  // Move focus to the error message when a new one appears -- same fix as app/auth/login/page.tsx
+  // (see its comment for the full rationale); role="alert" announces it, this makes it reachable.
+  useEffect(() => {
+    if (error) {
+      errorRef.current?.focus();
+    }
+  }, [error]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,6 +95,9 @@ export default function RegisterPage() {
 
         {error && (
           <div
+            ref={errorRef}
+            role="alert"
+            tabIndex={-1}
             style={{
               background: 'rgba(239, 68, 68, 0.15)',
               border: '1px solid rgba(239, 68, 68, 0.3)',
@@ -94,9 +106,10 @@ export default function RegisterPage() {
               borderRadius: '10px',
               fontSize: '13px',
               marginBottom: '24px',
+              outline: 'none',
             }}
           >
-            ⚠️ {error}
+            <span aria-hidden="true">⚠️</span> {error}
           </div>
         )}
 
@@ -110,20 +123,12 @@ export default function RegisterPage() {
               type="text"
               aria-label="Full Name"
               required
+              autoComplete="name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Jane Doe"
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                borderRadius: '10px',
-                background: 'rgba(30, 41, 59, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#f8fafc',
-                fontSize: '14px',
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
+              className="input-field"
+              style={{ width: '100%' }}
             />
           </div>
 
@@ -136,20 +141,12 @@ export default function RegisterPage() {
               type="email"
               aria-label="Email Address"
               required
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="jane@company.com"
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                borderRadius: '10px',
-                background: 'rgba(30, 41, 59, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#f8fafc',
-                fontSize: '14px',
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
+              className="input-field"
+              style={{ width: '100%' }}
             />
           </div>
 
@@ -162,18 +159,8 @@ export default function RegisterPage() {
               aria-label="Account Role"
               value={role}
               onChange={(e) => setRole(e.target.value as 'DEVELOPER' | 'AUDITOR')}
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                borderRadius: '10px',
-                background: 'rgba(30, 41, 59, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#38bdf8',
-                fontSize: '14px',
-                fontWeight: 600,
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
+              className="input-field"
+              style={{ width: '100%', color: '#38bdf8', fontWeight: 600 }}
             >
               <option value="DEVELOPER">Developer (Scan & Fix)</option>
               <option value="AUDITOR">Auditor (Read-Only Diagnostics)</option>
@@ -189,20 +176,12 @@ export default function RegisterPage() {
               type="password"
               aria-label="Password"
               required
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                borderRadius: '10px',
-                background: 'rgba(30, 41, 59, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#f8fafc',
-                fontSize: '14px',
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
+              className="input-field"
+              style={{ width: '100%' }}
             />
           </div>
 

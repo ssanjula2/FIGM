@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface SidebarProps {
   /** Whether the mobile/tablet off-canvas sidebar is currently open (< 1024px only -- on desktop
@@ -14,8 +14,33 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const asideRef = useRef<HTMLElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
+
+  // Previously just a plain nav link to /login (the app's OLDER, duplicate auth page) with no
+  // actual logout behavior at all -- clicking it left the real httpOnly session cookie fully
+  // valid server-side. This calls the real logout endpoint (clears the httpOnly cookies, revokes
+  // the stored refresh token, audit-logs the event -- see app/api/auth/logout/route.ts, which
+  // existed but had zero UI callers anywhere in the app before this), clears the client-side
+  // localStorage copy of the token/user the login pages themselves set, then navigates to the
+  // canonical /auth/login route.
+  const handleLogout = async () => {
+    onClose();
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch {
+      // Best-effort: even if the network call fails, still clear local state and navigate away --
+      // a user clicking "Log out" must never be left looking logged-in.
+    }
+    try {
+      localStorage.removeItem('figm_token');
+      localStorage.removeItem('figm_user');
+    } catch {
+      // localStorage can throw in some privacy-mode browser configurations; logout must not crash.
+    }
+    router.push('/auth/login');
+  };
 
   // Focus the first nav link the moment the mobile drawer opens, and trap Tab/Shift+Tab within it
   // while open -- without this, a keyboard user who opens the menu keeps tabbing through content
@@ -77,7 +102,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         { href: '/admin', label: 'Admin Panel', icon: '⚙️' },
         { href: '/profile', label: 'User Profile', icon: '👤' },
         { href: '/settings', label: 'Settings', icon: '🔧' },
-        { href: '/login', label: 'Log out', icon: '🚪' },
+        { href: '/auth/login', label: 'Log out', icon: '🚪', isLogout: true },
       ],
     },
   ];
@@ -194,29 +219,24 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     const isActive = pathname === item.href;
                     const isFirst = !firstLinkAssigned;
                     if (isFirst) firstLinkAssigned = true;
-                    return (
-                      <Link
-                        key={item.href}
-                        ref={isFirst ? firstLinkRef : undefined}
-                        href={item.href}
-                        onClick={onClose}
-                        aria-current={isActive ? 'page' : undefined}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '9px 12px',
-                          borderRadius: '10px',
-                          fontSize: '13px',
-                          fontWeight: isActive ? 700 : 500,
-                          color: isActive ? '#38bdf8' : '#94a3b8',
-                          background: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
-                          border: isActive ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid transparent',
-                          boxShadow: isActive ? '0 0 15px rgba(56, 189, 248, 0.15)' : 'none',
-                          textDecoration: 'none',
-                          transition: 'all 0.2s ease',
-                        }}
-                      >
+                    const itemStyle: React.CSSProperties = {
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                      padding: '9px 12px',
+                      borderRadius: '10px',
+                      fontSize: '13px',
+                      fontWeight: isActive ? 700 : 500,
+                      color: isActive ? '#38bdf8' : '#94a3b8',
+                      background: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
+                      border: isActive ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid transparent',
+                      boxShadow: isActive ? '0 0 15px rgba(56, 189, 248, 0.15)' : 'none',
+                      textDecoration: 'none',
+                      transition: 'all 0.2s ease',
+                    };
+                    const content = (
+                      <>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <span aria-hidden="true" style={{ fontSize: '15px' }}>{item.icon}</span>
                           <span>{item.label}</span>
@@ -225,6 +245,31 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         {isActive && (
                           <div aria-hidden="true" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8' }} />
                         )}
+                      </>
+                    );
+                    if ((item as { isLogout?: boolean }).isLogout) {
+                      return (
+                        <button
+                          key={item.href}
+                          ref={isFirst ? (firstLinkRef as unknown as React.Ref<HTMLButtonElement>) : undefined}
+                          type="button"
+                          onClick={handleLogout}
+                          style={{ ...itemStyle, cursor: 'pointer', background: 'transparent', border: '1px solid transparent', font: 'inherit', textAlign: 'left' }}
+                        >
+                          {content}
+                        </button>
+                      );
+                    }
+                    return (
+                      <Link
+                        key={item.href}
+                        ref={isFirst ? firstLinkRef : undefined}
+                        href={item.href}
+                        onClick={onClose}
+                        aria-current={isActive ? 'page' : undefined}
+                        style={itemStyle}
+                      >
+                        {content}
                       </Link>
                     );
                   })}

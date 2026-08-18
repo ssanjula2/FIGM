@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -10,6 +10,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
+
+  // Move focus to the error message when a new one appears -- a screen-reader user submitting
+  // invalid credentials needs to land on the reason, not stay silently on the submit button.
+  // role="alert" below already announces it; this additionally makes it reachable for anyone
+  // tabbing/reviewing. This is the canonical login page (the old /login duplicate, which had this
+  // exact fix, now redirects here) -- it must carry the same accessibility bar forward.
+  useEffect(() => {
+    if (error) {
+      errorRef.current?.focus();
+    }
+  }, [error]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,6 +136,9 @@ export default function LoginPage() {
 
         {error && (
           <div
+            ref={errorRef}
+            role="alert"
+            tabIndex={-1}
             style={{
               background: 'rgba(239, 68, 68, 0.15)',
               border: '1px solid rgba(239, 68, 68, 0.3)',
@@ -135,9 +150,10 @@ export default function LoginPage() {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
+              outline: 'none',
             }}
           >
-            <span>⚠️</span> {error}
+            <span aria-hidden="true">⚠️</span> {error}
           </div>
         )}
 
@@ -151,20 +167,12 @@ export default function LoginPage() {
               type="email"
               aria-label="Email Address"
               required
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="developer@figm.io"
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                borderRadius: '10px',
-                background: 'rgba(30, 41, 59, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#f8fafc',
-                fontSize: '14px',
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
+              className="input-field"
+              style={{ width: '100%' }}
             />
           </div>
 
@@ -182,20 +190,12 @@ export default function LoginPage() {
               type="password"
               aria-label="Password"
               required
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                borderRadius: '10px',
-                background: 'rgba(30, 41, 59, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#f8fafc',
-                fontSize: '14px',
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
+              className="input-field"
+              style={{ width: '100%' }}
             />
           </div>
 

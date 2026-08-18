@@ -137,7 +137,8 @@ export default function ProfilePage() {
       const res = await fetch('/api/profile', { method: 'DELETE', headers });
       if (res.ok) {
         localStorage.removeItem('figm_token');
-        router.push('/login');
+        localStorage.removeItem('figm_user');
+        router.push('/auth/login');
       } else {
         alert('Failed to delete account');
       }
@@ -168,7 +169,7 @@ export default function ProfilePage() {
       <div style={{ padding: '60px 20px', textAlign: 'center', color: '#ef4444' }}>
         <h2>Error Loading Profile</h2>
         <p>{error}</p>
-        <Link href="/login" style={{ color: '#38bdf8', fontWeight: 700 }}>Go to Login</Link>
+        <Link href="/auth/login" style={{ color: '#38bdf8', fontWeight: 700 }}>Go to Login</Link>
       </div>
     );
   }
@@ -238,9 +239,18 @@ export default function ProfilePage() {
         </div>
 
         <button
-          onClick={() => {
+          onClick={async () => {
+            // Was previously local-storage-only (no call to the real logout endpoint), leaving the
+            // actual httpOnly session cookie fully valid server-side after clicking "Sign Out" --
+            // see app/api/auth/logout/route.ts, the real logout route this now actually calls.
+            try {
+              await fetch('/api/auth/logout', { method: 'POST' });
+            } catch {
+              // Best-effort -- still clear local state and navigate away even if this fails.
+            }
             localStorage.removeItem('figm_token');
-            router.push('/login');
+            localStorage.removeItem('figm_user');
+            router.push('/auth/login');
           }}
           style={{
             padding: '10px 18px',

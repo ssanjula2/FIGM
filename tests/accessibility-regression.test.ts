@@ -23,40 +23,57 @@ function read(relativePath: string): string {
   return fs.readFileSync(path.resolve(process.cwd(), relativePath), 'utf-8');
 }
 
-test('Accessibility regression: app/login/page.tsx', async (t) => {
-  const src = read('app/login/page.tsx');
-
-  await t.test('every label has a matching htmlFor/id pair (unique IDs, real association)', () => {
-    const labelFors = [...src.matchAll(/htmlFor="([^"]+)"/g)].map((m) => m[1]);
-    const inputIds = [...src.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
-    assert.ok(labelFors.length >= 3, `expected at least 3 labeled fields (full name, email, password), found ${labelFors.length}`);
-    for (const forId of labelFors) {
-      assert.ok(inputIds.includes(forId), `label htmlFor="${forId}" has no matching input id="${forId}"`);
-    }
-    // Every id must be unique (no duplicate association targets).
-    assert.equal(new Set(inputIds).size, inputIds.length, 'input ids must be unique');
-  });
-
-  await t.test('the error message is announced (role="alert") and focus-manageable', () => {
-    assert.match(src, /role="alert"/, 'error notice must use role="alert" so it is announced when it appears');
-    assert.match(src, /errorRef\.current\?\.focus\(\)/, 'focus must move to the error region when a new error appears');
-  });
-
-  await t.test('the page has exactly one top-level heading (h1), not h2', () => {
-    const h1Count = (src.match(/<h1[\s>]/g) || []).length;
-    assert.equal(h1Count, 1, 'login page must have exactly one <h1> (previously used <h2> with no <h1> on the page at all)');
-  });
-
-  await t.test('the three form inputs use the shared .input-field class (real :focus border/box-shadow), not raw inline styles with no focus replacement', () => {
-    // Previously each input set outline:none inline with no replacement at all. They now share
-    // the `.input-field` class (globals.css), which defines a real `:focus` border/box-shadow.
-    // (The error alert region below still legitimately sets outline:none on itself -- it's
-    // programmatically focused via tabIndex={-1}, never part of the visible Tab order, so it
-    // intentionally has no focus ring of its own; that is not the defect this guards against.)
-    const inputFieldCount = (src.match(/className="input-field"/g) || []).length;
-    assert.equal(inputFieldCount, 3, `expected all 3 auth inputs (name/email/password) to use className="input-field", found ${inputFieldCount}`);
+test('Accessibility regression: app/login/page.tsx redirects to the canonical /auth/login', async (t) => {
+  // /login was a duplicate of /auth/login (different implementation -- plain localStorage token
+  // storage instead of the httpOnly cookie the rest of the app relies on, and no real logout
+  // wiring anywhere pointed at it). It's now a permanent redirect to the canonical page rather
+  // than a second, divergent implementation of the same form -- see the batch-7 fix. The
+  // accessibility assertions that used to target this file now target the two canonical pages
+  // below (app/auth/login, app/auth/register), which received the same fixes.
+  await t.test('redirects to /auth/login rather than rendering its own form', () => {
+    const src = read('app/login/page.tsx');
+    assert.match(src, /redirect\('\/auth\/login'\)/, 'the duplicate /login route must redirect to the canonical /auth/login, not render a second form');
   });
 });
+
+for (const [routeLabel, filePath, expectedLabeledFields] of [
+  ['app/auth/login/page.tsx', 'app/auth/login/page.tsx', 2],
+  ['app/auth/register/page.tsx', 'app/auth/register/page.tsx', 4],
+] as const) {
+  test(`Accessibility regression: ${routeLabel} (canonical auth page)`, async (t) => {
+    const src = read(filePath);
+
+    await t.test('every label has a matching htmlFor/id pair (unique IDs, real association)', () => {
+      const labelFors = [...src.matchAll(/htmlFor="([^"]+)"/g)].map((m) => m[1]);
+      const inputIds = [...src.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+      assert.equal(labelFors.length, expectedLabeledFields, `expected ${expectedLabeledFields} labeled fields, found ${labelFors.length}`);
+      for (const forId of labelFors) {
+        assert.ok(inputIds.includes(forId), `label htmlFor="${forId}" has no matching input id="${forId}"`);
+      }
+      assert.equal(new Set(inputIds).size, inputIds.length, 'input ids must be unique');
+    });
+
+    await t.test('the error message is announced (role="alert") and focus-manageable', () => {
+      assert.match(src, /role="alert"/, 'error notice must use role="alert" so it is announced when it appears');
+      assert.match(src, /errorRef\.current\?\.focus\(\)/, 'focus must move to the error region when a new error appears');
+    });
+
+    await t.test('the page has exactly one top-level heading (h1), not h2', () => {
+      const h1Count = (src.match(/<h1[\s>]/g) || []).length;
+      assert.equal(h1Count, 1, 'auth page must have exactly one <h1>');
+    });
+
+    await t.test('every form control (input/select) uses the shared .input-field class (real :focus border/box-shadow), not raw inline styles with no focus replacement', () => {
+      // Every input/select previously set outline:none inline with no replacement at all -- a
+      // WCAG 2.4.7 (Focus Visible) violation on what is actually the live, canonical auth page
+      // (unlike the old app/login/page.tsx duplicate, which already had this fix but was never
+      // the page real users were routed through by middleware.ts/most links).
+      const controlCount = (src.match(/<input\b/g) || []).length + (src.match(/<select\b/g) || []).length;
+      const inputFieldCount = (src.match(/className="input-field"/g) || []).length;
+      assert.equal(inputFieldCount, controlCount, `expected all ${controlCount} form controls to use className="input-field", found ${inputFieldCount}`);
+    });
+  });
+}
 
 test('Accessibility regression: app/notifications/page.tsx', async (t) => {
   const src = read('app/notifications/page.tsx');
