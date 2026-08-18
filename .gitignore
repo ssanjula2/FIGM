@@ -27,3 +27,16 @@ figm-user-db.json
 # other projects' source code -- only our own scan output (benchmarks/real-world/raw-results/)
 # and reports are tracked.
 benchmarks/real-world/.repo-clones/
+
+# Developer/audit scratch directory: ad-hoc probe scripts, captured live tokens/cookies, JSON
+# response dumps from manual testing sessions. This directory has repeatedly accumulated files
+# containing live JWT access/refresh tokens (see audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md, finding
+# HIGH-SCRATCH) -- exactly the class of artifact the figm-user-db.json incident above already
+# proved is dangerous to leave a single `git add -A` away from being committed. Never re-track it.
+scratch/
+
+# VS Code extension compiled build output -- regenerate via `npm run compile` (vscode-extension/,
+# `tsc -p ./`) from tracked src/. Same class of generated artifact as the root project's own
+# .next/dist/build above; was previously (and unnecessarily) checked in as 152 tracked files (see
+# audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md, finding LOW-VSCODEBUILD).
+vscode-extension/out/
