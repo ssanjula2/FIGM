@@ -2,18 +2,26 @@
  * Framework-Independent Guideline Model (FIGM)
  * Dynamic Analysis Engine - Micro-Benchmarking, Memory Profiling & Sandboxing
  *
- * P0 SECURITY NOTE (see audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md, finding CRIT-DYNPROF): the actual
- * execution of submitted source code happens in a separate, disposable OS process spawned by
- * `runInSandboxProcess()` below (src/engine/sandbox/profiler-sandbox-runner.cjs) — never in this
- * process. This process (the real Next.js/Node server) never calls `new Function()`/`eval()` on
- * untrusted source directly. See that file's header comment for the full isolation model
+ * P0 SECURITY NOTE (see audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md, finding CRIT-DYNPROF): on the real
+ * server, the actual execution of submitted source code happens in a separate, disposable OS
+ * process spawned by `runInSandboxProcess()` below (src/engine/sandbox/profiler-sandbox-runner.cjs)
+ * — never in the server's own process. See that file's header comment for the full isolation model
  * (curated secret-free env, capped heap, hard timeout + SIGKILL).
+ *
+ * BROWSER-BUNDLING NOTE (regression found and fixed the same day as the fix above,
+ * audit/FINAL-READY-VERIFICATION.md): app/live-scan/page.tsx dynamically imports
+ * RemediationEngine, which transitively reaches this file -- so this module IS part of the client
+ * bundle, not server-only. `child_process`/`fs`/`path`/`url` are Node built-ins with no browser
+ * equivalent; a static top-level `import` of them breaks webpack's client compile outright (and,
+ * because Next dev shares one client compilation across routes, can 500 every other page too until
+ * the dev server restarts). The Node-only modules are therefore `require()`d lazily, only inside a
+ * `typeof window === 'undefined'` branch -- the same server-only-require pattern already used
+ * elsewhere in this codebase (src/db/prisma-client.ts) specifically so Next's client webpack build
+ * can statically eliminate the branch (and everything it requires) instead of trying to bundle it.
+ * In the browser, `profileExecution` runs the original, always-browser-safe `new Function()`
+ * evaluation directly (no Node APIs involved) -- executing arbitrary code in the user's OWN browser
+ * is not the security boundary this fix protects; only the real server process must never do it.
  */
-
-import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import * as path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 const perf = typeof globalThis !== 'undefined' && globalThis.performance ? globalThis.performance : { now: () => Date.now() };
 
@@ -25,6 +33,8 @@ interface SandboxRunResult {
   runtimeErrorDetails?: { message: string; stack?: string; line?: number };
 }
 
+const IS_SERVER = typeof window === 'undefined';
+
 /**
  * Locates the sandbox runner script. Resolved defensively across every way this module can end up
  * running: directly via `tsx` from `src/` (tests, CLI, benchmarks), and inside a built Next.js
@@ -32,12 +42,19 @@ interface SandboxRunResult {
  * `process.cwd()` reliably remains the project root for both `next dev` and `next start`).
  * `outputFileTracingIncludes` in next.config.mjs ensures the .cjs file itself ships with a
  * production build, since it is referenced only via this runtime string path, not a static import.
+ * Server-only: callers must check IS_SERVER first.
  */
 function resolveSandboxRunnerPath(): string | null {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const path = require('path');
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { existsSync } = require('fs');
   const candidates: string[] = [
     path.join(process.cwd(), 'src', 'engine', 'sandbox', 'profiler-sandbox-runner.cjs'),
   ];
   try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { fileURLToPath } = require('url');
     const here = path.dirname(fileURLToPath(import.meta.url));
     candidates.push(path.join(here, 'sandbox', 'profiler-sandbox-runner.cjs'));
   } catch {
@@ -50,7 +67,13 @@ function resolveSandboxRunnerPath(): string | null {
   return null;
 }
 
-const SANDBOX_RUNNER_PATH = resolveSandboxRunnerPath();
+let sandboxRunnerPathCache: string | null | undefined;
+function getSandboxRunnerPath(): string | null {
+  if (sandboxRunnerPathCache === undefined) {
+    sandboxRunnerPathCache = resolveSandboxRunnerPath();
+  }
+  return sandboxRunnerPathCache;
+}
 
 /**
  * Builds a minimal, explicitly-curated environment for the sandboxed child process. This is
@@ -58,7 +81,7 @@ const SANDBOX_RUNNER_PATH = resolveSandboxRunnerPath();
  * scratch so that no application secret (JWT_SECRET, DATABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
  * GEMINI_API_KEY, ...) can ever reach code executed inside the sandbox, by construction rather than
  * by remembering to strip anything. Only what the OS process loader / Node runtime itself needs to
- * start is included.
+ * start is included. Server-only: callers must check IS_SERVER first.
  */
 function buildSandboxEnv(): NodeJS.ProcessEnv {
   const env: NodeJS.ProcessEnv = {
@@ -76,13 +99,51 @@ function buildSandboxEnv(): NodeJS.ProcessEnv {
 }
 
 /**
+ * Runs `code` directly via `new Function()` -- no Node APIs, safe to bundle/execute in a browser.
+ * Only ever called from the `!IS_SERVER` branch of `profileExecution`. Executing arbitrary code in
+ * the user's own browser tab is not the security boundary CRIT-DYNPROF protects (no server secret
+ * or server process is at risk); this is exactly the code this file used before that fix.
+ */
+function runInBrowserUnsandboxed(code: string): SandboxRunResult {
+  try {
+    let executableCode = code.replace(/export\s+default\s+/g, '').replace(/export\s+/g, '');
+    const fnMatch = executableCode.match(/function\s+([A-Za-z0-9_$]+)/);
+    if (fnMatch && fnMatch[1] && !executableCode.includes(`${fnMatch[1]}(`)) {
+      executableCode += `\ntry { ${fnMatch[1]}(); } catch(e) {}`;
+    }
+    // eslint-disable-next-line no-new-func
+    const fn = new Function(
+      'React',
+      'exports',
+      'require',
+      `
+      try {
+        ${executableCode}
+      } catch(e) {
+        return e;
+      }
+    `
+    );
+    const res = fn({}, {}, () => ({}));
+    if (res instanceof Error) {
+      return { hasRuntimeError: true, runtimeErrorDetails: { message: res.message, stack: res.stack } };
+    }
+    return { hasRuntimeError: false };
+  } catch (err: any) {
+    return { hasRuntimeError: true, runtimeErrorDetails: { message: err?.message || String(err), line: err?.line } };
+  }
+}
+
+/**
  * Executes `code` in the isolated sandbox subprocess and returns only a runtime-error verdict.
  * This function NEVER executes `code` in this process, under any failure mode: spawn failure,
  * timeout, non-zero exit, or unparseable output all fail safe to `hasRuntimeError: true` with a
  * descriptive message, rather than falling back to an in-process `new Function()` call.
+ * Server-only: callers must check IS_SERVER first.
  */
 function runInSandboxProcess(code: string): SandboxRunResult {
-  if (!SANDBOX_RUNNER_PATH) {
+  const sandboxRunnerPath = getSandboxRunnerPath();
+  if (!sandboxRunnerPath) {
     return {
       hasRuntimeError: true,
       runtimeErrorDetails: { message: 'Dynamic profiling sandbox runner script could not be located; execution skipped for safety.' },
@@ -90,7 +151,9 @@ function runInSandboxProcess(code: string): SandboxRunResult {
   }
 
   try {
-    const result = spawnSync(process.execPath, [SANDBOX_RUNNER_PATH], {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { spawnSync } = require('child_process');
+    const result = spawnSync(process.execPath, [sandboxRunnerPath], {
       input: JSON.stringify({ code }),
       env: buildSandboxEnv(),
       timeout: SANDBOX_TIMEOUT_MS,
@@ -200,13 +263,14 @@ export class DynamicProfiler {
         };
       }
 
-      // The actual execution of `code` happens in an isolated child process — see
-      // runInSandboxProcess()/profiler-sandbox-runner.cjs above. This process never runs
-      // untrusted source directly.
-      const sandboxResult = runInSandboxProcess(code);
-      if (sandboxResult.hasRuntimeError) {
+      // On the server, execution happens in an isolated child process (see
+      // runInSandboxProcess()/profiler-sandbox-runner.cjs above) -- the real server process never
+      // runs untrusted source directly. In the browser, there is no server process to protect, so
+      // this runs the original, always-browser-safe new Function() evaluation directly.
+      const execResult = IS_SERVER ? runInSandboxProcess(code) : runInBrowserUnsandboxed(code);
+      if (execResult.hasRuntimeError) {
         hasRuntimeError = true;
-        runtimeErrorDetails = sandboxResult.runtimeErrorDetails;
+        runtimeErrorDetails = execResult.runtimeErrorDetails;
       }
     } catch (err: any) {
       hasRuntimeError = true;

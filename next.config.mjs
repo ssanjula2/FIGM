@@ -71,13 +71,36 @@ const nextConfig = {
       },
     ];
   },
-  webpack: (config, { dev }) => {
+  webpack: (config, { dev, isServer }) => {
     config.resolve.extensionAlias = {
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs']
     };
     if (dev) {
       config.cache = { type: 'memory' };
+    }
+    // src/engine/dynamic-profiler.ts is reachable from the CLIENT bundle (app/live-scan/page.tsx
+    // dynamically imports RemediationEngine -> RuleExecutionEngine -> DynamicProfiler), but its
+    // server-only sandboxed-execution path (see that file's own header comment, CRIT-DYNPROF)
+    // lazily requires real Node built-ins guarded behind a `typeof window === 'undefined'` check.
+    // That runtime guard alone is not enough: webpack's module parser still statically discovers
+    // and tries to resolve every require() call regardless of the surrounding branch (dead-code
+    // elimination only runs during production minification, not `next dev`, and even then happens
+    // after module resolution) -- so without this, the client compile fails outright with
+    // "Module not found: Can't resolve 'child_process'" the moment /live-scan is visited, and
+    // because Next dev shares one client compilation across every route, that failure poisons
+    // every other page too until the dev server restarts. Stubbing these to `false` for the client
+    // compiler only (never the server one) tells webpack to resolve them to an empty module instead
+    // of erroring; the runtime guard above ensures the resulting empty stubs are never actually
+    // called in a browser context.
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        child_process: false,
+        fs: false,
+        path: false,
+        url: false,
+      };
     }
     return config;
   }
