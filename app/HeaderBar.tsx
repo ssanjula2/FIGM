@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { useGlobalSearch } from '../src/hooks/useGlobalSearch';
@@ -24,6 +24,20 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
     ? Math.round(records.reduce((acc, s) => acc + (s.qualityScore || 90), 0) / records.length)
     : 90;
   const passed = dynamicScore >= 70;
+
+  // Escape closes the Cmd+K search modal -- the visible "esc" button only handled a mouse click,
+  // leaving keyboard-only users (who this modal's own hint text advertises "esc" to) with no way
+  // to dismiss it via the actual Escape key.
+  useEffect(() => {
+    if (!isSearchOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsSearchOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isSearchOpen, setIsSearchOpen]);
 
   return (
     <>
@@ -60,6 +74,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
         <div
           role="button"
           tabIndex={0}
+          aria-label="Open global search"
           onClick={() => setIsSearchOpen(true)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -112,6 +127,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
             <select
               value={framework}
               onChange={(e) => setFramework(e.target.value)}
+              aria-label="Framework filter"
               style={{
                 padding: '7px 32px 7px 16px',
                 borderRadius: '20px',
@@ -151,6 +167,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
               textDecoration: 'none',
             }}
             title="Settings & Theme"
+            aria-label="Settings & Theme"
           >
             ⚙️
           </Link>
@@ -161,6 +178,8 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
               role="button"
               tabIndex={0}
               aria-label="Notifications"
+              aria-haspopup="true"
+              aria-expanded={showNotifDropdown}
               onClick={() => setShowNotifDropdown(!showNotifDropdown)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -318,6 +337,8 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
       {/* Global Cmd+K Search Modal */}
       {isSearchOpen && (
         <div
+          role="presentation"
+          onClick={() => setIsSearchOpen(false)}
           style={{
             position: 'fixed',
             inset: 0,
@@ -331,6 +352,10 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
           }}
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Global search"
+            onClick={(e) => e.stopPropagation()}
             style={{
               background: '#0f172a',
               border: '1px solid rgba(255, 255, 255, 0.15)',

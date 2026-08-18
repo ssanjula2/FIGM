@@ -888,6 +888,7 @@ export default function LiveScanPage() {
               className="input-field font-mono"
               style={{ flex: 1, padding: '5px 10px', fontSize: '12px' }}
               placeholder="e.g. MyComponent.tsx"
+              aria-label="File name"
             />
             <input
               ref={fileInputRef}
