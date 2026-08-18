@@ -3,7 +3,15 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    serverComponentsExternalPackages: ['typescript', 'tsx']
+    serverComponentsExternalPackages: ['typescript', 'tsx'],
+    // P0 security fix (audit finding CRIT-DYNPROF): src/engine/sandbox/profiler-sandbox-runner.cjs
+    // is spawned at runtime via a plain string path (child_process.spawnSync), never `import`ed, so
+    // Next's static file-tracing cannot discover it on its own and would otherwise omit it from a
+    // production/serverless build output -- silently breaking the sandbox (and, worse, inviting a
+    // "just fall back to in-process eval" fix later). This forces it to always ship.
+    outputFileTracingIncludes: {
+      '/api/**/*': ['./src/engine/sandbox/profiler-sandbox-runner.cjs'],
+    },
   },
   // Baseline response headers -- applied to every route. CORS is handled separately per-request
   // in middleware.ts (src/lib/cors.ts), since it needs to react to the request's Origin header,

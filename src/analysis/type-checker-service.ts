@@ -95,30 +95,48 @@ export class TypeCheckerService {
       moduleResolution: ts.ModuleResolutionKind.Bundler,
     };
 
-    const sourceFile = ts.createSourceFile(fileName, codeToTypeCheck, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
+    // Guarded (audit finding MED-TYPECHECKER): unlike TypeScriptFrameworkParser, this was the one
+    // remaining unguarded ts.createSourceFile()/ts.createProgram() call site — a cheap, deeply
+    // nested unclosed-brace payload can trigger a genuine RangeError (stack overflow) inside the
+    // TypeScript compiler's own recursive-descent parser. Every API route calling this already
+    // wraps its handler in try/catch, so this previously degraded to a caught 500 per request
+    // rather than crashing the process — but it should never have reached even that far unguarded.
+    let tsDiagnostics: readonly ts.Diagnostic[];
+    try {
+      const sourceFile = ts.createSourceFile(fileName, codeToTypeCheck, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
 
-    // Base host reads real lib.*.d.ts files from the installed `typescript` package on disk, so
-    // global built-ins (Promise, Map, Set, URL, console, ...) resolve exactly as they do for a real
-    // tsc invocation. Only the virtual in-memory snippet file is intercepted and served from memory.
-    const defaultHost = ts.createCompilerHost(compilerOptions, true);
-    const host: ts.CompilerHost = {
-      ...defaultHost,
-      getSourceFile: (name, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
-        if (name === fileName) return sourceFile;
-        if (TypeCheckerService.libFileCache.has(name)) {
-          return TypeCheckerService.libFileCache.get(name);
-        }
-        const libSourceFile = defaultHost.getSourceFile(name, languageVersionOrOptions, onError, shouldCreateNewSourceFile);
-        TypeCheckerService.libFileCache.set(name, libSourceFile);
-        return libSourceFile;
-      },
-      fileExists: (f) => f === fileName || defaultHost.fileExists(f),
-      readFile: (f) => (f === fileName ? codeToTypeCheck : defaultHost.readFile(f)),
-    };
+      // Base host reads real lib.*.d.ts files from the installed `typescript` package on disk, so
+      // global built-ins (Promise, Map, Set, URL, console, ...) resolve exactly as they do for a
+      // real tsc invocation. Only the virtual in-memory snippet file is intercepted/served from memory.
+      const defaultHost = ts.createCompilerHost(compilerOptions, true);
+      const host: ts.CompilerHost = {
+        ...defaultHost,
+        getSourceFile: (name, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
+          if (name === fileName) return sourceFile;
+          if (TypeCheckerService.libFileCache.has(name)) {
+            return TypeCheckerService.libFileCache.get(name);
+          }
+          const libSourceFile = defaultHost.getSourceFile(name, languageVersionOrOptions, onError, shouldCreateNewSourceFile);
+          TypeCheckerService.libFileCache.set(name, libSourceFile);
+          return libSourceFile;
+        },
+        fileExists: (f) => f === fileName || defaultHost.fileExists(f),
+        readFile: (f) => (f === fileName ? codeToTypeCheck : defaultHost.readFile(f)),
+      };
 
-    const program = ts.createProgram([fileName], compilerOptions, host, TypeCheckerService.lastProgram);
-    TypeCheckerService.lastProgram = program;
-    const tsDiagnostics = ts.getPreEmitDiagnostics(program);
+      const program = ts.createProgram([fileName], compilerOptions, host, TypeCheckerService.lastProgram);
+      TypeCheckerService.lastProgram = program;
+      tsDiagnostics = ts.getPreEmitDiagnostics(program);
+    } catch (err: any) {
+      // Reset the incremental-program cache: a corrupted/partial Program from a failed parse
+      // should never be reused as `oldProgram` for the next (unrelated) file's checkCode() call.
+      TypeCheckerService.lastProgram = undefined;
+      return {
+        hasTypeErrors: false,
+        diagnostics: [],
+        disclaimer: `Type checking skipped: the TypeScript compiler could not process this file (${err?.message || String(err)}).`,
+      };
+    }
 
     const reports: DiagnosticReport[] = [];
 
