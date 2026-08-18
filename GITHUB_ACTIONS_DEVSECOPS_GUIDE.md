@@ -12,7 +12,7 @@ FIGM Code Inspector transforms standard frontend development into an automated *
 flowchart LR
     A[Git Push / PR] --> B[GitHub Actions Runner]
     B --> C[Install & Build]
-    C --> D[Run 103 Unit & Integration Tests]
+    C --> D[Run Unit & Integration Tests]
     D --> E[FIGM AST Static Analysis Engine]
     E --> F[Generate JSON & Markdown Artifacts]
     F --> G[GitHub Check Annotations & PR Comment]
@@ -38,7 +38,7 @@ The workflow operates under Node 20.x environment with npm caching enabled:
 ### Key Workflow Jobs:
 1. **Checkout & Environment Setup**: Installs Node 20 with npm package caching.
 2. **Prisma Generation & Build Verification**: Ensures database schemas & TypeScript compile with 0 errors.
-3. **Test Suite Execution**: Runs all 103 automated tests.
+3. **Test Suite Execution**: Runs the full automated test suite (`npm test` reports the current test count).
 4. **FIGM DevSecOps Inspection (`npm run ci:scan`)**: Executes AST engine across `app/` and `src/`.
 5. **Artifact Generation & Upload**: Uploads `figm-ci-report.json` and `figm-ci-report.md` retained for 30 days.
 6. **PR Automated Commenting**: Posts interactive markdown summary directly on Pull Requests.

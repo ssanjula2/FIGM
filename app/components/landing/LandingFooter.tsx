@@ -57,6 +57,7 @@ export default function LandingFooter() {
               <li><Link href="/history" style={{ color: '#94a3b8', textDecoration: 'none' }}>Scan History</Link></li>
               <li><Link href="/auth/login" style={{ color: '#94a3b8', textDecoration: 'none' }}>Auth Workspace</Link></li>
               <li><a href="https://github.com/ssanjula2/FIGM" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', textDecoration: 'none' }}>GitHub Repository ↗</a></li>
+              <li><a href="https://github.com/ssanjula2/FIGM/blob/main/PRIVACY.md" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', textDecoration: 'none' }}>Privacy & Data Retention Policy ↗</a></li>
               <li><a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8', textDecoration: 'none' }}>W3C WCAG 2.2 Spec ↗</a></li>
             </ul>
           </div>

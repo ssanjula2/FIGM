@@ -75,7 +75,7 @@ live `/analytics` page or `docs/evidence/canonical-evaluation.json` in under a m
 **Model Answer**: `RealtimeService` uses Supabase Realtime WebSocket broadcast channels to push live scan-completion and notification events to connected client dashboards.
 
 ### Q17: What automated test coverage exists in the codebase?
-**Model Answer**: The current test suite (`npm test`) runs **543 automated tests across 66 suites with a 100% pass rate** (confirm the live count at defense time — `npm test`'s own summary line is the source of truth, this number changes as the suite grows). Covers unit rule-detection tests (positive/negative/boundary/adversarial/malformed/regression per rule), API security tests, live-scan end-to-end tests, and research-metrics consistency guards.
+**Model Answer**: The current test suite (`npm test`) runs **678 automated tests across 71 suites with a 100% pass rate** (confirm the live count at defense time — `npm test`'s own summary line is the source of truth, this number changes as the suite grows). Covers unit rule-detection tests (positive/negative/boundary/adversarial/malformed/regression per rule), API security tests, live-scan end-to-end tests, and research-metrics consistency guards.
 
 ### Q18: What is the main research novelty of your work?
 **Model Answer**: FIGM combines a framework-independent 4-layer rule taxonomy with a real-parser-backed detection engine (not a purely synthetic/regex "AST") and an AI remediation pipeline that verifies its own fixes by re-scanning — each finding is honestly labeled with its actual detection mechanism and confidence basis rather than presented uniformly.

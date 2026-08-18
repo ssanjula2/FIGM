@@ -35,9 +35,10 @@ FIGM-PERF-04 & PERFORMANCE & 2 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
 A target cohort of $N = 85$ student developers at NSBM Green University was planned for a System Usability Scale (SUS) evaluation of FIGM. As of this export, \textbf{0 of 85} real participant responses have been collected (see \texttt{research/CONSENT\_FORM.md} and \texttt{data/user-study-responses.json}) -- no SUS score, patch-acceptance rate, or satisfaction metric is reported here, because none has been measured from real data. A prior version of this chapter reported a completed evaluation with a specific SUS score and satisfaction percentages; those figures were fabricated (invented, with no underlying computation or data source) and have been retracted rather than replaced with different numbers.
 
 \section{Scan Throughput \& Memory Usage}
+Figures below are read directly from \texttt{benchmarks/eval-summary.json}'s \texttt{performanceMetrics} block (timestamp 2026-08-18T12:11:41.928Z). Timing and memory figures are machine- and load-dependent measurements captured at a single point in time on the development machine, not a live-tracked guarantee — they will vary run-to-run and across hardware.
 \begin{itemize}
     \item \textbf{Total Code Base Scanned}: 147 LOC
-    \item \textbf{Scan Duration}: 1198.56 ms
-    \item \textbf{Scan Speed}: 123 LOC/sec
-    \item \textbf{Peak Heap Memory Delta}: 119.14 MB
+    \item \textbf{Scan Duration}: 540.85 ms
+    \item \textbf{Scan Speed}: 271.80 LOC/sec
+    \item \textbf{Peak Heap Memory Delta}: 21.52 MB
 \end{itemize}

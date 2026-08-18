@@ -76,16 +76,16 @@ No database configuration required. The application automatically initializes `f
 
 ## 4. Verification & Testing
 
-Verify that all dependencies and storage engine bindings are functional by running the complete 103-test verification suite:
+Verify that all dependencies and storage engine bindings are functional by running the complete automated test suite:
 
 ```bash
 npm test
 ```
 
-Expected Output:
+Expected Output (illustrative — `npm test`'s own summary line reports the current, authoritative counts, which grow as the suite grows):
 ```text
-# tests 103
-# suites 12
-# pass 103
+# tests <N>
+# suites <M>
+# pass <N>
 # fail 0
 ```

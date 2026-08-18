@@ -12,4 +12,4 @@ All notable changes to the FIGM Code Inspector project are documented below.
 - **Real-Time Integration**: Integrated Supabase Realtime WebSocket events for notifications and dashboard activity feed broadcasts.
 - **Cloud Storage**: Enabled report export uploading to Supabase Storage bucket `figm-reports`.
 - **Security Hardening**: Enforced production JWT secret validations, HTML entity escaping in PDF exporter, and RBAC authorization.
-- **Testing**: Reached 103/103 passing automated tests across 12 test suites.
+- **Testing**: Reached 103/103 passing automated tests across 12 test suites (test count as of this release; the suite has grown substantially since — run `npm test` for the current count).

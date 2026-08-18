@@ -67,6 +67,16 @@ flowchart LR
 > claim is independently checkable against the tool's own live output, not only against this text.
 > The system is still, honestly, a hybrid — "AST-based" is accurate for a specific, documented
 > majority of rule/framework combinations, not for the tool as a uniform whole.
+>
+> **Further update (see `docs/architecture/RULE_ENGINEERING_AUDIT.md`):** the migration continued
+> past the 15/16-rule snapshot above. As of this audit, **23 of the 25 rules** are real-AST for
+> their eligible frameworks (up from 16/25 at the previous update). Only **FIGM-ANG-03** and
+> **FIGM-ANG-04** (Angular's `*ngFor trackBy` and template method-call rules — both operate on
+> Angular *template markup*, not the TypeScript class body) remain permanently
+> `LEGACY_TEXT_HEURISTIC` on every framework, pending an `@angular/compiler` integration to parse
+> that syntax for real. Vue SFC still has zero real-AST coverage across all 25 rules for the same
+> reason (the TypeScript compiler cannot parse Vue templates). The `sourceKind` field described
+> above remains the source of truth for which mechanism produced any given diagnostic.
 
 Static analysis of modern web applications requires handling heterogeneous template syntaxes and incomplete or malformed code blocks. The `SourceParser` adapter provides resilient pattern-based parsing that produces an AST-shaped intermediate representation:
 
@@ -198,7 +208,7 @@ sequenceDiagram
     Developer->>Parser: Submit Source Code (React / Next.js / Angular)
     Parser->>Mapper: Send Raw AST Node Tree
     Mapper->>Engine: Send Normalized ALP Primitives
-    Engine->>Engine: Evaluate 25 guideline predicates (24 pattern-based, 1 real-AST — see 4.2.2)
+    Engine->>Engine: Evaluate 25 guideline predicates (23 real-AST, 2 pattern-based — see 4.2.2)
 
     alt No Violation Found
         Engine-->>Developer: Return Clean Report (Zero Defects)

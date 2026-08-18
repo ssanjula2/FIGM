@@ -6,7 +6,9 @@ This guide describes the unit, integration, and empirical benchmark test suites 
 
 ## 1. Test Suite Architecture
 
-FIGM Code Inspector includes **103 automated tests** organized into **12 specialized test suites**:
+FIGM Code Inspector includes a growing suite of automated tests organized into specialized test suites under `tests/*.test.ts`. Run `npm test` to see the current test and suite count — the numbers change as the project evolves, so no fixed figure is maintained here.
+
+The table below lists an illustrative subset of suites from an earlier snapshot of the project; it is **not exhaustive**. As of this writing there are 54 files matching `tests/*.test.ts` — list that directory (or see `package.json`'s `test` script, which enumerates every suite) for the complete, current set.
 
 | Test File | Focus Area | Test Count |
 | :--- | :--- | :---: |
@@ -39,13 +41,13 @@ Run the full automated test suite:
 npm test
 ```
 
-Expected Output:
+Expected Output (illustrative format — exact counts and duration will reflect the current suite; run `npm test` for live numbers):
 ```text
-# tests 103
-# suites 12
-# pass 103
+# tests <N>
+# suites <M>
+# pass <N>
 # fail 0
-# duration_ms 1246.52
+# duration_ms <...>
 ```
 
 ---

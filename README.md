@@ -1,6 +1,6 @@
 # FIGM Code Inspector — Multi-Tenant SaaS Platform & Research Prototype
 
-[![Tests Passing](https://img.shields.io/badge/tests-544%2F544%20passed-success.svg)](https://github.com/ssanjula2/FIGM)
+[![Tests Passing](https://img.shields.io/badge/tests-678%2F678%20passed-success.svg)](https://github.com/ssanjula2/FIGM)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ssanjula2/FIGM)
 
 > The "Code Quality 96/100", "Security 94/100", "Build: passing", and "Dissertation: 100% compliant" badges previously shown here traced to no computation anywhere in this codebase and have been removed rather than replaced with different unverified numbers. The test-count badge above is the actual count from the last `npm test` run (see Validation below); the workflow at `.github/workflows/figm-scan.yml` runs static analysis on push/PR but has not yet run on a public remote, so no CI status badge is shown until it has real run history to report.
@@ -44,7 +44,7 @@ cp .env.example .env
 ```bash
 npm test
 ```
-*Executes all 544 automated tests across 66 test suites with 100% pass rate (last verified `npm test` run).*
+*Executes all 678 automated tests across 71 test suites with 100% pass rate (last verified `npm test` run). Run `npm test` yourself to confirm the current count, since this number changes as the suite grows.*
 
 ### 4. Launch Development Server
 ```bash
@@ -56,14 +56,15 @@ Navigate to [http://localhost:3000](http://localhost:3000).
 
 ## Documentation Index
 
-- 📘 [Installation Guide](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/INSTALL.md)
-- 🚀 [Deployment Guide](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/DEPLOYMENT.md)
-- 🔌 [API Documentation](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/API_DOCUMENTATION.md)
-- 🏗️ [Architecture Specification](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/ARCHITECTURE.md)
-- 🗄️ [Database & Schema Guide](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/DATABASE.md)
-- 🛡️ [Security Policy & Controls](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/SECURITY.md)
-- 🤝 [Contributing Guidelines](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/CONTRIBUTING.md)
-- 📜 [Changelog](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/CHANGELOG.md)
+- 📘 [Installation Guide](./INSTALL.md)
+- 🚀 [Deployment Guide](./DEPLOYMENT.md)
+- 🔌 [API Documentation](./API_DOCUMENTATION.md)
+- 🏗️ [Architecture Specification](./ARCHITECTURE.md)
+- 🗄️ [Database & Schema Guide](./DATABASE.md)
+- 🛡️ [Security Policy & Controls](./SECURITY.md)
+- 🔒 [Privacy & Data Retention Policy](./PRIVACY.md)
+- 🤝 [Contributing Guidelines](./CONTRIBUTING.md)
+- 📜 [Changelog](./CHANGELOG.md)
 
 ---
 

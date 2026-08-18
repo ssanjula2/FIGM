@@ -9,7 +9,7 @@ The Framework-Independent Guideline Model (FIGM) establishes a 4-layer hierarchi
 \end{equation}
 
 \section{Abstract Language Primitives (ALPs)}
-Table~\ref{tab:figm_alps} details the 25 core Abstract Language Primitives (ALPs) underpinning FIGM's 25 canonical rules, spanning AST constructs across React, Next.js, Angular, and Vue single-page application paradigms.
+Table~\ref{tab:figm_alps} details the 25 core Abstract Language Primitives (ALPs) underpinning FIGM's 25 canonical rules. Each ALP names the target AST construct(s) it matches conceptually; the constructs shown are genuinely parsed from a TypeScript-compiler AST for React, Next.js, plain JS/TS, and Angular's TypeScript class body (23 of the 25 rules), while the two Angular template-syntax rules and every rule as applied to Vue SFC templates are matched via a text-heuristic regex path over the same conceptual construct, since the TypeScript compiler cannot parse Angular or Vue template markup (see the AST Normalization Protocol section below for the precise framework/rule breakdown).
 
 \begin{table}[htbp]
 \centering
@@ -49,4 +49,4 @@ ALP-ANG-RENDERER2 & Angular Direct DOM Access Primitive & MemberExpression \\
 \end{table}
 
 \section{AST Normalization Protocol}
-FIGM parses framework templates into unified ESTree-compatible nodes via resilient source parsing, converting JSX, Vue SFC templates, and Angular template expressions into normalized AST nodes for static evaluation.
+FIGM's parsing layer is a framework-and-rule-gated hybrid, not a uniform AST engine. For 23 of the 25 canonical rules, source is parsed into a genuine TypeScript-compiler AST (\texttt{ts.createSourceFile}) and converted into unified, normalized \texttt{ASTNode} objects for static evaluation, wherever the input syntax is genuinely TypeScript/JSX-parseable — React, Next.js, plain JS/TS, and the TypeScript class body of Angular components. The remaining 2 rules (Angular's \texttt{*ngFor} \texttt{trackBy} rule and its template method-call-invocation rule, both operating on Angular \emph{template markup} rather than the TypeScript class body) are evaluated by a text-heuristic regex path instead, since the TypeScript compiler cannot parse Angular template syntax. The same text-heuristic path is used for \emph{every} rule when the input is a Vue SFC template, since Vue SFC templates receive no real-AST treatment for any of the 25 rules today. Every diagnostic FIGM emits is labeled with a \texttt{sourceKind} field (\texttt{REAL\_AST} or \texttt{LEGACY\_TEXT\_HEURISTIC}) recording which of the two mechanisms actually produced it, so this distinction is inspectable in the tool's own output and is never hidden from the reader.

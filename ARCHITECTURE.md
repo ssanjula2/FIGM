@@ -27,7 +27,7 @@ graph TD
 1. **Single Responsibility Principle (SRP)**:
    - `SourceParser`: dispatches each file to a real TypeScript-compiler-backed AST builder
      (`src/ast/real-syntax-node-builder.ts`, via `src/parser/typescript-framework-parser.ts`) for
-     15 of 25 FIGM rules on the frameworks where that syntax is genuinely parseable (React,
+     23 of 25 FIGM rules on the frameworks where that syntax is genuinely parseable (React,
      Next.js, plain JS/TS, and the TypeScript class body of Angular components), and to a
      regex/substring text-heuristic path for the remainder — see
      `docs/architecture/AST_MIGRATION_MAP.md` for the exact rule-by-rule breakdown and rationale.

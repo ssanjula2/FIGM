@@ -1,3 +1,13 @@
+> **⚠ ARCHIVED — SUPERSEDED.** This document is a dated, point-in-time forensic audit snapshot
+> from an earlier stage of the project (2026-08-13, see "Audit date" below). It has been
+> materially superseded by `audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md` (2026-08-18), which
+> independently re-verified findings against the current codebase. **Any specific number,
+> percentage, or pass/fail verdict below may no longer reflect the current codebase.** It is
+> retained here for historical record only — do not cite it as current evidence. For current
+> status, see `audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md` (the current audit of record).
+
+---
+
 # FIGM Code Inspector — Full Forensic Audit
 
 **Audit date:** 2026-08-13

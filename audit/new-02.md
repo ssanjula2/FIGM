@@ -1,12 +1,20 @@
+> **⚠ ARCHIVED — SUPERSEDED.** This document is a dated, point-in-time forensic re-audit snapshot
+> from an earlier stage of the project (2026-08-17, see "Audit date" below). It has been
+> materially superseded by `audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md` (2026-08-18), which
+> independently re-verified findings against the current codebase. **Any specific number,
+> percentage, or pass/fail verdict below may no longer reflect the current codebase.** It is
+> retained here for historical record only — do not cite it as current evidence. For current
+> status, see `audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md` (the current audit of record).
+
+---
+
 # FIGM Code Inspector — Final Verification Audit (Forensic Re-Audit)
 
 ## 1. Audit Metadata
 
 - **Audit date:** 2026-08-17
 - **Auditor role:** Independent external examiner (Principal Software Architect / Senior Static Analysis Engineer / Principal Security Engineer / Senior QA Engineer / Research Methodologist / Accessibility Engineer / Performance Engineer / Academic Reviewer).
-- **Predecessor document:** `audit/new.md` (dated 2026-08-13, HEAD `22e58e39` at time of writing, with a later addendum). This document does **not** overwrite, retract, or edit `audit/new.md` — every finding below was independently re-derived from the current working tree, then cross-r
-
-eferenced
+- **Predecessor document:** `audit/new.md` (dated 2026-08-13, HEAD `22e58e39` at time of writing, with a later addendum). This document does **not** overwrite, retract, or edit `audit/new.md` — every finding below was independently re-derived from the current working tree, then cross-referenced
  against `audit/new.md`'s finding IDs (SEC-*, BENCH-*, AST-*, AI-01, HS-*, DOC-*, UX-*, QA-*, PROD-*) purely to preserve a stable ID scheme. No commit message, prior audit claim, or code comment was accepted as proof of anything — every classification below is backed by either (a) a direct source-code quote with file:line, (b) a live HTTP request/response against the running application, or (c) hand-shown arithmetic from a cited raw data file.
 - **Method:** Direct reading of current source; several separate live `next dev` sessions across parallel verification passes (ports 3000/3001/3002, Windows, restarted repeatedly after dev-server compilation races — see §17 note) used for real HTTP attack/verification traffic against `/api/*`; multiple isolated `npm run build` attempts (some failed for environmental reasons fully root-caused and disclosed rather than hidden — see §17); two full `npm test` runs (both 596/596); `npx tsc --noEmit` run clean on every check; hand-recomputation of precision/recall/F1 from raw counts; a live browser session (Chrome, driven via automation) against the running app for UI-level verification.
 - **Provenance note:** this document is the product of a live-attack-focused security/database/QA verification pass (the majority of this document, §2–§9, §12–§17, §19–§25) merged with a second, targeted pass that independently closed four specific gaps the first pass had explicitly and honestly flagged as "not re-verified this session" — BENCH-02, DOC-05, QA-02, QA-03 — and contributed four additional new findings (NEW-06 through NEW-09; see §3, §4, §17, §22). Both passes independently re-derived their claims from the current working tree using the same anti-fabrication standard described above; neither trusted the other's or any prior document's conclusions without its own citation.
