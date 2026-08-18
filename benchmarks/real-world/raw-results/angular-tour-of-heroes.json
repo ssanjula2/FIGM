@@ -5,7 +5,7 @@
   "primaryFrameworkLabel": "Angular",
   "filesScanned": 21,
   "totalLOC": 609,
-  "scanDurationMs": 664.0263999999988,
+  "scanDurationMs": 1916.6398000000008,
   "totalFigmFindings": 12,
   "findingsByRule": {
     "FIGM-ANG-02": 5,

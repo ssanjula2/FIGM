@@ -1,20 +1,14 @@
 {
-  "generatedAt": "2026-08-17T21:45:31.613Z",
+  "generatedAt": "2026-08-18T12:30:05.805Z",
   "figmVersion": "FIGM-Core-v2 (see figm-spec.json meta.version)",
   "repoCount": 5,
   "totalFilesScanned": 80,
   "totalLOC": 4732,
   "totalFigmFindings": 114,
-  "totalScanDurationMs": 3606.404899999998,
+  "totalScanDurationMs": 8283.779699999996,
   "totalEngineCrashes": 0,
   "totalFilesWithParseErrors": 0,
-  "asyncEngineCrashesDuringRun": [
-    {
-      "type": "unhandledRejection",
-      "message": "TypeError: RSS is not a constructor\n    at generate (eval at profileExecution (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\src\\engine\\dynamic-profiler.ts:3:48), <anonymous>:11:16)\n    at eval (eval at profileExecution (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\src\\engine\\dynamic-profiler.ts:3:48), <anonymous>:46:1)\n    at Function.profileExecution (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\src\\engine\\dynamic-profiler.ts:73:19)\n    at Function.analyzeFile (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\src\\engine\\rule-execution-engine.ts:38:37)\n    at scanRepo (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\benchmarks\\real-world\\run-real-world-benchmark.ts:175:54)\n    at main (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\benchmarks\\real-world\\run-real-world-benchmark.ts:283:20)\n    at fs (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\benchmarks\\real-world\\run-real-world-benchmark.ts:345:1)\n    at Object.<anonymous> (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\benchmarks\\real-world\\run-real-world-benchmark.ts:360:8)\n    at Module._compile (node:internal/modules/cjs/loader:1554:14)\n    at Object.transformer (C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\node_modules\\tsx\\dist\\register-BoI6-WNn.cjs:9:3252)",
-      "detectedAtRepo": "vanillawebprojects"
-    }
-  ],
+  "asyncEngineCrashesDuringRun": [],
   "repos": [
     {
       "name": "react-crash-2021",
@@ -23,7 +17,7 @@
       "primaryFrameworkLabel": "React",
       "filesScanned": 10,
       "totalLOC": 340,
-      "scanDurationMs": 1242.9581000000003,
+      "scanDurationMs": 1770.8986000000004,
       "totalFigmFindings": 11,
       "findingsByRule": {
         "FIGM-REACT-01": 1,
@@ -53,7 +47,7 @@
       "primaryFrameworkLabel": "Next.js",
       "filesScanned": 5,
       "totalLOC": 128,
-      "scanDurationMs": 441.41419999999925,
+      "scanDurationMs": 701.3084999999992,
       "totalFigmFindings": 2,
       "findingsByRule": {
         "FIGM-PERF-01": 1,
@@ -80,7 +74,7 @@
       "primaryFrameworkLabel": "Angular",
       "filesScanned": 21,
       "totalLOC": 609,
-      "scanDurationMs": 664.0263999999988,
+      "scanDurationMs": 1916.6398000000008,
       "totalFigmFindings": 12,
       "findingsByRule": {
         "FIGM-ANG-02": 5,
@@ -109,7 +103,7 @@
       "primaryFrameworkLabel": "Vue",
       "filesScanned": 23,
       "totalLOC": 1396,
-      "scanDurationMs": 745.4339,
+      "scanDurationMs": 2175.8757999999943,
       "totalFigmFindings": 8,
       "findingsByRule": {
         "FIGM-PERF-04": 2,
@@ -138,7 +132,7 @@
       "primaryFrameworkLabel": "Generic JavaScript",
       "filesScanned": 21,
       "totalLOC": 2259,
-      "scanDurationMs": 512.5722999999998,
+      "scanDurationMs": 1719.0570000000007,
       "totalFigmFindings": 81,
       "findingsByRule": {
         "FIGM-PERF-03": 69,

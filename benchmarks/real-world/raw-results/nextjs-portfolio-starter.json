@@ -5,7 +5,7 @@
   "primaryFrameworkLabel": "Next.js",
   "filesScanned": 5,
   "totalLOC": 128,
-  "scanDurationMs": 441.41419999999925,
+  "scanDurationMs": 701.3084999999992,
   "totalFigmFindings": 2,
   "findingsByRule": {
     "FIGM-PERF-01": 1,

@@ -5,7 +5,7 @@
   "primaryFrameworkLabel": "Vue",
   "filesScanned": 23,
   "totalLOC": 1396,
-  "scanDurationMs": 745.4339,
+  "scanDurationMs": 2175.8757999999943,
   "totalFigmFindings": 8,
   "findingsByRule": {
     "FIGM-PERF-04": 2,
