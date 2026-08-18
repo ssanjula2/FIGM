@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   signJWT,
   verifyJWT,
@@ -12,6 +14,7 @@ import { UserDB, resolveBootstrapAdminPassword } from '../src/auth/user-db';
 import { RepositoryFactory } from '../src/storage/repository-factory';
 import { POST as registerPOST } from '../app/api/auth/register/route';
 import { POST as refreshPOST } from '../app/api/auth/refresh/route';
+import { POST as logoutPOST } from '../app/api/auth/logout/route';
 
 /**
  * Regression coverage for the SEC-01/SEC-02 remediation in audit/new.md:
@@ -201,6 +204,64 @@ test('Security Remediation Regression Suite', async (t) => {
     assert.equal(res.status, 401);
     const body = await res.json();
     assert.equal(body.code, 'TOKEN_REVOKED');
+  });
+
+  await t.test('logout actually revokes the refresh token (regression: Prisma silently ignores undefined-valued update fields)', async () => {
+    // Found live against the real configured Supabase DB while auditing credential-rotation
+    // procedure: app/api/auth/logout/route.ts called
+    // updateUser(userId, { refreshToken: undefined }) to clear the token. Prisma's update()
+    // treats an undefined-valued key as "field not included in this update" (only an explicit
+    // `null` clears a nullable column) -- so on the real Supabase/Prisma-backed storage provider
+    // this was a complete no-op: the stored refresh token was NEVER actually cleared, meaning a
+    // stolen/leaked refresh token remained fully valid for its full 7-day life even after the
+    // legitimate user "logged out." The JSON-file storage provider this test runs against
+    // happened to make `undefined` work anyway (plain object spread lets an undefined value
+    // override a previous key, unlike Prisma), which is exactly why no existing test caught this
+    // -- this test guards the SOURCE, not just the JSON-provider's more forgiving behavior.
+    RepositoryFactory.resetProvider();
+    const email = `logout_revoke_${Date.now()}@figm.io`;
+    const user = UserDB.createUser({
+      email,
+      passwordHash: hashPassword('LogoutRevokeTest123!'),
+      fullName: 'Logout Revocation Test User',
+      role: 'DEVELOPER',
+    });
+    const payload = { userId: user.id, email: user.email, fullName: user.fullName, role: user.role };
+    const accessToken = signJWT(payload);
+    const refreshToken = signRefreshToken(payload);
+    UserDB.updateUser(user.id, { refreshToken });
+    assert.equal(UserDB.getAllUsers().find((u) => u.id === user.id)?.refreshToken, refreshToken, 'sanity check: the refresh token is actually stored before logout');
+
+    const logoutReq = new Request('http://localhost:3000/api/auth/logout', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const logoutRes = await logoutPOST(logoutReq);
+    assert.equal(logoutRes.status, 200);
+
+    const afterLogout = UserDB.getAllUsers().find((u) => u.id === user.id);
+    assert.equal(afterLogout?.refreshToken, null, 'the stored refresh token must be explicitly cleared to null, not left unchanged');
+
+    // The real, end-to-end consequence: the pre-logout refresh token must now be rejected.
+    const refreshReq = new Request('http://localhost:3000/api/auth/refresh', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ refreshToken }),
+    });
+    const refreshRes = await refreshPOST(refreshReq);
+    assert.equal(refreshRes.status, 401);
+    const refreshBody = await refreshRes.json();
+    assert.equal(refreshBody.code, 'TOKEN_REVOKED');
+  });
+
+  await t.test('source-level guard: the logout route clears refreshToken with null, never undefined', () => {
+    // Direct regression guard for the exact Prisma-specific bug above -- catches a future edit
+    // reverting to `refreshToken: undefined` even in a change that doesn't touch this test's
+    // JSON-provider-based functional assertions (which, as documented above, would not by
+    // themselves detect a regression back to `undefined`).
+    const src = fs.readFileSync(path.resolve(process.cwd(), 'app/api/auth/logout/route.ts'), 'utf-8');
+    assert.match(src, /refreshToken:\s*null\s*\}/, 'logout must clear refreshToken with an explicit null');
+    assert.doesNotMatch(src, /refreshToken:\s*undefined/, 'logout must never clear refreshToken with undefined (a no-op against Prisma)');
   });
 
   await t.test('revoked refresh token: a token for a user that no longer exists is rejected the same way', async () => {

@@ -14,7 +14,11 @@ export interface DBUser {
   role: UserRole;
   resetToken?: string;
   resetTokenExpiry?: string;
-  refreshToken?: string;
+  // `| null` (not just optional/absent) is deliberate: an update payload of `{ refreshToken:
+  // undefined }` is silently ignored by Prisma's update() (undefined-valued keys are treated as
+  // "field not included," not "clear this field") -- only an explicit `null` actually clears the
+  // column. See app/api/auth/logout/route.ts, the one real call site that needs to clear this.
+  refreshToken?: string | null;
   apiKey?: string;
   avatarUrl?: string;
   createdAt: string;

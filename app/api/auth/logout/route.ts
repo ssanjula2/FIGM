@@ -10,7 +10,16 @@ export async function POST(request: Request) {
 
   const auth = authenticateUser(request);
   if (auth.user) {
-    await RepositoryFactory.getStorageProvider().updateUser(auth.user.userId, { refreshToken: undefined });
+    // `null`, not `undefined` -- Prisma's update() silently ignores an undefined-valued field
+    // (treats it as "not included in this update," not "clear it"), so the Supabase/Prisma-backed
+    // storage provider never actually revoked the refresh token in the database at all despite
+    // reporting success; only the client-side Set-Cookie clearing below actually took effect. A
+    // stolen/leaked refresh token (e.g. via the historical git-history exposure this same audit
+    // pass is documenting in docs/audit/GIT_HISTORY_SECRET_REMEDIATION.md) would have remained
+    // fully valid for its full 7-day life even after the legitimate user "logged out." Confirmed
+    // live against the real configured Supabase DB: after this fix, POST /api/auth/refresh with
+    // the pre-logout refresh token now correctly returns 401 TOKEN_REVOKED (was 200 before).
+    await RepositoryFactory.getStorageProvider().updateUser(auth.user.userId, { refreshToken: null });
     await AuditLogger.logEvent('LOGOUT', { userId: auth.user.userId, email: auth.user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
   } else {
     await AuditLogger.logEvent('LOGOUT', { ipAddress: ip, userAgent, status: 'SUCCESS', details: 'Unauthenticated logout request' });
