@@ -18,9 +18,32 @@ describe('FIGM Phase 4 Empirical Evaluation & Dynamic Metrics Engine', () => {
     assert.equal(results.ruleMetrics.length, 8, 'Expected 8 rule metrics');
     assert.equal(results.frameworkMetrics.length, 4, 'Expected 4 framework metrics');
 
-    assert.ok(results.overall.precision >= 0.8, 'Expected Precision >= 80%');
-    assert.ok(results.overall.recall >= 0.8, 'Expected Recall >= 80%');
-    assert.ok(results.overall.f1Score >= 0.8, 'Expected F1-Score >= 80%');
+    // Exact-value regression guard (audit finding QA-03): the controlled benchmark testbed
+    // (benchmarks/testbed/, 4 hand-authored fixtures, 19 hand-labelled violations across 8 rules)
+    // is fixed and the detection engine is fully deterministic against it -- two independent full
+    // reruns during the 2026-08-18 forensic audit reproduced TP=19/FP=2/FN=0 byte-for-byte. A loose
+    // ">= 0.8" floor would not catch a real regression (e.g. precision quietly dropping from 0.90 to
+    // 0.81), so this asserts the exact current, verified values. If a LEGITIMATE detector
+    // improvement to one of the 8 covered rules (FIGM-PERF-01..04, FIGM-A11Y-01..04) genuinely
+    // changes these counts on the fixed testbed, that is real information -- update this assertion
+    // deliberately, alongside the canonical artifacts (benchmarks/eval-summary.json,
+    // docs/evidence/canonical-evaluation.json) and every document that surfaces this number
+    // (docs/dissertation/chapter5_*, README, VIVA_PREPARATION_GUIDE.md), not silently.
+    assert.equal(results.overall.truePositives, 19, 'Expected exactly 19 true positives on the fixed controlled testbed');
+    assert.equal(results.overall.falsePositives, 2, 'Expected exactly 2 false positives on the fixed controlled testbed');
+    assert.equal(results.overall.falseNegatives, 0, 'Expected exactly 0 false negatives on the fixed controlled testbed');
+    assert.ok(
+      Math.abs(results.overall.precision - 19 / 21) < 1e-9,
+      `Expected precision to equal 19/21 (TP/(TP+FP)) exactly, got ${results.overall.precision}`
+    );
+    assert.ok(
+      Math.abs(results.overall.recall - 1) < 1e-9,
+      `Expected recall to equal 19/19 = 1.0 exactly, got ${results.overall.recall}`
+    );
+    assert.ok(
+      Math.abs(results.overall.f1Score - (2 * (19 / 21) * 1) / (19 / 21 + 1)) < 1e-9,
+      `Expected F1 to equal the harmonic mean of the above precision/recall exactly, got ${results.overall.f1Score}`
+    );
   });
 
   test('EvaluationRunner exports benchmark-results.md, benchmark-results.csv, and canonical-evaluation.json', () => {
