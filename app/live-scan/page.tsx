@@ -353,6 +353,92 @@ export default function LiveScanPage() {
   const [savingToHistory, setSavingToHistory] = useState<boolean>(false);
   const [saveHistoryStatus, setSaveHistoryStatus] = useState<{ kind: 'success' | 'error' | 'auth'; message: string } | null>(null);
 
+  // ── File upload (paste is the default; this adds real local-file input) ────
+  // A single uploaded file is fed straight into the existing single-editor flow above (same
+  // code/fileName state, same handleScan/result rendering -- no new code path). Two or more files
+  // switch into "batch mode": each is scanned independently via the same real /api/scan endpoint
+  // the single-file flow already uses, with results kept per-file rather than merged into one
+  // editor's worth of state (there is no single shared editor for N files to jump-to-line/apply-fix
+  // into, so batch mode intentionally shows a simpler, non-interactive per-file diagnostic list
+  // rather than reproducing every single-file panel feature N times).
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [batchFiles, setBatchFiles] = useState<{ fileName: string; code: string }[] | null>(null);
+  const [batchResults, setBatchResults] = useState<Record<string, { status: 'scanning' | 'done' | 'error'; result?: ScanResultResponse; error?: string }>>({});
+  const [batchExpanded, setBatchExpanded] = useState<Record<string, boolean>>({});
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const readFilesAsText = (fileList: FileList): Promise<{ fileName: string; code: string }[]> =>
+    Promise.all(
+      Array.from(fileList).map(
+        (file) =>
+          new Promise<{ fileName: string; code: string }>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve({ fileName: file.name, code: String(reader.result ?? '') });
+            reader.onerror = () => reject(new Error(`Could not read ${file.name}`));
+            reader.readAsText(file);
+          })
+      )
+    );
+
+  const runBatchScan = async (files: { fileName: string; code: string }[]) => {
+    setBatchResults(Object.fromEntries(files.map((f) => [f.fileName, { status: 'scanning' as const }])));
+    // Sequential, not Promise.all -- this hits the same POST /api/scan rate limit (60 req/min per
+    // IP, see app/api/scan/route.ts) real interactive paste-scanning already shares, so a batch of
+    // many files must not fire them all at once and trip it for a single legitimate upload.
+    for (const f of files) {
+      try {
+        const res = await fetch('/api/scan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: f.code, fileName: f.fileName }),
+        });
+        if (!res.ok) throw new Error(`Server returned status ${res.status}`);
+        const data: ScanResultResponse = await res.json();
+        setBatchResults((prev) => ({ ...prev, [f.fileName]: { status: 'done', result: data } }));
+      } catch (err: any) {
+        setBatchResults((prev) => ({ ...prev, [f.fileName]: { status: 'error', error: err.message || 'Scan failed' } }));
+      }
+    }
+  };
+
+  const handleFileUpload = async (fileList: FileList | null) => {
+    if (!fileList || fileList.length === 0) return;
+    setUploadError(null);
+
+    if (fileList.length === 1) {
+      // Single file: reuse the existing single-editor flow exactly as if the content were pasted.
+      setBatchFiles(null);
+      try {
+        const [{ fileName: name, code: content }] = await readFilesAsText(fileList);
+        if (content.length > MAX_CODE_LENGTH) {
+          setUploadError(`${name} is too large (${(content.length / 1000).toFixed(0)} KB) — the maximum is ${MAX_CODE_LENGTH / 1000} KB.`);
+          return;
+        }
+        setFileName(name);
+        setCode(content);
+        handleScan(content, name);
+      } catch (err: any) {
+        setUploadError(err.message || 'Could not read the selected file.');
+      }
+      return;
+    }
+
+    // Multiple files: batch mode.
+    try {
+      const files = await readFilesAsText(fileList);
+      const oversized = files.find((f) => f.code.length > MAX_CODE_LENGTH);
+      if (oversized) {
+        setUploadError(`${oversized.fileName} is too large (${(oversized.code.length / 1000).toFixed(0)} KB) — the maximum is ${MAX_CODE_LENGTH / 1000} KB. Remove it and re-upload.`);
+        return;
+      }
+      setBatchFiles(files);
+      setBatchExpanded({});
+      await runBatchScan(files);
+    } catch (err: any) {
+      setUploadError(err.message || 'Could not read the selected files.');
+    }
+  };
+
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<any>(null);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -791,7 +877,8 @@ export default function LiveScanPage() {
             </div>
           </div>
 
-          {/* File name */}
+          {/* File name + real local-file upload (single file feeds the editor below; 2+ files
+              switch to the batch results panel further down) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 600 }}>File Name:</span>
             <input
@@ -802,7 +889,71 @@ export default function LiveScanPage() {
               style={{ flex: 1, padding: '5px 10px', fontSize: '12px' }}
               placeholder="e.g. MyComponent.tsx"
             />
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept=".js,.jsx,.ts,.tsx,.vue,.mjs,.cjs"
+              onChange={(e) => {
+                handleFileUpload(e.target.files);
+                e.target.value = '';
+              }}
+              style={{ display: 'none' }}
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="btn-secondary"
+              style={{ padding: '5px 12px', fontSize: '11px', fontWeight: 700, whiteSpace: 'nowrap' }}
+              title="Upload one file to load it into the editor, or several files to scan them as a batch"
+            >
+              📁 Upload File(s)
+            </button>
           </div>
+
+          {uploadError && (
+            <div
+              role="alert"
+              style={{
+                fontSize: '11px',
+                color: '#f87171',
+                background: 'rgba(239,68,68,0.1)',
+                border: '1px solid rgba(239,68,68,0.25)',
+                borderRadius: '6px',
+                padding: '6px 10px',
+              }}
+            >
+              ⚠️ {uploadError}
+            </div>
+          )}
+
+          {batchFiles && (
+            <div
+              style={{
+                fontSize: '11px',
+                color: '#38bdf8',
+                background: 'rgba(56,189,248,0.08)',
+                border: '1px solid rgba(56,189,248,0.2)',
+                borderRadius: '6px',
+                padding: '6px 10px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <span>📦 Batch mode: {batchFiles.length} files uploaded — see results below.</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setBatchFiles(null);
+                  setBatchResults({});
+                }}
+                style={{ background: 'none', border: 'none', color: '#38bdf8', cursor: 'pointer', fontWeight: 700, fontSize: '11px' }}
+              >
+                Exit batch mode ✕
+              </button>
+            </div>
+          )}
 
           {/* Monaco editor */}
           <div style={{ border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden' }}>
@@ -1359,6 +1510,95 @@ export default function LiveScanPage() {
           </div>
         </div>
       </div>
+
+      {/* Batch upload results -- one card per uploaded file, each independently scanned via the
+          same real /api/scan endpoint the single-file editor above uses. Deliberately simpler than
+          the single-file panel (no jump-to-line/apply-fix/diff view): those all assume one live
+          Monaco editor instance to act on, which doesn't exist for N independently-uploaded files. */}
+      {batchFiles && (
+        <div className="glass-panel" style={{ padding: '20px', marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ fontSize: '13px', fontWeight: 700, color: '#f8fafc' }}>
+            📦 Batch Scan Results ({batchFiles.length} files)
+          </div>
+          {batchFiles.map((f) => {
+            const entry = batchResults[f.fileName];
+            const isExpanded = !!batchExpanded[f.fileName];
+            return (
+              <div
+                key={f.fileName}
+                style={{
+                  border: '1px solid var(--border)',
+                  borderRadius: '10px',
+                  overflow: 'hidden',
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setBatchExpanded((prev) => ({ ...prev, [f.fileName]: !prev[f.fileName] }))}
+                  aria-expanded={isExpanded}
+                  disabled={!entry || entry.status === 'scanning'}
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '10px 14px',
+                    background: 'rgba(255,255,255,0.03)',
+                    border: 'none',
+                    cursor: entry && entry.status !== 'scanning' ? 'pointer' : 'default',
+                    color: '#f8fafc',
+                    textAlign: 'left',
+                  }}
+                >
+                  <span style={{ fontSize: '12px', fontWeight: 700, fontFamily: 'JetBrains Mono' }}>{f.fileName}</span>
+                  {!entry || entry.status === 'scanning' ? (
+                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>⏳ Scanning…</span>
+                  ) : entry.status === 'error' ? (
+                    <span style={{ fontSize: '11px', color: '#ef4444', fontWeight: 700 }}>⚠️ {entry.error}</span>
+                  ) : (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span style={{ fontSize: '10px', color: '#38bdf8', fontWeight: 800 }}>{entry.result!.framework}</span>
+                      <span style={{ fontSize: '11px', color: entry.result!.diagnostics.length === 0 ? '#22c55e' : '#f59e0b', fontWeight: 700 }}>
+                        {entry.result!.diagnostics.length === 0 ? '🎉 No issues' : `${entry.result!.diagnostics.length} issue${entry.result!.diagnostics.length === 1 ? '' : 's'}`}
+                      </span>
+                      {typeof entry.result!.qualityScore === 'number' && (
+                        <span style={{ fontSize: '11px', color: '#94a3b8' }}>Quality {entry.result!.qualityScore}/100</span>
+                      )}
+                      <span aria-hidden="true">{isExpanded ? '▲' : '▼'}</span>
+                    </span>
+                  )}
+                </button>
+                {isExpanded && entry?.status === 'done' && (
+                  <div style={{ padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {entry.result!.diagnostics.length === 0 ? (
+                      <div style={{ fontSize: '12px', color: '#7c8ba6' }}>No violations found in this file.</div>
+                    ) : (
+                      entry.result!.diagnostics.map((d, i) => (
+                        <div
+                          key={`${d.ruleId}_${d.location.start.line}_${i}`}
+                          style={{
+                            borderLeft: `3px solid ${SEV_COLOR[d.severity] || SEV_COLOR.LOW}`,
+                            padding: '6px 10px',
+                            background: 'rgba(255,255,255,0.02)',
+                            borderRadius: '4px',
+                          }}
+                        >
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '2px' }}>
+                            <span style={{ fontSize: '10px', fontWeight: 800, color: SEV_COLOR[d.severity] || SEV_COLOR.LOW }}>{d.severity}</span>
+                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#38bdf8', fontFamily: 'JetBrains Mono' }}>{d.ruleId}</span>
+                            <span style={{ fontSize: '10px', color: '#7c8ba6' }}>Line {d.location.start.line}</span>
+                          </div>
+                          <div style={{ fontSize: '11px', color: '#cbd5e1' }}>{d.message}</div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
