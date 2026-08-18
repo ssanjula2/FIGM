@@ -199,4 +199,79 @@ export function plainReactLikeHelper() {
       assert.ok(['GENERIC_ESTREE', 'REACT_JSX', 'NEXT_JS', 'VUE_SFC', 'ANGULAR_TEMPLATE', 'SVELTE'].includes(res.framework));
     });
   });
+
+  describe('Angular-hint precision (structural evidence, not bare substring matching)', () => {
+    // Regression guard for audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md finding MED-FWMISDETECT: FIGM's
+    // own dogfooding found detectFramework() misclassifying two of its own source files as
+    // ANGULAR_TEMPLATE purely because an identifier or rendered JSX text happened to contain
+    // "trackby"/"rxjs" as a substring. Comments/strings were already excluded via
+    // stripCommentsAndStrings (see the existing tests above); these close the two remaining gaps.
+
+    it('a plain identifier merely containing "trackby" as a substring (e.g. isNgForWithoutTrackBy) does NOT trigger Angular classification', () => {
+      // This is the exact identifier this bug was found live in: src/parser/source-parser.ts's
+      // own FIGM-ANG-03 legacy-detection implementation.
+      const code = `
+export function isNgForWithoutTrackBy(attrs: Record<string, string>): boolean {
+  return Boolean(attrs['*ngFor']) && !attrs['trackby'];
+}
+`;
+      const res = SourceParser.parseSource(code, 'src/utils/ngForHelpers.ts');
+      assert.notEqual(res.framework, 'ANGULAR_TEMPLATE', 'a function name merely containing "TrackBy" as a substring must not itself trigger Angular classification');
+    });
+
+    it('rendered JSX text content mentioning "trackBy" and "RxJS" in prose does NOT trigger Angular classification', () => {
+      // The exact shape this bug was found live in: app/guidelines/page.tsx's rendered
+      // documentation prose describing the FIGM-ANG-03/FIGM-ANG-01 rules to end users.
+      const code = `
+export function AngularRuleDescription() {
+  return (
+    <p>
+      This rule checks for missing trackBy DOM reuse hints on *ngFor loops, and
+      unmanaged RxJS subscriptions that can leak memory over a component's lifetime.
+    </p>
+  );
+}
+`;
+      const res = SourceParser.parseSource(code, 'app/guidelines/RuleCard.tsx');
+      assert.notEqual(res.framework, 'ANGULAR_TEMPLATE', 'JSX text content merely mentioning "trackBy"/"RxJS" in prose must not itself trigger Angular classification');
+    });
+
+    it('a real *ngFor trackBy binding (no @Component wrapper) still correctly triggers Angular classification', () => {
+      const code = `<li *ngFor="let item of items; trackBy: trackById">{{ item.name }}</li>`;
+      const res = SourceParser.parseSource(code, 'src/app/list/list.template.html.ts');
+      assert.equal(res.framework, 'ANGULAR_TEMPLATE', 'a genuine trackBy binding on a real *ngFor directive must still be detected as Angular');
+    });
+
+    it('a real RxJS import (no @Component wrapper) still correctly triggers Angular classification', () => {
+      const code = `import { Observable } from 'rxjs';\nexport function stream(): Observable<number> { return null as any; }`;
+      const res = SourceParser.parseSource(code, 'src/app/services/stream.service.ts');
+      assert.equal(res.framework, 'ANGULAR_TEMPLATE', 'a genuine `from \'rxjs\'` import must still be detected as Angular');
+    });
+
+    it('a real <ng-template> tag still correctly triggers Angular classification', () => {
+      const code = `<ng-template #loading><div>Loading...</div></ng-template>`;
+      const res = SourceParser.parseSource(code, 'src/app/loading/loading.template.ts');
+      assert.equal(res.framework, 'ANGULAR_TEMPLATE', 'a genuine <ng-template> tag must still be detected as Angular');
+    });
+
+    it('a real @Component-decorated class still correctly triggers Angular classification (regression, non-.component.ts path)', () => {
+      const code = `@Component({\n  selector: 'app-x',\n})\nexport class XComponent {}`;
+      const res = SourceParser.parseSource(code, 'src/app/x/x-widget.ts');
+      assert.equal(res.framework, 'ANGULAR_TEMPLATE', 'a genuine @Component(...) decorator call must still be detected as Angular');
+    });
+
+    it('mixed real React/Next source with no genuine Angular syntax anywhere remains React/Next, not misclassified as Angular', () => {
+      const code = `
+import Link from 'next/link';
+import { useState } from 'react';
+export default function TrackingWidget() {
+  const [rxjsLike, setRxjsLike] = useState(0);
+  return <Link href="/rxjs-tutorial">Learn about trackBy patterns</Link>;
+}
+`;
+      const res = SourceParser.parseSource(code, 'app/tracking/page.tsx');
+      assert.notEqual(res.framework, 'ANGULAR_TEMPLATE', 'a real Next.js page must not be misclassified as Angular merely because an identifier/link text mentions "rxjs"/"trackBy"');
+      assert.equal(res.framework, 'NEXT_JS');
+    });
+  });
 });

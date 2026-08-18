@@ -409,11 +409,34 @@ export class SourceParser {
     if (normalizedPath.endsWith('.vue')) return 'VUE_SFC';
     if (normalizedPath.endsWith('.svelte')) return 'SVELTE';
 
+    // Each pattern below requires the actual Angular SYNTAX SHAPE the hint word appears in, not
+    // a bare substring match. Bare `.includes('trackby')`/`.includes('rxjs')` etc. previously
+    // matched three things apart: a real Angular file, a plain code IDENTIFIER merely containing
+    // the substring (e.g. a helper function name), and rendered JSX/HTML TEXT CONTENT mentioning
+    // the word in prose (e.g. a documentation page's rendered description of these very rules) --
+    // because stripCommentsAndStrings only blanks comments and string-literal DATA, not ordinary
+    // identifiers or JSX children text (see audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md, finding
+    // MED-FWMISDETECT). Requiring the real punctuation/context each construct only has in genuine
+    // Angular syntax closes both false-positive classes without a file-path/identifier allow-list:
+    // an identifier can never contain "@", and prose describing these terms does not naturally
+    // reproduce the exact punctuation shapes matched below.
+    //
+    // Deliberately built via `new RegExp(string)` rather than `/pattern/` regex-literal syntax:
+    // stripCommentsAndStrings tracks quoted strings but has no concept of a JS regex literal, so a
+    // bare `/pattern/` containing these same hint words would match ITS OWN source text the one
+    // time this very file is the one being scanned (found live, self-referentially, while fixing
+    // this exact bug) -- a quoted-string pattern argument is, like any other string, correctly
+    // blanked by stripCommentsAndStrings before this function ever sees it.
+    const ANGULAR_COMPONENT_DECORATOR_RE = new RegExp('@component\\s*\\('); // @Component({...}) -- '@' cannot occur inside a JS identifier
+    const ANGULAR_NG_TEMPLATE_TAG_RE = new RegExp('<ng-template\\b'); // real template tag open, not the bare words "ng" + "template" in prose
+    const ANGULAR_TRACKBY_BINDING_RE = new RegExp('\\btrackby\\s*:|\\[trackby\\]|\\[ngfortrackby\\]'); // *ngFor="...; trackBy: fn" or [trackBy]/[ngForTrackBy] binding syntax
+    const ANGULAR_RXJS_IMPORT_RE = new RegExp('\\bfrom\\s+[\'"]rxjs|\\brequire\\(\\s*[\'"]rxjs'); // a genuine `import ... from 'rxjs'` / `require('rxjs')`, not the bare word "RxJS" in prose
+
     const isAngularHint =
-      lowerCode.includes('@component') ||
-      lowerCode.includes('ng-template') ||
-      lowerCode.includes('trackby') ||
-      lowerCode.includes('rxjs') ||
+      ANGULAR_COMPONENT_DECORATOR_RE.test(lowerCode) ||
+      ANGULAR_NG_TEMPLATE_TAG_RE.test(lowerCode) ||
+      ANGULAR_TRACKBY_BINDING_RE.test(lowerCode) ||
+      ANGULAR_RXJS_IMPORT_RE.test(lowerCode) ||
       fileName.endsWith('.component.ts') ||
       fileName.endsWith('.component.tsx') ||
       fileName.endsWith('.component.js');
