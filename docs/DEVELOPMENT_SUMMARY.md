@@ -107,10 +107,10 @@ The Rule Book is categorized into **Universal Common Rules** alongside framework
 
 ## 4. Multi-Tenant Authentication & Security Architecture
 
-- **Row-Level Security (RLS)**: SQL DDL schema ([docs/multi_tenant_schema.sql](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/docs/multi_tenant_schema.sql)) with RLS policies (`user_id = current_setting('app.current_user_id')`).
-- **Cryptographic Security**: Passwords hashed using PBKDF2 with SHA-512 and random 16-byte salts ([src/auth/auth-service.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/auth/auth-service.ts)).
+- **Row-Level Security (RLS)**: SQL DDL schema ([docs/multi_tenant_schema.sql](./multi_tenant_schema.sql)) with RLS policies (`user_id = current_setting('app.current_user_id')`).
+- **Cryptographic Security**: Passwords hashed using `scrypt` (Node's built-in `crypto.scryptSync`, N=2^16/r=8/p=1) with random 16-byte salts ([src/auth/auth-service.ts](../src/auth/auth-service.ts)). Legacy PBKDF2-SHA512 hashes from before the SEC-06 migration are still accepted and transparently upgraded to `scrypt` on the user's next successful login.
 - **JWT Session Engine**: HMAC-SHA256 JWT tokens with 24-hour expiration.
-- **Auth Guard Middleware**: Intercepts requests and enforces 401 Unauthorized for unauthenticated access ([src/auth/auth-middleware.ts](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/src/auth/auth-middleware.ts)).
+- **Auth Guard Middleware**: Intercepts requests and enforces 401 Unauthorized for unauthenticated access ([src/auth/auth-middleware.ts](../src/auth/auth-middleware.ts)).
 
 ---
 
@@ -144,8 +144,8 @@ The Rule Book is categorized into **Universal Common Rules** alongside framework
 
 The thesis exporter automatically generates Markdown and LaTeX dissertation chapters:
 - ~~chapter4_large_scale_evaluation.md~~ (removed — generated from the fabricated 30-repository dataset, which has been deleted; no replacement large-scale evaluation currently exists)
-- [chapter5_empirical_validation_and_benchmarks.md](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/docs/dissertation/chapter5_empirical_validation_and_benchmarks.md)
-- [chapter6_user_study_and_validity.md](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/docs/dissertation/chapter6_user_study_and_validity.md)
+- [chapter5_empirical_validation_and_benchmarks.md](./dissertation/chapter5_empirical_validation_and_benchmarks.md)
+- [chapter6_user_study_and_validity.md](./dissertation/chapter6_user_study_and_validity.md)
 
 ---
 

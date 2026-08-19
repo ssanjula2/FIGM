@@ -1,5 +1,128 @@
 # FIGM Code Inspector — FINAL-READY Verification Report
 
+## 0. Addendum — 2026-08-19 Re-Verification Pass
+
+A second session (2026-08-19) re-verified everything below against the current codebase, with an
+explicit focus on Supabase credential rotation, secret hygiene, DynamicProfiler-specific attack
+probes not exhaustively covered on 2026-08-18, and a rigorous file-tracing check for the production
+build. **No code changed this pass except documentation fixes** (§0.6) — this was a verification
+pass, not a remediation pass, per this session's own explicit instructions not to rewrite working
+features unnecessarily.
+
+### 0.1 Credential rotation — re-confirmed BLOCKED, unchanged
+
+No Supabase CLI, personal-access token, or management-API credential exists in this environment
+today either (re-checked: `command -v supabase` → not found; grepped `.env`/`.env.local` for
+`SUPABASE_ACCESS_TOKEN`/`SUPABASE_MANAGEMENT` → absent). `SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_URL`,
+`DIRECT_URL` remain `PRESENT` in `.env` (value not read or printed). This confirms §4 below is
+still accurate and unchanged. No secret value was printed, echoed, committed, or placed in any
+example file at any point this pass.
+
+### 0.2 DynamicProfiler — full 8-probe regression, including probes not run on 2026-08-18
+
+Re-ran all 8 probes the 2026-08-19 task brief specifically named, via direct `DynamicProfiler.profileExecution()` calls:
+
+| Probe | Result |
+|---|---|
+| `process.env` | 13 non-secret env keys visible (unchanged from 2026-08-18) |
+| Infinite loop | Terminated at ~3.0s (sandbox timeout), parent unaffected |
+| Async rejection | Parent process confirmed alive 300ms later |
+| `process.exit(1)` | Terminates only the disposable sandbox child (45ms, reported as a safe abnormal-exit result); parent process unaffected |
+| `process.abort()` | Terminates only the disposable sandbox child (84ms, exit code 134/SIGABRT, reported safely); parent process unaffected |
+| `require('fs')` | Correctly stubbed to an empty object (`readFileSync` is `undefined`) |
+| `require('child_process')` | Correctly stubbed to an empty object (`exec` is `undefined`) |
+| Normal harmless code | Profiles correctly, no false error |
+
+**VERDICT: PASS.** `process.exit`/`process.abort` were not explicitly probed on 2026-08-18 — both confirmed today to only ever affect the disposable sandbox child process, never the real server, exactly as designed.
+
+### 0.3 Full regression suite — a real, worth-documenting environmental finding
+
+An initial `npm test` run (while two verification agents were concurrently running their own dev
+servers/benchmarks) showed **3 failures**: `tests/auth-isolation.test.ts`'s "Multi-Tenant
+Authentication & Session Management" suite, `tests/auth-production.test.ts`'s "Production Auth
+System Suite" (specifically a `scryptSync` call failing with `"Deriving bits failed"`), and
+`tests/cli-analyzer.test.ts` (process exit code 134/SIGABRT). Both failure signatures are textbook
+memory-allocation-failure symptoms, not assertion/logic failures. System memory was checked directly
+at that moment: **~2GB free of 16GB total**. After the concurrent agents finished and one orphaned
+leftover dev-server process (733MB) was stopped, the exact same suite was **re-run in full isolation:
+678/678 pass, 0 fail**. A second independent agent doing unrelated rule/benchmark re-verification
+work hit the identical pattern concurrently (OOM crash, worker `EINVAL`) and likewise got a clean
+pass (212/212, 21/21, 4/4) once re-run in isolation. **VERDICT: the 3 failures were transient
+resource contention from this session's own concurrent verification activity, not a code
+regression** — corroborated independently twice, by two separate processes hitting the same class
+of failure under the same load condition and both clearing on isolation.
+
+### 0.4 Production build — also memory-pressure-sensitive, and a stronger file-tracing proof
+
+An isolated `npm run build` (no dev server running, confirmed via `netstat`) failed with the exact
+`3221226505` (0xC0000005, Windows access-violation) build-worker crash this project's prior audit
+history has already documented as a memory-pressure artifact. System memory check: ~2.3GB free.
+Process inspection found the consumers were **entirely outside this session** — the user's own
+Chrome (multiple processes, ~1.9GB combined), VS Code (~1.7GB combined), the Claude desktop app
+itself (~560MB), Windows Defender, and Steam — not anything this session started or controls, and
+not something to force-close without being asked. A retry with `NODE_OPTIONS=--max-old-space-size=6144`
+made it worse (requesting more heap than was physically free). A retry with a heap ceiling matched
+to actually-available memory (`--max-old-space-size=1536`) **succeeded cleanly, 50/50 routes**,
+confirming this was purely a V8-heap-vs-available-RAM sizing interaction, not a code defect — the
+same build had already succeeded cleanly, with no special flags, earlier in the 2026-08-18 session
+when the machine had more free memory.
+
+**New, stronger evidence for the sandbox-script file-tracing requirement** (yesterday's check only
+confirmed the flat `.next` directory didn't need the file locally, which is true but weaker):
+`.next/server/app/api/scan/route.js.nft.json` (a Next.js "Node File Trace" manifest — exactly what
+Vercel's own deployment build consumes to decide which files ship in each serverless function's
+bundle) **explicitly lists `src/engine/sandbox/profiler-sandbox-runner.cjs`**, confirmed by direct
+`grep`, across 32 API routes' trace manifests. This is direct proof, not inference, that
+`outputFileTracingIncludes` in `next.config.mjs` works and the sandbox script will ship correctly
+in a real Vercel serverless deployment.
+
+### 0.5 Live re-verification (two independent agents, both clean re-confirmations, no regressions)
+
+- Session/history persistence, two-user cross-isolation (7 live cross-boundary checks), `/live-scan`
+  + general page-load smoke test, accessibility spot-check (aria attributes confirmed present in
+  served HTML), and a production-route smoke test (HOME/REGISTER/LOGIN/DASHBOARD/LIVE
+  SCAN/PROJECTS/HISTORY/EXPORT/LOGOUT/LOGIN-AGAIN) — all PASS, live, against a fresh dev server.
+- Framework-detection regression (21/21, including the 7-test "Angular-hint precision" block),
+  self-dogfood re-check (`source-parser.ts`/`app/guidelines/page.tsx` still correctly non-Angular),
+  controlled benchmark (`npm run eval` → exact TP=19/FP=2/FN=0/90.48%/100%/95% match), and the full
+  25-rule + adversarial regression (212/212 once re-run in isolation) — all PASS.
+- **Real-world benchmark: `BLOCKED — NOT VERIFIED this session`, not a code defect.** `git clone`
+  failed sandbox-wide today on every one of 5+ attempted variations (including the project's own
+  documented network-baseline control repo), while `git ls-remote` and plain `curl` to github.com
+  both succeeded — isolating the failure specifically to git's smart-HTTP clone body transfer in
+  today's sandbox session. 0 of 5 pinned repos could be cloned. The 2026-08-18 real-world benchmark
+  results (0 `FIGM-REACT-01` namespace false positives, 0 `FIGM-REACT-03` findings, 80 files/4,732
+  LOC/114 findings, 0 crashes) remain the last-known-good state and were not contradicted — they
+  simply could not be re-obtained today due to this session's network conditions.
+
+### 0.6 Documentation — two more dead-link/stale-content instances found and fixed
+
+The 2026-08-18 documentation pass fixed README.md's dead local links but missed two other live
+documents: `DATABASE.md` (1 dead `file:///` link) and `docs/DEVELOPMENT_SUMMARY.md` (5 dead
+`file:///` links, plus a **stale claim** that passwords are hashed with "PBKDF2 with SHA-512" —
+true historically, no longer true since the SEC-06 scrypt migration). Both fixed this pass:
+links converted to relative paths (verified each target exists first), and the password-hashing
+claim updated to accurately describe the current `scrypt` primary path with legacy-PBKDF2
+transparent-upgrade-on-login behavior. Also found and deleted 3 additional scratch files
+(`reg-resp3.json`, `reg4.json`, `reg6.json`) containing embedded JWT-shaped tokens that the
+2026-08-18 scratch cleanup missed (a filename-based check, not a content scan) — confirmed via a
+content-level regex scan of every file in `scratch/` that zero JWT-shaped strings remain anywhere
+in the directory now.
+
+### 0.7 Addendum scorecard delta
+
+Nothing regressed. Two new documentation issues were found and fixed (§0.6). One item that was
+previously unverified either way (production build under load) is now understood precisely: it
+succeeds, but is sensitive to desktop-level memory pressure on this specific development machine —
+an environmental characteristic to be aware of for local iteration, not a defect in the shipped
+code, and irrelevant to an actual Vercel deployment (which builds on Vercel's own infrastructure,
+not this machine). The real-world benchmark's live-reproducibility could not be re-confirmed today
+due to a network condition specific to today's sandbox session; this is flagged honestly as
+`BLOCKED — NOT VERIFIED this session` rather than either silently omitted or claimed passing on
+yesterday's authority.
+
+---
+
 ## 1. Executive Summary
 
 This report documents a full remediation-and-reverification pass executed directly against the findings of `audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md` (2026-08-18, HEAD `02ed599d` + 7 pre-existing commits at that point). Unlike a pure audit, this session **implemented fixes, live-verified each one, and committed the results** — nothing below is a plan; everything marked FIXED AND VERIFIED has been independently re-tested after the fix landed, including a fresh production build.
@@ -336,3 +459,5 @@ No prior finding was silently dropped from tracking.
 Every finding from `audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md` that could be fixed and verified from within this environment has been fixed and verified — including a CRITICAL regression that this session's own remediation work introduced and then closed within the same session, with independent real-world corroboration (§10). The remaining blocker is narrow and precisely scoped: **rotating `SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_URL`, and `DIRECT_URL`** requires Supabase dashboard access that does not exist in this environment (§4). A secondary, much lower-priority item — verifying `prisma migrate deploy` against a genuinely fresh database — is also blocked for the same class of reason (no disposable Postgres/Docker available here) but is not itself a security exposure.
 
 Once a human with the appropriate access completes the runbook in §4 (and, ideally, the Docker-based check in §7), this project has no other known CRITICAL or HIGH finding standing between it and a genuine `FINAL-READY` verdict.
+
+**Re-confirmed unchanged on 2026-08-19** (§0): the rotation blocker is identical, no new tooling appeared. Every application-level fix from 2026-08-18 was independently re-verified with no regressions found (two agents, both hit and cleanly resolved transient memory-pressure test noise, corroborating each other). Two additional minor documentation issues were found and fixed (§0.6). The verdict is unchanged: **`FINAL-READY BLOCKED — EXTERNAL SUPABASE CREDENTIAL ROTATION REQUIRED`.**

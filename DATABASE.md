@@ -20,7 +20,7 @@ erDiagram
 
 ## 2. Prisma Models & Schema Structure
 
-Defined in [prisma/schema.prisma](file:///c:/Users/MSI/.gemini/antigravity-ide/scratch/figm-model/prisma/schema.prisma):
+Defined in [prisma/schema.prisma](./prisma/schema.prisma):
 
 1. **`User`**: Account identity, hashed passwords, roles (`ADMIN`, `DEVELOPER`, `AUDITOR`), and API keys.
 2. **`Project`**: Workspaces with framework types and aggregated score metrics.
