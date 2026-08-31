@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import type { OnMount } from '@monaco-editor/react';
@@ -121,11 +121,19 @@ interface DiagnosticItem {
   standardReference: string;
   evidence?: string;
   sourceKind?: 'REAL_AST' | 'LEGACY_TEXT_HEURISTIC';
+  /** Authoritative separation of the two independent Live Scan systems -- see
+   *  src/engine/diagnostic-classifier.ts. Server-computed, never re-derived from ruleId matching. */
+  kind?: 'FIGM_RULE' | 'GENERAL_CODE_ERROR';
+  /** Pre-attempt fixability, computed for every diagnostic in both domains -- drives the
+   *  "Apply & Verify Fix" / "Preview Suggested Fix" / disabled "No Safe Fix" button state below. */
+  fixabilityStatus?: 'AUTO_FIX_AVAILABLE' | 'SUGGESTED_FIX_ONLY' | 'NO_SAFE_FIX';
+  /** Human-facing compiler/parser code, GENERAL_CODE_ERROR only (e.g. "TS2322", "SYNTAX"). */
+  compilerCode?: string;
 }
 
 /** Mirrors AIRemediationPipelineResult (src/ai/ai-remediation-pipeline.ts) -- the client must
  *  never invent its own notion of "fixed" independent of what the server actually verified. */
-type VerificationStatus = 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED' | 'MANUAL_REVIEW_REQUIRED' | 'VERIFICATION_UNAVAILABLE';
+type VerificationStatus = 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED' | 'MANUAL_REVIEW_REQUIRED' | 'VERIFICATION_UNAVAILABLE' | 'AI_UNAVAILABLE';
 
 interface FixOutcome {
   beforeCode: string;
@@ -137,6 +145,39 @@ interface FixOutcome {
   verified: boolean;
   status: VerificationStatus;
   fallbackReason?: string;
+  /** Which of the two independent fix systems produced this outcome -- drives the "[FIGM FIX]" /
+   *  "[CODE ERROR FIX]" history label. Never inferred from the outcome itself; always the same
+   *  classification (defect.kind) that chose which pipeline/action to call in the first place. */
+  pipeline: 'FIGM_FIX' | 'CODE_ERROR_FIX';
+}
+
+const PIPELINE_LABEL: Record<FixOutcome['pipeline'], string> = {
+  FIGM_FIX: '[FIGM FIX]',
+  CODE_ERROR_FIX: '[CODE ERROR FIX]',
+};
+
+/** Mirrors AIRemediationPipelineResult['engineType'] (src/ai/ai-remediation-pipeline.ts) --
+ *  distinct, honest labels per path so "AI fixed this" and "nothing could be fixed" never render
+ *  as the same badge. There is no regex-fallback engineType to label -- that path no longer exists.
+ *  AI_ASSISTED_FIX has no fixed label here -- which AI actually produced the patch (Qwen or Claude)
+ *  is server-reported per-response via `provider` (src/ai/ai-provider-selector.ts chooses it), so
+ *  the label is built at the call site (see buildEngineLabel below) instead of hardcoded per vendor. */
+const ENGINE_LABELS: Record<string, string> = {
+  AST_DETERMINISTIC_FIX: '⚡ Deterministic Engine',
+  MANUAL_REVIEW: '🧑 Manual Review Required',
+  UNAVAILABLE: '⛔ Automated Fix Unavailable',
+};
+
+const AI_PROVIDER_LABELS: Record<string, string> = {
+  QWEN: '✨ Qwen AI Suggested Fix',
+  CLAUDE: '✨ Claude AI Suggested Fix',
+};
+
+function buildEngineLabel(engineType: string | undefined, provider: string | undefined): string {
+  if (engineType === 'AI_ASSISTED_FIX') {
+    return (provider && AI_PROVIDER_LABELS[provider]) || '✨ AI Suggested Fix';
+  }
+  return ENGINE_LABELS[engineType as keyof typeof ENGINE_LABELS] || '⚡ Deterministic Engine';
 }
 
 interface ScanResultResponse {
@@ -152,6 +193,24 @@ interface ScanResultResponse {
     cyclomaticComplexity: number;
     complexityRating: string;
     riskRating?: string;
+  };
+  /** Server-authoritative two-system counts -- figmRuleCount + generalCodeErrorCount === diagnostics.length. */
+  figmRuleCount?: number;
+  generalCodeErrorCount?: number;
+  /** Honest analysis-completeness status -- see RuleExecutionEngine.buildScanResult. figmStatus
+   *  BLOCKED/PARTIAL means the FIGM section below reflects only what the parser could recover,
+   *  not a guarantee no further violations exist in the unparsed remainder. */
+  analysis?: {
+    parserStatus: 'VALID' | 'INVALID';
+    figmStatus: 'COMPLETE' | 'PARTIAL' | 'BLOCKED';
+  };
+  /** Third domain, distinct from FIGM_RULE/GENERAL_CODE_ERROR diagnostics -- a failure of the scan
+   *  service itself (see ScanServiceStatus in app/api/scan/route.ts), not a finding about the
+   *  submitted source. Only present when something about the *service* (not the code) went wrong. */
+  serviceStatus?: {
+    status: 'INFRASTRUCTURE_ERROR';
+    stage: 'ANALYSIS_ENGINE' | 'PERSISTENCE';
+    message: string;
   };
 }
 
@@ -213,6 +272,52 @@ const FIX_STATUS_META: Record<VerificationStatus, { icon: string; label: string;
     label: 'Applied Locally — Not Verified',
     color: '#fde68a',
     detail: 'A local patch was applied, but it could not be re-scanned to confirm the violation is actually gone (connection unavailable). Re-scan manually to confirm before trusting this fix.',
+  },
+  // Distinct from UNRESOLVED: no candidate patch was ever produced (every AI attempt errored —
+  // unparseable output, timeout, rate limit — or the provider consciously declined), so no patch
+  // was ever generated or re-scanned. See AIRemediationPipelineResult.verificationStatus's doc
+  // comment (src/ai/ai-remediation-pipeline.ts) — this used to be mislabeled UNRESOLVED, which
+  // wrongly implied a patch had been generated and re-scanned.
+  AI_UNAVAILABLE: {
+    icon: '⚠️',
+    label: 'Automated Fix Unavailable',
+    color: '#fde68a',
+    detail: 'No AI-generated patch could be produced for this violation (see the reason below). Your code was NOT changed.',
+  },
+};
+
+// ── Fixability status presentation (General Code Errors only) — drives the button label/state
+// shown BEFORE any fix is attempted. See src/engine/diagnostic-classifier.ts's getFixabilityStatus
+// for how this is derived (a real, side-effect-free dry-run of the same deterministic engine the
+// "Fix" button itself uses — never a separate, potentially-drifting guess).
+const FIXABILITY_META: Record<
+  NonNullable<DiagnosticItem['fixabilityStatus']>,
+  { label: string; buttonLabel: string; color: string; bg: string; disabled: boolean }
+> = {
+  AUTO_FIX_AVAILABLE: {
+    label: 'Auto-Fix Available',
+    buttonLabel: '🛠️ Apply & Verify Fix',
+    color: '#86efac',
+    bg: 'rgba(34,197,94,0.1)',
+    disabled: false,
+  },
+  // Clicking still calls the real pipeline (to compute and display the actual candidate patch),
+  // but the server-side guard in AIRemediationPipeline.remediateDefect makes it structurally
+  // impossible for this to ever come back `verified: true` -- so the source is never modified
+  // automatically no matter what. This is a preview action, not an apply action.
+  SUGGESTED_FIX_ONLY: {
+    label: 'Suggested Fix Only',
+    buttonLabel: '👁️ Preview Suggested Fix',
+    color: '#7dd3fc',
+    bg: 'rgba(56,189,248,0.1)',
+    disabled: false,
+  },
+  NO_SAFE_FIX: {
+    label: 'No Safe Fix',
+    buttonLabel: '🚫 No Safe Fix Available',
+    color: '#fde68a',
+    bg: 'rgba(234,179,8,0.1)',
+    disabled: true,
   },
 };
 
@@ -313,14 +418,14 @@ function DiffView({ before, after }: { before: string; after: string }) {
               row.type === 'removed'
                 ? 'rgba(239,68,68,0.08)'
                 : row.type === 'added'
-                ? 'rgba(34,197,94,0.08)'
-                : 'transparent',
+                  ? 'rgba(34,197,94,0.08)'
+                  : 'transparent',
             color:
               row.type === 'removed'
                 ? '#fca5a5'
                 : row.type === 'added'
-                ? '#86efac'
-                : '#94a3b8',
+                  ? '#86efac'
+                  : '#94a3b8',
             whiteSpace: 'pre',
             lineHeight: '1.6',
           }}
@@ -340,6 +445,28 @@ export default function LiveScanPage() {
   const [scanning, setScanning] = useState<boolean>(false);
   const [result, setResult] = useState<ScanResultResponse | null>(null);
   const [scanError, setScanError] = useState<string | null>(null);
+  // Distinct from scanError: a genuine scan-SERVICE failure (the analysis engine itself is
+  // unavailable, no scan completed at all) rather than a network/parse failure on this page or a
+  // finding about the submitted code. Kept separate so the two are never visually or semantically
+  // conflated -- see ScanServiceStatus in app/api/scan/route.ts. A PERSISTENCE-stage service
+  // status (scan succeeded, only history-saving failed) rides along on `result.serviceStatus`
+  // instead, since a scan result did come back in that case.
+  const [serviceError, setServiceError] = useState<string | null>(null);
+
+  // Two-system split, computed from the server's authoritative per-diagnostic `kind` field (never
+  // re-derived via ruleId.startsWith('FIGM-') here — see src/engine/diagnostic-classifier.ts).
+  // `kind` is always present on a real response; the `?? 'FIGM_RULE'` fallback only guards a
+  // TypeScript-optional field, not an actual expected code path.
+  const figmViolations = useMemo(
+    () => (result?.diagnostics ?? []).filter((d) => (d.kind ?? 'FIGM_RULE') === 'FIGM_RULE'),
+    [result]
+  );
+  const generalCodeErrors = useMemo(
+    () => (result?.diagnostics ?? []).filter((d) => d.kind === 'GENERAL_CODE_ERROR'),
+    [result]
+  );
+  const figmRuleCount = result?.figmRuleCount ?? figmViolations.length;
+  const generalCodeErrorCount = result?.generalCodeErrorCount ?? generalCodeErrors.length;
 
   // Per-violation fix state
   const [fixingId, setFixingId] = useState<string | null>(null);
@@ -392,9 +519,12 @@ export default function LiveScanPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code: f.code, fileName: f.fileName }),
         });
-        if (!res.ok) throw new Error(`Server returned status ${res.status}`);
-        const data: ScanResultResponse = await res.json();
-        setBatchResults((prev) => ({ ...prev, [f.fileName]: { status: 'done', result: data } }));
+        const data: any = await res.json().catch(() => null);
+        if (!res.ok) {
+          const msg = data?.serviceStatus?.status === 'INFRASTRUCTURE_ERROR' ? data.serviceStatus.message : data?.error;
+          throw new Error(msg || `Server returned status ${res.status}`);
+        }
+        setBatchResults((prev) => ({ ...prev, [f.fileName]: { status: 'done', result: data as ScanResultResponse } }));
       } catch (err: any) {
         setBatchResults((prev) => ({ ...prev, [f.fileName]: { status: 'error', error: err.message || 'Scan failed' } }));
       }
@@ -503,6 +633,7 @@ export default function LiveScanPage() {
 
     setScanning(true);
     setScanError(null);
+    setServiceError(null);
     lastScannedCode.current = targetCode;
 
     try {
@@ -511,9 +642,21 @@ export default function LiveScanPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: targetCode, fileName: targetFile }),
       });
-      if (!res.ok) throw new Error(`Server returned status ${res.status}`);
-      const data: ScanResultResponse = await res.json();
-      setResult(data);
+      // Always read the body before branching on status -- the server puts a real, specific
+      // message in it for every non-2xx case (429 rate limit, 413 too large, 503 infra failure,
+      // 500 last-resort), and discarding it in favor of a generic "Server returned status N"
+      // string throws away information the API deliberately provides.
+      const data: any = await res.json().catch(() => null);
+      if (!res.ok) {
+        if (data?.serviceStatus?.status === 'INFRASTRUCTURE_ERROR') {
+          setServiceError(data.serviceStatus.message);
+          setResult(null);
+          return;
+        }
+        throw new Error(data?.error || `Server returned status ${res.status}`);
+      }
+      const scanData = data as ScanResultResponse;
+      setResult(scanData);
       // Drop fix-attempt state only for violations that are no longer at the same (ruleId,
       // line) key -- not everything. A blanket reset here was wiping every OTHER still-open
       // violation's fix badge/diff whenever ANY single violation's fix succeeded, since a
@@ -523,7 +666,7 @@ export default function LiveScanPage() {
       // landed. A violation whose key really did shift (line moved) is still safely dropped,
       // since we can no longer be sure the old fix attempt still describes the same content.
       setFixResults((prev) => {
-        const stillPresentKeys = new Set(data.diagnostics.map((d) => d.ruleId + '_' + d.location.start.line));
+        const stillPresentKeys = new Set(scanData.diagnostics.map((d) => d.ruleId + '_' + d.location.start.line));
         const next: Record<string, FixOutcome> = {};
         for (const [key, outcome] of Object.entries(prev)) {
           if (stillPresentKeys.has(key)) next[key] = outcome;
@@ -666,26 +809,65 @@ export default function LiveScanPage() {
   // RemediationEngine.validatePatch). A patch that doesn't verify is shown for inspection
   // (so the user can see what was attempted and why it wasn't applied) but never silently
   // written into the user's code, and never labeled "Fixed".
-  const applyFix = async (defect: DiagnosticItem) => {
+  //
+  // Two genuinely separate entry points below (applyFigmFix / applyCodeErrorFix) share this one
+  // implementation because the underlying detect->apply->re-scan->verify contract is identical --
+  // the real separation is enforced server-side (FigmFixPipeline / CodeErrorFixPipeline each
+  // refuse a defect outside their own scope, see src/ai/figm-fix-pipeline.ts) and at the call site
+  // here (each wrapper hardcodes its own `action` and `pipeline` label, never inferred from the
+  // defect after the fact) -- a FIGM violation can never come back labeled "[CODE ERROR FIX]" or
+  // vice versa.
+  const applyFix = async (
+    defect: DiagnosticItem,
+    action: 'fix-figm-rule' | 'fix-code-error',
+    pipeline: FixOutcome['pipeline']
+  ) => {
     const fixKey = defect.ruleId + '_' + defect.location.start.line;
     setFixingId(fixKey);
     const beforeCode = code;
+
+    // Staleness guard: `defect` describes a violation found by the LAST COMPLETED scan
+    // (lastScannedCode.current); `code` is whatever is in the editor right now, which the 1.5s
+    // auto-scan debounce means can already be a newer, unscanned edit. Sending a mismatched
+    // (code, defect) pair to the server used to produce a confusing downstream failure -- a
+    // deterministic fixer locating the wrong AST node at the stale location, or Qwen correctly but
+    // unhelpfully declining because defect.offendingCodeSnippet no longer appears anywhere in the
+    // current source. Caught here, before any network call, with an honest, specific message
+    // instead of a wasted (and confusing) remediation attempt. The server independently enforces
+    // the same check (see AIRemediationPipeline.remediateDefect's STALE_VIOLATION_CONTEXT guard)
+    // as defense-in-depth, since this client check can't cover every caller.
+    if (code !== lastScannedCode.current) {
+      setFixResults((prev) => ({
+        ...prev,
+        [fixKey]: {
+          beforeCode,
+          afterCode: code,
+          description: 'The code has changed since this violation was detected.',
+          engine: '⏳ Re-scan required',
+          verified: false,
+          status: 'UNRESOLVED',
+          fallbackReason: 'This violation was found against an earlier version of the source. Re-scan (or wait for auto-scan) before attempting a fix, so the fix is generated against the current code.',
+          pipeline,
+        },
+      }));
+      setFixingId(null);
+      return;
+    }
 
     try {
       const res = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, fileName, action: 'ai-fix', defect }),
+        body: JSON.stringify({ code, fileName, action, defect }),
       });
 
-      if (!res.ok) throw new Error('AI fix endpoint error');
+      if (!res.ok) throw new Error('Fix endpoint error');
       const aiData = await res.json();
 
       const candidateCode: string = aiData.remediatedCode || code;
       const verified: boolean = aiData.verified === true;
       const status: VerificationStatus = aiData.verificationStatus || 'UNRESOLVED';
-      const engineLabel =
-        aiData.engineType === 'GEMINI_2_5_FLASH' ? '✨ Gemini 2.5 Flash' : '⚡ Deterministic Engine';
+      const engineLabel = buildEngineLabel(aiData.engineType, aiData.provider);
 
       setFixResults((prev) => ({
         ...prev,
@@ -697,6 +879,7 @@ export default function LiveScanPage() {
           verified,
           status,
           fallbackReason: aiData.fallbackReason,
+          pipeline,
         },
       }));
 
@@ -733,6 +916,7 @@ export default function LiveScanPage() {
               engine: '⚡ Deterministic Engine (offline)',
               verified: false,
               status: 'MANUAL_REVIEW_REQUIRED',
+              pipeline,
             },
           }));
           return;
@@ -767,6 +951,7 @@ export default function LiveScanPage() {
             engine: '⚡ Deterministic Engine (offline)',
             verified,
             status,
+            pipeline,
           },
         }));
 
@@ -782,6 +967,13 @@ export default function LiveScanPage() {
       setFixingId(null);
     }
   };
+
+  // Pipeline A -- FIGM Rule Fixer. Scope: ONLY the 50 canonical FIGM research rules.
+  const applyFigmFix = (defect: DiagnosticItem) => applyFix(defect, 'fix-figm-rule', 'FIGM_FIX');
+
+  // Pipeline B -- General Code Error Fixer. Scope: every genuine syntax/compiler/parser diagnostic
+  // that is NOT one of the 50 FIGM rules.
+  const applyCodeErrorFix = (defect: DiagnosticItem) => applyFix(defect, 'fix-code-error', 'CODE_ERROR_FIX');
 
   // ── Score colour ─────────────────────────────────────────────────────
   const scoreColor = (s: number) =>
@@ -964,8 +1156,8 @@ export default function LiveScanPage() {
                 fileName.endsWith('.ts') || fileName.endsWith('.tsx')
                   ? 'typescript'
                   : fileName.endsWith('.vue')
-                  ? 'html'
-                  : 'javascript'
+                    ? 'html'
+                    : 'javascript'
               }
               theme="vs-dark"
               value={code}
@@ -978,6 +1170,13 @@ export default function LiveScanPage() {
                 automaticLayout: true,
                 lineNumbers: 'on',
                 glyphMargin: true,
+                // Monaco renders its own internal hidden textarea as the actual focusable/editable
+                // element -- a wrapping <div aria-label> has no effect on it. `ariaLabel` is
+                // Monaco's own supported option for naming that element for screen readers; without
+                // it, a keyboard/screen-reader user tabbing into the editor gets no accessible name
+                // at all. Keyboard interaction (typing, navigation, Monaco's own command palette,
+                // etc.) is unaffected -- this only adds the missing name.
+                ariaLabel: 'Source code editor: paste or edit the code you want FIGM to scan',
               }}
             />
           </div>
@@ -1006,6 +1205,25 @@ export default function LiveScanPage() {
               }}
             >
               ⚠️ {scanError}
+            </div>
+          )}
+
+          {/* Scan SERVICE error -- deliberately distinct styling/label from scanError above: this
+              means the analysis engine itself failed, not that your code has a problem. See
+              ScanServiceStatus in app/api/scan/route.ts. */}
+          {serviceError && (
+            <div
+              role="alert"
+              style={{
+                padding: '10px 14px',
+                borderRadius: '8px',
+                background: 'rgba(234,179,8,0.1)',
+                border: '1px solid rgba(234,179,8,0.35)',
+                color: '#fde68a',
+                fontSize: '12px',
+              }}
+            >
+              <strong>🛠️ Scan Service Error:</strong> {serviceError}
             </div>
           )}
         </div>
@@ -1040,474 +1258,749 @@ export default function LiveScanPage() {
               screen reader announces "Analyzing…" when a scan starts and the resulting summary
               when it finishes, without stacking a separate live region per state. */}
           <div aria-live="polite" aria-atomic="false" style={{ display: 'contents' }}>
-          {!result && !scanning ? (
-            <div
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#7c8ba6',
-                textAlign: 'center',
-                padding: '48px 20px',
-              }}
-            >
-              <div style={{ fontSize: '36px', marginBottom: '12px' }}>💡</div>
-              <div style={{ fontSize: '15px', fontWeight: 700, color: '#94a3b8' }}>
-                Paste your code in the editor
-              </div>
-              <div style={{ fontSize: '12px', marginTop: '6px', color: '#475569' }}>
-                FIGM will automatically scan it and show real violations from your code
-              </div>
-            </div>
-          ) : scanning ? (
-            <div
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#94a3b8',
-                textAlign: 'center',
-                padding: '40px 20px',
-              }}
-            >
-              <div style={{ fontSize: '32px', marginBottom: '12px' }}>🔍</div>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: '#f8fafc' }}>
-                Analyzing Code…
-              </div>
-              <div style={{ fontSize: '12px', marginTop: '4px' }}>
-                Running all 25 FIGM guideline rules against your code
-              </div>
-            </div>
-          ) : result && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-
-              {/* Metrics bar */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px' }}>
-                {[
-                  {
-                    label: '⏱️ Speed',
-                    value: result.profile?.executionTimeMs != null
-                      ? `${result.profile.executionTimeMs.toFixed(2)} ms`
-                      : '—',
-                    color: '#38bdf8',
-                  },
-                  {
-                    label: '💾 Memory',
-                    value: result.profile?.peakMemoryMb != null
-                      ? `${result.profile.peakMemoryMb.toFixed(2)} MB`
-                      : '—',
-                    color: '#a855f7',
-                  },
-                  {
-                    label: '🧩 Complexity',
-                    value: `v(G)=${result.complexity?.cyclomaticComplexity ?? 1} (${result.complexity?.complexityRating ?? 'A'})`,
-                    color: '#eab308',
-                  },
-                  {
-                    label: '💯 Quality Score',
-                    value: `${result.qualityScore ?? 100} / 100`,
-                    color: scoreColor(result.qualityScore ?? 100),
-                  },
-                ].map((m) => (
-                  <div
-                    key={m.label}
-                    style={{
-                      padding: '7px 8px',
-                      background: '#090d16',
-                      borderRadius: '8px',
-                      border: '1px solid var(--border)',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: 600 }}>{m.label}</div>
-                    <div style={{ fontSize: '11px', fontWeight: 800, color: m.color, marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
-                      {m.value}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Summary row */}
+            {!result && !scanning ? (
               <div
                 style={{
+                  flex: 1,
                   display: 'flex',
-                  justifyContent: 'space-between',
-                  fontSize: '11px',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   color: '#7c8ba6',
-                  background: '#090d16',
-                  padding: '7px 12px',
-                  borderRadius: '6px',
-                  border: '1px solid var(--border)',
+                  textAlign: 'center',
+                  padding: '48px 20px',
                 }}
               >
-                <span>
-                  Framework:{' '}
-                  <strong style={{ color: '#38bdf8' }}>{result.framework}</strong>
-                </span>
-                <span>
-                  ALPs extracted:{' '}
-                  <strong style={{ color: '#a855f7' }}>{result.extractedALPsCount}</strong>
-                </span>
-                <span>
-                  Issues:{' '}
-                  <strong style={{ color: result.diagnostics.length > 0 ? '#ef4444' : '#22c55e' }}>
-                    {result.diagnostics.length}
-                  </strong>
-                </span>
+                <div style={{ fontSize: '36px', marginBottom: '12px' }}>💡</div>
+                <div style={{ fontSize: '15px', fontWeight: 700, color: '#94a3b8' }}>
+                  Paste your code in the editor
+                </div>
+                <div style={{ fontSize: '12px', marginTop: '6px', color: '#475569' }}>
+                  FIGM will automatically scan it and show real violations from your code
+                </div>
               </div>
+            ) : scanning ? (
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#94a3b8',
+                  textAlign: 'center',
+                  padding: '40px 20px',
+                }}
+              >
+                <div style={{ fontSize: '32px', marginBottom: '12px' }}>🔍</div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: '#f8fafc' }}>
+                  Analyzing Code…
+                </div>
+                <div style={{ fontSize: '12px', marginTop: '4px' }}>
+                  Running all 50 FIGM guideline rules against your code
+                </div>
+              </div>
+            ) : result && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
-              {/* Save to history */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <button
-                  onClick={handleSaveToHistory}
-                  disabled={savingToHistory}
+                {/* Metrics bar */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px' }}>
+                  {[
+                    {
+                      label: '⏱️ Speed',
+                      value: result.profile?.executionTimeMs != null
+                        ? `${result.profile.executionTimeMs.toFixed(2)} ms`
+                        : '—',
+                      color: '#38bdf8',
+                    },
+                    {
+                      label: '💾 Memory',
+                      value: result.profile?.peakMemoryMb != null
+                        ? `${result.profile.peakMemoryMb.toFixed(2)} MB`
+                        : '—',
+                      color: '#a855f7',
+                    },
+                    {
+                      label: '🧩 Complexity',
+                      value: `v(G)=${result.complexity?.cyclomaticComplexity ?? 1} (${result.complexity?.complexityRating ?? 'A'})`,
+                      color: '#eab308',
+                    },
+                    {
+                      label: '💯 Quality Score',
+                      value: `${result.qualityScore ?? 100} / 100`,
+                      color: scoreColor(result.qualityScore ?? 100),
+                    },
+                  ].map((m) => (
+                    <div
+                      key={m.label}
+                      style={{
+                        padding: '7px 8px',
+                        background: '#090d16',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border)',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: 600 }}>{m.label}</div>
+                      <div style={{ fontSize: '11px', fontWeight: 800, color: m.color, marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
+                        {m.value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Summary row */}
+                <div
                   style={{
-                    padding: '8px',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(56, 189, 248, 0.3)',
-                    background: 'rgba(56, 189, 248, 0.1)',
-                    color: '#38bdf8',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    cursor: savingToHistory ? 'not-allowed' : 'pointer',
-                    opacity: savingToHistory ? 0.6 : 1,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontSize: '11px',
+                    color: '#7c8ba6',
+                    background: '#090d16',
+                    padding: '7px 12px',
+                    borderRadius: '6px',
+                    border: '1px solid var(--border)',
                   }}
                 >
-                  {savingToHistory ? '💾 Saving…' : '💾 Save to History'}
-                </button>
-                {saveHistoryStatus && (
+                  <span>
+                    Framework:{' '}
+                    <strong style={{ color: '#38bdf8' }}>{result.framework}</strong>
+                  </span>
+                  <span>
+                    ALPs extracted:{' '}
+                    <strong style={{ color: '#a855f7' }}>{result.extractedALPsCount}</strong>
+                  </span>
+                  <span>
+                    Issues:{' '}
+                    <strong style={{ color: result.diagnostics.length > 0 ? '#ef4444' : '#22c55e' }}>
+                      {result.diagnostics.length}
+                    </strong>
+                  </span>
+                </div>
+
+                {/* Two-system summary — server-authoritative counts (RuleExecutionEngine.buildScanResult),
+                  never re-derived here from ruleId string-matching. The two systems are never merged
+                  into one combined "Problems" figure below; this total is only ever an additional sum. */}
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gap: '6px',
+                  }}
+                >
+                  {[
+                    { label: 'FIGM Rule Violations', value: figmRuleCount, color: '#a855f7' },
+                    { label: 'General Code Errors', value: generalCodeErrorCount, color: '#f59e0b' },
+                    { label: 'Total Issues', value: figmRuleCount + generalCodeErrorCount, color: '#f8fafc' },
+                  ].map((s) => (
+                    <div
+                      key={s.label}
+                      style={{
+                        padding: '8px 10px',
+                        background: '#090d16',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border)',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.3px' }}>
+                        {s.label}
+                      </div>
+                      <div style={{ fontSize: '18px', fontWeight: 900, color: s.color, marginTop: '2px' }}>
+                        {s.value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Honest analysis-completeness notice -- never silently implies a full FIGM sweep
+                  occurred when parsing only partially recovered (or couldn't recover at all). */}
+                {result.analysis && result.analysis.figmStatus !== 'COMPLETE' && (
                   <div
                     role="status"
                     style={{
                       fontSize: '11px',
-                      padding: '6px 10px',
+                      color: '#fde68a',
+                      background: 'rgba(234,179,8,0.08)',
+                      border: '1px solid rgba(234,179,8,0.25)',
                       borderRadius: '6px',
-                      color: saveHistoryStatus.kind === 'success' ? '#4ade80' : saveHistoryStatus.kind === 'auth' ? '#eab308' : '#f87171',
-                      background: saveHistoryStatus.kind === 'success' ? 'rgba(34,197,94,0.1)' : saveHistoryStatus.kind === 'auth' ? 'rgba(234,179,8,0.1)' : 'rgba(239,68,68,0.1)',
+                      padding: '7px 12px',
                     }}
                   >
-                    {saveHistoryStatus.message}
-                    {saveHistoryStatus.kind === 'auth' && (
-                      <>
-                        {' '}
-                        <Link href="/auth/login" style={{ color: '#38bdf8', fontWeight: 700 }}>Log in</Link>
-                      </>
-                    )}
-                    {saveHistoryStatus.kind === 'success' && (
-                      <>
-                        {' '}
-                        <Link href="/history" style={{ color: '#4ade80', fontWeight: 700, textDecoration: 'underline' }}>View history →</Link>
-                      </>
-                    )}
+                    ⚠️ FIGM analysis is <strong>{result.analysis.figmStatus}</strong>
+                    {result.analysis.figmStatus === 'BLOCKED'
+                      ? ' — the source could not be parsed into a syntax tree at all, so no FIGM rules were evaluated.'
+                      : ' — the source has real parse errors, so FIGM findings below reflect only what the parser could recover, not a guarantee the rest of the file is clean.'}
+                  </div>
+                )}
+
+                {/* Scan-service PERSISTENCE note -- the scan itself succeeded (everything above this
+                  point is real and complete); only the automatic background save to this
+                  account's history failed. Deliberately a small inline note, not a blocking
+                  banner, since it doesn't affect anything the user is looking at right now. */}
+                {result?.serviceStatus?.stage === 'PERSISTENCE' && (
+                  <div
+                    role="status"
+                    style={{
+                      fontSize: '11px',
+                      color: '#fde68a',
+                      background: 'rgba(234,179,8,0.08)',
+                      border: '1px solid rgba(234,179,8,0.25)',
+                      borderRadius: '6px',
+                      padding: '7px 12px',
+                    }}
+                  >
+                    🛠️ Scan Service Notice: {result.serviceStatus.message}
+                  </div>
+                )}
+
+                {/* Save to history */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <button
+                    onClick={handleSaveToHistory}
+                    disabled={savingToHistory}
+                    style={{
+                      padding: '8px',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(56, 189, 248, 0.3)',
+                      background: 'rgba(56, 189, 248, 0.1)',
+                      color: '#38bdf8',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      cursor: savingToHistory ? 'not-allowed' : 'pointer',
+                      opacity: savingToHistory ? 0.6 : 1,
+                    }}
+                  >
+                    {savingToHistory ? '💾 Saving…' : '💾 Save to History'}
+                  </button>
+                  {saveHistoryStatus && (
+                    <div
+                      role="status"
+                      style={{
+                        fontSize: '11px',
+                        padding: '6px 10px',
+                        borderRadius: '6px',
+                        color: saveHistoryStatus.kind === 'success' ? '#4ade80' : saveHistoryStatus.kind === 'auth' ? '#eab308' : '#f87171',
+                        background: saveHistoryStatus.kind === 'success' ? 'rgba(34,197,94,0.1)' : saveHistoryStatus.kind === 'auth' ? 'rgba(234,179,8,0.1)' : 'rgba(239,68,68,0.1)',
+                      }}
+                    >
+                      {saveHistoryStatus.message}
+                      {saveHistoryStatus.kind === 'auth' && (
+                        <>
+                          {' '}
+                          <Link href="/auth/login" style={{ color: '#38bdf8', fontWeight: 700 }}>Log in</Link>
+                        </>
+                      )}
+                      {saveHistoryStatus.kind === 'success' && (
+                        <>
+                          {' '}
+                          <Link href="/history" style={{ color: '#4ade80', fontWeight: 700, textDecoration: 'underline' }}>View history →</Link>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Diagnostics — two completely separate systems, never merged into one combined
+                  "Problems" section. See MANDATORY TWO-FIX-SYSTEM ARCHITECTURE: System A (FIGM
+                  Rule Violations) below is scoped to exactly the 25 canonical FIGM rule IDs;
+                  System B (General Code Errors) is scoped to every other genuine syntax/compiler/
+                  parser diagnostic. Both derive from the server's authoritative `kind` field
+                  (figmViolations/generalCodeErrors above), not from ruleId string-matching here. */}
+                {UNSUPPORTED_FRAMEWORKS.has(result.framework) ? (
+                  // A zero-violation result for a framework FIGM does not analyze at all must
+                  // never be presented as "your code is clean" -- that would misrepresent an
+                  // "unchecked" result as a "passed" one. See Task requirement: handle
+                  // unsupported frameworks gracefully, without implying a check occurred.
+                  <div
+                    style={{
+                      padding: '28px',
+                      background: 'rgba(234,179,8,0.08)',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(234,179,8,0.25)',
+                      textAlign: 'center',
+                    }}
+                  >
+                    <div style={{ fontSize: '28px', marginBottom: '6px' }}>⚠️</div>
+                    <strong style={{ color: '#fde68a', fontSize: '15px' }}>
+                      &quot;{result.framework}&quot; Is Not Yet Supported
+                    </strong>
+                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+                      FIGM detected this framework but does not yet run any guideline rules against
+                      it. This is <strong>not</strong> a &quot;no issues found&quot; result — no analysis was
+                      performed. Supported frameworks: React, Next.js, Angular, Vue, and plain
+                      JS/TS.
+                    </div>
+                  </div>
+                ) : figmRuleCount + generalCodeErrorCount === 0 ? (
+                  // Combined celebratory state ONLY when BOTH systems are clean — an additional
+                  // summary, never a substitute for the two independent sections below.
+                  <div
+                    style={{
+                      padding: '28px',
+                      background: 'rgba(34,197,94,0.08)',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(34,197,94,0.25)',
+                      textAlign: 'center',
+                    }}
+                  >
+                    <div style={{ fontSize: '28px', marginBottom: '6px' }}>🎉</div>
+                    <strong style={{ color: '#86efac', fontSize: '15px' }}>No Issues Found!</strong>
+                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+                      Your code meets all 50 FIGM rules, and no general code/compiler errors were detected.
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+
+                    {/* ================= SYSTEM A: FIGM RULE VIOLATIONS ================= */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '12px', fontWeight: 900, color: '#c4b5fd', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                          🔬 FIGM Rule Violations
+                        </span>
+                        <span
+                          style={{
+                            fontSize: '11px',
+                            fontWeight: 800,
+                            color: figmRuleCount > 0 ? '#a855f7' : '#4ade80',
+                            background: 'rgba(168,85,247,0.1)',
+                            border: '1px solid rgba(168,85,247,0.3)',
+                            borderRadius: '6px',
+                            padding: '2px 9px',
+                          }}
+                        >
+                          {figmRuleCount} finding{figmRuleCount === 1 ? '' : 's'}
+                        </span>
+                      </div>
+
+                      {figmRuleCount === 0 ? (
+                        <div style={{ padding: '14px', background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '8px', fontSize: '12px', color: '#86efac' }}>
+                          ✅ No violations of any of the 50 canonical FIGM rules.
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '520px', overflowY: 'auto', paddingRight: '4px' }}>
+                          {figmViolations.map((d, idx) => {
+                            const fixKey = d.ruleId + '_' + d.location.start.line;
+                            const fixResult = fixResults[fixKey];
+                            const isFixing = fixingId === fixKey;
+                            const color = SEV_COLOR[d.severity] ?? '#94a3b8';
+                            const bg = SEV_BG[d.severity] ?? 'rgba(148,163,184,0.08)';
+                            const statusMeta = fixResult ? FIX_STATUS_META[fixResult.status] : null;
+                            const fixability = d.fixabilityStatus ? FIXABILITY_META[d.fixabilityStatus] : null;
+                            const line = d.location?.start?.line && d.location.start.line > 0 ? d.location.start.line : 1;
+                            const column = d.location?.start?.column;
+                            const endLine = d.location?.end?.line;
+                            const endColumn = d.location?.end?.column;
+
+                            return (
+                              <div
+                                key={idx}
+                                style={{
+                                  padding: '14px',
+                                  background: '#090d16',
+                                  borderRadius: '10px',
+                                  border: `1px solid ${fixResult
+                                      ? fixResult.verified
+                                        ? 'rgba(34,197,94,0.3)'
+                                        : 'rgba(234,179,8,0.3)'
+                                      : 'rgba(255,255,255,0.07)'
+                                    }`,
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  gap: '9px',
+                                  transition: 'border-color 0.2s ease',
+                                }}
+                              >
+                                {/* Violation header */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+                                    <span
+                                      style={{
+                                        fontSize: '10px',
+                                        fontWeight: 800,
+                                        color,
+                                        background: bg,
+                                        border: `1px solid ${color}44`,
+                                        borderRadius: '4px',
+                                        padding: '2px 7px',
+                                      }}
+                                    >
+                                      {d.severity}
+                                    </span>
+                                    <span
+                                      style={{
+                                        fontSize: '11px',
+                                        color: '#38bdf8',
+                                        fontFamily: 'JetBrains Mono',
+                                        fontWeight: 700,
+                                      }}
+                                    >
+                                      {d.ruleId}
+                                    </span>
+                                    {d.sourceKind && (
+                                      <span
+                                        title={
+                                          d.sourceKind === 'REAL_AST'
+                                            ? 'Detected via genuine TypeScript-compiler AST traversal'
+                                            : 'Detected via text/regex pattern matching (not yet AST-migrated for this framework)'
+                                        }
+                                        style={{
+                                          fontSize: '9px',
+                                          fontWeight: 700,
+                                          color: d.sourceKind === 'REAL_AST' ? '#a855f7' : '#7c8ba6',
+                                          background: d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.1)' : 'rgba(100,116,139,0.1)',
+                                          border: `1px solid ${d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.3)' : 'rgba(100,116,139,0.3)'}`,
+                                          borderRadius: '4px',
+                                          padding: '2px 6px',
+                                        }}
+                                      >
+                                        {d.sourceKind === 'REAL_AST' ? '🌳 AST' : '📝 pattern'}
+                                      </span>
+                                    )}
+                                    {fixability && (
+                                      <span
+                                        title="Pre-attempt fixability classification"
+                                        style={{ fontSize: '9px', fontWeight: 700, color: fixability.color, background: fixability.bg, border: `1px solid ${fixability.color}55`, borderRadius: '4px', padding: '2px 6px' }}
+                                      >
+                                        {fixability.label}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                    <a
+                                      href={`/guidelines#${d.ruleId}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{
+                                        background: 'rgba(168,85,247,0.08)',
+                                        border: '1px solid rgba(168,85,247,0.25)',
+                                        borderRadius: '4px',
+                                        color: '#c4b5fd',
+                                        fontSize: '10px',
+                                        padding: '3px 8px',
+                                        cursor: 'pointer',
+                                        fontFamily: 'JetBrains Mono',
+                                        textDecoration: 'none',
+                                      }}
+                                    >
+                                      📖 Rule Guide
+                                    </a>
+                                    <button
+                                      onClick={() => jumpToLine(line)}
+                                      style={{
+                                        background: 'rgba(56,189,248,0.08)',
+                                        border: '1px solid rgba(56,189,248,0.25)',
+                                        borderRadius: '4px',
+                                        color: '#38bdf8',
+                                        fontSize: '10px',
+                                        padding: '3px 8px',
+                                        cursor: 'pointer',
+                                        fontFamily: 'JetBrains Mono',
+                                      }}
+                                    >
+                                      📍 Go to Line {line}
+                                      {column != null ? `:${column}` : ''} →
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Rule name */}
+                                <div style={{ fontSize: '13px', fontWeight: 800, color: '#f8fafc' }}>
+                                  {d.ruleName}
+                                </div>
+
+                                {/* Source range + standard reference */}
+                                <div style={{ fontSize: '10px', color: '#7c8ba6', display: 'flex', gap: '10px', flexWrap: 'wrap', fontFamily: 'JetBrains Mono' }}>
+                                  <span>
+                                    Location: L{line}
+                                    {column != null ? `:C${column}` : ''}
+                                    {endLine ? ` → L${endLine}${endColumn != null ? `:C${endColumn}` : ''}` : ''}
+                                  </span>
+                                  {d.standardReference && <span>Ref: {d.standardReference}</span>}
+                                </div>
+
+                                {/* Offending code snippet */}
+                                <pre
+                                  style={{
+                                    background: 'rgba(239,68,68,0.07)',
+                                    border: '1px solid rgba(239,68,68,0.2)',
+                                    padding: '8px 10px',
+                                    borderRadius: '6px',
+                                    fontSize: '11px',
+                                    color: '#fca5a5',
+                                    margin: 0,
+                                    fontFamily: 'JetBrains Mono',
+                                    overflowX: 'auto',
+                                    whiteSpace: 'pre-wrap',
+                                  }}
+                                >
+                                  <code>{d.offendingCodeSnippet}</code>
+                                </pre>
+
+                                {/* Evidence (what the detector actually matched) */}
+                                {d.evidence && (
+                                  <div style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic' }}>
+                                    🔍 <strong>Evidence:</strong> {d.evidence}
+                                  </div>
+                                )}
+
+                                {/* Explanation */}
+                                <div style={{ fontSize: '12px', color: '#cbd5e1' }}>
+                                  {d.message}
+                                </div>
+
+                                {/* How-to-fix hint */}
+                                <div
+                                  style={{
+                                    fontSize: '12px',
+                                    color: '#86efac',
+                                    background: 'rgba(34,197,94,0.06)',
+                                    border: '1px solid rgba(34,197,94,0.15)',
+                                    padding: '7px 10px',
+                                    borderRadius: '6px',
+                                  }}
+                                >
+                                  💡 <strong>How to Fix:</strong> {d.remediation}
+                                </div>
+
+                                {/* Fix outcome -- always reflects what the real engine actually verified,
+                            never a blanket "Fixed" independent of that verification. */}
+                                {fixResult && statusMeta && (
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                    <div
+                                      style={{
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                        color: statusMeta.color,
+                                        display: 'flex',
+                                        gap: '8px',
+                                        alignItems: 'center',
+                                      }}
+                                    >
+                                      <span>
+                                        {PIPELINE_LABEL[fixResult.pipeline]} {statusMeta.icon} {statusMeta.label}
+                                        {fixResult.verified ? ` (by ${fixResult.engine})` : ''}
+                                      </span>
+                                    </div>
+                                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '2px' }}>
+                                      {statusMeta.detail}
+                                    </div>
+                                    {fixResult.description && (
+                                      <div style={{ fontSize: '11px', color: '#7c8ba6' }}>
+                                        {fixResult.description}
+                                      </div>
+                                    )}
+                                    {fixResult.fallbackReason && (
+                                      <div style={{ fontSize: '10px', color: '#7c8ba6', fontStyle: 'italic' }}>
+                                        ({fixResult.fallbackReason})
+                                      </div>
+                                    )}
+                                    <DiffView before={fixResult.beforeCode} after={fixResult.afterCode} />
+                                  </div>
+                                )}
+
+                                {/* Fix button -- offered again after a non-FIXED outcome so the user can
+                            retry (e.g. after manually adjusting the code) rather than getting
+                            permanently stuck once one attempt didn't verify. */}
+                                {(!fixResult || !fixResult.verified) && (
+                                  <button
+                                    onClick={() => applyFigmFix(d)}
+                                    disabled={isFixing || !!fixingId || fixability?.disabled}
+                                    style={{
+                                      alignSelf: 'flex-start',
+                                      padding: '7px 14px',
+                                      borderRadius: '6px',
+                                      border: `1px solid ${fixability?.disabled ? 'rgba(234,179,8,0.35)' : 'rgba(34,197,94,0.35)'}`,
+                                      background: isFixing
+                                        ? 'rgba(234,179,8,0.1)'
+                                        : fixability?.disabled
+                                          ? 'rgba(234,179,8,0.08)'
+                                          : 'rgba(34,197,94,0.12)',
+                                      color: isFixing ? '#fde68a' : fixability?.disabled ? '#fde68a' : '#86efac',
+                                      fontSize: '12px',
+                                      fontWeight: 800,
+                                      cursor: isFixing ? 'wait' : fixability?.disabled ? 'not-allowed' : 'pointer',
+                                      opacity: fixability?.disabled ? 0.75 : 1,
+                                      transition: 'all 0.2s ease',
+                                    }}
+                                  >
+                                    {isFixing
+                                      ? '⏳ Applying & Verifying FIGM Fix…'
+                                      : fixResult
+                                        ? '🔁 Retry FIGM Fix'
+                                        : fixability
+                                          ? fixability.buttonLabel
+                                          : '✨ Fix FIGM Rule'}
+                                  </button>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* ================= SYSTEM B: GENERAL CODE ERRORS ================= */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '12px', fontWeight: 900, color: '#fcd34d', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                          🧰 General Code Errors
+                        </span>
+                        <span
+                          style={{
+                            fontSize: '11px',
+                            fontWeight: 800,
+                            color: generalCodeErrorCount > 0 ? '#f59e0b' : '#4ade80',
+                            background: 'rgba(245,158,11,0.1)',
+                            border: '1px solid rgba(245,158,11,0.3)',
+                            borderRadius: '6px',
+                            padding: '2px 9px',
+                          }}
+                        >
+                          {generalCodeErrorCount} error{generalCodeErrorCount === 1 ? '' : 's'}
+                        </span>
+                      </div>
+
+                      {generalCodeErrorCount === 0 ? (
+                        <div style={{ padding: '14px', background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '8px', fontSize: '12px', color: '#86efac' }}>
+                          ✅ No syntax, TypeScript, or other compiler/parser errors detected.
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '520px', overflowY: 'auto', paddingRight: '4px' }}>
+                          {generalCodeErrors.map((d, idx) => {
+                            const fixKey = d.ruleId + '_' + d.location.start.line;
+                            const fixResult = fixResults[fixKey];
+                            const isFixing = fixingId === fixKey;
+                            const color = SEV_COLOR[d.severity] ?? '#94a3b8';
+                            const bg = SEV_BG[d.severity] ?? 'rgba(148,163,184,0.08)';
+                            const statusMeta = fixResult ? FIX_STATUS_META[fixResult.status] : null;
+                            const line = d.location?.start?.line && d.location.start.line > 0 ? d.location.start.line : 1;
+                            const column = d.location?.start?.column;
+                            const fixability = d.fixabilityStatus ? FIXABILITY_META[d.fixabilityStatus] : null;
+
+                            return (
+                              <div
+                                key={idx}
+                                style={{
+                                  padding: '14px',
+                                  background: '#090d16',
+                                  borderRadius: '10px',
+                                  border: `1px solid ${fixResult
+                                      ? fixResult.verified
+                                        ? 'rgba(34,197,94,0.3)'
+                                        : 'rgba(234,179,8,0.3)'
+                                      : 'rgba(255,255,255,0.07)'
+                                    }`,
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  gap: '9px',
+                                  transition: 'border-color 0.2s ease',
+                                }}
+                              >
+                                {/* Error header: compiler diagnostic code + category + severity */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+                                    <span style={{ fontSize: '10px', fontWeight: 800, color, background: bg, border: `1px solid ${color}44`, borderRadius: '4px', padding: '2px 7px' }}>
+                                      {d.severity}
+                                    </span>
+                                    <span style={{ fontSize: '11px', color: '#f59e0b', fontFamily: 'JetBrains Mono', fontWeight: 700 }}>
+                                      {d.compilerCode || d.ruleId}
+                                    </span>
+                                    <span style={{ fontSize: '9px', fontWeight: 700, color: '#7c8ba6', background: 'rgba(100,116,139,0.1)', border: '1px solid rgba(100,116,139,0.3)', borderRadius: '4px', padding: '2px 6px' }}>
+                                      {d.ruleId === 'SYNTAX-PARSE-ERROR' ? 'SYNTAX_ERROR' : 'TYPE_COMPILE_ERROR'}
+                                    </span>
+                                    {fixability && (
+                                      <span
+                                        title="Pre-attempt fixability classification"
+                                        style={{ fontSize: '9px', fontWeight: 700, color: fixability.color, background: fixability.bg, border: `1px solid ${fixability.color}55`, borderRadius: '4px', padding: '2px 6px' }}
+                                      >
+                                        {fixability.label}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <button
+                                    onClick={() => jumpToLine(line)}
+                                    style={{ background: 'rgba(56,189,248,0.08)', border: '1px solid rgba(56,189,248,0.25)', borderRadius: '4px', color: '#38bdf8', fontSize: '10px', padding: '3px 8px', cursor: 'pointer', fontFamily: 'JetBrains Mono' }}
+                                  >
+                                    📍 Go to Line {line}
+                                    {column != null ? `:${column}` : ''} →
+                                  </button>
+                                </div>
+
+                                {/* Actual compiler/parser message -- never disguised as a FIGM rule name. */}
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#f8fafc' }}>
+                                  {d.message}
+                                </div>
+
+                                <div style={{ fontSize: '10px', color: '#7c8ba6', fontFamily: 'JetBrains Mono' }}>
+                                  Location: L{line}{column != null ? `:C${column}` : ''}
+                                </div>
+
+                                {/* Offending code snippet */}
+                                <pre style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.2)', padding: '8px 10px', borderRadius: '6px', fontSize: '11px', color: '#fca5a5', margin: 0, fontFamily: 'JetBrains Mono', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+                                  <code>{d.offendingCodeSnippet}</code>
+                                </pre>
+
+                                {/* Fix outcome */}
+                                {fixResult && statusMeta && (
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: 700, color: statusMeta.color, display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                      <span>
+                                        {PIPELINE_LABEL[fixResult.pipeline]} {statusMeta.icon} {statusMeta.label}
+                                        {fixResult.verified ? ` (by ${fixResult.engine})` : ''}
+                                      </span>
+                                    </div>
+                                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '2px' }}>{statusMeta.detail}</div>
+                                    {fixResult.description && <div style={{ fontSize: '11px', color: '#7c8ba6' }}>{fixResult.description}</div>}
+                                    {fixResult.fallbackReason && <div style={{ fontSize: '10px', color: '#7c8ba6', fontStyle: 'italic' }}>({fixResult.fallbackReason})</div>}
+                                    <DiffView before={fixResult.beforeCode} after={fixResult.afterCode} />
+                                  </div>
+                                )}
+
+                                {/* Fix button -- label/enabled state driven by the pre-attempt
+                                  fixabilityStatus (see FIXABILITY_META): NO_SAFE_FIX never renders
+                                  an enabled button (nothing to show), and SUGGESTED_FIX_ONLY's
+                                  button only ever previews a candidate -- the server-side guard in
+                                  AIRemediationPipeline.remediateDefect makes it structurally
+                                  impossible for that case to come back verified/auto-applied. */}
+                                {(!fixResult || !fixResult.verified) && (
+                                  <button
+                                    onClick={() => applyCodeErrorFix(d)}
+                                    disabled={isFixing || !!fixingId || fixability?.disabled}
+                                    style={{
+                                      alignSelf: 'flex-start',
+                                      padding: '7px 14px',
+                                      borderRadius: '6px',
+                                      border: `1px solid ${fixability?.disabled ? 'rgba(234,179,8,0.35)' : 'rgba(56,189,248,0.35)'}`,
+                                      background: isFixing ? 'rgba(234,179,8,0.1)' : fixability?.disabled ? 'rgba(234,179,8,0.08)' : 'rgba(56,189,248,0.12)',
+                                      color: isFixing ? '#fde68a' : fixability?.disabled ? '#fde68a' : '#7dd3fc',
+                                      fontSize: '12px',
+                                      fontWeight: 800,
+                                      cursor: isFixing ? 'wait' : fixability?.disabled ? 'not-allowed' : 'pointer',
+                                      opacity: fixability?.disabled ? 0.75 : 1,
+                                      transition: 'all 0.2s ease',
+                                    }}
+                                  >
+                                    {isFixing
+                                      ? '⏳ Applying & Verifying…'
+                                      : fixResult
+                                        ? '🔁 Retry'
+                                        : fixability
+                                          ? fixability.buttonLabel
+                                          : '🛠️ Fix Code Error'}
+                                  </button>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
-
-              {/* Diagnostics */}
-              {UNSUPPORTED_FRAMEWORKS.has(result.framework) ? (
-                // A zero-violation result for a framework FIGM does not analyze at all must
-                // never be presented as "your code is clean" -- that would misrepresent an
-                // "unchecked" result as a "passed" one. See Task requirement: handle
-                // unsupported frameworks gracefully, without implying a check occurred.
-                <div
-                  style={{
-                    padding: '28px',
-                    background: 'rgba(234,179,8,0.08)',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(234,179,8,0.25)',
-                    textAlign: 'center',
-                  }}
-                >
-                  <div style={{ fontSize: '28px', marginBottom: '6px' }}>⚠️</div>
-                  <strong style={{ color: '#fde68a', fontSize: '15px' }}>
-                    "{result.framework}" Is Not Yet Supported
-                  </strong>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
-                    FIGM detected this framework but does not yet run any guideline rules against
-                    it. This is <strong>not</strong> a "no issues found" result — no analysis was
-                    performed. Supported frameworks: React, Next.js, Angular, Vue, and plain
-                    JS/TS.
-                  </div>
-                </div>
-              ) : result.diagnostics.length === 0 ? (
-                <div
-                  style={{
-                    padding: '28px',
-                    background: 'rgba(34,197,94,0.08)',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(34,197,94,0.25)',
-                    textAlign: 'center',
-                  }}
-                >
-                  <div style={{ fontSize: '28px', marginBottom: '6px' }}>🎉</div>
-                  <strong style={{ color: '#86efac', fontSize: '15px' }}>No Issues Found!</strong>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
-                    Your code meets all 25 FIGM quality, performance, and accessibility rules.
-                  </div>
-                </div>
-              ) : (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px',
-                    maxHeight: '520px',
-                    overflowY: 'auto',
-                    paddingRight: '4px',
-                  }}
-                >
-                  {result.diagnostics.map((d, idx) => {
-                    const fixKey = d.ruleId + '_' + d.location.start.line;
-                    const fixResult = fixResults[fixKey];
-                    const isFixing = fixingId === fixKey;
-                    const color = SEV_COLOR[d.severity] ?? '#94a3b8';
-                    const bg = SEV_BG[d.severity] ?? 'rgba(148,163,184,0.08)';
-                    const isFigmRule = d.ruleId.startsWith('FIGM-');
-                    const statusMeta = fixResult ? FIX_STATUS_META[fixResult.status] : null;
-                    const line = d.location?.start?.line && d.location.start.line > 0 ? d.location.start.line : 1;
-                    const column = d.location?.start?.column;
-                    const endLine = d.location?.end?.line;
-                    const endColumn = d.location?.end?.column;
-
-                    return (
-                      <div
-                        key={idx}
-                        style={{
-                          padding: '14px',
-                          background: '#090d16',
-                          borderRadius: '10px',
-                          border: `1px solid ${
-                            fixResult
-                              ? fixResult.verified
-                                ? 'rgba(34,197,94,0.3)'
-                                : 'rgba(234,179,8,0.3)'
-                              : 'rgba(255,255,255,0.07)'
-                          }`,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '9px',
-                          transition: 'border-color 0.2s ease',
-                        }}
-                      >
-                        {/* Violation header */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                            <span
-                              style={{
-                                fontSize: '10px',
-                                fontWeight: 800,
-                                color,
-                                background: bg,
-                                border: `1px solid ${color}44`,
-                                borderRadius: '4px',
-                                padding: '2px 7px',
-                              }}
-                            >
-                              {d.severity}
-                            </span>
-                            <span
-                              style={{
-                                fontSize: '11px',
-                                color: '#38bdf8',
-                                fontFamily: 'JetBrains Mono',
-                                fontWeight: 700,
-                              }}
-                            >
-                              {d.ruleId}
-                            </span>
-                            {d.sourceKind && (
-                              <span
-                                title={
-                                  d.sourceKind === 'REAL_AST'
-                                    ? 'Detected via genuine TypeScript-compiler AST traversal'
-                                    : 'Detected via text/regex pattern matching (not yet AST-migrated for this framework)'
-                                }
-                                style={{
-                                  fontSize: '9px',
-                                  fontWeight: 700,
-                                  color: d.sourceKind === 'REAL_AST' ? '#a855f7' : '#7c8ba6',
-                                  background: d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.1)' : 'rgba(100,116,139,0.1)',
-                                  border: `1px solid ${d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.3)' : 'rgba(100,116,139,0.3)'}`,
-                                  borderRadius: '4px',
-                                  padding: '2px 6px',
-                                }}
-                              >
-                                {d.sourceKind === 'REAL_AST' ? '🌳 AST' : '📝 pattern'}
-                              </span>
-                            )}
-                          </div>
-                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                            {isFigmRule && (
-                              <a
-                                href={`/guidelines#${d.ruleId}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                  background: 'rgba(168,85,247,0.08)',
-                                  border: '1px solid rgba(168,85,247,0.25)',
-                                  borderRadius: '4px',
-                                  color: '#c4b5fd',
-                                  fontSize: '10px',
-                                  padding: '3px 8px',
-                                  cursor: 'pointer',
-                                  fontFamily: 'JetBrains Mono',
-                                  textDecoration: 'none',
-                                }}
-                              >
-                                📖 Rule Guide
-                              </a>
-                            )}
-                            <button
-                              onClick={() => jumpToLine(line)}
-                              style={{
-                                background: 'rgba(56,189,248,0.08)',
-                                border: '1px solid rgba(56,189,248,0.25)',
-                                borderRadius: '4px',
-                                color: '#38bdf8',
-                                fontSize: '10px',
-                                padding: '3px 8px',
-                                cursor: 'pointer',
-                                fontFamily: 'JetBrains Mono',
-                              }}
-                            >
-                              📍 Go to Line {line}
-                              {column != null ? `:${column}` : ''} →
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Rule name */}
-                        <div style={{ fontSize: '13px', fontWeight: 800, color: '#f8fafc' }}>
-                          {d.ruleName}
-                        </div>
-
-                        {/* Source range + standard reference */}
-                        <div style={{ fontSize: '10px', color: '#7c8ba6', display: 'flex', gap: '10px', flexWrap: 'wrap', fontFamily: 'JetBrains Mono' }}>
-                          <span>
-                            Location: L{line}
-                            {column != null ? `:C${column}` : ''}
-                            {endLine ? ` → L${endLine}${endColumn != null ? `:C${endColumn}` : ''}` : ''}
-                          </span>
-                          {d.standardReference && <span>Ref: {d.standardReference}</span>}
-                        </div>
-
-                        {/* Offending code snippet */}
-                        <pre
-                          style={{
-                            background: 'rgba(239,68,68,0.07)',
-                            border: '1px solid rgba(239,68,68,0.2)',
-                            padding: '8px 10px',
-                            borderRadius: '6px',
-                            fontSize: '11px',
-                            color: '#fca5a5',
-                            margin: 0,
-                            fontFamily: 'JetBrains Mono',
-                            overflowX: 'auto',
-                            whiteSpace: 'pre-wrap',
-                          }}
-                        >
-                          <code>{d.offendingCodeSnippet}</code>
-                        </pre>
-
-                        {/* Evidence (what the detector actually matched) */}
-                        {d.evidence && (
-                          <div style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic' }}>
-                            🔍 <strong>Evidence:</strong> {d.evidence}
-                          </div>
-                        )}
-
-                        {/* Explanation */}
-                        <div style={{ fontSize: '12px', color: '#cbd5e1' }}>
-                          {d.message}
-                        </div>
-
-                        {/* How-to-fix hint */}
-                        <div
-                          style={{
-                            fontSize: '12px',
-                            color: '#86efac',
-                            background: 'rgba(34,197,94,0.06)',
-                            border: '1px solid rgba(34,197,94,0.15)',
-                            padding: '7px 10px',
-                            borderRadius: '6px',
-                          }}
-                        >
-                          💡 <strong>How to Fix:</strong> {d.remediation}
-                        </div>
-
-                        {/* Fix outcome -- always reflects what the real engine actually verified,
-                            never a blanket "Fixed" independent of that verification. */}
-                        {fixResult && statusMeta && (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                            <div
-                              style={{
-                                fontSize: '11px',
-                                fontWeight: 700,
-                                color: statusMeta.color,
-                                display: 'flex',
-                                gap: '8px',
-                                alignItems: 'center',
-                              }}
-                            >
-                              <span>{statusMeta.icon} {statusMeta.label}{fixResult.verified ? ` (by ${fixResult.engine})` : ''}</span>
-                            </div>
-                            <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '2px' }}>
-                              {statusMeta.detail}
-                            </div>
-                            {fixResult.description && (
-                              <div style={{ fontSize: '11px', color: '#7c8ba6' }}>
-                                {fixResult.description}
-                              </div>
-                            )}
-                            {fixResult.fallbackReason && (
-                              <div style={{ fontSize: '10px', color: '#7c8ba6', fontStyle: 'italic' }}>
-                                ({fixResult.fallbackReason})
-                              </div>
-                            )}
-                            <DiffView before={fixResult.beforeCode} after={fixResult.afterCode} />
-                          </div>
-                        )}
-
-                        {/* Fix button -- offered again after a non-FIXED outcome so the user can
-                            retry (e.g. after manually adjusting the code) rather than getting
-                            permanently stuck once one attempt didn't verify. */}
-                        {(!fixResult || !fixResult.verified) && (
-                          <button
-                            onClick={() => applyFix(d)}
-                            disabled={isFixing || !!fixingId}
-                            style={{
-                              alignSelf: 'flex-start',
-                              padding: '7px 14px',
-                              borderRadius: '6px',
-                              border: '1px solid rgba(34,197,94,0.35)',
-                              background: isFixing
-                                ? 'rgba(234,179,8,0.1)'
-                                : 'rgba(34,197,94,0.12)',
-                              color: isFixing ? '#fde68a' : '#86efac',
-                              fontSize: '12px',
-                              fontWeight: 800,
-                              cursor: isFixing ? 'wait' : 'pointer',
-                              transition: 'all 0.2s ease',
-                            }}
-                          >
-                            {isFixing
-                              ? '⏳ Applying & Verifying Fix…'
-                              : fixResult
-                              ? '🔁 Retry Fix'
-                              : '✨ Apply & Verify Fix'}
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          )}
+            )}
           </div>
         </div>
       </div>
