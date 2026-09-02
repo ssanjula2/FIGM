@@ -1,0 +1,512 @@
+{
+  "generatedAt": "2026-08-25T14:37:48.798Z",
+  "methodology": "RemediationEngine.applyQuickFix + RemediationEngine.validatePatch run fresh against each of the 50 rules' own documented nonCompliantExample in src/matrix/four-layer-meta-model.ts. Not a historical telemetry log (none exists) -- a real, reproducible, freshly-executed measurement.",
+  "totalRules": 50,
+  "manualReviewCount": 18,
+  "autoAttemptedCount": 20,
+  "autoVerifiedCount": 19,
+  "autoVerifyFailedCount": 1,
+  "autoPatchedButNotDifferingCount": 0,
+  "outcomes": [
+    {
+      "ruleId": "FIGM-PERF-01",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-PERF-06",
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-01",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-A11Y-03",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-04",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-06",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-01",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-NEXT-02",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-04",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-REACT-02",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-REACT-03",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-REACT-04",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "UNRESOLVED"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-ANG-03",
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-ANG-05",
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-07",
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-REACT-05",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-REACT-06",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-NEXT-05",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-06",
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-ANG-06",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-VUE-01",
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-VUE-02",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-07",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-09",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-10",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-VUE-03",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-VUE-04",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-VUE-05",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-VUE-06",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-ANG-08",
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-ANG-09",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    },
+    {
+      "ruleId": "FIGM-ANG-10",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-REACT-07",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-REACT-08",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-REACT-09",
+      "remediationStatus": "MANUAL_REVIEW_REQUIRED",
+      "attempted": true,
+      "requiresManualReview": true,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": false,
+      "verificationStatus": "MANUAL_REVIEW_REQUIRED"
+    },
+    {
+      "ruleId": "FIGM-REACT-10",
+      "remediationStatus": "AUTOMATED_FIX_WITH_CAVEAT",
+      "attempted": false,
+      "requiresManualReview": false,
+      "patchApplied": false,
+      "patchDiffersFromOriginal": false,
+      "verified": false,
+      "verificationStatus": "RULE DID NOT FIRE on its own nonCompliantExample (see Phase 1 sourcekind table for this known set)"
+    },
+    {
+      "ruleId": "FIGM-REACT-11",
+      "remediationStatus": "AUTOMATED_FIX_VERIFIED",
+      "attempted": true,
+      "requiresManualReview": false,
+      "patchApplied": true,
+      "patchDiffersFromOriginal": true,
+      "verified": true,
+      "verificationStatus": "FIXED"
+    }
+  ]
+}

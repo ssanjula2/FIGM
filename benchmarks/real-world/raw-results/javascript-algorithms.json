@@ -1,0 +1,5270 @@
+{
+  "name": "javascript-algorithms",
+  "url": "https://github.com/trekhleb/javascript-algorithms.git",
+  "commit": "85293e3e2b88f4d2ce330d956b139cf628aa1e82",
+  "primaryFrameworkLabel": "Generic JavaScript/TypeScript",
+  "filesScanned": 361,
+  "totalLOC": 24363,
+  "scanDurationMs": 39045.826899999985,
+  "totalFigmFindings": 87,
+  "findingsByRule": {
+    "FIGM-REACT-01": 55,
+    "FIGM-PERF-01": 2,
+    "FIGM-PERF-05": 17,
+    "FIGM-PERF-04": 2,
+    "FIGM-ANG-07": 11
+  },
+  "findingsBySeverity": {
+    "HIGH": 57,
+    "MEDIUM": 30
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 361
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 4,
+    "totalParseErrorCount": 5
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "jest.config.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/caesar-cipher/caesarCipher.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 59,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/caesar-cipher/__test__/caesarCipher.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/hill-cipher/hillCipher.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 88,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/hill-cipher/_test_/hillCipher.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 47,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/polynomial-hash/PolynomialHash.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 90,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/polynomial-hash/SimplePolynomialHash.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 64,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/polynomial-hash/__test__/PolynomialHash.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 60,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/polynomial-hash/__test__/SimplePolynomialHash.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 53,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/rail-fence-cipher/railFenceCipher.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 243,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/cryptography/rail-fence-cipher/__test__/railFenceCipher.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 44,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/articulation-points/articulationPoints.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 114,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/articulation-points/__test__/articulationPoints.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 233,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/bellman-ford/bellmanFord.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 46,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/bellman-ford/__test__/bellmanFord.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 118,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/breadth-first-search/breadthFirstSearch.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 76,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/breadth-first-search/__test__/breadthFirstSearch.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 175,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/bridges/graphBridges.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 96,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/bridges/__test__/graphBridges.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 204,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/depth-first-search/depthFirstSearch.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 69,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/depth-first-search/__test__/depthFirstSearch.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 166,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/detect-cycle/detectDirectedCycle.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 94,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/detect-cycle/detectUndirectedCycle.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 60,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/detect-cycle/detectUndirectedCycleUsingDisjointSet.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/detect-cycle/__test__/detectDirectedCycle.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 43,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/detect-cycle/__test__/detectUndirectedCycle.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 42,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/detect-cycle/__test__/detectUndirectedCycleUsingDisjointSet.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/dijkstra/dijkstra.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 81,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/dijkstra/__test__/dijkstra.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 118,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/eulerian-path/eulerianPath.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 102,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/eulerian-path/__test__/eulerianPath.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 140,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/floyd-warshall/floydWarshall.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 73,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/floyd-warshall/__test__/floydWarshall.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 221,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/hamiltonian-cycle/hamiltonianCycle.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 135,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/hamiltonian-cycle/__test__/hamiltonianCycle.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 91,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/kruskal/kruskal.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 63,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/kruskal/__test__/kruskal.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 92,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/prim/prim.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 74,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/prim/__test__/prim.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 92,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/strongly-connected-components/stronglyConnectedComponents.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 134,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/strongly-connected-components/__test__/stronglyConnectedComponents.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 130,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/topological-sorting/topologicalSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 48,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/topological-sorting/__test__/topologicalSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 54,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 105,
+      "figmFindingCount": 4,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/graph/travelling-salesman/__test__/bfTravellingSalesman.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 52,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/image-processing/seam-carving/resizeImageWidth.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 254,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/image-processing/seam-carving/__tests__/resizeImageWidth.node.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 86,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/image-processing/utils/imageData.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 40,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/linked-list/reverse-traversal/reverseTraversal.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/linked-list/reverse-traversal/__test__/reverseTraversal.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/linked-list/traversal/traversal.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/linked-list/traversal/__test__/traversal.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 23,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/binary-floating-point/bitsToFloat.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 120,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/binary-floating-point/floatAsBinaryString.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 62,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/binary-floating-point/testCases.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 72,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/binary-floating-point/__tests__/bitsToFloat.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/binary-floating-point/__tests__/floatAsBinaryString.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 21,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/bitLength.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/bitsDiff.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/clearBit.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 11,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/countSetBits.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/divideByTwo.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/fullAdder.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 71,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/getBit.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/isEven.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/isPositive.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/isPowerOfTwo.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/multiply.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 42,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/multiplyByTwo.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/multiplyUnsigned.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 44,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/setBit.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/switchSign.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/updateBit.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/bitLength.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/bitsDiff.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/clearBit.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/countSetBits.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 21,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/divideByTwo.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/fullAdder.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/getBit.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/isEven.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/isPositive.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/isPowerOfTwo.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 21,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/multiply.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/multiplyByTwo.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/multiplyUnsigned.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/setBit.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/switchSign.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/bits/__test__/updateBit.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/complex-number/ComplexNumber.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 161,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/complex-number/__test__/ComplexNumber.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 182,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/euclidean-algorithm/euclideanAlgorithm.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/euclidean-algorithm/euclideanAlgorithmIterative.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 21,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/euclidean-algorithm/__test__/euclideanAlgorithm.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/euclidean-algorithm/__test__/euclideanAlgorithmIterative.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/euclidean-distance/euclideanDistance.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 29,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/euclidean-distance/__tests__/euclideanDistance.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/factorial/factorial.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/factorial/factorialRecursive.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/factorial/__test__/factorial.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/factorial/__test__/factorialRecursive.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fast-powering/fastPowering.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 31,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fast-powering/__test__/fastPowering.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fibonacci/fibonacci.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fibonacci/fibonacciNth.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fibonacci/fibonacciNthClosedForm.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fibonacci/__test__/fibonacci.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fibonacci/__test__/fibonacciNth.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fibonacci/__test__/fibonacciNthClosedForm.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fourier-transform/discreteFourierTransform.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fourier-transform/fastFourierTransform.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 78,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fourier-transform/inverseDiscreteFourierTransform.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 59,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fourier-transform/__test__/discreteFourierTransform.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fourier-transform/__test__/fastFourierTransform.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 102,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fourier-transform/__test__/FourierTester.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 296,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/fourier-transform/__test__/inverseDiscreteFourierTransform.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/horner-method/classicPolynome.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/horner-method/hornerMethod.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/horner-method/__test__/classicPolynome.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/horner-method/__test__/hornerMethod.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/integer-partition/integerPartition.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 58,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/integer-partition/__test__/integerPartition.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/is-power-of-two/isPowerOfTwo.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/is-power-of-two/isPowerOfTwoBitwise.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/is-power-of-two/__test__/isPowerOfTwo.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/is-power-of-two/__test__/isPowerOfTwoBitwise.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/least-common-multiple/leastCommonMultiple.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/least-common-multiple/__test__/leastCommonMultiple.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/liu-hui/liuHui.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 55,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/liu-hui/__test__/liuHui.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/matrix/Matrix.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 310,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/matrix/__tests__/Matrix.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 456,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/pascal-triangle/pascalTriangle.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/pascal-triangle/pascalTriangleRecursive.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 31,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/pascal-triangle/__test__/pascalTriangle.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/pascal-triangle/__test__/pascalTriangleRecursive.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/primality-test/trialDivision.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/primality-test/__test__/trialDivision.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 38,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/prime-factors/primeFactors.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 43,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/prime-factors/__test__/primeFactors.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 88,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/radian/degreeToRadian.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/radian/radianToDegree.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/radian/__test__/degreeToRadian.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/radian/__test__/radianToDegree.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/sieve-of-eratosthenes/sieveOfEratosthenes.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/sieve-of-eratosthenes/__test__/sieveOfEratosthenes.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/square-root/squareRoot.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/math/square-root/__test__/squareRoot.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/ml/k-means/kMeans.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 86,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/ml/k-means/__test__/kMeans.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/ml/knn/kNN.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 61,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/ml/knn/__test__/knn.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 72,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/search/binary-search/binarySearch.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 45,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/search/binary-search/__test__/binarySearch.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/search/interpolation-search/interpolationSearch.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 53,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/search/interpolation-search/__test__/interpolationSearch.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/search/jump-search/jumpSearch.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 52,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/search/jump-search/__test__/jumpSearch.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 40,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/search/linear-search/linearSearch.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 23,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/search/linear-search/__test__/linearSearch.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/cartesian-product/cartesianProduct.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/cartesian-product/__test__/cartesianProduct.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/combination-sum/combinationSum.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 66,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/combination-sum/__test__/combinationSum.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/combinations/combineWithoutRepetitions.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/combinations/combineWithRepetitions.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/combinations/__test__/combineWithoutRepetitions.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 71,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/combinations/__test__/combineWithRepetitions.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 66,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/fisher-yates/fisherYates.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/fisher-yates/__test__/fisherYates.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 20,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 196,
+      "figmFindingCount": 6,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/knapsack-problem/KnapsackItem.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/knapsack-problem/__test__/Knapsack.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 163,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/knapsack-problem/__test__/KnapsackItem.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/longest-common-subsequence/longestCommonSubsequence.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 61,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/longest-common-subsequence/longestCommonSubsequenceRecursive.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/longest-common-subsequence/__test__/longestCommonSubsequence.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/longest-common-subsequence/__test__/longestCommonSubsequenceRecursive.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/longest-increasing-subsequence/dpLongestIncreasingSubsequence.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 54,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/longest-increasing-subsequence/__test__/dpLongestIncreasingSubsequence.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/maximum-subarray/bfMaximumSubarray.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/maximum-subarray/dcMaximumSubarraySum.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/maximum-subarray/dpMaximumSubarray.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 46,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/maximum-subarray/__test__/bfMaximumSubarray.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/maximum-subarray/__test__/dcMaximumSubarraySum.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/maximum-subarray/__test__/dpMaximumSubarray.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/permutations/permutateWithoutRepetitions.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/permutations/permutateWithRepetitions.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/permutations/__test__/permutateWithoutRepetitions.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 69,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/permutations/__test__/permutateWithRepetitions.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 53,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/power-set/btPowerSet.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 42,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/power-set/bwPowerSet.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/power-set/caPowerSet.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 38,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/power-set/__test__/btPowerSet.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/power-set/__test__/bwPowerSet.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/power-set/__test__/caPowerSet.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 29,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/shortest-common-supersequence/shortestCommonSupersequence.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 72,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sets/shortest-common-supersequence/__test__/shortestCommonSupersequence.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/bubble-sort/BubbleSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 39,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/bubble-sort/__test__/BubbleSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 65,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/bucket-sort/BucketSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 47,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/bucket-sort/__test__/BucketSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/counting-sort/CountingSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 79,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/counting-sort/__test__/CountingSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 75,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/heap-sort/HeapSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 31,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/heap-sort/__test__/HeapSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 63,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/insertion-sort/InsertionSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 40,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/insertion-sort/__test__/InsertionSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 65,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/merge-sort/MergeSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 61,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/merge-sort/__test__/MergeSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 65,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/quick-sort/QuickSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 49,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/quick-sort/QuickSortInPlace.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 79,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/quick-sort/__test__/QuickSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 65,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/quick-sort/__test__/QuickSortInPlace.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 61,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/radix-sort/RadixSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 153,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/radix-sort/__test__/RadixSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/selection-sort/SelectionSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/selection-sort/__test__/SelectionSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 61,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/shell-sort/ShellSort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 42,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/shell-sort/__test__/ShellSort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 61,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/Sort.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/SortTester.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 73,
+      "figmFindingCount": 18,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/sorting/__test__/Sort.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/stack/valid-parentheses/validParentheses.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 43,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/stack/valid-parentheses/__test__/validParentheses.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/statistics/weighted-random/weightedRandom.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 53,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/statistics/weighted-random/__test__/weightedRandom.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 65,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/hamming-distance/hammingDistance.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 21,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/hamming-distance/__test__/hammingDistance.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/knuth-morris-pratt/knuthMorrisPratt.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 60,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/knuth-morris-pratt/__test__/knuthMorrisPratt.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/levenshtein-distance/levenshteinDistance.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 38,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/levenshtein-distance/__test__/levenshteinDistance.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/longest-common-substring/longestCommonSubstring.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 69,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/longest-common-substring/__test__/longestCommonSubstring.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/palindrome/isPalindrome.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/palindrome/__test__/isPalindrome.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/rabin-karp/rabinKarp.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 43,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/rabin-karp/__test__/rabinKarp.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 44,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/regular-expression-matching/regularExpressionMatching.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 136,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/regular-expression-matching/__test__/regularExpressionMatching.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/z-algorithm/zAlgorithm.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 133,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/string/z-algorithm/__test__/zAlgorithm.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/tree/breadth-first-search/breadthFirstSearch.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 59,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/tree/breadth-first-search/__test__/breadthFirstSearch.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 103,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/tree/depth-first-search/depthFirstSearch.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 77,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/tree/depth-first-search/__test__/depthFirstSearch.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 103,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/best-time-to-buy-sell-stocks/accumulatorBestTimeToBuySellStocks.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 21,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/best-time-to-buy-sell-stocks/dpBestTimeToBuySellStocks.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/best-time-to-buy-sell-stocks/dqBestTimeToBuySellStocks.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 43,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/best-time-to-buy-sell-stocks/peakvalleyBestTimeToBuySellStocks.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/best-time-to-buy-sell-stocks/__tests__/accumulatorBestTimeToBuySellStocks.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 49,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/best-time-to-buy-sell-stocks/__tests__/dpBestTimeToBuySellStocks.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 49,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/best-time-to-buy-sell-stocks/__tests__/dqBestTimeToBuySellStocks.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 49,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/best-time-to-buy-sell-stocks/__tests__/peakvalleyBestTimeToBuySellStocks.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 49,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/hanoi-tower/hanoiTower.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 85,
+      "figmFindingCount": 0,
+      "parseErrorCount": 2,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/hanoi-tower/__test__/hanoiTower.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 63,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/jump-game/backtrackingJumpGame.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 49,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/jump-game/dpBottomUpJumpGame.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 47,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/jump-game/dpTopDownJumpGame.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 81,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/jump-game/greedyJumpGame.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/jump-game/__test__/backtrackingJumpGame.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/jump-game/__test__/dpBottomUpJumpGame.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/jump-game/__test__/dpTopDownJumpGame.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/jump-game/__test__/greedyJumpGame.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/knight-tour/knightTour.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 113,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/knight-tour/__test__/knightTour.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 44,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/n-queens/nQueens.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 104,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/n-queens/nQueensBitwise.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 102,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/n-queens/QueenPosition.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 40,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/n-queens/__test__/nQueens.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 39,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/n-queens/__test__/nQueensBitwise.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/n-queens/__test__/QueensPosition.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/rain-terraces/bfRainTerraces.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/rain-terraces/dpRainTerraces.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 48,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/rain-terraces/__test__/bfRainTerraces.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/rain-terraces/__test__/dpRainTerraces.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/recursive-staircase/recursiveStaircaseBF.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/recursive-staircase/recursiveStaircaseDP.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/recursive-staircase/recursiveStaircaseIT.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/recursive-staircase/recursiveStaircaseMEM.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 45,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/recursive-staircase/__test__/recursiveStaircaseBF.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/recursive-staircase/__test__/recursiveStaircaseDP.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/recursive-staircase/__test__/recursiveStaircaseIT.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/recursive-staircase/__test__/recursiveStaircaseMEM.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/square-matrix-rotation/squareMatrixRotation.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 38,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/square-matrix-rotation/__test__/squareMatrixRotation.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 60,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/unique-paths/btUniquePaths.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 59,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/unique-paths/dpUniquePaths.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/unique-paths/uniquePaths.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/unique-paths/__test__/btUniquePaths.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/unique-paths/__test__/dpUniquePaths.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/algorithms/uncategorized/unique-paths/__test__/uniquePaths.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/bloom-filter/BloomFilter.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 132,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/bloom-filter/__test__/BloomFilter.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 63,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/deque/Deque.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 114,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/deque/__test__/Deque.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 191,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/disjoint-set/DisjointSet.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 98,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/disjoint-set/DisjointSetAdhoc.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 79,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/disjoint-set/DisjointSetItem.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 97,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/disjoint-set/__test__/DisjointSet.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 141,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/disjoint-set/__test__/DisjointSetAdhoc.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 51,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/disjoint-set/__test__/DisjointSetItem.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 116,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/doubly-linked-list/DoublyLinkedList.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 264,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/doubly-linked-list/DoublyLinkedListNode.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/doubly-linked-list/__test__/DoublyLinkedList.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 281,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/doubly-linked-list/__test__/DoublyLinkedListNode.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 56,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/graph/Graph.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 209,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/graph/GraphEdge.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 55,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/graph/GraphVertex.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 139,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/graph/__test__/Graph.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 451,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/graph/__test__/GraphEdge.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 86,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/graph/__test__/GraphVertex.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 205,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/hash-table/HashTable.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 122,
+      "figmFindingCount": 4,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/hash-table/__test__/HashTable.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 118,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/Heap.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 287,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/MaxHeap.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/MaxHeapAdhoc.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 116,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/MinHeap.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/MinHeapAdhoc.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 118,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/__test__/Heap.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/__test__/MaxHeap.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 173,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/__test__/MaxHeapAdhoc.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 92,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/__test__/MinHeap.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 195,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/heap/__test__/MinHeapAdhoc.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 92,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/linked-list/LinkedList.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 273,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/linked-list/LinkedListNode.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 11,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/linked-list/__test__/LinkedList.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 283,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/linked-list/__test__/LinkedListNode.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 47,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/lru-cache/LRUCache.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 154,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/lru-cache/LRUCacheOnMap.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 54,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/lru-cache/__test__/LRUCache.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 151,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/lru-cache/__test__/LRUCacheOnMap.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 149,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/priority-queue/PriorityQueue.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 99,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/priority-queue/__test__/PriorityQueue.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 125,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/queue/Queue.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 59,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/queue/__test__/Queue.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 66,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/stack/Stack.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 68,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/stack/__test__/Stack.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 78,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/avl-tree/AvlTree.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 164,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/avl-tree/__test__/AvlTRee.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 304,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/binary-search-tree/BinarySearchTree.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 45,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/binary-search-tree/BinarySearchTreeNode.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 152,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/binary-search-tree/__test__/BinarySearchTree.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 99,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/binary-search-tree/__test__/BinarySearchTreeNode.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 256,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/BinaryTreeNode.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 220,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/fenwick-tree/FenwickTree.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 73,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/fenwick-tree/__test__/FenwickTree.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 115,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/red-black-tree/RedBlackTree.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 324,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/red-black-tree/__test__/RedBlackTree.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 325,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/segment-tree/SegmentTree.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 169,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/segment-tree/__test__/SegmentTree.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 102,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/tree/__test__/BinaryTreeNode.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 298,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/trie/Trie.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 111,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/trie/TrieNode.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 95,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/trie/__test__/Trie.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 95,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/data-structures/trie/__test__/TrieNode.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 91,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/playground/playground.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/playground/__test__/playground.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/utils/comparator/Comparator.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 83,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/utils/comparator/__test__/Comparator.test.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 51,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/cryptography/caesar-cipher/caesarCipher.js",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 9
+        },
+        "end": {
+          "line": 25,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "return alphabet",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/cryptography/caesar-cipher/caesarCipher.js",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 28
+        },
+        "end": {
+          "line": 15,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "const charsMapClone = { ...charsMap };",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/cryptography/rail-fence-cipher/railFenceCipher.js",
+      "location": {
+        "start": {
+          "line": 23,
+          "column": 10
+        },
+        "end": {
+          "line": 23,
+          "column": 17
+        }
+      },
+      "offendingCodeSnippet": ".map(() => []);",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 23",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/articulation-points/articulationPoints.js",
+      "location": {
+        "start": {
+          "line": 68,
+          "column": 60
+        },
+        "end": {
+          "line": 80,
+          "column": 9
+        }
+      },
+      "offendingCodeSnippet": "visitedSet[currentVertex.getKey()].lowDiscoveryTime = currentVertex.getNeighbors()",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 68",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/articulation-points/articulationPoints.js",
+      "location": {
+        "start": {
+          "line": 68,
+          "column": 60
+        },
+        "end": {
+          "line": 69,
+          "column": 86
+        }
+      },
+      "offendingCodeSnippet": "visitedSet[currentVertex.getKey()].lowDiscoveryTime = currentVertex.getNeighbors()",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 68",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/bridges/graphBridges.js",
+      "location": {
+        "start": {
+          "line": 55,
+          "column": 60
+        },
+        "end": {
+          "line": 67,
+          "column": 9
+        }
+      },
+      "offendingCodeSnippet": "visitedSet[currentVertex.getKey()].lowDiscoveryTime = currentVertex.getNeighbors()",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 55",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/bridges/graphBridges.js",
+      "location": {
+        "start": {
+          "line": 55,
+          "column": 60
+        },
+        "end": {
+          "line": 56,
+          "column": 86
+        }
+      },
+      "offendingCodeSnippet": "visitedSet[currentVertex.getKey()].lowDiscoveryTime = currentVertex.getNeighbors()",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 55",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/eulerian-path/eulerianPath.js",
+      "location": {
+        "start": {
+          "line": 78,
+          "column": 23
+        },
+        "end": {
+          "line": 78,
+          "column": 77
+        }
+      },
+      "offendingCodeSnippet": "[edgeToDelete] = currentEdges.filter((edge) => !bridges[edge.getKey()]);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 78",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/graph/floyd-warshall/floydWarshall.js",
+      "location": {
+        "start": {
+          "line": 11,
+          "column": 64
+        },
+        "end": {
+          "line": 11,
+          "column": 68
+        }
+      },
+      "offendingCodeSnippet": "const nextVertices = Array(vertices.length).fill(null).map(() => {",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 11",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/graph/floyd-warshall/floydWarshall.js",
+      "location": {
+        "start": {
+          "line": 17,
+          "column": 61
+        },
+        "end": {
+          "line": 17,
+          "column": 65
+        }
+      },
+      "offendingCodeSnippet": "const distances = Array(vertices.length).fill(null).map(() => {",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 17",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/kruskal/kruskal.js",
+      "location": {
+        "start": {
+          "line": 33,
+          "column": 22
+        },
+        "end": {
+          "line": 33,
+          "column": 79
+        }
+      },
+      "offendingCodeSnippet": "const sortedEdges = new QuickSort(sortingCallbacks).sort(graph.getAllEdges());",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 33",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/strongly-connected-components/__test__/stronglyConnectedComponents.test.js",
+      "location": {
+        "start": {
+          "line": 126,
+          "column": 11
+        },
+        "end": {
+          "line": 126,
+          "column": 64
+        }
+      },
+      "offendingCodeSnippet": "expect(components[0].map((vertex) => vertex.getKey()).sort()).toEqual(['A', 'B', 'C']);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 126",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 21
+        },
+        "end": {
+          "line": 20,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "const visitedSet = currentPath.reduce((accumulator, vertex) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
+      "location": {
+        "start": {
+          "line": 16,
+          "column": 31
+        },
+        "end": {
+          "line": 16,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "const updatedAccumulator = { ...accumulator };",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 16",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
+      "location": {
+        "start": {
+          "line": 23,
+          "column": 29
+        },
+        "end": {
+          "line": 25,
+          "column": 4
+        }
+      },
+      "offendingCodeSnippet": "const unvisitedNeighbors = startVertex.getNeighbors().filter((neighbor) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 23",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
+      "location": {
+        "start": {
+          "line": 78,
+          "column": 28
+        },
+        "end": {
+          "line": 84,
+          "column": 4
+        }
+      },
+      "offendingCodeSnippet": "const allPossibleCycles = allPossiblePaths.filter((path) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 78",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/image-processing/seam-carving/resizeImageWidth.js",
+      "location": {
+        "start": {
+          "line": 52,
+          "column": 12
+        },
+        "end": {
+          "line": 52,
+          "column": 16
+        }
+      },
+      "offendingCodeSnippet": ".map(() => {",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 52",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/math/binary-floating-point/bitsToFloat.js",
+      "location": {
+        "start": {
+          "line": 68,
+          "column": 27
+        },
+        "end": {
+          "line": 74,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "const exponentUnbiased = exponentBits.reduce(",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 68",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/math/binary-floating-point/bitsToFloat.js",
+      "location": {
+        "start": {
+          "line": 79,
+          "column": 19
+        },
+        "end": {
+          "line": 85,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "const fraction = fractionBits.reduce(",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 79",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/math/complex-number/ComplexNumber.js",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 54
+        }
+      },
+      "offendingCodeSnippet": "import radianToDegree from '../radian/radianToDegree';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/math/horner-method/classicPolynome.js",
+      "location": {
+        "start": {
+          "line": 10,
+          "column": 9
+        },
+        "end": {
+          "line": 15,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "return coefficients.reverse().reduce(",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 10",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/math/horner-method/hornerMethod.js",
+      "location": {
+        "start": {
+          "line": 10,
+          "column": 9
+        },
+        "end": {
+          "line": 15,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "return coefficients.reduce(",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 10",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/math/integer-partition/integerPartition.js",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 62
+        },
+        "end": {
+          "line": 7,
+          "column": 66
+        }
+      },
+      "offendingCodeSnippet": "const partitionMatrix = Array(number + 1).fill(null).map(() => {",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/ml/knn/kNN.js",
+      "location": {
+        "start": {
+          "line": 35,
+          "column": 19
+        },
+        "end": {
+          "line": 40,
+          "column": 4
+        }
+      },
+      "offendingCodeSnippet": "const kNearest = distances.sort((a, b) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 35",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sets/fisher-yates/__test__/fisherYates.test.js",
+      "location": {
+        "start": {
+          "line": 17,
+          "column": 11
+        },
+        "end": {
+          "line": 17,
+          "column": 37
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(shuffledArray)).toEqual(sortedArr);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 17",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
+      "location": {
+        "start": {
+          "line": 75,
+          "column": 65
+        },
+        "end": {
+          "line": 75,
+          "column": 69
+        }
+      },
+      "offendingCodeSnippet": "const knapsackMatrix = Array(numberOfRows).fill(null).map(() => {",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 75",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 25
+        },
+        "end": {
+          "line": 27,
+          "column": 31
+        }
+      },
+      "offendingCodeSnippet": "this.possibleItems = new MergeSort({",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
+      "location": {
+        "start": {
+          "line": 31,
+          "column": 25
+        },
+        "end": {
+          "line": 43,
+          "column": 31
+        }
+      },
+      "offendingCodeSnippet": "this.possibleItems = new MergeSort({",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 31",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
+      "location": {
+        "start": {
+          "line": 47,
+          "column": 25
+        },
+        "end": {
+          "line": 59,
+          "column": 31
+        }
+      },
+      "offendingCodeSnippet": "this.possibleItems = new MergeSort({",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 47",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
+      "location": {
+        "start": {
+          "line": 184,
+          "column": 11
+        },
+        "end": {
+          "line": 186,
+          "column": 9
+        }
+      },
+      "offendingCodeSnippet": "return this.selectedItems.reduce((accumulator, item) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 184",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
+      "location": {
+        "start": {
+          "line": 191,
+          "column": 11
+        },
+        "end": {
+          "line": 193,
+          "column": 9
+        }
+      },
+      "offendingCodeSnippet": "return this.selectedItems.reduce((accumulator, item) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 191",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/sets/longest-common-subsequence/longestCommonSubsequence.js",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 61
+        },
+        "end": {
+          "line": 8,
+          "column": 99
+        }
+      },
+      "offendingCodeSnippet": "const lcsMatrix = Array(set2.length + 1).fill(null).map(() => Array(set1.length + 1).fill(null));",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/sorting/bucket-sort/BucketSort.js",
+      "location": {
+        "start": {
+          "line": 11,
+          "column": 58
+        },
+        "end": {
+          "line": 11,
+          "column": 65
+        }
+      },
+      "offendingCodeSnippet": "const buckets = new Array(bucketsNum).fill(null).map(() => []);",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 11",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/bucket-sort/BucketSort.js",
+      "location": {
+        "start": {
+          "line": 36,
+          "column": 17
+        },
+        "end": {
+          "line": 36,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "buckets[i] = new RadixSort().sort(buckets[i]);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 36",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/counting-sort/__test__/CountingSort.test.js",
+      "location": {
+        "start": {
+          "line": 35,
+          "column": 24
+        },
+        "end": {
+          "line": 35,
+          "column": 82
+        }
+      },
+      "offendingCodeSnippet": "const sortedArray = sorter.sort(notSortedArr, smallestElement, biggestElement);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 35",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/merge-sort/MergeSort.js",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 28
+        },
+        "end": {
+          "line": 19,
+          "column": 48
+        }
+      },
+      "offendingCodeSnippet": "const leftSortedArray = this.sort(leftArray);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/merge-sort/MergeSort.js",
+      "location": {
+        "start": {
+          "line": 20,
+          "column": 29
+        },
+        "end": {
+          "line": 20,
+          "column": 50
+        }
+      },
+      "offendingCodeSnippet": "const rightSortedArray = this.sort(rightArray);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 20",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/quick-sort/QuickSort.js",
+      "location": {
+        "start": {
+          "line": 42,
+          "column": 28
+        },
+        "end": {
+          "line": 42,
+          "column": 48
+        }
+      },
+      "offendingCodeSnippet": "const leftArraySorted = this.sort(leftArray);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 42",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/quick-sort/QuickSort.js",
+      "location": {
+        "start": {
+          "line": 43,
+          "column": 29
+        },
+        "end": {
+          "line": 43,
+          "column": 50
+        }
+      },
+      "offendingCodeSnippet": "const rightArraySorted = this.sort(rightArray);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 43",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/quick-sort/QuickSortInPlace.js",
+      "location": {
+        "start": {
+          "line": 72,
+          "column": 6
+        },
+        "end": {
+          "line": 72,
+          "column": 73
+        }
+      },
+      "offendingCodeSnippet": "this.sort(array, inputLowIndex, partitionIndex - 1, RECURSIVE_CALL);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 72",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/quick-sort/QuickSortInPlace.js",
+      "location": {
+        "start": {
+          "line": 73,
+          "column": 6
+        },
+        "end": {
+          "line": 73,
+          "column": 74
+        }
+      },
+      "offendingCodeSnippet": "this.sort(array, partitionIndex + 1, inputHighIndex, RECURSIVE_CALL);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 73",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/sorting/radix-sort/RadixSort.js",
+      "location": {
+        "start": {
+          "line": 142,
+          "column": 51
+        },
+        "end": {
+          "line": 142,
+          "column": 58
+        }
+      },
+      "offendingCodeSnippet": "return new Array(numBuckets).fill(null).map(() => []);",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 142",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/radix-sort/RadixSort.js",
+      "location": {
+        "start": {
+          "line": 26,
+          "column": 20
+        },
+        "end": {
+          "line": 28,
+          "column": 12
+        }
+      },
+      "offendingCodeSnippet": "sortedArray = buckets.reduce((acc, val) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 26",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/radix-sort/RadixSort.js",
+      "location": {
+        "start": {
+          "line": 119,
+          "column": 11
+        },
+        "end": {
+          "line": 121,
+          "column": 17
+        }
+      },
+      "offendingCodeSnippet": "return array.reduce((acc, val) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 119",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/sorting/Sort.js",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 2
+        },
+        "end": {
+          "line": 15,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(originalCallbacks) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 11
+        },
+        "end": {
+          "line": 12,
+          "column": 26
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort([])).toEqual([]);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 11
+        },
+        "end": {
+          "line": 13,
+          "column": 27
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort([1])).toEqual([1]);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 11
+        },
+        "end": {
+          "line": 14,
+          "column": 30
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort([1, 2])).toEqual([1, 2]);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 11
+        },
+        "end": {
+          "line": 15,
+          "column": 30
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort([2, 1])).toEqual([1, 2]);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 16,
+          "column": 11
+        },
+        "end": {
+          "line": 16,
+          "column": 54
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort([3, 4, 2, 1, 0, 0, 4, 3, 4, 2])).toEqual([0, 0, 1, 2, 2, 3, 3, 4, 4, 4]);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 16",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 17,
+          "column": 11
+        },
+        "end": {
+          "line": 17,
+          "column": 33
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(sortedArr)).toEqual(sortedArr);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 17",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 18,
+          "column": 11
+        },
+        "end": {
+          "line": 18,
+          "column": 34
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(reverseArr)).toEqual(sortedArr);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 18",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 11
+        },
+        "end": {
+          "line": 19,
+          "column": 36
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(notSortedArr)).toEqual(sortedArr);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 20,
+          "column": 11
+        },
+        "end": {
+          "line": 20,
+          "column": 32
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(equalArr)).toEqual(equalArr);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 20",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 25,
+          "column": 11
+        },
+        "end": {
+          "line": 25,
+          "column": 35
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(negativeArr)).toEqual(negativeArrSorted);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 25",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 40,
+          "column": 11
+        },
+        "end": {
+          "line": 40,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort([''])).toEqual(['']);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 40",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 41,
+          "column": 11
+        },
+        "end": {
+          "line": 41,
+          "column": 29
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(['a'])).toEqual(['a']);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 41",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 42,
+          "column": 11
+        },
+        "end": {
+          "line": 42,
+          "column": 35
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(['aa', 'a'])).toEqual(['a', 'aa']);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 42",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 43,
+          "column": 11
+        },
+        "end": {
+          "line": 43,
+          "column": 50
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(['aa', 'q', 'bbbb', 'ccc'])).toEqual(['q', 'aa', 'ccc', 'bbbb']);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 43",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 44,
+          "column": 11
+        },
+        "end": {
+          "line": 44,
+          "column": 36
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(['aa', 'aa'])).toEqual(['aa', 'aa']);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 44",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 59,
+          "column": 11
+        },
+        "end": {
+          "line": 59,
+          "column": 41
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(['bb', 'aa', 'c'])).toEqual(['c', 'bb', 'aa']);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 59",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 60,
+          "column": 11
+        },
+        "end": {
+          "line": 60,
+          "column": 55
+        }
+      },
+      "offendingCodeSnippet": "expect(sorter.sort(['aa', 'q', 'a', 'bbbb', 'ccc'])).toEqual(['q', 'a', 'aa', 'ccc', 'bbbb']);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 60",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/SortTester.js",
+      "location": {
+        "start": {
+          "line": 68,
+          "column": 4
+        },
+        "end": {
+          "line": 68,
+          "column": 32
+        }
+      },
+      "offendingCodeSnippet": "sorter.sort(arrayToBeSorted);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 68",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/sorting/__test__/Sort.test.js",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 6
+        },
+        "end": {
+          "line": 7,
+          "column": 19
+        }
+      },
+      "offendingCodeSnippet": "sorter.sort();",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/string/levenshtein-distance/levenshteinDistance.js",
+      "location": {
+        "start": {
+          "line": 9,
+          "column": 63
+        },
+        "end": {
+          "line": 9,
+          "column": 98
+        }
+      },
+      "offendingCodeSnippet": "const distanceMatrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 9",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/string/longest-common-substring/longestCommonSubstring.js",
+      "location": {
+        "start": {
+          "line": 17,
+          "column": 65
+        },
+        "end": {
+          "line": 17,
+          "column": 69
+        }
+      },
+      "offendingCodeSnippet": "const substringMatrix = Array(s2.length + 1).fill(null).map(() => {",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 17",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/string/regular-expression-matching/regularExpressionMatching.js",
+      "location": {
+        "start": {
+          "line": 27,
+          "column": 65
+        },
+        "end": {
+          "line": 27,
+          "column": 69
+        }
+      },
+      "offendingCodeSnippet": "const matchMatrix = Array(string.length + 1).fill(null).map(() => {",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 27",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/string/z-algorithm/zAlgorithm.js",
+      "location": {
+        "start": {
+          "line": 10,
+          "column": 61
+        },
+        "end": {
+          "line": 10,
+          "column": 67
+        }
+      },
+      "offendingCodeSnippet": "const zArray = new Array(zString.length).fill(null).map(() => 0);",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 10",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/uncategorized/knight-tour/knightTour.js",
+      "location": {
+        "start": {
+          "line": 98,
+          "column": 61
+        },
+        "end": {
+          "line": 98,
+          "column": 95
+        }
+      },
+      "offendingCodeSnippet": "const chessboard = Array(chessboardSize).fill(null).map(() => Array(chessboardSize).fill(0));",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 98",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/algorithms/uncategorized/knight-tour/knightTour.js",
+      "location": {
+        "start": {
+          "line": 20,
+          "column": 9
+        },
+        "end": {
+          "line": 23,
+          "column": 4
+        }
+      },
+      "offendingCodeSnippet": "return possibleMoves.filter((move) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 20",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/algorithms/uncategorized/unique-paths/dpUniquePaths.js",
+      "location": {
+        "start": {
+          "line": 10,
+          "column": 48
+        },
+        "end": {
+          "line": 10,
+          "column": 52
+        }
+      },
+      "offendingCodeSnippet": "const board = Array(height).fill(null).map(() => {",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 10",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/bloom-filter/BloomFilter.js",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 2
+        },
+        "end": {
+          "line": 10,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(size = 100) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/disjoint-set/DisjointSetAdhoc.js",
+      "location": {
+        "start": {
+          "line": 24,
+          "column": 2
+        },
+        "end": {
+          "line": 33,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(size) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 24",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/graph/Graph.js",
+      "location": {
+        "start": {
+          "line": 187,
+          "column": 69
+        },
+        "end": {
+          "line": 187,
+          "column": 73
+        }
+      },
+      "offendingCodeSnippet": "const adjacencyMatrix = Array(vertices.length).fill(null).map(() => {",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 187",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/data-structures/graph/Graph.js",
+      "location": {
+        "start": {
+          "line": 136,
+          "column": 11
+        },
+        "end": {
+          "line": 138,
+          "column": 9
+        }
+      },
+      "offendingCodeSnippet": "return this.getAllEdges().reduce((weight, graphEdge) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 136",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/graph/GraphVertex.js",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 2
+        },
+        "end": {
+          "line": 28,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(value) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/hash-table/HashTable.js",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 58
+        },
+        "end": {
+          "line": 15,
+          "column": 79
+        }
+      },
+      "offendingCodeSnippet": "this.buckets = Array(hashTableSize).fill(null).map(() => new LinkedList());",
+      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/hash-table/HashTable.js",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 2
+        },
+        "end": {
+          "line": 19,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(hashTableSize = defaultHashTableSize) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/data-structures/hash-table/HashTable.js",
+      "location": {
+        "start": {
+          "line": 38,
+          "column": 17
+        },
+        "end": {
+          "line": 41,
+          "column": 5
+        }
+      },
+      "offendingCodeSnippet": "const hash = Array.from(key).reduce(",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 38",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/data-structures/hash-table/HashTable.js",
+      "location": {
+        "start": {
+          "line": 115,
+          "column": 11
+        },
+        "end": {
+          "line": 119,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "return this.buckets.reduce((values, bucket) => {",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 115",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/heap/MaxHeapAdhoc.js",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 2
+        },
+        "end": {
+          "line": 11,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(heap = []) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/heap/MinHeapAdhoc.js",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 2
+        },
+        "end": {
+          "line": 11,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(heap = []) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/priority-queue/PriorityQueue.js",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 2
+        },
+        "end": {
+          "line": 17,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/tree/binary-search-tree/BinarySearchTreeNode.js",
+      "location": {
+        "start": {
+          "line": 9,
+          "column": 2
+        },
+        "end": {
+          "line": 15,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(value = null, compareFunction = undefined) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 9",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/tree/fenwick-tree/FenwickTree.js",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 2
+        },
+        "end": {
+          "line": 13,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(arraySize) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/tree/segment-tree/SegmentTree.js",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 81
+        }
+      },
+      "offendingCodeSnippet": "import isPowerOfTwo from '../../../algorithms/math/is-power-of-two/isPowerOfTwo';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/data-structures/tree/segment-tree/SegmentTree.js",
+      "location": {
+        "start": {
+          "line": 9,
+          "column": 2
+        },
+        "end": {
+          "line": 18,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(inputArray, operation, operationFallback) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 9",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    }
+  ]
+}
