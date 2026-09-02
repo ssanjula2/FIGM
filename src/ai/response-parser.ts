@@ -3,8 +3,10 @@
  * Response Parser Module for AI Remediation Outputs
  *
  * Provider-agnostic: validates the {status, patch, explanation, confidence} / {status, reason}
- * shape itself, not anything specific to a particular LLM provider's SDK or transport. Used by
- * src/ai/claude-client.server.ts (the current, and only, AI remediation integration).
+ * shape itself, not anything specific to a particular LLM provider's SDK or transport. Called
+ * directly by every AI remediation provider (src/ai/providers/{claude,gemini,ollama}-provider.ts,
+ * plus the pre-existing src/ai/claude-client.server.ts the claude-provider.ts wraps) via
+ * src/ai/ai-provider-selector.ts's AIRemediationProvider abstraction — never specific to one vendor.
  */
 
 export interface ParsedAIRemediation {
