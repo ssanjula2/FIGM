@@ -10,7 +10,7 @@ recording this SHA into this file — see `docs/audit/STAGE_7_EXPERIMENT_FREEZE_
 |---|---|---|
 | **Freeze date** | **2026-09-03** | This document |
 | Tool version | 1.0.0 | `package.json` |
-| **Commit SHA (freeze baseline)** | `PENDING_FREEZE_COMMIT_SHA` | Filled in by the Stage 7 documentation-only follow-up commit, per `git rev-parse HEAD` run immediately after the freeze commit |
+| **Commit SHA (freeze baseline)** | `61686e7aabad6f8c2c71b09ca0a5b52c36d08946` | `git rev-parse HEAD`, run immediately after the freeze commit (`research: freeze FIGM experiment baseline v1`); recorded here by the Stage 7 documentation-only follow-up commit |
 | Rule-set version | 2.1.0 | `src/research/research-config.ts` `RESEARCH_ARTIFACT_VERSIONS.ruleSetVersion` (corrected 2026-09-03, Stage 6 -- this row was stale at 2.0.0, one version behind the canonical source; the underlying 50-rule set itself is unchanged, this is purely a documentation correction) |
 | Rule semantics | 50 canonical rules, unchanged detection logic this session (only metadata: WCAG mapping, taxonomy field) | `figm-spec.json`, regenerated this session |
 | Domain taxonomy | `domain` (PERFORMANCE/ACCESSIBILITY, unchanged) + new additive `primaryResearchDomain` (ARCHITECTURE/STATIC_PERFORMANCE/ACCESSIBILITY) | `four-layer-meta-model.ts` `primaryResearchDomain()` |
