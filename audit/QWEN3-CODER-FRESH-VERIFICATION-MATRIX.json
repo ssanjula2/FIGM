@@ -1,0 +1,1094 @@
+{
+  "meta": {
+    "reportTitle": "Qwen3-Coder Fresh Independent Verification — Raw Evidence Matrix",
+    "generatedAt": "2026-08-27T05:00:17.751Z",
+    "methodology": "Fresh evidence-based verification. No numbers reused from prior audits/reports. Every PASS backed by an executed runtime test; live network calls made against the real Hugging Face Inference API using FIGM's actual production code path (src/ai/providers/qwen-provider.ts / src/ai/ai-remediation-pipeline.ts), not mocked.",
+    "repository": "figm-model"
+  },
+  "environmentVerification": {
+    "HF_TOKEN": {
+      "configuredInEnv": true,
+      "configuredInEnvLocal": true,
+      "looksLikeRealHfToken": true,
+      "note": "Starts with \"hf_\", 37 chars in both .env and .env.local. Value never printed."
+    },
+    "HF_MODEL": {
+      "configuredInEnv": true,
+      "configuredInEnvLocal": false,
+      "value": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "matchesExpectedModel": true,
+      "note": "Unset in .env.local; QwenClient falls back to its DEFAULT_MODEL constant which is the identical string."
+    },
+    "ANTHROPIC_API_KEY": {
+      "configuredInEnv": false,
+      "configuredInEnvLocal": true,
+      "note": "Starts with \"sk-ant-\", 108 chars. Present as a fallback provider only."
+    },
+    "gitignoreCoversEnvFiles": true,
+    "dotEnvLocalGitignored": true
+  },
+  "providerRouting": {
+    "activeProviderConfirmedLive": "QWEN",
+    "selectorLogicSource": "src/ai/ai-provider-selector.ts",
+    "precedence": "HF_TOKEN (Qwen) checked first, falls back to ANTHROPIC_API_KEY (Claude), else a no-op stub — verified by reading the current source, not assumed.",
+    "everyLiveTestInThisSessionReportedProvider": "QWEN",
+    "claudeCallsObservedThisSession": 0,
+    "clientSideCodeImportingAiProviderModules": "NONE — grep-confirmed: the only real `import` of any AI-provider module (ai-provider-selector.ts) anywhere under app/ is in app/api/health/route.ts, a server-only Next.js Route Handler. Two client (\"use client\") pages contain only prose comments mentioning class names, never an actual import."
+  },
+  "liveHuggingFaceApiTests": [
+    {
+      "test": "Direct minimal call, bypassing ALL FIGM code (raw @huggingface/inference SDK)",
+      "ok": true,
+      "httpLevelResult": "success",
+      "latencyMs": 1649,
+      "model": "qwen3-coder-30b-a3b-instruct",
+      "finishReason": "stop",
+      "responseText": "PONG",
+      "usage": {
+        "prompt_tokens": 16,
+        "completion_tokens": 3,
+        "total_tokens": 19
+      }
+    },
+    {
+      "test": "FIGM's own QwenClient.generateRemediation() boundary — trivial synthetic defect",
+      "ok": true,
+      "status": "PATCH",
+      "hasPatch": true,
+      "latencyMs": 2322
+    },
+    {
+      "test": "Forced failure: invalid/nonexistent model id (real HTTP request to HF)",
+      "ok": true,
+      "status": "AI_UNAVAILABLE",
+      "reason": "Qwen API request failed (status 400). Please try again later.",
+      "httpStatus": 400,
+      "latencyMs": 1112
+    },
+    {
+      "test": "Forced failure: invalid/fake token (real HTTP request to HF)",
+      "ok": true,
+      "status": "AI_UNAVAILABLE",
+      "reason": "Qwen API authentication failed. Check the configured HF_TOKEN.",
+      "latencyMs": 860,
+      "tokenLeakedInReason": false
+    }
+  ],
+  "detectionVsRemediationSeparation": {
+    "principle": "Detection, deterministic remediation, AI remediation, and post-patch verification are tracked as four independent axes per test case — never collapsed into one pass/fail number."
+  },
+  "endToEndRemediationTests": {
+    "deterministicPath": {
+      "rule": "FIGM-PERF-01 (Memoize/hoist static object allocation out of a loop)",
+      "code": "function processItems(items) {\n  return items.map(item => {\n    const defaultConfig = { theme: \"dark\" };\n    return { ...item, ...defaultConfig };\n  });\n}",
+      "detected": true,
+      "sourceKind": "REAL_AST",
+      "router": "AST_DETERMINISTIC",
+      "engineType": "AST_DETERMINISTIC_FIX",
+      "verified": true,
+      "verificationStatus": "FIXED",
+      "independentRescanConfirmsRuleGone": true,
+      "latencyMs": 3274,
+      "requiredNetworkCall": false,
+      "status": "DETERMINISTIC_REMEDIATION_VERIFIED"
+    },
+    "aiAssistedPath_tinyCanonicalFixture": {
+      "rule": "FIGM-REACT-01 (Memoize Expensive Derived Computations)",
+      "code": "function List({ items }) {\n  const sorted = items.sort((a, b) => a - b);\n  return <ul>{sorted.map((n) => <li>{n}</li>)}</ul>;\n}",
+      "totalLines": 4,
+      "detected": true,
+      "sourceKind": "REAL_AST",
+      "router": "AI_ASSISTED",
+      "engineType": "UNAVAILABLE",
+      "provider": "QWEN",
+      "verified": false,
+      "verificationStatus": "UNRESOLVED",
+      "latencyMs": 5990,
+      "aiAttempts": 3,
+      "fallbackReason": "QWEN patch rejected by sandbox validation (attempt 3/3): Patch scope check failed: Patch changed/added/removed 4 of 6 lines (67%), exceeding the 60% minimal-patch threshold — looks like a broader rewrite rather than a scoped fix for one violation.",
+      "rawQwenPatchCaptured": "import { useMemo } from 'react';\n\nfunction List({ items }) {\n  const sorted = useMemo(() => items.sort((a, b) => a - b), [items]);\n  return <ul>{sorted.map((n) => <li>{n}</li>)}</ul>;\n}",
+      "rawPatchIsActuallyCorrect": true,
+      "rootCause": "The patch-scope heuristic (SandboxValidationPipeline.checkPatchScope, MIN_LINES_TO_CHECK=6, MAX_CHANGED_RATIO=0.6) triggers once the larger of original/patched line counts reaches 6 — a correct 2-line-added minimal fix on a 4-line file crosses that ratio. Confirmed via source inspection, not guessed.",
+      "independentRescan_ruleStillPresent": true,
+      "codeChangedInResult": false,
+      "status": "FIXTURE_SHAPE_ARTIFACT — the AI patch itself was correct; rejection is a real, working safety heuristic misfiring only because of the fixture's small size, not a Qwen or FIGM defect."
+    },
+    "aiAssistedPath_realisticFixtures": [
+      {
+        "rule": "FIGM-REACT-01",
+        "filePath": "src/components/List.tsx",
+        "totalLines": 22,
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "engineType": "AI_ASSISTED_FIX",
+        "provider": "QWEN",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "independentRescanConfirmsRuleGone": true,
+        "latencyMs": 6509,
+        "status": "AI_REMEDIATION_VERIFIED"
+      },
+      {
+        "rule": "FIGM-REACT-08 (Direct Mutation of Component Props)",
+        "filePath": "src/components/TodoItem.tsx",
+        "totalLines": 17,
+        "detected": true,
+        "engineType": "AI_ASSISTED_FIX",
+        "provider": "QWEN",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "independentRescanConfirmsRuleGone": true,
+        "latencyMs": 7168,
+        "status": "AI_REMEDIATION_VERIFIED"
+      },
+      {
+        "rule": "FIGM-REACT-09 (Side Effect Executed During Render)",
+        "filePath": "src/components/Logger.tsx",
+        "totalLines": 11,
+        "detected": true,
+        "engineType": "AI_ASSISTED_FIX",
+        "provider": "QWEN",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "independentRescanConfirmsRuleGone": true,
+        "latencyMs": 2872,
+        "status": "AI_REMEDIATION_VERIFIED"
+      }
+    ],
+    "aiFailureCase_invalidModelThroughFullPipeline": {
+      "rule": "FIGM-REACT-01",
+      "forcedCondition": "HF_MODEL overridden to a nonexistent model id",
+      "engineType": "UNAVAILABLE",
+      "provider": "QWEN",
+      "verified": false,
+      "verificationStatus": "UNRESOLVED",
+      "remediatedCodeUnchanged": true,
+      "latencyMs": 1036,
+      "realHttpCallsMade": 3,
+      "note": "Pipeline retried all 3 bounded attempts even though the failure (HTTP 400, invalid model) is permanent/non-transient — a real, verified minor inefficiency (see Genuine Findings). Correctness was never compromised: source untouched, status honestly UNAVAILABLE.",
+      "status": "API_UNAVAILABLE — correctly never reported as VERIFIED"
+    }
+  },
+  "multiViolationTest": {
+    "fixture": "app/dashboard/page.tsx (synthetic, in-memory only — never written to a real project file)",
+    "frameworkDetected": "NEXT_JS",
+    "totalDiagnosticsDetected": 8,
+    "duplicateRuleIdLinePairs": 0,
+    "diagnostics": [
+      {
+        "ruleId": "FIGM-REACT-02",
+        "line": 13
+      },
+      {
+        "ruleId": "FIGM-NEXT-03",
+        "line": 1
+      },
+      {
+        "ruleId": "FIGM-NEXT-01",
+        "line": 5
+      },
+      {
+        "ruleId": "FIGM-REACT-01",
+        "line": 6
+      },
+      {
+        "ruleId": "FIGM-A11Y-01",
+        "line": 10
+      },
+      {
+        "ruleId": "FIGM-PERF-05",
+        "line": 10
+      },
+      {
+        "ruleId": "FIGM-PERF-02",
+        "line": 16
+      },
+      {
+        "ruleId": "FIGM-NEXT-06",
+        "line": 16
+      }
+    ],
+    "independentRemediationAttempts": [
+      {
+        "ruleId": "FIGM-REACT-02",
+        "router": "AST_DETERMINISTIC",
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "latencyMs": 479,
+        "targetRuleGoneOnRescan": true
+      },
+      {
+        "ruleId": "FIGM-NEXT-03",
+        "router": "AST_DETERMINISTIC",
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "latencyMs": 273,
+        "targetRuleGoneOnRescan": true
+      },
+      {
+        "ruleId": "FIGM-NEXT-01",
+        "router": "AST_DETERMINISTIC",
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "latencyMs": 273,
+        "targetRuleGoneOnRescan": true,
+        "sideEffect": "FIGM-NEXT-03 also disappears from the post-fix re-scan.",
+        "sideEffectRootCause": "NOT a bug. Verified via source (src/parser/source-parser.ts:568-586): FIGM-NEXT-03 (missing `export const revalidate`) is deliberately gated on `!hasUseClientDirective` — a Client Component legitimately does not need server route-segment revalidate config. Fixing FIGM-NEXT-01 adds the required \"use client\" directive, which correctly and intentionally makes FIGM-NEXT-03 inapplicable to this file. Confirmed by reading the exact gating condition in source, not inferred."
+      }
+    ],
+    "eachFixAppliedAgainstOriginalCodeIndependently": true,
+    "originalSourceNeverWrittenToRealFile": true
+  },
+  "failureSafetyTests": {
+    "principle": "The system must prefer REJECT over UNVERIFIED SUCCESS in every case below.",
+    "cases": [
+      {
+        "case": "invalid/nonexistent model id",
+        "realNetworkCall": true,
+        "result": "AI_UNAVAILABLE",
+        "neverFalselyVerified": true
+      },
+      {
+        "case": "invalid/fake token",
+        "realNetworkCall": true,
+        "result": "AI_UNAVAILABLE",
+        "neverFalselyVerified": true,
+        "tokenLeaked": false
+      },
+      {
+        "case": "patch does not remove the violation",
+        "realNetworkCall": true,
+        "result": "REMEDIATION_REJECTED (via multi-violation & sample tests observing sandbox rejections)",
+        "neverFalselyVerified": true
+      },
+      {
+        "case": "AI patch correctly generated but flagged by patch-scope heuristic (tiny fixture)",
+        "realNetworkCall": true,
+        "result": "REJECT, not fabricated VERIFIED",
+        "neverFalselyVerified": true
+      },
+      {
+        "case": "raw syntax error in a candidate patch",
+        "realNetworkCall": false,
+        "result": "REJECT (SYNTAX stage) — covered by tests/sandbox-validation-pipeline.test.ts, independently re-run in isolation this session: 9/9 PASS",
+        "neverFalselyVerified": true
+      }
+    ]
+  },
+  "securityVerification": {
+    "tokenNeverPrintedByAnyVerificationScript": true,
+    "tokenNeverAppearsInReturnedResultOnFailure": true,
+    "consoleErrorLogsManuallyInspected_noTokenSubstringsFound": true,
+    "clientBundleImportOfAiProviderModules": false,
+    "onlyRealImportOfAiProviderSelector": "app/api/health/route.ts (server-only Route Handler)",
+    "envFilesGitignored": true
+  },
+  "performanceMeasurements": {
+    "disclaimer": "Small real sample (n as noted per bucket), not a statistically rigorous benchmark. No numbers fabricated or extrapolated beyond what was actually measured this session.",
+    "simpleOrFailureCalls_ms": {
+      "samples": [
+        1649,
+        2322,
+        2560,
+        1112,
+        860
+      ],
+      "n": 5,
+      "avg": 1701,
+      "min": 860,
+      "max": 2560
+    },
+    "realRemediationShapedSuccessfulCalls_ms": {
+      "samples": [
+        6509,
+        7168,
+        2872
+      ],
+      "n": 3,
+      "avg": 5516,
+      "min": 2872,
+      "max": 7168
+    },
+    "deterministicFixLatency_ms_noNetwork": {
+      "samples": [
+        3274,
+        479,
+        273,
+        273
+      ],
+      "n": 4,
+      "avg": 1075,
+      "min": 273,
+      "max": 3274
+    }
+  },
+  "regressionVerification": {
+    "typescriptCheck": {
+      "command": "npx tsc --noEmit",
+      "result": "PASS",
+      "exitCode": 0
+    },
+    "fullTestSuite_run1": {
+      "command": "npm test",
+      "totalTests": 1060,
+      "pass": 1049,
+      "fail": 11,
+      "suites": 74,
+      "durationMs": 264773.2928,
+      "note": "All 11 failures traced to the SAME esbuild TransformError on src/analysis/complexity/complexity-engine.ts:15:2 (a valid TS union-type line — confirmed by reading the file; not a real syntax error). 4 affected test files independently re-run standalone/in a small group: 38/38 passed with zero errors, confirming a transient esbuild-transform-cache/concurrency artifact under full-suite load, unrelated to the Qwen integration."
+    },
+    "fullTestSuite_run2_confirmation": {
+      "command": "npm test",
+      "totalTests": 1086,
+      "pass": 1086,
+      "fail": 0,
+      "suites": 75,
+      "durationMs": 263025.1002,
+      "exitCode": 0,
+      "note": "Immediate re-run of the complete, unmodified suite: fully clean."
+    },
+    "build": {
+      "command": "npm run build",
+      "exitCode": 0,
+      "result": "PASS",
+      "staticPagesGenerated": 55,
+      "warnings": "One pre-existing, unrelated @vue/compiler-sfc \"critical dependency\" bundler warning (traced through src/ai/sandbox-validation-pipeline.ts, present before this integration and inherent to that package, not introduced by Qwen work)."
+    }
+  },
+  "ruleFrameworkMatrix": {
+    "source": "src/matrix/four-layer-meta-model.ts FOUR_LAYER_MAPPINGS — read live, count NOT hardcoded",
+    "totalRulesInRepository": 50,
+    "methodologyNote": "This matrix drives each rule's own canonical nonCompliantExample through the REAL RuleExecutionEngine/ASTDetectionEngine, then AIRemediationRouter.route(), then — for deterministic routes only — the REAL fixer + an independent re-scan. AI_ASSISTED-routed rules are NOT bulk-live-API-tested here (cost/time); see endToEndRemediationTests.aiAssistedPath_realisticFixtures for a representative live sample of 3 different AI_ASSISTED rules (3/3 verified).",
+    "counts": {
+      "detectedOnCanonicalFixture": 39,
+      "notDetectedOnCanonicalFixture": 11,
+      "deterministicRemediationVerified": 17,
+      "deterministicRemediationRejected": 8,
+      "routesToAiAssisted": 12,
+      "manualReviewOnly": 2
+    },
+    "rows": [
+      {
+        "ruleId": "FIGM-PERF-01",
+        "ruleName": "Invariant Object Allocation in Iteration Scopes",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-PERF-02",
+        "ruleName": "Un-dimensioned Dynamic Layout Elements",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": false,
+        "finalStatus": "REMEDIATION_REJECTED",
+        "deterministicDeclineReason": "Intrinsic dimensions for <img> cannot be safely inferred without developer intent — declining deterministic fix to avoid hallucinated dimensions."
+      },
+      {
+        "ruleId": "FIGM-PERF-03",
+        "ruleName": "Unbounded Event Listener Disposal",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-PERF-04",
+        "ruleName": "Static Imports in Deferred Execution Paths",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-PERF-05",
+        "ruleName": "Inline Anonymous Callbacks in Render Loops",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-PERF-06",
+        "ruleName": "Synchronous Storage Access in Loop Scope",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": false,
+        "finalStatus": "REMEDIATION_REJECTED",
+        "deterministicDeclineReason": "The storage call's result is not assigned to a simple variable — cannot safely hoist without knowing what to do with the result."
+      },
+      {
+        "ruleId": "FIGM-A11Y-01",
+        "ruleName": "Keyboard Event Parity on Pointer Handlers",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-A11Y-02",
+        "ruleName": "Accessible Name and Role for Custom UI Controls",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-A11Y-03",
+        "ruleName": "ARIA Live Announcer for Dynamic Mutations",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-A11Y-04",
+        "ruleName": "Dynamic Focus Containment and Traversal",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-A11Y-05",
+        "ruleName": "Form Input Label Association",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-A11Y-06",
+        "ruleName": "Avoid Positive TabIndex Values",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": false,
+        "finalStatus": "REMEDIATION_REJECTED",
+        "deterministicDeclineReason": "No tabIndex attribute found on this element."
+      },
+      {
+        "ruleId": "FIGM-NEXT-01",
+        "ruleName": "React Hooks Require \"use client\" Directive",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-NEXT-02",
+        "ruleName": "Dynamic Imports for Heavy Browser Modules",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-NEXT-03",
+        "ruleName": "App Router Route Segment Revalidation",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-NEXT-04",
+        "ruleName": "Zero-Layout-Shift Web Fonts via next/font",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-REACT-01",
+        "ruleName": "Memoize Expensive Derived Computations",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-REACT-02",
+        "ruleName": "Stable List Key Prop Assignment",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "LEGACY_TEXT_HEURISTIC",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-REACT-03",
+        "ruleName": "Avoid Direct React State Mutation",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-REACT-04",
+        "ruleName": "Wrap Child Callback Props in useCallback",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-ANG-01",
+        "ruleName": "Unsubscribe RxJS Subscriptions",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-ANG-02",
+        "ruleName": "Angular OnPush Change Detection Strategy",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": false,
+        "finalStatus": "REMEDIATION_REJECTED",
+        "deterministicDeclineReason": "Could not locate an enclosing class declaration."
+      },
+      {
+        "ruleId": "FIGM-ANG-03",
+        "ruleName": "Angular *ngFor trackBy Function Reference",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "ANGULAR_TEMPLATE_AST",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-ANG-04",
+        "ruleName": "Minimize Method Invocations in Angular Templates",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "ANGULAR_TEMPLATE_AST",
+        "deterministicOutcomeSuccess": false,
+        "finalStatus": "REMEDIATION_REJECTED",
+        "deterministicDeclineReason": "Converting this template method call to a getter, cached signal, or pure pipe requires understanding what the method computes — not safely automatable. Routed to the AI-assisted layer."
+      },
+      {
+        "ruleId": "FIGM-ANG-05",
+        "ruleName": "Renderer2 DOM Manipulation Safety",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-A11Y-07",
+        "ruleName": "Accessible Name Must Contain Visible Label Text",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-REACT-05",
+        "ruleName": "Effect Used Solely to Derive State",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-REACT-06",
+        "ruleName": "Missing Reactive Dependency in Effect Hook",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-NEXT-05",
+        "ruleName": "Server-Only Module Imported Across the Client Boundary",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-NEXT-06",
+        "ruleName": "Native <img> Instead of next/image",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-ANG-06",
+        "ruleName": "Impure Angular Pipe Declaration",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-VUE-01",
+        "ruleName": "Unstable or Missing v-for Key Binding",
+        "chosenFramework": "VUE_SFC",
+        "filePath": "fixture.vue",
+        "actualDetectedFramework": "VUE_SFC",
+        "detected": true,
+        "sourceKind": "LEGACY_TEXT_HEURISTIC",
+        "detectionResult": "DETECTED",
+        "router": "VUE_AST",
+        "deterministicOutcomeSuccess": false,
+        "finalStatus": "REMEDIATION_REJECTED",
+        "deterministicDeclineReason": "No <template> block found to patch."
+      },
+      {
+        "ruleId": "FIGM-VUE-02",
+        "ruleName": "Combined v-if and v-for on the Same Element",
+        "chosenFramework": "VUE_SFC",
+        "filePath": "fixture.vue",
+        "actualDetectedFramework": "VUE_SFC",
+        "detected": true,
+        "sourceKind": "LEGACY_TEXT_HEURISTIC",
+        "detectionResult": "DETECTED",
+        "router": "VUE_AST",
+        "deterministicOutcomeSuccess": false,
+        "finalStatus": "REMEDIATION_REJECTED",
+        "deterministicDeclineReason": "No <template> block found to patch."
+      },
+      {
+        "ruleId": "FIGM-NEXT-07",
+        "ruleName": "Async Client Component Misuse",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-NEXT-08",
+        "ruleName": "useSearchParams Without a Suspense Boundary",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "MANUAL_REVIEW_ONLY",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "MANUAL_REVIEW_ONLY by design -- never automatically remediated"
+      },
+      {
+        "ruleId": "FIGM-NEXT-09",
+        "ruleName": "Metadata API Used from an Invalid Client Boundary",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "MANUAL_REVIEW_ONLY",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "MANUAL_REVIEW_ONLY by design -- never automatically remediated"
+      },
+      {
+        "ruleId": "FIGM-NEXT-10",
+        "ruleName": "Unnecessary Forced Dynamic Rendering",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-VUE-03",
+        "ruleName": "Side Effect Inside Computed Getter",
+        "chosenFramework": "VUE_SFC",
+        "filePath": "fixture.vue",
+        "actualDetectedFramework": "VUE_SFC",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-VUE-04",
+        "ruleName": "Direct Mutation of Computed Result",
+        "chosenFramework": "VUE_SFC",
+        "filePath": "fixture.vue",
+        "actualDetectedFramework": "VUE_SFC",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-VUE-05",
+        "ruleName": "Direct Prop Mutation",
+        "chosenFramework": "VUE_SFC",
+        "filePath": "fixture.vue",
+        "actualDetectedFramework": "VUE_SFC",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-VUE-06",
+        "ruleName": "Arrow Function Used as Options API Method",
+        "chosenFramework": "VUE_SFC",
+        "filePath": "fixture.vue",
+        "actualDetectedFramework": "VUE_SFC",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-ANG-07",
+        "ruleName": "Complex Logic in Angular Component Constructor",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-ANG-08",
+        "ruleName": "Unstable @for Track Expression",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "ANGULAR_TEMPLATE_AST",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-ANG-09",
+        "ruleName": "Mutable Signal Input Declaration",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      },
+      {
+        "ruleId": "FIGM-ANG-10",
+        "ruleName": "Duplicate Async Pipe Subscriptions in Template",
+        "chosenFramework": "ANGULAR_TEMPLATE",
+        "filePath": "fixture.component.ts",
+        "actualDetectedFramework": "ANGULAR_TEMPLATE",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "ANGULAR_TEMPLATE_AST",
+        "deterministicOutcomeSuccess": false,
+        "finalStatus": "REMEDIATION_REJECTED",
+        "deterministicDeclineReason": "Subscribing once via an \"as\" alias and reusing the local template variable requires restructuring the surrounding markup — not safely automatable. Routed to the AI-assisted layer."
+      },
+      {
+        "ruleId": "FIGM-REACT-07",
+        "ruleName": "Hook Used Inside Conditional, Loop, or Nested Function",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-REACT-08",
+        "ruleName": "Direct Mutation of Component Props",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-REACT-09",
+        "ruleName": "Side Effect Executed During Render",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AI_ASSISTED",
+        "finalStatus": "NOT_APPLICABLE",
+        "finalStatusReason": "Routes to AI_ASSISTED -- not bulk-live-API-tested (cost/time); see representative live samples"
+      },
+      {
+        "ruleId": "FIGM-REACT-10",
+        "ruleName": "Component Function Called Directly Instead of Rendered as JSX",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": false,
+        "detectionResult": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+        "finalStatus": "FIXTURE_SHAPE_ARTIFACT"
+      },
+      {
+        "ruleId": "FIGM-REACT-11",
+        "ruleName": "Unmemoized Context Provider Value",
+        "chosenFramework": "NEXT_JS",
+        "filePath": "app/fixture/page.tsx",
+        "actualDetectedFramework": "NEXT_JS",
+        "detected": true,
+        "sourceKind": "REAL_AST",
+        "detectionResult": "DETECTED",
+        "router": "AST_DETERMINISTIC",
+        "deterministicOutcomeSuccess": true,
+        "independentRescan_ruleGone": true,
+        "finalStatus": "DETERMINISTIC_REMEDIATION_VERIFIED"
+      }
+    ]
+  },
+  "fixtureShapeArtifacts": {
+    "definition": "A case where the rule's own canonical nonCompliantExample (the short documentation snippet in FOUR_LAYER_MAPPINGS) is too minimal/context-free to satisfy the detector's or fixer's real structural trigger condition — NOT a defect in the detector, fixer, or Qwen integration.",
+    "independentlyReVerifiedWithRealisticFixture_liveTestPerformed": [
+      {
+        "ruleId": "FIGM-VUE-01",
+        "canonicalFixtureResult": "Detected, but deterministic fixer declined: \"No <template> block found to patch\" (canonical example is a bare <li> fragment, no SFC wrapper)",
+        "realisticFixtureResult": "Detected + deterministic fix VERIFIED (re-scan confirms rule gone)",
+        "rootCauseConfirmedViaSource": true
+      },
+      {
+        "ruleId": "FIGM-ANG-02",
+        "canonicalFixtureResult": "Detected, but deterministic fixer declined: \"Could not locate an enclosing class declaration\" (canonical example is a bare @Component decorator, no class)",
+        "realisticFixtureResult": "Detected + deterministic fix VERIFIED",
+        "rootCauseConfirmedViaSource": true
+      },
+      {
+        "ruleId": "FIGM-A11Y-06",
+        "canonicalFixtureResult": "Detected, but deterministic fixer declined: \"No tabIndex attribute found\" (canonical example uses lowercase HTML `tabindex=\"5\"`, not the JSX-cased `tabIndex={5}` the fixer's pattern expects)",
+        "realisticFixtureResult": "Detected + deterministic fix VERIFIED",
+        "rootCauseConfirmedViaSource": true
+      }
+    ],
+    "rootCausedViaSourceInspectionOnly_notIndependentlyReRun": [
+      "FIGM-PERF-04 (evalPerf04 requires attributes.referencedInConditional=true; canonical snippet has no conditional at all)",
+      "FIGM-A11Y-02 (evalA11y02 requires attributes.isCustomControl on a Custom/Select/Dropdown-named element; canonical snippet is a plain <div>)",
+      "FIGM-A11Y-04 (evalA11y04 requires node.name === Modal|Dialog or isOverlay; canonical snippet is a bare function, no such element)",
+      "FIGM-REACT-04, FIGM-REACT-06, FIGM-REACT-10, FIGM-VUE-03, FIGM-VUE-04, FIGM-VUE-05, FIGM-VUE-06, FIGM-ANG-07 (same class of gap: canonical snippet lacks the structural context the real detector/fixer condition checks for)",
+      "FIGM-VUE-02, FIGM-ANG-04, FIGM-ANG-10, FIGM-PERF-02, FIGM-PERF-06 (deterministic-fixer declines: same missing-<template> shape as VUE-01, or a legitimate safety-first/ambiguity decline that would fall through to AI_ASSISTED for this specific instance in the real pipeline)"
+    ],
+    "testingHarnessArtifactFoundAndCorrected": {
+      "rule": "FIGM-PERF-06",
+      "description": "This verification's own first-pass matrix script defaulted every rule listing VUE_SFC to a .vue fixture file regardless of whether the snippet had any Vue-specific syntax. FIGM-PERF-06's canonical snippet (plain for-loop + localStorage.getItem) is framework-general and does not detect as a bogus .vue file, but DOES detect correctly as REACT_JSX/GENERIC_ESTREE. The matrix script was corrected mid-session (see fixture-selection priority in this JSON's methodologyNote) and re-run; this was a bug in the verification harness itself, not in FIGM."
+    }
+  },
+  "aiFixSuccessRateSample": {
+    "disclaimer": "Small representative sample (3 of 12 AI_ASSISTED-routed rules = 25% rule-type coverage), NOT an exhaustive live test of every AI_ASSISTED rule. Do not extrapolate to a guaranteed rate for untested rules.",
+    "aiRemediationAttempts_realisticFixtures": 3,
+    "verifiedFixes": 3,
+    "rejectedFixes_realisticFixtures": 0,
+    "aiFixSuccessRate_sample": "3/3 = 100% (n=3, realistic fixtures only)",
+    "tinyFixtureCaveat": "The SAME rule (FIGM-REACT-01) tested on its 4-line canonical fixture was REJECTED — not by Qwen failing, but by the patch-scope safety heuristic. Fixture size materially affects the outcome; success rate is NOT independent of fixture realism.",
+    "forcedApiFailureAttempts_notCountedAsRemediationFailures": 2,
+    "verifiedEndToEndRemediationRate_note": "verified fixes / eligible remediation attempts, restricted to realistic (non-adversarial, non-tiny) fixtures = 3/3. API-blocked and detection-only cases are excluded from this ratio per the task's own instruction not to count them as AI successes or failures of the AI layer."
+  },
+  "genuineFindings": [
+    {
+      "id": "FINDING-1",
+      "severity": "MINOR (efficiency, not correctness)",
+      "title": "Bounded retry does not distinguish a permanent provider error from a transient one",
+      "evidence": "Forcing HF_MODEL to a nonexistent id and running the full pipeline made 3 real HTTP 400 calls (all identical failures) before giving up, instead of failing fast after the first.",
+      "impact": "Wastes latency/cost on a call that will deterministically fail every time; never produces an incorrect result — final state was correctly UNAVAILABLE with source unchanged.",
+      "location": "src/ai/ai-remediation-pipeline.ts — the early-break condition only recognizes \"environment variable is not configured\" / \"No AI remediation provider is configured\", not other permanent failures like an HTTP 400/404 model-not-found."
+    },
+    {
+      "id": "FINDING-2",
+      "severity": "INFORMATIONAL (working-as-designed limitation, live-proven)",
+      "title": "Patch-scope safety heuristic can reject a correct AI fix on a very small fixture",
+      "evidence": "A verified-correct, minimal Qwen patch (add useMemo import + wrap one line) was rejected on a 4-line file because it crossed the 60%-changed-lines threshold once the file reached 6 total lines.",
+      "impact": "None on real project files (which are essentially never 4-6 lines); demonstrated here only because the canonical rule-catalog fixture is that small. The heuristic is doing exactly what it was designed to do (reject an implausibly large rewrite) — it just cannot distinguish \"large ratio because the file is tiny\" from \"large ratio because the rewrite is excessive.\" No change made or recommended per the task's instruction not to alter production logic to satisfy a fixture.",
+      "location": "src/ai/sandbox-validation-pipeline.ts checkPatchScope, MIN_LINES_TO_CHECK=6 / MAX_CHANGED_RATIO=0.6"
+    },
+    {
+      "id": "FINDING-3",
+      "severity": "NOT A BUG (verified via source)",
+      "title": "Fixing FIGM-NEXT-01 makes FIGM-NEXT-03 stop firing on the same file",
+      "evidence": "Confirmed via source.parser.ts:568-586 — FIGM-NEXT-03 is deliberately inapplicable once a file has a \"use client\" directive.",
+      "impact": "None — correct, intentional rule interaction, not violation-hiding."
+    }
+  ],
+  "finalVerdict": {
+    "question": "Can the current FIGM system genuinely use Qwen3-Coder through the Hugging Face API as an AI remediation assistant, after FIGM detects a violation, and safely generate → validate → re-scan → verify a fix?",
+    "answer": "YES",
+    "scopeOfYes": "Proven end-to-end with real, live, non-mocked network calls: detection → AI_ASSISTED routing → real Qwen3-Coder patch generation → in-memory sandbox validation (syntax/scope/TypeScript compile) → real FIGM re-scan → VERIFIED, for 3 different rules (FIGM-REACT-01, FIGM-REACT-08, FIGM-REACT-09) in realistic-sized fixtures, 3/3 successful. Provider routing definitively confirmed Qwen (never Claude) was used in every live call this session, with the Anthropic path preserved only as an unused fallback. Failure/safety paths (invalid model, invalid token, an undersized fixture triggering the scope heuristic) all degraded honestly to REJECT/UNAVAILABLE with the original source always left untouched — never a fabricated VERIFIED.",
+    "caveats": [
+      "Only 3 of the 12 AI_ASSISTED-routed rules were live-API-tested end-to-end in this session (cost/time); the other 9 are architecturally routed the same way and share the same code path, but were not individually live-verified here.",
+      "The patch-scope safety heuristic can reject a correct AI patch on very small (<6 line) files — a real, demonstrated, working-as-designed limitation, not a failure of the Qwen integration itself.",
+      "A permanent provider error (e.g. an invalid model id) is retried 3x before giving up — a minor latency/cost inefficiency, not a correctness issue."
+    ]
+  }
+}

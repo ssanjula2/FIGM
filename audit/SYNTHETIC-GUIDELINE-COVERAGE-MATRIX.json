@@ -1,0 +1,2420 @@
+{
+  "generatedAt": "2026-08-26T17:23:36.445Z",
+  "methodology": "Real, freshly-executed measurement. Detection: RuleExecutionEngine.analyzeFile (the same engine app/api/scan/route.ts calls) run against each rule's own canonical nonCompliantExample/compliantExample (src/matrix/four-layer-meta-model.ts), for every framework listed in that rule's own `frameworks` applicability array. Remediation: AIRemediationPipeline.remediateDefect (the same pipeline the app's AI-Fix action calls) run on the first framework where the violation was actually detected. Nothing here touches real project source -- every fixture is an in-memory string. A subset of false negatives are known fixture-shape artifacts of using each rule's minimal documentation-display snippet as a whole standalone file rather than a realistically-wrapped one -- see the report's Detection Failures section for the root-cause investigation and cross-reference against this project's own passing test suite.",
+  "summary": {
+    "currentRuleCount": 50,
+    "frameworksSupported": [
+      "REACT_JSX",
+      "NEXT_JS",
+      "ANGULAR_TEMPLATE",
+      "VUE_SFC",
+      "GENERIC_ESTREE"
+    ],
+    "applicableRuleFrameworkCombinations": 131,
+    "detected": 93,
+    "falseNegative": 32,
+    "falsePositive": 0,
+    "blockedFrameworkMisclassified": 6,
+    "remediation": {
+      "fixVerified": 17,
+      "aiBlockedExternalDependency": 20,
+      "manualReviewRequired": 2,
+      "skippedNotDetected": 11
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-PERF-01 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "MIXED",
+      "remediation": {
+        "ruleId": "FIGM-PERF-01",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-PERF-01 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-PERF-02 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "MIXED",
+      "remediation": {
+        "ruleId": "FIGM-PERF-02",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-PERF-02 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-PERF-03 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "MIXED",
+      "remediation": {
+        "ruleId": "FIGM-PERF-03",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-PERF-03 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-PERF-04 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-PERF-04",
+        "frameworkUsed": null,
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-PERF-04 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-PERF-05 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "MIXED",
+      "remediation": {
+        "ruleId": "FIGM-PERF-05",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-PERF-05 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-PERF-06",
+      "ruleName": "Synchronous Storage Access in Loop Scope",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-PERF-06 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-PERF-06",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-PERF-06 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-01",
+      "ruleName": "Keyboard Event Parity on Pointer Handlers",
+      "domain": "ACCESSIBILITY",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-A11Y-01 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "MIXED",
+      "remediation": {
+        "ruleId": "FIGM-A11Y-01",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-A11Y-01 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-A11Y-02 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-A11Y-02",
+        "frameworkUsed": null,
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-A11Y-02 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-03",
+      "ruleName": "ARIA Live Announcer for Dynamic Mutations",
+      "domain": "ACCESSIBILITY",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-A11Y-03 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "MIXED",
+      "remediation": {
+        "ruleId": "FIGM-A11Y-03",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-A11Y-03 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-04",
+      "ruleName": "Dynamic Focus Containment and Traversal",
+      "domain": "ACCESSIBILITY",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-A11Y-04 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-A11Y-04",
+        "frameworkUsed": null,
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-A11Y-04 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-A11Y-05 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "MIXED",
+      "remediation": {
+        "ruleId": "FIGM-A11Y-05",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-A11Y-05 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-06",
+      "ruleName": "Avoid Positive TabIndex Values",
+      "domain": "ACCESSIBILITY",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [],
+      "isFrameworkIndependent": true,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-A11Y-06 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "MIXED",
+      "remediation": {
+        "ruleId": "FIGM-A11Y-06",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-A11Y-06 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-01",
+      "ruleName": "React Hooks Require \"use client\" Directive",
+      "domain": "PERFORMANCE",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "NEXT_JS",
+        "REACT_JSX"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-NEXT-01 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "REACT_JSX": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-01",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-NEXT-01 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-02",
+      "ruleName": "Dynamic Imports for Heavy Browser Modules",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "NEXT_JS"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-NEXT-02 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-02",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-NEXT-02 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "NEXT_JS"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-NEXT-03 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-03",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-NEXT-03 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-04",
+      "ruleName": "Zero-Layout-Shift Web Fonts via next/font",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "NEXT_JS",
+        "REACT_JSX"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-NEXT-04 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-04",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-NEXT-04 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-REACT-01 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-REACT-01",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-REACT-01 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-REACT-02",
+      "ruleName": "Stable List Key Prop Assignment",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-REACT-02 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "MIXED",
+      "remediation": {
+        "ruleId": "FIGM-REACT-02",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-REACT-02 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-REACT-03",
+      "ruleName": "Avoid Direct React State Mutation",
+      "domain": "PERFORMANCE",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-REACT-03 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-REACT-03",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-REACT-03 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-REACT-04",
+      "ruleName": "Wrap Child Callback Props in useCallback",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-REACT-04 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-REACT-04",
+        "frameworkUsed": null,
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-REACT-04 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-ANG-01 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-ANG-01",
+        "frameworkUsed": "ANGULAR_TEMPLATE",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-ANG-01 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-ANG-02 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "BLOCKED_FRAMEWORK_MISCLASSIFIED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": false
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-ANG-02",
+        "frameworkUsed": "ANGULAR_TEMPLATE",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-ANG-02 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-ANG-03",
+      "ruleName": "Angular *ngFor trackBy Function Reference",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "ANGULAR_TEMPLATE_AST",
+      "routerReason": "FIGM-ANG-03 has a real Angular-template-AST deterministic fixer (src/engine/angular-template-fix-engine.ts).",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-ANG-03",
+        "frameworkUsed": "ANGULAR_TEMPLATE",
+        "routerDecision": "ANGULAR_TEMPLATE_AST",
+        "routerReason": "FIGM-ANG-03 has a real Angular-template-AST deterministic fixer (src/engine/angular-template-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "ANGULAR_TEMPLATE_AST",
+      "routerReason": "FIGM-ANG-04 has a real Angular-template-AST deterministic fixer (src/engine/angular-template-fix-engine.ts).",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-ANG-04",
+        "frameworkUsed": "ANGULAR_TEMPLATE",
+        "routerDecision": "ANGULAR_TEMPLATE_AST",
+        "routerReason": "FIGM-ANG-04 has a real Angular-template-AST deterministic fixer (src/engine/angular-template-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-ANG-05",
+      "ruleName": "Renderer2 DOM Manipulation Safety",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-ANG-05 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-ANG-05",
+        "frameworkUsed": "ANGULAR_TEMPLATE",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-ANG-05 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-A11Y-07",
+      "ruleName": "Accessible Name Must Contain Visible Label Text",
+      "domain": "ACCESSIBILITY",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-A11Y-07 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-A11Y-07",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-A11Y-07 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-REACT-05",
+      "ruleName": "Effect Used Solely to Derive State",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-REACT-05 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "BLOCKED_FRAMEWORK_MISCLASSIFIED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": false
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-REACT-05",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-REACT-05 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-REACT-06",
+      "ruleName": "Missing Reactive Dependency in Effect Hook",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "MANUAL_REVIEW_ONLY",
+      "routerReason": "FIGM-REACT-06 requires cross-file context or carries a runtime-only failure mode this pipeline cannot safely validate even with AI assistance — see MANUAL_REVIEW_ONLY_RULE_IDS.",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "BLOCKED_FRAMEWORK_MISCLASSIFIED",
+          "sourceKind": null,
+          "frameworkClassificationMatches": false
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-REACT-06",
+        "frameworkUsed": null,
+        "routerDecision": "MANUAL_REVIEW_ONLY",
+        "routerReason": "FIGM-REACT-06 requires cross-file context or carries a runtime-only failure mode this pipeline cannot safely validate even with AI assistance — see MANUAL_REVIEW_ONLY_RULE_IDS.",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-05",
+      "ruleName": "Server-Only Module Imported Across the Client Boundary",
+      "domain": "PERFORMANCE",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "NEXT_JS"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-NEXT-05 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-05",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-NEXT-05 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-06",
+      "ruleName": "Native <img> Instead of next/image",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "NEXT_JS"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-NEXT-06 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-06",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-NEXT-06 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-ANG-06",
+      "ruleName": "Impure Angular Pipe Declaration",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-ANG-06 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-ANG-06",
+        "frameworkUsed": "ANGULAR_TEMPLATE",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-ANG-06 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-VUE-01",
+      "ruleName": "Unstable or Missing v-for Key Binding",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "VUE_SFC"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "VUE_AST",
+      "routerReason": "FIGM-VUE-01 has a real Vue-AST deterministic fixer (src/engine/vue-fix-engine.ts).",
+      "perFramework": {
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "LEGACY_TEXT_HEURISTIC",
+      "remediation": {
+        "ruleId": "FIGM-VUE-01",
+        "frameworkUsed": "VUE_SFC",
+        "routerDecision": "VUE_AST",
+        "routerReason": "FIGM-VUE-01 has a real Vue-AST deterministic fixer (src/engine/vue-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-VUE-02",
+      "ruleName": "Combined v-if and v-for on the Same Element",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "VUE_SFC"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "VUE_AST",
+      "routerReason": "FIGM-VUE-02 has a real Vue-AST deterministic fixer (src/engine/vue-fix-engine.ts).",
+      "perFramework": {
+        "VUE_SFC": {
+          "classification": "DETECTED",
+          "sourceKind": "LEGACY_TEXT_HEURISTIC",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "LEGACY_TEXT_HEURISTIC",
+      "remediation": {
+        "ruleId": "FIGM-VUE-02",
+        "frameworkUsed": "VUE_SFC",
+        "routerDecision": "VUE_AST",
+        "routerReason": "FIGM-VUE-02 has a real Vue-AST deterministic fixer (src/engine/vue-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-07",
+      "ruleName": "Async Client Component Misuse",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "NEXT_JS"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-NEXT-07 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-07",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-NEXT-07 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "NEXT_JS"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "MANUAL_REVIEW_ONLY",
+      "routerReason": "FIGM-NEXT-08 requires cross-file context or carries a runtime-only failure mode this pipeline cannot safely validate even with AI assistance — see MANUAL_REVIEW_ONLY_RULE_IDS.",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-08",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "MANUAL_REVIEW_ONLY",
+        "routerReason": "FIGM-NEXT-08 requires cross-file context or carries a runtime-only failure mode this pipeline cannot safely validate even with AI assistance — see MANUAL_REVIEW_ONLY_RULE_IDS.",
+        "attempted": true,
+        "engineType": "MANUAL_REVIEW",
+        "verified": false,
+        "verificationStatus": "MANUAL_REVIEW_REQUIRED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": false,
+        "classification": "MANUAL_REVIEW_REQUIRED"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-09",
+      "ruleName": "Metadata API Used from an Invalid Client Boundary",
+      "domain": "PERFORMANCE",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "NEXT_JS"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "MANUAL_REVIEW_ONLY",
+      "routerReason": "FIGM-NEXT-09 requires cross-file context or carries a runtime-only failure mode this pipeline cannot safely validate even with AI assistance — see MANUAL_REVIEW_ONLY_RULE_IDS.",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-09",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "MANUAL_REVIEW_ONLY",
+        "routerReason": "FIGM-NEXT-09 requires cross-file context or carries a runtime-only failure mode this pipeline cannot safely validate even with AI assistance — see MANUAL_REVIEW_ONLY_RULE_IDS.",
+        "attempted": true,
+        "engineType": "MANUAL_REVIEW",
+        "verified": false,
+        "verificationStatus": "MANUAL_REVIEW_REQUIRED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": false,
+        "classification": "MANUAL_REVIEW_REQUIRED"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-10",
+      "ruleName": "Unnecessary Forced Dynamic Rendering",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "NEXT_JS"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-NEXT-10 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-NEXT-10",
+        "frameworkUsed": "NEXT_JS",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-NEXT-10 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-VUE-03",
+      "ruleName": "Side Effect Inside Computed Getter",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "VUE_SFC"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "VUE_AST",
+      "routerReason": "FIGM-VUE-03 has a real Vue-AST deterministic fixer (src/engine/vue-fix-engine.ts).",
+      "perFramework": {
+        "VUE_SFC": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-VUE-03",
+        "frameworkUsed": null,
+        "routerDecision": "VUE_AST",
+        "routerReason": "FIGM-VUE-03 has a real Vue-AST deterministic fixer (src/engine/vue-fix-engine.ts).",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-VUE-04",
+      "ruleName": "Direct Mutation of Computed Result",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "VUE_SFC"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "VUE_AST",
+      "routerReason": "FIGM-VUE-04 has a real Vue-AST deterministic fixer (src/engine/vue-fix-engine.ts).",
+      "perFramework": {
+        "VUE_SFC": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-VUE-04",
+        "frameworkUsed": null,
+        "routerDecision": "VUE_AST",
+        "routerReason": "FIGM-VUE-04 has a real Vue-AST deterministic fixer (src/engine/vue-fix-engine.ts).",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-VUE-05",
+      "ruleName": "Direct Prop Mutation",
+      "domain": "PERFORMANCE",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "VUE_SFC"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-VUE-05 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "VUE_SFC": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-VUE-05",
+        "frameworkUsed": null,
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-VUE-05 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-VUE-06",
+      "ruleName": "Arrow Function Used as Options API Method",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "VUE_SFC"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-VUE-06 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "VUE_SFC": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-VUE-06",
+        "frameworkUsed": null,
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-VUE-06 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-ANG-07 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-ANG-07",
+        "frameworkUsed": null,
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-ANG-07 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-ANG-08",
+      "ruleName": "Unstable @for Track Expression",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "ANGULAR_TEMPLATE_AST",
+      "routerReason": "FIGM-ANG-08 has a real Angular-template-AST deterministic fixer (src/engine/angular-template-fix-engine.ts).",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-ANG-08",
+        "frameworkUsed": "ANGULAR_TEMPLATE",
+        "routerDecision": "ANGULAR_TEMPLATE_AST",
+        "routerReason": "FIGM-ANG-08 has a real Angular-template-AST deterministic fixer (src/engine/angular-template-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-ANG-09",
+      "ruleName": "Mutable Signal Input Declaration",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-ANG-09 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "BLOCKED_FRAMEWORK_MISCLASSIFIED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": false
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-ANG-09",
+        "frameworkUsed": "ANGULAR_TEMPLATE",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-ANG-09 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    },
+    {
+      "ruleId": "FIGM-ANG-10",
+      "ruleName": "Duplicate Async Pipe Subscriptions in Template",
+      "domain": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "frameworksApplicable": [
+        "ANGULAR_TEMPLATE"
+      ],
+      "frameworksNotApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "VUE_SFC",
+        "GENERIC_ESTREE"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "ANGULAR_TEMPLATE_AST",
+      "routerReason": "FIGM-ANG-10 has a real Angular-template-AST deterministic fixer (src/engine/angular-template-fix-engine.ts).",
+      "perFramework": {
+        "ANGULAR_TEMPLATE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-ANG-10",
+        "frameworkUsed": "ANGULAR_TEMPLATE",
+        "routerDecision": "ANGULAR_TEMPLATE_AST",
+        "routerReason": "FIGM-ANG-10 has a real Angular-template-AST deterministic fixer (src/engine/angular-template-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-REACT-07",
+      "ruleName": "Hook Used Inside Conditional, Loop, or Nested Function",
+      "domain": "PERFORMANCE",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-REACT-07 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "BLOCKED_FRAMEWORK_MISCLASSIFIED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": false
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-REACT-07",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-REACT-07 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-REACT-08",
+      "ruleName": "Direct Mutation of Component Props",
+      "domain": "PERFORMANCE",
+      "severity": "CRITICAL",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-REACT-08 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-REACT-08",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-REACT-08 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-REACT-09",
+      "ruleName": "Side Effect Executed During Render",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AI_ASSISTED",
+      "routerReason": "FIGM-REACT-09 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-REACT-09",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AI_ASSISTED",
+        "routerReason": "FIGM-REACT-09 has no deterministic AST fixer — requires developer intention or architectural reasoning, routed to the AI-assisted layer.",
+        "attempted": true,
+        "engineType": "UNAVAILABLE",
+        "verified": false,
+        "verificationStatus": "UNRESOLVED",
+        "fallbackReason": "Claude API request failed (status 400). Please try again later.",
+        "remediatedDiffersFromOriginal": false,
+        "classification": "AI_REMEDIATION_BLOCKED_EXTERNAL_DEPENDENCY"
+      },
+      "finalStatus": "VERIFIED_DETECTION_ONLY_AI_BLOCKED"
+    },
+    {
+      "ruleId": "FIGM-REACT-10",
+      "ruleName": "Component Function Called Directly Instead of Rendered as JSX",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-REACT-10 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "FALSE_NEGATIVE",
+          "sourceKind": null,
+          "frameworkClassificationMatches": true
+        }
+      },
+      "detectionMethod": "NOT_DETECTED_ON_CANONICAL_FIXTURE",
+      "remediation": {
+        "ruleId": "FIGM-REACT-10",
+        "frameworkUsed": null,
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-REACT-10 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": false,
+        "engineType": null,
+        "verified": null,
+        "verificationStatus": null,
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": null,
+        "classification": "SKIPPED_NOT_DETECTED"
+      },
+      "finalStatus": "FAILED_DETECTION_ON_CANONICAL_FIXTURE"
+    },
+    {
+      "ruleId": "FIGM-REACT-11",
+      "ruleName": "Unmemoized Context Provider Value",
+      "domain": "PERFORMANCE",
+      "severity": "HIGH",
+      "frameworksApplicable": [
+        "REACT_JSX",
+        "NEXT_JS",
+        "GENERIC_ESTREE"
+      ],
+      "frameworksNotApplicable": [
+        "ANGULAR_TEMPLATE",
+        "VUE_SFC"
+      ],
+      "isFrameworkIndependent": false,
+      "routerDecision": "AST_DETERMINISTIC",
+      "routerReason": "FIGM-REACT-11 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+      "perFramework": {
+        "REACT_JSX": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "NEXT_JS": {
+          "classification": "DETECTED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": true
+        },
+        "GENERIC_ESTREE": {
+          "classification": "BLOCKED_FRAMEWORK_MISCLASSIFIED",
+          "sourceKind": "REAL_AST",
+          "frameworkClassificationMatches": false
+        }
+      },
+      "detectionMethod": "REAL_AST",
+      "remediation": {
+        "ruleId": "FIGM-REACT-11",
+        "frameworkUsed": "REACT_JSX",
+        "routerDecision": "AST_DETERMINISTIC",
+        "routerReason": "FIGM-REACT-11 has a real TypeScript-Compiler-API deterministic fixer (src/engine/ast-fix-engine.ts).",
+        "attempted": true,
+        "engineType": "AST_DETERMINISTIC_FIX",
+        "verified": true,
+        "verificationStatus": "FIXED",
+        "fallbackReason": null,
+        "remediatedDiffersFromOriginal": true,
+        "classification": "FIX_VERIFIED"
+      },
+      "finalStatus": "VERIFIED"
+    }
+  ]
+}
