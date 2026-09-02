@@ -43,10 +43,20 @@ export async function POST(request: Request) {
     }
 
     const passwordHash = hashPassword(newPassword);
+    // Explicit `null` (not `undefined`) -- Prisma's update() silently no-ops on undefined-valued
+    // fields (treats them as "not included"), so only a real null value clears reset_token /
+    // reset_token_expiry on the Postgres backend. Same bug class already fixed for refreshToken at
+    // logout (see app/api/auth/logout/route.ts); this closes the sibling instance for password
+    // reset so a used/expired token can never be replayed after a successful reset. `refreshToken`
+    // is cleared the same way and for the same reason as changePassword/adminResetPassword: a
+    // password reset is frequently how an owner responds to a compromised account, so any
+    // already-issued refresh token (e.g. the attacker's) must stop working too, not just the old
+    // password.
     await provider.updateUser(user.id, {
       passwordHash,
-      resetToken: undefined,
-      resetTokenExpiry: undefined,
+      resetToken: null,
+      resetTokenExpiry: null,
+      refreshToken: null,
     });
 
     await AuditLogger.logEvent('RESET_PASSWORD', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });

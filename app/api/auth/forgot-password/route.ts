@@ -41,20 +41,21 @@ export async function POST(request: Request) {
 
     await AuditLogger.logEvent('FORGOT_PASSWORD', { userId: user.id, email: user.email, ipAddress: ip, userAgent, status: 'SUCCESS' });
 
-    // The reset token must never be returned to the caller in production -- this endpoint has no
-    // way to know the caller is the account owner (that's the entire point of emailing the token
-    // out-of-band instead). Returning it here would let anyone who submits a victim's email obtain
-    // a valid reset token immediately, silently defeating the "don't reveal whether the account
-    // exists" masking done above for the not-found case. Since this project has no email-sending
-    // integration yet, the token is echoed back ONLY outside production, purely so the reset flow
-    // remains testable/demonstrable without one; wiring up real email delivery is required before
-    // this can be considered safe to deploy with NODE_ENV=production.
-    const isProd = process.env.NODE_ENV === 'production';
+    // The reset token must never be returned to the caller outside of automated tests -- this
+    // endpoint has no way to know the caller is the account owner (that's the entire point of
+    // emailing the token out-of-band instead). Returning it here would let anyone who submits a
+    // victim's email obtain a valid reset token immediately, silently defeating the "don't reveal
+    // whether the account exists" masking done above for the not-found case. Since this project
+    // has no email-sending integration yet, the token is echoed back ONLY when both NODE_ENV=test
+    // AND ALLOW_TEST_RESET_TOKEN=true are set, so it can never be enabled by accident in dev,
+    // staging, or preview deployments; wiring up real email delivery is required before this flow
+    // is safe to deploy with real users.
+    const allowTestToken = process.env.NODE_ENV === 'test' && process.env.ALLOW_TEST_RESET_TOKEN === 'true';
     return NextResponse.json({
-      message: isProd
-        ? 'If an account exists with that email address, a password reset link has been sent.'
-        : 'Password reset token generated successfully',
-      ...(isProd ? {} : { resetToken: token, _devOnly: 'resetToken is only included outside production; see comment in forgot-password/route.ts' }),
+      message: allowTestToken
+        ? 'Password reset token generated successfully'
+        : 'If an account exists with that email address, a password reset link has been sent.',
+      ...(allowTestToken ? { resetToken: token, _devOnly: 'resetToken is only included when NODE_ENV=test and ALLOW_TEST_RESET_TOKEN=true; see comment in forgot-password/route.ts' } : {}),
       expiresAt: expiry,
     });
   } catch (err: unknown) {

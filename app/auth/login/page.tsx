@@ -1,11 +1,28 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { Suspense, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { isSafeRedirect } from '../../../src/utils/safe-redirect';
+import PasswordField from '../../components/PasswordField';
 
+// useSearchParams() opts a component out of static prerendering unless it's wrapped in its own
+// Suspense boundary (https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout) -- without
+// this split, `next build` fails to prerender this page at all. The fallback is only ever visible
+// for the instant before client hydration reads the `redirect` query param; the rest of the page
+// (email/password fields, submit handling) doesn't depend on it, so a plain loading placeholder is
+// enough here rather than a full skeleton.
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#030712' }} />}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -47,7 +64,17 @@ export default function LoginPage() {
         }
       }
 
-      router.push('/guidelines');
+      // middleware.ts already gates every protected route by the httpOnly figm_token cookie the
+      // login API response set; `redirect` here is only ever a same-origin app path captured by
+      // that middleware when it originally bounced an unauthenticated visitor, so it's safe to
+      // send the browser straight there instead of always landing on the dashboard. Absent an
+      // explicit deep-link target, the destination is role-based: ADMIN/AUDITOR land in the
+      // admin/research workspace (app/admin/layout.tsx enforces this server-side regardless of
+      // what the client sends here -- this is just the default landing page), everyone else in
+      // their own workspace at `/`.
+      const redirectTarget = searchParams.get('redirect');
+      const roleDefault = data.user?.role === 'ADMIN' || data.user?.role === 'AUDITOR' ? '/admin' : '/';
+      router.push(isSafeRedirect(redirectTarget) ? redirectTarget : roleDefault);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Login failed';
       setError(message);
@@ -177,25 +204,17 @@ export default function LoginPage() {
           </div>
 
           <div style={{ marginBottom: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <label htmlFor="login-password" style={{ color: '#cbd5e1', fontSize: '13px', fontWeight: 600, margin: 0 }}>
-                Password
-              </label>
-              <Link href="/auth/forgot-password" style={{ color: '#38bdf8', fontSize: '12px', textDecoration: 'none', fontWeight: 500 }}>
-                Forgot Password?
-              </Link>
-            </div>
-            <input
+            <PasswordField
               id="login-password"
-              type="password"
-              aria-label="Password"
-              required
-              autoComplete="current-password"
+              label="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="input-field"
-              style={{ width: '100%' }}
+              onChange={setPassword}
+              autoComplete="current-password"
+              labelTrailing={
+                <Link href="/auth/forgot-password" style={{ color: '#38bdf8', fontSize: '12px', textDecoration: 'none', fontWeight: 500 }}>
+                  Forgot Password?
+                </Link>
+              }
             />
           </div>
 
@@ -222,7 +241,7 @@ export default function LoginPage() {
         </form>
 
         <div style={{ marginTop: '28px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link href="/auth/register" style={{ color: '#38bdf8', fontWeight: 600, textDecoration: 'none' }}>
             Register Now
           </Link>

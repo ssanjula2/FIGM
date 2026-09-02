@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import PasswordField from '../../components/PasswordField';
 
 function ResetPasswordContent() {
   const router = useRouter();
@@ -130,53 +131,34 @@ function ResetPasswordContent() {
           </div>
 
           <div style={{ marginBottom: '18px' }}>
-            <label htmlFor="new-password" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
-              New Password (min 8 chars, 1 uppercase, 1 number)
-            </label>
-            <input
+            <PasswordField
               id="new-password"
-              type="password"
-              aria-label="New Password"
-              required
+              label="New Password"
+              hint="min 8 chars, 1 uppercase, 1 number"
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="••••••••"
-              style={{
-                width: '100%',
+              onChange={setNewPassword}
+              inputStyle={{
                 padding: '12px 16px',
                 borderRadius: '10px',
                 background: 'rgba(30, 41, 59, 0.6)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#f8fafc',
                 fontSize: '14px',
-                outline: 'none',
-                boxSizing: 'border-box',
               }}
             />
           </div>
 
           <div style={{ marginBottom: '24px' }}>
-            <label htmlFor="confirm-password" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
-              Confirm New Password
-            </label>
-            <input
+            <PasswordField
               id="confirm-password"
-              type="password"
-              aria-label="Confirm New Password"
-              required
+              label="Confirm New Password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="••••••••"
-              style={{
-                width: '100%',
+              onChange={setConfirmPassword}
+              inputStyle={{
                 padding: '12px 16px',
                 borderRadius: '10px',
                 background: 'rgba(30, 41, 59, 0.6)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#f8fafc',
                 fontSize: '14px',
-                outline: 'none',
-                boxSizing: 'border-box',
               }}
             />
           </div>

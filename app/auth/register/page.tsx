@@ -3,12 +3,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import PasswordField from '../../components/PasswordField';
 
 export default function RegisterPage() {
   const router = useRouter();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState<'DEVELOPER' | 'AUDITOR'>('DEVELOPER');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,8 +26,17 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+
+    // Client-side confirmation check only -- the actual password-strength policy is enforced
+    // server-side in POST /api/auth/register (see src/auth/auth-service.ts's validatePassword),
+    // which is the real, non-bypassable boundary. This is purely a UX guard against a typo.
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const res = await fetch('/api/auth/register', {
@@ -46,7 +57,11 @@ export default function RegisterPage() {
         }
       }
 
-      router.push('/guidelines');
+      // Registration issues a real session immediately (see app/api/auth/register/route.ts) --
+      // land directly in the authenticated application, same role-based default as a normal login
+      // (register/route.ts never assigns ADMIN, but AUDITOR is self-registerable and belongs in the
+      // admin/research workspace, not the developer one).
+      router.push(data.user?.role === 'AUDITOR' ? '/admin' : '/');
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Registration failed';
       setError(message);
@@ -167,21 +182,24 @@ export default function RegisterPage() {
             </select>
           </div>
 
-          <div style={{ marginBottom: '24px' }}>
-            <label htmlFor="reg-password" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
-              Password (min 8 chars, 1 uppercase, 1 number)
-            </label>
-            <input
+          <div style={{ marginBottom: '18px' }}>
+            <PasswordField
               id="reg-password"
-              type="password"
-              aria-label="Password"
-              required
-              autoComplete="new-password"
+              label="Password"
+              hint="min 8 chars, 1 uppercase, 1 number"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="input-field"
-              style={{ width: '100%' }}
+              onChange={setPassword}
+              autoComplete="new-password"
+            />
+          </div>
+
+          <div style={{ marginBottom: '24px' }}>
+            <PasswordField
+              id="reg-confirm-password"
+              label="Confirm Password"
+              value={confirmPassword}
+              onChange={setConfirmPassword}
+              autoComplete="new-password"
             />
           </div>
 
