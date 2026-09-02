@@ -1,0 +1,14 @@
+# Clones of third-party repositories used only by the offline real-world research benchmark
+# (npm run research:... scripts). Categorically safe to exclude: these are cloned copies of OTHER
+# projects' source, not part of this codebase's own module graph, so nothing here can ever be
+# `import`-reachable from app/api code. Already gitignored; excluded here too because the Vercel
+# CLI's source upload was including it regardless, making the deploy upload ~230MB larger than
+# necessary and causing upload timeouts ("fetch failed" / "Upload aborted").
+#
+# Deliberately NOT excluding docs/, research/, dist/, scripts/, or vscode-extension/ here anymore
+# -- two of those (docs/ via src/docs/dissertation-exporter.ts, scripts/ via
+# src/eval/thesis-gap-exporter.ts's transitive import of scripts/import-user-study.js) turned out
+# to be real, transitively-imported production dependencies of app/api/export-dissertation/route.ts,
+# and broke the build when excluded. A shallow grep for direct references isn't sufficient to
+# prove a directory is safe to exclude; only .repo-clones/ above has a categorical guarantee.
+benchmarks/real-world/.repo-clones/

@@ -1,8 +1,17 @@
 node_modules
 .next
+# Alternate-named Next.js build output directory (same shape/purpose as .next above -- manifests,
+# server/static chunks, trace, type-check cache -- referenced only as a tsconfig.json type-check
+# include path, never meant to be committed).
+.next-verify/
 dist
 build
 coverage
+# Stray tsc/build-tool sourcemap output left next to src/*.ts by an earlier local compile -- these
+# are generated artifacts (no matching .js is ever tracked; verified 0 before adding this rule),
+# same class of issue previously fixed for vscode-extension/out/. See the forensic audit's
+# repo-hygiene finding (56 tracked src/**/*.js.map files).
+src/**/*.js.map
 *.log
 .env
 .DS_Store
@@ -40,3 +49,8 @@ scratch/
 # .next/dist/build above; was previously (and unnecessarily) checked in as 152 tracked files (see
 # audit/ULTIMATE_FINAL_FORENSIC_AUDIT.md, finding LOW-VSCODEBUILD).
 vscode-extension/out/
+
+# Temporary migration secrets and external tool scratchpads
+*migration-secret*
+*scratchpad*
+
