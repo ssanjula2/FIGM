@@ -120,6 +120,7 @@ function buildReport(sourceFile: ts.SourceFile, filePath: string, attrNode: ts.J
     confidenceScore: 96.0,
     evidence: `Real AST (TypeScript compiler): JsxAttribute "key" at ${sourceFile.fileName}:${line + 1} resolves to the enclosing .map() callback's index parameter`,
     fixAvailable: true,
+    sourceKind: 'REAL_AST',
   };
 }
 

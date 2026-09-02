@@ -1,0 +1,411 @@
+{
+  "name": "react-crash-2021",
+  "url": "https://github.com/bradtraversy/react-crash-2021.git",
+  "commit": "a644cdedd86d9a4bb939eca4881bf26a29340519",
+  "primaryFrameworkLabel": "React",
+  "filesScanned": 10,
+  "totalLOC": 340,
+  "scanDurationMs": 2589.6448,
+  "totalFigmFindings": 11,
+  "findingsByRule": {
+    "FIGM-REACT-01": 1,
+    "FIGM-PERF-05": 5,
+    "FIGM-A11Y-05": 4,
+    "FIGM-REACT-02": 1
+  },
+  "findingsBySeverity": {
+    "HIGH": 2,
+    "MEDIUM": 5,
+    "CRITICAL": 4
+  },
+  "frameworksDetected": {
+    "REACT_JSX": 3,
+    "GENERIC_ESTREE": 7
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "src/App.js",
+      "framework": "REACT_JSX",
+      "loc": 124,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/About.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/AddTask.js",
+      "framework": "REACT_JSX",
+      "loc": 59,
+      "figmFindingCount": 7,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Button.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Footer.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Header.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Task.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 22,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Tasks.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/index.js",
+      "framework": "REACT_JSX",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reportWebVitals.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/App.js",
+      "location": {
+        "start": {
+          "line": 64,
+          "column": 17
+        },
+        "end": {
+          "line": 64,
+          "column": 55
+        }
+      },
+      "offendingCodeSnippet": "? setTasks(tasks.filter((task) => task.id !== id))",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 64",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/App.js",
+      "location": {
+        "start": {
+          "line": 94,
+          "column": 17
+        },
+        "end": {
+          "line": 94,
+          "column": 51
+        }
+      },
+      "offendingCodeSnippet": "onAdd={() => setShowAddTask(!showAddTask)}",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 94",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/AddTask.js",
+      "location": {
+        "start": {
+          "line": 27,
+          "column": 8
+        },
+        "end": {
+          "line": 32,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 27",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/components/AddTask.js",
+      "location": {
+        "start": {
+          "line": 31,
+          "column": 20
+        },
+        "end": {
+          "line": 31,
+          "column": 50
+        }
+      },
+      "offendingCodeSnippet": "onChange={(e) => setText(e.target.value)}",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 31",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/AddTask.js",
+      "location": {
+        "start": {
+          "line": 36,
+          "column": 8
+        },
+        "end": {
+          "line": 41,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 36",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/components/AddTask.js",
+      "location": {
+        "start": {
+          "line": 40,
+          "column": 20
+        },
+        "end": {
+          "line": 40,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "onChange={(e) => setDay(e.target.value)}",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 40",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/AddTask.js",
+      "location": {
+        "start": {
+          "line": 45,
+          "column": 8
+        },
+        "end": {
+          "line": 50,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 45",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/components/AddTask.js",
+      "location": {
+        "start": {
+          "line": 49,
+          "column": 20
+        },
+        "end": {
+          "line": 49,
+          "column": 63
+        }
+      },
+      "offendingCodeSnippet": "onChange={(e) => setReminder(e.currentTarget.checked)}",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 49",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/AddTask.js",
+      "location": {
+        "start": {
+          "line": 53,
+          "column": 6
+        },
+        "end": {
+          "line": 53,
+          "column": 73
+        }
+      },
+      "offendingCodeSnippet": "<input type='submit' value='Save Task' className='btn btn-block' />",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 53",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/components/Task.js",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 22
+        },
+        "end": {
+          "line": 13,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "onClick={() => onDelete(task.id)}",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-02",
+      "ruleName": "Stable List Key Prop Assignment",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/components/Tasks.js",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 14
+        },
+        "end": {
+          "line": 7,
+          "column": 80
+        }
+      },
+      "offendingCodeSnippet": "<Task key={index} task={task} onDelete={onDelete} onToggle={onToggle} />",
+      "message": "Array index assigned as list key prop causing component re-ordering and state bugs.",
+      "remediation": "Assign a unique stable identifier (item.id) to list key props instead of array index.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 96,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXAttribute] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

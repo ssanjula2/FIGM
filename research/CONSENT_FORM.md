@@ -5,8 +5,8 @@
 **Module**: IS303.2 Research Methodology Repeat Coursework 2025  
 **Investigator**: A P H D S Sanjula  
 **Student ID**: 28256  
-**Ethics Status**: `ETHICS_APPROVAL_STATUS = NEEDS_VERIFICATION`  
-**Target Sample**: 85 Valid Real Human Participants  
+**Ethics Status**: `ETHICS_APPROVAL_STATUS = CONFIRMED_BY_RESEARCHER` (`ETHICS_APPROVAL_REFERENCE = TO_BE_RECORDED` — formal approval confirmed by the researcher; the specific approval number/date/committee name has not yet been supplied to this repository, see `docs/research/PARTICIPANT_TARGET_DECISION.md` and `docs/audit/STAGE_1_RESEARCH_CONTRACT_CLOSE_REPORT.md`)  
+**Target Sample**: 20 Valid Real Human Participants — the final approved study target, confirmed by the researcher as a later approved research-scope decision. The original Research Proposal and Interim Submission 02 (both read in full 2026-09-03) independently state a target of 80-100 student developers; that figure is the documented historical baseline, preserved as such, and superseded by this later approval. See `docs/research/PARTICIPANT_TARGET_DECISION.md` for the full decision record.  
 
 ---
 
@@ -28,7 +28,7 @@ Participation in this study is **completely voluntary**. You have the absolute r
 
 ## 4. CONFIDENTIALITY, ANONYMITY & DATA PROTECTION
 - **Zero Personally Identifiable Information (PII)**: We do NOT collect your full name, email address, phone number, national ID, IP address, or employee ID.
-- **Anonymous Participant IDs**: Each valid submission is assigned an anonymous sequential identifier (e.g., `P001`, `P002`, ... `P085`) after data ingestion and validation.
+- **Anonymous Participant IDs**: Each valid submission is assigned an anonymous sequential identifier (e.g., `P001`, `P002`, ... up to the target sample size) after data ingestion and validation.
 - **Research-Only Use**: Collected anonymized data will be stored securely and used exclusively for academic research publication and thesis evaluation at NSBM Green University.
 
 ## 5. CONTACT INFORMATION

@@ -1,0 +1,867 @@
+{
+  "name": "reactive-angular-course",
+  "url": "https://github.com/angular-university/reactive-angular-course.git",
+  "commit": "ba2c2ee10d40f7ec78bc976efbee6110a31e2123",
+  "primaryFrameworkLabel": "Angular",
+  "filesScanned": 40,
+  "totalLOC": 2331,
+  "scanDurationMs": 3482.822700000019,
+  "totalFigmFindings": 19,
+  "findingsByRule": {
+    "FIGM-PERF-04": 2,
+    "FIGM-ANG-02": 7,
+    "FIGM-ANG-07": 6,
+    "FIGM-ANG-01": 4
+  },
+  "findingsBySeverity": {
+    "MEDIUM": 8,
+    "HIGH": 7,
+    "CRITICAL": 4
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 24,
+    "ANGULAR_TEMPLATE": 16
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "e2e/app.e2e-spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "e2e/app.po.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "karma.conf.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "protractor.conf.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 29,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "server/db-data.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 908,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "server/get-courses.route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 38,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "server/login.route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 23,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "server/save-course.route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 38,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "server/search-lessons.route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 47,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "server/server.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/about/about.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 50,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app-routing.module.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 43,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 32,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.module.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 81,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/common/safe-url.pipe.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/course/course.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 86,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/course-dialog/course-dialog.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 64,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/courses-card-list/courses-card-list.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/courses-card-list/courses-card-list.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 54,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/home/home.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 38,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/lesson/lesson.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 23,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/loading/loading.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 25,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/loading/loading.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 36,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/login/login.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 54,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/messages/messages.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 42,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/messages/messages.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 21,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/model/course.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/model/lesson.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 11,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/model/message.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/model/user.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/search-lessons/search-lessons.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 68,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/services/auth.store.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 53,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/services/courses.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 77,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/services/courses.store.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 87,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/environments/environment.prod.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 4,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/environments/environment.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/main.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/polyfills.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/test.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/typings.d.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "server/search-lessons.route.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 34
+        }
+      },
+      "offendingCodeSnippet": "import {LESSONS} from \"./db-data\";",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/about/about.component.ts",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 0
+        },
+        "end": {
+          "line": 27,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/app.component.ts",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 14,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/course-dialog/course-dialog.component.ts",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 23,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/course-dialog/course-dialog.component.ts",
+      "location": {
+        "start": {
+          "line": 30,
+          "column": 4
+        },
+        "end": {
+          "line": 46,
+          "column": 5
+        }
+      },
+      "offendingCodeSnippet": "constructor(",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 30",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/course-dialog/course-dialog.component.ts",
+      "location": {
+        "start": {
+          "line": 52,
+          "column": 6
+        },
+        "end": {
+          "line": 53,
+          "column": 22
+        }
+      },
+      "offendingCodeSnippet": "this.coursesStore.saveCourse(this.course.id, changes)",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 52",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/courses-card-list/courses-card-list.component.ts",
+      "location": {
+        "start": {
+          "line": 42,
+          "column": 8
+        },
+        "end": {
+          "line": 48,
+          "column": 24
+        }
+      },
+      "offendingCodeSnippet": "dialogRef.afterClosed()",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 42",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/lesson/lesson.component.ts",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/loading/loading.component.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/loading/loading.service.ts",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 4
+        },
+        "end": {
+          "line": 15,
+          "column": 5
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/login/login.component.ts",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 14,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/login/login.component.ts",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 2
+        },
+        "end": {
+          "line": 29,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/login/login.component.ts",
+      "location": {
+        "start": {
+          "line": 39,
+          "column": 4
+        },
+        "end": {
+          "line": 47,
+          "column": 9
+        }
+      },
+      "offendingCodeSnippet": "this.auth.login(val.email, val.password)",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 39",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/messages/messages.component.ts",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 13,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/messages/messages.component.ts",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 2
+        },
+        "end": {
+          "line": 25,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor(public messagesService: MessagesService) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/services/auth.store.ts",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 4
+        },
+        "end": {
+          "line": 33,
+          "column": 5
+        }
+      },
+      "offendingCodeSnippet": "constructor(private http: HttpClient) {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/services/courses.store.ts",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 4
+        },
+        "end": {
+          "line": 26,
+          "column": 5
+        }
+      },
+      "offendingCodeSnippet": "constructor(",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/services/courses.store.ts",
+      "location": {
+        "start": {
+          "line": 42,
+          "column": 8
+        },
+        "end": {
+          "line": 43,
+          "column": 24
+        }
+      },
+      "offendingCodeSnippet": "this.loading.showLoaderUntilCompleted(loadCourses$)",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 42",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/main.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 57
+        }
+      },
+      "offendingCodeSnippet": "import { environment } from './environments/environment';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

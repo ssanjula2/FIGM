@@ -17,6 +17,7 @@ import { PATCH as notificationsPATCH } from '../app/api/notifications/route';
 import { GET as dashboardSummaryGET } from '../app/api/dashboard/summary/route';
 import { PATCH as profilePATCH } from '../app/api/profile/route';
 import { GET as adminUsersGET } from '../app/api/admin/users/route';
+import { GET as reportGET } from '../app/api/report/route';
 import { UserDB } from '../src/auth/user-db';
 
 function authedRequest(url: string, opts: RequestInit, jwt: string): Request {
@@ -130,6 +131,85 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
       assert.equal('resetToken' in body, false, 'resetToken must never be present in the response body in production');
     } finally {
       (process.env as any).NODE_ENV = originalEnv;
+    }
+  });
+
+  await t.test('POST /api/auth/forgot-password does not leak the reset token merely because NODE_ENV !== production', async () => {
+    RepositoryFactory.resetProvider();
+    const email = `dev_reset_${Date.now()}@figm.io`;
+    // Distinct fake IP per test -- checkRateLimit's in-process fallback keys purely by IP across
+    // every route (register, login, forgot-password all share one bucket per key), so reusing the
+    // default 'unknown-client' key here would collide with every earlier request in this same
+    // file/process and trip the 5-request/minute forgot-password limit well before this test runs.
+    const testIp = `10.20.${Math.floor(Math.random() * 200)}.${Math.floor(Math.random() * 200)}`;
+    await registerPOST(
+      new Request('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: { 'x-forwarded-for': testIp },
+        body: JSON.stringify({ email, password: 'ValidPass123!', fullName: 'Reset Dev User' }),
+      })
+    );
+
+    const originalEnv = process.env.NODE_ENV;
+    const originalFlag = process.env.ALLOW_TEST_RESET_TOKEN;
+    try {
+      // Development and staging/preview must never leak the token, with or without the flag set.
+      (process.env as any).NODE_ENV = 'development';
+      delete process.env.ALLOW_TEST_RESET_TOKEN;
+      const devReq = new Request('http://localhost:3000/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'x-forwarded-for': testIp },
+        body: JSON.stringify({ email }),
+      });
+      const devBody = await (await forgotPasswordPOST(devReq)).json();
+      assert.equal('resetToken' in devBody, false, 'resetToken must not leak in development');
+
+      // NODE_ENV=test alone (without the explicit opt-in flag) must also not leak the token.
+      (process.env as any).NODE_ENV = 'test';
+      delete process.env.ALLOW_TEST_RESET_TOKEN;
+      const testReq = new Request('http://localhost:3000/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'x-forwarded-for': testIp },
+        body: JSON.stringify({ email }),
+      });
+      const testBody = await (await forgotPasswordPOST(testReq)).json();
+      assert.equal('resetToken' in testBody, false, 'resetToken must not leak in test env without ALLOW_TEST_RESET_TOKEN=true');
+    } finally {
+      (process.env as any).NODE_ENV = originalEnv;
+      if (originalFlag === undefined) delete process.env.ALLOW_TEST_RESET_TOKEN;
+      else process.env.ALLOW_TEST_RESET_TOKEN = originalFlag;
+    }
+  });
+
+  await t.test('POST /api/auth/forgot-password returns the reset token only when NODE_ENV=test AND ALLOW_TEST_RESET_TOKEN=true', async () => {
+    RepositoryFactory.resetProvider();
+    const email = `explicit_test_reset_${Date.now()}@figm.io`;
+    const testIp = `10.30.${Math.floor(Math.random() * 200)}.${Math.floor(Math.random() * 200)}`;
+    await registerPOST(
+      new Request('http://localhost:3000/api/auth/register', {
+        method: 'POST',
+        headers: { 'x-forwarded-for': testIp },
+        body: JSON.stringify({ email, password: 'ValidPass123!', fullName: 'Reset Explicit Test User' }),
+      })
+    );
+
+    const originalEnv = process.env.NODE_ENV;
+    const originalFlag = process.env.ALLOW_TEST_RESET_TOKEN;
+    try {
+      (process.env as any).NODE_ENV = 'test';
+      process.env.ALLOW_TEST_RESET_TOKEN = 'true';
+      const req = new Request('http://localhost:3000/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'x-forwarded-for': testIp },
+        body: JSON.stringify({ email }),
+      });
+      const body = await (await forgotPasswordPOST(req)).json();
+      assert.equal('resetToken' in body, true, 'resetToken must be present when both the test env and explicit flag are set');
+      assert.equal(typeof body.resetToken, 'string');
+    } finally {
+      (process.env as any).NODE_ENV = originalEnv;
+      if (originalFlag === undefined) delete process.env.ALLOW_TEST_RESET_TOKEN;
+      else process.env.ALLOW_TEST_RESET_TOKEN = originalFlag;
     }
   });
 
@@ -328,6 +408,7 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
       fullName: 'NEW-01 Regression',
       role: 'DEVELOPER',
     });
+    assert.ok(user.apiKey, 'sanity check: createUser always sets apiKey');
     assert.ok(user.apiKey.startsWith('figm_key_'));
     const suffix = user.apiKey.slice('figm_key_'.length);
     // crypto.randomBytes(16).toString('hex') is always exactly 32 lowercase hex characters --
@@ -405,5 +486,20 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
     const headers = buildCorsHeaders('https://anything.example', ['https://a.example', 'https://b.example']);
     assert.notEqual(headers['Access-Control-Allow-Origin'], '*');
     assert.equal('Access-Control-Allow-Origin' in headers, false);
+  });
+
+  await t.test('GET /api/report rejects unauthenticated callers with 401 and allows authenticated users', async () => {
+    // Unauthenticated request
+    const unauthedReq = new Request('http://localhost:3000/api/report');
+    const unauthedRes = await reportGET(unauthedReq);
+    assert.equal(unauthedRes.status, 401, 'unauthenticated callers must receive 401 Unauthorized');
+
+    // Authenticated request bearing valid token
+    const token = tokenFor('usr_report_test');
+    const authedReq = new Request('http://localhost:3000/api/report', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const authedRes = await reportGET(authedReq);
+    assert.equal(authedRes.status, 200, 'authenticated callers must receive 200 OK');
   });
 });

@@ -18,7 +18,7 @@ export function checkUserStudyStatus() {
   const report = processUserStudyPipeline(rawCSVPath);
   const prov = report.provenance;
 
-  const target = prov.targetSampleSize || 85;
+  const target = prov.targetSampleSize || HUMAN_STUDY_TARGET_PARTICIPANTS;
   const valid = prov.validParticipantCount || 0;
   const remaining = Math.max(0, target - valid);
   const percent = parseFloat(((valid / target) * 100).toFixed(1));

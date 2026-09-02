@@ -45,7 +45,7 @@ export default function FIGMModelSection() {
           Mapping framework-specific syntax to formal mathematical predicates (<strong style={{ color: '#38bdf8' }}>Domain → Concern → ALP → Rule</strong>).
         </p>
         <p style={{ color: '#7c8ba6', fontSize: '12px', maxWidth: '720px', margin: '0 auto 40px auto', lineHeight: 1.5 }}>
-          &quot;Detection Weight&quot; below is a static per-rule confidence value configured in the detection engine's evidence
+          &quot;Detection Weight&quot; below is a static per-rule confidence value configured in the detection engine&apos;s evidence
           scoring, not a measured empirical accuracy figure — see <a href="/analytics" style={{ color: '#38bdf8' }}>/analytics</a> for live benchmark Precision/Recall/F1.
         </p>
 

@@ -42,10 +42,10 @@ export default function LandingFooter() {
             <div style={{ color: '#f8fafc', fontWeight: 700, fontSize: '14px', marginBottom: '16px' }}>Navigation</div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <li><Link href="/live-scan" style={{ color: '#94a3b8', textDecoration: 'none' }}>Live Code Scanner</Link></li>
-              <li><Link href="/guidelines" style={{ color: '#94a3b8', textDecoration: 'none' }}>25 Guideline Rules</Link></li>
+              <li><Link href="/guidelines" style={{ color: '#94a3b8', textDecoration: 'none' }}>50 Guideline Rules</Link></li>
               <li><Link href="/diagnostics" style={{ color: '#94a3b8', textDecoration: 'none' }}>Diagnostics Hub</Link></li>
               <li><Link href="/profiler" style={{ color: '#94a3b8', textDecoration: 'none' }}>Dynamic Profiler</Link></li>
-              <li><Link href="/ai-fix" style={{ color: '#94a3b8', textDecoration: 'none' }}>Gemini AI Remediation</Link></li>
+              <li><Link href="/ai-fix" style={{ color: '#94a3b8', textDecoration: 'none' }}>Claude AI Remediation</Link></li>
             </ul>
           </div>
 

@@ -2,16 +2,18 @@ import crypto from 'node:crypto';
 import { DBUser, DBScanRecord, DBSubmission } from '../auth/user-db';
 import { RepositoryFactory } from '../storage/repository-factory';
 import { hashPassword } from '../auth/auth-service';
+import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../research/research-config';
 
 /** Matches the synthetic participant-identity format app/api/user-study/log-scan/route.ts itself
  *  generates and enforces (PARTICIPANT_ID_PATTERN there) -- the single definition of what counts
  *  as a "participant id" versus a real developer/auditor/admin account id. */
 export const PARTICIPANT_ID_PATTERN = /^P\d{3,6}$/;
 
-/** The research cohort's planned sample size (matches scripts/import-user-study.ts's
- *  TARGET_SAMPLE_SIZE and app/api/research-metrics/route.ts's fallback default) -- this is the
- *  set of identifiers the matrix always displays a row for, NOT a claim that all 85 have real
- *  data. Every row's actual content is looked up from real database records; an id with no
+/** The research cohort's planned sample size -- re-exports the single canonical value from
+ *  src/research/research-config.ts (matches scripts/import-user-study.ts's use of the same
+ *  constant and app/api/research-metrics/route.ts's fallback default) -- this is the
+ *  set of identifiers the matrix always displays a row for, NOT a claim that all of them have
+ *  real data. Every row's actual content is looked up from real database records; an id with no
  *  matching User row is rendered as NOT_REGISTERED, never fabricated.
  *
  *  IMPORTANT (forensic-audit P0-C, "two independent numbering systems"): the `P001`-style codes
@@ -26,7 +28,7 @@ export const PARTICIPANT_ID_PATTERN = /^P\d{3,6}$/;
  *  entry in research/analysis/usability-results.json's `anonymizedParticipantIds` also called
  *  "P002" are NOT guaranteed (or even expected) to be the same person -- do not assume they
  *  correlate anywhere in this codebase, dashboard, or dissertation text. */
-export const TARGET_PARTICIPANT_COUNT = 85;
+export const TARGET_PARTICIPANT_COUNT = HUMAN_STUDY_TARGET_PARTICIPANTS;
 
 export type ParticipantStatus = 'NOT_REGISTERED' | 'REGISTERED' | 'SCANNED' | 'SUBMITTED';
 
@@ -137,7 +139,7 @@ export class ParticipantRepository {
   }
 
   /**
-   * Builds the P001..P085 research matrix. Every row for an id with no real User record is
+   * Builds the P001..P0NN research matrix (NN = HUMAN_STUDY_TARGET_PARTICIPANTS). Every row for an id with no real User record is
    * NOT_REGISTERED with every other field null/zero/empty -- never a fabricated name, scan count,
    * or score. `search` (case-insensitive substring on participant id) is applied server-side.
    */
@@ -162,7 +164,7 @@ export class ParticipantRepository {
     }
 
     // Fetch every submission ONCE and group in memory, rather than one getSubmissionsByUserId
-    // call per participant in the loop below (85 separate queries -> 1). Both storage backends
+    // call per participant in the loop below (TARGET_PARTICIPANT_COUNT separate queries -> 1). Both storage backends
     // already support this via the 'all_users' sentinel (see supabase-storage-provider.ts /
     // UserDB.getSubmissionsByUserId).
     const allSubmissions = ((await ParticipantRepository.provider.getSubmissionsByUserId('all_users')) as DBSubmission[]) || [];

@@ -2,6 +2,14 @@ import * as vscode from 'vscode';
 import { FIGM_RULES } from './rules-data';
 import { FIGMStatusBarManager } from './status-bar';
 
+// Mirrors the canonical weighted-severity formula in src/engine/quality-score.ts
+// (calculateQualityScoreFromCounts) exactly -- CRITICAL=15, HIGH=8, MEDIUM=3, LOW=1, floored at 0.
+// The extension is a standalone-published package with its own tsconfig rootDir (compiled by
+// `tsc -p ./` against only vscode-extension/src), so it cannot import that module directly; this
+// constant and the formula below are covered by tests/vscode-score-consistency.test.ts in the main
+// repo, which fails the build if the two ever drift out of sync.
+const SEVERITY_WEIGHT: Record<string, number> = { CRITICAL: 15, HIGH: 8, MEDIUM: 3, LOW: 1 };
+
 export class FIGMDiagnosticsManager {
   private diagnosticCollection: vscode.DiagnosticCollection;
   private outputChannel: vscode.OutputChannel;
@@ -63,7 +71,11 @@ export class FIGMDiagnosticsManager {
       }
     });
 
-    const qualityScore = Math.max(0, 100 - diagnostics.length * 5);
+    const weightedPenalty = diagnostics.reduce((sum, d) => {
+      const ruleDef = FIGM_RULES.find((r) => r.ruleId === d.code);
+      return sum + (ruleDef ? SEVERITY_WEIGHT[ruleDef.severity] || 0 : 0);
+    }, 0);
+    const qualityScore = Math.max(0, 100 - weightedPenalty);
     this.diagnosticCollection.set(document.uri, diagnostics);
     this.statusBarManager.updateStatus(qualityScore, diagnostics.length);
 

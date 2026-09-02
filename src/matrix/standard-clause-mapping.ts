@@ -15,10 +15,12 @@
  * doing so would risk presenting speculative clause numbers as verified fact. Instead, this module
  * uses only clause references that are independently verifiable against the real published
  * standards:
- *   - The 4 WCAG 2.2 Success Criterion numbers below (`src/types/taxonomy.ts`'s
+ *   - The 5 WCAG 2.2 Success Criterion numbers below (`src/types/taxonomy.ts`'s
  *     AccessibilityConcernType already carried these as comments) are real, checkable citations —
- *     WCAG 2.2 SC 2.1.1 "Keyboard", SC 4.1.2 "Name, Role, Value", SC 4.1.3 "Status Messages", and
- *     SC 2.4.3 "Focus Order" are genuine clauses of the published W3C WCAG 2.2 recommendation.
+ *     WCAG 2.2 SC 2.1.1 "Keyboard", SC 4.1.2 "Name, Role, Value", SC 4.1.3 "Status Messages",
+ *     SC 2.4.3 "Focus Order", and SC 2.5.3 "Label in Name" are genuine clauses of the published
+ *     W3C WCAG 2.2 recommendation (SC 2.5.3 added for FIGM-A11Y-07 -- verified against
+ *     https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html, not invented).
  *   - The ISO/IEC 25010 Performance Efficiency sub-characteristics used below (Time Behaviour,
  *     Resource Utilization) are the real, published structure of that standard's Performance
  *     Efficiency characteristic — not invented.
@@ -33,6 +35,7 @@ const WCAG_CLAUSE: Partial<Record<ConcernType, string>> = {
   NAME_ROLE_VALUE: 'WCAG 2.2 SC 4.1.2 (Name, Role, Value)',
   STATUS_MESSAGES: 'WCAG 2.2 SC 4.1.3 (Status Messages)',
   FOCUS_ORDER: 'WCAG 2.2 SC 2.4.3 (Focus Order)',
+  INPUT_MODALITIES: 'WCAG 2.2 SC 2.5.3 (Label in Name)',
 };
 
 // ISO/IEC 25010 Performance Efficiency has three real sub-characteristics: Time Behaviour,

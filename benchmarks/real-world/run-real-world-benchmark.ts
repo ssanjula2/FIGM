@@ -42,6 +42,17 @@ interface RepoManifestEntry {
   pinnedCommit: string;
   /** Label only, for the report -- never used to override FIGM's own framework auto-detection. */
   primaryFrameworkLabel: string;
+  /** Reproducibility metadata (Stage 5, 2026-09-03) -- optional because the original 15 repos'
+   *  license/rationale live in METHODOLOGY.md's tables rather than duplicated here; required for
+   *  every repo added from Stage 5 onward. Never fabricated -- 'NOASSERTION' means GitHub's API
+   *  itself reported no detected SPDX license, not a missing lookup. */
+  license?: string;
+  inclusionRationale?: string;
+  datePinned?: string;
+  /** 'entire repository' means no subdirectory restriction was applied -- the same
+   *  IGNORE_DIRS/SUPPORTED_EXT filter as every other repo in this corpus (see collectFiles below). */
+  sourceDirs?: string;
+  exclusionPaths?: string;
 }
 
 export const REPOS: RepoManifestEntry[] = [
@@ -74,6 +85,156 @@ export const REPOS: RepoManifestEntry[] = [
     url: 'https://github.com/bradtraversy/vanillawebprojects.git',
     pinnedCommit: 'adc66a181a67049fb413c8862181ddc6c45ba22b',
     primaryFrameworkLabel: 'Generic JavaScript',
+  },
+  // -----------------------------------------------------------------------------------------
+  // Corpus expansion (Scientific Hardening Pass, 2026-08-25) -- 10 additional repositories, two
+  // per framework category above. Selection criteria fixed BEFORE cloning/scanning; see
+  // METHODOLOGY.md §8b for the full rationale and the candidates that were tried and dropped
+  // because they do not exist (never fabricated).
+  // -----------------------------------------------------------------------------------------
+  {
+    name: 'react-redux-realworld-example-app',
+    url: 'https://github.com/gothinkster/react-redux-realworld-example-app.git',
+    pinnedCommit: 'ee72eba4056392c95a27bc48d385d3f54ba38a18',
+    primaryFrameworkLabel: 'React',
+  },
+  {
+    name: 'redux-essentials-example-app',
+    url: 'https://github.com/reduxjs/redux-essentials-example-app.git',
+    pinnedCommit: 'b4414e1504c914ece3253dd8a21adfb2278464d9',
+    primaryFrameworkLabel: 'React',
+  },
+  {
+    name: 'next-learn',
+    url: 'https://github.com/vercel/next-learn.git',
+    pinnedCommit: 'bb2558441a6673ab76c89914c25018bffa27a2ba',
+    primaryFrameworkLabel: 'Next.js',
+  },
+  {
+    name: 'commerce',
+    url: 'https://github.com/vercel/commerce.git',
+    pinnedCommit: '3761e52e60df9c6a316e067dbfd7032e494d3634',
+    primaryFrameworkLabel: 'Next.js',
+  },
+  {
+    name: 'angular-realworld-example-app',
+    url: 'https://github.com/realworld-apps/angular-realworld-example-app.git',
+    pinnedCommit: 'dd99ed2cf39c805d719f943c5d7061a5683d98a8',
+    primaryFrameworkLabel: 'Angular',
+  },
+  {
+    name: 'reactive-angular-course',
+    url: 'https://github.com/angular-university/reactive-angular-course.git',
+    pinnedCommit: 'ba2c2ee10d40f7ec78bc976efbee6110a31e2123',
+    primaryFrameworkLabel: 'Angular',
+  },
+  {
+    name: 'vue-realworld-example-app',
+    url: 'https://github.com/realworld-apps/vue-realworld-example-app.git',
+    pinnedCommit: 'f7e48c8178602ce25d43293bc6f8ca51d84ae222',
+    primaryFrameworkLabel: 'Vue',
+  },
+  {
+    name: 'vitesse',
+    url: 'https://github.com/antfu-collective/vitesse.git',
+    pinnedCommit: '8a01bc9283fedcd63e750af55a75496361789a81',
+    primaryFrameworkLabel: 'Vue',
+  },
+  {
+    name: 'JavaScript30',
+    url: 'https://github.com/wesbos/JavaScript30.git',
+    pinnedCommit: 'c36f2ed261eacb3e9ad83c05eb2fd3a4f72cc82f',
+    primaryFrameworkLabel: 'Generic JavaScript',
+  },
+  {
+    name: 'javascript-algorithms',
+    url: 'https://github.com/trekhleb/javascript-algorithms.git',
+    pinnedCommit: '85293e3e2b88f4d2ce330d956b139cf628aa1e82',
+    primaryFrameworkLabel: 'Generic JavaScript/TypeScript',
+  },
+  // -----------------------------------------------------------------------------------------
+  // Corpus expansion (Stage 5, 2026-09-03) -- 6 additional repositories, all primary-framework
+  // (React/Next.js/Angular) per the researcher's authoritative repository-sample requirement
+  // (Proposal SS4.3 / Interim02 SS3.4: 20-30 public open-source SPA repos using React, Next.js,
+  // Angular; Vue is additional support only and is deliberately NOT padded here). Selection
+  // criteria fixed before cloning/scanning -- see METHODOLOGY.md SS8c for full rationale,
+  // existence/size/license/archived-status verification, and candidates checked and rejected
+  // (e.g. angular/angular.io -- archived; vercel/ai-chatbot -- renamed to vercel/chatbot,
+  // confirmed via redirect before use; cal-com/cal.com, several guessed Angular-app names --
+  // do not exist, never fabricated). Brings the corpus to 21 repositories total (15 primary +
+  // 3 Vue + 3 generic).
+  // -----------------------------------------------------------------------------------------
+  {
+    name: 'excalidraw',
+    url: 'https://github.com/excalidraw/excalidraw.git',
+    pinnedCommit: 'e1bb9ff8f8931e783c11d104abb8967ac6605c9a',
+    primaryFrameworkLabel: 'React',
+    license: 'MIT',
+    inclusionRationale:
+      'Large (131k+ stars), real, actively-maintained production SPA (collaborative whiteboard/canvas tool), not a tutorial or starter -- addresses the corpus\'s existing tutorial/starter-heavy bias for React specifically. Existence, size (~103MB), license, and non-archived status verified via the GitHub API before selection, not assumed.',
+    datePinned: '2026-09-03',
+    sourceDirs: 'entire repository',
+    exclusionPaths: 'node_modules, .git, dist, build, .next, coverage, .vercel (same IGNORE_DIRS as every other repo)',
+  },
+  {
+    name: 'bulletproof-react',
+    url: 'https://github.com/alan2207/bulletproof-react.git',
+    pinnedCommit: '9506629ed003a561c6627735480cce4994244bb4',
+    primaryFrameworkLabel: 'React',
+    license: 'MIT',
+    inclusionRationale:
+      'Widely-referenced (35k+ stars) React architecture reference implementation -- real feature-folder structure, hooks, forms, API layer -- distinct in shape/purpose from the corpus\'s existing React entries (a CRUD tutorial, two Redux example apps). Small enough (~2.2MB) to clone/scan quickly, deliberately not selected for that reason (selected for architectural distinctiveness; small size is incidental).',
+    datePinned: '2026-09-03',
+    sourceDirs: 'entire repository',
+    exclusionPaths: 'node_modules, .git, dist, build, .next, coverage, .vercel (same IGNORE_DIRS as every other repo)',
+  },
+  {
+    name: 'vercel-chatbot',
+    url: 'https://github.com/vercel/chatbot.git',
+    pinnedCommit: 'c2f8235e1f3ea903ad8b7f61447c4f74164b5c58',
+    primaryFrameworkLabel: 'Next.js',
+    license: 'NOASSERTION',
+    inclusionRationale:
+      'Official Vercel-org Next.js App Router template (20k+ stars), real streaming-UI/AI-chat production patterns distinct from the corpus\'s existing Next.js entries (a portfolio starter, a course repo, a commerce template). Repository was found renamed mid-selection (vercel/ai-chatbot -> vercel/chatbot, confirmed via GitHub API redirect) -- the current canonical URL is used here, consistent with how the prior expansion pass handled the gothinkster->realworld-apps org transfer.',
+    datePinned: '2026-09-03',
+    sourceDirs: 'entire repository',
+    exclusionPaths: 'node_modules, .git, dist, build, .next, coverage, .vercel (same IGNORE_DIRS as every other repo)',
+  },
+  {
+    name: 'nextjs-saas-starter',
+    url: 'https://github.com/nextjs/saas-starter.git',
+    pinnedCommit: '6e33e58b1e553a41fe22e6b941a7229a002de361',
+    primaryFrameworkLabel: 'Next.js',
+    license: 'MIT',
+    inclusionRationale:
+      'Official nextjs-org SaaS starter template (16k+ stars), small (~400KB) but real, production-shaped App Router app (auth, billing, dashboard) -- a lightweight counterbalance to the corpus\'s larger Next.js entries (commerce, next-learn), and organization-maintained per the same selection bar used for the corpus\'s other official-org picks.',
+    datePinned: '2026-09-03',
+    sourceDirs: 'entire repository',
+    exclusionPaths: 'node_modules, .git, dist, build, .next, coverage, .vercel (same IGNORE_DIRS as every other repo)',
+  },
+  {
+    name: 'ngx-admin',
+    url: 'https://github.com/akveo/ngx-admin.git',
+    pinnedCommit: 'dc6a442704bfef34b776b5eb15faf852d9e2f75c',
+    primaryFrameworkLabel: 'Angular',
+    license: 'MIT',
+    inclusionRationale:
+      'Popular (25k+ stars) real production-shaped Angular admin dashboard (Nebular UI, NgRx-adjacent patterns) -- addresses the corpus\'s Angular representativeness gap (previously only a tutorial and two smaller course/RealWorld apps), the same rationale vercel/commerce addressed for Next.js in the prior expansion pass.',
+    datePinned: '2026-09-03',
+    sourceDirs: 'entire repository',
+    exclusionPaths: 'node_modules, .git, dist, build, .next, coverage, .vercel (same IGNORE_DIRS as every other repo)',
+  },
+  {
+    name: 'coreui-free-angular-admin-template',
+    url: 'https://github.com/coreui/coreui-free-angular-admin-template.git',
+    pinnedCommit: '5f66f95b19edf4092fd2f95f5c5b34e185bba033',
+    primaryFrameworkLabel: 'Angular',
+    license: 'MIT',
+    inclusionRationale:
+      'Organization-maintained (CoreUI) real Angular admin template distinct in UI-library choice (Bootstrap-based, not Nebular like ngx-admin above) -- a second, independently-authored Angular production-shaped app for balance, not a fork or variant of ngx-admin.',
+    datePinned: '2026-09-03',
+    sourceDirs: 'entire repository',
+    exclusionPaths: 'node_modules, .git, dist, build, .next, coverage, .vercel (same IGNORE_DIRS as every other repo)',
   },
 ];
 
@@ -342,19 +503,43 @@ function main() {
   console.log('=======================================================');
 }
 
-main();
+// Direct Execution Entry Point.
+//
+// Bug found via this Stage 5 corpus-expansion pass (2026-09-03): this script used to call main()
+// unconditionally at module scope, with no entry guard at all. That meant merely IMPORTING the
+// REPOS manifest from another module (exactly what generate-corpus-summary.ts and
+// tests/real-world-corpus-manifest.test.ts both legitimately need to do) silently re-triggered a
+// full clone-and-scan of all 21 repositories as an import side effect -- discovered when running
+// generate-corpus-summary.ts (which only reads already-written raw-results/*.json) produced a
+// second full 21-repo clone/scan in its output log. The exact same bug class was already fixed
+// once in src/cli/figm-analyze.ts (see METHODOLOGY.md section 6b) for the identical reason; this
+// file simply never had a guard added when it was first written. Fixed the same way: only run
+// main() when this file is the actual process entry point (checked by exact basename, not a path
+// substring). Verified harmless in effect (not a data-integrity bug): the accidental second run
+// produced byte-identical per-repo counts to the first run (same 21 repos, same commits, same
+// engine), so no re-run of the corpus was required after this fix -- only the missing guard.
+const entryScriptBasename = process.argv[1] ? path.basename(process.argv[1]) : '';
+const isDirectExecution =
+  entryScriptBasename === 'run-real-world-benchmark.ts' || entryScriptBasename === 'run-real-world-benchmark.js';
+
+if (isDirectExecution) {
+  main();
+}
 
 // Give any pending microtask-queued promise rejections (see the comment above main()) a chance to
 // surface and be captured by the handlers registered in main(), rather than firing after this
 // process has already exited and appearing as an unexplained crash to whoever ran this script.
-setTimeout(() => {
-  if (asyncEngineCrashes.length > 0) {
-    const summaryPath = path.join(__dirname, 'raw-results', '_combined-summary.json');
-    if (fs.existsSync(summaryPath)) {
-      const existing = JSON.parse(fs.readFileSync(summaryPath, 'utf-8'));
-      existing.asyncEngineCrashesDuringRun = asyncEngineCrashes;
-      fs.writeFileSync(summaryPath, JSON.stringify(existing, null, 2), 'utf-8');
+// Only armed on direct execution -- see the entry-guard comment above.
+if (isDirectExecution) {
+  setTimeout(() => {
+    if (asyncEngineCrashes.length > 0) {
+      const summaryPath = path.join(__dirname, 'raw-results', '_combined-summary.json');
+      if (fs.existsSync(summaryPath)) {
+        const existing = JSON.parse(fs.readFileSync(summaryPath, 'utf-8'));
+        existing.asyncEngineCrashesDuringRun = asyncEngineCrashes;
+        fs.writeFileSync(summaryPath, JSON.stringify(existing, null, 2), 'utf-8');
+      }
     }
-  }
-  process.exit(0);
-}, 1500);
+    process.exit(0);
+  }, 1500);
+}

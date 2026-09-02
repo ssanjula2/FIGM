@@ -85,7 +85,7 @@ export const VALIDATION_TESTBED: RuleTestCase[] = [
   },
   {
     ruleId: 'FIGM-PERF-05',
-    ruleName: 'Inline Anonymous Callbacks in Render Loops',
+    ruleName: 'Inline Anonymous Callbacks in Render Scope',
     framework: 'REACT_JSX',
     fileName: 'LoopCallback.jsx',
     sampleA: `export function List({ items }) {\n  return items.map(item => <Card onClick={() => handleClick(item.id)} />);\n}`,

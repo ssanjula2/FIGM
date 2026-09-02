@@ -1,0 +1,230 @@
+{
+  "name": "redux-essentials-example-app",
+  "url": "https://github.com/reduxjs/redux-essentials-example-app.git",
+  "commit": "b4414e1504c914ece3253dd8a21adfb2278464d9",
+  "primaryFrameworkLabel": "React",
+  "filesScanned": 8,
+  "totalLOC": 793,
+  "scanDurationMs": 894.7988000000041,
+  "totalFigmFindings": 5,
+  "findingsByRule": {
+    "FIGM-PERF-03": 4,
+    "FIGM-PERF-05": 1
+  },
+  "findingsBySeverity": {
+    "CRITICAL": 4,
+    "MEDIUM": 1
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 3,
+    "REACT_JSX": 5
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "public/mockServiceWorker.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 285,
+      "figmFindingCount": 4,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/api/client.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 56,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/api/server.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 340,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/App.tsx",
+      "framework": "REACT_JSX",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Navbar.tsx",
+      "framework": "REACT_JSX",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Spinner.tsx",
+      "framework": "REACT_JSX",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/UserIcon.tsx",
+      "framework": "REACT_JSX",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/main.tsx",
+      "framework": "REACT_JSX",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "public/mockServiceWorker.js",
+      "location": {
+        "start": {
+          "line": 16,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "self.addEventListener('install', function () {",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 16",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "public/mockServiceWorker.js",
+      "location": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 22,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "self.addEventListener('activate', function (event) {",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 20",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "public/mockServiceWorker.js",
+      "location": {
+        "start": {
+          "line": 24,
+          "column": 0
+        },
+        "end": {
+          "line": 90,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "self.addEventListener('message', async function (event) {",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 24",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "public/mockServiceWorker.js",
+      "location": {
+        "start": {
+          "line": 92,
+          "column": 0
+        },
+        "end": {
+          "line": 116,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "self.addEventListener('fetch', function (event) {",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 92",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/api/server.ts",
+      "location": {
+        "start": {
+          "line": 324,
+          "column": 60
+        },
+        "end": {
+          "line": 324,
+          "column": 64
+        }
+      },
+      "offendingCodeSnippet": "const notifications = [...Array(numNotifications)].map(() => {",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 324",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    }
+  ]
+}

@@ -44,12 +44,18 @@ export class ProjectRepository {
 
     if (options.search && typeof options.search === 'string' && options.search.trim() !== '') {
       const q = options.search.toLowerCase().trim();
+      // Defensive against a malformed/legacy record missing one of these fields (found via a
+      // pre-existing test fixture that constructs a project with `description` omitted entirely) --
+      // `|| ''` never changes behavior for a well-formed record, only stops a single bad record
+      // from throwing and losing every result for every caller (including an ADMIN searching
+      // across every user's projects, where one other user's stray bad record would otherwise be
+      // fatal to the whole request).
       projects = projects.filter(
         (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.description.toLowerCase().includes(q) ||
-          p.repoUrl.toLowerCase().includes(q) ||
-          p.framework.toLowerCase().includes(q)
+          (p.name || '').toLowerCase().includes(q) ||
+          (p.description || '').toLowerCase().includes(q) ||
+          (p.repoUrl || '').toLowerCase().includes(q) ||
+          (p.framework || '').toLowerCase().includes(q)
       );
     }
 

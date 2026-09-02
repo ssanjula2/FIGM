@@ -39,3 +39,27 @@ export function severityCountsFromDiagnostics(diagnostics: Array<Pick<Diagnostic
 export function calculateQualityScore(diagnostics: Array<Pick<DiagnosticReport, 'severity'>>): number {
   return calculateQualityScoreFromCounts(severityCountsFromDiagnostics(diagnostics));
 }
+
+/**
+ * Canonical per-domain health score aggregated across many scans. Each scan's domain score is
+ * computed independently -- the same weighted-severity formula above, applied to ONLY that scan's
+ * diagnostics whose `domain` matches -- and the results are averaged. A domain's score therefore
+ * can never be pulled up or down by findings in a different domain, whether from the same scan or
+ * any other; it depends solely on that domain's own diagnostics. Returns null only when there are
+ * no scans at all (nothing to average), matching calculateQualityScore's floor of 100 for a scan
+ * with zero matching diagnostics (no violations found for this domain = a perfect score for it).
+ */
+export function calculateDomainScore(
+  scans: Array<{ diagnostics: unknown }>,
+  domain: string
+): number | null {
+  if (scans.length === 0) return null;
+  const perScanScores = scans.map((scan) => {
+    const domainDiagnostics = (Array.isArray(scan.diagnostics) ? scan.diagnostics : []).filter(
+      (d: any) => d && d.domain === domain
+    );
+    return calculateQualityScore(domainDiagnostics);
+  });
+  const average = perScanScores.reduce((sum, score) => sum + score, 0) / perScanScores.length;
+  return Math.round(average);
+}

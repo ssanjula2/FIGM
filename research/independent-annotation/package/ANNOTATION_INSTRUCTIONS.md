@@ -6,9 +6,12 @@ knowledge of what a separate, automated tool already concluded about them.
 
 ## What you're doing
 
-You will review 4 short source files (`fixtures/`), each a different framework (React, Vue,
-Angular, plain JavaScript). For each file, read the code carefully and identify every violation
-you personally find against the rule list in `RULE_REFERENCE.md`.
+You will review the source files in `fixtures/` — a set of short, isolated files spanning React,
+Next.js, Angular, Vue, and plain JavaScript/TypeScript (see the file extensions/names for which is
+which; a `negative/` subset is deliberately clean code with no intended violation at all — treat it
+the same as any other file, just read the code, don't assume anything about which folder a file is
+in). For each file, read the code carefully and identify every violation you personally find
+against the rule list in `RULE_REFERENCE.md`.
 
 **You do not need to find anything in every file.** Some files may have more issues than others,
 and you may disagree with what you'd expect an automated tool to find — that disagreement is the

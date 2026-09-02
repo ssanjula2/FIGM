@@ -18,6 +18,12 @@ import { FOUR_LAYER_MAPPINGS } from '../src/matrix/four-layer-meta-model.js';
  * canonical registry === live engine dispatch === generated figm-spec.json === guidelines UI
  * source, so a future edit that reintroduces a hand-maintained duplicate fails loudly here instead
  * of silently drifting.
+ *
+ * The baseline was 25 rules; a research-backed expansion pass (FIGM-A11Y-07, FIGM-REACT-05/06,
+ * FIGM-NEXT-05/06, FIGM-ANG-06, FIGM-VUE-01/02 -- see docs/research/EXPANSION_RESEARCH_TRACEABILITY.md)
+ * deliberately grew the canonical count to 33, then a second pass to 50, through the exact same single-source-of-truth
+ * pipeline this test enforces -- the hardcoded counts below were updated to match that new,
+ * intentional baseline, not loosened to let something slip through undetected.
  */
 
 function read(relativePath: string): string {
@@ -25,12 +31,13 @@ function read(relativePath: string): string {
 }
 
 const CANONICAL_IDS = RULE_CATALOG.map((r) => r.id).sort();
+const CANONICAL_RULE_COUNT = 50;
 
-test('canonical registry has exactly 25 unique rules', () => {
-  assert.equal(RULE_CATALOG.length, 25);
-  assert.equal(TOTAL_RULE_COUNT, 25);
-  assert.equal(new Set(CANONICAL_IDS).size, 25, 'no duplicate rule IDs in RULE_CATALOG');
-  assert.equal(FOUR_LAYER_MAPPINGS.length, 25);
+test('canonical registry has exactly 50 unique rules', () => {
+  assert.equal(RULE_CATALOG.length, CANONICAL_RULE_COUNT);
+  assert.equal(TOTAL_RULE_COUNT, CANONICAL_RULE_COUNT);
+  assert.equal(new Set(CANONICAL_IDS).size, CANONICAL_RULE_COUNT, 'no duplicate rule IDs in RULE_CATALOG');
+  assert.equal(FOUR_LAYER_MAPPINGS.length, CANONICAL_RULE_COUNT);
 });
 
 test('canonical registry === live engine dispatch (ast-detection-engine.ts)', () => {
@@ -42,7 +49,7 @@ test('canonical registry === live engine dispatch (ast-detection-engine.ts)', ()
   const dispatchedIds = new Set(
     [...engineSrc.matchAll(/this\.createReport\('(FIGM-[A-Z0-9-]+)'/g)].map((m) => m[1])
   );
-  assert.equal(dispatchedIds.size, 25, 'engine must dispatch exactly 25 distinct rule IDs');
+  assert.equal(dispatchedIds.size, CANONICAL_RULE_COUNT, `engine must dispatch exactly ${CANONICAL_RULE_COUNT} distinct rule IDs`);
   for (const id of CANONICAL_IDS) {
     assert.ok(dispatchedIds.has(id), `canonical rule ${id} is never dispatched by ASTDetectionEngine.evaluateNode`);
   }
@@ -53,8 +60,8 @@ test('canonical registry === live engine dispatch (ast-detection-engine.ts)', ()
 
 test('canonical registry === generated figm-spec.json', () => {
   const spec = JSON.parse(read('figm-spec.json'));
-  assert.equal(spec.meta.totalCoreRules, 25);
-  assert.equal(spec.rules.length, 25);
+  assert.equal(spec.meta.totalCoreRules, CANONICAL_RULE_COUNT);
+  assert.equal(spec.rules.length, CANONICAL_RULE_COUNT);
   const specIds = spec.rules.map((r: { id: string }) => r.id).sort();
   assert.deepEqual(specIds, CANONICAL_IDS, 'figm-spec.json rule IDs must exactly match RULE_CATALOG (run `npm run generate-spec` if this fails)');
 
@@ -100,9 +107,18 @@ test('every rule is applicable to at least one framework, and Vue is representab
   for (const r of RULE_CATALOG) {
     assert.ok(r.frameworks.length > 0, `${r.id} has an empty frameworks[] -- every rule must be applicable somewhere`);
   }
+  // 12 universal PERF/A11Y rules (framework-independent) + FIGM-VUE-01/02 (LEGACY_TEXT_HEURISTIC,
+  // first expansion pass) + FIGM-VUE-03/04/05/06 (REAL_AST via <script>-block extraction, second
+  // expansion pass) -- all 6 are Vue-exclusive, so Vue is no longer covered ONLY by the
+  // framework-independent set.
   const vueRules = RULE_CATALOG.filter((r) => r.frameworks.includes('VUE_SFC'));
-  assert.equal(vueRules.length, 12, 'exactly the 12 universal PERF/A11Y rules should apply to Vue (no Vue-exclusive rules exist)');
-  assert.ok(vueRules.every((r) => r.isFrameworkIndependent), 'every Vue-applicable rule must be framework-independent, since no rule targets Vue specifically');
+  assert.equal(vueRules.length, 18, '12 universal PERF/A11Y rules + FIGM-VUE-01..06 should apply to Vue');
+  const vueExclusiveIds = vueRules.filter((r) => !r.isFrameworkIndependent).map((r) => r.id).sort();
+  assert.deepEqual(
+    vueExclusiveIds,
+    ['FIGM-VUE-01', 'FIGM-VUE-02', 'FIGM-VUE-03', 'FIGM-VUE-04', 'FIGM-VUE-05', 'FIGM-VUE-06'],
+    'only FIGM-VUE-01..06 should be Vue-applicable-but-not-framework-independent'
+  );
 });
 
 test('isFrameworkIndependent is never true for a framework-gated rule (requirement: do not mislabel framework-specific rules)', () => {

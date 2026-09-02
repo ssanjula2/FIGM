@@ -3,7 +3,7 @@
 **Research Title**: "Usability Evaluation of the Framework-Independent Guideline Model (FIGM) Code Inspector for Single Page Applications"  
 **Institution**: NSBM Green University  
 **Candidate**: A P H D S Sanjula (Student ID: 28256)  
-**Target Sample Size**: **85 Valid Real Human Participants**  
+**Target Sample Size**: **20 Valid Real Human Participants** — the final approved study target (a later approved research-scope decision confirmed by the researcher; the original Proposal/Interim 02 documents state 80-100 as the historical baseline, preserved and superseded — see `docs/research/PARTICIPANT_TARGET_DECISION.md`)  
 
 ---
 
@@ -24,7 +24,7 @@
 ## 2. Participant Recruitment & Task Execution
 
 1. Share the **Form Respondent URL** with frontend software developers (React, Vue, Angular).
-2. Participants complete the 5 task questions (evaluating React/Angular/Vue benchmark fixtures in `benchmarks/testbed/`) and 10 standard System Usability Scale (SUS) questions (15–25 minutes).
+2. Participants complete the 5 task questions (evaluating **one of** the React/Angular/Vue benchmark fixtures — `UserProfile.jsx`, `SearchPanel.component.ts`, or `DataGrid.vue` — in `samples/sample-spa/src/`, per the in-form instructions before Question 9) and 10 standard System Usability Scale (SUS) questions (15–25 minutes). *(Corrected, Phase 4: previously said "benchmarks/testbed/" and did not specify "one of," which read as inspecting all three across a different fixture directory than the one the actual Google Form script points to.)*
 
 ---
 
@@ -45,7 +45,7 @@ When responses are submitted:
 
 ## 4. Checking Collection Status & Target Progress
 
-Run the status command at any time to check real-time progress toward the 85-participant goal:
+Run the status command at any time to check real-time progress toward the 20-participant goal:
 ```powershell
 npm run research:user-study:status
 ```
@@ -55,9 +55,9 @@ npm run research:user-study:status
 ====================================================
   FIGM REAL HUMAN USER STUDY STATUS
 ====================================================
-  Target Sample Size   : 85
-  Valid Participants  : 0 (0/85 collected - 0%)
-  Remaining Needed    : 85
+  Target Sample Size   : 20
+  Valid Participants  : 0 (0/20 collected - 0%)
+  Remaining Needed    : 20
   Collection Status   : NOT_COLLECTED
   Real Human Data     : false
   Target Reached      : false
@@ -69,8 +69,8 @@ npm run research:user-study:status
 ====================================================
   FIGM REAL HUMAN USER STUDY STATUS
 ====================================================
-  Target Sample Size   : 85
-  Valid Participants  : 85 (85/85 collected - 100%)
+  Target Sample Size   : 20
+  Valid Participants  : 20 (20/20 collected - 100%)
   Remaining Needed    : 0
   Collection Status   : COLLECTED
   Real Human Data     : true

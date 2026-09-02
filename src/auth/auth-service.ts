@@ -288,6 +288,100 @@ export function verifyRefreshToken(token: string): { userId: string; email: stri
   }
 }
 
+/** Consent state carried inside a research-participant session token -- see
+ *  signResearchParticipantToken's doc comment for why consent lives here rather than in a new DB
+ *  column. `given` defaults to false on the token a fresh GET /api/user-study/log-scan issues;
+ *  POST /api/user-study/consent is the only thing that ever re-signs a token with `given: true`. */
+export interface ResearchParticipantConsent {
+  given: boolean;
+  version?: string;
+  timestamp?: string;
+}
+
+/**
+ * Signs a research-participant session token binding one browser session to exactly one
+ * participant code (e.g. "P006"). Unlike a real user JWT, this never carries a role/identity
+ * beyond the participant code itself -- the study is intentionally anonymous, with no login step
+ * (see app/user-study/page.tsx). Reuses the same HMAC secret/format as signJWT rather than
+ * inventing a second signing mechanism (see auth-authz forensic audit finding on
+ * /api/user-study/log-scan: previously ANY caller could POST any participantId with no session
+ * binding at all). 7-day expiry: long enough to span a real participant's return visit within the
+ * same browser, short enough not to be a permanent forgeable credential.
+ *
+ * `consent` defaults to not-given -- callers that want a consent-bearing token must pass one
+ * explicitly (see POST /api/user-study/consent, the only route that ever does). Binding consent to
+ * this anonymous session token, rather than a new database column keyed by real identity, avoids
+ * collecting any additional PII solely to enforce the consent gate.
+ */
+export function signResearchParticipantToken(
+  participantCode: string,
+  expiresInSeconds = 604800,
+  consent: ResearchParticipantConsent = { given: false }
+): string {
+  const header = { alg: 'HS256', typ: 'JWT', kind: 'research_participant' };
+  const now = Math.floor(Date.now() / 1000);
+  const claim = {
+    sub: participantCode,
+    kind: 'research_participant',
+    iat: now,
+    exp: now + expiresInSeconds,
+    consentGiven: consent.given === true,
+    consentVersion: consent.given ? consent.version : undefined,
+    consentTimestamp: consent.given ? consent.timestamp : undefined,
+  };
+
+  const encodedHeader = Buffer.from(JSON.stringify(header)).toString('base64url');
+  const encodedPayload = Buffer.from(JSON.stringify(claim)).toString('base64url');
+
+  const signature = crypto
+    .createHmac('sha256', getJwtSecret())
+    .update(`${encodedHeader}.${encodedPayload}`)
+    .digest('base64url');
+
+  return `${encodedHeader}.${encodedPayload}.${signature}`;
+}
+
+/**
+ * Verifies a research-participant session token and returns the participant code it is bound to
+ * plus its consent state, or null if missing/malformed/expired/tampered/wrong-kind. Never trust a
+ * client-supplied participantId for attribution -- this is the only source of truth for "which
+ * participant does this request belong to," and consentGiven here is likewise the only source of
+ * truth for whether study-interaction logging may proceed (see POST /api/user-study/log-scan).
+ */
+export function verifyResearchParticipantToken(
+  token: string
+): { participantCode: string; consentGiven: boolean; consentVersion?: string; consentTimestamp?: string } | null {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+
+    const [encodedHeader, encodedPayload, signature] = parts;
+    const expectedSignature = crypto
+      .createHmac('sha256', getJwtSecret())
+      .update(`${encodedHeader}.${encodedPayload}`)
+      .digest('base64url');
+
+    if (!safeCompare(signature, expectedSignature)) return null;
+
+    const payloadJson = Buffer.from(encodedPayload, 'base64url').toString('utf-8');
+    const claim = JSON.parse(payloadJson);
+
+    const now = Math.floor(Date.now() / 1000);
+    if (claim.exp && claim.exp < now) return null;
+    if (claim.kind !== 'research_participant') return null;
+    if (typeof claim.sub !== 'string' || !claim.sub) return null;
+
+    return {
+      participantCode: claim.sub,
+      consentGiven: claim.consentGiven === true,
+      consentVersion: typeof claim.consentVersion === 'string' ? claim.consentVersion : undefined,
+      consentTimestamp: typeof claim.consentTimestamp === 'string' ? claim.consentTimestamp : undefined,
+    };
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Generate secure random token for password reset
  */

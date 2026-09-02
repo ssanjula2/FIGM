@@ -35,24 +35,42 @@ import type { ASTNode } from '../types/ast-spec.js';
  *  for genuinely multi-line HTML and, per stripCommentsAndStrings' own documented behavior
  *  elsewhere in this codebase, only a backtick `template:`/`styles:`-shaped (colon-assigned)
  *  string is treated as real markup rather than blanked string data in the first place. */
-function extractAngularTemplateBlock(code: string): { content: string; lineOffset: number } | undefined {
+function extractAngularTemplateBlock(code: string, filePath: string): { content: string; lineOffset: number } | undefined {
   const match = /template\s*:\s*`([\s\S]*?)`/.exec(code);
   if (match) {
     const backtickIndex = match.index + match[0].indexOf('`');
     const startLine = code.slice(0, backtickIndex + 1).split(/\r?\n/).length;
     return { content: match[1], lineOffset: startLine - 1 };
   }
-  // No inline `template: \`...\`` property found. Two distinct real cases produce this:
+  // No inline `template: \`...\`` property found. Three distinct real cases produce this:
   //  (a) a genuine component TS file using an external `templateUrl: './x.html'` -- the file
   //      contains no template markup at all, so there is nothing to scan (real-AST or legacy),
   //      confirmed by the presence of an `@Component(` decorator with no inline template.
-  //  (b) the file/snippet itself IS raw template markup -- a standalone `.html` template file, or
-  //      (in framework-detection terms) any ANGULAR_TEMPLATE-classified content that never went
-  //      through a `@Component({...})` wrapper. The legacy heuristic this replaces scanned such
-  //      content directly with no `template:` requirement, so real-AST parity requires the same:
-  //      fall back to treating the whole input as the template, with no line offset.
+  //  (b) the file genuinely IS (or stands in for, in an isolated test) raw template markup -- a
+  //      standalone `.html` template file, or a `.component.ts`/`.component.html`-named file
+  //      (this codebase's own established Angular-component naming convention, also used as an
+  //      Angular-detection signal elsewhere -- see detectFramework) supplying bare template
+  //      content with no `@Component(` wrapper, exactly how this codebase's own test suite
+  //      (`tests/rule-detection-matrix.test.ts` et al.) exercises FIGM-ANG-03/04/08/10 in
+  //      isolation. The legacy heuristic this replaces scanned such content directly with no
+  //      `template:` requirement, so real-AST parity requires the same: fall back to treating the
+  //      whole input as the template, with no line offset -- but ONLY when the filename says this
+  //      is actually template-shaped, not by mere absence of a `template:`/`@Component(` match.
+  //  (c) **the bug this comment replaces**: a PLAIN `.ts` file that is neither a component nor a
+  //      template at all -- a service, config, interceptor, model, etc. with no Angular decorator
+  //      AND no `.component.*` filename (confirmed via a real-world re-scan: `app.config.ts`,
+  //      `user.service.ts`, and similar files in `angular-realworld-example-app` were previously
+  //      fed to `angular-html-parser` in full, which then misread ordinary TypeScript interface/
+  //      object-literal `{`/`}` braces as malformed Angular template/ICU syntax -- "Unexpected
+  //      character EOF... unescaped {", "Invalid ICU message" -- on files containing zero
+  //      template markup). Case (b)'s fallback previously had no way to distinguish this from a
+  //      real standalone template file/snippet; it now requires the filename to actually indicate
+  //      template-shaped content.
   if (/@Component\s*\(/.test(code)) return undefined;
-  return { content: code, lineOffset: 0 };
+  if (/\.html?$/i.test(filePath) || /\.component\.(ts|html?)$/i.test(filePath)) {
+    return { content: code, lineOffset: 0 };
+  }
+  return undefined;
 }
 
 interface AngularBuilderState {
@@ -158,8 +176,8 @@ export interface AngularTemplateParseError {
  * same "real parser's own errors" precedent for Angular. Never throws; returns an empty array if
  * there is no inline template or the parse produces nothing usable.
  */
-export function getAngularTemplateParseErrors(code: string): AngularTemplateParseError[] {
-  const block = extractAngularTemplateBlock(code);
+export function getAngularTemplateParseErrors(code: string, filePath: string): AngularTemplateParseError[] {
+  const block = extractAngularTemplateBlock(code, filePath);
   if (!block) return [];
   try {
     const result = parseHtml(block.content, { tokenizeAngularBlocks: true });
@@ -178,8 +196,8 @@ export function getAngularTemplateParseErrors(code: string): AngularTemplatePars
  * template. Never throws (angular-html-parser is error-tolerant like the TypeScript compiler
  * path); returns an empty list if there is no inline template or parsing produces nothing usable.
  */
-export function buildAngularTemplateRealSyntaxNodes(code: string): ASTNode[] {
-  const block = extractAngularTemplateBlock(code);
+export function buildAngularTemplateRealSyntaxNodes(code: string, filePath: string): ASTNode[] {
+  const block = extractAngularTemplateBlock(code, filePath);
   if (!block) return [];
 
   let rootNodes: NgNode[];

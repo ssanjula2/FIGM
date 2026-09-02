@@ -7,6 +7,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { RuleExecutionEngine } from '../src/engine/rule-execution-engine.js';
 import { RemediationEngine } from '../src/engine/remediation-engine.js';
+import { RemediationValidator } from '../src/engine/remediation-validation.server.js';
 import { ComplexityEngine } from '../src/analysis/complexity/complexity-engine.js';
 
 describe('Adversarial User Code Detection Suite', () => {
@@ -195,7 +196,7 @@ describe('Adversarial User Code Detection Suite', () => {
 
       if (perfDiag) {
         const patchRes = RemediationEngine.applyQuickFix(code, perfDiag);
-        const valRes = RemediationEngine.validatePatch(code, patchRes.remediatedCode, perfDiag);
+        const valRes = RemediationValidator.validatePatch(code, patchRes.remediatedCode, perfDiag);
         assert.equal(valRes.isValid, true);
         assert.equal(valRes.status, 'FIXED');
       }

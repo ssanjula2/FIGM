@@ -10,9 +10,9 @@ const reportPath = path.resolve(process.cwd(), 'figm-scan-report.html');
 if (!fs.existsSync(reportPath)) {
   console.log('[FIGM UI] No report found. Running initial scan on samples/sample-spa...');
   try {
-    execSync('npx tsx src/cli/figm-analyze.ts samples/sample-spa', { stdio: 'inherit' });
+    execSync('npx tsx src/cli/figm-analyze.ts samples/sample-spa', { stdio: 'inherit', timeout: 60000 });
   } catch (err) {
-    console.error('[FIGM UI] Failed to run initial scan:', err);
+    console.error('[FIGM UI] Failed to run initial scan within timeout:', err);
   }
 }
 

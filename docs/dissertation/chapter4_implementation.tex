@@ -3,7 +3,7 @@
 \label{ch:implementation}
 
 \section{Static Rule Execution Engine}
-The FIGM static analysis engine matches extracted Abstract Language Primitives (ALPs) against formal boolean predicates over a normalized node representation. As of the AST migration documented in \texttt{docs/architecture/AST\_MIGRATION\_MAP.md}, this normalized representation is populated by two distinct mechanisms depending on rule and framework: 23 of the 25 FIGM rules are detected via genuine TypeScript-compiler-API AST traversal for React, Next.js, plain JS/TS, and the TypeScript class body of Angular components (the frameworks/syntax for which a real parse is possible without adding a new dependency); the remaining 2 rules (Angular \texttt{*ngFor} trackBy and template method-call detection, both of which require parsing Angular's inline template markup), and every rule applied to Vue SFC markup (neither of which the TypeScript compiler can parse), are detected via a regex/substring text-heuristic over the source. This is not a uniform "unified AST traversal" claim -- it is a framework- and rule-gated hybrid, and every emitted finding is labeled with which of the two mechanisms produced it (\texttt{sourceKind}: \texttt{REAL\_AST} or \texttt{LEGACY\_TEXT\_HEURISTIC}) so this distinction is verifiable in the tool's own output, not only in this text.
+The FIGM static analysis engine matches extracted Abstract Language Primitives (ALPs) against formal boolean predicates over a normalized node representation. As of the AST migration documented in \texttt{docs/architecture/AST\_MIGRATION\_MAP.md} (see its 2026-08 Scientific Hardening addendum), this normalized representation is populated by three distinct mechanisms depending on rule and framework: 44 of the 50 FIGM rules are detected via genuine TypeScript-compiler-API AST traversal for React, Next.js, plain JS/TS, and the TypeScript class body of Angular components; a further 4 rules (\texttt{FIGM-ANG-03}, \texttt{FIGM-ANG-04}, \texttt{FIGM-ANG-08}, \texttt{FIGM-ANG-10}) parse Angular's inline template markup via \texttt{angular-html-parser}, a real, independently-maintained HTML+Angular-template parser extracted from Angular's own compiler -- not \texttt{@angular/compiler} itself -- giving genuine element/attribute/directive/interpolation and \texttt{@for}/\texttt{@if}/\texttt{@switch} control-flow AST with real source spans; the remaining 2 rules (\texttt{FIGM-VUE-01}, \texttt{FIGM-VUE-02}, both requiring Vue Single-File-Component template markup, which neither the TypeScript compiler nor \texttt{angular-html-parser} can parse) are detected via a regex/substring text-heuristic over the source, a limitation documented as environment-blocked: a genuine Vue template parser (\texttt{@vue/compiler-sfc}) was scoped for this pass but the development environment had no package-registry network access to install it. This is not a uniform "unified AST traversal" claim -- it is a framework- and rule-gated hybrid, and every emitted finding is labeled with which mechanism produced it (\texttt{sourceKind}: \texttt{REAL\_AST} or \texttt{LEGACY\_TEXT\_HEURISTIC}) so this distinction is verifiable in the tool's own output, not only in this text.
 
 \subsection{Formal Predicate for FIGM-PERF-01}
 \begin{equation}
@@ -128,6 +128,131 @@ P_ANG_04(n) \iff IsTemplateInterpolation(n) \land ContainsMethodCall(n)
 \subsection{Formal Predicate for FIGM-ANG-05}
 \begin{equation}
 P_ANG_05(n) \iff IsNativeElementAccess(n) \land \neg UsesRenderer2(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-A11Y-07}
+\begin{equation}
+P_A11Y_07(n) \iff HasVisibleTextChild(n) \land HasAriaLabel(n) \land \neg Contains(AriaLabelText(n), VisibleText(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-05}
+\begin{equation}
+P_REACT_05(n) \iff IsUseEffectCall(n) \land SoleBodyStatementIsStateSetterCall(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-06}
+\begin{equation}
+P_REACT_06(n) \iff IsUseEffectCall(n) \land \exists p \in ReferencedIdentifiers(n): (IsDestructuredProp(p) \land \neg InDependencyArray(p, n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-05}
+\begin{equation}
+P_NEXT_05(n) \iff HasUseClientDirective(File(n)) \land IsServerOnlyModuleImport(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-06}
+\begin{equation}
+P_NEXT_06(n) \iff IsNativeImgElement(n) \land File(n).framework == NEXT_JS
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-06}
+\begin{equation}
+P_ANG_06(n) \iff IsPipeDecorator(n) \land PureOptionEqualsFalse(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-VUE-01}
+\begin{equation}
+P_VUE_01(n) \iff HasVFor(n) \land (\neg HasKeyBinding(n) \lor KeyBindingEqualsLoopIndex(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-VUE-02}
+\begin{equation}
+P_VUE_02(n) \iff HasVFor(n) \land HasVIf(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-07}
+\begin{equation}
+P_NEXT_07(n) \iff IsComponentFunction(n) \land IsAsync(n) \land HasUseClientDirective(File(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-08}
+\begin{equation}
+P_NEXT_08(n) \iff IsUseSearchParamsCall(n) \land \neg ExistsSuspenseElement(File(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-09}
+\begin{equation}
+P_NEXT_09(n) \iff IsMetadataApiExport(n) \land HasUseClientDirective(File(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-NEXT-10}
+\begin{equation}
+P_NEXT_10(n) \iff IsForceDynamicExport(n) \land \neg ExistsRequestTimeApiCall(File(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-VUE-03}
+\begin{equation}
+P_VUE_03(n) \iff IsComputedCall(n) \land ContainsSideEffect(GetterBody(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-VUE-04}
+\begin{equation}
+P_VUE_04(n) \iff IsMutationOf(n) \land RootBindingIsComputed(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-VUE-05}
+\begin{equation}
+P_VUE_05(n) \iff IsMutationOf(n) \land RootBindingIsDefinePropsResult(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-VUE-06}
+\begin{equation}
+P_VUE_06(n) \iff IsArrowFunction(n) \land IsOptionsApiMethodsProperty(Parent(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-07}
+\begin{equation}
+P_ANG_07(n) \iff IsConstructor(n) \land ContainsNonTrivialStatement(Body(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-08}
+\begin{equation}
+P_ANG_08(n) \iff IsForBlockTrackExpression(n) \land (TrackEqualsIndex(n) \lor TrackEqualsLoopVar(n))
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-09}
+\begin{equation}
+P_ANG_09(n) \iff IsSignalInputProperty(n) \land \neg HasReadonlyModifier(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-ANG-10}
+\begin{equation}
+P_ANG_10(n) \iff IsAsyncPipeExpression(n) \land ExistsDuplicateAsyncPipeExpression(File(n), n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-07}
+\begin{equation}
+P_REACT_07(n) \iff IsHookCall(n) \land HasConditionalOrLoopOrNestedFunctionAncestor(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-08}
+\begin{equation}
+P_REACT_08(n) \iff IsDirectMutation(n) \land RootIsDestructuredProp(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-09}
+\begin{equation}
+P_REACT_09(n) \iff IsIoOrStorageCall(n) \land Scope(n) == RENDER \land \neg InsideEffectOrHandler(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-10}
+\begin{equation}
+P_REACT_10(n) \iff IsPascalCaseIdentifierCall(n) \land IsInFileDefinedComponent(n) \land InsideJsxExpressionContainer(n)
+\end{equation}
+
+\subsection{Formal Predicate for FIGM-REACT-11}
+\begin{equation}
+P_REACT_11(n) \iff IsProviderValueAttribute(n) \land IsUnmemoizedObjectOrArrayLiteral(n)
 \end{equation}
 
 \section{Resilient Source Parsing \& Diagnostics}

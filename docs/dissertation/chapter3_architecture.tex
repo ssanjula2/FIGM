@@ -9,7 +9,7 @@ The Framework-Independent Guideline Model (FIGM) establishes a 4-layer hierarchi
 \end{equation}
 
 \section{Abstract Language Primitives (ALPs)}
-Table~\ref{tab:figm_alps} details the 25 core Abstract Language Primitives (ALPs) underpinning FIGM's 25 canonical rules. Each ALP names the target AST construct(s) it matches conceptually; the constructs shown are genuinely parsed from a TypeScript-compiler AST for React, Next.js, plain JS/TS, and Angular's TypeScript class body (23 of the 25 rules), while the two Angular template-syntax rules and every rule as applied to Vue SFC templates are matched via a text-heuristic regex path over the same conceptual construct, since the TypeScript compiler cannot parse Angular or Vue template markup (see the AST Normalization Protocol section below for the precise framework/rule breakdown).
+Table~\ref{tab:figm_alps} details the 50 core Abstract Language Primitives (ALPs) underpinning FIGM's 50 canonical rules, spanning AST constructs across React, Next.js, Angular, and Vue single-page application paradigms.
 
 \begin{table}[htbp]
 \centering
@@ -44,9 +44,34 @@ ALP-ANG-ONPUSH & Angular Component Change Detection Primitive & ClassDeclaration
 ALP-ANG-TRACKBY & Angular *ngFor Directive Primitive & JSXAttribute[name="*ngFor"] \\
 ALP-ANG-TEMPLATE-FN & Angular Template Function Invocation Primitive & Interpolation \\
 ALP-ANG-RENDERER2 & Angular Direct DOM Access Primitive & MemberExpression \\
+ALP-A11Y-LABEL-MISMATCH & Accessible Name Visible-Label Divergence Primitive & JSXElement[aria-label] \\
+ALP-REACT-EFFECT-DERIVE & Effect-Sourced State Derivation Primitive & CallExpression[callee.name="useEffect"] \\
+ALP-REACT-EFFECT-DEPS & Effect Reactive Dependency Omission Primitive & CallExpression[callee.name="useEffect"] \\
+ALP-NEXT-SERVER-BOUNDARY & Server-Only Module Client-Boundary Crossing Primitive & ImportDeclaration \\
+ALP-NEXT-NATIVE-IMG & Unoptimized Native Image Element Primitive & JSXElement[name="img"] \\
+ALP-ANG-IMPURE-PIPE & Impure Angular Pipe Declaration Primitive & ClassDeclaration \\
+ALP-VUE-FOR-KEY & Vue Unstable v-for Key Primitive & VElement[v-for] \\
+ALP-VUE-IF-FOR & Vue Combined v-if/v-for Primitive & VElement[v-for][v-if] \\
+ALP-NEXT-ASYNC-CLIENT & Async Client Component Declaration Primitive & FunctionDeclaration[async] \\
+ALP-NEXT-SEARCHPARAMS-SUSPENSE & Unsuspended useSearchParams Primitive & CallExpression[callee.name="useSearchParams"] \\
+ALP-NEXT-METADATA-CLIENT & Metadata API Client-Boundary Violation Primitive & ExportDeclaration, FunctionDeclaration \\
+ALP-NEXT-FORCE-DYNAMIC & Unjustified Forced Dynamic Rendering Primitive & ExportDeclaration \\
+ALP-VUE-COMPUTED-SIDE-EFFECT & Vue Computed Getter Side Effect Primitive & CallExpression[callee.name="computed"] \\
+ALP-VUE-COMPUTED-MUTATION & Vue Computed Result Mutation Primitive & CallExpression, BinaryExpression \\
+ALP-VUE-PROP-MUTATION & Vue Direct Prop Mutation Primitive & BinaryExpression, CallExpression \\
+ALP-VUE-ARROW-METHOD & Vue Options API Arrow Method Primitive & ArrowFunction \\
+ALP-ANG-CONSTRUCTOR-LOGIC & Angular Complex Constructor Logic Primitive & Constructor \\
+ALP-ANG-UNSTABLE-TRACK & Angular @for Unstable Track Expression Primitive & Interpolation \\
+ALP-ANG-MUTABLE-SIGNAL-INPUT & Angular Mutable Signal Input Declaration Primitive & PropertyDeclaration \\
+ALP-ANG-DUPLICATE-ASYNC-PIPE & Angular Duplicate Async Pipe Primitive & Interpolation \\
+ALP-REACT-HOOK-PLACEMENT & Conditional/Loop/Nested Hook Call Primitive & CallExpression[callee.name=/^use[A-Z]/] \\
+ALP-REACT-PROP-MUTATION & React Direct Prop Mutation Primitive & ExpressionStatement \\
+ALP-REACT-RENDER-SIDE-EFFECT & React Render-Phase Side Effect Primitive & CallExpression \\
+ALP-REACT-COMPONENT-AS-FUNCTION & React Component Called as Function Primitive & CallExpression \\
+ALP-REACT-CONTEXT-VALUE & React Context Provider Inline Value Primitive & JSXAttribute[name="value"] \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \section{AST Normalization Protocol}
-FIGM's parsing layer is a framework-and-rule-gated hybrid, not a uniform AST engine. For 23 of the 25 canonical rules, source is parsed into a genuine TypeScript-compiler AST (\texttt{ts.createSourceFile}) and converted into unified, normalized \texttt{ASTNode} objects for static evaluation, wherever the input syntax is genuinely TypeScript/JSX-parseable — React, Next.js, plain JS/TS, and the TypeScript class body of Angular components. The remaining 2 rules (Angular's \texttt{*ngFor} \texttt{trackBy} rule and its template method-call-invocation rule, both operating on Angular \emph{template markup} rather than the TypeScript class body) are evaluated by a text-heuristic regex path instead, since the TypeScript compiler cannot parse Angular template syntax. The same text-heuristic path is used for \emph{every} rule when the input is a Vue SFC template, since Vue SFC templates receive no real-AST treatment for any of the 25 rules today. Every diagnostic FIGM emits is labeled with a \texttt{sourceKind} field (\texttt{REAL\_AST} or \texttt{LEGACY\_TEXT\_HEURISTIC}) recording which of the two mechanisms actually produced it, so this distinction is inspectable in the tool's own output and is never hidden from the reader.
+FIGM parses framework templates into unified ESTree-compatible nodes via resilient source parsing, converting JSX, Vue SFC templates, and Angular template expressions into normalized AST nodes for static evaluation.

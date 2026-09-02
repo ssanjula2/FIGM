@@ -1,12 +1,19 @@
 import { NextResponse } from 'next/server';
 import { authenticateUser } from '../../../../../src/auth/auth-middleware';
 import { ProjectRepository } from '../../../../../src/engine/project-repository';
+import { checkRateLimit, getClientIp } from '../../../../../src/auth/rate-limiter';
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   const auth = authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  // Duplication is a heavier DB write than a plain create (copies the source project's own
+  // data) with the same unbounded-repeat-abuse profile -- same limit applied for the same reason
+  // as POST /api/projects above.
+  const rateLimitError = await checkRateLimit(getClientIp(request), 10, 60000);
+  if (rateLimitError) return rateLimitError;
 
   const source = await ProjectRepository.getProjectById(params.id);
   if (!source) {

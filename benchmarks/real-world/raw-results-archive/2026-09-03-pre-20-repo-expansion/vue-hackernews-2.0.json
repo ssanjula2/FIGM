@@ -1,0 +1,352 @@
+{
+  "name": "vue-hackernews-2.0",
+  "url": "https://github.com/vuejs/vue-hackernews-2.0.git",
+  "commit": "98399b55c6f1da4197840ba76189795b3e95be0f",
+  "primaryFrameworkLabel": "Vue",
+  "filesScanned": 23,
+  "totalLOC": 1396,
+  "scanDurationMs": 2252.7792000000045,
+  "totalFigmFindings": 5,
+  "findingsByRule": {
+    "FIGM-PERF-04": 2,
+    "FIGM-PERF-02": 1,
+    "FIGM-VUE-06": 1,
+    "FIGM-PERF-05": 1
+  },
+  "findingsBySeverity": {
+    "MEDIUM": 3,
+    "HIGH": 2
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 15,
+    "VUE_SFC": 8
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 1,
+    "totalParseErrorCount": 1
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "server.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 123,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/api/create-api-client.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/api/create-api-server.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 32,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/api/index.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 77,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 42,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/App.vue",
+      "framework": "VUE_SFC",
+      "loc": 103,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Comment.vue",
+      "framework": "VUE_SFC",
+      "loc": 75,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Item.vue",
+      "framework": "VUE_SFC",
+      "loc": 68,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/ProgressBar.vue",
+      "framework": "VUE_SFC",
+      "loc": 102,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Spinner.vue",
+      "framework": "VUE_SFC",
+      "loc": 55,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/entry-client.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 69,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/entry-server.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 53,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/router/index.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/store/actions.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 50,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/store/getters.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/store/index.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 29,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/store/mutations.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/util/filters.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/util/title.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 31,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/views/CreateListView.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 23,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/views/ItemList.vue",
+      "framework": "VUE_SFC",
+      "loc": 158,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/views/ItemView.vue",
+      "framework": "VUE_SFC",
+      "loc": 134,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/views/UserView.vue",
+      "framework": "VUE_SFC",
+      "loc": 63,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/api/create-api-server.js",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 31
+        }
+      },
+      "offendingCodeSnippet": "import Firebase from 'firebase'",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/api/create-api-server.js",
+      "location": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 27
+        }
+      },
+      "offendingCodeSnippet": "import LRU from 'lru-cache'",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/App.vue",
+      "location": {
+        "start": {
+          "line": 6,
+          "column": 10
+        },
+        "end": {
+          "line": 6,
+          "column": 65
+        }
+      },
+      "offendingCodeSnippet": "<img class=\"logo\" src=\"~public/logo-48.png\" alt=\"logo\">",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-VUE-06",
+      "ruleName": "Arrow Function Used as Options API Method",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/components/Comment.vue",
+      "location": {
+        "start": {
+          "line": 36,
+          "column": 4
+        },
+        "end": {
+          "line": 36,
+          "column": 57
+        }
+      },
+      "offendingCodeSnippet": "pluralize: n => n + (n === 1 ? ' reply' : ' replies')",
+      "message": "Arrow function used as an Options API method; `this` will not be bound to the component instance.",
+      "remediation": "Use a regular method shorthand (or a plain function expression) for every entry in the Options API methods block, never an arrow function. Evidence: Vue.js official documentation, \"Options: State\" -- https://vuejs.org/api/options-state.html (\"avoid using arrow functions when declaring methods, as they will not have access to the component instance via this... this.myMethod will be undefined\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunction] at line 36",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "src/views/ItemView.vue",
+      "location": {
+        "start": {
+          "line": 88,
+          "column": 15
+        },
+        "end": {
+          "line": 88,
+          "column": 51
+        }
+      },
+      "offendingCodeSnippet": "}).then(() => Promise.all(item.kids.map(id => {",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 88",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    }
+  ]
+}

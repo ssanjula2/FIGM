@@ -1,0 +1,317 @@
+{
+  "name": "vitesse",
+  "url": "https://github.com/antfu-collective/vitesse.git",
+  "commit": "8a01bc9283fedcd63e750af55a75496361789a81",
+  "primaryFrameworkLabel": "Vue",
+  "filesScanned": 29,
+  "totalLOC": 1563,
+  "scanDurationMs": 2643.4373999999953,
+  "totalFigmFindings": 2,
+  "findingsByRule": {
+    "FIGM-A11Y-05": 1,
+    "FIGM-PERF-04": 1
+  },
+  "findingsBySeverity": {
+    "CRITICAL": 1,
+    "MEDIUM": 1
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 19,
+    "VUE_SFC": 10
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "cypress/e2e/basic.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "cypress.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "eslint.config.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/App.vue",
+      "framework": "VUE_SFC",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/auto-imports.d.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 632,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/TheCounter.vue",
+      "framework": "VUE_SFC",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/TheFooter.vue",
+      "framework": "VUE_SFC",
+      "loc": 38,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/TheInput.vue",
+      "framework": "VUE_SFC",
+      "loc": 21,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components.d.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/composables/dark.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 5,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/layouts/404.vue",
+      "framework": "VUE_SFC",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/layouts/default.vue",
+      "framework": "VUE_SFC",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/layouts/home.vue",
+      "framework": "VUE_SFC",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/main.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/modules/i18n.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 51,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/modules/nprogress.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/modules/pinia.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/modules/pwa.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/pages/hi/[name].vue",
+      "framework": "VUE_SFC",
+      "loc": 51,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/pages/index.vue",
+      "framework": "VUE_SFC",
+      "loc": 60,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/pages/[...all].vue",
+      "framework": "VUE_SFC",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/route-map.d.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 122,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/shims.d.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/stores/user.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/types.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 4,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "test/basic.test.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "test/component.test.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 29,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "uno.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 42,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "vite.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 168,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/TheInput.vue",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 2
+        },
+        "end": {
+          "line": 8,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/modules/nprogress.ts",
+      "location": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 33
+        }
+      },
+      "offendingCodeSnippet": "import NProgress from 'nprogress'",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

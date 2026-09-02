@@ -1,0 +1,489 @@
+{
+  "name": "JavaScript30",
+  "url": "https://github.com/wesbos/JavaScript30.git",
+  "commit": "c36f2ed261eacb3e9ad83c05eb2fd3a4f72cc82f",
+  "primaryFrameworkLabel": "Generic JavaScript",
+  "filesScanned": 7,
+  "totalLOC": 602,
+  "scanDurationMs": 622.9340000000084,
+  "totalFigmFindings": 15,
+  "findingsByRule": {
+    "FIGM-PERF-03": 15
+  },
+  "findingsBySeverity": {
+    "CRITICAL": 15
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 7
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 56,
+      "figmFindingCount": 12,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "11 - Custom Video Player/scripts.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 1,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "12 - Key Sequence Detection/cornify.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 371,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "19 - Webcam Fun/scripts-FINISHED.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 111,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "19 - Webcam Fun/scripts.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "29 - Countdown Timer/scripts-FINISHED.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 56,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "29 - Countdown Timer/scripts-START.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 1,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 41,
+          "column": 0
+        },
+        "end": {
+          "line": 41,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "video.addEventListener('click', togglePlay);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 41",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 42,
+          "column": 0
+        },
+        "end": {
+          "line": 42,
+          "column": 44
+        }
+      },
+      "offendingCodeSnippet": "video.addEventListener('play', updateButton);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 42",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 43,
+          "column": 0
+        },
+        "end": {
+          "line": 43,
+          "column": 45
+        }
+      },
+      "offendingCodeSnippet": "video.addEventListener('pause', updateButton);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 43",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 44,
+          "column": 0
+        },
+        "end": {
+          "line": 44,
+          "column": 52
+        }
+      },
+      "offendingCodeSnippet": "video.addEventListener('timeupdate', handleProgress);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 44",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 46,
+          "column": 0
+        },
+        "end": {
+          "line": 46,
+          "column": 44
+        }
+      },
+      "offendingCodeSnippet": "toggle.addEventListener('click', togglePlay);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 46",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 47,
+          "column": 30
+        },
+        "end": {
+          "line": 47,
+          "column": 68
+        }
+      },
+      "offendingCodeSnippet": "skipButtons.forEach(button => button.addEventListener('click', skip));",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 47",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 48,
+          "column": 24
+        },
+        "end": {
+          "line": 48,
+          "column": 75
+        }
+      },
+      "offendingCodeSnippet": "ranges.forEach(range => range.addEventListener('change', handleRangeUpdate));",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 48",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 49,
+          "column": 24
+        },
+        "end": {
+          "line": 49,
+          "column": 78
+        }
+      },
+      "offendingCodeSnippet": "ranges.forEach(range => range.addEventListener('mousemove', handleRangeUpdate));",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 49",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 52,
+          "column": 0
+        },
+        "end": {
+          "line": 52,
+          "column": 41
+        }
+      },
+      "offendingCodeSnippet": "progress.addEventListener('click', scrub);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 52",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 53,
+          "column": 0
+        },
+        "end": {
+          "line": 53,
+          "column": 68
+        }
+      },
+      "offendingCodeSnippet": "progress.addEventListener('mousemove', (e) => mousedown && scrub(e));",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 53",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 54,
+          "column": 0
+        },
+        "end": {
+          "line": 54,
+          "column": 62
+        }
+      },
+      "offendingCodeSnippet": "progress.addEventListener('mousedown', () => mousedown = true);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 54",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "11 - Custom Video Player/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 55,
+          "column": 0
+        },
+        "end": {
+          "line": 55,
+          "column": 61
+        }
+      },
+      "offendingCodeSnippet": "progress.addEventListener('mouseup', () => mousedown = false);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 55",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "19 - Webcam Fun/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 110,
+          "column": 0
+        },
+        "end": {
+          "line": 110,
+          "column": 48
+        }
+      },
+      "offendingCodeSnippet": "video.addEventListener('canplay', paintToCanvas);",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 110",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "29 - Countdown Timer/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 48,
+          "column": 26
+        },
+        "end": {
+          "line": 48,
+          "column": 70
+        }
+      },
+      "offendingCodeSnippet": "buttons.forEach(button => button.addEventListener('click', startTimer));",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 48",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-03",
+      "ruleName": "Unbounded Event Listener Disposal",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "29 - Countdown Timer/scripts-FINISHED.js",
+      "location": {
+        "start": {
+          "line": 49,
+          "column": 0
+        },
+        "end": {
+          "line": 55,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "document.customForm.addEventListener('submit', function(e) {",
+      "message": "Event listener registered without matching disposal/teardown handler in unmount scope.",
+      "remediation": "Return an explicit teardown function or invoke removeEventListener in the lifecycle unmount routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 49",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

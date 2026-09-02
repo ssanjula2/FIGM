@@ -5,18 +5,17 @@
   "primaryFrameworkLabel": "Angular",
   "filesScanned": 40,
   "totalLOC": 2331,
-  "scanDurationMs": 3577.872400000051,
-  "totalFigmFindings": 23,
+  "scanDurationMs": 3506.1177000000025,
+  "totalFigmFindings": 19,
   "findingsByRule": {
-    "FIGM-REACT-01": 4,
     "FIGM-PERF-04": 2,
     "FIGM-ANG-02": 7,
     "FIGM-ANG-07": 6,
     "FIGM-ANG-01": 4
   },
   "findingsBySeverity": {
-    "HIGH": 11,
     "MEDIUM": 8,
+    "HIGH": 7,
     "CRITICAL": 4
   },
   "frameworksDetected": {
@@ -65,7 +64,7 @@
       "relativePath": "server/db-data.ts",
       "framework": "GENERIC_ESTREE",
       "loc": 908,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -97,7 +96,7 @@
       "relativePath": "server/search-lessons.route.ts",
       "framework": "GENERIC_ESTREE",
       "loc": 47,
-      "figmFindingCount": 4,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -352,33 +351,6 @@
   ],
   "rawDiagnostics": [
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "server/db-data.ts",
-      "location": {
-        "start": {
-          "line": 894,
-          "column": 9
-        },
-        "end": {
-          "line": 894,
-          "column": 77
-        }
-      },
-      "offendingCodeSnippet": "return Object.values(LESSONS).filter(lesson => lesson.courseId == courseId);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 894",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-04",
       "ruleName": "Static Imports in Deferred Execution Paths",
       "domain": "PERFORMANCE",
@@ -404,87 +376,6 @@
       "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 5",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "server/search-lessons.route.ts",
-      "location": {
-        "start": {
-          "line": 23,
-          "column": 15
-        },
-        "end": {
-          "line": 23,
-          "column": 115
-        }
-      },
-      "offendingCodeSnippet": "lessons = Object.values(LESSONS).filter(lesson => lesson.courseId == courseId).sort((l1, l2) => l1.id - l2.id);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 23",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "server/search-lessons.route.ts",
-      "location": {
-        "start": {
-          "line": 23,
-          "column": 15
-        },
-        "end": {
-          "line": 23,
-          "column": 83
-        }
-      },
-      "offendingCodeSnippet": "lessons = Object.values(LESSONS).filter(lesson => lesson.courseId == courseId).sort((l1, l2) => l1.id - l2.id);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 23",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "server/search-lessons.route.ts",
-      "location": {
-        "start": {
-          "line": 30,
-          "column": 17
-        },
-        "end": {
-          "line": 30,
-          "column": 116
-        }
-      },
-      "offendingCodeSnippet": "lessons = lessons.filter(lesson => lesson.description.trim().toLowerCase().search(filter.toLowerCase()) >= 0);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 30",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
       "ruleId": "FIGM-ANG-02",

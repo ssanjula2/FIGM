@@ -9,6 +9,7 @@ import { GET as participantDetailGET } from '../app/api/admin/participants/[part
 import { GET as adminScansGET } from '../app/api/admin/scans/route';
 import { GET as ruleStatsGET } from '../app/api/admin/rule-stats/route';
 import { POST as logScanPOST } from '../app/api/user-study/log-scan/route';
+import { CONSENT_PROTOCOL_VERSION } from '../src/research/research-config';
 
 /**
  * Covers the "Admin + P001-P085 Participant Research Dashboard + Security Closure" brief:
@@ -96,14 +97,14 @@ test('Participant matrix never fabricates data for an unregistered id', async ()
   RepositoryFactory.resetProvider();
   const matrix = await ParticipantRepository.getMatrix();
 
-  assert.equal(matrix.length, 85, 'matrix must always cover exactly P001..P085');
+  assert.equal(matrix.length, TARGET_PARTICIPANT_COUNT, 'matrix must always cover exactly P001..P0NN (NN = TARGET_PARTICIPANT_COUNT)');
   assert.deepEqual(
     matrix.map((r) => r.participantId).slice(0, 3),
     ['P001', 'P002', 'P003']
   );
 
   const unregistered = matrix.filter((r) => r.status === 'NOT_REGISTERED');
-  // Extremely unlikely all 85 slots are ever real in a test environment; if this ever legitimately
+  // Extremely unlikely all TARGET_PARTICIPANT_COUNT slots are ever real in a test environment; if this ever legitimately
   // happens the honest thing is to skip rather than fail on an assumption about environment state.
   if (unregistered.length === 0) return;
 
@@ -132,15 +133,15 @@ test('A real participant scan is reflected accurately end-to-end (no fabrication
   // real participant-pattern rows across every historical `npm test` run (by design, same as every
   // other test file's fixtures; see tests/participant-provisioning-race.test.ts's own comment on
   // this). What this test actually verifies -- "a real, newly-logged scan is reflected in the
-  // matrix, not fabricated" -- has nothing to do with WHICH of the 85 fixed slots is used, so
+  // matrix, not fabricated" -- has nothing to do with WHICH of the TARGET_PARTICIPANT_COUNT fixed slots is used, so
   // relying on organically finding a free one made this test's pass/fail depend on unbounded
-  // ambient history (a real, reproduced flake: after enough historical runs, all 85 fill up and
+  // ambient history (a real, reproduced flake: after enough historical runs, all TARGET_PARTICIPANT_COUNT slots fill up and
   // this assertion fails with no product regression at all -- root-caused via Phase 7 of the
   // scientific-hardening pass, not assumed). Fixed by making the arrange step self-sufficient:
-  // this test owns slot P085 outright and frees it first if a prior run left it occupied, rather
-  // than hoping the ambient pool has room. P085 (the highest slot) is chosen deliberately --
+  // this test owns the highest slot (P020, i.e. P${TARGET_PARTICIPANT_COUNT}) outright and frees it first if a prior run left it occupied, rather
+  // than hoping the ambient pool has room. The highest slot is chosen deliberately --
   // assignNewParticipant() always fills the LOWEST unused number first, so no other test's
-  // auto-picked participant is ever plausibly P085, minimizing any chance of cross-test
+  // auto-picked participant is ever plausibly this slot, minimizing any chance of cross-test
   // interference even though every test in this file already calls resetProvider() and creates
   // its own uniquely-suffixed fixtures. The POST itself still goes through the real route with a
   // real, correctly-signed, code-bound session token, exercising the real security check.
@@ -161,7 +162,14 @@ test('A real participant scan is reflected accurately end-to-end (no fabrication
     researchStatus: 'ASSIGNED',
     researchAssignedAt: new Date().toISOString(),
   });
-  const cookie = signResearchParticipantToken(participantId);
+  // Consent is a separate, server-enforced prerequisite (see app/api/user-study/consent/route.ts)
+  // -- this test isn't exercising the consent flow itself, so it signs an already-consented token
+  // directly rather than round-tripping through POST /api/user-study/consent.
+  const cookie = signResearchParticipantToken(participantId, undefined, {
+    given: true,
+    version: CONSENT_PROTOCOL_VERSION,
+    timestamp: new Date().toISOString(),
+  });
   const baselineScans = 0;
 
   // A real FIGM violation (missing removeEventListener), same fixture pattern used elsewhere in

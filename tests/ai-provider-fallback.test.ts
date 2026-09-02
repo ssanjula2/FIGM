@@ -359,3 +359,78 @@ test('AI provider fallback — Claude primary, Gemini automatic fallback', async
     }
   });
 });
+
+/**
+ * Pipeline-level coverage for the REVERSE direction: AI_PRIMARY_PROVIDER=GEMINI with Claude as the
+ * automatic fallback. AIProviderSelector.getFallbackProvider is already unit-tested in isolation
+ * (tests/ai-provider-selector.test.ts: "GEMINI primary falls back to CLAUDE by default" /
+ * "GEMINI primary returns undefined when CLAUDE is not configured") — this file previously only
+ * exercised the opposite direction (CLAUDE primary -> GEMINI fallback) through the REAL end-to-end
+ * AIRemediationPipeline. This closes that gap: confirms ai-remediation-pipeline.ts's retry loop
+ * (which calls AIProviderSelector.getFallbackProvider(provider.providerName) generically, never
+ * hardcoded to a specific primary — see its own comment above the retry loop) actually switches
+ * providers and produces a verified fix when GEMINI, not CLAUDE, is the one configured as primary
+ * and the one that fails. No implementation change was needed for this — verified by direct source
+ * read (ai-remediation-pipeline.ts:203,274) that the fallback call site is already provider-agnostic.
+ */
+test('AI provider fallback — GEMINI primary, CLAUDE automatic fallback', async (t) => {
+  const GEMINI_PRIMARY_ENV = { ...BASE_ENV, AI_PRIMARY_PROVIDER: 'GEMINI' };
+
+  await t.test('GEMINI primary authentication failure -> automatic CLAUDE fallback -> CLAUDE produces a verified fix', async () => {
+    const mock = mockDualFetch(
+      async () => claudeChatResponse({ status: 'PATCH', patch: minimalFixCode, explanation: 'Wrapped in useMemo.', confidence: 94 }),
+      async () => geminiErrorResponse(403, { error: { code: 403, status: 'PERMISSION_DENIED', message: 'API key not valid' } })
+    );
+    try {
+      const result = await withEnv(GEMINI_PRIMARY_ENV, () => AIRemediationPipeline.remediateDefect(scopeFixtureCode, scopeFixtureDefect, 'REACT_JSX'));
+      assert.equal(result.provider, 'CLAUDE', 'the final result must credit Claude, which actually produced the accepted patch');
+      assert.equal(result.engineType, 'AI_ASSISTED_FIX');
+      assert.equal(result.verified, true);
+      assert.equal(result.verificationStatus, 'FIXED');
+      assert.equal(result.remediatedCode, minimalFixCode);
+      const counts = mock.counts();
+      assert.equal(counts.gemini, 1, 'Gemini must be tried exactly once before falling back — its auth failure is permanent, never worth a same-provider retry');
+      assert.equal(counts.claude, 1, 'Claude succeeded on its first attempt after the fallback switch');
+    } finally {
+      mock.restore();
+    }
+  });
+
+  await t.test('GEMINI primary quota-exhausted (429) -> automatic CLAUDE fallback, without burning further Gemini attempts', async () => {
+    const mock = mockDualFetch(
+      async () => claudeChatResponse({ status: 'PATCH', patch: minimalFixCode, explanation: 'Wrapped in useMemo.', confidence: 90 }),
+      async () => geminiErrorResponse(429, { error: { code: 429, status: 'RESOURCE_EXHAUSTED', message: 'quota exhausted' } })
+    );
+    try {
+      const result = await withEnv(GEMINI_PRIMARY_ENV, () => AIRemediationPipeline.remediateDefect(scopeFixtureCode, scopeFixtureDefect, 'REACT_JSX'));
+      assert.equal(result.provider, 'CLAUDE');
+      assert.equal(result.verificationStatus, 'FIXED');
+      const counts = mock.counts();
+      assert.equal(counts.gemini, 1, 'a rate-limit/quota failure with a fallback configured must not burn further Gemini attempts');
+      assert.equal(counts.claude, 1);
+    } finally {
+      mock.restore();
+    }
+  });
+
+  await t.test('GEMINI primary fails and CLAUDE is not configured -> no fallback available -> AI_UNAVAILABLE, no code modification', async () => {
+    const mock = mockDualFetch(
+      async () => {
+        throw new Error('Claude must never be called when ANTHROPIC_API_KEY is not configured');
+      },
+      async () => geminiErrorResponse(429, { error: { code: 429, status: 'RESOURCE_EXHAUSTED', message: 'quota exhausted' } })
+    );
+    try {
+      const result = await withEnv({ ...GEMINI_PRIMARY_ENV, ANTHROPIC_API_KEY: undefined }, () => AIRemediationPipeline.remediateDefect(scopeFixtureCode, scopeFixtureDefect, 'REACT_JSX'));
+      assert.equal(result.engineType, 'UNAVAILABLE');
+      assert.equal(result.verified, false);
+      assert.equal(result.verificationStatus, 'AI_UNAVAILABLE');
+      assert.equal(result.remediatedCode, scopeFixtureCode, 'no code modification when the primary fails and no fallback is configured');
+      const counts = mock.counts();
+      assert.equal(counts.gemini, 1, 'Gemini auth/quota failure is permanent — exactly one attempt, never 3, even with no fallback available');
+      assert.equal(counts.claude, 0);
+    } finally {
+      mock.restore();
+    }
+  });
+});

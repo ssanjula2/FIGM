@@ -5,7 +5,7 @@
   "primaryFrameworkLabel": "Angular",
   "filesScanned": 21,
   "totalLOC": 609,
-  "scanDurationMs": 1916.6398000000008,
+  "scanDurationMs": 1905.7898000000023,
   "totalFigmFindings": 12,
   "findingsByRule": {
     "FIGM-ANG-02": 5,
@@ -220,7 +220,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 92,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 3"
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 3",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-02",
@@ -245,7 +247,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 92,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7"
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -270,7 +274,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 21"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
     },
     {
       "ruleId": "FIGM-ANG-02",
@@ -295,7 +301,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 92,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 6"
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -320,7 +328,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 27"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 27",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -345,7 +355,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 36"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 36",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-02",
@@ -370,7 +382,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 92,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 13"
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-02",
@@ -395,7 +409,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 92,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 6"
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -420,7 +436,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 21"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -445,7 +463,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 43"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 43",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-04",
@@ -470,7 +490,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1"
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-04",
@@ -495,7 +517,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 5"
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     }
   ]
 }

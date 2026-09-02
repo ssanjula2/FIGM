@@ -134,7 +134,7 @@ function UserList({ users }) {
           <strong style={{ color: '#f1f5f9' }}>React</strong>,{' '}
           <strong style={{ color: '#f1f5f9' }}>Next.js App Router</strong>,{' '}
           <strong style={{ color: '#f1f5f9' }}>Angular</strong>, and{' '}
-          <strong style={{ color: '#f1f5f9' }}>Vue 3 SFCs</strong> via 4-Layer Meta-Model primitives and Gemini 2.5 Flash.
+          <strong style={{ color: '#f1f5f9' }}>Vue 3 SFCs</strong> via 4-Layer Meta-Model primitives and Claude Opus 5.
         </p>
 
         {/* CTA Buttons */}
@@ -178,7 +178,7 @@ function UserList({ users }) {
             }}
           >
             <span>🔍</span>
-            <span>Explore {data?.systemCapabilities?.totalGuidelineRules ?? 25} Rules</span>
+            <span>Explore {data?.systemCapabilities?.totalGuidelineRules ?? 50} Rules</span>
           </Link>
 
           <Link
@@ -254,7 +254,7 @@ function UserList({ users }) {
                   cursor: 'pointer',
                 }}
               >
-                🟢 Gemini AI Patch (Sample B)
+                🟢 Claude AI Patch (Sample B)
               </button>
             </div>
           </div>

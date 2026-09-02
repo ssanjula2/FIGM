@@ -207,6 +207,28 @@ test('FIGM-ANG-07: Complex Logic in Angular Component Constructor', async (t) =>
     const reports = detect(code, 'x.component.ts');
     assert.ok(!reports.some((r) => r.ruleId === 'FIGM-ANG-07'));
   });
+
+  // Regression guard (real-world false positive confirmed via a fresh benchmark re-scan of
+  // trekhleb/javascript-algorithms -- a zero-Angular plain-JS repository -- which reported 11
+  // FIGM-ANG-07 findings on ordinary data-structure class constructors, e.g. Sort.js's
+  // `constructor(originalCallbacks) { ... }`, recommending "move to ngOnInit" for code with no
+  // Angular runtime at all. Closed via hasAngularContext -- see its doc comment in
+  // real-syntax-node-builder.ts for why this rule specifically needed the gate while its sibling
+  // Angular rules (ANG-01/02/05/06/09) did not.)
+  await t.test('[TN, regression] does NOT fire on a plain (non-Angular) JS/TS class with real constructor logic and no Angular evidence', () => {
+    const code = `export class Sort {\n  constructor(originalCallbacks) {\n    this.originalMethods = originalCallbacks;\n    this.callbacks = this.initSortingCallbacks(originalCallbacks);\n  }\n}`;
+    const reports = detect(code, 'Sort.js');
+    assert.ok(!reports.some((r) => r.ruleId === 'FIGM-ANG-07'), 'a plain non-Angular class constructor must not be flagged as an Angular anti-pattern');
+  });
+
+  // Boundary case: a GENERIC_ESTREE (.ts, not .component.ts) file that IS genuinely an Angular
+  // class -- via a real @angular/core import, without an ANGULAR_TEMPLATE-triggering filename or
+  // decorator -- must still be covered, not silently excluded by the new gate.
+  await t.test('[TP, boundary] still fires on a genuine Angular class in a plain .ts file, via an @angular/core import', () => {
+    const code = `import { Injectable } from '@angular/core';\nexport class DataService {\n  constructor(private http: HttpClient) {\n    this.cache = this.http.get('/api/init').toPromise();\n  }\n}`;
+    const reports = detect(code, 'data.service.ts');
+    assert.ok(reports.some((r) => r.ruleId === 'FIGM-ANG-07'), 'a real Angular service class (evidenced by an @angular/core import) must still be covered even without a .component.ts filename');
+  });
 });
 
 test('FIGM-ANG-08: Unstable @for Track Expression', async (t) => {

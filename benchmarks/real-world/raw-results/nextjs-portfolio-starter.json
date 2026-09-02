@@ -5,19 +5,17 @@
   "primaryFrameworkLabel": "Next.js",
   "filesScanned": 5,
   "totalLOC": 128,
-  "scanDurationMs": 701.3084999999992,
-  "totalFigmFindings": 2,
+  "scanDurationMs": 747.7551999999996,
+  "totalFigmFindings": 1,
   "findingsByRule": {
-    "FIGM-PERF-01": 1,
-    "FIGM-REACT-01": 1
+    "FIGM-PERF-01": 1
   },
   "findingsBySeverity": {
-    "HIGH": 2
+    "HIGH": 1
   },
   "frameworksDetected": {
-    "GENERIC_ESTREE": 2,
-    "NEXT_JS": 2,
-    "REACT_JSX": 1
+    "GENERIC_ESTREE": 3,
+    "NEXT_JS": 2
   },
   "parserFailures": {
     "filesWithParseErrors": 0,
@@ -53,13 +51,13 @@
       "relativePath": "scripts/gen-rss.js",
       "framework": "GENERIC_ESTREE",
       "loc": 43,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
     {
       "relativePath": "theme.config.js",
-      "framework": "REACT_JSX",
+      "framework": "GENERIC_ESTREE",
       "loc": 22,
       "figmFindingCount": 0,
       "parseErrorCount": 0,
@@ -90,32 +88,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 95,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 4"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "scripts/gen-rss.js",
-      "location": {
-        "start": {
-          "line": 35,
-          "column": 2
-        },
-        "end": {
-          "line": 35,
-          "column": 62
-        }
-      },
-      "offendingCodeSnippet": "allPosts.sort((a, b) => new Date(b.date) - new Date(a.date))",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 35"
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     }
   ]
 }

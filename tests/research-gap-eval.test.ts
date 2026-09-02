@@ -40,10 +40,19 @@ test('Research Gap Evaluation Suite & Dissertation Artifact Validation', async (
     assert.ok(Math.abs(results.overall.precision - expectedPrecision) < 1e-9);
     assert.ok(Math.abs(results.overall.recall - expectedRecall) < 1e-9);
 
-    // Rule-coverage provenance must be present and must never silently claim full 25-rule coverage.
+    // Rule-coverage provenance must be present and must be genuinely derived from
+    // benchmarks/ground-truth.json's actual contents (never a hand-typed literal that could
+    // silently claim more coverage than the fixture set actually provides).
     assert.ok(results.ruleCoverage);
     assert.equal(results.ruleCoverage.totalFigmRules, FOUR_LAYER_MAPPINGS.length);
-    assert.ok(results.ruleCoverage.rulesWithGroundTruth < results.ruleCoverage.totalFigmRules, 'ground truth must not cover every rule (a real, current limitation this suite must keep visible)');
+    // Ground truth now genuinely covers all 25 rules (closed via benchmarks/testbed/next03/ +
+    // EvaluationRunner.collectTestbedFiles's recursive walk -- previously FIGM-NEXT-03 was the one
+    // rule left uncovered because its detector requires a literal Next.js App Router path a flat
+    // testbed directory couldn't host). If this ever regresses (a rule silently loses ground-truth
+    // coverage), rulesWithGroundTruth will legitimately drop below totalFigmRules again -- that is
+    // real information this assertion must catch, not something to loosen back to "< total".
+    assert.equal(results.ruleCoverage.rulesWithGroundTruth, results.ruleCoverage.totalFigmRules, 'ground truth is expected to cover all 25 rules as of this revision -- if this changed, that is real information, update deliberately');
+    assert.equal(results.ruleCoverage.uncoveredRuleIds.length, 0);
     assert.equal(results.ruleCoverage.rulesWithGroundTruth, results.ruleCoverage.coveredRuleIds.length);
     assert.equal(results.ruleCoverage.totalFigmRules, results.ruleCoverage.rulesWithGroundTruth + results.ruleCoverage.uncoveredRuleIds.length);
   });

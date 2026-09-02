@@ -1,0 +1,1554 @@
+{
+  "name": "react-redux-realworld-example-app",
+  "url": "https://github.com/gothinkster/react-redux-realworld-example-app.git",
+  "commit": "ee72eba4056392c95a27bc48d385d3f54ba38a18",
+  "primaryFrameworkLabel": "React",
+  "filesScanned": 38,
+  "totalLOC": 2378,
+  "scanDurationMs": 4805.806600000011,
+  "totalFigmFindings": 45,
+  "findingsByRule": {
+    "FIGM-PERF-04": 21,
+    "FIGM-PERF-02": 6,
+    "FIGM-REACT-03": 2,
+    "FIGM-A11Y-05": 15,
+    "FIGM-PERF-01": 1
+  },
+  "findingsBySeverity": {
+    "MEDIUM": 21,
+    "HIGH": 7,
+    "CRITICAL": 17
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 13,
+    "REACT_JSX": 25
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "src/agent.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 97,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/App.js",
+      "framework": "REACT_JSX",
+      "loc": 87,
+      "figmFindingCount": 11,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Article/ArticleActions.js",
+      "framework": "REACT_JSX",
+      "loc": 42,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Article/ArticleMeta.js",
+      "framework": "REACT_JSX",
+      "loc": 28,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Article/Comment.js",
+      "framework": "REACT_JSX",
+      "loc": 36,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Article/CommentContainer.js",
+      "framework": "REACT_JSX",
+      "loc": 41,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Article/CommentInput.js",
+      "framework": "REACT_JSX",
+      "loc": 59,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Article/CommentList.js",
+      "framework": "REACT_JSX",
+      "loc": 23,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Article/DeleteButton.js",
+      "framework": "REACT_JSX",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Article/index.js",
+      "framework": "REACT_JSX",
+      "loc": 98,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/ArticleList.js",
+      "framework": "REACT_JSX",
+      "loc": 39,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/ArticlePreview.js",
+      "framework": "REACT_JSX",
+      "loc": 80,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Editor.js",
+      "framework": "REACT_JSX",
+      "loc": 179,
+      "figmFindingCount": 4,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Header.js",
+      "framework": "REACT_JSX",
+      "loc": 92,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Home/Banner.js",
+      "framework": "REACT_JSX",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Home/index.js",
+      "framework": "REACT_JSX",
+      "loc": 74,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Home/MainView.js",
+      "framework": "REACT_JSX",
+      "loc": 97,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Home/Tags.js",
+      "framework": "REACT_JSX",
+      "loc": 37,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/ListErrors.js",
+      "framework": "REACT_JSX",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/ListPagination.js",
+      "framework": "REACT_JSX",
+      "loc": 59,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Login.js",
+      "framework": "REACT_JSX",
+      "loc": 98,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Profile.js",
+      "framework": "REACT_JSX",
+      "loc": 171,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/ProfileFavorites.js",
+      "framework": "REACT_JSX",
+      "loc": 54,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Register.js",
+      "framework": "REACT_JSX",
+      "loc": 114,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/Settings.js",
+      "framework": "REACT_JSX",
+      "loc": 172,
+      "figmFindingCount": 6,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/constants/actionTypes.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/index.js",
+      "framework": "REACT_JSX",
+      "loc": 21,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/middleware.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 69,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reducer.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 23,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reducers/article.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reducers/articleList.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 87,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reducers/auth.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reducers/common.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 71,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reducers/editor.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 55,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reducers/home.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reducers/profile.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/reducers/settings.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/store.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "import { Route, Switch } from 'react-router-dom';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 7,
+          "column": 44
+        }
+      },
+      "offendingCodeSnippet": "import Article from '../components/Article';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 42
+        }
+      },
+      "offendingCodeSnippet": "import Editor from '../components/Editor';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 9,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
+          "column": 38
+        }
+      },
+      "offendingCodeSnippet": "import Home from '../components/Home';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 9",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 10,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "import Login from '../components/Login';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 10",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 11,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 44
+        }
+      },
+      "offendingCodeSnippet": "import Profile from '../components/Profile';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 11",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 0
+        },
+        "end": {
+          "line": 12,
+          "column": 62
+        }
+      },
+      "offendingCodeSnippet": "import ProfileFavorites from '../components/ProfileFavorites';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 13,
+          "column": 46
+        }
+      },
+      "offendingCodeSnippet": "import Register from '../components/Register';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 0
+        },
+        "end": {
+          "line": 14,
+          "column": 46
+        }
+      },
+      "offendingCodeSnippet": "import Settings from '../components/Settings';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 0
+        },
+        "end": {
+          "line": 15,
+          "column": 33
+        }
+      },
+      "offendingCodeSnippet": "import { store } from '../store';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/App.js",
+      "location": {
+        "start": {
+          "line": 16,
+          "column": 0
+        },
+        "end": {
+          "line": 16,
+          "column": 42
+        }
+      },
+      "offendingCodeSnippet": "import { push } from 'react-router-redux';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 16",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/Article/ArticleActions.js",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "import { Link } from 'react-router-dom';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/components/Article/ArticleMeta.js",
+      "location": {
+        "start": {
+          "line": 10,
+          "column": 8
+        },
+        "end": {
+          "line": 10,
+          "column": 72
+        }
+      },
+      "offendingCodeSnippet": "<img src={article.author.image} alt={article.author.username} />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 10",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/components/Article/Comment.js",
+      "location": {
+        "start": {
+          "line": 18,
+          "column": 10
+        },
+        "end": {
+          "line": 18,
+          "column": 105
+        }
+      },
+      "offendingCodeSnippet": "<img src={comment.author.image} className=\"comment-author-img\" alt={comment.author.username} />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 18",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/Article/CommentContainer.js",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 42
+        }
+      },
+      "offendingCodeSnippet": "import CommentInput from './CommentInput';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/Article/CommentContainer.js",
+      "location": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "import CommentList from './CommentList';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/Article/CommentContainer.js",
+      "location": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "import { Link } from 'react-router-dom';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 3",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-REACT-03",
+      "ruleName": "Avoid Direct React State Mutation",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Article/CommentInput.js",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 4
+        },
+        "end": {
+          "line": 16,
+          "column": 6
+        }
+      },
+      "offendingCodeSnippet": "this.state = {",
+      "message": "Direct mutation of React state variable skips component re-renders.",
+      "remediation": "Use immutable state updates or return new object references inside state setters.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 99,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Article/CommentInput.js",
+      "location": {
+        "start": {
+          "line": 35,
+          "column": 10
+        },
+        "end": {
+          "line": 39,
+          "column": 21
+        }
+      },
+      "offendingCodeSnippet": "<textarea className=\"form-control\"",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 35",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/components/Article/CommentInput.js",
+      "location": {
+        "start": {
+          "line": 43,
+          "column": 10
+        },
+        "end": {
+          "line": 46,
+          "column": 52
+        }
+      },
+      "offendingCodeSnippet": "<img",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 43",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/components/Article/index.js",
+      "location": {
+        "start": {
+          "line": 38,
+          "column": 19
+        },
+        "end": {
+          "line": 38,
+          "column": 82
+        }
+      },
+      "offendingCodeSnippet": "const markup = { __html: marked(this.props.article.body, { sanitize: true }) };",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 38",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/components/ArticlePreview.js",
+      "location": {
+        "start": {
+          "line": 40,
+          "column": 10
+        },
+        "end": {
+          "line": 40,
+          "column": 74
+        }
+      },
+      "offendingCodeSnippet": "<img src={article.author.image} alt={article.author.username} />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 40",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Editor.js",
+      "location": {
+        "start": {
+          "line": 107,
+          "column": 20
+        },
+        "end": {
+          "line": 112,
+          "column": 52
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 107",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Editor.js",
+      "location": {
+        "start": {
+          "line": 116,
+          "column": 20
+        },
+        "end": {
+          "line": 121,
+          "column": 58
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 116",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Editor.js",
+      "location": {
+        "start": {
+          "line": 125,
+          "column": 20
+        },
+        "end": {
+          "line": 130,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "<textarea",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 125",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Editor.js",
+      "location": {
+        "start": {
+          "line": 135,
+          "column": 20
+        },
+        "end": {
+          "line": 141,
+          "column": 53
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 135",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/components/Header.js",
+      "location": {
+        "start": {
+          "line": 60,
+          "column": 12
+        },
+        "end": {
+          "line": 60,
+          "column": 103
+        }
+      },
+      "offendingCodeSnippet": "<img src={props.currentUser.image} className=\"user-pic\" alt={props.currentUser.username} />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 60",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/Home/Tags.js",
+      "location": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 32
+        }
+      },
+      "offendingCodeSnippet": "import agent from '../../agent';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/components/ListPagination.js",
+      "location": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 29
+        }
+      },
+      "offendingCodeSnippet": "import agent from '../agent';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Login.js",
+      "location": {
+        "start": {
+          "line": 62,
+          "column": 20
+        },
+        "end": {
+          "line": 67,
+          "column": 52
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 62",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Login.js",
+      "location": {
+        "start": {
+          "line": 71,
+          "column": 20
+        },
+        "end": {
+          "line": 76,
+          "column": 55
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 71",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/components/Profile.js",
+      "location": {
+        "start": {
+          "line": 128,
+          "column": 16
+        },
+        "end": {
+          "line": 128,
+          "column": 87
+        }
+      },
+      "offendingCodeSnippet": "<img src={profile.image} className=\"user-img\" alt={profile.username} />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 128",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Register.js",
+      "location": {
+        "start": {
+          "line": 69,
+          "column": 20
+        },
+        "end": {
+          "line": 74,
+          "column": 55
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 69",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Register.js",
+      "location": {
+        "start": {
+          "line": 78,
+          "column": 20
+        },
+        "end": {
+          "line": 83,
+          "column": 52
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 78",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Register.js",
+      "location": {
+        "start": {
+          "line": 87,
+          "column": 20
+        },
+        "end": {
+          "line": 92,
+          "column": 55
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 87",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-REACT-03",
+      "ruleName": "Avoid Direct React State Mutation",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Settings.js",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 4
+        },
+        "end": {
+          "line": 21,
+          "column": 6
+        }
+      },
+      "offendingCodeSnippet": "this.state = {",
+      "message": "Direct mutation of React state variable skips component re-renders.",
+      "remediation": "Use immutable state updates or return new object references inside state setters.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 99,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExpressionStatement] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Settings.js",
+      "location": {
+        "start": {
+          "line": 69,
+          "column": 12
+        },
+        "end": {
+          "line": 74,
+          "column": 53
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 69",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Settings.js",
+      "location": {
+        "start": {
+          "line": 78,
+          "column": 12
+        },
+        "end": {
+          "line": 83,
+          "column": 56
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 78",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Settings.js",
+      "location": {
+        "start": {
+          "line": 87,
+          "column": 12
+        },
+        "end": {
+          "line": 92,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "<textarea",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 87",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Settings.js",
+      "location": {
+        "start": {
+          "line": 97,
+          "column": 12
+        },
+        "end": {
+          "line": 102,
+          "column": 53
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 97",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "src/components/Settings.js",
+      "location": {
+        "start": {
+          "line": 106,
+          "column": 12
+        },
+        "end": {
+          "line": 111,
+          "column": 56
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 106",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/middleware.js",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "import agent from './agent';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/middleware.js",
+      "location": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 33
+        }
+      },
+      "offendingCodeSnippet": "import {",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/store.js",
+      "location": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "import { createLogger } from 'redux-logger'",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/store.js",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 4,
+          "column": 73
+        }
+      },
+      "offendingCodeSnippet": "import { promiseMiddleware, localStorageMiddleware } from './middleware';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

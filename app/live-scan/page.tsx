@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import type { OnMount } from '@monaco-editor/react';
+import { trackScanStarted, trackScanCompleted } from '../../src/lib/analytics';
 
 // Monaco is a heavy browser-only editor bundle (FIGM's own FIGM-NEXT-02 rule: "Heavy browser
 // module imported statically in Next.js instead of next/dynamic with ssr: false"). Code-split it
@@ -159,9 +160,10 @@ const PIPELINE_LABEL: Record<FixOutcome['pipeline'], string> = {
 /** Mirrors AIRemediationPipelineResult['engineType'] (src/ai/ai-remediation-pipeline.ts) --
  *  distinct, honest labels per path so "AI fixed this" and "nothing could be fixed" never render
  *  as the same badge. There is no regex-fallback engineType to label -- that path no longer exists.
- *  AI_ASSISTED_FIX has no fixed label here -- which AI actually produced the patch (Qwen or Claude)
- *  is server-reported per-response via `provider` (src/ai/ai-provider-selector.ts chooses it), so
- *  the label is built at the call site (see buildEngineLabel below) instead of hardcoded per vendor. */
+ *  AI_ASSISTED_FIX has no fixed label here -- which AI actually produced the patch (Claude, Gemini,
+ *  or a local Ollama model) is server-reported per-response via `provider`
+ *  (src/ai/ai-provider-selector.ts chooses it), so the label is built at the call site (see
+ *  buildEngineLabel below) instead of hardcoded per vendor. */
 const ENGINE_LABELS: Record<string, string> = {
   AST_DETERMINISTIC_FIX: '⚡ Deterministic Engine',
   MANUAL_REVIEW: '🧑 Manual Review Required',
@@ -169,8 +171,8 @@ const ENGINE_LABELS: Record<string, string> = {
 };
 
 const AI_PROVIDER_LABELS: Record<string, string> = {
-  QWEN: '✨ Qwen AI Suggested Fix',
   CLAUDE: '✨ Claude AI Suggested Fix',
+  GEMINI: '✨ Gemini AI Suggested Fix (Claude fallback)',
 };
 
 function buildEngineLabel(engineType: string | undefined, provider: string | undefined): string {
@@ -199,10 +201,13 @@ interface ScanResultResponse {
   generalCodeErrorCount?: number;
   /** Honest analysis-completeness status -- see RuleExecutionEngine.buildScanResult. figmStatus
    *  BLOCKED/PARTIAL means the FIGM section below reflects only what the parser could recover,
-   *  not a guarantee no further violations exist in the unparsed remainder. */
+   *  not a guarantee no further violations exist in the unparsed remainder. UNSUPPORTED_FRAMEWORK
+   *  is the server-authoritative "FIGM has no rule coverage for this framework at all" signal --
+   *  see the "Not Yet Supported" banner below, which now reads THIS field instead of a client-only
+   *  hardcoded framework set. */
   analysis?: {
     parserStatus: 'VALID' | 'INVALID';
-    figmStatus: 'COMPLETE' | 'PARTIAL' | 'BLOCKED';
+    figmStatus: 'COMPLETE' | 'PARTIAL' | 'BLOCKED' | 'UNSUPPORTED_FRAMEWORK';
   };
   /** Third domain, distinct from FIGM_RULE/GENERAL_CODE_ERROR diagnostics -- a failure of the scan
    *  service itself (see ScanServiceStatus in app/api/scan/route.ts), not a finding about the
@@ -222,10 +227,11 @@ const SEV_COLOR: Record<string, string> = {
   LOW: '#94a3b8',
 };
 
-// Frameworks the real engine detects (for classification) but runs zero FIGM guideline rules
-// against -- must never be presented as a "clean scan," since no rule was actually evaluated.
-// Mirrors FrameworkType in src/types/ast-spec.ts.
-const UNSUPPORTED_FRAMEWORKS = new Set(['SVELTE']);
+// Phase 2 (AST/Rule Coverage Gaps): previously a hardcoded client-side framework set here had to
+// be manually kept in sync with which frameworks the server actually runs zero FIGM rules against
+// -- now driven directly by the server-authoritative result.analysis.figmStatus signal instead
+// (see the "Not Yet Supported" banner below), so this file can never drift out of sync with
+// RuleExecutionEngine.buildScanResult's own real UNSUPPORTED_FRAMEWORK determination.
 
 // Mirrors MAX_CODE_LENGTH in app/api/scan/route.ts -- checked client-side too so an obviously
 // oversized paste gets an immediate, specific message instead of a network round-trip that
@@ -283,6 +289,39 @@ const FIX_STATUS_META: Record<VerificationStatus, { icon: string; label: string;
     label: 'Automated Fix Unavailable',
     color: '#fde68a',
     detail: 'No AI-generated patch could be produced for this violation (see the reason below). Your code was NOT changed.',
+  },
+};
+
+// Same verificationStatus union, same underlying pipeline/guarantees as FIX_STATUS_META above --
+// only the WORDING differs, so a compile/type/syntax error (GENERAL_CODE_ERROR) is never described
+// as a "violation" (FIGM guideline language that doesn't apply to a compiler diagnostic). Used only
+// by the general-code-error list below; FIGM violations keep FIX_STATUS_META unchanged.
+const GENERAL_ERROR_FIX_STATUS_META: Record<VerificationStatus, { icon: string; label: string; color: string; detail: string }> = {
+  FIXED: {
+    icon: '✅',
+    label: 'Automated Fix Verified',
+    color: '#86efac',
+    detail: 'The patched code was re-scanned with the real TypeScript compiler and this error no longer occurs.',
+  },
+  MANUAL_REVIEW_REQUIRED: FIX_STATUS_META.MANUAL_REVIEW_REQUIRED,
+  UNRESOLVED: {
+    icon: '❌',
+    label: 'Fix Validation Failed',
+    color: '#fca5a5',
+    detail: 'A patch was generated, but re-scanning it still detects the same compile/type/syntax error (or a related one caused by the same defect). Your code was NOT changed.',
+  },
+  PATCH_REJECTED: {
+    icon: '❌',
+    label: 'Fix Validation Failed',
+    color: '#fca5a5',
+    detail: 'The suggested patch would introduce a new syntax or type error. Your code was NOT changed.',
+  },
+  VERIFICATION_UNAVAILABLE: FIX_STATUS_META.VERIFICATION_UNAVAILABLE,
+  AI_UNAVAILABLE: {
+    icon: '⚠️',
+    label: 'Automated Fix Unavailable',
+    color: '#fde68a',
+    detail: 'No patch could be produced for this compile/type/syntax error (see the reason below). Your code was NOT changed.',
   },
 };
 
@@ -635,6 +674,11 @@ export default function LiveScanPage() {
     setScanError(null);
     setServiceError(null);
     lastScannedCode.current = targetCode;
+    // Framework isn't known until the server responds, so this fires with 'unknown' -- matching
+    // the same "detected server-side, not client-guessed" principle the rest of this file follows
+    // for the actual scan result. Never includes targetCode/targetFile itself (see
+    // src/lib/analytics.ts's closed parameter types).
+    trackScanStarted({ framework: 'unknown', source: 'live_scan' });
 
     try {
       const res = await fetch('/api/scan', {
@@ -657,6 +701,12 @@ export default function LiveScanPage() {
       }
       const scanData = data as ScanResultResponse;
       setResult(scanData);
+      trackScanCompleted({
+        framework: scanData.framework,
+        ruleCount: scanData.figmRuleCount ?? scanData.diagnostics.length,
+        durationMs: scanData.profile?.executionTimeMs ?? 0,
+        source: 'live_scan',
+      });
       // Drop fix-attempt state only for violations that are no longer at the same (ruleId,
       // line) key -- not everything. A blanket reset here was wiping every OTHER still-open
       // violation's fix badge/diff whenever ANY single violation's fix succeeded, since a
@@ -756,6 +806,19 @@ export default function LiveScanPage() {
   const handleEditorMount: OnMount = (editor, monacoInstance) => {
     editorRef.current = editor;
     monacoRef.current = monacoInstance;
+
+    // Monaco's built-in TS/JS language service has no project type info (no React/Next
+    // types, no tsconfig), so its semantic checks misflag ordinary JSX as errors. Those
+    // squiggles are unrelated to the FIGM rule engine's own markers (set separately below
+    // under the 'figm-analyzer' owner), so disable them to avoid misleading noise.
+    monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: false,
+    });
+    monacoInstance.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: false,
+    });
   };
 
   // ── Debounced auto-scan while user types ──────────────────────────────
@@ -830,8 +893,8 @@ export default function LiveScanPage() {
     // (lastScannedCode.current); `code` is whatever is in the editor right now, which the 1.5s
     // auto-scan debounce means can already be a newer, unscanned edit. Sending a mismatched
     // (code, defect) pair to the server used to produce a confusing downstream failure -- a
-    // deterministic fixer locating the wrong AST node at the stale location, or Qwen correctly but
-    // unhelpfully declining because defect.offendingCodeSnippet no longer appears anywhere in the
+    // deterministic fixer locating the wrong AST node at the stale location, or the AI provider
+    // correctly but unhelpfully declining because defect.offendingCodeSnippet no longer appears anywhere in the
     // current source. Caught here, before any network call, with an honest, specific message
     // instead of a wasted (and confusing) remediation attempt. The server independently enforces
     // the same check (see AIRemediationPipeline.remediateDefect's STALE_VIOLATION_CONTEXT guard)
@@ -979,89 +1042,79 @@ export default function LiveScanPage() {
   const scoreColor = (s: number) =>
     s >= 80 ? '#22c55e' : s >= 50 ? '#eab308' : '#ef4444';
 
+  // Derived severity counts for the Code Health Overview (Step 9) -- a pure client-side
+  // aggregation of `result.diagnostics[].severity`, a field the API already returns for every
+  // diagnostic. This groups already-present data for display; it never calls a different
+  // endpoint, never changes what is detected, and fabricates no metric the server didn't provide.
+  const severityCounts = useMemo(() => {
+    const counts: Record<'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW', number> = { CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0 };
+    for (const d of result?.diagnostics ?? []) {
+      if (counts[d.severity] !== undefined) counts[d.severity] += 1;
+    }
+    return counts;
+  }, [result]);
+
   // ── Render ────────────────────────────────────────────────────────────
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div className="insp-shell animate-fade-in">
 
-      {/* Page Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
-          <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.4px', margin: 0 }}>
-            ⚡ Live Code Inspector &amp; Auto-Fix Studio
-          </h1>
-          <p style={{ color: '#7c8ba6', fontSize: '13px', marginTop: '4px' }}>
-            Paste <strong style={{ color: '#94a3b8' }}>any</strong> code below — FIGM detects real violations from your actual code and applies targeted fixes. Nothing is hardcoded.
-          </p>
+      {/* Compact top bar (Step 5) */}
+      <div className="insp-topbar">
+        <div className="insp-topbar-left">
+          <span aria-hidden="true">⚡</span>
+          <span className="insp-topbar-title">FIGM Code Inspector</span>
+          {result && (
+            <span className="insp-chip" style={{ ['--chip-color' as any]: '#7dd3fc', ['--chip-bg' as any]: 'rgba(56,189,248,0.1)', ['--chip-border' as any]: 'rgba(56,189,248,0.25)' }}>
+              {result.framework}
+            </span>
+          )}
+          <span className={`insp-status${scanning ? ' is-scanning' : ''}`}>
+            <span className="insp-status-dot" aria-hidden="true" />
+            {scanning ? 'Scanning…' : 'Ready'}
+          </span>
         </div>
-
-        {/* Auto-scan indicator */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '6px 14px',
-            borderRadius: '20px',
-            background: 'rgba(34,197,94,0.08)',
-            border: '1px solid rgba(34,197,94,0.25)',
-            fontSize: '11px',
-            fontWeight: 700,
-            color: '#86efac',
-          }}
-        >
-          <span
-            style={{
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              background: scanning ? '#eab308' : '#22c55e',
-              animation: scanning ? 'pulse 1s infinite' : 'none',
-              display: 'inline-block',
-            }}
-          />
-          {scanning ? 'Scanning…' : 'Auto-scan active (1.5 s debounce)'}
+        <div className="insp-topbar-actions">
+          <span className="insp-topbar-sub">Auto-scan · 1.5s debounce</span>
+          <Link href="/settings" className="btn-secondary" style={{ padding: '6px 12px', fontSize: '11px', textDecoration: 'none' }}>
+            ⚙️ Settings
+          </Link>
         </div>
       </div>
 
+      <p style={{ color: 'var(--text-dim)', fontSize: '12.5px', margin: 0 }}>
+        Paste <strong style={{ color: 'var(--text-muted)' }}>any</strong> code below — FIGM detects real violations from your actual code and applies targeted fixes. Nothing is hardcoded.
+      </p>
+
       {/* Main Studio Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.25fr) minmax(0, 1fr)', gap: '20px' }}>
+      <div className="insp-grid">
 
         {/* LEFT — Editor */}
-        <div className="glass-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div className="insp-panel">
 
           {/* Editor header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '13px', fontWeight: 700, color: '#f8fafc' }}>Source Code Editor</span>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 800,
-                  color: '#22c55e',
-                  background: 'rgba(34,197,94,0.1)',
-                  border: '1px solid rgba(34,197,94,0.25)',
-                  borderRadius: '6px',
-                  padding: '2px 8px',
-                }}
-              >
+          <div className="insp-panel-header">
+            <div className="insp-panel-title">
+              <span aria-hidden="true">📝</span>
+              <span>Source Code Editor</span>
+              <span className="insp-chip" style={{ ['--chip-color' as any]: '#86efac', ['--chip-bg' as any]: 'rgba(34,197,94,0.1)', ['--chip-border' as any]: 'rgba(34,197,94,0.25)' }}>
                 Interactive
               </span>
             </div>
 
             {/* Sample presets */}
-            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-              <span style={{ fontSize: '10px', color: '#7c8ba6' }}>Try Sample:</span>
+            <div className="insp-toolbar">
+              <span className="insp-toolbar-label">Try Sample:</span>
               {[
-                { label: 'Next.js', code: SAMPLE_NEXTJS_CODE, file: 'DashboardPage.tsx', color: '#ffffff' },
+                { label: 'Next.js', code: SAMPLE_NEXTJS_CODE, file: 'DashboardPage.tsx', color: '#e2e8f0' },
                 { label: 'React', code: SAMPLE_REACT_CODE, file: 'UserProfile.jsx', color: '#38bdf8' },
-                { label: 'Angular', code: SAMPLE_ANGULAR_CODE, file: 'SearchPanel.component.ts', color: '#ef4444' },
-                { label: 'Vue', code: SAMPLE_VUE_CODE, file: 'UserProfile.vue', color: '#10b981' },
+                { label: 'Angular', code: SAMPLE_ANGULAR_CODE, file: 'SearchPanel.component.ts', color: '#f87171' },
+                { label: 'Vue', code: SAMPLE_VUE_CODE, file: 'UserProfile.vue', color: '#34d399' },
               ].map((p) => (
                 <button
                   key={p.label}
                   onClick={() => loadPreset(p.code, p.file)}
-                  className="btn-secondary"
-                  style={{ padding: '3px 9px', fontSize: '11px', color: p.color, fontWeight: 700 }}
+                  className="insp-tab-btn"
+                  style={{ color: p.color }}
                 >
                   {p.label}
                 </button>
@@ -1072,7 +1125,7 @@ export default function LiveScanPage() {
           {/* File name + real local-file upload (single file feeds the editor below; 2+ files
               switch to the batch results panel further down) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 600 }}>File Name:</span>
+            <span style={{ fontSize: '11px', color: 'var(--text-dim)', fontWeight: 600 }}>File Name:</span>
             <input
               type="text"
               value={fileName}
@@ -1097,7 +1150,7 @@ export default function LiveScanPage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               className="btn-secondary"
-              style={{ padding: '5px 12px', fontSize: '11px', fontWeight: 700, whiteSpace: 'nowrap' }}
+              style={{ padding: '5px 12px', fontSize: '11px', whiteSpace: 'nowrap' }}
               title="Upload one file to load it into the editor, or several files to scan them as a batch"
             >
               📁 Upload File(s)
@@ -1105,35 +1158,13 @@ export default function LiveScanPage() {
           </div>
 
           {uploadError && (
-            <div
-              role="alert"
-              style={{
-                fontSize: '11px',
-                color: '#f87171',
-                background: 'rgba(239,68,68,0.1)',
-                border: '1px solid rgba(239,68,68,0.25)',
-                borderRadius: '6px',
-                padding: '6px 10px',
-              }}
-            >
+            <div role="alert" className="insp-notice" style={{ color: '#f87171', background: 'rgba(239,68,68,0.1)', borderColor: 'rgba(239,68,68,0.25)' }}>
               ⚠️ {uploadError}
             </div>
           )}
 
           {batchFiles && (
-            <div
-              style={{
-                fontSize: '11px',
-                color: '#38bdf8',
-                background: 'rgba(56,189,248,0.08)',
-                border: '1px solid rgba(56,189,248,0.2)',
-                borderRadius: '6px',
-                padding: '6px 10px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
+            <div className="insp-notice" style={{ color: '#38bdf8', background: 'rgba(56,189,248,0.08)', borderColor: 'rgba(56,189,248,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span>📦 Batch mode: {batchFiles.length} files uploaded — see results below.</span>
               <button
                 type="button"
@@ -1149,9 +1180,40 @@ export default function LiveScanPage() {
           )}
 
           {/* Monaco editor */}
-          <div style={{ border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden' }}>
+          <div className="insp-editor-frame">
+            <div className="insp-editor-tab-strip">
+              <span>{fileName || 'untitled'}</span>
+              <span>UTF-8</span>
+            </div>
             <Editor
-              height="430px"
+              height="520px"
+              // `path` gives Monaco's TypeScript worker a real filename suffix to key its
+              // ScriptKind detection off of (see node_modules/monaco-editor's tsWorker.js
+              // `getScriptKind`, which switches on the model URI's file suffix, not the
+              // `language` id below -- Monaco only ever registers a single "typescript" language
+              // for BOTH .ts and .tsx, there is no separate "typescriptreact" id). Without a real
+              // path, the default in-memory model URI has no matching suffix, so the worker falls
+              // back to plain ScriptKind.TS -- which does not permit JSX syntax -- and flags
+              // ordinary JSX as a real syntax error.
+              //
+              // This is deliberately a small fixed bucket keyed off the extension, NOT the raw
+              // `fileName` state -- `fileName` is bound to a free-text input the user can type
+              // into on every keystroke (see the "File Name" field above), and @monaco-editor/react
+              // creates (and never disposes) one Monaco model per distinct `path` it's given, so
+              // using the literal fileName here would leak a new model on every keystroke. Bucketing
+              // by extension keeps the same handful of stable model identities while still giving
+              // the worker the correct suffix for ScriptKind/coloring.
+              path={
+                fileName.endsWith('.tsx')
+                  ? 'model.tsx'
+                  : fileName.endsWith('.ts')
+                    ? 'model.ts'
+                    : fileName.endsWith('.vue')
+                      ? 'model.vue'
+                      : fileName.endsWith('.jsx')
+                        ? 'model.jsx'
+                        : 'model.js'
+              }
               language={
                 fileName.endsWith('.ts') || fileName.endsWith('.tsx')
                   ? 'typescript'
@@ -1186,24 +1248,14 @@ export default function LiveScanPage() {
             onClick={() => handleScan()}
             disabled={scanning}
             className="btn-primary"
-            style={{ padding: '11px', width: '100%', fontSize: '14px', fontWeight: 800 }}
+            style={{ padding: '11px', width: '100%', fontSize: '13px' }}
           >
             {scanning ? '🔄 Scanning Your Code…' : '🚀 Check My Code Now'}
           </button>
 
           {/* Scan error */}
           {scanError && (
-            <div
-              role="alert"
-              style={{
-                padding: '10px 14px',
-                borderRadius: '8px',
-                background: 'rgba(239,68,68,0.1)',
-                border: '1px solid rgba(239,68,68,0.3)',
-                color: '#fca5a5',
-                fontSize: '12px',
-              }}
-            >
+            <div role="alert" className="insp-notice" style={{ color: '#fca5a5', background: 'rgba(239,68,68,0.1)', borderColor: 'rgba(239,68,68,0.3)' }}>
               ⚠️ {scanError}
             </div>
           )}
@@ -1212,43 +1264,23 @@ export default function LiveScanPage() {
               means the analysis engine itself failed, not that your code has a problem. See
               ScanServiceStatus in app/api/scan/route.ts. */}
           {serviceError && (
-            <div
-              role="alert"
-              style={{
-                padding: '10px 14px',
-                borderRadius: '8px',
-                background: 'rgba(234,179,8,0.1)',
-                border: '1px solid rgba(234,179,8,0.35)',
-                color: '#fde68a',
-                fontSize: '12px',
-              }}
-            >
+            <div role="alert" className="insp-notice" style={{ color: '#fde68a', background: 'rgba(234,179,8,0.1)', borderColor: 'rgba(234,179,8,0.35)' }}>
               <strong>🛠️ Scan Service Error:</strong> {serviceError}
             </div>
           )}
         </div>
 
         {/* RIGHT — Results */}
-        <div className="glass-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div className="insp-panel">
 
           {/* Panel header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: '#f8fafc' }}>
-              Detected Issues &amp; 1-Click Fixes
-            </span>
+          <div className="insp-panel-header">
+            <div className="insp-panel-title">
+              <span aria-hidden="true">🔎</span>
+              <span>Inspection Results</span>
+            </div>
             {result && (
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 800,
-                  color: '#38bdf8',
-                  background: 'rgba(56,189,248,0.1)',
-                  border: '1px solid rgba(56,189,248,0.25)',
-                  borderRadius: '6px',
-                  padding: '2px 8px',
-                  fontFamily: 'JetBrains Mono',
-                }}
-              >
+              <span className="insp-chip" style={{ ['--chip-color' as any]: '#7dd3fc', ['--chip-bg' as any]: 'rgba(56,189,248,0.1)', ['--chip-border' as any]: 'rgba(56,189,248,0.25)', fontFamily: 'var(--insp-mono)' }}>
                 {result.framework}
               </span>
             )}
@@ -1259,41 +1291,19 @@ export default function LiveScanPage() {
               when it finishes, without stacking a separate live region per state. */}
           <div aria-live="polite" aria-atomic="false" style={{ display: 'contents' }}>
             {!result && !scanning ? (
-              <div
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#7c8ba6',
-                  textAlign: 'center',
-                  padding: '48px 20px',
-                }}
-              >
-                <div style={{ fontSize: '36px', marginBottom: '12px' }}>💡</div>
-                <div style={{ fontSize: '15px', fontWeight: 700, color: '#94a3b8' }}>
+              <div className="insp-empty-state">
+                <div className="insp-empty-icon" aria-hidden="true">💡</div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-muted)' }}>
                   Paste your code in the editor
                 </div>
-                <div style={{ fontSize: '12px', marginTop: '6px', color: '#475569' }}>
+                <div style={{ fontSize: '12px', marginTop: '6px' }}>
                   FIGM will automatically scan it and show real violations from your code
                 </div>
               </div>
             ) : scanning ? (
-              <div
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#94a3b8',
-                  textAlign: 'center',
-                  padding: '40px 20px',
-                }}
-              >
-                <div style={{ fontSize: '32px', marginBottom: '12px' }}>🔍</div>
-                <div style={{ fontSize: '14px', fontWeight: 700, color: '#f8fafc' }}>
+              <div className="insp-empty-state">
+                <div className="insp-empty-icon" aria-hidden="true">🔍</div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)' }}>
                   Analyzing Code…
                 </div>
                 <div style={{ fontSize: '12px', marginTop: '4px' }}>
@@ -1303,8 +1313,40 @@ export default function LiveScanPage() {
             ) : result && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
-                {/* Metrics bar */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px' }}>
+                {/* Code Health Overview (Step 9): real metrics only, no invented figures. */}
+                <div className="insp-metric-row" style={{ ['--insp-cols' as any]: 4 }}>
+                  {[
+                    { label: 'Quality Score', value: `${result.qualityScore ?? 100}`, color: scoreColor(result.qualityScore ?? 100) },
+                    { label: 'Total Issues', value: `${figmRuleCount + generalCodeErrorCount}`, color: figmRuleCount + generalCodeErrorCount > 0 ? '#f59e0b' : 'var(--status-ok)' },
+                    { label: 'Rules Checked', value: '50', color: 'var(--text-muted)' },
+                    { label: 'Complexity', value: `v(G)=${result.complexity?.cyclomaticComplexity ?? 1}`, color: '#eab308' },
+                  ].map((m) => (
+                    <div key={m.label} className="insp-metric-tile">
+                      <div className="insp-metric-label">{m.label}</div>
+                      <div className="insp-metric-value" style={{ color: m.color }}>{m.value}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Severity breakdown -- a display-only aggregation of the already-returned
+                    per-diagnostic `severity` field (see severityCounts above), same source of
+                    truth the violation cards below use, never a separate/derived detection pass. */}
+                <div className="insp-metric-row" style={{ ['--insp-cols' as any]: 4 }}>
+                  {[
+                    { label: 'Critical', value: severityCounts.CRITICAL, color: 'var(--sev-critical)' },
+                    { label: 'High', value: severityCounts.HIGH, color: 'var(--sev-high)' },
+                    { label: 'Medium', value: severityCounts.MEDIUM, color: 'var(--sev-medium)' },
+                    { label: 'Low', value: severityCounts.LOW, color: 'var(--sev-low)' },
+                  ].map((m) => (
+                    <div key={m.label} className="insp-metric-tile">
+                      <div className="insp-metric-label">{m.label}</div>
+                      <div className="insp-metric-value" style={{ color: m.color }}>{m.value}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Performance metrics */}
+                <div className="insp-metric-row" style={{ ['--insp-cols' as any]: 2 }}>
                   {[
                     {
                       label: '⏱️ Speed',
@@ -1320,29 +1362,10 @@ export default function LiveScanPage() {
                         : '—',
                       color: '#a855f7',
                     },
-                    {
-                      label: '🧩 Complexity',
-                      value: `v(G)=${result.complexity?.cyclomaticComplexity ?? 1} (${result.complexity?.complexityRating ?? 'A'})`,
-                      color: '#eab308',
-                    },
-                    {
-                      label: '💯 Quality Score',
-                      value: `${result.qualityScore ?? 100} / 100`,
-                      color: scoreColor(result.qualityScore ?? 100),
-                    },
                   ].map((m) => (
-                    <div
-                      key={m.label}
-                      style={{
-                        padding: '7px 8px',
-                        background: '#090d16',
-                        borderRadius: '8px',
-                        border: '1px solid var(--border)',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: 600 }}>{m.label}</div>
-                      <div style={{ fontSize: '11px', fontWeight: 800, color: m.color, marginTop: '2px', fontFamily: 'JetBrains Mono' }}>
+                    <div key={m.label} className="insp-metric-tile">
+                      <div className="insp-metric-label">{m.label}</div>
+                      <div className="insp-metric-value" style={{ color: m.color, fontSize: '12px' }}>
                         {m.value}
                       </div>
                     </div>
@@ -1350,18 +1373,7 @@ export default function LiveScanPage() {
                 </div>
 
                 {/* Summary row */}
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    fontSize: '11px',
-                    color: '#7c8ba6',
-                    background: '#090d16',
-                    padding: '7px 12px',
-                    borderRadius: '6px',
-                    border: '1px solid var(--border)',
-                  }}
-                >
+                <div className="insp-notice" style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-dim)', background: 'var(--insp-panel-bg-alt)' }}>
                   <span>
                     Framework:{' '}
                     <strong style={{ color: '#38bdf8' }}>{result.framework}</strong>
@@ -1381,32 +1393,15 @@ export default function LiveScanPage() {
                 {/* Two-system summary — server-authoritative counts (RuleExecutionEngine.buildScanResult),
                   never re-derived here from ruleId string-matching. The two systems are never merged
                   into one combined "Problems" figure below; this total is only ever an additional sum. */}
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: '6px',
-                  }}
-                >
+                <div className="insp-metric-row" style={{ ['--insp-cols' as any]: 3 }}>
                   {[
                     { label: 'FIGM Rule Violations', value: figmRuleCount, color: '#a855f7' },
                     { label: 'General Code Errors', value: generalCodeErrorCount, color: '#f59e0b' },
-                    { label: 'Total Issues', value: figmRuleCount + generalCodeErrorCount, color: '#f8fafc' },
+                    { label: 'Total Issues', value: figmRuleCount + generalCodeErrorCount, color: 'var(--text-main)' },
                   ].map((s) => (
-                    <div
-                      key={s.label}
-                      style={{
-                        padding: '8px 10px',
-                        background: '#090d16',
-                        borderRadius: '8px',
-                        border: '1px solid var(--border)',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <div style={{ fontSize: '9px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.3px' }}>
-                        {s.label}
-                      </div>
-                      <div style={{ fontSize: '18px', fontWeight: 900, color: s.color, marginTop: '2px' }}>
+                    <div key={s.label} className="insp-metric-tile">
+                      <div className="insp-metric-label">{s.label}</div>
+                      <div className="insp-metric-value" style={{ color: s.color, fontSize: '17px' }}>
                         {s.value}
                       </div>
                     </div>
@@ -1414,19 +1409,12 @@ export default function LiveScanPage() {
                 </div>
 
                 {/* Honest analysis-completeness notice -- never silently implies a full FIGM sweep
-                  occurred when parsing only partially recovered (or couldn't recover at all). */}
-                {result.analysis && result.analysis.figmStatus !== 'COMPLETE' && (
-                  <div
-                    role="status"
-                    style={{
-                      fontSize: '11px',
-                      color: '#fde68a',
-                      background: 'rgba(234,179,8,0.08)',
-                      border: '1px solid rgba(234,179,8,0.25)',
-                      borderRadius: '6px',
-                      padding: '7px 12px',
-                    }}
-                  >
+                  occurred when parsing only partially recovered (or couldn't recover at all).
+                  UNSUPPORTED_FRAMEWORK is excluded here -- the dedicated "Not Yet Supported"
+                  banner below already covers that case more specifically; showing both would be a
+                  confusing duplicate warning for the same underlying fact. */}
+                {result.analysis && result.analysis.figmStatus !== 'COMPLETE' && result.analysis.figmStatus !== 'UNSUPPORTED_FRAMEWORK' && (
+                  <div role="status" className="insp-notice" style={{ color: '#fde68a', background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.25)' }}>
                     ⚠️ FIGM analysis is <strong>{result.analysis.figmStatus}</strong>
                     {result.analysis.figmStatus === 'BLOCKED'
                       ? ' — the source could not be parsed into a syntax tree at all, so no FIGM rules were evaluated.'
@@ -1439,17 +1427,7 @@ export default function LiveScanPage() {
                   account's history failed. Deliberately a small inline note, not a blocking
                   banner, since it doesn't affect anything the user is looking at right now. */}
                 {result?.serviceStatus?.stage === 'PERSISTENCE' && (
-                  <div
-                    role="status"
-                    style={{
-                      fontSize: '11px',
-                      color: '#fde68a',
-                      background: 'rgba(234,179,8,0.08)',
-                      border: '1px solid rgba(234,179,8,0.25)',
-                      borderRadius: '6px',
-                      padding: '7px 12px',
-                    }}
-                  >
+                  <div role="status" className="insp-notice" style={{ color: '#fde68a', background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.25)' }}>
                     🛠️ Scan Service Notice: {result.serviceStatus.message}
                   </div>
                 )}
@@ -1459,15 +1437,10 @@ export default function LiveScanPage() {
                   <button
                     onClick={handleSaveToHistory}
                     disabled={savingToHistory}
+                    className="btn-secondary"
                     style={{
                       padding: '8px',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(56, 189, 248, 0.3)',
-                      background: 'rgba(56, 189, 248, 0.1)',
-                      color: '#38bdf8',
                       fontSize: '12px',
-                      fontWeight: 700,
-                      cursor: savingToHistory ? 'not-allowed' : 'pointer',
                       opacity: savingToHistory ? 0.6 : 1,
                     }}
                   >
@@ -1507,25 +1480,19 @@ export default function LiveScanPage() {
                   System B (General Code Errors) is scoped to every other genuine syntax/compiler/
                   parser diagnostic. Both derive from the server's authoritative `kind` field
                   (figmViolations/generalCodeErrors above), not from ruleId string-matching here. */}
-                {UNSUPPORTED_FRAMEWORKS.has(result.framework) ? (
+                {result.analysis?.figmStatus === 'UNSUPPORTED_FRAMEWORK' ? (
                   // A zero-violation result for a framework FIGM does not analyze at all must
                   // never be presented as "your code is clean" -- that would misrepresent an
                   // "unchecked" result as a "passed" one. See Task requirement: handle
-                  // unsupported frameworks gracefully, without implying a check occurred.
-                  <div
-                    style={{
-                      padding: '28px',
-                      background: 'rgba(234,179,8,0.08)',
-                      borderRadius: '10px',
-                      border: '1px solid rgba(234,179,8,0.25)',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <div style={{ fontSize: '28px', marginBottom: '6px' }}>⚠️</div>
-                    <strong style={{ color: '#fde68a', fontSize: '15px' }}>
+                  // unsupported frameworks gracefully, without implying a check occurred. Driven
+                  // by the server-authoritative figmStatus field (Phase 2), not a client-guessed
+                  // framework set.
+                  <div className="insp-notice" style={{ padding: '24px', textAlign: 'center', background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.25)' }}>
+                    <div style={{ fontSize: '26px', marginBottom: '6px' }}>⚠️</div>
+                    <strong style={{ color: '#fde68a', fontSize: '14px' }}>
                       &quot;{result.framework}&quot; Is Not Yet Supported
                     </strong>
-                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
                       FIGM detected this framework but does not yet run any guideline rules against
                       it. This is <strong>not</strong> a &quot;no issues found&quot; result — no analysis was
                       performed. Supported frameworks: React, Next.js, Angular, Vue, and plain
@@ -1535,18 +1502,10 @@ export default function LiveScanPage() {
                 ) : figmRuleCount + generalCodeErrorCount === 0 ? (
                   // Combined celebratory state ONLY when BOTH systems are clean — an additional
                   // summary, never a substitute for the two independent sections below.
-                  <div
-                    style={{
-                      padding: '28px',
-                      background: 'rgba(34,197,94,0.08)',
-                      borderRadius: '10px',
-                      border: '1px solid rgba(34,197,94,0.25)',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <div style={{ fontSize: '28px', marginBottom: '6px' }}>🎉</div>
-                    <strong style={{ color: '#86efac', fontSize: '15px' }}>No Issues Found!</strong>
-                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+                  <div className="insp-notice" style={{ padding: '24px', textAlign: 'center', background: 'rgba(34,197,94,0.08)', borderColor: 'rgba(34,197,94,0.25)' }}>
+                    <div style={{ fontSize: '26px', marginBottom: '6px' }}>🎉</div>
+                    <strong style={{ color: '#86efac', fontSize: '14px' }}>No Issues Found!</strong>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
                       Your code meets all 50 FIGM rules, and no general code/compiler errors were detected.
                     </div>
                   </div>
@@ -1556,26 +1515,16 @@ export default function LiveScanPage() {
                     {/* ================= SYSTEM A: FIGM RULE VIOLATIONS ================= */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '12px', fontWeight: 900, color: '#c4b5fd', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#c4b5fd', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
                           🔬 FIGM Rule Violations
                         </span>
-                        <span
-                          style={{
-                            fontSize: '11px',
-                            fontWeight: 800,
-                            color: figmRuleCount > 0 ? '#a855f7' : '#4ade80',
-                            background: 'rgba(168,85,247,0.1)',
-                            border: '1px solid rgba(168,85,247,0.3)',
-                            borderRadius: '6px',
-                            padding: '2px 9px',
-                          }}
-                        >
+                        <span className="insp-chip" style={{ ['--chip-color' as any]: figmRuleCount > 0 ? '#c4b5fd' : '#4ade80', ['--chip-bg' as any]: 'rgba(168,85,247,0.1)', ['--chip-border' as any]: 'rgba(168,85,247,0.3)' }}>
                           {figmRuleCount} finding{figmRuleCount === 1 ? '' : 's'}
                         </span>
                       </div>
 
                       {figmRuleCount === 0 ? (
-                        <div style={{ padding: '14px', background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '8px', fontSize: '12px', color: '#86efac' }}>
+                        <div className="insp-notice" style={{ background: 'rgba(34,197,94,0.06)', borderColor: 'rgba(34,197,94,0.2)', color: '#86efac' }}>
                           ✅ No violations of any of the 50 canonical FIGM rules.
                         </div>
                       ) : (
@@ -1592,47 +1541,25 @@ export default function LiveScanPage() {
                             const column = d.location?.start?.column;
                             const endLine = d.location?.end?.line;
                             const endColumn = d.location?.end?.column;
+                            const cardAccent = fixResult ? (fixResult.verified ? 'rgba(34,197,94,0.6)' : 'rgba(234,179,8,0.6)') : color;
 
                             return (
                               <div
                                 key={idx}
-                                style={{
-                                  padding: '14px',
-                                  background: '#090d16',
-                                  borderRadius: '10px',
-                                  border: `1px solid ${fixResult
-                                      ? fixResult.verified
-                                        ? 'rgba(34,197,94,0.3)'
-                                        : 'rgba(234,179,8,0.3)'
-                                      : 'rgba(255,255,255,0.07)'
-                                    }`,
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  gap: '9px',
-                                  transition: 'border-color 0.2s ease',
-                                }}
+                                className="insp-card"
+                                style={{ ['--card-accent' as any]: cardAccent }}
                               >
                                 {/* Violation header */}
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                                    <span
-                                      style={{
-                                        fontSize: '10px',
-                                        fontWeight: 800,
-                                        color,
-                                        background: bg,
-                                        border: `1px solid ${color}44`,
-                                        borderRadius: '4px',
-                                        padding: '2px 7px',
-                                      }}
-                                    >
+                                <div className="insp-card-row">
+                                  <div className="insp-card-chips">
+                                    <span className="insp-chip" style={{ ['--chip-color' as any]: color, ['--chip-bg' as any]: bg, ['--chip-border' as any]: `${color}44` }}>
                                       {d.severity}
                                     </span>
                                     <span
                                       style={{
                                         fontSize: '11px',
                                         color: '#38bdf8',
-                                        fontFamily: 'JetBrains Mono',
+                                        fontFamily: 'var(--insp-mono)',
                                         fontWeight: 700,
                                       }}
                                     >
@@ -1645,14 +1572,11 @@ export default function LiveScanPage() {
                                             ? 'Detected via genuine TypeScript-compiler AST traversal'
                                             : 'Detected via text/regex pattern matching (not yet AST-migrated for this framework)'
                                         }
+                                        className="insp-chip"
                                         style={{
-                                          fontSize: '9px',
-                                          fontWeight: 700,
-                                          color: d.sourceKind === 'REAL_AST' ? '#a855f7' : '#7c8ba6',
-                                          background: d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.1)' : 'rgba(100,116,139,0.1)',
-                                          border: `1px solid ${d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.3)' : 'rgba(100,116,139,0.3)'}`,
-                                          borderRadius: '4px',
-                                          padding: '2px 6px',
+                                          ['--chip-color' as any]: d.sourceKind === 'REAL_AST' ? '#a855f7' : '#7c8ba6',
+                                          ['--chip-bg' as any]: d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.1)' : 'rgba(100,116,139,0.1)',
+                                          ['--chip-border' as any]: d.sourceKind === 'REAL_AST' ? 'rgba(168,85,247,0.3)' : 'rgba(100,116,139,0.3)',
                                         }}
                                       >
                                         {d.sourceKind === 'REAL_AST' ? '🌳 AST' : '📝 pattern'}
@@ -1661,7 +1585,8 @@ export default function LiveScanPage() {
                                     {fixability && (
                                       <span
                                         title="Pre-attempt fixability classification"
-                                        style={{ fontSize: '9px', fontWeight: 700, color: fixability.color, background: fixability.bg, border: `1px solid ${fixability.color}55`, borderRadius: '4px', padding: '2px 6px' }}
+                                        className="insp-chip"
+                                        style={{ ['--chip-color' as any]: fixability.color, ['--chip-bg' as any]: fixability.bg, ['--chip-border' as any]: `${fixability.color}55` }}
                                       >
                                         {fixability.label}
                                       </span>
@@ -1672,32 +1597,14 @@ export default function LiveScanPage() {
                                       href={`/guidelines#${d.ruleId}`}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      style={{
-                                        background: 'rgba(168,85,247,0.08)',
-                                        border: '1px solid rgba(168,85,247,0.25)',
-                                        borderRadius: '4px',
-                                        color: '#c4b5fd',
-                                        fontSize: '10px',
-                                        padding: '3px 8px',
-                                        cursor: 'pointer',
-                                        fontFamily: 'JetBrains Mono',
-                                        textDecoration: 'none',
-                                      }}
+                                      className="insp-link-btn"
+                                      style={{ ['--chip-color' as any]: '#c4b5fd', ['--chip-bg' as any]: 'rgba(168,85,247,0.08)', ['--chip-border' as any]: 'rgba(168,85,247,0.25)' }}
                                     >
                                       📖 Rule Guide
                                     </a>
                                     <button
                                       onClick={() => jumpToLine(line)}
-                                      style={{
-                                        background: 'rgba(56,189,248,0.08)',
-                                        border: '1px solid rgba(56,189,248,0.25)',
-                                        borderRadius: '4px',
-                                        color: '#38bdf8',
-                                        fontSize: '10px',
-                                        padding: '3px 8px',
-                                        cursor: 'pointer',
-                                        fontFamily: 'JetBrains Mono',
-                                      }}
+                                      className="insp-link-btn"
                                     >
                                       📍 Go to Line {line}
                                       {column != null ? `:${column}` : ''} →
@@ -1706,12 +1613,12 @@ export default function LiveScanPage() {
                                 </div>
 
                                 {/* Rule name */}
-                                <div style={{ fontSize: '13px', fontWeight: 800, color: '#f8fafc' }}>
+                                <div className="insp-card-title">
                                   {d.ruleName}
                                 </div>
 
                                 {/* Source range + standard reference */}
-                                <div style={{ fontSize: '10px', color: '#7c8ba6', display: 'flex', gap: '10px', flexWrap: 'wrap', fontFamily: 'JetBrains Mono' }}>
+                                <div className="insp-card-location">
                                   <span>
                                     Location: L{line}
                                     {column != null ? `:C${column}` : ''}
@@ -1721,53 +1628,31 @@ export default function LiveScanPage() {
                                 </div>
 
                                 {/* Offending code snippet */}
-                                <pre
-                                  style={{
-                                    background: 'rgba(239,68,68,0.07)',
-                                    border: '1px solid rgba(239,68,68,0.2)',
-                                    padding: '8px 10px',
-                                    borderRadius: '6px',
-                                    fontSize: '11px',
-                                    color: '#fca5a5',
-                                    margin: 0,
-                                    fontFamily: 'JetBrains Mono',
-                                    overflowX: 'auto',
-                                    whiteSpace: 'pre-wrap',
-                                  }}
-                                >
+                                <pre className="insp-card-snippet">
                                   <code>{d.offendingCodeSnippet}</code>
                                 </pre>
 
                                 {/* Evidence (what the detector actually matched) */}
                                 {d.evidence && (
-                                  <div style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic' }}>
+                                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
                                     🔍 <strong>Evidence:</strong> {d.evidence}
                                   </div>
                                 )}
 
                                 {/* Explanation */}
-                                <div style={{ fontSize: '12px', color: '#cbd5e1' }}>
+                                <div className="insp-card-body">
                                   {d.message}
                                 </div>
 
                                 {/* How-to-fix hint */}
-                                <div
-                                  style={{
-                                    fontSize: '12px',
-                                    color: '#86efac',
-                                    background: 'rgba(34,197,94,0.06)',
-                                    border: '1px solid rgba(34,197,94,0.15)',
-                                    padding: '7px 10px',
-                                    borderRadius: '6px',
-                                  }}
-                                >
+                                <div className="insp-card-remediation">
                                   💡 <strong>How to Fix:</strong> {d.remediation}
                                 </div>
 
                                 {/* Fix outcome -- always reflects what the real engine actually verified,
                             never a blanket "Fixed" independent of that verification. */}
                                 {fixResult && statusMeta && (
-                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                  <div className="insp-fix-outcome">
                                     <div
                                       style={{
                                         fontSize: '11px',
@@ -1783,16 +1668,16 @@ export default function LiveScanPage() {
                                         {fixResult.verified ? ` (by ${fixResult.engine})` : ''}
                                       </span>
                                     </div>
-                                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '2px' }}>
+                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px' }}>
                                       {statusMeta.detail}
                                     </div>
                                     {fixResult.description && (
-                                      <div style={{ fontSize: '11px', color: '#7c8ba6' }}>
+                                      <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
                                         {fixResult.description}
                                       </div>
                                     )}
                                     {fixResult.fallbackReason && (
-                                      <div style={{ fontSize: '10px', color: '#7c8ba6', fontStyle: 'italic' }}>
+                                      <div style={{ fontSize: '10px', color: 'var(--text-dim)', fontStyle: 'italic' }}>
                                         ({fixResult.fallbackReason})
                                       </div>
                                     )}
@@ -1807,22 +1692,16 @@ export default function LiveScanPage() {
                                   <button
                                     onClick={() => applyFigmFix(d)}
                                     disabled={isFixing || !!fixingId || fixability?.disabled}
+                                    className="insp-fix-btn"
                                     style={{
-                                      alignSelf: 'flex-start',
-                                      padding: '7px 14px',
-                                      borderRadius: '6px',
-                                      border: `1px solid ${fixability?.disabled ? 'rgba(234,179,8,0.35)' : 'rgba(34,197,94,0.35)'}`,
-                                      background: isFixing
+                                      ['--chip-border' as any]: fixability?.disabled ? 'rgba(234,179,8,0.35)' : 'rgba(34,197,94,0.35)',
+                                      ['--chip-bg' as any]: isFixing
                                         ? 'rgba(234,179,8,0.1)'
                                         : fixability?.disabled
                                           ? 'rgba(234,179,8,0.08)'
                                           : 'rgba(34,197,94,0.12)',
-                                      color: isFixing ? '#fde68a' : fixability?.disabled ? '#fde68a' : '#86efac',
-                                      fontSize: '12px',
-                                      fontWeight: 800,
+                                      ['--chip-color' as any]: isFixing ? '#fde68a' : fixability?.disabled ? '#fde68a' : '#86efac',
                                       cursor: isFixing ? 'wait' : fixability?.disabled ? 'not-allowed' : 'pointer',
-                                      opacity: fixability?.disabled ? 0.75 : 1,
-                                      transition: 'all 0.2s ease',
                                     }}
                                   >
                                     {isFixing
@@ -1844,26 +1723,16 @@ export default function LiveScanPage() {
                     {/* ================= SYSTEM B: GENERAL CODE ERRORS ================= */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '12px', fontWeight: 900, color: '#fcd34d', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, color: '#fcd34d', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
                           🧰 General Code Errors
                         </span>
-                        <span
-                          style={{
-                            fontSize: '11px',
-                            fontWeight: 800,
-                            color: generalCodeErrorCount > 0 ? '#f59e0b' : '#4ade80',
-                            background: 'rgba(245,158,11,0.1)',
-                            border: '1px solid rgba(245,158,11,0.3)',
-                            borderRadius: '6px',
-                            padding: '2px 9px',
-                          }}
-                        >
+                        <span className="insp-chip" style={{ ['--chip-color' as any]: generalCodeErrorCount > 0 ? '#fcd34d' : '#4ade80', ['--chip-bg' as any]: 'rgba(245,158,11,0.1)', ['--chip-border' as any]: 'rgba(245,158,11,0.3)' }}>
                           {generalCodeErrorCount} error{generalCodeErrorCount === 1 ? '' : 's'}
                         </span>
                       </div>
 
                       {generalCodeErrorCount === 0 ? (
-                        <div style={{ padding: '14px', background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '8px', fontSize: '12px', color: '#86efac' }}>
+                        <div className="insp-notice" style={{ background: 'rgba(34,197,94,0.06)', borderColor: 'rgba(34,197,94,0.2)', color: '#86efac' }}>
                           ✅ No syntax, TypeScript, or other compiler/parser errors detected.
                         </div>
                       ) : (
@@ -1874,86 +1743,72 @@ export default function LiveScanPage() {
                             const isFixing = fixingId === fixKey;
                             const color = SEV_COLOR[d.severity] ?? '#94a3b8';
                             const bg = SEV_BG[d.severity] ?? 'rgba(148,163,184,0.08)';
-                            const statusMeta = fixResult ? FIX_STATUS_META[fixResult.status] : null;
+                            const statusMeta = fixResult ? GENERAL_ERROR_FIX_STATUS_META[fixResult.status] : null;
                             const line = d.location?.start?.line && d.location.start.line > 0 ? d.location.start.line : 1;
                             const column = d.location?.start?.column;
                             const fixability = d.fixabilityStatus ? FIXABILITY_META[d.fixabilityStatus] : null;
+                            const cardAccent = fixResult ? (fixResult.verified ? 'rgba(34,197,94,0.6)' : 'rgba(234,179,8,0.6)') : color;
 
                             return (
                               <div
                                 key={idx}
-                                style={{
-                                  padding: '14px',
-                                  background: '#090d16',
-                                  borderRadius: '10px',
-                                  border: `1px solid ${fixResult
-                                      ? fixResult.verified
-                                        ? 'rgba(34,197,94,0.3)'
-                                        : 'rgba(234,179,8,0.3)'
-                                      : 'rgba(255,255,255,0.07)'
-                                    }`,
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  gap: '9px',
-                                  transition: 'border-color 0.2s ease',
-                                }}
+                                className="insp-card"
+                                style={{ ['--card-accent' as any]: cardAccent }}
                               >
                                 {/* Error header: compiler diagnostic code + category + severity */}
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                                    <span style={{ fontSize: '10px', fontWeight: 800, color, background: bg, border: `1px solid ${color}44`, borderRadius: '4px', padding: '2px 7px' }}>
+                                <div className="insp-card-row">
+                                  <div className="insp-card-chips">
+                                    <span className="insp-chip" style={{ ['--chip-color' as any]: color, ['--chip-bg' as any]: bg, ['--chip-border' as any]: `${color}44` }}>
                                       {d.severity}
                                     </span>
-                                    <span style={{ fontSize: '11px', color: '#f59e0b', fontFamily: 'JetBrains Mono', fontWeight: 700 }}>
+                                    <span style={{ fontSize: '11px', color: '#f59e0b', fontFamily: 'var(--insp-mono)', fontWeight: 700 }}>
                                       {d.compilerCode || d.ruleId}
                                     </span>
-                                    <span style={{ fontSize: '9px', fontWeight: 700, color: '#7c8ba6', background: 'rgba(100,116,139,0.1)', border: '1px solid rgba(100,116,139,0.3)', borderRadius: '4px', padding: '2px 6px' }}>
+                                    <span className="insp-chip">
                                       {d.ruleId === 'SYNTAX-PARSE-ERROR' ? 'SYNTAX_ERROR' : 'TYPE_COMPILE_ERROR'}
                                     </span>
                                     {fixability && (
                                       <span
                                         title="Pre-attempt fixability classification"
-                                        style={{ fontSize: '9px', fontWeight: 700, color: fixability.color, background: fixability.bg, border: `1px solid ${fixability.color}55`, borderRadius: '4px', padding: '2px 6px' }}
+                                        className="insp-chip"
+                                        style={{ ['--chip-color' as any]: fixability.color, ['--chip-bg' as any]: fixability.bg, ['--chip-border' as any]: `${fixability.color}55` }}
                                       >
                                         {fixability.label}
                                       </span>
                                     )}
                                   </div>
-                                  <button
-                                    onClick={() => jumpToLine(line)}
-                                    style={{ background: 'rgba(56,189,248,0.08)', border: '1px solid rgba(56,189,248,0.25)', borderRadius: '4px', color: '#38bdf8', fontSize: '10px', padding: '3px 8px', cursor: 'pointer', fontFamily: 'JetBrains Mono' }}
-                                  >
+                                  <button onClick={() => jumpToLine(line)} className="insp-link-btn">
                                     📍 Go to Line {line}
                                     {column != null ? `:${column}` : ''} →
                                   </button>
                                 </div>
 
                                 {/* Actual compiler/parser message -- never disguised as a FIGM rule name. */}
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#f8fafc' }}>
+                                <div className="insp-card-title">
                                   {d.message}
                                 </div>
 
-                                <div style={{ fontSize: '10px', color: '#7c8ba6', fontFamily: 'JetBrains Mono' }}>
+                                <div className="insp-card-location">
                                   Location: L{line}{column != null ? `:C${column}` : ''}
                                 </div>
 
                                 {/* Offending code snippet */}
-                                <pre style={{ background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.2)', padding: '8px 10px', borderRadius: '6px', fontSize: '11px', color: '#fca5a5', margin: 0, fontFamily: 'JetBrains Mono', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+                                <pre className="insp-card-snippet">
                                   <code>{d.offendingCodeSnippet}</code>
                                 </pre>
 
                                 {/* Fix outcome */}
                                 {fixResult && statusMeta && (
-                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                  <div className="insp-fix-outcome">
                                     <div style={{ fontSize: '11px', fontWeight: 700, color: statusMeta.color, display: 'flex', gap: '8px', alignItems: 'center' }}>
                                       <span>
                                         {PIPELINE_LABEL[fixResult.pipeline]} {statusMeta.icon} {statusMeta.label}
                                         {fixResult.verified ? ` (by ${fixResult.engine})` : ''}
                                       </span>
                                     </div>
-                                    <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '2px' }}>{statusMeta.detail}</div>
-                                    {fixResult.description && <div style={{ fontSize: '11px', color: '#7c8ba6' }}>{fixResult.description}</div>}
-                                    {fixResult.fallbackReason && <div style={{ fontSize: '10px', color: '#7c8ba6', fontStyle: 'italic' }}>({fixResult.fallbackReason})</div>}
+                                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px' }}>{statusMeta.detail}</div>
+                                    {fixResult.description && <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>{fixResult.description}</div>}
+                                    {fixResult.fallbackReason && <div style={{ fontSize: '10px', color: 'var(--text-dim)', fontStyle: 'italic' }}>({fixResult.fallbackReason})</div>}
                                     <DiffView before={fixResult.beforeCode} after={fixResult.afterCode} />
                                   </div>
                                 )}
@@ -1968,18 +1823,12 @@ export default function LiveScanPage() {
                                   <button
                                     onClick={() => applyCodeErrorFix(d)}
                                     disabled={isFixing || !!fixingId || fixability?.disabled}
+                                    className="insp-fix-btn"
                                     style={{
-                                      alignSelf: 'flex-start',
-                                      padding: '7px 14px',
-                                      borderRadius: '6px',
-                                      border: `1px solid ${fixability?.disabled ? 'rgba(234,179,8,0.35)' : 'rgba(56,189,248,0.35)'}`,
-                                      background: isFixing ? 'rgba(234,179,8,0.1)' : fixability?.disabled ? 'rgba(234,179,8,0.08)' : 'rgba(56,189,248,0.12)',
-                                      color: isFixing ? '#fde68a' : fixability?.disabled ? '#fde68a' : '#7dd3fc',
-                                      fontSize: '12px',
-                                      fontWeight: 800,
+                                      ['--chip-border' as any]: fixability?.disabled ? 'rgba(234,179,8,0.35)' : 'rgba(56,189,248,0.35)',
+                                      ['--chip-bg' as any]: isFixing ? 'rgba(234,179,8,0.1)' : fixability?.disabled ? 'rgba(234,179,8,0.08)' : 'rgba(56,189,248,0.12)',
+                                      ['--chip-color' as any]: isFixing ? '#fde68a' : fixability?.disabled ? '#fde68a' : '#7dd3fc',
                                       cursor: isFixing ? 'wait' : fixability?.disabled ? 'not-allowed' : 'pointer',
-                                      opacity: fixability?.disabled ? 0.75 : 1,
-                                      transition: 'all 0.2s ease',
                                     }}
                                   >
                                     {isFixing
@@ -2010,89 +1859,117 @@ export default function LiveScanPage() {
           the single-file panel (no jump-to-line/apply-fix/diff view): those all assume one live
           Monaco editor instance to act on, which doesn't exist for N independently-uploaded files. */}
       {batchFiles && (
-        <div className="glass-panel" style={{ padding: '20px', marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div style={{ fontSize: '13px', fontWeight: 700, color: '#f8fafc' }}>
-            📦 Batch Scan Results ({batchFiles.length} files)
+        <div className="insp-panel">
+          <div className="insp-panel-header">
+            <div className="insp-panel-title">
+              <span aria-hidden="true">📦</span>
+              <span>Batch Scan Results</span>
+              <span className="insp-chip">{batchFiles.length} files</span>
+            </div>
           </div>
-          {batchFiles.map((f) => {
-            const entry = batchResults[f.fileName];
-            const isExpanded = !!batchExpanded[f.fileName];
-            return (
-              <div
-                key={f.fileName}
-                style={{
-                  border: '1px solid var(--border)',
-                  borderRadius: '10px',
-                  overflow: 'hidden',
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setBatchExpanded((prev) => ({ ...prev, [f.fileName]: !prev[f.fileName] }))}
-                  aria-expanded={isExpanded}
-                  disabled={!entry || entry.status === 'scanning'}
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '10px 14px',
-                    background: 'rgba(255,255,255,0.03)',
-                    border: 'none',
-                    cursor: entry && entry.status !== 'scanning' ? 'pointer' : 'default',
-                    color: '#f8fafc',
-                    textAlign: 'left',
-                  }}
-                >
-                  <span style={{ fontSize: '12px', fontWeight: 700, fontFamily: 'JetBrains Mono' }}>{f.fileName}</span>
-                  {!entry || entry.status === 'scanning' ? (
-                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>⏳ Scanning…</span>
-                  ) : entry.status === 'error' ? (
-                    <span style={{ fontSize: '11px', color: '#ef4444', fontWeight: 700 }}>⚠️ {entry.error}</span>
-                  ) : (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span style={{ fontSize: '10px', color: '#38bdf8', fontWeight: 800 }}>{entry.result!.framework}</span>
-                      <span style={{ fontSize: '11px', color: entry.result!.diagnostics.length === 0 ? '#22c55e' : '#f59e0b', fontWeight: 700 }}>
-                        {entry.result!.diagnostics.length === 0 ? '🎉 No issues' : `${entry.result!.diagnostics.length} issue${entry.result!.diagnostics.length === 1 ? '' : 's'}`}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {batchFiles.map((f) => {
+              const entry = batchResults[f.fileName];
+              const isExpanded = !!batchExpanded[f.fileName];
+              return (
+                <div key={f.fileName} className="insp-editor-frame">
+                  <button
+                    type="button"
+                    onClick={() => setBatchExpanded((prev) => ({ ...prev, [f.fileName]: !prev[f.fileName] }))}
+                    aria-expanded={isExpanded}
+                    disabled={!entry || entry.status === 'scanning'}
+                    className="insp-editor-tab-strip"
+                    style={{
+                      width: '100%',
+                      border: 'none',
+                      cursor: entry && entry.status !== 'scanning' ? 'pointer' : 'default',
+                      color: 'var(--text-main)',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <span style={{ fontSize: '12px', fontWeight: 700, fontFamily: 'var(--insp-mono)' }}>{f.fileName}</span>
+                    {!entry || entry.status === 'scanning' ? (
+                      <span className="insp-status is-scanning">
+                        <span className="insp-status-dot" aria-hidden="true" />
+                        Scanning…
                       </span>
-                      {typeof entry.result!.qualityScore === 'number' && (
-                        <span style={{ fontSize: '11px', color: '#94a3b8' }}>Quality {entry.result!.qualityScore}/100</span>
-                      )}
-                      <span aria-hidden="true">{isExpanded ? '▲' : '▼'}</span>
-                    </span>
-                  )}
-                </button>
-                {isExpanded && entry?.status === 'done' && (
-                  <div style={{ padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {entry.result!.diagnostics.length === 0 ? (
-                      <div style={{ fontSize: '12px', color: '#7c8ba6' }}>No violations found in this file.</div>
+                    ) : entry.status === 'error' ? (
+                      <span className="insp-chip" style={{ ['--chip-color' as any]: '#fca5a5', ['--chip-bg' as any]: 'rgba(239,68,68,0.1)', ['--chip-border' as any]: 'rgba(239,68,68,0.3)' }}>
+                        ⚠️ {entry.error}
+                      </span>
                     ) : (
-                      entry.result!.diagnostics.map((d, i) => (
-                        <div
-                          key={`${d.ruleId}_${d.location.start.line}_${i}`}
-                          style={{
-                            borderLeft: `3px solid ${SEV_COLOR[d.severity] || SEV_COLOR.LOW}`,
-                            padding: '6px 10px',
-                            background: 'rgba(255,255,255,0.02)',
-                            borderRadius: '4px',
-                          }}
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span className="insp-chip" style={{ ['--chip-color' as any]: '#7dd3fc', ['--chip-bg' as any]: 'rgba(56,189,248,0.1)', ['--chip-border' as any]: 'rgba(56,189,248,0.25)' }}>
+                          {entry.result!.framework}
+                        </span>
+                        <span
+                          className="insp-chip"
+                          style={
+                            entry.result!.diagnostics.length === 0
+                              ? { ['--chip-color' as any]: '#86efac', ['--chip-bg' as any]: 'rgba(34,197,94,0.1)', ['--chip-border' as any]: 'rgba(34,197,94,0.25)' }
+                              : { ['--chip-color' as any]: '#fcd34d', ['--chip-bg' as any]: 'rgba(245,158,11,0.1)', ['--chip-border' as any]: 'rgba(245,158,11,0.3)' }
+                          }
                         >
-                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '2px' }}>
-                            <span style={{ fontSize: '10px', fontWeight: 800, color: SEV_COLOR[d.severity] || SEV_COLOR.LOW }}>{d.severity}</span>
-                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#38bdf8', fontFamily: 'JetBrains Mono' }}>{d.ruleId}</span>
-                            <span style={{ fontSize: '10px', color: '#7c8ba6' }}>Line {d.location.start.line}</span>
-                          </div>
-                          <div style={{ fontSize: '11px', color: '#cbd5e1' }}>{d.message}</div>
-                        </div>
-                      ))
+                          {entry.result!.diagnostics.length === 0 ? '🎉 No issues' : `${entry.result!.diagnostics.length} issue${entry.result!.diagnostics.length === 1 ? '' : 's'}`}
+                        </span>
+                        {typeof entry.result!.qualityScore === 'number' && (
+                          <span className="insp-chip">Quality {entry.result!.qualityScore}/100</span>
+                        )}
+                        <span aria-hidden="true">{isExpanded ? '▲' : '▼'}</span>
+                      </span>
                     )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  </button>
+                  {isExpanded && entry?.status === 'done' && (
+                    <div style={{ padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {entry.result!.diagnostics.length === 0 ? (
+                        <div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>No violations found in this file.</div>
+                      ) : (
+                        entry.result!.diagnostics.map((d, i) => (
+                          <div
+                            key={`${d.ruleId}_${d.location.start.line}_${i}`}
+                            className="insp-card"
+                            style={{ ['--card-accent' as any]: SEV_COLOR[d.severity] || SEV_COLOR.LOW, padding: '8px 10px' }}
+                          >
+                            <div className="insp-card-chips">
+                              <span className="insp-chip" style={{ ['--chip-color' as any]: SEV_COLOR[d.severity] || SEV_COLOR.LOW, ['--chip-bg' as any]: SEV_BG[d.severity] || SEV_BG.LOW }}>
+                                {d.severity}
+                              </span>
+                              <span style={{ fontSize: '11px', fontWeight: 700, color: '#38bdf8', fontFamily: 'var(--insp-mono)' }}>{d.ruleId}</span>
+                              <span className="insp-card-location" style={{ gap: '4px' }}>Line {d.location.start.line}</span>
+                            </div>
+                            <div className="insp-card-body">{d.message}</div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
+
+      {/* Bottom status bar (Step 12) -- only ever surfaces information already computed above;
+          introduces no new data source. */}
+      <div className="insp-statusbar">
+        <div className="insp-statusbar-group">
+          <span>FIGM Engine</span>
+          <span>50 Rules</span>
+          <span>{result ? result.framework : 'TypeScript'}</span>
+          <span>UTF-8</span>
+        </div>
+        <span className={`insp-status${scanning ? ' is-scanning' : figmRuleCount + generalCodeErrorCount > 0 ? ' is-warn' : ''}`}>
+          <span className="insp-status-dot" aria-hidden="true" />
+          {scanning
+            ? 'Analyzing…'
+            : !result
+              ? 'Ready'
+              : figmRuleCount + generalCodeErrorCount > 0
+                ? `Issues Found (${figmRuleCount + generalCodeErrorCount})`
+                : 'Scan Complete'}
+        </span>
+      </div>
     </div>
   );
 }

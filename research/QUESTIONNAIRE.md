@@ -1,7 +1,7 @@
 # FIGM USER STUDY QUESTIONNAIRE SPECIFICATION
 
 **Research Title**: "Usability Evaluation of the Framework-Independent Guideline Model (FIGM) Code Inspector for Single Page Applications"  
-**Target Sample**: 85 Valid Real Human Participants  
+**Target Sample**: 20 Valid Real Human Participants — the final approved study target (a later approved research-scope decision confirmed by the researcher; the original Proposal/Interim 02 documents state 80-100 as the historical baseline, preserved and superseded — see `docs/research/PARTICIPANT_TARGET_DECISION.md`)  
 
 ---
 

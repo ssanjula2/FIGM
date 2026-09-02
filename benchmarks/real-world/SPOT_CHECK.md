@@ -70,3 +70,52 @@ If "TP (narrow)" is counted as correct (the predicate is, after all, satisfied e
 
 Neither of these was fixed as part of this benchmarking task (out of scope — see METHODOLOGY.md),
 but both are concrete, reproducible, file/line-cited findings a maintainer could act on directly.
+
+**Correction (Phase: pre-data-collection remediation):** both classes have since been fixed in
+`src/ast/real-syntax-node-builder.ts`:
+
+1. FIGM-REACT-03 (`buildReact03`, line ~733) now requires `isProvableStateTarget(ctx, ...)` (line
+   727) before flagging Shape A (`arr.push(...)`) or Shape B (`obj.prop = value`) as a state
+   mutation — the target must be a `this.state`/`this.setState`-style access, or its root
+   identifier must be in `ctx.stateLikeNames` (file-wide, positive `useState`/state-hook evidence
+   computed once per file). A bare `X.defaultProps = {...}`, `module.exports = ...`, or
+   `ctx.fillStyle = ...` — none of which touch a name with real state evidence — no longer fires.
+2. FIGM-REACT-01 (`buildReact01`, line ~983) now calls `isLikelyNonArrayNamespaceReceiver` (line
+   959, an uppercase-leading-identifier heuristic that correctly excludes namespace/class-style
+   receivers such as `Vue.filter(...)`) and, for `GENERIC_ESTREE` files specifically, requires
+   `ctx.hasReactContext` (real JSX syntax, a `.jsx`/`.tsx` extension, or an actual `import ... from
+   'react'`) before firing at all — closing exactly the `Vue.filter(...)` misfire (#14) and the
+   non-React build-script false-positives (#6, #18) documented above.
+
+Both fixes are unit-tested (`tests/react-ast-rules.test.ts`, `tests/framework-detection-react-hint-hardening.test.ts`)
+and the full suite passes with them in place (see `research/audits/FIGM_PRE_DATA_COLLECTION_AUDIT.md`
+Section 18). **This spot-check's 13/18 (72%) / 7/18 (39%) accuracy figures are now stale** — they
+were measured against the pre-fix detector. A fresh real-world re-scan (and ideally a larger,
+re-sampled spot-check) against the corrected detector is required before citing an updated accuracy
+figure; none is fabricated here in its place.
+
+**Real-world re-run confirmation (final implementation pass, `_combined-summary.json` regenerated
+2026-09-02T17:21:57.872Z, prior run archived at
+`benchmarks/real-world/raw-results-archive/2026-08-25-pre-final-pass/`):** the `javascript-algorithms`
+repo (`trekhleb/javascript-algorithms`, a plain-JS/TS algorithms repository with zero React
+content — exactly the shape #6/#18 above describe) reported **`FIGM-REACT-01: 55`** findings in the
+pre-fix run and **zero** `FIGM-REACT-01` findings in this session's fresh re-run against the same
+pinned commit — direct, real-world (not merely unit-test) confirmation that the `hasReactContext`
+gate closes this false-positive class. Total findings across all 15 repos dropped from 497 to 392
+(-21%) on an unchanged 843-file/59-parse-error-adjusted corpus, consistent with a genuine
+false-positive reduction rather than a coverage regression (0 engine crashes in both runs; total
+files scanned identical at 843). A new observation from this same re-run, **not yet investigated or
+fixed**: `FIGM-ANG-07` ("Complex Logic in Angular Component Constructor") fired 11 times in this
+same non-Angular `javascript-algorithms` repo — `ANG-07` is intentionally gated to include
+`GENERIC_ESTREE` alongside `ANGULAR_TEMPLATE` (`ANGULAR_CLASS_FRAMEWORKS` in
+`real-syntax-node-builder.ts`), so this may be a deliberate framework-agnostic-by-design
+application of a general "complex constructor logic" pattern rather than a defect — but it was not
+verified either way this session and should be treated as an open question, not assumed correct.
+Angular template parse-error counts also increased in this re-run (`angular-realworld-example-app`:
+0→13, `reactive-angular-course`: 0→5, `angular-tour-of-heroes`: 0→2) — consistent with the real
+`angular-html-parser`-based template parser (landed in a prior session within this same multi-turn
+engagement) now genuinely detecting malformed/complex templates that the previous text-heuristic
+path silently never flagged as a parse failure at all. This is a rigor improvement (honest
+`PARTIAL`/parse-error reporting) rather than a regression, consistent with this project's
+false-clean-scan protection design — but it was not manually spot-checked this session to confirm
+each new parse error is genuine rather than a new false positive of the parser itself.

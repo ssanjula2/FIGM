@@ -30,6 +30,13 @@ import { RuleExecutionEngine } from '../src/engine/rule-execution-engine.js';
  *      contains an "() =>" substring. Real AST only flags an ArrowFunctionExpression that is
  *      itself the DIRECT initializer of a JSX handler attribute, so a named reference to an
  *      already-memoized callback is correctly no longer flagged -- see the updated case below.
+ *   5. FIGM-PERF-01 (Phase 2, AST/Rule Coverage Gaps) closed the KNOWN LIMITATION this file used
+ *      to pin down: a declaration's object literal built directly FROM the enclosing loop's own
+ *      per-iteration variable (`items.map(item => { const cfg = { id: item.id }; ... })`) is not
+ *      actually invariant/hoistable, but used to be flagged anyway. A narrow, scoped check
+ *      (src/ast/real-syntax-node-builder.ts's referencesAnyBoundName/loopBoundNames) now resolves
+ *      the nearest enclosing loop/iteration-callback's bound name(s) and skips flagging when the
+ *      object literal genuinely references one of them -- see the updated case below.
  * Where a case instead documents a genuine, currently-unfixed architectural limitation of the
  * line/regex-based detection layer (no data-flow analysis), the assertion pins down CURRENT
  * behavior honestly and the rationale says so explicitly — these are reported as remaining
@@ -52,8 +59,8 @@ const CASES: BoundaryAdversarialCase[] = [
     ruleId: 'FIGM-PERF-01', kind: 'boundary',
     label: 'object literal properties reference the loop variable itself',
     code: `items.map(item => { const cfg = { id: item.id }; return <span>{item}</span>; });`,
-    filePath: 'a.jsx', expectFire: true,
-    rationale: 'KNOWN LIMITATION: cfg depends on item.id so it cannot actually be hoisted (it is not truly invariant), but the line-based heuristic has no data-flow awareness of what the object references — it flags any object literal allocated in loop/render scope regardless of content. Documented over-approximation, not fixed in this pass (would require real data-flow analysis).',
+    filePath: 'a.jsx', expectFire: false,
+    rationale: 'FIXED (Phase 2, AST/Rule Coverage Gaps): cfg depends on item.id, so it cannot actually be hoisted (it is not truly invariant). The real-AST detector now resolves the nearest enclosing loop/iteration-callback\'s bound name(s) (here, "item") and correctly does not flag an object literal that genuinely references one of them -- previously a documented over-approximation, now resolved without a full data-flow rewrite.',
   },
   {
     ruleId: 'FIGM-PERF-01', kind: 'adversarial',

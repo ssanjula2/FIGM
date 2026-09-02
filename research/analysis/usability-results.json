@@ -4,13 +4,13 @@
     "datasetType": "SYNTHETIC",
     "isRealHumanData": false,
     "collectionStatus": "NOT_COLLECTED",
-    "targetSampleSize": 85,
+    "targetSampleSize": 20,
     "validParticipantCount": 0,
     "targetReached": false,
     "anonymizedParticipantIds": [],
     "totalResponsesIngested": 0,
     "excludedResponsesCount": 0,
-    "processedAt": "2026-08-10T10:30:02.427Z"
+    "processedAt": "2026-09-02T16:20:12.184Z"
   },
   "metrics": {
     "susMean": 0,

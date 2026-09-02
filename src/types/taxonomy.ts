@@ -19,11 +19,12 @@ export type RemediationStatus = 'AUTOMATED_FIX_VERIFIED' | 'AUTOMATED_FIX_WITH_C
 /**
  * UI-facing rule category bucket. Distinct from `DomainType` (PERFORMANCE/ACCESSIBILITY, the
  * formal taxonomy axis) -- this is "which framework must this code belong to" for display grouping.
- * There is no VUE bucket because no rule is Vue-*specific*: Vue files are only ever covered by the
- * COMMON (framework-independent) rules -- see FourLayerMapping.rule.frameworks for the per-rule
- * framework applicability that actually determines Vue coverage.
+ * VUE exists (added alongside FIGM-VUE-01/02) because those two rules ARE Vue-*specific* --
+ * unlike every rule below them, they are not part of the framework-independent COMMON set and are
+ * never evaluated against any other FrameworkType. See FourLayerMapping.rule.frameworks for the
+ * per-rule framework applicability that actually determines this.
  */
-export type RuleCategory = 'COMMON' | 'NEXTJS' | 'REACT' | 'ANGULAR';
+export type RuleCategory = 'COMMON' | 'NEXTJS' | 'REACT' | 'ANGULAR' | 'VUE';
 
 export type PerformanceConcernType =
   | 'BUNDLE_SIZE'
@@ -37,7 +38,8 @@ export type AccessibilityConcernType =
   | 'KEYBOARD_ACCESSIBILITY'     // WCAG 2.2 SC 2.1.1
   | 'NAME_ROLE_VALUE'           // WCAG 2.2 SC 4.1.2
   | 'STATUS_MESSAGES'           // WCAG 2.2 SC 4.1.3
-  | 'FOCUS_ORDER';               // WCAG 2.2 SC 2.4.3
+  | 'FOCUS_ORDER'                // WCAG 2.2 SC 2.4.3
+  | 'INPUT_MODALITIES';          // WCAG 2.2 SC 2.5.3 (added for FIGM-A11Y-07)
 
 export type ConcernType = PerformanceConcernType | AccessibilityConcernType;
 
@@ -48,6 +50,15 @@ export interface StandardTraceability {
   clause: string;
   title: string;
   level?: 'A' | 'AA' | 'AAA';
+  /** Why this specific Success Criterion (not a different one) applies to this rule -- required
+   *  for every WCAG_2_2 entry so a per-rule mapping can be reviewed/challenged on its own merits,
+   *  rather than trusted because the field exists. See src/matrix/four-layer-meta-model.ts's
+   *  WCAG_22_MAPPINGS for the canonical source (never a single shared default). */
+  mappingRationale?: string;
+  /** How reliably a static AST check can actually detect this WCAG concern -- distinct from
+   *  whether a mapping to a Success Criterion exists at all. Never claim DIRECT_STATIC_CHECK for a
+   *  concern static analysis can only approximate. */
+  automatedDetectability?: 'DIRECT_STATIC_CHECK' | 'PARTIAL_STATIC_CHECK' | 'HEURISTIC' | 'MANUAL_REVIEW_REQUIRED' | 'NOT_SUPPORTED';
 }
 
 /**
@@ -159,6 +170,10 @@ export interface FIGMMasterSpecification {
   rules: {
     id: string;
     domain: DomainType;
+    /** Research-facing three-way split (ARCHITECTURE / STATIC_PERFORMANCE / ACCESSIBILITY) --
+     *  see src/matrix/four-layer-meta-model.ts's primaryResearchDomain() for why this is additive
+     *  to `domain` rather than a replacement of it. */
+    primaryResearchDomain: 'ARCHITECTURE' | 'STATIC_PERFORMANCE' | 'ACCESSIBILITY';
     concern: ConcernType;
     category: RuleCategory;
     alpId: string;

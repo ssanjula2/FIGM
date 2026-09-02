@@ -46,11 +46,13 @@ test('QA Matrix — cross-cutting robustness', async (t) => {
     assert.equal(perf01.length, 2000, 'one FIGM-PERF-01 invariant-object finding per line, no truncation and no duplication');
     const perf01Lines = perf01.map((d) => d.location.start.line);
     assert.equal(new Set(perf01Lines).size, 2000, 'each of the 2000 findings must be attributed to its own distinct line, not duplicated onto one');
-    // The fixture also legitimately triggers one unrelated TypeScript compiler diagnostic
-    // (JSX runtime module resolution, TYPE-TS-2875) -- this is a real, separate finding that
-    // predates this fix and is not part of what this test is validating.
+    // This fixture previously also triggered TYPE-TS-2875 ("This JSX tag requires the module path
+    // 'react/jsx-runtime' to exist"), tracked as audit finding NEW-09 ("open, not root-caused").
+    // Root-caused live (see type-checker-service.ts's SNIPPET_NOISE_CODES comment for 2875): it is
+    // a snippet-checking-environment artifact of isolated single-file compilation with no anchoring
+    // 'react' import, not a real defect in this fixture's source -- so it must NOT appear here.
     const nonPerf01 = result.diagnostics.filter((d) => d.ruleId !== 'FIGM-PERF-01');
-    assert.deepEqual(nonPerf01.map((d) => d.ruleId), ['TYPE-TS-2875']);
+    assert.deepEqual(nonPerf01.map((d) => d.ruleId), [], 'no diagnostics beyond the 2000 real FIGM-PERF-01 findings -- TYPE-TS-2875 is a filtered snippet-checking artifact, not a real finding');
     assert.ok(elapsedMs < 15000, `performance regression guard: 2000-violation scan took ${elapsedMs}ms, expected under 15s`);
   });
 

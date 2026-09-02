@@ -31,7 +31,12 @@ describe('SaaS Production Features 8 & 9: Search & Admin Suite', () => {
     assert.strictEqual(updatedRole?.role, 'AUDITOR');
 
     const resetPass = await UserRepository.adminResetPassword(targetUser.id, 'NewAdminPass123!');
-    assert.ok(resetPass);
+    assert.strictEqual(resetPass.success, true);
+
+    // Same server-side strength policy as registration/self-service change/reset -- an admin
+    // cannot bypass it by resetting someone else's password to a weak value.
+    const weakReset = await UserRepository.adminResetPassword(targetUser.id, 'weak');
+    assert.strictEqual(weakReset.success, false);
 
     const deleted = await UserRepository.deleteAccount(targetUser.id);
     assert.strictEqual(deleted, true);

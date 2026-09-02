@@ -75,7 +75,7 @@ migration history stays real and reproducible.
 
 The repository layer (`UserRepository`, `ProjectRepository`, `ScanRepository`, `NotificationRepository`, `DashboardRepository`, `SettingsRepository`, `ResearchRepository`) includes an automatic environment detection engine:
 
-- **Production Mode (`DATABASE_URL` present)**: Executes queries against Supabase PostgreSQL via Prisma ORM & RLS policies.
+- **Production Mode (`DATABASE_URL` present)**: Executes queries against Supabase PostgreSQL via Prisma ORM, with tenant isolation enforced at the application/repository layer (every query explicitly scoped by `userId`) rather than by Postgres RLS -- see `DATABASE.md` section 3.
 - **Offline / Test Mode (`DATABASE_URL` absent)**: Seamlessly operates using local persistent store (`figm-user-db.json`), ensuring 100% offline capability and fast test execution.
 
 ---

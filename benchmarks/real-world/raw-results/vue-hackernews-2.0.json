@@ -5,25 +5,25 @@
   "primaryFrameworkLabel": "Vue",
   "filesScanned": 23,
   "totalLOC": 1396,
-  "scanDurationMs": 2175.8757999999943,
-  "totalFigmFindings": 8,
+  "scanDurationMs": 2190.0778000000028,
+  "totalFigmFindings": 5,
   "findingsByRule": {
     "FIGM-PERF-04": 2,
     "FIGM-PERF-02": 1,
-    "FIGM-REACT-01": 4,
+    "FIGM-VUE-06": 1,
     "FIGM-PERF-05": 1
   },
   "findingsBySeverity": {
     "MEDIUM": 3,
-    "HIGH": 5
+    "HIGH": 2
   },
   "frameworksDetected": {
     "GENERIC_ESTREE": 15,
     "VUE_SFC": 8
   },
   "parserFailures": {
-    "filesWithParseErrors": 0,
-    "totalParseErrorCount": 0
+    "filesWithParseErrors": 1,
+    "totalParseErrorCount": 1
   },
   "engineCrashes": [],
   "perFile": [
@@ -79,7 +79,7 @@
       "relativePath": "src/components/Comment.vue",
       "framework": "VUE_SFC",
       "loc": 75,
-      "figmFindingCount": 0,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -111,7 +111,7 @@
       "relativePath": "src/entry-client.js",
       "framework": "GENERIC_ESTREE",
       "loc": 69,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -135,7 +135,7 @@
       "relativePath": "src/store/actions.js",
       "framework": "GENERIC_ESTREE",
       "loc": 50,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -143,7 +143,7 @@
       "relativePath": "src/store/getters.js",
       "framework": "GENERIC_ESTREE",
       "loc": 24,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -168,7 +168,7 @@
       "framework": "GENERIC_ESTREE",
       "loc": 25,
       "figmFindingCount": 0,
-      "parseErrorCount": 0,
+      "parseErrorCount": 1,
       "engineCrash": null
     },
     {
@@ -236,7 +236,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1"
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-04",
@@ -261,7 +263,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2"
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-02",
@@ -286,111 +290,40 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 92,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 6"
+      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
+      "ruleId": "FIGM-VUE-06",
+      "ruleName": "Arrow Function Used as Options API Method",
       "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
+      "concern": "ARCHITECTURE",
       "severity": "HIGH",
-      "filePath": "src/entry-client.js",
+      "filePath": "src/components/Comment.vue",
       "location": {
         "start": {
-          "line": 44,
-          "column": 22
-        },
-        "end": {
-          "line": 46,
-          "column": 6
-        }
-      },
-      "offendingCodeSnippet": "const activated = matched.filter((c, i) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 44"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/entry-client.js",
-      "location": {
-        "start": {
-          "line": 47,
-          "column": 27
-        },
-        "end": {
-          "line": 47,
-          "column": 73
-        }
-      },
-      "offendingCodeSnippet": "const asyncDataHooks = activated.map(c => c.asyncData).filter(_ => _)",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 47"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/store/actions.js",
-      "location": {
-        "start": {
-          "line": 27,
-          "column": 10
+          "line": 36,
+          "column": 4
         },
         "end": {
           "line": 36,
-          "column": 6
+          "column": 57
         }
       },
-      "offendingCodeSnippet": "ids = ids.filter(id => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
+      "offendingCodeSnippet": "pluralize: n => n + (n === 1 ? ' reply' : ' replies')",
+      "message": "Arrow function used as an Options API method; `this` will not be bound to the component instance.",
+      "remediation": "Use a regular method shorthand (or a plain function expression) for every entry in the Options API methods block, never an arrow function. Evidence: Vue.js official documentation, \"Options: State\" -- https://vuejs.org/api/options-state.html (\"avoid using arrow functions when declaring methods, as they will not have access to the component instance via this... this.myMethod will be undefined\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 27"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/store/getters.js",
-      "location": {
-        "start": {
-          "line": 21,
-          "column": 11
-        },
-        "end": {
-          "line": 21,
-          "column": 70
-        }
-      },
-      "offendingCodeSnippet": "return getters.activeIds.map(id => state.items[id]).filter(_ => _)",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 21"
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunction] at line 36",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -406,12 +339,14 @@
         }
       },
       "offendingCodeSnippet": "}).then(() => Promise.all(item.kids.map(id => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 88"
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 88",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     }
   ]
 }

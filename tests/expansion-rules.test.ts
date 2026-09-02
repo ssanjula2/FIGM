@@ -228,11 +228,11 @@ test('FIGM-VUE-01: Unstable or Missing v-for Key Binding', async (t) => {
     assert.ok(!reports.some((r) => r.ruleId === 'FIGM-VUE-01'));
   });
 
-  await t.test('sourceKind is honestly LEGACY_TEXT_HEURISTIC, never REAL_AST', () => {
+  await t.test('sourceKind is honestly REAL_AST (Phase 2: real @vue/compiler-dom template parse via src/ast/vue-template-ast-builder.ts, not a text heuristic)', () => {
     const code = `<template><li v-for="todo in todos">{{ todo.text }}</li></template>`;
     const reports = detect(code, 'TodoList.vue');
     const report = reports.find((r) => r.ruleId === 'FIGM-VUE-01');
-    assert.equal(report?.sourceKind, 'LEGACY_TEXT_HEURISTIC');
+    assert.equal(report?.sourceKind, 'REAL_AST');
   });
 
   await t.test('[fix+verify] fix adds a stable :key, resolving the violation on re-scan', () => {

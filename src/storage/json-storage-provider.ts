@@ -9,6 +9,7 @@ import {
   DBNotification,
   DBSettings,
   DBAuditLog,
+  DBSubmission,
 } from '../auth/user-db';
 
 export class JsonStorageProvider implements IStorageProvider {
@@ -29,6 +30,10 @@ export class JsonStorageProvider implements IStorageProvider {
 
   findUserByRefreshToken(token: string): DBUser | undefined {
     return UserDB.findUserByRefreshToken(token);
+  }
+
+  findUserByParticipantCode(code: string): DBUser | undefined {
+    return UserDB.findUserByParticipantCode(code);
   }
 
   getAllUsers(): DBUser[] {
@@ -138,10 +143,13 @@ export class JsonStorageProvider implements IStorageProvider {
 
     if (query.search && query.search.trim() !== '') {
       const q = query.search.toLowerCase().trim();
+      // Defensive against a malformed/legacy record missing one of these fields -- same class of
+      // guard as ProjectRepository.getProjects's own search filter, for the same reason: one bad
+      // record must never be fatal to an ADMIN's search across every user's scans.
       records = records.filter(
         (r) =>
-          r.fileName.toLowerCase().includes(q) ||
-          r.framework.toLowerCase().includes(q) ||
+          (r.fileName || '').toLowerCase().includes(q) ||
+          (r.framework || '').toLowerCase().includes(q) ||
           (r.repositoryUrl && r.repositoryUrl.toLowerCase().includes(q))
       );
     }
@@ -199,5 +207,18 @@ export class JsonStorageProvider implements IStorageProvider {
 
   getAuditLogs(limit?: number): DBAuditLog[] {
     return UserDB.getAuditLogs(limit);
+  }
+
+  // Submissions
+  createSubmission(submission: Omit<DBSubmission, 'id' | 'createdAt'>): DBSubmission {
+    return UserDB.createSubmission(submission);
+  }
+
+  getSubmissionsByUserId(userId: string): DBSubmission[] {
+    return UserDB.getSubmissionsByUserId(userId);
+  }
+
+  deleteSubmission(submissionId: string, userId: string): boolean {
+    return UserDB.deleteSubmission(submissionId, userId);
   }
 }

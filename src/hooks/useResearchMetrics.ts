@@ -64,7 +64,10 @@ export interface UserStudyStatus {
 
 export interface ResearchMetricsPayload {
   _meta: {
+    /** e.g. "benchmarks/eval-summary.json + dissertation IS303.2 (...)" */
+    source: string;
     generatedAt: string;
+    note: string;
     benchmarkError: string | null;
   };
   dissertation: {
@@ -74,16 +77,26 @@ export interface ResearchMetricsPayload {
     module: string;
     title: string;
     researchApproach: string;
+    methodology: string;
     scope: string;
+    outOfScope: string[];
   };
   benchmarkMetrics: {
     timestamp: string;
+    /** Human-readable description of how TP/FP/FN were computed -- see src/eval/evaluation-runner.ts. */
+    calculationMethod: string | null;
     precision: number;
     recall: number;
     f1Score: number;
     truePositives: number;
     falsePositives: number;
     falseNegatives: number;
+    /** { totalFigmRules, rulesWithGroundTruth, coveredRuleIds, uncoveredRuleIds } -- shape owned by
+     *  src/eval/evaluation-runner.ts's RuleCoverageProvenance, read here as opaque JSON. */
+    ruleCoverage: Record<string, unknown> | null;
+    ruleMetrics: unknown[];
+    frameworkMetrics: unknown[];
+    performanceMetrics: Record<string, unknown>;
   } | null;
   systemCapabilities: {
     totalGuidelineRules: number;
@@ -92,19 +105,26 @@ export interface ResearchMetricsPayload {
     aiRemediationModel: string;
     evaluationDataset: {
       description: string;
+      scope: string;
       sizeTarget: string;
+      groundTruthMethod: string;
     };
   };
-  userStudy: UserStudyStatus;
+  userStudy: UserStudyStatus & {
+    cohort: string;
+    instrument: string;
+  };
   references: Array<{
     id: string;
     authors: string;
     year: number;
     title: string;
     venue: string;
+    location?: string;
     pages?: string | null;
     volume?: string;
     url?: string;
+    accessedDate?: string;
     doi?: string | null;
   }>;
   researchQuestions: Array<{ id: string; text: string }>;

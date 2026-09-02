@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import SkeletonLoader from './SkeletonLoader';
 import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
@@ -54,6 +54,17 @@ export default function LiveDashboardContent() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
+
+  // Move focus to the error message when it appears, same pattern the auth pages already use --
+  // a screen-reader user landing on this page's error state needs to land on the reason, not stay
+  // silently on whatever had focus before the fetch failed. role="alert" below already announces
+  // it; this additionally makes it reachable for anyone tabbing/reviewing.
+  useEffect(() => {
+    if (error) {
+      errorRef.current?.focus();
+    }
+  }, [error]);
 
   const fetchDashboardData = useCallback(async () => {
     setLoading(true);
@@ -121,7 +132,8 @@ export default function LiveDashboardContent() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div role="status" aria-live="polite" aria-label="Loading dashboard data" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <span className="sr-only">Loading dashboard data…</span>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
           <SkeletonLoader height="90px" />
           <SkeletonLoader height="90px" />
@@ -142,6 +154,9 @@ export default function LiveDashboardContent() {
   if (error) {
     return (
       <div
+        ref={errorRef}
+        role="alert"
+        tabIndex={-1}
         className="glass-panel"
         style={{
           padding: '48px',
@@ -151,7 +166,7 @@ export default function LiveDashboardContent() {
           borderRadius: '16px',
         }}
       >
-        <span style={{ fontSize: '36px' }}>⚠️</span>
+        <span aria-hidden="true" style={{ fontSize: '36px' }}>⚠️</span>
         <h2 style={{ color: '#fca5a5', fontSize: '20px', fontWeight: 800, margin: '12px 0 6px 0' }}>
           Dashboard Loading Error
         </h2>
@@ -333,37 +348,53 @@ export default function LiveDashboardContent() {
             Parsed files across Single-Page Application targets
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
-                <span>⚛️ React JSX / TSX</span>
-                <span style={{ color: '#38bdf8' }}>{summary?.frameworkDistribution?.react || 10} Repos</span>
-              </div>
-              <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ width: '40%', height: '100%', background: 'linear-gradient(90deg, #38bdf8, #818cf8)', borderRadius: '4px' }} />
-              </div>
-            </div>
+          {(() => {
+            // Real counts only, honest zero when no data -- no artificial "|| 10" fallback that
+            // renders a plausible-looking number indistinguishable from a real one, and no
+            // hardcoded 40% bar width regardless of actual value (both previously present here;
+            // see research/audits/FIGM_PRE_DATA_COLLECTION_AUDIT.md's dashboard-fallback-masking
+            // finding). Bar width is now the real proportion of this framework within the three
+            // shown, so an all-zero state renders three empty bars, not three identical fake ones.
+            const reactCount = summary?.frameworkDistribution?.react ?? 0;
+            const nextjsCount = summary?.frameworkDistribution?.nextjs ?? 0;
+            const angularCount = summary?.frameworkDistribution?.angular ?? 0;
+            const total = Math.max(reactCount + nextjsCount + angularCount, 1);
+            const widthPct = (count: number) => `${Math.round((count / total) * 100)}%`;
 
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
-                <span>▲ Next.js App Router</span>
-                <span style={{ color: '#a855f7' }}>{summary?.frameworkDistribution?.nextjs || 10} Repos</span>
-              </div>
-              <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ width: '40%', height: '100%', background: 'linear-gradient(90deg, #a855f7, #c084fc)', borderRadius: '4px' }} />
-              </div>
-            </div>
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
+                    <span>⚛️ React JSX / TSX</span>
+                    <span style={{ color: '#38bdf8' }}>{reactCount} Repos</span>
+                  </div>
+                  <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ width: widthPct(reactCount), height: '100%', background: 'linear-gradient(90deg, #38bdf8, #818cf8)', borderRadius: '4px' }} />
+                  </div>
+                </div>
 
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
-                <span>🅰️ Angular Templates</span>
-                <span style={{ color: '#f43f5e' }}>{summary?.frameworkDistribution?.angular || 10} Repos</span>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
+                    <span>▲ Next.js App Router</span>
+                    <span style={{ color: '#a855f7' }}>{nextjsCount} Repos</span>
+                  </div>
+                  <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ width: widthPct(nextjsCount), height: '100%', background: 'linear-gradient(90deg, #a855f7, #c084fc)', borderRadius: '4px' }} />
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
+                    <span>🅰️ Angular Templates</span>
+                    <span style={{ color: '#f43f5e' }}>{angularCount} Repos</span>
+                  </div>
+                  <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ width: widthPct(angularCount), height: '100%', background: 'linear-gradient(90deg, #f43f5e, #fb7185)', borderRadius: '4px' }} />
+                  </div>
+                </div>
               </div>
-              <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ width: '40%', height: '100%', background: 'linear-gradient(90deg, #f43f5e, #fb7185)', borderRadius: '4px' }} />
-              </div>
-            </div>
-          </div>
+            );
+          })()}
         </div>
 
         {/* Activity Timeline Feed */}

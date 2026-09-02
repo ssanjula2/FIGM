@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { RuleExecutionEngine } from '../src/engine/rule-execution-engine.js';
-import { buildAngularTemplateRealSyntaxNodes } from '../src/ast/angular-template-ast-builder.js';
+import { buildAngularTemplateRealSyntaxNodes, getAngularTemplateParseErrors } from '../src/ast/angular-template-ast-builder.js';
 
 /**
  * Dedicated regression suite for the Angular template real-AST builder
@@ -218,15 +218,31 @@ test('Angular Template Real-AST Builder — scenario matrix (Phase 6)', async (t
     }
   });
 
-  await t.test('standalone raw template markup (no @Component wrapper) still resolves via the whole-file fallback', () => {
-    const nodes = buildAngularTemplateRealSyntaxNodes(`<div *ngFor="let item of items">{{ item.name }}</div>`);
+  await t.test('standalone raw template markup (no @Component wrapper) still resolves via the whole-file fallback, when the filename is genuinely .html', () => {
+    const nodes = buildAngularTemplateRealSyntaxNodes(`<div *ngFor="let item of items">{{ item.name }}</div>`, 'x.component.html');
     assert.ok(nodes.some((n) => n.attributes?.isNgForWithoutTrackBy === true));
   });
 
   await t.test('a component using only an external templateUrl (no inline template) yields no Angular-template nodes, not a crash', () => {
     const nodes = buildAngularTemplateRealSyntaxNodes(
-      `@Component({ selector: 'app-x', templateUrl: './x.component.html' })\nexport class X {}`
+      `@Component({ selector: 'app-x', templateUrl: './x.component.html' })\nexport class X {}`,
+      'x.component.ts'
     );
     assert.deepEqual(nodes, []);
+  });
+
+  // Regression guard (real-world defect confirmed via a fresh benchmark re-scan of
+  // angular-realworld-example-app: app.config.ts, user.service.ts, and similar plain .ts files
+  // with no @Component decorator and no inline template were previously fed to
+  // angular-html-parser IN FULL, which then misread ordinary TypeScript interface/object-literal
+  // braces as malformed Angular template/ICU syntax -- "Unexpected character EOF... unescaped {",
+  // "Invalid ICU message" -- on files containing zero template markup at all.)
+  await t.test('[regression] a plain .ts file with no @Component decorator and no inline template yields no nodes and no bogus parse errors', () => {
+    const code = `import { ApplicationConfig } from '@angular/core';\n\nexport interface ConduitDebug {\n  getToken: () => string | null;\n}\n\nexport const appConfig: ApplicationConfig = {\n  providers: [],\n};`;
+    const nodes = buildAngularTemplateRealSyntaxNodes(code, 'src/app/app.config.ts');
+    assert.deepEqual(nodes, [], 'a plain non-component .ts file must yield no Angular-template nodes');
+
+    const errors = getAngularTemplateParseErrors(code, 'src/app/app.config.ts');
+    assert.deepEqual(errors, [], 'a plain non-component .ts file must never report a bogus template parse error');
   });
 });

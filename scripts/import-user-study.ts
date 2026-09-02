@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../src/research/research-config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,6 +68,16 @@ export interface ProcessedUsabilityReport {
   exclusionLog: string[];
 }
 
+/**
+ * IMPORTANT (forensic-audit P0-C, "two independent numbering systems"): these `P001`-style ids
+ * identify a position in this CSV's valid-row order, assigned purely sequentially, "never the
+ * original timestamp/free-text fields" (see research/DATA_COLLECTION_PROTOCOL.md §3.4) -- by
+ * design, NOT cross-referenced against the live web app's own P001-style session codes (see
+ * src/engine/participant-repository.ts's PARTICIPANT_ID_PATTERN/TARGET_PARTICIPANT_COUNT doc
+ * comment for the other half of this). A "P002" here and a "P002" in the live admin scan-history
+ * dashboard are two different, uncorrelated identifiers that happen to share a visual format --
+ * never assume they refer to the same person anywhere downstream of this function's output.
+ */
 export function generateAnonymousParticipantIDs(validCount: number): string[] {
   if (validCount <= 0) return [];
   const ids: string[] = [];
@@ -159,7 +170,7 @@ export function processUserStudyPipeline(rawCSVPath?: string): ProcessedUsabilit
         datasetType: 'SYNTHETIC',
         isRealHumanData: false,
         collectionStatus: 'NOT_COLLECTED',
-        targetSampleSize: 85,
+        targetSampleSize: HUMAN_STUDY_TARGET_PARTICIPANTS,
         validParticipantCount: 0,
         targetReached: false,
         anonymizedParticipantIds: [],
@@ -194,7 +205,7 @@ export function processUserStudyPipeline(rawCSVPath?: string): ProcessedUsabilit
         datasetType: 'SYNTHETIC',
         isRealHumanData: false,
         collectionStatus: 'NOT_COLLECTED',
-        targetSampleSize: 85,
+        targetSampleSize: HUMAN_STUDY_TARGET_PARTICIPANTS,
         validParticipantCount: 0,
         targetReached: false,
         anonymizedParticipantIds: [],
@@ -294,7 +305,7 @@ export function processUserStudyPipeline(rawCSVPath?: string): ProcessedUsabilit
         datasetType: 'SYNTHETIC',
         isRealHumanData: false,
         collectionStatus: 'NOT_COLLECTED',
-        targetSampleSize: 85,
+        targetSampleSize: HUMAN_STUDY_TARGET_PARTICIPANTS,
         validParticipantCount: 0,
         targetReached: false,
         anonymizedParticipantIds: [],
@@ -338,9 +349,9 @@ export function processUserStudyPipeline(rawCSVPath?: string): ProcessedUsabilit
       datasetType: 'REAL_HUMAN_DATA',
       isRealHumanData: true,
       collectionStatus: 'COLLECTED',
-      targetSampleSize: 85,
+      targetSampleSize: HUMAN_STUDY_TARGET_PARTICIPANTS,
       validParticipantCount: validCount,
-      targetReached: validCount >= 85,
+      targetReached: validCount >= HUMAN_STUDY_TARGET_PARTICIPANTS,
       anonymizedParticipantIds: generateAnonymousParticipantIDs(validCount),
       totalResponsesIngested: dataRows.length,
       excludedResponsesCount: excludedCount,

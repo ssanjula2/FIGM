@@ -3,8 +3,22 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { RuleExecutionEngine, ScanResult } from '../../../src/engine/rule-execution-engine';
 import { ReportGenerator } from '../../../src/reporter/report-generator';
+import { authenticateUser } from '../../../src/auth/auth-middleware';
+import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 
 export async function GET(request: Request) {
+  const auth = authenticateUser(request);
+  if (auth.errorResponse || !auth.user) {
+    return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // When figm-scan-report.json is absent, the fallback path below recursively walks and runs the
+  // full FIGM analysis engine over every file in samples/sample-spa on EVERY request -- genuinely
+  // expensive, repeatable compute an authenticated account could otherwise hammer for free. Same
+  // checkRateLimit/getClientIp pattern used by every other compute/write-heavy auth route.
+  const rateLimitError = await checkRateLimit(getClientIp(request), 10, 60000);
+  if (rateLimitError) return rateLimitError;
+
   try {
     const { searchParams } = new URL(request.url);
     const format = searchParams.get('format');
@@ -29,7 +43,9 @@ export async function GET(request: Request) {
       for (const file of files) {
         const relativePath = path.relative(sampleDir, file);
         const code = fs.readFileSync(file, 'utf-8');
-        results.push(RuleExecutionEngine.analyzeFile(relativePath, code));
+        // Async variant: this route runs on the live web server -- see
+        // RuleExecutionEngine.analyzeFileAsync's doc comment.
+        results.push(await RuleExecutionEngine.analyzeFileAsync(relativePath, code));
       }
     }
 

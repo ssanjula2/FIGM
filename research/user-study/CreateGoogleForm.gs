@@ -5,7 +5,9 @@
  * Institution: NSBM Green University
  * Candidate: A P H D S Sanjula (Student ID: 28256)
  * Module: IS303.2 Research Methodology Repeat Coursework 2025
- * Target Sample Size: 85 Valid Real Human Participants
+ * Target Sample Size: 20 Valid Real Human Participants (revised from an earlier 85-participant
+ *   target per the supervisor's latest instruction; see
+ *   research/audits/FIGM_PRE_DATA_COLLECTION_AUDIT.md Section 3)
  * 
  * INSTRUCTIONS:
  * 1. Open https://script.google.com/ in your browser while logged into your Google account.
@@ -40,7 +42,7 @@ function createFIGMUserStudyForm() {
   form.setRequireLogin(true);
 
   // Link Destination Spreadsheet
-  const ss = SpreadsheetApp.create("FIGM User Study — Responses (Target N=85)");
+  const ss = SpreadsheetApp.create("FIGM User Study — Responses (Target N=20)");
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
 
   // SECTION 1 — Participant Information & Consent

@@ -23,6 +23,36 @@ function read(relativePath: string): string {
   return fs.readFileSync(path.resolve(process.cwd(), relativePath), 'utf-8');
 }
 
+/**
+ * Every password field across the app renders through the shared <PasswordField> component
+ * (app/components/PasswordField.tsx) rather than a raw <input>, so its label/id/aria-label
+ * markup lives in that one file, not duplicated per page -- a page's own source no longer
+ * contains a literal `htmlFor="..."` for a password field. The dedicated structural test below
+ * verifies PasswordField.tsx itself correctly associates its label with its input; this helper
+ * lets each page-level test count `<PasswordField id="...">` usages as real labeled fields
+ * (by the `id` prop that becomes that component's own `htmlFor`/input `id`) instead of expecting
+ * to find that markup literally in the page.
+ */
+function extractPasswordFieldIds(src: string): string[] {
+  const ids: string[] = [];
+  const re = /<PasswordField\b([\s\S]*?)\/>/g;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(src))) {
+    const idMatch = match[1].match(/\sid="([^"]+)"/);
+    if (idMatch) ids.push(idMatch[1]);
+  }
+  return ids;
+}
+
+test('app/components/PasswordField.tsx correctly associates its label and aria-label with its input', () => {
+  const src = read('app/components/PasswordField.tsx');
+  assert.match(src, /htmlFor=\{id\}/, 'the built-in label must be associated to the input via the same `id` prop');
+  assert.match(src, /\bid=\{id\}\s/, 'the input must expose that same `id` prop');
+  assert.match(src, /aria-label=\{label\}/, 'the input must always carry an aria-label (belt-and-suspenders even when a visible <label> is also rendered, and the only accessible name when hideLabel is set)');
+  assert.match(src, /!hideLabel/, 'the visible <label> must be conditionally suppressible via hideLabel, for designs that never had one');
+  assert.match(src, /type=\{visible \? 'text' : 'password'\}/, 'must render as a real password input by default, toggling to text only when revealed');
+});
+
 test('Accessibility regression: app/login/page.tsx redirects to the canonical /auth/login', async (t) => {
   // /login was a duplicate of /auth/login (different implementation -- plain localStorage token
   // storage instead of the httpOnly cookie the rest of the app relies on, and no real logout
@@ -38,19 +68,32 @@ test('Accessibility regression: app/login/page.tsx redirects to the canonical /a
 
 for (const [routeLabel, filePath, expectedLabeledFields] of [
   ['app/auth/login/page.tsx', 'app/auth/login/page.tsx', 2],
-  ['app/auth/register/page.tsx', 'app/auth/register/page.tsx', 4],
+  // Was 4 before app/auth/register/page.tsx gained a required Confirm Password field (password
+  // policy hardening) -- fullName, email, role, password, confirm password.
+  ['app/auth/register/page.tsx', 'app/auth/register/page.tsx', 5],
 ] as const) {
   test(`Accessibility regression: ${routeLabel} (canonical auth page)`, async (t) => {
     const src = read(filePath);
 
     await t.test('every label has a matching htmlFor/id pair (unique IDs, real association)', () => {
-      const labelFors = [...src.matchAll(/htmlFor="([^"]+)"/g)].map((m) => m[1]);
-      const inputIds = [...src.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
-      assert.equal(labelFors.length, expectedLabeledFields, `expected ${expectedLabeledFields} labeled fields, found ${labelFors.length}`);
+      // A <PasswordField id="..."> call site is itself a JSX prop that textually looks just like a
+      // real DOM `id="..."` attribute -- stripped out first so it isn't double-counted once here
+      // (as a generic id) and again via extractPasswordFieldIds below.
+      const srcWithoutPasswordFields = src.replace(/<PasswordField\b[\s\S]*?\/>/g, '');
+      const labelFors = [...srcWithoutPasswordFields.matchAll(/htmlFor="([^"]+)"/g)].map((m) => m[1]);
+      const inputIds = [...srcWithoutPasswordFields.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+      const passwordFieldIds = extractPasswordFieldIds(src);
+      const totalLabeledFields = labelFors.length + passwordFieldIds.length;
+      assert.equal(
+        totalLabeledFields,
+        expectedLabeledFields,
+        `expected ${expectedLabeledFields} labeled fields, found ${totalLabeledFields} (${labelFors.length} native + ${passwordFieldIds.length} PasswordField)`
+      );
       for (const forId of labelFors) {
         assert.ok(inputIds.includes(forId), `label htmlFor="${forId}" has no matching input id="${forId}"`);
       }
-      assert.equal(new Set(inputIds).size, inputIds.length, 'input ids must be unique');
+      const allIds = [...inputIds, ...passwordFieldIds];
+      assert.equal(new Set(allIds).size, allIds.length, 'input ids must be unique');
     });
 
     await t.test('the error message is announced (role="alert") and focus-manageable', () => {
@@ -216,5 +259,126 @@ test('Accessibility regression: theme control honesty', async (t) => {
 
   await t.test('the settings page is explicit that only Dark Glass is currently implemented', () => {
     assert.match(src, /not implemented yet/i);
+  });
+});
+
+test('Accessibility regression: Cmd+K search modal has a real keyboard focus trap', async (t) => {
+  const src = read('app/HeaderBar.tsx');
+
+  await t.test('the dialog and its input/trigger are ref-tracked (required for a trap and focus restoration)', () => {
+    assert.match(src, /searchDialogRef/, 'the dialog element must be ref-tracked so Tab/Shift+Tab can be bounded to its own focusable elements');
+    assert.match(src, /searchInputRef/, 'the input must be ref-tracked so focus can move into the dialog programmatically on open');
+    assert.match(src, /searchTriggerRef/, 'the trigger must be ref-tracked so focus can return to it on close');
+  });
+
+  await t.test('Tab/Shift+Tab wraps within the dialog instead of escaping to the page behind it', () => {
+    assert.match(src, /e\.key !== 'Tab'/, 'a Tab handler must exist alongside the Escape handler');
+    assert.match(src, /shiftKey && document\.activeElement === first/, 'Shift+Tab from the first focusable element must wrap to the last');
+    assert.match(src, /!e\.shiftKey && document\.activeElement === last/, 'Tab from the last focusable element must wrap to the first');
+  });
+
+  await t.test('closing the modal (by any path) returns focus to the search trigger', () => {
+    // The ref is captured into a local variable at effect-open time and that variable is what's
+    // called in cleanup (not a live re-read of searchTriggerRef.current) -- an ESLint
+    // react-hooks/exhaustive-deps fix for the same stale-ref-in-cleanup class of bug, functionally
+    // equivalent for this always-mounted trigger element.
+    assert.match(src, /const triggerEl = searchTriggerRef\.current/, 'the trigger ref must be captured before the dialog opens');
+    assert.match(src, /triggerEl\?\.focus\(\)/, 'focus must be restored to the captured trigger element when the modal closes, not left on a removed element');
+  });
+});
+
+test('Accessibility regression: Monaco live-scan editor has an accessible name', async (t) => {
+  const src = read('app/live-scan/page.tsx');
+
+  await t.test('the editor options include a real ariaLabel (the only supported way to name Monaco\'s internal input for screen readers)', () => {
+    assert.match(src, /ariaLabel:\s*['"]/, 'Monaco renders its own hidden textarea as the actual focusable element -- a wrapping <div aria-label> has no effect on it, only the editor\'s own `ariaLabel` option does');
+  });
+});
+
+test('Regression: the application requires authentication before showing the product', async (t) => {
+  await t.test('middleware.ts no longer treats "/" as a public path', () => {
+    const src = read('middleware.ts');
+    assert.equal(
+      /path === '\/'\s*\|\|/.test(src),
+      false,
+      '"/" must not be listed as a public path -- an unauthenticated visitor to the homepage must be redirected to /auth/login, not shown the app'
+    );
+    assert.match(src, /matcher: \['\/\(\(\?!/, 'the middleware matcher must be a negative (catch-all-except-static-assets) pattern, not a hand-maintained allow-list of protected routes -- the latter is exactly the gap that let most of the app render unauthenticated before this fix');
+  });
+
+  await t.test('AppShell renders the auth pages standalone, without the authenticated app\'s Sidebar/HeaderBar chrome', () => {
+    const src = read('app/AppShell.tsx');
+    assert.match(src, /isBareRoute/, 'AppShell must render public/pre-auth routes without the app chrome around them');
+    assert.match(src, /pathname\.startsWith\('\/auth\/'\)/);
+  });
+
+  await t.test('the homepage renders the authenticated dashboard, not a public landing page', () => {
+    const src = read('app/page.tsx');
+    assert.match(src, /LiveDashboardContent/);
+    assert.equal(/HeroSection/.test(src), false, 'the public landing/marketing content must not be shown at "/" -- it now lives at the public /about route');
+  });
+});
+
+test('Accessibility regression: app/profile/page.tsx (user profile)', async (t) => {
+  const src = read('app/profile/page.tsx');
+
+  await t.test('has exactly one top-level heading (h1) -- the account-name heading is an h2, not a second h1', () => {
+    const h1Count = (src.match(/<h1[\s>]/g) || []).length;
+    assert.equal(h1Count, 1, 'exactly one <h1> ("My Profile") -- the fullName heading below it must be an <h2>');
+    assert.match(src, /<h2[^>]*>\s*\{user\.fullName\}/, 'the account-name heading must be an <h2>, a subsection of the page\'s single <h1>');
+  });
+
+  await t.test('has the required page title and subtitle text', () => {
+    assert.match(src, /My Profile/, 'page must have a literal "My Profile" title');
+    assert.match(src, /Manage your personal account and activity\./, 'page must have the required subtitle');
+  });
+
+  await t.test('password fields and the API key field use real label/input association (htmlFor/id), not just visually-adjacent text', () => {
+    const srcWithoutPasswordFields = src.replace(/<PasswordField\b[\s\S]*?\/>/g, '');
+    const labelFors = [...srcWithoutPasswordFields.matchAll(/htmlFor="([^"]+)"/g)].map((m) => m[1]);
+    const inputIds = [...srcWithoutPasswordFields.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+    const passwordFieldIds = extractPasswordFieldIds(src);
+    const totalLabeledFields = labelFors.length + passwordFieldIds.length;
+    assert.ok(
+      totalLabeledFields >= 5,
+      `expected at least 5 labeled fields (3 password via PasswordField + api key + theme), found ${totalLabeledFields}`
+    );
+    for (const forId of labelFors) {
+      assert.ok(inputIds.includes(forId), `label htmlFor="${forId}" has no matching input/select id="${forId}"`);
+    }
+    const allIds = [...inputIds, ...passwordFieldIds];
+    assert.equal(new Set(allIds).size, allIds.length, 'field ids must be unique');
+  });
+
+  await t.test('the delete-account confirmation has real dialog semantics: role, aria-modal, labelledby, focus trap, Escape-to-close, focus restoration', () => {
+    assert.match(src, /role="dialog"/, 'the delete confirmation must be a real dialog, not an unlabeled positioned <div>');
+    assert.match(src, /aria-modal="true"/);
+    assert.match(src, /aria-labelledby="delete-account-modal-title"/);
+    assert.match(src, /id="delete-account-modal-title"/, 'the referenced labelledby id must exist on the actual heading');
+    assert.match(src, /e\.key === 'Escape'/, 'Escape must close the modal');
+    assert.match(src, /deleteCancelRef\.current\?\.focus\(\)/, 'focus must move into the dialog (the Cancel button) when it opens');
+    assert.match(src, /const triggerEl = deleteTriggerRef\.current/, 'the trigger ref must be captured at effect-run time, not read from inside the cleanup closure (stale-ref bug)');
+    assert.match(src, /triggerEl\?\.focus\(\)/, 'focus must return to the trigger button when the dialog closes');
+  });
+});
+
+test('Accessibility regression: app/admin/profile/page.tsx (admin profile)', async (t) => {
+  const src = read('app/admin/profile/page.tsx');
+
+  await t.test('has exactly one top-level heading (h1) -- the account-name heading is an h2, not a second h1', () => {
+    const h1Count = (src.match(/<h1[\s>]/g) || []).length;
+    assert.equal(h1Count, 1, 'exactly one <h1> ("Admin Profile") -- the fullName heading below it must be an <h2>');
+    assert.match(src, /<h2[^>]*>\{user\.fullName\}/, 'the account-name heading must be an <h2>, a subsection of the page\'s single <h1>');
+  });
+
+  await t.test('has the required page title and subtitle text', () => {
+    assert.match(src, /Admin Profile/, 'page must have a literal "Admin Profile" title');
+    assert.match(src, /Manage your administrative account and security\./, 'page must have the required subtitle');
+  });
+
+  await t.test('the password-change fields keep their existing label association (now via the shared PasswordField component, which always carries an aria-label -- see its own dedicated structural test)', () => {
+    const labels = (src.match(/label="(Current|New|Confirm new) password"/g) || []).length;
+    assert.equal(labels, 3, 'all three password fields must be PasswordField usages naming them "Current/New/Confirm new password"');
+    assert.match(src, /import PasswordField from/, 'must use the shared PasswordField component, not a raw <input type="password">');
   });
 });

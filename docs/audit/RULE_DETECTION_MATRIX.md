@@ -1,5 +1,17 @@
 # FIGM Code Inspector — Phase 3 Rule Detection Matrix
 
+> **STALE-SCOPE NOTICE (added 2026-09-02, not a rewrite of the matrix below):** this document and
+> its backing test (`tests/rule-detection-matrix.test.ts`) cover the **original 25 rules only**. The
+> canonical FIGM rule set has since grown to **50 rules** (`figm-spec.json`'s `meta.totalCoreRules`),
+> including a later "Group 4" migration (`docs/architecture/RULE_ENGINEERING_AUDIT.md`) and further
+> framework-specific rule additions. **There is no equivalent doc-level real-fixture TP/TN proof for
+> the 25 rules added after this document was written** — this is a genuine gap, not an oversight to
+> paper over: ground-truth/proof coverage for the rule set as a whole should be read as 25/50 (50%)
+> at the doc level, separate from (and not to be conflated with) whatever fraction of the 50-rule
+> benchmark testbed (`benchmarks/testbed/`, `benchmarks/ground-truth.json`) has fixture coverage.
+> Everything below this notice remains accurate for the 25 rules it actually documents; it is not
+> a current claim about the full 50-rule set.
+
 **Date**: 2026-08-13 (rewritten — the prior version of this document was not backed by real fixture execution and is superseded; see "What changed" below)
 **Method**: `tests/rule-detection-matrix.test.ts` — a real positive (should-fire) AND negative (should-NOT-fire) fixture for every one of the 25 rules, executed against the real `SourceParser` + `ASTDetectionEngine` (the same pipeline `RuleExecutionEngine.analyzeFile` uses in production). 51/51 assertions pass (`npm test`, or standalone: `node --import tsx --test tests/rule-detection-matrix.test.ts`). Positive fixtures are shared with, and kept in sync with, `tests/ast-detection-rules.test.ts`.
 **Rule ID source of truth**: directly read from `src/ast/ast-detection-engine.ts`'s `evaluateNode` method and its 25 private `eval*` predicates — not from any prior doc or narrative.
@@ -50,6 +62,27 @@ Per the explicit brief instruction not to trust pre-existing audit documents, no
 | FIGM-ANG-05 | ANGULAR | Direct `nativeElement.style...` mutation | Same change via `this.renderer.setStyle(...)` | ✅ | ✅ | PASS |
 
 **25/25 rules**: real positive fixture fires the rule, real negative fixture does not. 51/51 test assertions pass (50 TP/TN + 1 structural "exactly 25 real rule IDs, no duplicates" check).
+
+## Addendum: FIGM-ANG-06..10 (Phase 2, AST/Rule Coverage Gaps)
+
+Closes part of the doc-level gap the STALE-SCOPE NOTICE above discloses, for the 5 Angular rules
+added after this document's original 25-rule scope. Not a rewrite of the table above (which stays
+historically accurate for the 25 rules it documents) — a real, currently-passing, execution-backed
+addition for the rules this specific category (`ANGULAR`) grew by. **Method**: real positive +
+negative fixtures already present in `tests/expansion-rules.test.ts` (FIGM-ANG-06) and
+`tests/expansion-2-rules.test.ts` (FIGM-ANG-07..10), executed against the same real `SourceParser`
++ `ASTDetectionEngine` pipeline as the table above — verified passing directly for this addendum,
+not assumed from prior claims.
+
+| Rule ID | Category | Positive (TP) fixture | Negative (TN) fixture | TP | TN | sourceKind | Backing test |
+|---|---|---|---|:---:|:---:|:---:|---|
+| FIGM-ANG-06 | ANGULAR | `@Pipe({ pure: false })` | `@Pipe({...})` (pure by default) | ✅ | ✅ | LEGACY_TEXT_HEURISTIC | `tests/expansion-rules.test.ts` |
+| FIGM-ANG-07 | ANGULAR | Service call directly in the constructor body | Constructor only assigns injected fields | ✅ | ✅ | LEGACY_TEXT_HEURISTIC | `tests/expansion-2-rules.test.ts` |
+| FIGM-ANG-08 | ANGULAR | `@for (...; track $index)` / `track <loopVar>` | `@for (...; track item.id)` (stable) | ✅ | ✅ | **REAL_AST** (`angular-html-parser`) | `tests/expansion-2-rules.test.ts` |
+| FIGM-ANG-09 | ANGULAR | `input()`/`model()` property missing `readonly` | Same property declared `readonly` | ✅ | ✅ | REAL_AST (TS compiler, class body) | `tests/expansion-2-rules.test.ts` |
+| FIGM-ANG-10 | ANGULAR | Same observable piped through `\| async` twice in one template | Piped once, or two different observables each piped once | ✅ | ✅ | **REAL_AST** (`angular-html-parser`) | `tests/expansion-2-rules.test.ts` |
+
+**30/30 (25 original + 5 above) Angular-category-relevant rules now have a doc-level, execution-backed TP/TN proof.** ANG-01..05, ANG-08, ANG-09, ANG-10 all report `REAL_AST`; ANG-06/07 remain `LEGACY_TEXT_HEURISTIC` (framework-agnostic decorator/constructor-body text checks — real-AST migration for these two was not part of this addendum's scope). The remaining 20 non-Angular post-25-rule additions (PERF-05/06 already covered above as originally-25; NEXT-05/06, REACT-05..11, A11Y-07, VUE-01..06, and others) are still the STALE-SCOPE NOTICE's open gap and are not addressed by this addendum.
 
 ## What this matrix does NOT claim
 

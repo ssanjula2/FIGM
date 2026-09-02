@@ -1,5 +1,18 @@
 # FIGM AST Migration Report
 
+> **STALE -- SUPERSEDED, updated 2026-08-24 (forensic-audit closure pass).** This report documents
+> the state after Groups 1-3 + Phase 5 only ("15 of 25" below), which was already superseded by a
+> later Group 4 migration pass (+7 more rules) that this document was never updated to reflect --
+> flagged as an open action item by a prior audit and left unfixed for 3 days, then independently
+> re-flagged as still-open by the 2026-08-24 forensic audit. **The current, correct, verified figure
+> is 23 of 25 rules with a genuine real-AST path for at least one supported framework** (FIGM-ANG-03
+> and FIGM-ANG-04 are the only two rules with no real-AST path for any framework; Vue SFC files
+> remain 100% legacy-heuristic for every rule). See `docs/architecture/RULE_ENGINEERING_AUDIT.md`
+> (§ "23/25 rules are real-AST for their eligible frameworks (up from 16/25 before this pass)") for
+> the current, internally-consistent source of truth. The body below is preserved unedited as an
+> accurate historical record of the Groups 1-3 + Phase 5 pass specifically -- do not read "15 of 25"
+> or "10 of 25 remain legacy" anywhere below as the current state.
+
 **Scope of this pass:** Group 1 (priority list, 8 rules), Group 2 (Angular class-body rules), Group 3 (Next.js rules), and Phase 5 (FIGM-REACT-02 relocated onto the shared parser abstraction). See `docs/architecture/AST_MIGRATION_MAP.md` for the Phase 1 design document written *before* any of this code was changed, and for the rules deliberately deferred to a future pass.
 
 ---

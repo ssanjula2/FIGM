@@ -1,0 +1,525 @@
+{
+  "name": "angular-tour-of-heroes",
+  "url": "https://github.com/johnpapa/angular-tour-of-heroes.git",
+  "commit": "c65967710e8b1b87c0e6a4f19eea2b5f54e7c50e",
+  "primaryFrameworkLabel": "Angular",
+  "filesScanned": 21,
+  "totalLOC": 609,
+  "scanDurationMs": 1932.5782,
+  "totalFigmFindings": 12,
+  "findingsByRule": {
+    "FIGM-ANG-02": 5,
+    "FIGM-ANG-01": 5,
+    "FIGM-PERF-04": 2
+  },
+  "findingsBySeverity": {
+    "HIGH": 5,
+    "CRITICAL": 5,
+    "MEDIUM": 2
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 14,
+    "ANGULAR_TEMPLATE": 7
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "e2e/app.e2e-spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "e2e/app.po.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "karma.conf.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "protractor.conf.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app-routing.module.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 19,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.module.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/dashboard.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 30,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/hero-detail.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 49,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/hero-search.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 58,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/hero-search.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 23,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/hero.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 68,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/hero.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 5,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/heroes.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 64,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/in-memory-data.service.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/environments/environment.prod.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 4,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/environments/environment.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/main.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 12,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/polyfills.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 68,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/test.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/typings.d.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/app.component.ts",
+      "location": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 15,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 3",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/dashboard.component.ts",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/dashboard.component.ts",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 4
+        },
+        "end": {
+          "line": 22,
+          "column": 60
+        }
+      },
+      "offendingCodeSnippet": "this.heroService.getHeroes()",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/hero-detail.component.ts",
+      "location": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/hero-detail.component.ts",
+      "location": {
+        "start": {
+          "line": 27,
+          "column": 8
+        },
+        "end": {
+          "line": 27,
+          "column": 74
+        }
+      },
+      "offendingCodeSnippet": "this.heroService.getHero(id).subscribe(hero => (this.hero = hero));",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 27",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/hero-detail.component.ts",
+      "location": {
+        "start": {
+          "line": 36,
+          "column": 4
+        },
+        "end": {
+          "line": 39,
+          "column": 37
+        }
+      },
+      "offendingCodeSnippet": "this.heroService.save(this.hero).subscribe(hero => {",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 36",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/hero-search.component.ts",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/heroes.component.ts",
+      "location": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/heroes.component.ts",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 4
+        },
+        "end": {
+          "line": 26,
+          "column": 7
+        }
+      },
+      "offendingCodeSnippet": "this.heroService",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/heroes.component.ts",
+      "location": {
+        "start": {
+          "line": 43,
+          "column": 4
+        },
+        "end": {
+          "line": 48,
+          "column": 37
+        }
+      },
+      "offendingCodeSnippet": "this.heroService.delete(hero).subscribe(res => {",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 43",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/main.ts",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 47
+        }
+      },
+      "offendingCodeSnippet": "import { enableProdMode } from '@angular/core';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/main.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 57
+        }
+      },
+      "offendingCodeSnippet": "import { environment } from './environments/environment';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

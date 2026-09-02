@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-09-02T22:45:14.851Z",
+  "engineVersion": "FIGM-Core-v2 (see figm-spec.json meta.version)",
+  "scriptSourceOfTruth": "benchmarks/real-world/run-real-world-benchmark.ts (REPOS array)",
+  "reproduceCommand": "node --import tsx benchmarks/real-world/run-real-world-benchmark.ts",
+  "summaryArtifactCommand": "node --import tsx benchmarks/real-world/generate-corpus-summary.ts",
+  "totalRepositories": 21,
+  "primaryFrameworkRepoCount": 15,
+  "totalFilesDiscovered": 2512,
+  "totalFilesAnalyzed": 2512,
+  "totalParseErrorFiles": 117,
+  "totalEngineCrashes": 0,
+  "totalFindings": 2649
+}

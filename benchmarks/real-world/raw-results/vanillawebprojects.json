@@ -5,16 +5,15 @@
   "primaryFrameworkLabel": "Generic JavaScript",
   "filesScanned": 21,
   "totalLOC": 2259,
-  "scanDurationMs": 1719.0570000000007,
-  "totalFigmFindings": 81,
+  "scanDurationMs": 1844.5381000000016,
+  "totalFigmFindings": 70,
   "findingsByRule": {
     "FIGM-PERF-03": 69,
-    "FIGM-REACT-01": 11,
     "FIGM-PERF-02": 1
   },
   "findingsBySeverity": {
     "CRITICAL": 69,
-    "HIGH": 12
+    "HIGH": 1
   },
   "frameworksDetected": {
     "GENERIC_ESTREE": 21
@@ -45,7 +44,7 @@
       "relativePath": "dom-array-methods/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 97,
-      "figmFindingCount": 8,
+      "figmFindingCount": 5,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -61,7 +60,7 @@
       "relativePath": "expense-tracker/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 121,
-      "figmFindingCount": 7,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -149,7 +148,7 @@
       "relativePath": "product-filtering/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 181,
-      "figmFindingCount": 4,
+      "figmFindingCount": 3,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -165,7 +164,7 @@
       "relativePath": "sortable-list/script.js",
       "framework": "GENERIC_ESTREE",
       "loc": 119,
-      "figmFindingCount": 7,
+      "figmFindingCount": 6,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -218,7 +217,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 235"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 235",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -243,7 +244,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 236"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 236",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -268,7 +271,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 239"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 239",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -293,7 +298,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 240"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 240",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -318,7 +325,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 56"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 56",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -343,7 +352,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 57"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 57",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -368,7 +379,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 58"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 58",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -393,7 +406,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 59"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 59",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -418,7 +433,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 61"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 61",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -443,7 +460,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 63"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 63",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -468,82 +487,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 65"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "dom-array-methods/script.js",
-      "location": {
-        "start": {
-          "line": 41,
-          "column": 2
-        },
-        "end": {
-          "line": 41,
-          "column": 40
-        }
-      },
-      "offendingCodeSnippet": "data.sort((a, b) => b.money - a.money);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 41"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "dom-array-methods/script.js",
-      "location": {
-        "start": {
-          "line": 48,
-          "column": 9
-        },
-        "end": {
-          "line": 48,
-          "column": 50
-        }
-      },
-      "offendingCodeSnippet": "data = data.filter(user => user.money > 1000000);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 48"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "dom-array-methods/script.js",
-      "location": {
-        "start": {
-          "line": 55,
-          "column": 17
-        },
-        "end": {
-          "line": 55,
-          "column": 67
-        }
-      },
-      "offendingCodeSnippet": "const wealth = data.reduce((acc, user) => (acc += user.money), 0);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 55"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 65",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -568,7 +514,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 92"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 92",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -593,7 +541,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 93"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 93",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -618,7 +568,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 94"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 94",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -643,7 +595,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 95"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 95",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -668,7 +622,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 96"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 96",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -693,7 +649,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 23"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 23",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -718,7 +676,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 24"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 24",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -743,7 +703,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 25"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 25",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -768,7 +730,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 26"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 26",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -793,157 +757,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 28"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 79,
-          "column": 16
-        },
-        "end": {
-          "line": 79,
-          "column": 63
-        }
-      },
-      "offendingCodeSnippet": "const total = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 79"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 81,
-          "column": 17
-        },
-        "end": {
-          "line": 83,
-          "column": 44
-        }
-      },
-      "offendingCodeSnippet": "const income = amounts",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 81"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 81,
-          "column": 17
-        },
-        "end": {
-          "line": 82,
-          "column": 29
-        }
-      },
-      "offendingCodeSnippet": "const income = amounts",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 81"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 87,
-          "column": 4
-        },
-        "end": {
-          "line": 87,
-          "column": 76
-        }
-      },
-      "offendingCodeSnippet": "amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) *",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 87"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 87,
-          "column": 4
-        },
-        "end": {
-          "line": 87,
-          "column": 36
-        }
-      },
-      "offendingCodeSnippet": "amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) *",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 87"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "expense-tracker/script.js",
-      "location": {
-        "start": {
-          "line": 98,
-          "column": 17
-        },
-        "end": {
-          "line": 98,
-          "column": 74
-        }
-      },
-      "offendingCodeSnippet": "transactions = transactions.filter(transaction => transaction.id !== id);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 98"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 28",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -968,7 +784,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 120"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 120",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -993,7 +811,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 76"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 76",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1018,7 +838,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 85"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 85",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1043,7 +865,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 112"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 112",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1068,7 +892,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 72"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 72",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1093,7 +919,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 80"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 80",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1118,7 +946,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 77"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 77",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1143,7 +973,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 90"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 90",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-02",
@@ -1168,7 +1000,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 92,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 33"
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 33",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1193,7 +1027,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 110"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 110",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1218,7 +1054,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 111"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 111",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1243,7 +1081,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 113"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 113",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1268,7 +1108,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 66"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 66",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1293,7 +1135,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 98"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 98",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1318,7 +1162,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 113"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 113",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1343,7 +1189,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 128"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 128",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1368,7 +1216,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 130"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 130",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1393,7 +1243,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 133"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 133",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1418,7 +1270,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 153"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 153",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1443,7 +1297,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 53"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 53",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1468,7 +1324,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 60"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 60",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1493,7 +1351,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 154"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 154",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1518,7 +1378,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 165"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 165",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1543,7 +1405,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 166"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 166",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1568,7 +1432,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 169"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 169",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1593,7 +1459,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 172"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 172",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1618,7 +1486,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 175"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 175",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1643,7 +1513,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 178"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 178",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1668,7 +1540,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 98"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 98",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1693,7 +1567,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 99"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 99",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1718,57 +1594,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 123"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "product-filtering/script.js",
-      "location": {
-        "start": {
-          "line": 159,
-          "column": 28
-        },
-        "end": {
-          "line": 160,
-          "column": 37
-        }
-      },
-      "offendingCodeSnippet": "const checkedCategories = Array.from(checkEls)",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 159"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "sortable-list/script.js",
-      "location": {
-        "start": {
-          "line": 26,
-          "column": 2
-        },
-        "end": {
-          "line": 28,
-          "column": 36
-        }
-      },
-      "offendingCodeSnippet": "[...richestPeople]",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 26"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 123",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1793,7 +1621,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 107"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 107",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1818,7 +1648,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 111"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 111",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1843,7 +1675,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 112"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 112",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1868,7 +1702,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 113"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 113",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1893,7 +1729,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 114"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 114",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1918,7 +1756,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 118"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 118",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1943,7 +1783,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 67"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 67",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1968,7 +1810,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 70"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 70",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -1993,7 +1837,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 72"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 72",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2018,7 +1864,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 74"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 74",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2043,7 +1891,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 121"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 121",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2068,7 +1918,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 124"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 124",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2093,7 +1945,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 129"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 129",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2118,7 +1972,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 134"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 134",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2143,7 +1999,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 137"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 137",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2168,7 +2026,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 107"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 107",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2193,7 +2053,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 130"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 130",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-03",
@@ -2218,7 +2080,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 98,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 133"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 133",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     }
   ]
 }

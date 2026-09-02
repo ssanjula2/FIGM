@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { processUserStudyPipeline } from '../scripts/import-user-study.js';
+import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../src/research/research-config.js';
 
 /**
  * Canonical real-study data flow regression guard.
@@ -48,8 +49,10 @@ test('processUserStudyPipeline reports honest N=0 when no real CSV exists (curre
   assert.equal(report.provenance.validParticipantCount, 0);
   assert.equal(report.provenance.anonymizedParticipantIds.length, 0);
   // Planned sample size stays a distinct, separate field from actual collected count -- never
-  // conflated into a nonzero N just because a target exists.
-  assert.equal(report.provenance.targetSampleSize, 85);
+  // conflated into a nonzero N just because a target exists. Sourced from the single canonical
+  // constant (src/research/research-config.ts), not a hardcoded literal here -- see
+  // tests/anti-hardcoding-guard.test.ts for the dedicated single-source-of-truth regression guard.
+  assert.equal(report.provenance.targetSampleSize, HUMAN_STUDY_TARGET_PARTICIPANTS);
   assert.notEqual(report.provenance.validParticipantCount, report.provenance.targetSampleSize);
 });
 

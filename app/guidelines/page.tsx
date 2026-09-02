@@ -12,7 +12,7 @@ import type { FrameworkType } from '../../src/types/ast-spec';
  * drift out of sync with the engine on those fields. What remains hand-authored below is purely
  * supplementary teaching content (the "why it matters" prose and per-framework implementation
  * tips) that has no equivalent in the engine's data model; tests/rule-catalog-consistency.test.ts
- * asserts every one of the 25 canonical rule IDs has an entry here.
+ * asserts every one of the 50 canonical rule IDs has an entry here.
  */
 interface FrameworkTip {
   framework: 'Next.js' | 'React' | 'Angular' | 'Vue' | 'JS/TS';
@@ -263,6 +263,181 @@ const RULE_UI_CONTENT: Record<string, RuleUiContent> = {
     standard: 'Angular Security & SSR Abstraction Guidelines',
     tips: [{ framework: 'Angular', tip: 'Use Renderer2.setStyle() or [ngStyle] property bindings instead of direct nativeElement mutation' }],
   },
+  'FIGM-A11Y-07': {
+    concern: 'A visible label a sighted user reads must be contained in the accessible name, or speech-input users who speak what they see cannot activate the control.',
+    targetConstruct: 'Element with visible text content and a diverging aria-label',
+    predicate: 'aria-label attribute value does not contain the element\'s own visible text',
+    standard: 'WCAG 2.2 SC 2.5.3 (Label in Name)',
+    tips: [{ framework: 'React', tip: 'Keep aria-label a superset of the visible text, or drop it and let the visible text be the accessible name' }],
+  },
+  'FIGM-REACT-05': {
+    concern: 'An Effect whose only job is calling a state setter is computing derived state reactively, forcing an extra render pass React\'s own docs say is avoidable.',
+    targetConstruct: 'useEffect callback consisting of exactly one state-setter call',
+    predicate: 'useEffect(() => { setX(...) }, [deps]) with no other statement in the body',
+    standard: 'React documentation, "You Might Not Need an Effect"',
+    tips: [{ framework: 'React', tip: 'Delete the Effect and the state variable; compute the value directly during render' }],
+  },
+  'FIGM-REACT-06': {
+    concern: 'An Effect that reads a prop but omits it from the dependency array runs against a stale value from an earlier render.',
+    targetConstruct: 'useEffect callback referencing a destructured prop absent from its dependency array',
+    predicate: 'Prop identifier referenced in the Effect body, present in props destructuring, absent from the static dependency array literal',
+    standard: 'React documentation, useEffect reference ("Specifying reactive dependencies")',
+    tips: [{ framework: 'React', tip: 'Add the missing prop to the dependency array, or restructure the Effect so it doesn\'t need to read it' }],
+  },
+  'FIGM-NEXT-05': {
+    concern: 'A Node.js server-only module reachable from a "use client" file risks shipping server secrets or server-only logic into the client bundle.',
+    targetConstruct: 'Node.js built-in import (fs, path, crypto, net, child_process, ...) in a "use client" file',
+    predicate: 'File has "use client" directive AND imports a server-only module specifier',
+    standard: 'Next.js documentation, "Server and Client Components" (environment poisoning)',
+    tips: [{ framework: 'Next.js', tip: 'Move the dependent logic into a Server Component/Server Action and pass only serializable data as props; consider the server-only package' }],
+  },
+  'FIGM-NEXT-06': {
+    concern: 'A native <img> forgoes Next.js\'s built-in automatic image optimization (responsive sizing, lazy loading, modern formats).',
+    targetConstruct: 'Native lowercase <img> element in a Next.js file',
+    predicate: '<img ...> tag present instead of the next/image Image component',
+    standard: 'Next.js documentation, Image component reference',
+    tips: [{ framework: 'Next.js', tip: 'Replace with next/image\'s <Image> component and import it at the top of the file' }],
+  },
+  'FIGM-ANG-06': {
+    concern: 'An @Pipe declared pure: false re-runs its transform() on every change-detection cycle regardless of whether its inputs changed.',
+    targetConstruct: '@Pipe decorator with pure: false',
+    predicate: '@Pipe({ ..., pure: false })',
+    standard: 'Angular API reference, Pipe decorator',
+    tips: [{ framework: 'Angular', tip: 'Remove pure: false (pipes are pure by default) and recompute derived values only when their real inputs change' }],
+  },
+  'FIGM-VUE-01': {
+    concern: 'A v-for without a stable :key (or keyed by index) prevents Vue from tracking node identity across re-renders, causing incorrect state reuse.',
+    targetConstruct: 'v-for directive missing :key, or :key bound to the loop index',
+    predicate: 'v-for="... in ..." without a same-element :key/v-bind:key binding, or one bound to the index variable',
+    standard: 'Vue.js Style Guide, "Priority A Rules: Essential" (Keyed v-for)',
+    tips: [{ framework: 'Vue', tip: 'Bind :key to a stable, unique identifier from each item (e.g. item.id), never the array index' }],
+  },
+  'FIGM-VUE-02': {
+    concern: 'v-if and v-for on the same element re-evaluates the condition on every iteration instead of filtering the list once.',
+    targetConstruct: 'Element with both v-for and v-if directives',
+    predicate: 'v-for="..." and v-if="..." present on the same template element',
+    standard: 'Vue.js Style Guide, "Priority A Rules: Essential" (Avoid v-if with v-for)',
+    tips: [{ framework: 'Vue', tip: 'Filter the source into a computed property and iterate that, or move v-if to a wrapping <template>' }],
+  },
+  'FIGM-NEXT-07': {
+    concern: 'React Client Components do not support async component functions.',
+    targetConstruct: 'Async function component in a "use client" file',
+    predicate: 'async function Name() {...} in a file marked "use client", returning JSX',
+    standard: 'Next.js documentation, error reference "No async Client Component"',
+    tips: [{ framework: 'Next.js', tip: 'Remove async and fetch with useEffect, or convert to a Server Component' }],
+  },
+  'FIGM-NEXT-08': {
+    concern: 'Reading useSearchParams() without a Suspense boundary opts the whole Client Component tree into client-side rendering.',
+    targetConstruct: 'useSearchParams() call with no <Suspense> element in the same file',
+    predicate: 'useSearchParams() present, file contains no <Suspense> JSX element',
+    standard: 'Next.js documentation, useSearchParams reference and "Missing Suspense boundary" error',
+    tips: [{ framework: 'Next.js', tip: 'Wrap the component that calls useSearchParams() in a <Suspense> boundary' }],
+  },
+  'FIGM-NEXT-09': {
+    concern: 'The metadata API can only be resolved on the server, before the page renders.',
+    targetConstruct: 'metadata/generateMetadata/generateViewport export in a "use client" file',
+    predicate: 'File has "use client" AND exports metadata/generateMetadata/generateViewport',
+    standard: 'Next.js documentation, generateMetadata reference',
+    tips: [{ framework: 'Next.js', tip: 'Move the metadata export to a Server Component page/layout' }],
+  },
+  'FIGM-NEXT-10': {
+    concern: 'force-dynamic disables static rendering and caching; without a real request-time dependency, this forfeits performance for no benefit.',
+    targetConstruct: 'export const dynamic = "force-dynamic" with no visible cookies()/headers()/no-store fetch',
+    predicate: 'dynamic === "force-dynamic" AND no request-time API call found in the file',
+    standard: 'Next.js documentation on route segment config',
+    tips: [{ framework: 'Next.js', tip: 'Remove force-dynamic unless the route genuinely needs per-request data' }],
+  },
+  'FIGM-VUE-03': {
+    concern: 'A computed getter must be a pure derivation; mutating other state or performing I/O inside it breaks Vue\'s dependency tracking.',
+    targetConstruct: 'computed(() => {...}) getter body containing an assignment to another ref or an I/O call',
+    predicate: 'Assignment to <ref>.value, or fetch/localStorage/sessionStorage call, inside a computed() getter',
+    standard: 'Vue.js documentation, "Computed Properties" (also vue/no-side-effects-in-computed-properties)',
+    tips: [{ framework: 'Vue', tip: 'Move the side effect into a watch() or event handler' }],
+  },
+  'FIGM-VUE-04': {
+    concern: 'Mutating what a computed ref currently holds silently breaks the "pure derivation" contract without Vue\'s own reassignment warning.',
+    targetConstruct: 'Mutation of a computed ref\'s .value contents from outside its own definition',
+    predicate: '<computedName>.value.<field> = ... or <computedName>.value.push(...) etc.',
+    standard: 'Vue.js documentation, "Computed Properties"',
+    tips: [{ framework: 'Vue', tip: 'Mutate the underlying source ref, never the computed\'s own output' }],
+  },
+  'FIGM-VUE-05': {
+    concern: 'Mutating a prop directly is silently overwritten on the next parent re-render and breaks one-way data flow.',
+    targetConstruct: 'Mutation of a defineProps()-bound props field',
+    predicate: '<props>.<field> = ... or an array-mutator call rooted at <props>',
+    standard: 'Vue.js documentation, "Props"',
+    tips: [{ framework: 'Vue', tip: 'Use a local data/computed copy, or emit an event so the parent owns the update' }],
+  },
+  'FIGM-VUE-06': {
+    concern: 'Arrow functions do not receive Vue\'s automatic `this` binding, so an arrow-function method silently loses access to the component instance.',
+    targetConstruct: 'Arrow function value inside an Options API methods: {} block',
+    predicate: 'methods: { name: () => {...} }',
+    standard: 'Vue.js documentation, "Options: State"',
+    tips: [{ framework: 'Vue', tip: 'Use regular method shorthand syntax, never an arrow function, for Options API methods' }],
+  },
+  'FIGM-ANG-07': {
+    concern: 'Non-trivial constructor logic runs before Angular has set up bindings and is harder to test than an equivalent ngOnInit/method.',
+    targetConstruct: 'Constructor body containing a call beyond a bare field assignment',
+    predicate: 'constructor(...) { ...CallExpression... }',
+    standard: 'Angular official coding style guide',
+    tips: [{ framework: 'Angular', tip: 'Move non-trivial initialization to ngOnInit or a well-named method' }],
+  },
+  'FIGM-ANG-08': {
+    concern: 'Tracking by index or the whole loop variable defeats @for\'s tracking purpose just as surely as omitting trackBy did for *ngFor.',
+    targetConstruct: '@for block whose track expression is $index or the bare loop variable',
+    predicate: '@for (x of items; track $index) or @for (x of items; track x)',
+    standard: 'Angular documentation, "Control flow"',
+    tips: [{ framework: 'Angular', tip: 'Track by a stable unique property (e.g. item.id) instead' }],
+  },
+  'FIGM-ANG-09': {
+    concern: 'A signal input is a read-only signal at runtime; without the readonly modifier, other code in the class can accidentally reassign it.',
+    targetConstruct: 'Class property initialized by input()/model() without readonly',
+    predicate: 'x = input(...) or x = model(...) missing the readonly modifier',
+    standard: 'Angular documentation and official style guide (signal inputs)',
+    tips: [{ framework: 'Angular', tip: 'Add the readonly modifier to every input()/model()-initialized property' }],
+  },
+  'FIGM-ANG-10': {
+    concern: 'Each | async usage creates its own subscription; piping the same observable twice silently doubles the underlying work.',
+    targetConstruct: 'The same observable expression piped through | async more than once in one template',
+    predicate: 'Identical "<expr> | async" text appearing 2+ times in the same template',
+    standard: 'AsyncPipe subscription behavior, corroborated across independent Angular educator sources',
+    tips: [{ framework: 'Angular', tip: 'Subscribe once with *ngIf="obs$ | async as value" and reuse the local variable' }],
+  },
+  'FIGM-REACT-07': {
+    concern: 'React relies on Hooks being called in the same order every render; a conditional/loop/nested-function call makes that order unstable.',
+    targetConstruct: 'Hook call whose nearest control-flow/function ancestor is a conditional, loop, or nested function',
+    predicate: 'use-prefixed call reached through an IfStatement/loop/nested function before the component/custom Hook boundary',
+    standard: 'React documentation, "Rules of Hooks"',
+    tips: [{ framework: 'React', tip: 'Move the Hook to the top level, unconditionally, and put the condition inside/around its result' }],
+  },
+  'FIGM-REACT-08': {
+    concern: 'React treats props as read-only, like a pure function\'s arguments; mutating a prop breaks the parent\'s ability to reason about its own data.',
+    targetConstruct: 'Direct mutation of a destructured component prop',
+    predicate: '<propVar>.<field> = ... or an array-mutator call rooted at a destructured prop',
+    standard: 'React documentation, "Keeping Components Pure"',
+    tips: [{ framework: 'React', tip: 'Derive a new object/array and pass it up via a callback prop, or copy into local state' }],
+  },
+  'FIGM-REACT-09': {
+    concern: 'A component body must be pure with respect to rendering; I/O reached directly during render runs on every render pass, including Strict Mode\'s double-invocation.',
+    targetConstruct: 'fetch/localStorage/sessionStorage call reached directly in a component\'s render body',
+    predicate: 'I/O-shaped call in RENDER scope, not inside an event handler or Effect, in a non-async component',
+    standard: 'React documentation, "Keeping Components Pure" and "Components and Hooks must be pure"',
+    tips: [{ framework: 'React', tip: 'Move the call into an event handler or a useEffect callback' }],
+  },
+  'FIGM-REACT-10': {
+    concern: 'Calling a component function directly bypasses React\'s own orchestration and silently breaks the Rules of Hooks for any Hook it uses.',
+    targetConstruct: 'PascalCase in-file component function called directly inside a JSX expression container',
+    predicate: '{Component()} instead of {<Component />}',
+    standard: 'React documentation, "React calls Components and Hooks"',
+    tips: [{ framework: 'React', tip: 'Render the component as JSX (<Component />), never call it as a plain function' }],
+  },
+  'FIGM-REACT-11': {
+    concern: 'A Context.Provider value set to a fresh inline literal is a new reference every render, re-rendering every consumer regardless of whether the data changed.',
+    targetConstruct: '*.Provider element\'s value prop set to an inline object/array literal',
+    predicate: '<Context.Provider value={{...}}> not wrapped in useMemo',
+    standard: 'React documentation, useContext reference',
+    tips: [{ framework: 'React', tip: 'Wrap the Provider\'s value in useMemo, keyed on its real dependencies' }],
+  },
 };
 
 const TIP_COLOR: Record<FrameworkTip['framework'], string> = {
@@ -284,6 +459,7 @@ const CATEGORY_BADGE: Record<RuleCatalogEntry['category'], { label: string; bg: 
   NEXTJS: { label: '▲ Next.js Specific', bg: '#000000', color: '#ffffff', border: '#334155' },
   REACT: { label: '⚛️ React Specific', bg: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: 'rgba(56, 189, 248, 0.4)' },
   ANGULAR: { label: '🅰️ Angular Specific', bg: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: 'rgba(239, 68, 68, 0.4)' },
+  VUE: { label: '🟢 Vue Specific', bg: 'rgba(66, 184, 131, 0.2)', color: '#42b883', border: 'rgba(66, 184, 131, 0.4)' },
 };
 
 const FRAMEWORK_FILTER_META: { key: FrameworkType; label: string; color: string }[] = [

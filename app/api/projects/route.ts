@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { authenticateUser } from '../../../src/auth/auth-middleware';
 import { ProjectRepository } from '../../../src/engine/project-repository';
 import { AuditLogger } from '../../../src/auth/audit-logger';
+import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 
 export async function GET(request: Request) {
   const auth = authenticateUser(request);
@@ -40,6 +41,13 @@ export async function POST(request: Request) {
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  // No per-account cap exists on how many projects a user can create -- without this, a single
+  // authenticated account could script unlimited project creation (a real storage/DB-row
+  // exhaustion vector, not just an annoyance). Same checkRateLimit/getClientIp pattern used by
+  // every other write-triggering auth route in this codebase.
+  const rateLimitError = await checkRateLimit(getClientIp(request), 10, 60000);
+  if (rateLimitError) return rateLimitError;
 
   try {
     const body = await request.json();

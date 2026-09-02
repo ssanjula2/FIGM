@@ -5,6 +5,7 @@ import { AIResponseParser } from '../src/ai/response-parser.js';
 import { AIPatchValidator } from '../src/ai/patch-validator.js';
 import { AIRemediationPipeline } from '../src/ai/ai-remediation-pipeline.js';
 import { RemediationEngine } from '../src/engine/remediation-engine.js';
+import { RemediationValidator } from '../src/engine/remediation-validation.server.js';
 import { DiagnosticReport } from '../src/types/ast-spec.js';
 
 test('AI Remediation Pipeline & Fallback Suite', async (t) => {
@@ -16,7 +17,13 @@ test('AI Remediation Pipeline & Fallback Suite', async (t) => {
     concern: 'INVARIANT_ALLOCATIONS',
     severity: 'CRITICAL',
     filePath: 'src/UserProfile.jsx',
-    location: { start: { line: 15, column: 5 }, end: { line: 15, column: 40 } },
+    // Must match sampleCode's actual position (line 3, where `const defaultConfig` really is) --
+    // the new AST-based deterministic fixer locates the real node via this position, unlike the
+    // legacy regex engine's `code.includes(snippet)` string match, which never needed it to be
+    // accurate. Column is 0-based (see ast-fix-engine.ts's positionFromLocation) and points at the
+    // `defaultConfig` identifier itself, guaranteeing the position resolves inside the
+    // VariableDeclaration node the fixer walks up to.
+    location: { start: { line: 3, column: 10 }, end: { line: 3, column: 45 } },
     offendingCodeSnippet: 'const defaultConfig = { theme: "dark" };',
     remediation: 'Hoist static object allocation outside loop scope.',
     standardReference: 'ISO 25010'
@@ -69,14 +76,62 @@ test('AI Remediation Pipeline & Fallback Suite', async (t) => {
     assert.ok(invalidRes.reason?.includes('identical'));
   });
 
-  await t.test('AI Remediation Pipeline automatically falls back when GEMINI_API_KEY is unset', async () => {
-    delete process.env.GEMINI_API_KEY;
+  await t.test('AI Remediation Pipeline fixes a Layer-1-eligible rule deterministically without ever needing ANTHROPIC_API_KEY', async () => {
+    delete process.env.ANTHROPIC_API_KEY;
+    // Ollama (OLLAMA_BASE_URL/OLLAMA_MODEL) now outranks Claude in src/ai/ai-provider-selector.ts's
+    // precedence -- cleared here so a developer's own local-dev shell env can never make this
+    // deterministic-only assertion attempt a real, unmocked network call.
+    delete process.env.OLLAMA_BASE_URL;
+    delete process.env.OLLAMA_MODEL;
 
+    // FIGM-PERF-01 is in AstDeterministicFixEngine.SUPPORTED_RULE_IDS and this sample's shape
+    // (a single `const NAME = {...}` inside a loop, not referencing any loop-local identifier) is
+    // exactly what the fixer safely hoists -- Layer 1 must resolve this without ever consulting
+    // Claude/the API key, proving deterministic-first routing (architecture rule #19/#31).
     const pipelineRes = await AIRemediationPipeline.remediateDefect(sampleCode, sampleDefect, 'REACT_JSX');
-    assert.equal(pipelineRes.engineType, 'TEMPLATE_FALLBACK');
-    assert.ok(pipelineRes.fallbackReason?.includes('GEMINI_API_KEY'));
+    assert.equal(pipelineRes.engineType, 'AST_DETERMINISTIC_FIX');
+    assert.equal(pipelineRes.verified, true);
+    assert.equal(pipelineRes.verificationStatus, 'FIXED');
+    assert.equal(pipelineRes.fallbackReason, undefined, 'a deterministic fix must never need a fallbackReason');
     assert.ok(pipelineRes.remediatedCode.length > 0);
     assert.ok(pipelineRes.suggestedFix?.diff.length! > 0);
+  });
+
+  await t.test('AI Remediation Pipeline reports UNAVAILABLE — never a regex-fabricated fix — for an AI_ASSISTED rule when ANTHROPIC_API_KEY is unset', async () => {
+    delete process.env.ANTHROPIC_API_KEY;
+    delete process.env.OLLAMA_BASE_URL;
+    delete process.env.OLLAMA_MODEL;
+
+    // FIGM-REACT-01 has no deterministic fixer (routes AI_ASSISTED — see
+    // tests/claude-integration.test.ts) and no manual-review-only classification either, so with
+    // no API key configured there is genuinely no automated path left. The legacy
+    // src/engine/remediation-engine.ts regex engine must NEVER be silently invoked to manufacture
+    // a plausible-looking "fixed" result here (architecture rule #14/#19).
+    const reactDefect: DiagnosticReport = {
+      ruleId: 'FIGM-REACT-01',
+      ruleName: 'Missing key prop in dynamic list rendering',
+      message: 'Missing key prop in dynamic list rendering',
+      domain: 'PERFORMANCE',
+      concern: 'INVARIANT_ALLOCATIONS',
+      severity: 'HIGH',
+      filePath: 'src/List.jsx',
+      location: { start: { line: 3, column: 3 }, end: { line: 3, column: 60 } },
+      offendingCodeSnippet: 'return <ul>{sorted.map((n) => <li>{n}</li>)}</ul>;',
+      remediation: 'Add a stable, unique `key` prop to each list item.',
+      standardReference: 'ISO 25010'
+    };
+    const reactCode = `function List({ items }) {\n  const sorted = items.sort((a, b) => a - b);\n  return <ul>{sorted.map((n) => <li>{n}</li>)}</ul>;\n}`;
+
+    const pipelineRes = await AIRemediationPipeline.remediateDefect(reactCode, reactDefect, 'REACT_JSX');
+    assert.equal(pipelineRes.engineType, 'UNAVAILABLE');
+    assert.equal(pipelineRes.verified, false);
+    // AI_UNAVAILABLE, not UNRESOLVED: no provider was even configured, so no candidate patch was
+    // ever produced — UNRESOLVED is reserved for when a real patch WAS generated and
+    // sandbox-validated/re-scanned but still failed (see AIRemediationPipelineResult's
+    // verificationStatus doc comment in src/ai/ai-remediation-pipeline.ts).
+    assert.equal(pipelineRes.verificationStatus, 'AI_UNAVAILABLE');
+    assert.equal(pipelineRes.remediatedCode, reactCode, 'no code change may be produced when no automated fix is available');
+    assert.ok(pipelineRes.fallbackReason?.includes('ANTHROPIC_API_KEY'));
   });
 
   await t.test('applyQuickFix for FIGM-PERF-01 preserves the original variable name (regression: a prior version hardcoded a new name, leaving dangling references)', () => {
@@ -84,7 +139,7 @@ test('AI Remediation Pipeline & Fallback Suite', async (t) => {
     assert.ok(patchRes.remediatedCode.includes('const defaultConfig ='), 'expected the original variable name "defaultConfig" to be preserved, not renamed');
     assert.ok(!patchRes.remediatedCode.includes('const options ='), 'the old broken template hardcoded "options" as the replacement name');
 
-    const validation = RemediationEngine.validatePatch(sampleCode, patchRes.remediatedCode, sampleDefect);
+    const validation = RemediationValidator.validatePatch(sampleCode, patchRes.remediatedCode, sampleDefect);
     assert.equal(validation.isValid, true);
     assert.equal(validation.status, 'FIXED');
   });
@@ -113,10 +168,10 @@ function render(items) {
 
     // The rule itself is confirmed gone (proves re-scan alone is not a sufficient check)...
     const rescan = RuleExecutionEngineCheck(brokenPatch);
-    assert.ok(!rescan.some((d) => d.ruleId === 'FIGM-PERF-01'), 'sanity check: the rule really does stop firing on the broken patch');
+    assert.ok(!rescan.some((d: any) => d.ruleId === 'FIGM-PERF-01'), 'sanity check: the rule really does stop firing on the broken patch');
 
     // ...yet validatePatch must still reject it, because the patch is not valid code.
-    const validation = RemediationEngine.validatePatch(originalCode, brokenPatch, brokenDefect);
+    const validation = RemediationValidator.validatePatch(originalCode, brokenPatch, brokenDefect);
     assert.equal(validation.isValid, false);
     assert.equal(validation.status, 'PATCH_REJECTED');
   });

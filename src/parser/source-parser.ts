@@ -1,6 +1,6 @@
 /**
  * Framework-Independent Guideline Model (FIGM)
- * Resilient Source Code Parser Adapter (Complete 23-Rule Extraction Specification)
+ * Resilient Source Code Parser Adapter (Complete 50-Rule Extraction Specification)
  */
 
 import { ASTNode, FrameworkType } from '../types/ast-spec.js';
@@ -10,6 +10,8 @@ import {
   isJsxRealAstEligible,
   isAngularClassRealAstEligible,
 } from '../ast/real-syntax-node-builder.js';
+import { parseVueSfc } from './vue-sfc-parser.js';
+import { getAngularTemplateParseErrors } from '../ast/angular-template-ast-builder.js';
 
 /**
  * Per-rule real-AST eligibility gates (AST Migration Phases 4-7). When a rule is real-AST-eligible
@@ -321,6 +323,44 @@ export class SourceParser {
 
     this.validateSyntax(code, errors);
 
+    // Root-caused live (found via cross-framework verification): `validateSyntax` above is a
+    // generic brace/paren/token heuristic applied uniformly to every framework -- it has no
+    // knowledge of Vue's own `<template>`/`<script>` block structure, so genuinely malformed Vue
+    // markup (e.g. an unclosed `<template>` tag) produced ZERO parse errors and a false "no issues,
+    // quality 100" result, even though this codebase already has a real `@vue/compiler-sfc` parser
+    // wrapper (vue-sfc-parser.ts) -- it was only ever wired into the deterministic FIX-verification
+    // path (vue-framework-adapter.ts / VueAstFixEngine), never into this initial detection scan.
+    // Reusing that same real parser here (not a second heuristic) closes the gap: a genuinely
+    // broken .vue file now surfaces the SAME real, first-party compiler diagnostic
+    // (`@vue/compiler-sfc`'s own `errors`) that the fix-validation path already trusts.
+    if (framework === 'VUE_SFC') {
+      const vueParse = parseVueSfc(code, filePath);
+      for (const err of vueParse?.errors ?? []) {
+        const loc = (err as { loc?: { start: { line: number; column: number } } }).loc;
+        errors.push({
+          line: loc?.start.line ?? 1,
+          column: loc?.start.column ?? 1,
+          message: `Vue SFC parse error: ${err.message}`,
+        });
+      }
+    }
+
+    // Same rationale/precedent as the VUE_SFC branch immediately above: angular-html-parser (a
+    // real Angular-template parser, already used and trusted by SandboxValidationPipeline's
+    // FRAMEWORK_STRUCTURAL stage) is error-tolerant -- it never throws on malformed markup -- but
+    // it DOES record real structural errors on successful parse, which previously went unread by
+    // the initial detection scan. Without this, a genuinely malformed inline Angular template
+    // (e.g. a mismatched closing tag) produced zero diagnostics: not "no issues", a real gap.
+    if (framework === 'ANGULAR_TEMPLATE') {
+      for (const err of getAngularTemplateParseErrors(code, filePath)) {
+        errors.push({
+          line: err.line,
+          column: err.column,
+          message: `Angular template parse error: ${err.message}`,
+        });
+      }
+    }
+
     try {
       const rootNode = this.buildASTFromCode(code, filePath, framework, errors);
       return {
@@ -377,18 +417,47 @@ export class SourceParser {
     });
 
     if (errors.length === 0) {
-      let openBraces = 0;
-      let openParens = 0;
-      for (let i = 0; i < code.length; i++) {
-        if (code[i] === '{') openBraces++;
-        if (code[i] === '}') openBraces--;
-        if (code[i] === '(') openParens++;
-        if (code[i] === ')') openParens--;
+      // BUG (found live, reproduced from a real user report): this used to report every unclosed
+      // brace/paren at `{ line: lines.length, column: 1 }` -- unconditionally the LAST line of the
+      // file, regardless of where the actual unmatched bracket is. For a real file with e.g. an
+      // unclosed `(` on line 5 of a 216-line file, that reported "L216:C1" with an offending-code
+      // snippet extracted from line 216 (often blank, or unrelated closing markup) -- structurally
+      // guaranteed to be disconnected from the real problem. Downstream, AIPromptBuilder embeds
+      // that wrong snippet verbatim in the Qwen prompt alongside the real current source, and Qwen
+      // correctly (and unhelpfully) declines with "the provided source does not contain the exact
+      // offending code snippet" -- Qwen was behaving correctly on bad input, not malfunctioning.
+      //
+      // Fixed by tracking the actual source position of every open bracket on a stack (popped on
+      // its matching close) and reporting the position of the outermost bracket still unmatched at
+      // EOF -- the real opening token that was never closed, e.g. the `return (` itself, not
+      // wherever the file happens to end. Scans `stripCommentsAndStrings(code)` (same length as
+      // `code`, so line/column stay accurate) rather than raw `code`, so a brace/paren that only
+      // appears inside a string literal, template-literal static text, or a comment can no longer
+      // corrupt the count or the reported position.
+      const scanText = stripCommentsAndStrings(code);
+      const braceStack: Array<{ line: number; column: number }> = [];
+      const parenStack: Array<{ line: number; column: number }> = [];
+      let line = 1;
+      let column = 1;
+      for (let i = 0; i < scanText.length; i++) {
+        const ch = scanText[i];
+        if (ch === '\n') {
+          line++;
+          column = 1;
+          continue;
+        }
+        if (ch === '{') braceStack.push({ line, column });
+        else if (ch === '}') braceStack.pop();
+        else if (ch === '(') parenStack.push({ line, column });
+        else if (ch === ')') parenStack.pop();
+        column++;
       }
-      if (openBraces > 0) {
-        errors.push({ line: lines.length, column: 1, message: 'Syntax Error: Unclosed curly brace "{"' });
-      } else if (openParens > 0) {
-        errors.push({ line: lines.length, column: 1, message: 'Syntax Error: Unclosed parenthesis "("}' });
+      if (braceStack.length > 0) {
+        const pos = braceStack[0];
+        errors.push({ line: pos.line, column: pos.column, message: 'Syntax Error: Unclosed curly brace "{"' });
+      } else if (parenStack.length > 0) {
+        const pos = parenStack[0];
+        errors.push({ line: pos.line, column: pos.column, message: 'Syntax Error: Unclosed parenthesis "("' });
       }
     }
   }
@@ -471,14 +540,28 @@ export class SourceParser {
     if (nextPageRole || nextPagesRole || nextContentHint) return 'NEXT_JS';
 
     if (normalizedPath.endsWith('.jsx') || normalizedPath.endsWith('.tsx')) return 'REACT_JSX';
+
+    // Same "real syntax shape, not a bare substring" fix already applied to the Angular hint
+    // above -- these bare `.includes(...)` checks previously matched a plain vanilla identifier
+    // that merely CONTAINS the substring (e.g. `myUseStateHelper(x)` contains "usestate",
+    // `class ReactDomLikeRenderer` contains "reactdom", `enableJsxLikeSyntax(flag)` contains
+    // "jsx"), misclassifying files with zero real React content as REACT_JSX (forensic audit
+    // finding, Section 12: reproduced 6/6 on plain .ts identifiers with no React import/JSX/hook
+    // usage at all). `\b` word-boundary anchors plus requiring the actual call/import shape close
+    // this the same way ANGULAR_TRACKBY_BINDING_RE/ANGULAR_RXJS_IMPORT_RE do above: an ordinary
+    // identifier substring never reproduces `from 'react'`, `reactdom.`, or `useState(` exactly.
+    // The bare "jsx" substring check is dropped entirely rather than hardened -- real JSX files
+    // are already caught by the `.jsx`/`.tsx` extension check immediately above, and a `.ts`/`.js`
+    // file merely mentioning the word "jsx" (e.g. in a config value or identifier) is not a
+    // reliable signal on its own.
+    const REACT_IMPORT_RE = new RegExp('\\bfrom\\s+[\'"]react[\'"]|\\brequire\\(\\s*[\'"]react[\'"]'); // import ... from 'react' / require('react')
+    const REACT_DOM_RE = new RegExp('\\bfrom\\s+[\'"]react-dom|\\brequire\\(\\s*[\'"]react-dom|\\breactdom\\s*\\.'); // import from 'react-dom' or a real ReactDOM.xxx call
+    const REACT_HOOK_CALL_RE = new RegExp('\\buse(state|effect|memo|callback)\\s*\\('); // an actual hook CALL, e.g. useState(...), not a name that merely contains one
+
     if (
-      lowerCode.includes('import react') ||
-      lowerCode.includes('reactdom') ||
-      lowerCode.includes('jsx') ||
-      lowerCode.includes('usestate') ||
-      lowerCode.includes('useeffect') ||
-      lowerCode.includes('usememo') ||
-      lowerCode.includes('usecallback')
+      REACT_IMPORT_RE.test(lowerCode) ||
+      REACT_DOM_RE.test(lowerCode) ||
+      REACT_HOOK_CALL_RE.test(lowerCode)
     ) return 'REACT_JSX';
 
     return 'GENERIC_ESTREE';
@@ -544,6 +627,11 @@ export class SourceParser {
     const useRealAstA11y06 = useRealAstJsx;
     const useRealAstReact01 = useRealAstGeneral;
     const useRealAstReact04 = useRealAstJsx;
+    // FIGM-VUE-01/02 (template-markup rules): real AST via buildVueTemplateRealSyntaxNodes,
+    // already unconditionally merged into root.children above (buildRealSyntaxNodes's VUE_SFC
+    // branch) -- this only suppresses the legacy text-heuristic blocks below for VUE_SFC so the
+    // same violation is never reported twice (once REAL_AST, once LEGACY_TEXT_HEURISTIC).
+    const useRealAstVueTemplate = framework === 'VUE_SFC';
 
     // Check App Router missing revalidate (FIGM-NEXT-03) -- superseded by buildNext03Root inside
     // buildRealSyntaxNodes for NEXT_JS (see real-syntax-node-builder.ts); this legacy check now
@@ -895,8 +983,11 @@ export class SourceParser {
 
       // 11. Modal Focus Containment (FIGM-A11Y-04)
       // Real-AST-migrated (buildA11y04) for useRealAstJsx frameworks; unchanged elsewhere.
-      if (!useRealAstJsx && (cTrimmed.includes('<Modal') || cTrimmed.includes('<Dialog'))) {
-        const compName = trimmed.includes('<Modal') ? 'Modal' : 'Dialog';
+      // Overlay/Drawer added (Phase 2, AST/Rule Coverage Gaps) to match this rule's own canonical
+      // spec (four-layer-meta-model.ts's astNodeType has always documented all four tag names;
+      // the legacy detector, like the real-AST one, only ever implemented two of them).
+      if (!useRealAstJsx && (cTrimmed.includes('<Modal') || cTrimmed.includes('<Dialog') || cTrimmed.includes('<Overlay') || cTrimmed.includes('<Drawer'))) {
+        const compName = trimmed.includes('<Modal') ? 'Modal' : trimmed.includes('<Dialog') ? 'Dialog' : trimmed.includes('<Overlay') ? 'Overlay' : 'Drawer';
         const hasRestoration = cTrimmed.includes('restoresFocus') || cTrimmed.includes('onClose=');
 
         root.children!.push({
@@ -1060,7 +1151,9 @@ export class SourceParser {
       }
 
       // 20. Angular *ngFor Without trackBy (FIGM-ANG-03)
-      if (cTrimmed.includes('*ngFor=') && !cTrimmed.includes('trackBy')) {
+      // Real-AST-migrated (buildAngularTemplateRealSyntaxNodes, via angular-html-parser) for
+      // useRealAstAngular frameworks as of the scientific-hardening pass; unchanged elsewhere.
+      if (!useRealAstAngular && cTrimmed.includes('*ngFor=') && !cTrimmed.includes('trackBy')) {
         root.children!.push({
           type: 'JSXAttribute',
           name: '*ngFor',
@@ -1073,8 +1166,80 @@ export class SourceParser {
         });
       }
 
+      // 20b. Vue v-for Missing/Unstable :key (FIGM-VUE-01) -- now REAL_AST via
+      // buildVueTemplateRealSyntaxNodes (a real @vue/compiler-dom template parse); this legacy
+      // text-heuristic block is suppressed for VUE_SFC (useRealAstVueTemplate) to avoid a
+      // duplicate diagnostic, and left unreachable-but-in-place as a documented historical
+      // fallback shape rather than deleted, matching this file's existing convention for every
+      // other superseded legacy block (see e.g. the FIGM-NEXT-03 comment above).
+      if (!useRealAstVueTemplate && cTrimmed.includes('v-for=')) {
+        const keyMatch = cTrimmed.match(/(?:^|\s)(?::key|v-bind:key)\s*=\s*"([^"]*)"/);
+        const forMatch = cTrimmed.match(/v-for\s*=\s*"\s*\(?\s*[\w$]+\s*,\s*([\w$]+)\s*\)?\s+in\s+/);
+        const indexVarName = forMatch?.[1];
+        const keyBoundToIndex = !!keyMatch && !!indexVarName && keyMatch[1].trim() === indexVarName;
+        if (!keyMatch || keyBoundToIndex) {
+          root.children!.push({
+            type: 'VElement',
+            name: 'v-for',
+            scopeType: currentScope,
+            attributes: {
+              isVForUnstableKey: true,
+              codeSnippet: trimmed
+            },
+            loc: { start: { line: lineNum, column: Math.max(0, lineText.indexOf('v-for')) }, end: { line: lineNum, column: lineText.length } }
+          });
+        }
+      }
+
+      // 20c. Vue Combined v-if and v-for on Same Element (FIGM-VUE-02) -- now REAL_AST, same
+      // reason/suppression as FIGM-VUE-01 above.
+      if (!useRealAstVueTemplate && cTrimmed.includes('v-for=') && cTrimmed.includes('v-if=')) {
+        root.children!.push({
+          type: 'VElement',
+          name: 'v-for',
+          scopeType: currentScope,
+          attributes: {
+            isVForWithVIf: true,
+            codeSnippet: trimmed
+          },
+          loc: { start: { line: lineNum, column: Math.max(0, lineText.indexOf('v-for')) }, end: { line: lineNum, column: lineText.length } }
+        });
+      }
+
+      // 20d. Angular Unstable @for Track Expression (FIGM-ANG-08) -- LEGACY_TEXT_HEURISTIC only.
+      // The new @for/@if/@switch block syntax is Angular's own template-compiler syntax, not
+      // real JS/TS, so (like *ngFor/*ngIf above) it cannot go through the TypeScript-compiler
+      // real-AST path this engine uses for Angular CLASS bodies. `track` is required syntax
+      // (Angular's own compiler rejects an @for block with no track expression at all -- error
+      // NG5002 -- so "missing track" is unreachable in code that compiles); this instead targets
+      // the real, reachable anti-pattern: track bound to $index or the bare loop variable itself
+      // (an unstable object reference) instead of a stable property such as `.id`.
+      // Real-AST-migrated (buildAngularTemplateRealSyntaxNodes) for useRealAstAngular frameworks
+      // as of the scientific-hardening pass; unchanged elsewhere.
+      if (!useRealAstAngular && framework === 'ANGULAR_TEMPLATE') {
+        const forTrackMatch = cTrimmed.match(/@for\s*\(\s*([\w$]+)\s+of\s+[^;]+;\s*track\s+([\w$.]+)/);
+        if (forTrackMatch) {
+          const [, loopVar, trackExpr] = forTrackMatch;
+          const isUnstable = trackExpr === '$index' || trackExpr === loopVar;
+          if (isUnstable) {
+            root.children!.push({
+              type: 'Interpolation',
+              name: '@for',
+              scopeType: currentScope,
+              attributes: {
+                isUnstableForTrack: true,
+                codeSnippet: trimmed
+              },
+              loc: { start: { line: lineNum, column: Math.max(0, lineText.indexOf('@for')) }, end: { line: lineNum, column: lineText.length } }
+            });
+          }
+        }
+      }
+
       // 21. Angular Template Function Call (FIGM-ANG-04)
-      if ((framework === 'ANGULAR_TEMPLATE' || cleanCode.includes('@Component')) && (cTrimmed.includes('{{') && cTrimmed.includes('()') || cTrimmed.includes(']="') && cTrimmed.includes('()'))) {
+      // Real-AST-migrated (buildAngularTemplateRealSyntaxNodes) for useRealAstAngular frameworks
+      // as of the scientific-hardening pass; unchanged elsewhere.
+      if (!useRealAstAngular && (framework === 'ANGULAR_TEMPLATE' || cleanCode.includes('@Component')) && (cTrimmed.includes('{{') && cTrimmed.includes('()') || cTrimmed.includes(']="') && cTrimmed.includes('()'))) {
         root.children!.push({
           type: 'Interpolation',
           name: 'templateFunctionCall',
@@ -1153,6 +1318,39 @@ export class SourceParser {
         });
       }
     });
+
+    // Angular Duplicate Async Pipe Subscriptions in Template (FIGM-ANG-10)
+    // Real-AST-migrated (buildAngularTemplateRealSyntaxNodes) for useRealAstAngular frameworks as
+    // of the scientific-hardening pass; unchanged (LEGACY_TEXT_HEURISTIC) elsewhere. This is a
+    // whole-file check (the SAME observable expression appearing 2+ times anywhere in the
+    // template), not a per-line one, so it runs once after the per-line loop rather than inside it.
+    if (!useRealAstAngular && framework === 'ANGULAR_TEMPLATE') {
+      const asyncPipeMatches = [...cleanCode.matchAll(/\(?\s*([\w.$]+)\s*\|\s*async\s*\)?/g)];
+      const seenExpr = new Map<string, number>();
+      for (const m of asyncPipeMatches) {
+        const exprText = m[1];
+        seenExpr.set(exprText, (seenExpr.get(exprText) ?? 0) + 1);
+      }
+      const duplicateExprs = new Set([...seenExpr.entries()].filter(([, count]) => count >= 2).map(([expr]) => expr));
+      if (duplicateExprs.size > 0) {
+        for (const m of asyncPipeMatches) {
+          if (!duplicateExprs.has(m[1])) continue;
+          const idx = m.index ?? 0;
+          const lineNum = cleanCode.slice(0, idx).split(/\r?\n/).length;
+          const lineText = lines[lineNum - 1] ?? '';
+          root.children!.push({
+            type: 'Interpolation',
+            name: 'async',
+            scopeType: 'GLOBAL',
+            attributes: {
+              isDuplicateAsyncPipe: true,
+              codeSnippet: lineText.trim()
+            },
+            loc: { start: { line: lineNum, column: Math.max(0, lineText.indexOf(m[1])) }, end: { line: lineNum, column: lineText.length } }
+          });
+        }
+      }
+    }
 
     // Append every real-AST-derived node (see top of this method) after the legacy line loop, so
     // ASTDetectionEngine/ALPExtractionEngine's flat root.children traversal sees both sets

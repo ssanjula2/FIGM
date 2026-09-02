@@ -1,0 +1,1650 @@
+{
+  "name": "angular-realworld-example-app",
+  "url": "https://github.com/realworld-apps/angular-realworld-example-app.git",
+  "commit": "dd99ed2cf39c805d719f943c5d7061a5683d98a8",
+  "primaryFrameworkLabel": "Angular",
+  "filesScanned": 50,
+  "totalLOC": 4054,
+  "scanDurationMs": 4683.559599999979,
+  "totalFigmFindings": 45,
+  "findingsByRule": {
+    "FIGM-PERF-04": 3,
+    "FIGM-ANG-01": 27,
+    "FIGM-PERF-02": 2,
+    "FIGM-ANG-04": 11,
+    "FIGM-ANG-08": 2
+  },
+  "findingsBySeverity": {
+    "MEDIUM": 3,
+    "CRITICAL": 27,
+    "HIGH": 15
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 19,
+    "ANGULAR_TEMPLATE": 31
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "playwright.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.config.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 80,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.routes.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 62,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/auth/auth.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 84,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/auth/if-authenticated.directive.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 39,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/auth/services/jwt.service.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 335,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/auth/services/jwt.service.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/auth/services/user.service.spec.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 366,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/auth/services/user.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 182,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/auth/user.model.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/interceptors/api.interceptor.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/interceptors/error.interceptor.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 55,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/interceptors/token.interceptor.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/layout/footer.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/layout/header.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/models/errors.model.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 4,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/core/models/loading-state.model.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/components/article-comment.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 51,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/components/article-list.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 135,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/components/article-meta.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 33,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/components/article-preview.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 51,
+      "figmFindingCount": 7,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/components/favorite-button.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 80,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/models/article-list-config.model.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/models/article.model.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/models/comment.model.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/pages/article/article.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 162,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/pages/editor/editor.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 97,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/pages/home/home.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 95,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/services/articles.service.spec.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 267,
+      "figmFindingCount": 5,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/services/articles.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 55,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/services/comments.service.spec.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 406,
+      "figmFindingCount": 4,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/services/comments.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/services/tags.service.spec.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 388,
+      "figmFindingCount": 5,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/article/services/tags.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/profile/components/follow-button.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 82,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/profile/components/profile-articles.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 44,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/profile/components/profile-favorites.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 44,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/profile/models/profile.model.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/profile/pages/profile/profile.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 64,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/profile/profile.routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 353,
+      "figmFindingCount": 11,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/profile/services/profile.service.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/features/settings/settings.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 80,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/shared/components/list-errors.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/shared/pipes/default-image.pipe.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/shared/pipes/markdown.pipe.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 15,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/main.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/test-setup.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "vitest.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/app.config.ts",
+      "location": {
+        "start": {
+          "line": 11,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 29
+        }
+      },
+      "offendingCodeSnippet": "import { EMPTY } from 'rxjs';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 11",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/app.config.ts",
+      "location": {
+        "start": {
+          "line": 37,
+          "column": 2
+        },
+        "end": {
+          "line": 37,
+          "column": 70
+        }
+      },
+      "offendingCodeSnippet": "userService.authState.subscribe(state => (currentAuthState = state));",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 37",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/app.config.ts",
+      "location": {
+        "start": {
+          "line": 38,
+          "column": 2
+        },
+        "end": {
+          "line": 38,
+          "column": 65
+        }
+      },
+      "offendingCodeSnippet": "userService.currentUser.subscribe(user => (currentUser = user));",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 38",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-comment.component.ts",
+      "location": {
+        "start": {
+          "line": 22,
+          "column": 12
+        },
+        "end": {
+          "line": 22,
+          "column": 90
+        }
+      },
+      "offendingCodeSnippet": "<img [src]=\"comment.author.image | defaultImage\" class=\"comment-author-img\" />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [Element$1] at line 22",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-list.component.ts",
+      "location": {
+        "start": {
+          "line": 46,
+          "column": 34
+        },
+        "end": {
+          "line": 46,
+          "column": 35
+        }
+      },
+      "offendingCodeSnippet": "<li class=\"page-item\" [ngClass]=\"{ active: pageNumber === page() }\">",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 46",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-08",
+      "ruleName": "Unstable @for Track Expression",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-list.component.ts",
+      "location": {
+        "start": {
+          "line": 45,
+          "column": 44
+        },
+        "end": {
+          "line": 45,
+          "column": 45
+        }
+      },
+      "offendingCodeSnippet": "@for (pageNumber of totalPages(); track pageNumber) {",
+      "message": "@for track expression bound to the index or the bare loop variable instead of a stable identifier.",
+      "remediation": "Track by a stable unique property (e.g. item.id) instead of $index or the bare loop variable. Evidence: Angular official documentation, \"Control flow\" -- https://angular.dev/guide/templates/control-flow (\"Select a property that uniquely identifies each item... If you don't have a unique identifier, you can use track $index, though that is not recommended for dynamic lists\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 84,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 45",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-meta.component.ts",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 8
+        },
+        "end": {
+          "line": 12,
+          "column": 59
+        }
+      },
+      "offendingCodeSnippet": "<img [src]=\"article.author.image | defaultImage\" />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [Element$1] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-preview.component.ts",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 10
+        },
+        "end": {
+          "line": 14,
+          "column": 11
+        }
+      },
+      "offendingCodeSnippet": "{{ article().favoritesCount }}",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-preview.component.ts",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 12
+        },
+        "end": {
+          "line": 19,
+          "column": 13
+        }
+      },
+      "offendingCodeSnippet": "<h1>{{ article().title }}</h1>",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-preview.component.ts",
+      "location": {
+        "start": {
+          "line": 20,
+          "column": 11
+        },
+        "end": {
+          "line": 20,
+          "column": 12
+        }
+      },
+      "offendingCodeSnippet": "<p>{{ article().description }}</p>",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 20",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-preview.component.ts",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 24
+        },
+        "end": {
+          "line": 12,
+          "column": 25
+        }
+      },
+      "offendingCodeSnippet": "<app-article-meta [article]=\"article()\">",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-preview.component.ts",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 29
+        },
+        "end": {
+          "line": 13,
+          "column": 30
+        }
+      },
+      "offendingCodeSnippet": "<app-favorite-button [article]=\"article()\" (toggle)=\"toggleFavorite($event)\" class=\"pull-xs-right\">",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-preview.component.ts",
+      "location": {
+        "start": {
+          "line": 18,
+          "column": 9
+        },
+        "end": {
+          "line": 18,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "<a [routerLink]=\"['/article', article().slug]\" class=\"preview-link\">",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 18",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-08",
+      "ruleName": "Unstable @for Track Expression",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/article-preview.component.ts",
+      "location": {
+        "start": {
+          "line": 23,
+          "column": 42
+        },
+        "end": {
+          "line": 23,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "@for (tag of article().tagList; track tag) {",
+      "message": "@for track expression bound to the index or the bare loop variable instead of a stable identifier.",
+      "remediation": "Track by a stable unique property (e.g. item.id) instead of $index or the bare loop variable. Evidence: Angular official documentation, \"Control flow\" -- https://angular.dev/guide/templates/control-flow (\"Select a property that uniquely identifies each item... If you don't have a unique identifier, you can use track $index, though that is not recommended for dynamic lists\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 84,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 23",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/article/components/favorite-button.component.ts",
+      "location": {
+        "start": {
+          "line": 24,
+          "column": 6
+        },
+        "end": {
+          "line": 24,
+          "column": 7
+        }
+      },
+      "offendingCodeSnippet": "[ngClass]=\"{",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 24",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/features/article/pages/editor/editor.component.ts",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 4,
+          "column": 37
+        }
+      },
+      "offendingCodeSnippet": "import { combineLatest } from 'rxjs';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/articles.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 71,
+          "column": 6
+        },
+        "end": {
+          "line": 74,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "service.query(config).subscribe(response => {",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 71",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/articles.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 85,
+          "column": 6
+        },
+        "end": {
+          "line": 85,
+          "column": 39
+        }
+      },
+      "offendingCodeSnippet": "service.query(config).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 85",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/articles.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 102,
+          "column": 6
+        },
+        "end": {
+          "line": 102,
+          "column": 39
+        }
+      },
+      "offendingCodeSnippet": "service.query(config).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 102",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/articles.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 127,
+          "column": 6
+        },
+        "end": {
+          "line": 127,
+          "column": 39
+        }
+      },
+      "offendingCodeSnippet": "service.query(config).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 127",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/articles.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 143,
+          "column": 6
+        },
+        "end": {
+          "line": 146,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "service.query(config).subscribe(response => {",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 143",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/comments.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 103,
+          "column": 6
+        },
+        "end": {
+          "line": 103,
+          "column": 38
+        }
+      },
+      "offendingCodeSnippet": "service.getAll(slug).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 103",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/comments.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 234,
+          "column": 6
+        },
+        "end": {
+          "line": 234,
+          "column": 48
+        }
+      },
+      "offendingCodeSnippet": "service.add(slug, commentBody).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 234",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/comments.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 310,
+          "column": 6
+        },
+        "end": {
+          "line": 310,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "service.delete(commentId, slug).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 310",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/comments.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 318,
+          "column": 6
+        },
+        "end": {
+          "line": 318,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "service.delete(commentId, slug).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 318",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/tags.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 231,
+          "column": 6
+        },
+        "end": {
+          "line": 231,
+          "column": 34
+        }
+      },
+      "offendingCodeSnippet": "service.getAll().subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 231",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/tags.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 239,
+          "column": 6
+        },
+        "end": {
+          "line": 239,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "observable.subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 239",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/tags.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 240,
+          "column": 6
+        },
+        "end": {
+          "line": 240,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "observable.subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 240",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/tags.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 241,
+          "column": 6
+        },
+        "end": {
+          "line": 241,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "observable.subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 241",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/article/services/tags.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 309,
+          "column": 8
+        },
+        "end": {
+          "line": 309,
+          "column": 36
+        }
+      },
+      "offendingCodeSnippet": "service.getAll().subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 309",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/features/profile/components/follow-button.component.ts",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 13,
+          "column": 29
+        }
+      },
+      "offendingCodeSnippet": "import { EMPTY } from 'rxjs';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/profile/components/follow-button.component.ts",
+      "location": {
+        "start": {
+          "line": 25,
+          "column": 6
+        },
+        "end": {
+          "line": 25,
+          "column": 7
+        }
+      },
+      "offendingCodeSnippet": "[ngClass]=\"{",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 25",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/profile/components/profile-articles.component.ts",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 35
+        },
+        "end": {
+          "line": 12,
+          "column": 36
+        }
+      },
+      "offendingCodeSnippet": "<app-article-list [limit]=\"10\" [config]=\"articlesConfig()!\" />",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-04",
+      "ruleName": "Minimize Method Invocations in Angular Templates",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/features/profile/components/profile-favorites.component.ts",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 35
+        },
+        "end": {
+          "line": 12,
+          "column": 36
+        }
+      },
+      "offendingCodeSnippet": "<app-article-list [limit]=\"10\" [config]=\"favoritesConfig()!\" />",
+      "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
+      "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 77,
+          "column": 6
+        },
+        "end": {
+          "line": 77,
+          "column": 39
+        }
+      },
+      "offendingCodeSnippet": "service.get(username).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 77",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 85,
+          "column": 6
+        },
+        "end": {
+          "line": 85,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "observable.subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 85",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 86,
+          "column": 6
+        },
+        "end": {
+          "line": 86,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "observable.subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 86",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 204,
+          "column": 6
+        },
+        "end": {
+          "line": 204,
+          "column": 42
+        }
+      },
+      "offendingCodeSnippet": "service.follow(username).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 204",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 304,
+          "column": 6
+        },
+        "end": {
+          "line": 304,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "observable.subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 304",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 305,
+          "column": 6
+        },
+        "end": {
+          "line": 305,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "observable.subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 305",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 306,
+          "column": 6
+        },
+        "end": {
+          "line": 306,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "observable.subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 306",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 316,
+          "column": 6
+        },
+        "end": {
+          "line": 316,
+          "column": 39
+        }
+      },
+      "offendingCodeSnippet": "service.get(username).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 316",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 323,
+          "column": 6
+        },
+        "end": {
+          "line": 323,
+          "column": 39
+        }
+      },
+      "offendingCodeSnippet": "service.get(username).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 323",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 330,
+          "column": 6
+        },
+        "end": {
+          "line": 330,
+          "column": 39
+        }
+      },
+      "offendingCodeSnippet": "service.get(username).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 330",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-01",
+      "ruleName": "Unsubscribe RxJS Subscriptions",
+      "domain": "PERFORMANCE",
+      "concern": "ASYNC_LEAKS",
+      "severity": "CRITICAL",
+      "filePath": "src/app/features/profile/services/profile.service.spec.ts",
+      "location": {
+        "start": {
+          "line": 337,
+          "column": 6
+        },
+        "end": {
+          "line": 337,
+          "column": 39
+        }
+      },
+      "offendingCodeSnippet": "service.get(username).subscribe();",
+      "message": "RxJS subscription created inside Angular component missing unsubscribe or takeUntilDestroyed.",
+      "remediation": "Use takeUntilDestroyed() or unsubscribe() in ngOnDestroy routine.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 98,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 337",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

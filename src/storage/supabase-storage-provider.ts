@@ -11,6 +11,7 @@ import {
   DBNotification,
   DBSettings,
   DBAuditLog,
+  DBSubmission,
 } from '../auth/user-db';
 import { severityCountsFromDiagnostics } from '../engine/quality-score';
 
@@ -32,6 +33,10 @@ function mapUser(u: any): DBUser {
     avatarUrl: u.avatarUrl ?? undefined,
     createdAt: u.createdAt.toISOString(),
     lastLoginAt: toIso(u.lastLoginAt),
+    participantCode: u.participantCode ?? undefined,
+    researchStatus: u.researchStatus ?? undefined,
+    researchAssignedAt: toIso(u.researchAssignedAt),
+    researchConsentVerifiedAt: toIso(u.researchConsentVerifiedAt),
   };
 }
 
@@ -185,6 +190,20 @@ function mapSettings(s: any): DBSettings {
   };
 }
 
+function mapSubmission(s: any): DBSubmission {
+  return {
+    id: s.id,
+    userId: s.userId,
+    fileName: s.fileName,
+    framework: s.framework,
+    codeContent: s.codeContent,
+    executionTimeMs: s.executionTimeMs,
+    qualityScore: s.qualityScore,
+    diagnosticsCount: s.diagnosticsCount,
+    createdAt: s.createdAt.toISOString(),
+  };
+}
+
 function mapAuditLog(a: any): DBAuditLog {
   return {
     id: a.id,
@@ -278,6 +297,14 @@ export class SupabaseStorageProvider implements IStorageProvider {
     return u ? mapUser(u) : undefined;
   }
 
+  /** Checks `participantCode` first (authoritative for every row created after that field
+   *  existed) and falls back to `id` (pre-migration rows whose id itself is the P-shaped code). */
+  async findUserByParticipantCode(code: string): Promise<DBUser | undefined> {
+    if (!this.prisma) return this.fallback!.findUserByParticipantCode(code);
+    const u = await this.db().user.findFirst({ where: { OR: [{ participantCode: code }, { id: code }] } });
+    return u ? mapUser(u) : undefined;
+  }
+
   async getAllUsers(): Promise<DBUser[]> {
     if (!this.prisma) return this.fallback!.getAllUsers();
     const users = await this.db().user.findMany({ orderBy: { createdAt: 'asc' } });
@@ -299,6 +326,10 @@ export class SupabaseStorageProvider implements IStorageProvider {
         refreshToken: user.refreshToken,
         avatarUrl: user.avatarUrl,
         lastLoginAt: user.lastLoginAt ? new Date(user.lastLoginAt) : null,
+        participantCode: user.participantCode,
+        researchStatus: (user.researchStatus as any) ?? undefined,
+        researchAssignedAt: user.researchAssignedAt ? new Date(user.researchAssignedAt) : undefined,
+        researchConsentVerifiedAt: user.researchConsentVerifiedAt ? new Date(user.researchConsentVerifiedAt) : undefined,
       },
     });
     return mapUser(created);
@@ -310,6 +341,8 @@ export class SupabaseStorageProvider implements IStorageProvider {
       const data: any = { ...updates };
       if ('resetTokenExpiry' in updates) data.resetTokenExpiry = updates.resetTokenExpiry ? new Date(updates.resetTokenExpiry) : null;
       if ('lastLoginAt' in updates) data.lastLoginAt = updates.lastLoginAt ? new Date(updates.lastLoginAt) : null;
+      if ('researchAssignedAt' in updates) data.researchAssignedAt = updates.researchAssignedAt ? new Date(updates.researchAssignedAt) : null;
+      if ('researchConsentVerifiedAt' in updates) data.researchConsentVerifiedAt = updates.researchConsentVerifiedAt ? new Date(updates.researchConsentVerifiedAt) : null;
       const updated = await this.db().user.update({ where: { id: userId }, data });
       return mapUser(updated);
     } catch (err: any) {
@@ -534,7 +567,7 @@ export class SupabaseStorageProvider implements IStorageProvider {
       theme: 'dark',
       autoSave: true,
       autoScan: true,
-      aiModel: 'gemini-2.5-flash',
+      aiModel: 'claude-opus-5',
       exportFormat: 'PDF',
     };
   }
@@ -585,5 +618,40 @@ export class SupabaseStorageProvider implements IStorageProvider {
     if (!this.prisma) return this.fallback!.getAuditLogs(limit);
     const logs = await this.db().auditLog.findMany({ orderBy: { createdAt: 'desc' }, take: limit });
     return logs.map(mapAuditLog);
+  }
+
+  // --- SUBMISSIONS ---
+  async createSubmission(submission: Omit<DBSubmission, 'id' | 'createdAt'>): Promise<DBSubmission> {
+    if (!this.prisma) return this.fallback!.createSubmission(submission);
+    const created = await this.db().submission.create({
+      data: {
+        userId: submission.userId,
+        fileName: submission.fileName,
+        framework: submission.framework,
+        codeContent: submission.codeContent,
+        executionTimeMs: submission.executionTimeMs,
+        qualityScore: submission.qualityScore,
+        diagnosticsCount: submission.diagnosticsCount,
+      },
+    });
+    return mapSubmission(created);
+  }
+
+  async getSubmissionsByUserId(userId: string): Promise<DBSubmission[]> {
+    if (!this.prisma) return this.fallback!.getSubmissionsByUserId(userId);
+    const submissions = await this.db().submission.findMany({
+      where: userId === 'all_users' ? undefined : { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+    return submissions.map(mapSubmission);
+  }
+
+  async deleteSubmission(submissionId: string, userId: string): Promise<boolean> {
+    if (!this.prisma) return this.fallback!.deleteSubmission(submissionId, userId);
+    // Ownership-checked delete, same pattern as deleteScanRecord's caller-side checks elsewhere --
+    // deleteMany's count tells us whether a row matching BOTH id and owner actually existed,
+    // without a separate read-then-delete round trip.
+    const result = await this.db().submission.deleteMany({ where: { id: submissionId, userId } });
+    return result.count > 0;
   }
 }

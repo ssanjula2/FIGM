@@ -13,6 +13,26 @@ import { FOUR_LAYER_MAPPINGS } from '../matrix/four-layer-meta-model.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+/** Recursively lists every file under `dir`, returned as POSIX-style (forward-slash) paths
+ *  relative to `baseDir` -- a file directly in `baseDir` yields just its bare filename (identical
+ *  to the old flat `readdirSync` behavior), a file in a subdirectory yields e.g.
+ *  "next03/app/demo/page.tsx". Deterministic order (readdirSync's own OS-dependent order is not
+ *  guaranteed sorted, so this sorts explicitly to keep repeated runs' file-processing order --
+ *  and therefore total-duration-per-run variance -- stable). */
+function collectTestbedFiles(dir: string, baseDir: string = dir): string[] {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const files: string[] = [];
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...collectTestbedFiles(fullPath, baseDir));
+    } else if (entry.isFile()) {
+      files.push(path.relative(baseDir, fullPath).split(path.sep).join('/'));
+    }
+  }
+  return files.sort();
+}
+
 export interface GroundTruthItem {
   filePath: string;
   framework: string;
@@ -50,7 +70,7 @@ export interface PerformanceBenchmarkMetrics {
 }
 
 /** Explicit, honest scope statement: the ground-truth benchmark below only ever covers the rule
- *  IDs actually present in benchmarks/ground-truth.json, never "all 25 FIGM rules" implicitly.
+ *  IDs actually present in benchmarks/ground-truth.json, never "all 50 FIGM rules" implicitly.
  *  `coveredRuleIds` is derived from the ground-truth data itself (never a separately-maintained
  *  literal list) so this can never silently drift out of sync with what the benchmark actually
  *  measures. */
@@ -81,19 +101,25 @@ export class EvaluationRunner {
     const groundTruthData: { groundTruthViolations: GroundTruthItem[] } = JSON.parse(groundTruthRaw);
     const groundTruths = groundTruthData.groundTruthViolations;
 
-    const files = fs.readdirSync(testbedDir).filter((f) => fs.statSync(path.join(testbedDir, f)).isFile());
+    // Recursive walk (not a flat readdirSync): FIGM-NEXT-03's real-AST detector requires a
+    // literal app/<segment>/page.<ext> path component (isAppRouterPageFile in
+    // real-syntax-node-builder.ts), which only a genuinely nested fixture can provide. Every
+    // relative path is normalized to forward slashes so a flat file's relative path is identical
+    // to its bare filename (byte-for-byte the same string readdirSync used to return), leaving all
+    // pre-existing flat fixtures' matching against ground-truth.json completely unchanged.
+    const files = collectTestbedFiles(testbedDir);
 
     const initialMemory = process.memoryUsage().heapUsed;
     const startTime = performance.now();
     const fileScanResults: ScanResult[] = [];
     let totalLinesOfCode = 0;
 
-    for (const fileName of files) {
-      const filePath = path.join(testbedDir, fileName);
+    for (const relativePath of files) {
+      const filePath = path.join(testbedDir, relativePath);
       const code = fs.readFileSync(filePath, 'utf-8');
       totalLinesOfCode += code.split(/\r?\n/).length;
 
-      const result = RuleExecutionEngine.analyzeFile(fileName, code);
+      const result = RuleExecutionEngine.analyzeFile(relativePath, code);
       fileScanResults.push(result);
     }
 
@@ -122,7 +148,12 @@ export class EvaluationRunner {
     // up automatically on the next run rather than requiring someone to remember to also update a
     // hardcoded array here.
     const allRules = [...new Set(groundTruths.map((g) => g.ruleId))].sort();
-    const allFrameworks = ['REACT_JSX', 'VUE_SFC', 'ANGULAR_TEMPLATE', 'GENERIC_ESTREE'];
+    // Same reasoning as allRules above -- a hardcoded list here silently dropped any framework
+    // introduced by a new ground-truth entry (e.g. NEXT_JS) from frameworkMetrics entirely: its
+    // TP/FP/FN still counted correctly toward the global/rule-level totals via fwTP/fwFP/fwFN
+    // below, but the framework-level breakdown report would never show that row, which is a real
+    // under-reporting bug, not neutral.
+    const allFrameworks = [...new Set(groundTruths.map((g) => g.framework))].sort();
 
     for (const r of allRules) { ruleTP[r] = 0; ruleFP[r] = 0; ruleFN[r] = 0; }
     for (const fw of allFrameworks) { fwTP[fw] = 0; fwFP[fw] = 0; fwFN[fw] = 0; }
@@ -161,9 +192,15 @@ export class EvaluationRunner {
 
     const ruleMetrics: RuleEvaluationMetric[] = allRules.map((r) => {
       const score = this.calculateMetrics(ruleTP[r], ruleFP[r], ruleFN[r]);
+      // Domain must come from the canonical rule registry (FOUR_LAYER_MAPPINGS, itself sourced
+      // from figm-spec.json), not from a substring guess on the rule ID -- a prior
+      // `r.includes('PERF') ? 'PERFORMANCE' : 'ACCESSIBILITY'` heuristic silently mislabeled every
+      // PERFORMANCE rule whose ID does not literally contain "PERF" (e.g. FIGM-REACT-01/02/03,
+      // several FIGM-ANG-*/FIGM-NEXT-* rules) as ACCESSIBILITY.
+      const canonicalDomain = FOUR_LAYER_MAPPINGS.find((m) => m.rule.ruleId === r)?.domain;
       return {
         ruleId: r,
-        domain: r.includes('PERF') ? 'PERFORMANCE' : 'ACCESSIBILITY',
+        domain: canonicalDomain ?? 'UNKNOWN',
         ...score
       };
     });
@@ -242,7 +279,7 @@ export class EvaluationRunner {
 * **Overall Recall**: ${(evalResults.overall.recall * 100).toFixed(1)}%
 * **Overall F1-Score**: **${(evalResults.overall.f1Score * 100).toFixed(1)}%**
 
-> **Rule Coverage Scope**: This benchmark empirically measures **${evalResults.ruleCoverage.rulesWithGroundTruth} of ${evalResults.ruleCoverage.totalFigmRules}** FIGM rules (those with hand-labelled ground-truth violations in \`benchmarks/ground-truth.json\`): ${evalResults.ruleCoverage.coveredRuleIds.map((r) => `\`${r}\``).join(', ')}. The remaining ${evalResults.ruleCoverage.uncoveredRuleIds.length} rules (${evalResults.ruleCoverage.uncoveredRuleIds.map((r) => `\`${r}\``).join(', ')}) are verified only by unit-level positive/negative fixture tests (\`tests/rule-detection-matrix.test.ts\` et al.), **not** by this empirical Precision/Recall/F1 benchmark. The Precision/Recall/F1 figures above must never be read as "FIGM is ${(evalResults.overall.f1Score * 100).toFixed(1)}% accurate across all 25 rules."
+> **Rule Coverage Scope**: This benchmark empirically measures **${evalResults.ruleCoverage.rulesWithGroundTruth} of ${evalResults.ruleCoverage.totalFigmRules}** FIGM rules (those with hand-labelled ground-truth violations in \`benchmarks/ground-truth.json\`): ${evalResults.ruleCoverage.coveredRuleIds.map((r) => `\`${r}\``).join(', ')}. The remaining ${evalResults.ruleCoverage.uncoveredRuleIds.length} rules (${evalResults.ruleCoverage.uncoveredRuleIds.map((r) => `\`${r}\``).join(', ')}) are verified only by unit-level positive/negative fixture tests (\`tests/rule-detection-matrix.test.ts\` et al.), **not** by this empirical Precision/Recall/F1 benchmark. The Precision/Recall/F1 figures above must never be read as "FIGM is ${(evalResults.overall.f1Score * 100).toFixed(1)}% accurate across all ${evalResults.ruleCoverage.totalFigmRules} rules."
 >
 > **Calculation method**: ${evalResults.calculationMethod}
 
@@ -350,7 +387,7 @@ ${evalResults.frameworkMetrics
         executionMode: 'AUTOMATED_DYNAMIC_EVALUATION',
         calculationMethod: evalResults.calculationMethod
       },
-      // Explicit, honest rule-coverage scope (never silently implied to be "all 25 rules") --
+      // Explicit, honest rule-coverage scope (never silently implied to be "all rules") --
       // derived from benchmarks/ground-truth.json's actual contents, not a hand-maintained list.
       ruleCoverage: evalResults.ruleCoverage,
       overall: {

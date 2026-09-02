@@ -1,0 +1,1829 @@
+{
+  "name": "commerce",
+  "url": "https://github.com/vercel/commerce.git",
+  "commit": "3761e52e60df9c6a316e067dbfd7032e494d3634",
+  "primaryFrameworkLabel": "Next.js",
+  "filesScanned": 65,
+  "totalLOC": 3961,
+  "scanDurationMs": 7806.888100000011,
+  "totalFigmFindings": 46,
+  "findingsByRule": {
+    "FIGM-PERF-05": 3,
+    "FIGM-NEXT-03": 5,
+    "FIGM-NEXT-02": 1,
+    "FIGM-PERF-04": 5,
+    "FIGM-PERF-01": 3,
+    "FIGM-NEXT-08": 7,
+    "FIGM-REACT-02": 4,
+    "FIGM-NEXT-10": 1,
+    "FIGM-A11Y-07": 1,
+    "FIGM-REACT-01": 6,
+    "FIGM-REACT-11": 1,
+    "FIGM-A11Y-04": 2,
+    "FIGM-REACT-05": 2,
+    "FIGM-REACT-06": 1,
+    "FIGM-A11Y-05": 2,
+    "FIGM-A11Y-01": 2
+  },
+  "findingsBySeverity": {
+    "MEDIUM": 16,
+    "HIGH": 24,
+    "CRITICAL": 6
+  },
+  "frameworksDetected": {
+    "NEXT_JS": 28,
+    "REACT_JSX": 22,
+    "GENERIC_ESTREE": 15
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 16,
+    "totalParseErrorCount": 17
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "app/api/revalidate/route.ts",
+      "framework": "NEXT_JS",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/error.tsx",
+      "framework": "REACT_JSX",
+      "loc": 20,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/layout.tsx",
+      "framework": "NEXT_JS",
+      "loc": 48,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/opengraph-image.tsx",
+      "framework": "REACT_JSX",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 22,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/product/[handle]/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 150,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/robots.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/search/children-wrapper.tsx",
+      "framework": "NEXT_JS",
+      "loc": 15,
+      "figmFindingCount": 1,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/search/layout.tsx",
+      "framework": "REACT_JSX",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/search/loading.tsx",
+      "framework": "REACT_JSX",
+      "loc": 22,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/search/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 40,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/search/[collection]/opengraph-image.tsx",
+      "framework": "REACT_JSX",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/search/[collection]/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 53,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/sitemap.ts",
+      "framework": "NEXT_JS",
+      "loc": 53,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/[page]/layout.tsx",
+      "framework": "REACT_JSX",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/[page]/opengraph-image.tsx",
+      "framework": "REACT_JSX",
+      "loc": 10,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/[page]/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 51,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/carousel.tsx",
+      "framework": "NEXT_JS",
+      "loc": 46,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/cart/actions.ts",
+      "framework": "NEXT_JS",
+      "loc": 107,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/cart/add-to-cart.tsx",
+      "framework": "NEXT_JS",
+      "loc": 95,
+      "figmFindingCount": 2,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/cart/cart-context.tsx",
+      "framework": "REACT_JSX",
+      "loc": 239,
+      "figmFindingCount": 4,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/cart/delete-item-button.tsx",
+      "framework": "REACT_JSX",
+      "loc": 39,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/cart/edit-item-quantity-button.tsx",
+      "framework": "REACT_JSX",
+      "loc": 62,
+      "figmFindingCount": 1,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/cart/modal.tsx",
+      "framework": "NEXT_JS",
+      "loc": 257,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/cart/open-cart.tsx",
+      "framework": "REACT_JSX",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/grid/index.tsx",
+      "framework": "REACT_JSX",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/grid/three-items.tsx",
+      "framework": "NEXT_JS",
+      "loc": 68,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/grid/tile.tsx",
+      "framework": "NEXT_JS",
+      "loc": 51,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/icons/logo.tsx",
+      "framework": "REACT_JSX",
+      "loc": 17,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/label.tsx",
+      "framework": "REACT_JSX",
+      "loc": 40,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/footer-menu.tsx",
+      "framework": "NEXT_JS",
+      "loc": 47,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/footer.tsx",
+      "framework": "NEXT_JS",
+      "loc": 79,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/navbar/index.tsx",
+      "framework": "NEXT_JS",
+      "loc": 62,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/navbar/mobile-menu.tsx",
+      "framework": "NEXT_JS",
+      "loc": 105,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/navbar/search.tsx",
+      "framework": "NEXT_JS",
+      "loc": 44,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/product-grid-items.tsx",
+      "framework": "NEXT_JS",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/search/collections.tsx",
+      "framework": "REACT_JSX",
+      "loc": 38,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/search/filter/dropdown.tsx",
+      "framework": "NEXT_JS",
+      "loc": 65,
+      "figmFindingCount": 6,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/search/filter/index.tsx",
+      "framework": "REACT_JSX",
+      "loc": 48,
+      "figmFindingCount": 1,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/layout/search/filter/item.tsx",
+      "framework": "NEXT_JS",
+      "loc": 75,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/loading-dots.tsx",
+      "framework": "REACT_JSX",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/logo-square.tsx",
+      "framework": "REACT_JSX",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/opengraph-image.tsx",
+      "framework": "NEXT_JS",
+      "loc": 46,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/price.tsx",
+      "framework": "REACT_JSX",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/product/gallery.tsx",
+      "framework": "NEXT_JS",
+      "loc": 97,
+      "figmFindingCount": 1,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/product/product-description.tsx",
+      "framework": "REACT_JSX",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/product/variant-selector.tsx",
+      "framework": "NEXT_JS",
+      "loc": 107,
+      "figmFindingCount": 4,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/prose.tsx",
+      "framework": "REACT_JSX",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/welcome-toast.tsx",
+      "framework": "REACT_JSX",
+      "loc": 37,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/constants.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 52,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/fragments/cart.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 54,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/fragments/image.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 11,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/fragments/product.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 65,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/fragments/seo.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/index.ts",
+      "framework": "NEXT_JS",
+      "loc": 544,
+      "figmFindingCount": 1,
+      "parseErrorCount": 2,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/mutations/cart.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 46,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/queries/cart.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 11,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/queries/collection.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 57,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/queries/menu.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 11,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/queries/page.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 42,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/queries/product.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/shopify/types.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 273,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/type-guards.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/utils.ts",
+      "framework": "NEXT_JS",
+      "loc": 52,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "next.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "app/error.tsx",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 17
+        },
+        "end": {
+          "line": 13,
+          "column": 30
+        }
+      },
+      "offendingCodeSnippet": "onClick={() => reset()}",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-02",
+      "ruleName": "Dynamic Imports for Heavy Browser Modules",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "HIGH",
+      "filePath": "app/page.tsx",
+      "location": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 60
+        }
+      },
+      "offendingCodeSnippet": "import { ThreeItemGrid } from \"components/grid/three-items\";",
+      "message": "Heavy browser module imported statically in Next.js instead of next/dynamic with ssr: false.",
+      "remediation": "Use next/dynamic lazy import with ssr: false for heavy client-only packages.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 90,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/product/[handle]/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "app/product/[handle]/page.tsx",
+      "location": {
+        "start": {
+          "line": 10,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "import { notFound } from \"next/navigation\";",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 10",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "app/product/[handle]/page.tsx",
+      "location": {
+        "start": {
+          "line": 58,
+          "column": 24
+        },
+        "end": {
+          "line": 73,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "const productJsonLd = {",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 58",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "app/search/children-wrapper.tsx",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 23
+        },
+        "end": {
+          "line": 12,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-02",
+      "ruleName": "Stable List Key Prop Assignment",
+      "category": "FIGM_GUIDELINE_VIOLATION",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "app/search/loading.tsx",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 16
+        },
+        "end": {
+          "line": 13,
+          "column": 27
+        }
+      },
+      "line": 13,
+      "column": 16,
+      "offendingCodeSnippet": "key={index}",
+      "sourceSnippet": "key={index}",
+      "message": "Array index assigned as list key prop causing component re-ordering and state bugs.",
+      "remediation": "Assign a unique stable identifier (item.id) to list key props instead of array index.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 96,
+      "evidence": "Real AST (TypeScript compiler): JsxAttribute \"key\" at app/search/loading.tsx:13 resolves to the enclosing .map() callback's index parameter",
+      "fixAvailable": true,
+      "sourceKind": "REAL_AST",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/search/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/search/[collection]/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "app/search/[collection]/page.tsx",
+      "location": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "import { notFound } from \"next/navigation\";",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 3",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-10",
+      "ruleName": "Unnecessary Forced Dynamic Rendering",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/sitemap.ts",
+      "location": {
+        "start": {
+          "line": 10,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 39
+        }
+      },
+      "offendingCodeSnippet": "export const dynamic = \"force-dynamic\";",
+      "message": "export const dynamic = \"force-dynamic\" with no visible request-time dependency in this file.",
+      "remediation": "Remove the force-dynamic export and let Next.js statically render/cache the route, unless the route genuinely needs per-request data (cookies, headers, draftMode, or an explicitly uncached fetch) -- in which case keep it and document why. Evidence: Next.js official documentation on route segment config (\"If you prefer your page to always be dynamic... your page won't attempt to be statically generated\" -- legitimate uses include dashboards/authenticated content that read per-request context, per Next.js community and official guidance on the dynamic route segment option).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 74,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 10",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/[page]/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "app/[page]/page.tsx",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "import { notFound } from \"next/navigation\";",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "components/cart/add-to-cart.tsx",
+      "location": {
+        "start": {
+          "line": 63,
+          "column": 23
+        },
+        "end": {
+          "line": 63,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 63",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-07",
+      "ruleName": "Accessible Name Must Contain Visible Label Text",
+      "domain": "ACCESSIBILITY",
+      "concern": "INPUT_MODALITIES",
+      "severity": "HIGH",
+      "filePath": "components/cart/add-to-cart.tsx",
+      "location": {
+        "start": {
+          "line": 32,
+          "column": 6
+        },
+        "end": {
+          "line": 41,
+          "column": 15
+        }
+      },
+      "offendingCodeSnippet": "<button",
+      "message": "Accessible name (aria-label) does not contain the element's visible text label (WCAG 2.5.3).",
+      "remediation": "Include the element's visible text as a substring of its aria-label, or remove the redundant aria-label if the visible text alone is already an adequate accessible name. Evidence: W3C WCAG 2.2 Success Criterion 2.5.3 \"Label in Name\" (Level A) -- https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html.",
+      "standardReference": "WCAG 2.2 SC 2.5.3 (Label in Name)",
+      "confidenceScore": 89,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 32",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "components/cart/cart-context.tsx",
+      "location": {
+        "start": {
+          "line": 102,
+          "column": 24
+        },
+        "end": {
+          "line": 102,
+          "column": 75
+        }
+      },
+      "offendingCodeSnippet": "const totalQuantity = lines.reduce((sum, item) => sum + item.quantity, 0);",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 102",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "components/cart/cart-context.tsx",
+      "location": {
+        "start": {
+          "line": 103,
+          "column": 22
+        },
+        "end": {
+          "line": 106,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "const totalAmount = lines.reduce(",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 103",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "components/cart/cart-context.tsx",
+      "location": {
+        "start": {
+          "line": 139,
+          "column": 27
+        },
+        "end": {
+          "line": 145,
+          "column": 24
+        }
+      },
+      "offendingCodeSnippet": "const updatedLines = currentCart.lines",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 139",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-11",
+      "ruleName": "Unmemoized Context Provider Value",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "components/cart/cart-context.tsx",
+      "location": {
+        "start": {
+          "line": 201,
+          "column": 26
+        },
+        "end": {
+          "line": 201,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "<CartContext.Provider value={{ cartPromise }}>",
+      "message": "Context Provider value prop is an unmemoized inline object/array literal.",
+      "remediation": "Wrap the Provider's value in useMemo, keyed on the actual data it depends on, instead of constructing the object/array inline in JSX. Evidence: React official documentation, useContext reference -- https://react.dev/reference/react/useContext (\"Changes are determined by comparing the new and old value using the same algorithm as Object.is... wrap the state in useMemo to prevent unnecessary re-renders\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 86,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXAttribute] at line 201",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "components/cart/edit-item-quantity-button.tsx",
+      "location": {
+        "start": {
+          "line": 42,
+          "column": 18
+        },
+        "end": {
+          "line": 45,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "const payload = {",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 42",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-04",
+      "ruleName": "Dynamic Focus Containment and Traversal",
+      "domain": "ACCESSIBILITY",
+      "concern": "FOCUS_ORDER",
+      "severity": "CRITICAL",
+      "filePath": "components/cart/modal.tsx",
+      "location": {
+        "start": {
+          "line": 77,
+          "column": 12
+        },
+        "end": {
+          "line": 77,
+          "column": 237
+        }
+      },
+      "offendingCodeSnippet": "<Dialog.Panel className=\"fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white\">",
+      "message": "Modal or dynamic overlay component unmounts without programmatically restoring focus.",
+      "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically.",
+      "standardReference": "WCAG 2.2 SC 2.4.3 (Focus Order)",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 77",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "components/cart/modal.tsx",
+      "location": {
+        "start": {
+          "line": 95,
+          "column": 21
+        },
+        "end": {
+          "line": 100,
+          "column": 23
+        }
+      },
+      "offendingCodeSnippet": "{cart.lines",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 95",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-02",
+      "ruleName": "Stable List Key Prop Assignment",
+      "category": "FIGM_GUIDELINE_VIOLATION",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "components/cart/modal.tsx",
+      "location": {
+        "start": {
+          "line": 121,
+          "column": 28
+        },
+        "end": {
+          "line": 121,
+          "column": 35
+        }
+      },
+      "line": 121,
+      "column": 28,
+      "offendingCodeSnippet": "key={i}",
+      "sourceSnippet": "key={i}",
+      "message": "Array index assigned as list key prop causing component re-ordering and state bugs.",
+      "remediation": "Assign a unique stable identifier (item.id) to list key props instead of array index.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 96,
+      "evidence": "Real AST (TypeScript compiler): JsxAttribute \"key\" at components/cart/modal.tsx:121 resolves to the enclosing .map() callback's index parameter",
+      "fixAvailable": true,
+      "sourceKind": "REAL_AST",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-REACT-05",
+      "ruleName": "Effect Used Solely to Derive State",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "components/layout/footer-menu.tsx",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 2
+        },
+        "end": {
+          "line": 15,
+          "column": 27
+        }
+      },
+      "offendingCodeSnippet": "useEffect(() => {",
+      "message": "useEffect body consists solely of a state-setter call; this derived value can be computed during render instead.",
+      "remediation": "Delete the Effect and the corresponding state variable; compute the value directly in the component body during render (wrap in useMemo only if the computation is measurably expensive). Evidence: React official documentation, \"You Might Not Need an Effect\" -- https://react.dev/learn/you-might-not-need-an-effect (\"If there is no external system involved... you shouldn't need an Effect\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 84,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-06",
+      "ruleName": "Missing Reactive Dependency in Effect Hook",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "components/layout/footer-menu.tsx",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 2
+        },
+        "end": {
+          "line": 15,
+          "column": 27
+        }
+      },
+      "offendingCodeSnippet": "useEffect(() => {",
+      "message": "useEffect reads a component prop that is missing from its dependency array.",
+      "remediation": "Add the missing prop to the Effect's dependency array. Evidence: React official documentation, useEffect reference, \"Specifying reactive dependencies\" -- https://react.dev/reference/react/useEffect#specifying-reactive-dependencies (\"Your Effect's dependencies... must include every reactive value you read in the Effect\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 82,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-05",
+      "ruleName": "Effect Used Solely to Derive State",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "components/layout/navbar/mobile-menu.tsx",
+      "location": {
+        "start": {
+          "line": 29,
+          "column": 2
+        },
+        "end": {
+          "line": 31,
+          "column": 30
+        }
+      },
+      "offendingCodeSnippet": "useEffect(() => {",
+      "message": "useEffect body consists solely of a state-setter call; this derived value can be computed during render instead.",
+      "remediation": "Delete the Effect and the corresponding state variable; compute the value directly in the component body during render (wrap in useMemo only if the computation is measurably expensive). Evidence: React official documentation, \"You Might Not Need an Effect\" -- https://react.dev/learn/you-might-not-need-an-effect (\"If there is no external system involved... you shouldn't need an Effect\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 84,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 29",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-04",
+      "ruleName": "Dynamic Focus Containment and Traversal",
+      "domain": "ACCESSIBILITY",
+      "concern": "FOCUS_ORDER",
+      "severity": "CRITICAL",
+      "filePath": "components/layout/navbar/mobile-menu.tsx",
+      "location": {
+        "start": {
+          "line": 64,
+          "column": 12
+        },
+        "end": {
+          "line": 64,
+          "column": 130
+        }
+      },
+      "offendingCodeSnippet": "<Dialog.Panel className=\"fixed bottom-0 left-0 right-0 top-0 flex h-full w-full flex-col bg-white pb-6 dark:bg-black\">",
+      "message": "Modal or dynamic overlay component unmounts without programmatically restoring focus.",
+      "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically.",
+      "standardReference": "WCAG 2.2 SC 2.4.3 (Focus Order)",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 64",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "components/layout/navbar/search.tsx",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 23
+        },
+        "end": {
+          "line": 8,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "components/layout/navbar/search.tsx",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 6
+        },
+        "end": {
+          "line": 23,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "components/layout/navbar/search.tsx",
+      "location": {
+        "start": {
+          "line": 34,
+          "column": 6
+        },
+        "end": {
+          "line": 37,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 34",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "components/layout/search/filter/dropdown.tsx",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 23
+        },
+        "end": {
+          "line": 12,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-01",
+      "ruleName": "Keyboard Event Parity on Pointer Handlers",
+      "domain": "ACCESSIBILITY",
+      "concern": "KEYBOARD_ACCESSIBILITY",
+      "severity": "CRITICAL",
+      "filePath": "components/layout/search/filter/dropdown.tsx",
+      "location": {
+        "start": {
+          "line": 41,
+          "column": 6
+        },
+        "end": {
+          "line": 46,
+          "column": 7
+        }
+      },
+      "offendingCodeSnippet": "<div",
+      "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+      "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+      "standardReference": "WCAG 2.2 SC 2.1.1 (Keyboard)",
+      "confidenceScore": 96,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 41",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "components/layout/search/filter/dropdown.tsx",
+      "location": {
+        "start": {
+          "line": 42,
+          "column": 17
+        },
+        "end": {
+          "line": 44,
+          "column": 9
+        }
+      },
+      "offendingCodeSnippet": "onClick={() => {",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 42",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-01",
+      "ruleName": "Keyboard Event Parity on Pointer Handlers",
+      "domain": "ACCESSIBILITY",
+      "concern": "KEYBOARD_ACCESSIBILITY",
+      "severity": "CRITICAL",
+      "filePath": "components/layout/search/filter/dropdown.tsx",
+      "location": {
+        "start": {
+          "line": 51,
+          "column": 8
+        },
+        "end": {
+          "line": 56,
+          "column": 9
+        }
+      },
+      "offendingCodeSnippet": "<div",
+      "message": "Non-interactive element has pointer click listener but lacks onKeyDown handler or tabindex.",
+      "remediation": "Use a native interactive element (<button>) or add tabindex=\"0\" with an onKeyDown handler.",
+      "standardReference": "WCAG 2.2 SC 2.1.1 (Keyboard)",
+      "confidenceScore": 96,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 51",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "components/layout/search/filter/dropdown.tsx",
+      "location": {
+        "start": {
+          "line": 52,
+          "column": 19
+        },
+        "end": {
+          "line": 54,
+          "column": 11
+        }
+      },
+      "offendingCodeSnippet": "onClick={() => {",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 52",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-02",
+      "ruleName": "Stable List Key Prop Assignment",
+      "category": "FIGM_GUIDELINE_VIOLATION",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "components/layout/search/filter/dropdown.tsx",
+      "location": {
+        "start": {
+          "line": 58,
+          "column": 24
+        },
+        "end": {
+          "line": 58,
+          "column": 31
+        }
+      },
+      "line": 58,
+      "column": 24,
+      "offendingCodeSnippet": "<FilterItem key={i} item={item} />",
+      "sourceSnippet": "<FilterItem key={i} item={item} />",
+      "message": "Array index assigned as list key prop causing component re-ordering and state bugs.",
+      "remediation": "Assign a unique stable identifier (item.id) to list key props instead of array index.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 96,
+      "evidence": "Real AST (TypeScript compiler): JsxAttribute \"key\" at components/layout/search/filter/dropdown.tsx:58 resolves to the enclosing .map() callback's index parameter",
+      "fixAvailable": true,
+      "sourceKind": "REAL_AST",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-REACT-02",
+      "ruleName": "Stable List Key Prop Assignment",
+      "category": "FIGM_GUIDELINE_VIOLATION",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "components/layout/search/filter/index.tsx",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 20
+        },
+        "end": {
+          "line": 13,
+          "column": 27
+        }
+      },
+      "line": 13,
+      "column": 20,
+      "offendingCodeSnippet": "<FilterItem key={i} item={item} />",
+      "sourceSnippet": "<FilterItem key={i} item={item} />",
+      "message": "Array index assigned as list key prop causing component re-ordering and state bugs.",
+      "remediation": "Assign a unique stable identifier (item.id) to list key props instead of array index.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 96,
+      "evidence": "Real AST (TypeScript compiler): JsxAttribute \"key\" at components/layout/search/filter/index.tsx:13 resolves to the enclosing .map() callback's index parameter",
+      "fixAvailable": true,
+      "sourceKind": "REAL_AST",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "components/layout/search/filter/item.tsx",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 23
+        },
+        "end": {
+          "line": 12,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "components/product/gallery.tsx",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 23
+        },
+        "end": {
+          "line": 14,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "components/product/variant-selector.tsx",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 23
+        },
+        "end": {
+          "line": 21,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "components/product/variant-selector.tsx",
+      "location": {
+        "start": {
+          "line": 33,
+          "column": 7
+        },
+        "end": {
+          "line": 39,
+          "column": 5
+        }
+      },
+      "offendingCodeSnippet": "...variant.selectedOptions.reduce(",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 33",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "components/product/variant-selector.tsx",
+      "location": {
+        "start": {
+          "line": 57,
+          "column": 57
+        },
+        "end": {
+          "line": 57,
+          "column": 59
+        }
+      },
+      "offendingCodeSnippet": "const optionParams: Record<string, string> = {};",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 57",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-REACT-01",
+      "ruleName": "Memoize Expensive Derived Computations",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "components/product/variant-selector.tsx",
+      "location": {
+        "start": {
+          "line": 62,
+          "column": 29
+        },
+        "end": {
+          "line": 69,
+          "column": 13
+        }
+      },
+      "offendingCodeSnippet": "const filtered = Object.entries(optionParams).filter(",
+      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
+      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 62",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "components/welcome-toast.tsx",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 4,
+          "column": 31
+        }
+      },
+      "offendingCodeSnippet": "import { toast } from \"sonner\";",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "lib/shopify/index.ts",
+      "location": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "import { isShopifyError } from \"lib/type-guards\";",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

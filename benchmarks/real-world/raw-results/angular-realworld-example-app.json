@@ -5,7 +5,7 @@
   "primaryFrameworkLabel": "Angular",
   "filesScanned": 50,
   "totalLOC": 4054,
-  "scanDurationMs": 4776.626400000008,
+  "scanDurationMs": 4672.574999999997,
   "totalFigmFindings": 45,
   "findingsByRule": {
     "FIGM-PERF-04": 3,
@@ -483,7 +483,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 37",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -510,7 +510,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 38",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-02",
@@ -629,21 +629,21 @@
       "filePath": "src/app/features/article/components/article-preview.component.ts",
       "location": {
         "start": {
-          "line": 13,
-          "column": 107
+          "line": 14,
+          "column": 10
         },
         "end": {
-          "line": 13,
-          "column": 108
+          "line": 14,
+          "column": 11
         }
       },
-      "offendingCodeSnippet": "<app-favorite-button [article]=\"article()\" (toggle)=\"toggleFavorite($event)\" class=\"pull-xs-right\">",
+      "offendingCodeSnippet": "{{ article().favoritesCount }}",
       "message": "Component method call inside Angular HTML template executes on every change detection cycle.",
       "remediation": "Pre-calculate template values or use pure Angular Pipes instead of method calls.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 90,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 13",
+      "evidence": "Real AST (TypeScript compiler): [Interpolation] at line 14",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
@@ -888,7 +888,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 71",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -915,7 +915,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 85",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -942,7 +942,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 102",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -969,7 +969,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 127",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -996,7 +996,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 143",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1023,7 +1023,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 103",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1050,7 +1050,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 234",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1077,7 +1077,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 310",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1104,7 +1104,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 318",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1131,7 +1131,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 231",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1158,7 +1158,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 239",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1185,7 +1185,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 240",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1212,7 +1212,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 241",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1239,7 +1239,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 309",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-04",
@@ -1374,7 +1374,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 77",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1401,7 +1401,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 85",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1428,7 +1428,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 86",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1455,7 +1455,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 204",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1482,7 +1482,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 304",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1509,7 +1509,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 305",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1536,7 +1536,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 306",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1563,7 +1563,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 316",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1590,7 +1590,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 323",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1617,7 +1617,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 330",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-ANG-01",
@@ -1644,7 +1644,7 @@
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 337",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "NO_SAFE_FIX"
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     }
   ]
 }

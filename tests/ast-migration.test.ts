@@ -69,12 +69,32 @@ test('AST Migration — parser abstraction resilience (Phase 2)', async (t) => {
     assert.equal(canAttemptRealAstParse('ANGULAR_TEMPLATE'), true);
   });
 
-  await t.test('buildRealSyntaxNodes never attempts to parse VUE_SFC content, even garbage SFC markup', () => {
+  await t.test('buildRealSyntaxNodes never throws on VUE_SFC <template> markup, even genuinely malformed markup, and still detects a real violation within it (Phase 2: FIGM-VUE-01/02 template AST)', () => {
+    // Updated for Phase 2 (AST/Rule Coverage Gaps): buildVueTemplateRealSyntaxNodes now DOES
+    // parse the <template> block for real (via @vue/compiler-dom, which is tolerant of malformed
+    // markup the same way the TS compiler is tolerant of malformed script) -- this fixture's
+    // `<<<broken>>>` inner content no longer prevents finding the outer `<div v-for="x in y">`
+    // element, which is a genuine FIGM-VUE-01 violation (no :key binding at all) correctly
+    // detected as REAL_AST. The resilience property this test protects (never throws on malformed
+    // input) still holds; only the "template markup is never parsed at all" premise is corrected.
     const vueGarbage = '<template><div v-for="x in y" :style="{ a: 1 }"><<<broken>>></div></template>\n<script>export default {}</script>';
     assert.doesNotThrow(() => buildRealSyntaxNodes(vueGarbage, 'Component.vue', 'VUE_SFC'));
     const result = buildRealSyntaxNodes(vueGarbage, 'Component.vue', 'VUE_SFC');
-    assert.deepEqual(result.nodes, []);
+    assert.equal(result.nodes.length, 1);
+    assert.equal(result.nodes[0].attributes?.isVForUnstableKey, true);
+    assert.equal(result.nodes[0].sourceKind, 'REAL_AST');
     assert.deepEqual(result.diagnostics, []);
+  });
+
+  await t.test('buildRealSyntaxNodes DOES now parse a VUE_SFC <script> block for real (second expansion pass)', () => {
+    // Confirms the corrected claim directly: unlike the rest of VUE_SFC (which stays
+    // LEGACY_TEXT_HEURISTIC, per the test above), FIGM-VUE-03..06 get genuine REAL_AST detection
+    // from the extracted <script> block -- see buildVueScriptRealSyntaxNodes's doc comment.
+    const vueWithArrowMethod = '<template><div /></template>\n<script>export default { methods: { increment: () => { this.count++; } } }</script>';
+    const result = buildRealSyntaxNodes(vueWithArrowMethod, 'Component.vue', 'VUE_SFC');
+    assert.equal(result.nodes.length, 1);
+    assert.equal(result.nodes[0].attributes?.isArrowOptionsMethod, true);
+    assert.equal(result.nodes[0].sourceKind, 'REAL_AST');
   });
 });
 
@@ -90,17 +110,25 @@ test('AST Migration — sourceKind provenance labeling (Phase 8)', async (t) => 
 
   // FIGM-A11Y-05 was migrated to real AST in Group 4 (docs/architecture/RULE_ENGINEERING_AUDIT.md)
   // -- see 'FIGM-A11Y-05: unlabeled <input> fires, via real AST' below for its current REAL_AST
-  // coverage. FIGM-ANG-03/04 (Angular *template markup*) are the rules that remain permanently
-  // LEGACY_TEXT_HEURISTIC on every framework (they need @angular/compiler, a deliberately
-  // undeployed new dependency -- see AST_MIGRATION_MAP.md §5), so this "not yet migrated" example
-  // now uses one of those instead.
-  await t.test('a rule that can never be real-AST-migrated without a new parser dependency (e.g. FIGM-ANG-04) is labeled LEGACY_TEXT_HEURISTIC, never REAL_AST', () => {
-    const code = `import { Component } from '@angular/core';\n@Component({ selector: 'app-x', changeDetection: 0, template: \`<span>{{ computeTotal() }}</span>\` })\nexport class WidgetComponent {}`;
-    const diags = diagnosticsFor(code, 'widget.component.ts');
-    const ang04 = diags.find((d) => d.ruleId === 'FIGM-ANG-04');
-    assert.ok(ang04, 'expected FIGM-ANG-04 to fire (template method call)');
-    assert.equal(ang04!.sourceKind, 'LEGACY_TEXT_HEURISTIC');
-    assert.match(ang04!.evidence ?? '', /^Legacy text-heuristic pattern match/);
+  // coverage. FIGM-ANG-03/04/08/10 (Angular template markup) were ALSO since migrated to REAL_AST
+  // (Scientific Hardening Pass) via angular-html-parser -- see
+  // src/ast/angular-template-ast-builder.ts and AST_MIGRATION_MAP.md's update note at the top of
+  // that file. Updated again for Phase 2 (AST/Rule Coverage Gaps): FIGM-VUE-01/02 (the two
+  // `<template>`-markup Vue rules) are now ALSO REAL_AST via src/ast/vue-template-ast-builder.ts
+  // (a real @vue/compiler-dom template parse) -- see tests/vue-template-ast-detection.test.ts for
+  // dedicated coverage, and canAttemptRealAstParse('VUE_SFC') === false above no longer means
+  // "no real AST for any Vue rule" (it only ever governed the whole-file TypeScript parse attempt
+  // -- both Vue's script AND template halves have always been reached through their own separate,
+  // dedicated real parsers instead, never through that whole-file gate). SVELTE (also excluded by
+  // canAttemptRealAstParse, with no dedicated real parser integrated for it at all -- see Phase 2
+  // item 5 / tests/svelte-unsupported.test.ts) is the stable "still genuinely legacy" example.
+  await t.test('a framework with no real-AST parser integrated at all (SVELTE) is labeled LEGACY_TEXT_HEURISTIC, never REAL_AST', () => {
+    const code = `<script>\n  let items = [1, 2, 3];\n</script>\n<img src="x.png" />\n`;
+    const diags = diagnosticsFor(code, 'Widget.svelte');
+    const perf02 = diags.find((d) => d.ruleId === 'FIGM-PERF-02');
+    assert.ok(perf02, 'expected FIGM-PERF-02 to fire (an <img> with no width/height)');
+    assert.equal(perf02!.sourceKind, 'LEGACY_TEXT_HEURISTIC');
+    assert.match(perf02!.evidence ?? '', /^Legacy text-heuristic pattern match/);
   });
 
   await t.test('FIGM-A11Y-05: unlabeled <input> fires, via real AST', () => {
@@ -112,7 +140,14 @@ test('AST Migration — sourceKind provenance labeling (Phase 8)', async (t) => 
     assert.match(a11y05!.evidence ?? '', /^Real AST \(TypeScript compiler\)/);
   });
 
-  await t.test('every rule fired on a VUE_SFC file is labeled LEGACY_TEXT_HEURISTIC (Vue is never real-AST-parsed)', () => {
+  // Updated for Phase 2: this fixture deliberately has no v-for/v-if/computed/prop-mutation shape
+  // -- only a generic @click + className attribute pattern, which stays LEGACY_TEXT_HEURISTIC for
+  // VUE_SFC specifically because A11Y-01/03's real-AST paths are REACT_JSX/NEXT_JS-only (see
+  // AST_MIGRATION_MAP.md §2). This is no longer "Vue is never real-AST-parsed" as a blanket
+  // statement (FIGM-VUE-01/02/03/04/06 now are, on their own matching shapes) -- it demonstrates
+  // that a rule's real-AST eligibility is still correctly framework-AND-shape-scoped, not a
+  // regression back to the old "nothing about Vue is real" state.
+  await t.test('a rule with no real-AST path for VUE_SFC (FIGM-A11Y-01/03 stay REACT_JSX/NEXT_JS-only) is still labeled LEGACY_TEXT_HEURISTIC on a Vue file', () => {
     const code = `<template>\n  <div @click="onClick" class="status-panel">{{ count }}</div>\n</template>\n<script>\nexport default { methods: { onClick() {} } };\n</script>`;
     const diags = diagnosticsFor(code, 'Component.vue');
     assert.ok(diags.length > 0, 'expected at least one diagnostic on this Vue fixture');
@@ -190,7 +225,7 @@ test('AST Migration — real-AST rules are structurally immune to comment/string
   });
 });
 
-test('AST Migration — Angular class-body rules (Group 2: ANG-01/02/05 real-AST, ANG-03/04 still legacy)', async (t) => {
+test('AST Migration — Angular class-body and template rules (Group 2: ANG-01/02/05 real-AST; ANG-03/04/08/10 upgraded to real-AST in the Scientific Hardening Pass)', async (t) => {
   await t.test('FIGM-ANG-01: an RxJS .subscribe() with no managed teardown fires, via real AST', () => {
     const code = `import { Component } from '@angular/core';\n@Component({ selector: 'app-x', template: '<div></div>' })\nexport class WidgetComponent {\n  ngOnInit() {\n    this.service.data$.subscribe(x => console.log(x));\n  }\n}`;
     const diags = diagnosticsFor(code, 'widget.component.ts');
@@ -221,15 +256,15 @@ test('AST Migration — Angular class-body rules (Group 2: ANG-01/02/05 real-AST
     assert.equal(ang05!.sourceKind, 'REAL_AST');
   });
 
-  await t.test('FIGM-ANG-03/04 (template-markup rules) remain LEGACY_TEXT_HEURISTIC even on an ANGULAR_TEMPLATE file', () => {
+  await t.test('FIGM-ANG-03/04 (template-markup rules) fire via REAL_AST (angular-html-parser) on an ANGULAR_TEMPLATE file', () => {
     const code = `import { Component } from '@angular/core';\n@Component({\n  selector: 'app-x',\n  changeDetection: 0,\n  template: \`<li *ngFor="let item of items">{{ formatItem() }}</li>\`\n})\nexport class WidgetComponent {}`;
     const diags = diagnosticsFor(code, 'widget.component.ts');
     const ang03 = diags.find((d) => d.ruleId === 'FIGM-ANG-03');
     const ang04 = diags.find((d) => d.ruleId === 'FIGM-ANG-04');
-    assert.ok(ang03, 'expected FIGM-ANG-03 (*ngFor without trackBy) to still fire via the legacy path');
-    assert.equal(ang03!.sourceKind, 'LEGACY_TEXT_HEURISTIC');
-    assert.ok(ang04, 'expected FIGM-ANG-04 (template method call) to still fire via the legacy path');
-    assert.equal(ang04!.sourceKind, 'LEGACY_TEXT_HEURISTIC');
+    assert.ok(ang03, 'expected FIGM-ANG-03 (*ngFor without trackBy) to fire via the real-AST path');
+    assert.equal(ang03!.sourceKind, 'REAL_AST');
+    assert.ok(ang04, 'expected FIGM-ANG-04 (template method call) to fire via the real-AST path');
+    assert.equal(ang04!.sourceKind, 'REAL_AST');
   });
 });
 

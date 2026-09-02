@@ -92,8 +92,12 @@ test('Research Integrity & Metric Consistency Test Suite', async (t) => {
     assert.ok(summary.ruleCoverage, 'eval-summary.json must expose ruleCoverage provenance');
     assert.equal(summary.ruleCoverage.rulesWithGroundTruth, summary.ruleCoverage.coveredRuleIds.length);
     assert.equal(summary.ruleCoverage.totalFigmRules, summary.ruleCoverage.rulesWithGroundTruth + summary.ruleCoverage.uncoveredRuleIds.length);
-    // Must never silently claim full rule coverage from the ground-truth benchmark alone.
-    assert.ok(summary.ruleCoverage.rulesWithGroundTruth < summary.ruleCoverage.totalFigmRules);
+    // Ground truth now genuinely covers all 25 rules (see tests/research-gap-eval.test.ts's GAP 2
+    // case for the full explanation -- FIGM-NEXT-03 was closed by extending EvaluationRunner's
+    // file discovery to a recursive walk plus a genuinely nested App Router fixture). If coverage
+    // ever regresses, this must catch it -- not be loosened back to "< total".
+    assert.equal(summary.ruleCoverage.rulesWithGroundTruth, summary.ruleCoverage.totalFigmRules);
+    assert.equal(summary.ruleCoverage.uncoveredRuleIds.length, 0);
   });
 
   await t.test('regression guard: fabricated/duplicate metric sources must never be reintroduced', () => {

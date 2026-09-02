@@ -8,6 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { EvaluationRunner } from '../eval/evaluation-runner.js';
 import { CORE_ALPS, FOUR_LAYER_MAPPINGS, FORMAL_PREDICATES_MAP } from '../matrix/four-layer-meta-model.js';
+import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../research/research-config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,7 +61,7 @@ The Framework-Independent Guideline Model (FIGM) establishes a 4-layer hierarchi
 \\end{equation}
 
 \\section{Abstract Language Primitives (ALPs)}
-Table~\\ref{tab:figm_alps} details the ${CORE_ALPS.length} core Abstract Language Primitives (ALPs) underpinning FIGM's 25 canonical rules, spanning AST constructs across React, Next.js, Angular, and Vue single-page application paradigms.
+Table~\\ref{tab:figm_alps} details the ${CORE_ALPS.length} core Abstract Language Primitives (ALPs) underpinning FIGM's 50 canonical rules, spanning AST constructs across React, Next.js, Angular, and Vue single-page application paradigms.
 
 \\begin{table}[htbp]
 \\centering
@@ -92,7 +93,7 @@ FIGM parses framework templates into unified ESTree-compatible nodes via resilie
 \\label{ch:implementation}
 
 \\section{Static Rule Execution Engine}
-The FIGM static analysis engine matches extracted Abstract Language Primitives (ALPs) against formal boolean predicates over a normalized node representation. As of the AST migration documented in \\texttt{docs/architecture/AST\\_MIGRATION\\_MAP.md}, this normalized representation is populated by two distinct mechanisms depending on rule and framework: 23 of the 25 FIGM rules are detected via genuine TypeScript-compiler-API AST traversal for React, Next.js, plain JS/TS, and the TypeScript class body of Angular components (the frameworks/syntax for which a real parse is possible without adding a new dependency); the remaining 2 rules (Angular \\texttt{*ngFor} trackBy and template method-call detection, both of which require parsing Angular's inline template markup), and every rule applied to Vue SFC markup (neither of which the TypeScript compiler can parse), are detected via a regex/substring text-heuristic over the source. This is not a uniform "unified AST traversal" claim -- it is a framework- and rule-gated hybrid, and every emitted finding is labeled with which of the two mechanisms produced it (\\texttt{sourceKind}: \\texttt{REAL\\_AST} or \\texttt{LEGACY\\_TEXT\\_HEURISTIC}) so this distinction is verifiable in the tool's own output, not only in this text.
+The FIGM static analysis engine matches extracted Abstract Language Primitives (ALPs) against formal boolean predicates over a normalized node representation. As of the AST migration documented in \\texttt{docs/architecture/AST\\_MIGRATION\\_MAP.md} (see its 2026-08 Scientific Hardening addendum), this normalized representation is populated by three distinct mechanisms depending on rule and framework: 44 of the 50 FIGM rules are detected via genuine TypeScript-compiler-API AST traversal for React, Next.js, plain JS/TS, and the TypeScript class body of Angular components; a further 4 rules (\\texttt{FIGM-ANG-03}, \\texttt{FIGM-ANG-04}, \\texttt{FIGM-ANG-08}, \\texttt{FIGM-ANG-10}) parse Angular's inline template markup via \\texttt{angular-html-parser}, a real, independently-maintained HTML+Angular-template parser extracted from Angular's own compiler -- not \\texttt{@angular/compiler} itself -- giving genuine element/attribute/directive/interpolation and \\texttt{@for}/\\texttt{@if}/\\texttt{@switch} control-flow AST with real source spans; the remaining 2 rules (\\texttt{FIGM-VUE-01}, \\texttt{FIGM-VUE-02}, both requiring Vue Single-File-Component template markup, which neither the TypeScript compiler nor \\texttt{angular-html-parser} can parse) are detected via a regex/substring text-heuristic over the source, a limitation documented as environment-blocked: a genuine Vue template parser (\\texttt{@vue/compiler-sfc}) was scoped for this pass but the development environment had no package-registry network access to install it. This is not a uniform "unified AST traversal" claim -- it is a framework- and rule-gated hybrid, and every emitted finding is labeled with which mechanism produced it (\\texttt{sourceKind}: \\texttt{REAL\\_AST} or \\texttt{LEGACY\\_TEXT\\_HEURISTIC}) so this distinction is verifiable in the tool's own output, not only in this text.
 
 ${predicatesTex}
 
@@ -111,7 +112,7 @@ The empirical benchmark suite evaluated FIGM across React JSX, Vue SFC, Angular 
 The system achieved an overall Precision of \\textbf{${(evalResults.overall.precision * 100).toFixed(1)}\\%}, Recall of \\textbf{${(evalResults.overall.recall * 100).toFixed(1)}\\%}, and F1-Score of \\textbf{${(evalResults.overall.f1Score * 100).toFixed(1)}\\%}.
 
 \\section{Rule-by-Rule Accuracy Evaluation}
-Table~\\ref{tab:rule_eval_results} presents the empirical evaluation breakdown for the 8 core guidelines that have established ground-truth benchmark fixtures, out of the 25 total FIGM rules (see Chapter~\\ref{ch:implementation} for the full rule catalog).
+Table~\\ref{tab:rule_eval_results} presents the empirical evaluation breakdown across all 50 total FIGM rules (see Chapter~\\ref{ch:implementation} for the full rule catalog), every one of which now has an established ground-truth benchmark fixture in \\texttt{benchmarks/testbed}.
 
 \\begin{table}[htbp]
 \\centering
@@ -134,7 +135,7 @@ ${evalResults.ruleMetrics
 \\end{table}
 
 \\section{Developer Usability Study}
-A target cohort of $N = 85$ student developers at NSBM Green University was planned for a System Usability Scale (SUS) evaluation of FIGM. As of this export, \\textbf{0 of 85} real participant responses have been collected (see \\texttt{research/CONSENT\\_FORM.md} and \\texttt{data/user-study-responses.json}) -- no SUS score, patch-acceptance rate, or satisfaction metric is reported here, because none has been measured from real data. A prior version of this chapter reported a completed evaluation with a specific SUS score and satisfaction percentages; those figures were fabricated (invented, with no underlying computation or data source) and have been retracted rather than replaced with different numbers.
+A target cohort of $N = ${HUMAN_STUDY_TARGET_PARTICIPANTS}$ student developers at NSBM Green University was planned for a System Usability Scale (SUS) evaluation of FIGM. As of this export, \\textbf{0 of ${HUMAN_STUDY_TARGET_PARTICIPANTS}} real participant responses have been collected (see \\texttt{research/CONSENT\\_FORM.md} and \\texttt{research/raw/real/responses.csv} -- the actual expected-input path read by \\texttt{scripts/import-user-study.ts}; a prior version of this chapter cited a non-existent \\texttt{data/user-study-responses.json} path, corrected here to the repository's real source-of-truth location) -- no SUS score, patch-acceptance rate, or satisfaction metric is reported here, because none has been measured from real data. A prior version of this chapter reported a completed evaluation with a specific SUS score and satisfaction percentages; those figures were fabricated (invented, with no underlying computation or data source) and have been retracted rather than replaced with different numbers.
 
 \\section{Scan Throughput \\& Memory Usage}
 \\begin{itemize}

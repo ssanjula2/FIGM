@@ -15,34 +15,42 @@ describe('FIGM Phase 4 Empirical Evaluation & Dynamic Metrics Engine', () => {
     const results = EvaluationRunner.runEvaluation();
 
     assert.ok(results.overall.truePositives > 0, 'Expected TP > 0');
-    assert.equal(results.ruleMetrics.length, 8, 'Expected 8 rule metrics');
-    assert.equal(results.frameworkMetrics.length, 4, 'Expected 4 framework metrics');
+    assert.equal(results.ruleMetrics.length, 50, 'Expected 50 rule metrics (full canonical rule set)');
+    assert.equal(results.frameworkMetrics.length, 5, 'Expected 5 framework metrics (React/Next.js/Vue/Angular/generic)');
 
-    // Exact-value regression guard (audit finding QA-03): the controlled benchmark testbed
-    // (benchmarks/testbed/, 4 hand-authored fixtures, 19 hand-labelled violations across 8 rules)
-    // is fixed and the detection engine is fully deterministic against it -- two independent full
-    // reruns during the 2026-08-18 forensic audit reproduced TP=19/FP=2/FN=0 byte-for-byte. A loose
-    // ">= 0.8" floor would not catch a real regression (e.g. precision quietly dropping from 0.90 to
-    // 0.81), so this asserts the exact current, verified values. If a LEGITIMATE detector
-    // improvement to one of the 8 covered rules (FIGM-PERF-01..04, FIGM-A11Y-01..04) genuinely
+    // Exact-value regression guard (audit finding QA-03, extended through the full 25/25-rule
+    // ground-truth expansion, then the 33/33-rule expansion pass, then the 50/50-rule second
+    // expansion pass -- see docs/research/EXPANSION_RESEARCH_TRACEABILITY.md and
+    // docs/research/EXPANSION_2_RESEARCH_TRACEABILITY.md): the controlled benchmark testbed
+    // (benchmarks/testbed/, 46 hand-authored POSITIVE fixtures -- 45 flat + 1 nested app-router
+    // fixture for FIGM-NEXT-03, 65 hand-labelled violations across all 50 rules -- plus, since the
+    // Pre-Freeze Technical Completion Pass, 21 hand-authored NEGATIVE/clean fixtures under
+    // benchmarks/testbed/negative/ with zero ground-truth entries of their own, verified to
+    // genuinely produce no FIGM diagnostics) is fixed and the detection
+    // engine is fully deterministic against it. A loose ">= 0.8" floor would not catch a real
+    // regression (e.g. precision quietly dropping), so this asserts the exact current, verified
+    // values -- reproduced by directly running `npm run eval` and reading
+    // benchmarks/eval-summary.json. If a LEGITIMATE detector change to any covered rule genuinely
     // changes these counts on the fixed testbed, that is real information -- update this assertion
     // deliberately, alongside the canonical artifacts (benchmarks/eval-summary.json,
     // docs/evidence/canonical-evaluation.json) and every document that surfaces this number
-    // (docs/dissertation/chapter5_*, README, VIVA_PREPARATION_GUIDE.md), not silently.
-    assert.equal(results.overall.truePositives, 19, 'Expected exactly 19 true positives on the fixed controlled testbed');
-    assert.equal(results.overall.falsePositives, 2, 'Expected exactly 2 false positives on the fixed controlled testbed');
+    // (docs/dissertation/chapter5_*, VIVA_PREPARATION_GUIDE.md, DISSERTATION_DEMO_GUIDE.md,
+    // RESEARCH_TRACEABILITY_MATRIX.md, docs/evidence/research-claim-traceability.md,
+    // app/api/research-metrics/route.ts's evaluationDataset block), not silently.
+    assert.equal(results.overall.truePositives, 65, 'Expected exactly 65 true positives on the fixed controlled testbed');
+    assert.equal(results.overall.falsePositives, 0, 'Expected exactly 0 false positives on the fixed controlled testbed');
     assert.equal(results.overall.falseNegatives, 0, 'Expected exactly 0 false negatives on the fixed controlled testbed');
     assert.ok(
-      Math.abs(results.overall.precision - 19 / 21) < 1e-9,
-      `Expected precision to equal 19/21 (TP/(TP+FP)) exactly, got ${results.overall.precision}`
+      Math.abs(results.overall.precision - 1) < 1e-9,
+      `Expected precision to equal 65/65 = 1.0 exactly, got ${results.overall.precision}`
     );
     assert.ok(
       Math.abs(results.overall.recall - 1) < 1e-9,
-      `Expected recall to equal 19/19 = 1.0 exactly, got ${results.overall.recall}`
+      `Expected recall to equal 65/65 = 1.0 exactly, got ${results.overall.recall}`
     );
     assert.ok(
-      Math.abs(results.overall.f1Score - (2 * (19 / 21) * 1) / (19 / 21 + 1)) < 1e-9,
-      `Expected F1 to equal the harmonic mean of the above precision/recall exactly, got ${results.overall.f1Score}`
+      Math.abs(results.overall.f1Score - 1) < 1e-9,
+      `Expected F1 to equal 1.0 exactly, got ${results.overall.f1Score}`
     );
   });
 

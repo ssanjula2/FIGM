@@ -5,16 +5,14 @@
   "primaryFrameworkLabel": "React",
   "filesScanned": 8,
   "totalLOC": 793,
-  "scanDurationMs": 1069.8554000000004,
-  "totalFigmFindings": 8,
+  "scanDurationMs": 869.155399999996,
+  "totalFigmFindings": 5,
   "findingsByRule": {
     "FIGM-PERF-03": 4,
-    "FIGM-REACT-01": 3,
     "FIGM-PERF-05": 1
   },
   "findingsBySeverity": {
     "CRITICAL": 4,
-    "HIGH": 3,
     "MEDIUM": 1
   },
   "frameworksDetected": {
@@ -31,7 +29,7 @@
       "relativePath": "public/mockServiceWorker.js",
       "framework": "GENERIC_ESTREE",
       "loc": 285,
-      "figmFindingCount": 7,
+      "figmFindingCount": 4,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -175,33 +173,6 @@
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "public/mockServiceWorker.js",
-      "location": {
-        "start": {
-          "line": 78,
-          "column": 31
-        },
-        "end": {
-          "line": 80,
-          "column": 8
-        }
-      },
-      "offendingCodeSnippet": "const remainingClients = allClients.filter((client) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 78",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-03",
       "ruleName": "Unbounded Event Listener Disposal",
       "domain": "PERFORMANCE",
@@ -229,62 +200,8 @@
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "public/mockServiceWorker.js",
-      "location": {
-        "start": {
-          "line": 166,
-          "column": 9
-        },
-        "end": {
-          "line": 170,
-          "column": 6
-        }
-      },
-      "offendingCodeSnippet": "return allClients",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 166",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "public/mockServiceWorker.js",
-      "location": {
-        "start": {
-          "line": 262,
-          "column": 29
-        },
-        "end": {
-          "line": 262,
-          "column": 59
-        }
-      },
-      "offendingCodeSnippet": "[channel.port2].concat(transferrables.filter(Boolean)),",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 262",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -300,7 +217,7 @@
         }
       },
       "offendingCodeSnippet": "const notifications = [...Array(numNotifications)].map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,

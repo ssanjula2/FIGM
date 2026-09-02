@@ -230,6 +230,164 @@ git ls-remote https://github.com/bradtraversy/react-crash-2021.git HEAD
 # regardless of what the remote's default branch currently points to.
 ```
 
+## 8b. Corpus expansion (Scientific Hardening Pass, 2026-08-25) — 5 repos → 15 repos
+
+The original 5-repo corpus (§3, §9) was explicitly disclosed as small, tutorial/starter-only, and
+non-representative. This section documents 10 additional repositories added to address that,
+**written before any of the 10 were cloned or scanned**, so the selection criteria could not have
+been shaped by knowledge of how favorably each repo would score.
+
+**Selection criteria, fixed in advance:**
+1. Real, public GitHub repositories, not authored by this project or its dependencies.
+2. Two additional repositories per framework category already in the original 5 (React, Next.js,
+   Angular, Vue, generic JS/TS) — for balance, not because 2 is scientifically special.
+3. Preference for widely-known, either official-org-maintained or canonical-reference repositories
+   (mirroring the original 5's own selection bar), over an unverifiable long-tail repo — favoring
+   confidence that the code is genuine, idiomatic, human-authored, and not itself a joke/spam repo.
+4. At least some of the 10 deliberately larger/more production-shaped than the original 5's
+   tutorials/starters, to partially address the original corpus's most-cited limitation (§9,
+   bullet 2) — without picking anything too large to clone/scan/spot-check within this session.
+5. **Existence verified via `git ls-remote <url> HEAD` and size/license/archive status verified via
+   the GitHub REST API for every candidate BEFORE it was added to `REPOS` below** — exactly the same
+   discipline as the original 5 (§2). Three candidates that were tried and do not exist
+   (`javascript30/JavaScript30`, `angular-realworld/angular-realworld-example-app`, plus a handful of
+   guessed Angular-app repo names) were dropped rather than fabricated; this is disclosed rather than
+   silently omitted, per this project's no-fabrication standard.
+6. The [RealWorld](https://github.com/gothinkster/realworld) project (multiple frontend
+   implementations of the identical "Conduit" Medium-clone spec, one repo per framework) was
+   deliberately favored where available (React/Angular/Vue) — it gives FIGM a rare
+   apples-to-apples case: the *same* application logic and feature scope, reimplemented per
+   framework, so cross-framework finding-rate differences are less confounded by "these are just
+   different apps doing different things."
+
+**The 10 additional repositories** (existence/commit verified via `git ls-remote`; size/license via
+the GitHub API; two of the three RealWorld repos below now live under the `realworld-apps` GitHub
+org after a repository transfer from `gothinkster` — the transfer was discovered during this
+verification step, and the current canonical URL is used below):
+
+| Repo | Framework | Why chosen | Size (KB) | License | Stars (at selection time) |
+|---|---|---|---|---|---|
+| [`gothinkster/react-redux-realworld-example-app`](https://github.com/gothinkster/react-redux-realworld-example-app) | React | Canonical RealWorld React+Redux implementation. | 540 | MIT | 5,621 |
+| [`reduxjs/redux-essentials-example-app`](https://github.com/reduxjs/redux-essentials-example-app) | React | Official Redux docs example app ("Redux Essentials" tutorial), Redux Toolkit + hooks. | 1,349 | none asserted | 323 |
+| [`vercel/next-learn`](https://github.com/vercel/next-learn) | Next.js | Official Next.js "Learn" course repository (Vercel org). | 5,022 | MIT | 4,781 |
+| [`vercel/commerce`](https://github.com/vercel/commerce) | Next.js | Official Vercel Next.js Commerce template — deliberately larger/closer to a real production app, to offset the original corpus's tutorial-only bias. | 11,114 | MIT | 14,236 |
+| [`realworld-apps/angular-realworld-example-app`](https://github.com/realworld-apps/angular-realworld-example-app) | Angular | Canonical RealWorld Angular implementation. | 2,100 | NOASSERTION | 5,623 |
+| [`angular-university/reactive-angular-course`](https://github.com/angular-university/reactive-angular-course) | Angular | Well-known Angular/RxJS course reference repo, real components/services/reactive-forms usage distinct in shape from the Tour of Heroes tutorial already in the corpus. | 2,040 | MIT | 327 |
+| [`realworld-apps/vue-realworld-example-app`](https://github.com/realworld-apps/vue-realworld-example-app) | Vue | Canonical RealWorld Vue implementation (same Conduit spec as the React/Angular RealWorld apps above). | 2,994 | MIT | 4,070 |
+| [`antfu-collective/vitesse`](https://github.com/antfu-collective/vitesse) | Vue | Popular, actively-maintained opinionated Vue 3 starter template (Composition API, `<script setup>`) — real, modern, idiomatic Vue 3 code, distinct in era/style from `vue-hackernews-2.0`'s Vue 2/Options API code. | 3,784 | MIT | 9,437 |
+| [`wesbos/JavaScript30`](https://github.com/wesbos/JavaScript30) | Generic JS | Widely-known "30 Day Vanilla JS Coding Challenge" — 30 independent small real DOM/Canvas/fetch projects, a second independent proxy for "framework-independent JavaScript in the wild" alongside `vanillawebprojects`. | 46,998 | none asserted | 29,250 |
+| [`trekhleb/javascript-algorithms`](https://github.com/trekhleb/javascript-algorithms) | Generic JS/TS | Large (196k★), well-known algorithms-in-JS repository — the deliberate "big, real, non-tutorial" entry for the generic-JS category, addressing the same representativeness gap `vercel/commerce` addresses for Next.js. | 14,964 | MIT | 196,550 |
+
+Two repositories (`reduxjs/redux-essentials-example-app`, `wesbos/JavaScript30`) have no
+GitHub-detected SPDX license; both are widely-referenced public educational repositories with
+visible source, included for internal, non-redistributive scan-and-count analysis only (this
+benchmark reports finding counts/rule IDs/line numbers, never reproduces source file contents in
+its output beyond the same short `offendingCodeSnippet` excerpts already used for the original 5).
+
+This brings the real-world corpus to **15 repositories total**. `REPOS` in
+`run-real-world-benchmark.ts` was updated to include all 10; the script and its pinned-commit
+verification behavior are otherwise unchanged from §4.
+
+## 8c. Corpus expansion (Stage 5, 2026-09-03) — 15 repos → 21 repos, primary-framework-only additions
+
+Per the researcher's authoritative repository-sample requirement (Proposal §4.3 / Interim02 §3.4:
+20-30 public open-source SPA repositories using React, Next.js, Angular; Vue is additional support
+only, explicitly **not** to be padded to reach the total), 6 additional repositories were added,
+**all primary-framework** (2 React, 2 Next.js, 2 Angular) — no new Vue or generic-JS repos were
+added this pass. This brings the corpus to 21 total (15 primary-framework + 3 Vue + 3 generic),
+with the primary-framework subset growing from 9 to 15.
+
+**Selection criteria, fixed before cloning/scanning:**
+1. Real, public GitHub repositories, not authored by this project or its dependencies.
+2. Existence verified via `git ls-remote <url> HEAD`; size, license, and archived-status verified
+   via the GitHub REST API for every candidate **before** it was added to `REPOS` — same discipline
+   as §3/§8b. Candidates checked and rejected without being added: `angular/angular.io` (confirmed
+   `archived: true` via the API — excluded on that basis alone, per the same non-archived
+   requirement implicit in every prior selection); `cal-com/cal.com`, `TeamHive/ngx-material-timepicker`,
+   `wardbell/AngularAirport`, and several other guessed Angular-app repository names returned
+   `404 Not Found` and were dropped, never fabricated.
+3. `vercel/ai-chatbot` was found to have been renamed to `vercel/chatbot` mid-selection (the old
+   URL 301-redirects at the GitHub API) — the current canonical URL is recorded in `REPOS`,
+   consistent with how §8b already handled the `gothinkster` → `realworld-apps` org transfer.
+4. Preference for either official-org-maintained repositories (`vercel/chatbot`, `nextjs/saas-starter`)
+   or widely-referenced community repositories with a real, non-toy production shape
+   (`excalidraw/excalidraw`, `alan2207/bulletproof-react`, `akveo/ngx-admin`,
+   `coreui/coreui-free-angular-admin-template`) — the same selection bar as §3/§8b.
+5. At least one deliberately large, production-shaped addition per underrepresented framework
+   (`excalidraw` for React — 664 files, 197,600 LOC; `akveo/ngx-admin` for Angular — 244 files,
+   14,408 LOC), to continue offsetting the corpus's original tutorial/starter-only bias (§9),
+   alongside at least one deliberately small addition per framework for balance
+   (`alan2207/bulletproof-react`, `nextjs/saas-starter`).
+
+**The 6 additional repositories** (full detail, license, and per-repo inclusion rationale in
+`raw-results/repository-manifest.json`, machine-generated by `generate-corpus-summary.ts`):
+
+| Repo | Framework | Commit (short) | Files | LOC | License |
+|---|---|---|---|---|---|
+| [`excalidraw/excalidraw`](https://github.com/excalidraw/excalidraw) | React | `e1bb9ff8` | 664 | 197,600 | MIT |
+| [`alan2207/bulletproof-react`](https://github.com/alan2207/bulletproof-react) | React | `9506629e` | 425 | 23,202 | MIT |
+| [`vercel/chatbot`](https://github.com/vercel/chatbot) | Next.js | `c2f8235e` | 154 | 21,054 | NOASSERTION |
+| [`nextjs/saas-starter`](https://github.com/nextjs/saas-starter) | Next.js | `6e33e58b` | 41 | 3,637 | MIT |
+| [`akveo/ngx-admin`](https://github.com/akveo/ngx-admin) | Angular | `dc6a4427` | 244 | 14,408 | MIT |
+| [`coreui/coreui-free-angular-admin-template`](https://github.com/coreui/coreui-free-angular-admin-template) | Angular | `5f66f95b` | 141 | 6,369 | MIT |
+
+Full 40-character commit hashes are in `run-real-world-benchmark.ts`'s `REPOS` array.
+
+**Pre-expansion archive**: the original 15-repository result set was copied, before this expansion
+was run, to `raw-results-archive/2026-09-03-pre-20-repo-expansion/` — see
+`docs/audit/STAGE_5_REAL_REPOSITORY_EXPANSION_REPORT.md` for the full before/after comparison.
+
+**A real script defect was found and fixed during this pass** (not a detector/rule change):
+`run-real-world-benchmark.ts` called `main()` unconditionally at module scope with no entry guard,
+so merely *importing* `REPOS` (exactly what the new `generate-corpus-summary.ts` and
+`tests/real-world-corpus-manifest.test.ts` legitimately need to do) silently re-triggered a full
+21-repository clone-and-scan as an import side effect — the same bug class already fixed once in
+`src/cli/figm-analyze.ts` (§6b), just never ported to this file. Fixed identically (exact
+entry-script-basename check). Verified harmless in effect, not a data-integrity bug: the accidental
+second full run produced byte-identical per-repo file/LOC/finding counts to the first, so the
+corpus did not need to be re-run after the fix — only the missing guard needed fixing.
+
+**Anomaly investigation (Stage 5 §7 requirement) — two concrete findings, both documented, neither
+fixed in this pass** (fixing either would mean changing parser/detector semantics mid-corpus-run,
+which this stage's own brief explicitly prohibits):
+
+1. **Parser spike, root-caused**: 117/2512 files (4.7%) across the corpus produced one or more
+   `SYNTAX-PARSE-ERROR` diagnostics, heavily concentrated in the 4 new Next.js-family repos
+   (`vercel-chatbot` 47/154 = 30.5%, `nextjs-saas-starter` 12/41 = 29.3%, `commerce` 16/65 = 24.6%,
+   `next-learn` 20/131 = 15.3%, vs. 0-2% in most other repos). Traced to a single dominant root
+   cause, confirmed by direct re-scan with per-message-bucket counting: **"Unexpected token '{' in
+   function parameter list"**, fired by FIGM's lightweight scope parser on the extremely common
+   Next.js App Router pattern of a destructured function parameter with an inline TypeScript object
+   type, e.g. `function Layout({ children }: { children: React.ReactNode })`
+   (`app/(auth)/layout.tsx:6` in `vercel-chatbot`, and equivalently in every other affected repo).
+   This shape appears on nearly every `layout.tsx`/`page.tsx` in an App Router codebase, which is
+   why the 4 new Next.js repos concentrate the spike — it is not new to this pass (the pre-existing
+   `javascript-algorithms` and `vue-hackernews-2.0` entries already showed 2 and 1 instances of the
+   identical message before Stage 5). This is the same class of pre-existing lightweight-parser
+   limitation already flagged as dissertation Chapter 6 future work ("Compiler AST Driver
+   Integration: replace lightweight scope parsers with Babel/SWC pluggable drivers") — documented
+   here with exact reproduction, not silently absorbed into an unexplained parse-error count.
+2. **A concrete "wrong framework" false-positive class**: `FIGM-ANG-01` ("RxJS subscription created
+   inside Angular component missing unsubscribe or takeUntilDestroyed") fired twice in
+   `excalidraw/excalidraw` — a pure-React codebase with zero Angular content — on
+   `packages/excalidraw/components/AppStateObserver.ts`, a plain TypeScript class whose private
+   method happens to be named `subscribe()` and is called as `this.subscribe({...})`. The rule
+   matches on syntactic shape alone (a `this.<name>(...)` call resembling an RxJS `.subscribe()`
+   pattern) with no actual Angular-framework evidence required, the same class of limitation already
+   disclosed for `FIGM-REACT-03` in the original benchmark (§1, `SPOT_CHECK.md`). Documented as a
+   reproducible false-positive class (2/2649 findings, 0.08% of this run); not fixed here for the
+   same reason as finding 1.
+3. **One genuine exact-duplicate finding** (not a systemic bug): `excalidraw/App.tsx:11606:10`
+   produced two identical `FIGM-REACT-01` diagnostics (same rule, message, and code snippet) for the
+   same AST location. Isolated to 1 of 2649 findings (0.04%) corpus-wide — every other apparent
+   "duplicate" surfaced by an initial (buggy) investigation script collapsed once the check was
+   corrected to key on `location.start.line`/`column` rather than a nonexistent `d.line` field
+   (which had silently matched only on rule+file, producing false positives). Not treated as a
+   corpus-invalidating defect given its scale; noted for a future engine-hardening pass.
+
+No engine crashes (synchronous or async) occurred across all 21 repositories in either the original
+or the re-triggered run — see `raw-results/_combined-summary.json`.
+
 ## 9. Known limitations of this benchmark, stated directly
 
 - 5 repositories, 80 files, 4,732 LOC total -- a small corpus. Findings here characterize FIGM's

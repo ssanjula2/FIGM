@@ -6,13 +6,13 @@ export default function FeaturesGrid() {
   const features = [
     {
       icon: '⚡',
-      title: '25 Canonical Rules & Formal Predicates',
+      title: '50 Canonical Rules & Formal Predicates',
       desc: 'Formally defined static inspection predicates detecting invariant allocations, un-dimensioned elements, missing ARIA names, and RxJS memory leaks.',
       tag: 'AST Engine',
     },
     {
       icon: '🤖',
-      title: 'Gemini 2.5 Flash AI Remediation',
+      title: 'Claude Opus 5 AI Remediation',
       desc: 'Generates syntactically valid unified git diff patches with AST re-parsing syntax validation and automatic deterministic fallback protection.',
       tag: 'AI Pipeline',
     },

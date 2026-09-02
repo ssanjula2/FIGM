@@ -4,30 +4,32 @@
 
 ## 5.0 Provenance
 
-- **Dataset**: `benchmarks/ground-truth.json` (8 rules, hand-labelled) scored against fixture files in `benchmarks/testbed`
-- **Generated at**: 2026-08-18T12:40:43.922Z
+- **Dataset**: `benchmarks/ground-truth.json` (50 rules, hand-labelled) scored against fixture files in `benchmarks/testbed`
+- **Generated at**: 2026-09-02T23:23:44.330Z
 - **Calculation method**: TP/FP/FN computed by dynamically re-running RuleExecutionEngine.analyzeFile against every file in benchmarks/testbed and diffing the resulting diagnostics against benchmarks/ground-truth.json (exact filePath+ruleId match). Precision = TP/(TP+FP), Recall = TP/(TP+FN), F1 = 2*P*R/(P+R). No cached or hand-typed confusion matrix is used at any step.
-- **Rule coverage**: 8 of 25 FIGM rules have empirical ground-truth coverage (FIGM-A11Y-01, FIGM-A11Y-02, FIGM-A11Y-03, FIGM-A11Y-04, FIGM-PERF-01, FIGM-PERF-02, FIGM-PERF-03, FIGM-PERF-04). The remaining 17 rules (FIGM-A11Y-05, FIGM-A11Y-06, FIGM-ANG-01, FIGM-ANG-02, FIGM-ANG-03, FIGM-ANG-04, FIGM-ANG-05, FIGM-NEXT-01, FIGM-NEXT-02, FIGM-NEXT-03, FIGM-NEXT-04, FIGM-PERF-05, FIGM-PERF-06, FIGM-REACT-01, FIGM-REACT-02, FIGM-REACT-03, FIGM-REACT-04) are verified only by unit-level positive/negative fixture tests, not by this benchmark -- see Section 5.1.1.
+- **Rule coverage**: 50 of 50 FIGM rules have empirical ground-truth coverage (FIGM-A11Y-01, FIGM-A11Y-02, FIGM-A11Y-03, FIGM-A11Y-04, FIGM-A11Y-05, FIGM-A11Y-06, FIGM-A11Y-07, FIGM-ANG-01, FIGM-ANG-02, FIGM-ANG-03, FIGM-ANG-04, FIGM-ANG-05, FIGM-ANG-06, FIGM-ANG-07, FIGM-ANG-08, FIGM-ANG-09, FIGM-ANG-10, FIGM-NEXT-01, FIGM-NEXT-02, FIGM-NEXT-03, FIGM-NEXT-04, FIGM-NEXT-05, FIGM-NEXT-06, FIGM-NEXT-07, FIGM-NEXT-08, FIGM-NEXT-09, FIGM-NEXT-10, FIGM-PERF-01, FIGM-PERF-02, FIGM-PERF-03, FIGM-PERF-04, FIGM-PERF-05, FIGM-PERF-06, FIGM-REACT-01, FIGM-REACT-02, FIGM-REACT-03, FIGM-REACT-04, FIGM-REACT-05, FIGM-REACT-06, FIGM-REACT-07, FIGM-REACT-08, FIGM-REACT-09, FIGM-REACT-10, FIGM-REACT-11, FIGM-VUE-01, FIGM-VUE-02, FIGM-VUE-03, FIGM-VUE-04, FIGM-VUE-05, FIGM-VUE-06). All FIGM rules now have empirical ground-truth coverage; none remain unit-test-only.
 
 ## 5.1 Precision, Recall, and F1-Score Metrics against Ground Truth
 
 Automated evaluation: `RuleExecutionEngine.analyzeFile` (the identical engine the live product uses) is re-run against every fixture in `benchmarks/testbed`, and its diagnostics are diffed against the hand-labelled violations in `benchmarks/ground-truth.json`.
 
 ### Confusion Matrix
-- **True Positives (TP)**: 19
-- **False Positives (FP)**: 2
+- **True Positives (TP)**: 65
+- **False Positives (FP)**: 0
 - **False Negatives (FN)**: 0
 
 *(True Negatives are not reported: there is no well-defined "clean code that correctly triggers nothing" universe to count for a rule-based static-analysis benchmark, so Accuracy/Specificity/FPR/FNR -- which require TN -- are intentionally not computed or shown, rather than filled in with a placeholder.)*
 
 ### Calculated Performance Metrics
-- **Precision**: 90.48%
+- **Precision**: 100.00%
 - **Recall (Sensitivity)**: 100.00%
-- **F1-Score**: 95.00%
+- **F1-Score**: 100.00%
 
 ### 5.1.1 Rule Coverage Limitation
 
-> **This benchmark measures 8 of FIGM's 25 rules only.** The Precision/Recall/F1 figures above must not be interpreted as "FIGM detects all 25 rules with 95.0% accuracy" -- they describe detection accuracy strictly for the rule subset with hand-labelled ground truth: FIGM-A11Y-01, FIGM-A11Y-02, FIGM-A11Y-03, FIGM-A11Y-04, FIGM-PERF-01, FIGM-PERF-02, FIGM-PERF-03, FIGM-PERF-04. Extending empirical ground-truth coverage to the remaining 17 rules (FIGM-A11Y-05, FIGM-A11Y-06, FIGM-ANG-01, FIGM-ANG-02, FIGM-ANG-03, FIGM-ANG-04, FIGM-ANG-05, FIGM-NEXT-01, FIGM-NEXT-02, FIGM-NEXT-03, FIGM-NEXT-04, FIGM-PERF-05, FIGM-PERF-06, FIGM-REACT-01, FIGM-REACT-02, FIGM-REACT-03, FIGM-REACT-04) is future work.
+> **This benchmark measures 50 of FIGM's 50 rules only.** The Precision/Recall/F1 figures above must not be interpreted as "FIGM detects all 50 rules with 100.0% accuracy" -- they describe detection accuracy strictly for the rule subset with hand-labelled ground truth: FIGM-A11Y-01, FIGM-A11Y-02, FIGM-A11Y-03, FIGM-A11Y-04, FIGM-A11Y-05, FIGM-A11Y-06, FIGM-A11Y-07, FIGM-ANG-01, FIGM-ANG-02, FIGM-ANG-03, FIGM-ANG-04, FIGM-ANG-05, FIGM-ANG-06, FIGM-ANG-07, FIGM-ANG-08, FIGM-ANG-09, FIGM-ANG-10, FIGM-NEXT-01, FIGM-NEXT-02, FIGM-NEXT-03, FIGM-NEXT-04, FIGM-NEXT-05, FIGM-NEXT-06, FIGM-NEXT-07, FIGM-NEXT-08, FIGM-NEXT-09, FIGM-NEXT-10, FIGM-PERF-01, FIGM-PERF-02, FIGM-PERF-03, FIGM-PERF-04, FIGM-PERF-05, FIGM-PERF-06, FIGM-REACT-01, FIGM-REACT-02, FIGM-REACT-03, FIGM-REACT-04, FIGM-REACT-05, FIGM-REACT-06, FIGM-REACT-07, FIGM-REACT-08, FIGM-REACT-09, FIGM-REACT-10, FIGM-REACT-11, FIGM-VUE-01, FIGM-VUE-02, FIGM-VUE-03, FIGM-VUE-04, FIGM-VUE-05, FIGM-VUE-06. Empirical ground-truth coverage now extends to every FIGM rule; there is no remaining rule left to extend it to.
+>
+> **Circularity, stated plainly**: the fixtures in `benchmarks/testbed` and the hand-labels in `benchmarks/ground-truth.json` were both authored by this project, not by an independent third party -- the 100% figures above are a genuine, live-computed measurement of internal consistency between the detectors and this project's own expectations for them, not independent external validation that FIGM correctly handles real-world code it was not built and tuned against. `benchmarks/real-world/` (real, unmodified public repositories, no hand-labelled ground truth, results reported as raw unverified tool output only) is this project's closest attempt at the latter, and independent third-party annotation of FIGM's output is tracked separately in `research/independent-annotation/` (status: pending, 0 submissions as of this writing) -- see that directory's own STATUS.md for the current count before citing it as complete.
 
 ---
 
@@ -44,7 +46,7 @@ Automated evaluation: `RuleExecutionEngine.analyzeFile` (the identical engine th
 | **angular-eslint** | ✅ | ❌ | ❌ | ❌ |
 | **FIGM Code Inspector (Proposed)** | ✅ | ✅ | ✅ | ✅ |
 
-FIGM's rule set is structurally 12 universal (cross-framework) and 13 framework-specific rules out of 25 total, derived directly from the live rule specification (`src/matrix/four-layer-meta-model.ts`) -- this is a rule-set composition count, not a detection-accuracy claim.
+FIGM's rule set is structurally 13 universal (cross-framework) and 37 framework-specific rules out of 50 total, derived directly from the live rule specification (`src/matrix/four-layer-meta-model.ts`) -- this is a rule-set composition count, not a detection-accuracy claim.
 
 ---
 
@@ -52,4 +54,6 @@ FIGM's rule set is structurally 12 universal (cross-framework) and 13 framework-
 
 > **NOT YET EMPIRICALLY MEASURED.** A prior version of this section reported a "Patch Generation Success Rate," "Compilation Success Rate," and "Violation Removal Rate" derived from hardcoded literals (`totalDefectsIdentified = 450`, `patchesGenerated = 434`, ...) that corresponded to no real AI remediation run -- no such benchmark has actually been executed. Those figures were removed rather than replaced with different unverified numbers.
 >
-> The AI remediation pipeline (`src/ai/ai-remediation-pipeline.ts`) does exist and does verify each fix by re-scanning the patched code and confirming the original violation is gone (see `src/engine/remediation-engine.ts::validatePatch` and `tests/live-scan-e2e.test.ts`/`tests/ai-remediation.test.ts` for the per-fix correctness tests this pass instead) -- but no aggregate "success rate across N defects" statistic has been computed against a real, reproducible defect corpus. Computing one honestly would require running the pipeline against every ground-truth violation in `benchmarks/ground-truth.json` and recording the real FIXED/PATCH_REJECTED/UNRESOLVED/MANUAL_REVIEW_REQUIRED outcome distribution -- tracked as future work, not fabricated here.
+> The AI remediation pipeline (`src/ai/ai-remediation-pipeline.ts`) does exist and does verify each fix by re-scanning the patched code and confirming the original violation is gone (see `src/engine/remediation-engine.ts::validatePatch` and `tests/live-scan-e2e.test.ts`/`tests/ai-remediation.test.ts` for the per-fix correctness tests this pass instead) -- but no aggregate "success rate across N defects" statistic has been computed against a real, reproducible defect corpus (i.e. multiple, varied violation instances per rule, such as `benchmarks/ground-truth.json`). Computing one honestly would require running the pipeline against every ground-truth violation there and recording the real FIXED/PATCH_REJECTED/UNRESOLVED/MANUAL_REVIEW_REQUIRED outcome distribution -- tracked as future work, not fabricated here.
+>
+> **A narrower, already-computed figure exists and should not be conflated with the above**: `benchmarks/fix-success-rate-results.json` (generated separately, via `benchmarks/fix-success-rate.ts`) records a real, freshly-executed run of `RemediationEngine.applyQuickFix`/`validatePatch` against each of the 50 rules' own single documented `nonCompliantExample` in `src/matrix/four-layer-meta-model.ts` -- one canonical instance per rule, not the multi-fixture ground-truth corpus. Of 50 rules, 20 are auto-attempted (the other 30 correctly route to manual review by rule design) and 19 of those 20 verify as FIXED. This is a genuine measurement, not fabricated, but its denominator is "one canonical example per automatable rule," not "N real-world defect instances" -- the two should be read as answering different questions, not as the same statistic under two names.

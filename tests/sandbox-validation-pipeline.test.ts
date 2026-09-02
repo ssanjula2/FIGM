@@ -173,10 +173,11 @@ test('Sandbox Validation Pipeline (Layer 2 AI patch gatekeeper)', async (t) => {
     assert.equal(stageStatus(result, 'TEST'), 'NOT_APPLICABLE');
   });
 
-  await t.test('TEST stage PASS: a real, behavior-preserving patch to the fixture file passes its real co-located test, and the file is restored afterward', async () => {
+  await t.test('TEST stage PASS: a real, behavior-preserving patch to the fixture file passes its real co-located test, and the real file was never even opened for writing', async () => {
     const fixturePath = 'src/engine/sandbox-test-stage-fixture.ts';
     const absoluteFixturePath = path.resolve(process.cwd(), fixturePath);
     const originalContent = fs.readFileSync(absoluteFixturePath, 'utf8');
+    const originalMtimeMs = fs.statSync(absoluteFixturePath).mtimeMs;
     const { defect } = detect(`<input type="text" placeholder="Enter name" />`, 'component.tsx');
     const withRealPath: DiagnosticReport = { ...defect, filePath: fixturePath };
 
@@ -187,13 +188,19 @@ test('Sandbox Validation Pipeline (Layer 2 AI patch gatekeeper)', async (t) => {
     const result = await SandboxValidationPipeline.validate(originalContent, harmlessPatch, withRealPath, 'GENERIC_ESTREE');
 
     assert.equal(stageStatus(result, 'TEST'), 'PASS', JSON.stringify(result.stages, null, 2));
-    assert.equal(fs.readFileSync(absoluteFixturePath, 'utf8'), originalContent, 'the real fixture file must be restored to its original content after validation');
+    assert.equal(fs.readFileSync(absoluteFixturePath, 'utf8'), originalContent, 'the real fixture file must be untouched after validation');
+    // Content equality alone doesn't rule out a write-then-restore-identical-bytes round trip
+    // (the exact class of prior bug this guards against — see runAssociatedTestIfPresent's own
+    // doc comment). mtime is unaffected by content, so an unchanged mtime is direct evidence the
+    // file was never opened for writing at all, not merely restored afterward.
+    assert.equal(fs.statSync(absoluteFixturePath).mtimeMs, originalMtimeMs, 'the real fixture file must never be opened for writing at all, not just restored to the same bytes');
   });
 
-  await t.test('TEST stage FAIL: a patch that breaks the fixture\'s real behavior fails its real co-located test, and the file is restored afterward', async () => {
+  await t.test('TEST stage FAIL: a patch that breaks the fixture\'s real behavior fails its real co-located test, and the real file was never even opened for writing', async () => {
     const fixturePath = 'src/engine/sandbox-test-stage-fixture.ts';
     const absoluteFixturePath = path.resolve(process.cwd(), fixturePath);
     const originalContent = fs.readFileSync(absoluteFixturePath, 'utf8');
+    const originalMtimeMs = fs.statSync(absoluteFixturePath).mtimeMs;
     const { defect } = detect(`<input type="text" placeholder="Enter name" />`, 'component.tsx');
     const withRealPath: DiagnosticReport = { ...defect, filePath: fixturePath };
 
@@ -204,8 +211,26 @@ test('Sandbox Validation Pipeline (Layer 2 AI patch gatekeeper)', async (t) => {
 
     assert.equal(result.accepted, false, JSON.stringify(result.stages, null, 2));
     assert.equal(stageStatus(result, 'TEST'), 'FAIL');
-    assert.equal(fs.readFileSync(absoluteFixturePath, 'utf8'), originalContent, 'the real fixture file must be restored to its original content even after a failed run');
+    assert.equal(fs.readFileSync(absoluteFixturePath, 'utf8'), originalContent, 'the real fixture file must be untouched even after a failed run');
+    assert.equal(fs.statSync(absoluteFixturePath).mtimeMs, originalMtimeMs, 'the real fixture file must never be opened for writing at all, not just restored to the same bytes, even on a FAIL');
   });
+
+  // A third "internal exception mid-overlay-build" scenario was deliberately NOT added as a live
+  // test: forcing a genuine exception specifically inside runAssociatedTestIfPresent's overlay
+  // setup (as opposed to an earlier stage in validate(), e.g. by breaking os.tmpdir() globally,
+  // which fails Stage 1 first and never reaches this stage at all) would require monkeypatching
+  // fs.cpSync/fs.symlinkSync -- verified NOT to work reliably in this build: this project's `.ts`
+  // files are each transpiled with their own independent copy of `import * as fs from 'fs'`
+  // (confirmed empirically -- reassigning fs.cpSync in this test file's copy has zero effect on
+  // sandbox-validation-pipeline.ts's own separate copy), so no in-process mock can reach the real
+  // call site without invasive dependency-injection surgery on the pipeline module, which is out
+  // of scope for this fix. The crash-safety property is instead guaranteed STRUCTURALLY, verified
+  // by direct source read rather than a forced-failure test: runAssociatedTestIfPresent's only
+  // write of `patchedCode` targets `path.join(overlayDir, relativeToRoot)` -- `absoluteSourcePath`
+  // (the real file) is only ever read (existsSync/the cpSync source side), never opened for
+  // writing anywhere in the method, on any path, including its catch block. There is therefore no
+  // "window" a crash could land in, unlike the prior write-then-restore-in-`finally` version this
+  // replaced (audit finding HIGH-7 / P1-7).
 
   // ── Critical regression: trailing-newline asymmetry must never inflate PATCH_SCOPE ──────────
   // Reproduced live against the real Gemini API on FIGM-A11Y-01 (an 8-line Card.jsx fixture): a

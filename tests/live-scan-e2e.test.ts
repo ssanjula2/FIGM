@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { POST as scanPOST } from '../app/api/scan/route';
 import { RepositoryFactory } from '../src/storage/repository-factory';
+import { RuleExecutionEngine } from '../src/engine/rule-execution-engine';
 
 /**
  * Live Scan end-to-end regression suite.
@@ -103,8 +104,37 @@ test('Live Scan E2E — Next.js', async () => {
   const code = `export default function Page({ user }) {
   return <img src={user.avatarUrl} alt="Avatar" />;
 }`;
-  const { defect } = await scanFixVerify(code, 'app/dashboard/page.tsx', 'FIGM-PERF-02', '203.0.113.2');
+  const initial = await scan(code, 'app/dashboard/page.tsx', '203.0.113.2');
+  const defect = initial.diagnostics.find((d: any) => d.ruleId === 'FIGM-PERF-02');
+  assert.ok(defect, 'expected FIGM-PERF-02 to be detected');
   assert.equal(defect.sourceKind, 'REAL_AST');
+
+  // Unlike this suite's other scanFixVerify() cases (FIGM-PERF-01/ANG-02/VUE-01), which all have
+  // real deterministic fixers and so pass with or without a configured Claude key, FIGM-PERF-02
+  // has no safe deterministic fixer for an image with no statically-determinable dimensions (the
+  // live scan response reports fixabilityStatus: 'NO_SAFE_FIX' -- the system correctly declines
+  // to hallucinate width/height rather than guess) and so genuinely routes AI_ASSISTED, exactly
+  // like the FIGM-PERF-05 REGRESSION case below. `npm test` deliberately runs without
+  // ANTHROPIC_API_KEY (see tests/test-env-setup.mjs); `npm run test:claude` is the dedicated suite
+  // that loads .env.local and exercises live Claude calls. Branch on the actual environment
+  // rather than hardcoding either outcome, so this test is correct in both.
+  const fixRes = await scanPOST(aiFixRequest(code, 'app/dashboard/page.tsx', defect, '203.0.113.2'));
+  assert.equal(fixRes.status, 200);
+  const fixData = await fixRes.json();
+
+  if (process.env.ANTHROPIC_API_KEY) {
+    assert.equal(fixData.verified, true, `expected FIGM-PERF-02 fix to be verified; got status=${fixData.verificationStatus}, reason=${fixData.fallbackReason}`);
+    assert.equal(fixData.verificationStatus, 'FIXED');
+    const rescan = await scan(fixData.remediatedCode, 'app/dashboard/page.tsx', '203.0.113.2');
+    assert.ok(!rescan.diagnostics.some((d: any) => d.ruleId === 'FIGM-PERF-02'), 'FIGM-PERF-02 must be gone after a verified fix');
+  } else {
+    assert.notEqual(fixData.verified, true, 'without a configured Claude key, this must never be reported as verified/fixed');
+    // AI_UNAVAILABLE, not UNRESOLVED: no provider is configured at all, so no candidate patch was
+    // ever produced (see AIRemediationPipelineResult's verificationStatus doc comment).
+    assert.equal(fixData.verificationStatus, 'AI_UNAVAILABLE');
+    assert.equal(fixData.remediatedCode, code, 'no code change may be produced when no automated fix is available');
+    assert.ok(fixData.fallbackReason?.includes('ANTHROPIC_API_KEY'));
+  }
 });
 
 test('Live Scan E2E — Angular', async () => {
@@ -118,18 +148,36 @@ export class WidgetComponent {}`;
 
 test('Live Scan E2E — Vue', async () => {
   RepositoryFactory.resetProvider();
+  // FIGM-VUE-01 (missing :key), not FIGM-PERF-02, deliberately: FIGM-PERF-02 on a .vue file is
+  // detected via the legacy text-heuristic path (see docs/architecture/AST_MIGRATION_MAP.md) and
+  // has no real deterministic fixer for Vue source — AstDeterministicFixEngine only handles
+  // TS/TSX/JS, so routing it there and having it decline for a .vue file is architecturally
+  // correct (routes AI_ASSISTED), not a bug. It used to appear "FIXED" here only because the now-
+  // removed regex-based RemediationEngine fallback silently patched it regardless of framework —
+  // exactly the fabricated-success pattern this pipeline must no longer produce (see
+  // src/ai/ai-remediation-pipeline.ts's header). FIGM-VUE-01 has both real AST detection
+  // (@vue/compiler-sfc/-dom) and a real deterministic fixer (VueAstFixEngine), so it proves the
+  // genuine, still-working Vue deterministic-fix guarantee end to end.
   const code = `<template>
-  <div>
-    <img :src="avatarUrl" alt="Avatar" />
-  </div>
+  <ul>
+    <li v-for="item in items">{{ item.name }}</li>
+  </ul>
 </template>
 <script>
-export default { props: ['avatarUrl'] };
+export default {
+  data() {
+    return { items: [] };
+  },
+};
 </script>`;
-  const { defect } = await scanFixVerify(code, 'Widget.vue', 'FIGM-PERF-02', '203.0.113.4');
-  // Vue is never real-AST-parsed (see docs/architecture/AST_MIGRATION_MAP.md) -- must be
-  // honestly labeled legacy, never silently claimed as AST-derived.
-  assert.equal(defect.sourceKind, 'LEGACY_TEXT_HEURISTIC');
+  const { defect } = await scanFixVerify(code, 'Widget.vue', 'FIGM-VUE-01', '203.0.113.4');
+  // Updated for Phase 2 (AST/Rule Coverage Gaps): FIGM-VUE-01 detection is now REAL_AST (a real
+  // @vue/compiler-dom <template> parse via src/ast/vue-template-ast-builder.ts), closing the
+  // detection-side gap this comment used to document -- see tests/vue-template-ast-detection.test.ts
+  // for dedicated coverage. VueAstFixEngine's remediation was already real-AST-based before this
+  // change and remains unaffected; both detection and remediation now agree on the same real
+  // @vue/compiler-sfc/-dom AST, rather than detection trailing behind remediation.
+  assert.equal(defect.sourceKind, 'REAL_AST');
 });
 
 test('Live Scan E2E — plain JavaScript', async () => {
@@ -181,6 +229,38 @@ test('Live Scan E2E — malformed source: never crashes, reports a syntax diagno
   assert.equal(fixRes.status, 200);
   const fixData = await fixRes.json();
   assert.notEqual(fixData.verified, true, 'a syntax error must never be reported as a verified fix');
+});
+
+test('Live Scan E2E — INFRASTRUCTURE_ERROR: an analysis-engine failure returns a sanitized 503, distinct from a code diagnostic, and never leaks internal error detail', async () => {
+  // No legitimate (even pathologically malformed/deeply-nested) source input was able to make the
+  // real engine throw uncaught -- it is deliberately defensive at every internal layer (see
+  // TypeCheckerService's own try/catch, DynamicProfiler's fail-safe resolution). That robustness
+  // is exactly why this test has to simulate the ONE failure mode it can't defend against by
+  // construction: the analysis engine itself being unavailable (e.g. an unrelated dependency
+  // outage). This is fault injection at the real integration seam the route actually calls
+  // through, not a mock of the scan pipeline's own logic -- everything else in this suite still
+  // exercises the real, undisturbed engine.
+  const originalAnalyzeFileAsync = RuleExecutionEngine.analyzeFileAsync;
+  const internalDetail = 'ECONNREFUSED 10.0.0.42:5432 — pool exhausted, credentials=hunter2';
+  (RuleExecutionEngine as any).analyzeFileAsync = async () => {
+    throw new Error(internalDetail);
+  };
+  try {
+    const res = await scanPOST(scanRequest('const x = 1;', 'Infra.tsx', '203.0.113.42'));
+    assert.equal(res.status, 503);
+    const body = await res.json();
+    assert.equal(body.success, false);
+    assert.equal(body.serviceStatus?.status, 'INFRASTRUCTURE_ERROR');
+    assert.equal(body.serviceStatus?.stage, 'ANALYSIS_ENGINE');
+    assert.ok(body.serviceStatus?.message, 'must expose a human-readable, safe message');
+    assert.equal(body.diagnostics, undefined, 'an infra failure must not masquerade as a completed scan with zero diagnostics');
+    assert.ok(
+      !JSON.stringify(body).includes(internalDetail),
+      'the real internal error detail must never reach the client, even inside a nested field'
+    );
+  } finally {
+    (RuleExecutionEngine as any).analyzeFileAsync = originalAnalyzeFileAsync;
+  }
 });
 
 test('Live Scan E2E — empty source is rejected with a clear 400, not a crash', async () => {
@@ -241,14 +321,26 @@ function Dashboard({ items, isOpen }) {
   }
 });
 
-test('Live Scan E2E — REGRESSION: a fix that does not actually resolve the violation must be reported UNRESOLVED, never FIXED', async () => {
+test('Live Scan E2E — REGRESSION: a fix that does not actually resolve the violation must be reported honestly, never FIXED', async () => {
   // This is the exact defect found during this task: the live-scan UI's applyFix() used to
   // unconditionally display "Fixed by {engine}" for any /api/scan {action:'ai-fix'} response,
   // completely ignoring the `verified`/`verificationStatus` fields the API already computed via
-  // a real re-scan. This test pins the API contract the UI now depends on: for a rule the
-  // deterministic engine cannot safely resolve from a bare snippet (FIGM-PERF-05, which
-  // `RemediationEngine.applyQuickFix` explicitly marks `requiresManualReview: true`), the
-  // response must say so honestly.
+  // a real re-scan. This test pins the API contract the UI now depends on: for a rule with no
+  // deterministic fixer (FIGM-PERF-05 routes AI_ASSISTED — see AIRemediationRouter) and no
+  // ANTHROPIC_API_KEY configured in this test environment, there is genuinely no automated path
+  // left, and the response must say so honestly.
+  //
+  // Note: this used to assert 'MANUAL_REVIEW_REQUIRED', produced by the legacy regex-based
+  // RemediationEngine's own `requiresManualReview` flag as an automatic fallback when Claude was
+  // unavailable. That regex fallback has been removed from the automated remediation pipeline
+  // (architecture rule: AI failure must never silently fall back to regex and report success, or
+  // even report a definitive-sounding "manual review" verdict manufactured by a different, lower-
+  // scrutiny engine) — 'AI_UNAVAILABLE' is the honest verdict for "no candidate patch was ever
+  // produced" (no provider configured at all here), distinct both from 'UNRESOLVED' (a real patch
+  // WAS generated and sandbox-validated/re-scanned but still failed — see
+  // AIRemediationPipelineResult's verificationStatus doc comment) and from a rule that is
+  // *permanently* MANUAL_REVIEW_ONLY at the rule level (FIGM-NEXT-08/09, FIGM-REACT-06 — see
+  // tests/ai-remediation-router.test.ts).
   RepositoryFactory.resetProvider();
   const code = `function List({ items }) {
   return items.map(item => <Card onClick={() => handleClick(item.id)} />);
@@ -261,7 +353,9 @@ test('Live Scan E2E — REGRESSION: a fix that does not actually resolve the vio
   assert.equal(fixRes.status, 200);
   const fixData = await fixRes.json();
 
-  assert.notEqual(fixData.verified, true, 'a rule the engine cannot safely auto-fix must never be reported as verified/fixed');
-  assert.equal(fixData.verificationStatus, 'MANUAL_REVIEW_REQUIRED');
-  assert.equal(fixData.requiresManualReview, true);
+  assert.notEqual(fixData.verified, true, 'a rule with no automated fix available must never be reported as verified/fixed');
+  assert.equal(fixData.verificationStatus, 'AI_UNAVAILABLE');
+  assert.equal(fixData.engineType, 'UNAVAILABLE');
+  assert.equal(fixData.remediatedCode, code, 'no code change may be produced when no automated fix is available');
+  assert.ok(fixData.fallbackReason?.includes('ANTHROPIC_API_KEY'));
 });

@@ -2,12 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { UserDB } from '../src/auth/user-db';
 import { RepositoryFactory } from '../src/storage/repository-factory';
-import { ParticipantRepository } from '../src/engine/participant-repository';
+import { ParticipantRepository, TARGET_PARTICIPANT_COUNT } from '../src/engine/participant-repository';
 
 /**
  * Regression coverage for Phase 14 closure: ParticipantRepository.getMatrix used to call
- * provider.getSubmissionsByUserId once PER participant row inside its P001..P085 loop (~85
- * separate queries), instead of fetching every submission once and grouping in memory. Both
+ * provider.getSubmissionsByUserId once PER participant row inside its P001..P0NN loop
+ * (TARGET_PARTICIPANT_COUNT separate queries), instead of fetching every submission once and
+ * grouping in memory. Both
  * storage backends already support a batch fetch via the 'all_users' sentinel (see
  * UserDB.getSubmissionsByUserId / SupabaseStorageProvider.getSubmissionsByUserId), which the fix
  * now uses instead.
@@ -40,9 +41,10 @@ test('the batched matrix still reports the correct submission count for a partic
   RepositoryFactory.resetProvider();
   const provider = RepositoryFactory.getStorageProvider();
 
-  // P901/P902 are outside the real 85-participant target range used elsewhere in the suite, but
-  // getMatrix only iterates P001..P085 -- use a real id inside that range so it actually shows up.
-  const participantId = `P${String(1 + Math.floor(Math.random() * 85)).padStart(3, '0')}`;
+  // P901/P902 are outside the real participant target range used elsewhere in the suite, but
+  // getMatrix only iterates P001..P0NN (NN = TARGET_PARTICIPANT_COUNT) -- use a real id inside
+  // that range so it actually shows up.
+  const participantId = `P${String(1 + Math.floor(Math.random() * TARGET_PARTICIPANT_COUNT)).padStart(3, '0')}`;
   const email = `${participantId.toLowerCase()}@user-study.figm.local`;
   // Check by EMAIL, not by id: the real participant-provisioning path
   // (ParticipantRepository.assignNewParticipant) creates users with a `usr_<timestamp>_<random>`

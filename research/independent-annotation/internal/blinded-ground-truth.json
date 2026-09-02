@@ -1,6 +1,6 @@
 {
   "_generatedBy": "scripts/generate-annotation-package.ts",
-  "_generatedAt": "2026-08-14T11:51:03.725Z",
+  "_generatedAt": "2026-09-02T23:03:38.745Z",
   "_warning": "INTERNAL USE ONLY -- never copy this file into research/independent-annotation/package/. It contains the real answers.",
   "_matchingNote": "The real evaluation pipeline (src/eval/evaluation-runner.ts) matches ground truth to detections by (filePath, ruleId) only, never by line number. blindedLine below is documentary/for human sanity-checking only, not a match key.",
   "groundTruthViolations": [
@@ -67,6 +67,14 @@
       "expectedLine": 44,
       "description": "Modal component overlay without focus restoration",
       "blindedLine": 37
+    },
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-05",
+      "expectedLine": 24,
+      "description": "Inline arrow callback passed to onClick in render scope (line 24 -- co-occurs with the FIGM-A11Y-01 finding on the same line; a genuine second, independent defect, not a duplicate). Previously an undisclosed baseline false positive in the 8/25-rule benchmark era, since FIGM-PERF-05 was not yet a ground-truth-covered rule; now correctly labelled as a true positive after direct source verification.",
+      "blindedLine": 21
     },
     {
       "filePath": "VueBenchmark.vue",
@@ -141,6 +149,14 @@
       "blindedLine": 23
     },
     {
+      "filePath": "AngularBenchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-02",
+      "expectedLine": 3,
+      "description": "@Component decorator with no ChangeDetectionStrategy.OnPush. Previously an undisclosed baseline false positive in the 8/25-rule benchmark era, since FIGM-ANG-02 was not yet a ground-truth-covered rule; now correctly labelled as a true positive after direct source verification.",
+      "blindedLine": 3
+    },
+    {
       "filePath": "VanillaJSBenchmark.js",
       "framework": "GENERIC_ESTREE",
       "ruleId": "FIGM-PERF-04",
@@ -155,6 +171,358 @@
       "expectedLine": 6,
       "description": "window.addEventListener orientationchange missing teardown",
       "blindedLine": 4
+    },
+    {
+      "filePath": "Perf05Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-05",
+      "expectedLine": 3,
+      "description": "Inline arrow callback created inside .map() render loop",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "Perf05Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-04",
+      "expectedLine": 3,
+      "description": "Inline arrow onClick passed to Card-named custom component (genuinely co-occurs with FIGM-PERF-05 on this same line -- both are real, independently verified detections, not a duplicate)",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "Perf06Benchmark.js",
+      "framework": "GENERIC_ESTREE",
+      "ruleId": "FIGM-PERF-06",
+      "expectedLine": 4,
+      "description": "localStorage.getItem called inside a for-loop body",
+      "blindedLine": 3
+    },
+    {
+      "filePath": "A11y05Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-05",
+      "expectedLine": 3,
+      "description": "Text input with no associated label or aria-label anywhere in file",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "A11y06Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-06",
+      "expectedLine": 3,
+      "description": "Positive literal tabIndex value (5)",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "React01Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-01",
+      "expectedLine": 3,
+      "description": ".sort() call on the render path with no useMemo wrapper",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "React02Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-02",
+      "expectedLine": 3,
+      "description": "Array index used directly as the key prop",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "React03Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-03",
+      "expectedLine": 5,
+      "description": "Direct property mutation of a useState-bound variable before calling its setter",
+      "blindedLine": 4
+    },
+    {
+      "filePath": "React04Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-04",
+      "expectedLine": 3,
+      "description": "Inline arrow function passed as onClick to a Button-named child component",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "React04Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-05",
+      "expectedLine": 3,
+      "description": "Inline arrow callback created in render scope (genuinely co-occurs with FIGM-REACT-04 on this same line -- both are real, independently verified detections, not a duplicate)",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "Next01Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-01",
+      "expectedLine": 10,
+      "description": "useState called in a Next.js file with no \"use client\" directive",
+      "blindedLine": 9
+    },
+    {
+      "filePath": "Next02Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-02",
+      "expectedLine": 5,
+      "description": "Known heavy package (monaco-editor) statically imported instead of via next/dynamic",
+      "blindedLine": 4
+    },
+    {
+      "filePath": "Next04Benchmark.tsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-NEXT-04",
+      "expectedLine": 6,
+      "description": "External Google Fonts CSS link tag instead of next/font",
+      "blindedLine": 5
+    },
+    {
+      "filePath": "Ang01Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-01",
+      "expectedLine": 5,
+      "description": "RxJS subscribe() with no unsubscribe/takeUntilDestroyed anywhere in file",
+      "blindedLine": 4
+    },
+    {
+      "filePath": "Ang02Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-02",
+      "expectedLine": 2,
+      "description": "@Component decorator with no ChangeDetectionStrategy.OnPush",
+      "blindedLine": 1
+    },
+    {
+      "filePath": "Ang03Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-03",
+      "expectedLine": 5,
+      "description": "*ngFor with no trackBy",
+      "blindedLine": 4
+    },
+    {
+      "filePath": "Ang04Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-04",
+      "expectedLine": 5,
+      "description": "Method call inside template interpolation",
+      "blindedLine": 4
+    },
+    {
+      "filePath": "Ang05Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-05",
+      "expectedLine": 6,
+      "description": "Direct nativeElement.style mutation, no Renderer2",
+      "blindedLine": 5
+    },
+    {
+      "filePath": "next03/app/demo/page.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-03",
+      "expectedLine": 1,
+      "description": "App Router page with no export const revalidate -- requires a nested app/<segment>/page.tsx path for isAppRouterPageFile() to classify it, hence the only non-flat fixture in this testbed (see EvaluationRunner.collectTestbedFiles)",
+      "blindedLine": null
+    },
+    {
+      "filePath": "A11y07Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-07",
+      "expectedLine": 3,
+      "description": "aria-label \"Submit the entire form\" does not contain the visible text \"Send\"",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "React05Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-05",
+      "expectedLine": 4,
+      "description": "useEffect body is exactly one setTotal(...) call deriving state from the items prop",
+      "blindedLine": 3
+    },
+    {
+      "filePath": "React06Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-06",
+      "expectedLine": 3,
+      "description": "useEffect reads the userId prop but the dependency array is empty",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "Next05Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-05",
+      "expectedLine": 3,
+      "description": "Node.js 'fs' module imported into a file marked 'use client'",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "Next06Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-06",
+      "expectedLine": 6,
+      "description": "Native <img> element used instead of next/image's Image component",
+      "blindedLine": 5
+    },
+    {
+      "filePath": "Ang06Benchmark.pipe.ts",
+      "framework": "GENERIC_ESTREE",
+      "ruleId": "FIGM-ANG-06",
+      "expectedLine": 4,
+      "description": "@Pipe decorator declared with pure: false -- classified GENERIC_ESTREE by detectFramework (filename has no .component.ts suffix and body has no @Component(/rxjs marker), but FIGM-ANG-06 is evaluated on GENERIC_ESTREE exactly like FIGM-ANG-01/02/05 already are",
+      "blindedLine": 3
+    },
+    {
+      "filePath": "Vue01Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-01",
+      "expectedLine": 3,
+      "description": "v-for over todos with no :key binding",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "Vue02Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-02",
+      "expectedLine": 3,
+      "description": "v-for and v-if present together on the same <li> element",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "Next07Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-07",
+      "expectedLine": 4,
+      "description": "async function component in a file marked 'use client'",
+      "blindedLine": 3
+    },
+    {
+      "filePath": "Next08Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-08",
+      "expectedLine": 5,
+      "description": "useSearchParams() called with no <Suspense> element anywhere in the file",
+      "blindedLine": 4
+    },
+    {
+      "filePath": "Next09Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-09",
+      "expectedLine": 3,
+      "description": "metadata export present in a file marked 'use client'",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "Next10Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-10",
+      "expectedLine": 2,
+      "description": "export const dynamic = 'force-dynamic' with no cookies()/headers()/no-store fetch in the file",
+      "blindedLine": 1
+    },
+    {
+      "filePath": "Vue03Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-03",
+      "expectedLine": 6,
+      "description": "computed getter assigns to logCount.value -- a side effect, not pure derivation",
+      "blindedLine": 5
+    },
+    {
+      "filePath": "Vue04Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-04",
+      "expectedLine": 8,
+      "description": "sortedItems.value.push(x) mutates the computed's own output instead of its source ref",
+      "blindedLine": 7
+    },
+    {
+      "filePath": "Vue05Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-05",
+      "expectedLine": 8,
+      "description": "props.todo.done = true mutates a defineProps()-bound prop",
+      "blindedLine": 7
+    },
+    {
+      "filePath": "Vue06Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-06",
+      "expectedLine": 8,
+      "description": "Options API 'increment' method declared as an arrow function",
+      "blindedLine": 7
+    },
+    {
+      "filePath": "Ang07Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-07",
+      "expectedLine": 4,
+      "description": "constructor calls a service method beyond a bare field assignment",
+      "blindedLine": 3
+    },
+    {
+      "filePath": "Ang08Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-08",
+      "expectedLine": 5,
+      "description": "@for track expression bound to $index instead of a stable property",
+      "blindedLine": 4
+    },
+    {
+      "filePath": "Ang09Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-09",
+      "expectedLine": 4,
+      "description": "userId = input() property missing the readonly modifier",
+      "blindedLine": 3
+    },
+    {
+      "filePath": "Ang10Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-10",
+      "expectedLine": 5,
+      "description": "user$ piped through | async twice in the same template",
+      "blindedLine": 4
+    },
+    {
+      "filePath": "React07Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-07",
+      "expectedLine": 4,
+      "description": "useState called inside an if statement instead of the component's top level",
+      "blindedLine": 3
+    },
+    {
+      "filePath": "React08Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-08",
+      "expectedLine": 3,
+      "description": "todo.done = true mutates a destructured component prop",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "React09Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-09",
+      "expectedLine": 3,
+      "description": "fetch(endpoint) called directly in the render body, not in an event handler or Effect",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "React10Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-10",
+      "expectedLine": 3,
+      "description": "Article() called directly as a function instead of rendered as <Article />",
+      "blindedLine": 2
+    },
+    {
+      "filePath": "React11Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-11",
+      "expectedLine": 4,
+      "description": "AuthContext.Provider value={{ user, setUser }} is an unmemoized inline object literal",
+      "blindedLine": 3
     }
   ]
 }

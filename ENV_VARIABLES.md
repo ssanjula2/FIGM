@@ -29,6 +29,7 @@ Complete guide to all environment variables required for local development, auto
 | `GEMINI_MODEL` | No | `gemini-3.6-flash` | Server Only | Overrides the default Gemini model used for AI remediation. |
 | `GEMINI_TIMEOUT_MS` | No | `45000` | Server Only | Overrides the default per-request timeout (ms) for Gemini remediation calls. |
 | `ALLOW_TEST_RESET_TOKEN` | No | `true` | Test only | Test-only escape hatch that makes `/api/auth/forgot-password` echo the reset token in its response. Has no effect unless `NODE_ENV=test` is also set -- both must be true. Never set this in development, staging, preview, or production. |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | No | `G-XXXXXXXXXX` | Client | Google Analytics 4 measurement ID. Supplementary behavioral telemetry only (`src/lib/analytics.ts`) -- events are sent only when this is set AND `NODE_ENV=production`; the app functions identically with it unset. Closed, explicitly-typed event schema; never carries source code, uploaded code, patch content, email, name, password, JWT, cookie, or API key values (see `tests/analytics-payload-safety.test.ts`). |
 
 ---
 

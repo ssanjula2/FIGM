@@ -40,6 +40,23 @@ test('FIGM Complete 25-Rule AST Detection Suite', async (t) => {
     assert.ok(reports.some(r => r.ruleId === 'FIGM-PERF-05'));
   });
 
+  // Formal predicate is `IsInlineCallback(n) AND Scope(n) in {LOOP, RENDER}` -- deliberately not
+  // loop-specific (see docs/architecture/RULE_ENGINEERING_AUDIT.md §FIGM-PERF-05). These two cases
+  // pin that render-scope-without-a-loop is genuinely intended detector behavior, not a bug.
+  await t.test('FIGM-PERF-05: Detects inline arrow function in plain render scope with no loop at all', () => {
+    const code = `function SearchBox() {\n  return <input onChange={(e) => setValue(e.target.value)} />;\n}`;
+    const res = SourceParser.parseSource(code, 'component.jsx');
+    const reports = ASTDetectionEngine.evaluateNode(res.ast!, 'component.jsx', res.framework);
+    assert.ok(reports.some(r => r.ruleId === 'FIGM-PERF-05'));
+  });
+
+  await t.test('FIGM-PERF-05: Does NOT trigger on a named (non-inline) handler reference', () => {
+    const code = `function SearchBox() {\n  return <input onChange={handleChange} />;\n}`;
+    const res = SourceParser.parseSource(code, 'component.jsx');
+    const reports = ASTDetectionEngine.evaluateNode(res.ast!, 'component.jsx', res.framework);
+    assert.ok(!reports.some(r => r.ruleId === 'FIGM-PERF-05'));
+  });
+
   await t.test('FIGM-PERF-06: Detects localStorage access inside loop', () => {
     const code = `items.map(item => {\n  const token = localStorage.getItem('token');\n  return token;\n})`;
     const res = SourceParser.parseSource(code, 'component.js');
@@ -124,6 +141,42 @@ test('FIGM Complete 25-Rule AST Detection Suite', async (t) => {
     const res = SourceParser.parseSource(code, 'Component.jsx');
     const reports = ASTDetectionEngine.evaluateNode(res.ast!, 'Component.jsx', res.framework);
     assert.ok(reports.some(r => r.ruleId === 'FIGM-REACT-01'));
+  });
+
+  // A `.filter().sort()` (or similarly chained) expression is ONE logical derived-computation
+  // violation. Before the fix, real-syntax-node-builder's buildReact01 independently matched both
+  // the outer and inner CallExpression of the chain, producing two overlapping diagnostics.
+  await t.test('FIGM-REACT-01: chained .filter().sort() produces exactly ONE diagnostic, not two', () => {
+    const code = `function Component({ items, category }) {\n  const filtered = items.filter(i => i.category === category).sort((a, b) => a.price - b.price);\n  return <div>{filtered.length}</div>;\n}`;
+    const res = SourceParser.parseSource(code, 'Component.jsx');
+    const reports = ASTDetectionEngine.evaluateNode(res.ast!, 'Component.jsx', res.framework);
+    const react01 = reports.filter(r => r.ruleId === 'FIGM-REACT-01');
+    assert.equal(react01.length, 1, `expected exactly 1 FIGM-REACT-01 finding, got ${react01.length}: ${JSON.stringify(react01.map(r => r.location))}`);
+  });
+
+  await t.test('FIGM-REACT-01: two independent expensive computations each get their own diagnostic', () => {
+    const code = `function Component({ items, otherItems }) {\n  const sorted = items.sort((a, b) => a - b);\n  const reduced = otherItems.reduce((acc, x) => acc + x, 0);\n  return <div>{sorted.length}{reduced}</div>;\n}`;
+    const res = SourceParser.parseSource(code, 'Component.jsx');
+    const reports = ASTDetectionEngine.evaluateNode(res.ast!, 'Component.jsx', res.framework);
+    const react01 = reports.filter(r => r.ruleId === 'FIGM-REACT-01');
+    assert.equal(react01.length, 2, `expected 2 independent FIGM-REACT-01 findings, got ${react01.length}`);
+  });
+
+  await t.test('FIGM-REACT-01: a derived computation broken by an intervening non-derived method still reports both real derived calls', () => {
+    // `.map()` is not in the derived-computation method set, so it does not chain-suppress either
+    // side -- `.filter()` and `.sort()` here remain genuinely distinct, reportable violations.
+    const code = `function Component({ items }) {\n  const out = items.filter(i => i.active).map(i => i.label).sort();\n  return <div>{out.length}</div>;\n}`;
+    const res = SourceParser.parseSource(code, 'Component.jsx');
+    const reports = ASTDetectionEngine.evaluateNode(res.ast!, 'Component.jsx', res.framework);
+    const react01 = reports.filter(r => r.ruleId === 'FIGM-REACT-01');
+    assert.equal(react01.length, 2, `expected 2 findings (filter + sort, broken chain via .map()), got ${react01.length}`);
+  });
+
+  await t.test('FIGM-REACT-01: memoized chain inside useMemo is not flagged at all', () => {
+    const code = `function Component({ items, category }) {\n  const filtered = useMemo(() => items.filter(i => i.category === category).sort((a, b) => a.price - b.price), [items, category]);\n  return <div>{filtered.length}</div>;\n}`;
+    const res = SourceParser.parseSource(code, 'Component.jsx');
+    const reports = ASTDetectionEngine.evaluateNode(res.ast!, 'Component.jsx', res.framework);
+    assert.ok(!reports.some(r => r.ruleId === 'FIGM-REACT-01'));
   });
 
   await t.test('FIGM-REACT-02: Detects key={index} array index keys', () => {

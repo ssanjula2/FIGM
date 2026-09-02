@@ -55,7 +55,7 @@ const FRAMEWORK_APPLICABILITY: Record<string, { reactSupport: boolean; nextSuppo
   'FIGM-ANG-01': { reactSupport: false, nextSupport: false, angularSupport: true, detectionStrategy: 'CFG_REACHABILITY' },
 };
 
-/** Derived from `FOUR_LAYER_MAPPINGS` (25 rules) — never a hand-duplicated literal list. Universal
+/** Derived from `FOUR_LAYER_MAPPINGS` (50 rules) — never a hand-duplicated literal list. Universal
  *  PERF/A11Y rules apply to all three frameworks; NEXT-* is Next.js-only; REACT-* applies to
  *  React and Next.js; ANG-* is Angular-only. Three rules (FIGM-PERF-03, FIGM-A11Y-04, FIGM-ANG-01)
  *  use a control-flow-reachability strategy rather than pure AST structure matching (event-listener
@@ -80,7 +80,7 @@ export const RULE_COVERAGE_MATRIX: RuleCoverageItem[] = FOUR_LAYER_MAPPINGS.map(
 });
 
 export class CoverageBenchmarkEngine {
-  /** Structural rule-set composition (how many of FIGM's 25 rules are universal vs. framework-
+  /** Structural rule-set composition (how many of FIGM's 50 rules are universal vs. framework-
    *  specific) — NOT a detection-accuracy claim. There is no flat always-100 success-rate field here (a prior
    *  version hardcoded one at a flat 100.0 regardless of any input); actual detection accuracy is
    *  reported only by `EvaluationRunner`'s ground-truth benchmark (see

@@ -1,0 +1,63 @@
+{
+  "experimentVersion": "1.0.0",
+  "protocolDocument": "docs/research/RQ1_EXPERIMENT_PROTOCOL.md",
+  "researchQuestion": "RQ1: How do different SPA render and state-management strategies influence performance metrics such as First Contentful Paint (FCP) and Time to Interactive (TTI)?",
+  "primaryFigmFrameworkScope": ["React", "Next.js", "Angular"],
+  "rq1RuntimeFrameworkScope": "React/Next.js controlled experiment",
+  "frameworksImplementedThisStage": ["NEXTJS_REACT"],
+  "angularRq1RuntimeFixture": "NOT_REQUIRED_FOR_THIS_EXPERIMENT",
+  "frameworksNotYetImplemented": [
+    {
+      "framework": "Angular",
+      "status": "NOT_REQUIRED_FOR_THIS_EXPERIMENT",
+      "reason": "Researcher-confirmed scope decision (Stage 3A, 2026-09-03): Angular remains a PRIMARY framework for FIGM's overall guideline development, static-analysis validation, and real-repository evaluation (unchanged, unaffected by this decision). RQ1 investigates rendering/state-management strategy effects on FCP/TTI; it does not explicitly require a cross-framework performance comparison. React/Next.js alone provides a controlled, technically valid CSR/SSR/LOCAL/GLOBAL experiment sufficient to answer RQ1 within this scope. An Angular RQ1 runtime fixture is therefore NOT required for this experiment -- this is a deliberate scope decision, not an unresolved gap or a claim that RQ1 results generalize to Angular. See docs/research/RQ1_EXPERIMENT_PROTOCOL.md Section 13 for the explicit limitation statement."
+    }
+  ],
+  "conditions": [
+    { "conditionId": "CSR_LOCAL", "framework": "NEXTJS_REACT", "renderingStrategy": "CSR", "stateManagementStrategy": "LOCAL", "route": "/rq1-experiment/csr-local" },
+    { "conditionId": "CSR_GLOBAL", "framework": "NEXTJS_REACT", "renderingStrategy": "CSR", "stateManagementStrategy": "GLOBAL", "route": "/rq1-experiment/csr-global" },
+    { "conditionId": "SSR_LOCAL", "framework": "NEXTJS_REACT", "renderingStrategy": "SSR", "stateManagementStrategy": "LOCAL", "route": "/rq1-experiment/ssr-local" },
+    { "conditionId": "SSR_GLOBAL", "framework": "NEXTJS_REACT", "renderingStrategy": "SSR", "stateManagementStrategy": "GLOBAL", "route": "/rq1-experiment/ssr-global" }
+  ],
+  "warmupRuns": 1,
+  "measuredRuns": 10,
+  "runCountRationale": "Frozen minimum protocol (Stage 3A, 2026-09-03): 1 warm-up + 10 measured runs per condition x 4 conditions = 4 warm-up + 40 measured = 44 total browser executions for the final experiment. Warm-up runs are executed for real (never skipped, never simulated) and recorded honestly (including on failure) with isWarmup:true, but excluded from measured statistics by default -- see analyze-results.ts's filterMeasuredRows(). --measured-runs 20 is available for a fuller pass if runtime allows; if used, record the actual value in the run's own report rather than assuming 10.",
+  "fcpMeasurement": {
+    "tool": "lighthouse",
+    "toolVersion": "12.8.2",
+    "audit": "first-contentful-paint",
+    "field": "numericValue",
+    "unit": "millisecond"
+  },
+  "ttiMeasurement": {
+    "tool": "lighthouse",
+    "toolVersion": "12.8.2",
+    "audit": "interactive",
+    "field": "numericValue",
+    "unit": "millisecond",
+    "note": "Lighthouse's own historical Time-to-Interactive audit, requested explicitly via onlyAudits since it is no longer part of the default performance-category audit set in Lighthouse 10+. Verified present and returning real numeric output in this environment via research/rq1-experiment/scripts/_smoke-lighthouse.mjs before this protocol was finalized."
+  },
+  "environment": {
+    "browserLaunchMechanism": "chrome-launcher",
+    "headless": true,
+    "chromeFlags": ["--headless=new", "--no-sandbox", "--disable-gpu"],
+    "lighthouseConfigPreset": "lighthouse/core/config/desktop-config.js (the real, official Lighthouse desktop preset -- NOT a hand-assembled set of flags; see Stage 3A correction note in lighthouse-worker.mjs)",
+    "formFactor": "desktop",
+    "throttlingMethod": "simulate",
+    "throttling": {
+      "rttMs": 40,
+      "throughputKbps": 10240,
+      "requestLatencyMs": 0,
+      "downloadThroughputKbps": 0,
+      "uploadThroughputKbps": 0,
+      "cpuSlowdownMultiplier": 1
+    },
+    "throttlingNote": "These are Lighthouse desktop-config.js's real 'desktopDense4G' simulated-throttling values, read directly from a live run's lhr.configSettings (research/rq1-experiment/scripts/_smoke-configsettings.mjs), not transcribed from documentation. requestLatencyMs/downloadThroughputKbps/uploadThroughputKbps of 0 mean those specific override fields are unset; rttMs and throughputKbps are the values actually applied.",
+    "screenEmulation": { "mobile": false, "width": 1350, "height": 940, "deviceScaleFactor": 1, "disabled": false },
+    "emulatedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+    "applicationBuildMode": "production (next build && next start), never next dev",
+    "cachePolicy": "cold -- Lighthouse's default storage reset (clears cache/storage before each navigation) is left enabled; a warm/repeat-view variant is out of scope for this experiment",
+    "navigationPolicy": "cold navigation only, one Lighthouse run per Chrome instance, a fresh Chrome instance launched per run (including warm-up runs)"
+  },
+  "notes": "This file is read by run-experiment.ts. It is authoritative for the condition list and run counts; docs/research/RQ1_EXPERIMENT_PROTOCOL.md is authoritative for the full rationale and control-variable narrative."
+}

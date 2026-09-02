@@ -107,7 +107,7 @@ The Rule Book is categorized into **Universal Common Rules** alongside framework
 
 ## 4. Multi-Tenant Authentication & Security Architecture
 
-- **Row-Level Security (RLS)**: SQL DDL schema ([docs/multi_tenant_schema.sql](./multi_tenant_schema.sql)) with RLS policies (`user_id = current_setting('app.current_user_id')`).
+- **Tenant Isolation**: Enforced at the application/repository authorization layer -- every repository query is explicitly scoped to the authenticated request's `userId`, not by Postgres RLS. `docs/multi_tenant_schema.sql` is an aspirational RLS design never applied to the live database (see `DATABASE.md` section 3 for why it wouldn't provide real protection as written even if it were).
 - **Cryptographic Security**: Passwords hashed using `scrypt` (Node's built-in `crypto.scryptSync`, N=2^16/r=8/p=1) with random 16-byte salts ([src/auth/auth-service.ts](../src/auth/auth-service.ts)). Legacy PBKDF2-SHA512 hashes from before the SEC-06 migration are still accepted and transparently upgraded to `scrypt` on the user's next successful login.
 - **JWT Session Engine**: HMAC-SHA256 JWT tokens with 24-hour expiration.
 - **Auth Guard Middleware**: Intercepts requests and enforces 401 Unauthorized for unauthenticated access ([src/auth/auth-middleware.ts](../src/auth/auth-middleware.ts)).

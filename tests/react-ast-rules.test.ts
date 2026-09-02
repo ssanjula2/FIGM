@@ -23,6 +23,17 @@ test('Stage A: FIGM-REACT-02 real-AST migration', async (t) => {
     assert.equal(reports[0].line, 1);
   });
 
+  // Regression guard (Scientific Hardening Pass, Phase 1): this detector's `evidence` string has
+  // always honestly said "Real AST (TypeScript compiler)", but the structured `sourceKind` field
+  // was never actually set on its DiagnosticReport -- an inconsistency with every other real-AST
+  // rule (which do carry sourceKind: 'REAL_AST'), found via a programmatic audit of all 50 rules.
+  await t.test('[Provenance] every finding carries sourceKind: REAL_AST, consistent with its evidence text', () => {
+    const code = `items.map((item, index) => <li key={index}>{item}</li>)`;
+    const reports = detectArrayIndexKey(code, 'List.jsx');
+    assert.equal(reports.length, 1);
+    assert.equal(reports[0].sourceKind, 'REAL_AST');
+  });
+
   await t.test('[Negative] does not flag a stable id used as the key', () => {
     const code = `items.map((item) => <li key={item.id}>{item.name}</li>)`;
     const reports = detectArrayIndexKey(code, 'List.jsx');

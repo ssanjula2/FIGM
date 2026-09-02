@@ -5,17 +5,15 @@
   "primaryFrameworkLabel": "Vue",
   "filesScanned": 29,
   "totalLOC": 1563,
-  "scanDurationMs": 2666.27429999999,
-  "totalFigmFindings": 3,
+  "scanDurationMs": 2561.312300000005,
+  "totalFigmFindings": 2,
   "findingsByRule": {
     "FIGM-A11Y-05": 1,
-    "FIGM-PERF-04": 1,
-    "FIGM-REACT-01": 1
+    "FIGM-PERF-04": 1
   },
   "findingsBySeverity": {
     "CRITICAL": 1,
-    "MEDIUM": 1,
-    "HIGH": 1
+    "MEDIUM": 1
   },
   "frameworksDetected": {
     "GENERIC_ESTREE": 19,
@@ -215,7 +213,7 @@
       "relativePath": "src/stores/user.ts",
       "framework": "GENERIC_ESTREE",
       "loc": 35,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -314,33 +312,6 @@
       "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/stores/user.ts",
-      "location": {
-        "start": {
-          "line": 11,
-          "column": 36
-        },
-        "end": {
-          "line": 11,
-          "column": 92
-        }
-      },
-      "offendingCodeSnippet": "const otherNames = computed(() => usedNames.value.filter(name => name !== savedName.value))",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 11",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     }
   ]
 }

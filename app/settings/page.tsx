@@ -167,9 +167,8 @@ export default function SettingsPage() {
               onChange={(e) => updateSettings({ aiModel: e.target.value })}
               style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#a855f7', fontWeight: 700, fontSize: '13px' }}
             >
-              <option value="gemini-2.5-flash">Gemini 2.5 Flash (Ultra Fast)</option>
-              <option value="gemini-1.5-pro">Gemini 1.5 Pro (Deep AST Remediation)</option>
-              <option value="claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+              <option value="claude-opus-5">Claude Opus 5 (Deep AST Remediation)</option>
+              <option value="claude-sonnet-5">Claude Sonnet 5 (Fast)</option>
               <option value="gpt-4o">GPT-4o Static Analysis Mode</option>
             </select>
           </div>

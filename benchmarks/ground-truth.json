@@ -1,8 +1,9 @@
 {
   "meta": {
     "benchmarkSuite": "FIGM Empirical Evaluation Benchmark Testbed v1.0",
-    "totalExpectedViolations": 19,
-    "frameworks": ["REACT_JSX", "VUE_SFC", "ANGULAR_TEMPLATE", "GENERIC_ESTREE"]
+    "totalExpectedViolations": 65,
+    "frameworks": ["REACT_JSX", "VUE_SFC", "ANGULAR_TEMPLATE", "GENERIC_ESTREE", "NEXT_JS"],
+    "ruleCoverageNote": "50/50 canonical rules have empirical ground-truth coverage as of this revision (up from 33/33, 25/25, before that 8/25). The most recent 17 rules (FIGM-NEXT-07..10, FIGM-VUE-03..06, FIGM-ANG-07..10, FIGM-REACT-07..11) were added in a second research-backed expansion pass -- see docs/research/EXPANSION_2_RESEARCH_TRACEABILITY.md, including 3 candidates replaced and 1 corrected after research contradicted or duplicated the original brief. Each got one new flat single-rule fixture, following the exact same isolated-single-rule convention as every prior fixture in this testbed (React09Benchmark.jsx deliberately uses fetch() rather than localStorage.setItem to avoid an incidental, disclosed co-fire with the existing FIGM-PERF-06; Ang07/08/09/10 all include changeDetection: ChangeDetectionStrategy.OnPush to avoid incidentally co-firing FIGM-ANG-02). FIGM-VUE-03..06 are the first Vue rules with REAL_AST detection (via <script>-block extraction and re-parse with the same TypeScript compiler every other real-AST rule uses -- no @vue/compiler-sfc dependency required). Correction (Phase: Vue template real-AST upgrade): FIGM-VUE-01/02 also now have REAL_AST detection, via a dedicated @vue/compiler-dom template parser (src/ast/vue-template-ast-builder.ts) added once package-registry access allowed installing @vue/compiler-dom/@vue/compiler-sfc -- see src/matrix/four-layer-meta-model.ts's per-rule knownLimitation field for FIGM-VUE-01/02, which carries the same correction. All 6/6 Vue rules are REAL_AST as of this revision; none remain LEGACY_TEXT_HEURISTIC. FIGM-ANG-06's fixture (Ang06Benchmark.pipe.ts) classifies as GENERIC_ESTREE, not ANGULAR_TEMPLATE, because detectFramework's Angular-hint check only recognizes @Component(...)/.component.ts, not @Pipe(...) -- this is the same GENERIC_ESTREE framework value FIGM-ANG-01/02/05 already accept. FIGM-NEXT-03 required extending EvaluationRunner's file discovery (src/eval/evaluation-runner.ts's collectTestbedFiles) from a flat readdirSync to a recursive walk, since its real-AST detector requires a literal app/<segment>/page.<ext> App Router path -- benchmarks/testbed/next03/app/demo/page.tsx is the only non-flat fixture in this testbed. All other fixtures are completely unaffected: a flat file's relative path is identical to its old bare filename. Addition (Pre-Freeze Technical Completion Pass): benchmarks/testbed/negative/ (21 files, discovered automatically by collectTestbedFiles' recursive walk) adds genuine NEGATIVE/CLEAN fixtures for 21 of the 50 rules -- a representative sample across all three research domains (6 Architecture, 8 Static Performance, all 7 Accessibility rules), not a mechanical 'remove the trigger token' transform of the existing positive fixtures but independently-written, realistic compliant code (e.g. FIGM-PERF-01's negative hoists the allocation to a frozen module-level constant; FIGM-REACT-03's negative uses a real functional state update via the setter). None of these 21 files has a corresponding entry in groundTruthViolations below -- by the same exact-match logic EvaluationRunner already uses to compute FP, any diagnostic FIGM raises on a file with no ground-truth entry is automatically counted as a false positive, so no schema change or new evaluation-runner logic was needed to make these count. Each was individually verified via a direct RuleExecutionEngine.analyzeFile call to genuinely produce zero FIGM diagnostics before being added (several iterations were needed: some initial drafts incidentally co-fired FIGM-PERF-05 (an inline JSX arrow-function handler) or FIGM-A11Y-07 (an aria-label not containing its element's visible text) and were rewritten, e.g. by wrapping handlers in useCallback -- the same real remediation this project's own rules recommend -- rather than by weakening the fixture's realism). Re-running EvaluationRunner with these 21 files included still reports FP=0 across the full 50-rule set -- a genuine, not assumed, result: the controlled benchmark's TP=65/FP=0/FN=0 was not touched or forced, it is what EvaluationRunner actually computed after the addition. This meaningfully improves (without fully resolving) the benchmark's most-cited validity limitation: the original 46-fixture corpus contained zero true-negative examples, so a 100% precision figure demonstrated only that positive fixtures fire correctly, never that FIGM stays quiet on genuinely compliant code. 21/50 rules now have at least one verified negative fixture; 29/50 do not yet -- this is a partial, not complete, remedy, and should be described as such."
   },
   "groundTruthViolations": [
     {
@@ -60,6 +61,13 @@
       "ruleId": "FIGM-A11Y-04",
       "expectedLine": 44,
       "description": "Modal component overlay without focus restoration"
+    },
+    {
+      "filePath": "ReactBenchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-05",
+      "expectedLine": 24,
+      "description": "Inline arrow callback passed to onClick in render scope (line 24 -- co-occurs with the FIGM-A11Y-01 finding on the same line; a genuine second, independent defect, not a duplicate). Previously an undisclosed baseline false positive in the 8/25-rule benchmark era, since FIGM-PERF-05 was not yet a ground-truth-covered rule; now correctly labelled as a true positive after direct source verification."
     },
 
     {
@@ -126,6 +134,13 @@
       "expectedLine": 26,
       "description": "window.addEventListener scroll in Angular ngOnInit hook"
     },
+    {
+      "filePath": "AngularBenchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-02",
+      "expectedLine": 3,
+      "description": "@Component decorator with no ChangeDetectionStrategy.OnPush. Previously an undisclosed baseline false positive in the 8/25-rule benchmark era, since FIGM-ANG-02 was not yet a ground-truth-covered rule; now correctly labelled as a true positive after direct source verification."
+    },
 
     {
       "filePath": "VanillaJSBenchmark.js",
@@ -140,6 +155,315 @@
       "ruleId": "FIGM-PERF-03",
       "expectedLine": 6,
       "description": "window.addEventListener orientationchange missing teardown"
+    },
+
+    {
+      "filePath": "Perf05Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-05",
+      "expectedLine": 3,
+      "description": "Inline arrow callback created inside .map() render loop"
+    },
+    {
+      "filePath": "Perf05Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-04",
+      "expectedLine": 3,
+      "description": "Inline arrow onClick passed to Card-named custom component (genuinely co-occurs with FIGM-PERF-05 on this same line -- both are real, independently verified detections, not a duplicate)"
+    },
+    {
+      "filePath": "Perf06Benchmark.js",
+      "framework": "GENERIC_ESTREE",
+      "ruleId": "FIGM-PERF-06",
+      "expectedLine": 4,
+      "description": "localStorage.getItem called inside a for-loop body"
+    },
+    {
+      "filePath": "A11y05Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-05",
+      "expectedLine": 3,
+      "description": "Text input with no associated label or aria-label anywhere in file"
+    },
+    {
+      "filePath": "A11y06Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-06",
+      "expectedLine": 3,
+      "description": "Positive literal tabIndex value (5)"
+    },
+    {
+      "filePath": "React01Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-01",
+      "expectedLine": 3,
+      "description": ".sort() call on the render path with no useMemo wrapper"
+    },
+    {
+      "filePath": "React02Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-02",
+      "expectedLine": 3,
+      "description": "Array index used directly as the key prop"
+    },
+    {
+      "filePath": "React03Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-03",
+      "expectedLine": 5,
+      "description": "Direct property mutation of a useState-bound variable before calling its setter"
+    },
+    {
+      "filePath": "React04Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-04",
+      "expectedLine": 3,
+      "description": "Inline arrow function passed as onClick to a Button-named child component"
+    },
+    {
+      "filePath": "React04Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-PERF-05",
+      "expectedLine": 3,
+      "description": "Inline arrow callback created in render scope (genuinely co-occurs with FIGM-REACT-04 on this same line -- both are real, independently verified detections, not a duplicate)"
+    },
+    {
+      "filePath": "Next01Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-01",
+      "expectedLine": 10,
+      "description": "useState called in a Next.js file with no \"use client\" directive"
+    },
+    {
+      "filePath": "Next02Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-02",
+      "expectedLine": 5,
+      "description": "Known heavy package (monaco-editor) statically imported instead of via next/dynamic"
+    },
+    {
+      "filePath": "Next04Benchmark.tsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-NEXT-04",
+      "expectedLine": 6,
+      "description": "External Google Fonts CSS link tag instead of next/font"
+    },
+    {
+      "filePath": "Ang01Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-01",
+      "expectedLine": 5,
+      "description": "RxJS subscribe() with no unsubscribe/takeUntilDestroyed anywhere in file"
+    },
+    {
+      "filePath": "Ang02Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-02",
+      "expectedLine": 2,
+      "description": "@Component decorator with no ChangeDetectionStrategy.OnPush"
+    },
+    {
+      "filePath": "Ang03Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-03",
+      "expectedLine": 5,
+      "description": "*ngFor with no trackBy"
+    },
+    {
+      "filePath": "Ang04Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-04",
+      "expectedLine": 5,
+      "description": "Method call inside template interpolation"
+    },
+    {
+      "filePath": "Ang05Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-05",
+      "expectedLine": 6,
+      "description": "Direct nativeElement.style mutation, no Renderer2"
+    },
+    {
+      "filePath": "next03/app/demo/page.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-03",
+      "expectedLine": 1,
+      "description": "App Router page with no export const revalidate -- requires a nested app/<segment>/page.tsx path for isAppRouterPageFile() to classify it, hence the only non-flat fixture in this testbed (see EvaluationRunner.collectTestbedFiles)"
+    },
+    {
+      "filePath": "A11y07Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-A11Y-07",
+      "expectedLine": 3,
+      "description": "aria-label \"Submit the entire form\" does not contain the visible text \"Send\""
+    },
+    {
+      "filePath": "React05Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-05",
+      "expectedLine": 4,
+      "description": "useEffect body is exactly one setTotal(...) call deriving state from the items prop"
+    },
+    {
+      "filePath": "React06Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-06",
+      "expectedLine": 3,
+      "description": "useEffect reads the userId prop but the dependency array is empty"
+    },
+    {
+      "filePath": "Next05Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-05",
+      "expectedLine": 3,
+      "description": "Node.js 'fs' module imported into a file marked 'use client'"
+    },
+    {
+      "filePath": "Next06Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-06",
+      "expectedLine": 6,
+      "description": "Native <img> element used instead of next/image's Image component"
+    },
+    {
+      "filePath": "Ang06Benchmark.pipe.ts",
+      "framework": "GENERIC_ESTREE",
+      "ruleId": "FIGM-ANG-06",
+      "expectedLine": 4,
+      "description": "@Pipe decorator declared with pure: false -- classified GENERIC_ESTREE by detectFramework (filename has no .component.ts suffix and body has no @Component(/rxjs marker), but FIGM-ANG-06 is evaluated on GENERIC_ESTREE exactly like FIGM-ANG-01/02/05 already are"
+    },
+    {
+      "filePath": "Vue01Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-01",
+      "expectedLine": 3,
+      "description": "v-for over todos with no :key binding"
+    },
+    {
+      "filePath": "Vue02Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-02",
+      "expectedLine": 3,
+      "description": "v-for and v-if present together on the same <li> element"
+    },
+    {
+      "filePath": "Next07Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-07",
+      "expectedLine": 4,
+      "description": "async function component in a file marked 'use client'"
+    },
+    {
+      "filePath": "Next08Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-08",
+      "expectedLine": 5,
+      "description": "useSearchParams() called with no <Suspense> element anywhere in the file"
+    },
+    {
+      "filePath": "Next09Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-09",
+      "expectedLine": 3,
+      "description": "metadata export present in a file marked 'use client'"
+    },
+    {
+      "filePath": "Next10Benchmark.tsx",
+      "framework": "NEXT_JS",
+      "ruleId": "FIGM-NEXT-10",
+      "expectedLine": 2,
+      "description": "export const dynamic = 'force-dynamic' with no cookies()/headers()/no-store fetch in the file"
+    },
+    {
+      "filePath": "Vue03Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-03",
+      "expectedLine": 6,
+      "description": "computed getter assigns to logCount.value -- a side effect, not pure derivation"
+    },
+    {
+      "filePath": "Vue04Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-04",
+      "expectedLine": 8,
+      "description": "sortedItems.value.push(x) mutates the computed's own output instead of its source ref"
+    },
+    {
+      "filePath": "Vue05Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-05",
+      "expectedLine": 8,
+      "description": "props.todo.done = true mutates a defineProps()-bound prop"
+    },
+    {
+      "filePath": "Vue06Benchmark.vue",
+      "framework": "VUE_SFC",
+      "ruleId": "FIGM-VUE-06",
+      "expectedLine": 8,
+      "description": "Options API 'increment' method declared as an arrow function"
+    },
+    {
+      "filePath": "Ang07Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-07",
+      "expectedLine": 4,
+      "description": "constructor calls a service method beyond a bare field assignment"
+    },
+    {
+      "filePath": "Ang08Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-08",
+      "expectedLine": 5,
+      "description": "@for track expression bound to $index instead of a stable property"
+    },
+    {
+      "filePath": "Ang09Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-09",
+      "expectedLine": 4,
+      "description": "userId = input() property missing the readonly modifier"
+    },
+    {
+      "filePath": "Ang10Benchmark.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "ruleId": "FIGM-ANG-10",
+      "expectedLine": 5,
+      "description": "user$ piped through | async twice in the same template"
+    },
+    {
+      "filePath": "React07Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-07",
+      "expectedLine": 4,
+      "description": "useState called inside an if statement instead of the component's top level"
+    },
+    {
+      "filePath": "React08Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-08",
+      "expectedLine": 3,
+      "description": "todo.done = true mutates a destructured component prop"
+    },
+    {
+      "filePath": "React09Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-09",
+      "expectedLine": 3,
+      "description": "fetch(endpoint) called directly in the render body, not in an event handler or Effect"
+    },
+    {
+      "filePath": "React10Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-10",
+      "expectedLine": 3,
+      "description": "Article() called directly as a function instead of rendered as <Article />"
+    },
+    {
+      "filePath": "React11Benchmark.jsx",
+      "framework": "REACT_JSX",
+      "ruleId": "FIGM-REACT-11",
+      "expectedLine": 4,
+      "description": "AuthContext.Provider value={{ user, setUser }} is an unmemoized inline object literal"
     }
   ]
 }

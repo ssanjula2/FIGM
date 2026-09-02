@@ -4,10 +4,10 @@
 
 \section{Overall System Accuracy}
 The empirical benchmark suite evaluated FIGM across React JSX, Vue SFC, Angular component templates, and ES2022 scripts.
-The system achieved an overall Precision of \textbf{90.5\%}, Recall of \textbf{100.0\%}, and F1-Score of \textbf{95.0\%}.
+The system achieved an overall Precision of \textbf{100.0\%}, Recall of \textbf{100.0\%}, and F1-Score of \textbf{100.0\%}.
 
 \section{Rule-by-Rule Accuracy Evaluation}
-Table~\ref{tab:rule_eval_results} presents the empirical evaluation breakdown for the 8 core guidelines that have established ground-truth benchmark fixtures, out of the 25 total FIGM rules (see Chapter~\ref{ch:implementation} for the full rule catalog).
+Table~\ref{tab:rule_eval_results} presents the empirical evaluation breakdown across all 50 total FIGM rules (see Chapter~\ref{ch:implementation} for the full rule catalog), every one of which now has an established ground-truth benchmark fixture in \texttt{benchmarks/testbed}.
 
 \begin{table}[htbp]
 \centering
@@ -21,24 +21,65 @@ FIGM-A11Y-01 & ACCESSIBILITY & 3 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
 FIGM-A11Y-02 & ACCESSIBILITY & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
 FIGM-A11Y-03 & ACCESSIBILITY & 3 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
 FIGM-A11Y-04 & ACCESSIBILITY & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-A11Y-05 & ACCESSIBILITY & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-A11Y-06 & ACCESSIBILITY & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-A11Y-07 & ACCESSIBILITY & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-01 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-02 & PERFORMANCE & 2 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-03 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-04 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-05 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-06 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-07 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-08 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-09 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-ANG-10 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-01 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-02 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-03 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-04 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-05 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-06 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-07 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-08 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-09 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-NEXT-10 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
 FIGM-PERF-01 & PERFORMANCE & 2 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
 FIGM-PERF-02 & PERFORMANCE & 3 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
 FIGM-PERF-03 & PERFORMANCE & 4 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
 FIGM-PERF-04 & PERFORMANCE & 2 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-PERF-05 & PERFORMANCE & 3 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-PERF-06 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-01 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-02 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-03 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-04 & PERFORMANCE & 2 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-05 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-06 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-07 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-08 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-09 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-10 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-REACT-11 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-VUE-01 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-VUE-02 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-VUE-03 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-VUE-04 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-VUE-05 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
+FIGM-VUE-06 & PERFORMANCE & 1 & 0 & 0 & 100.0\% & 100.0\% & 100.0\% \\
 \midrule
-\textbf{Overall} & \textbf{All} & \textbf{19} & \textbf{2} & \textbf{0} & \textbf{90.5\%} & \textbf{100.0\%} & \textbf{95.0\%} \\
+\textbf{Overall} & \textbf{All} & \textbf{65} & \textbf{0} & \textbf{0} & \textbf{100.0\%} & \textbf{100.0\%} & \textbf{100.0\%} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \section{Developer Usability Study}
-A target cohort of $N = 85$ student developers at NSBM Green University was planned for a System Usability Scale (SUS) evaluation of FIGM. As of this export, \textbf{0 of 85} real participant responses have been collected (see \texttt{research/CONSENT\_FORM.md} and \texttt{data/user-study-responses.json}) -- no SUS score, patch-acceptance rate, or satisfaction metric is reported here, because none has been measured from real data. A prior version of this chapter reported a completed evaluation with a specific SUS score and satisfaction percentages; those figures were fabricated (invented, with no underlying computation or data source) and have been retracted rather than replaced with different numbers.
+A target cohort of $N = 20$ student developers at NSBM Green University was planned for a System Usability Scale (SUS) evaluation of FIGM. As of this export, \textbf{0 of 20} real participant responses have been collected (see \texttt{research/CONSENT\_FORM.md} and \texttt{research/raw/real/responses.csv} -- the actual expected-input path read by \texttt{scripts/import-user-study.ts}; a prior version of this chapter cited a non-existent \texttt{data/user-study-responses.json} path, corrected here to the repository's real source-of-truth location) -- no SUS score, patch-acceptance rate, or satisfaction metric is reported here, because none has been measured from real data. A prior version of this chapter reported a completed evaluation with a specific SUS score and satisfaction percentages; those figures were fabricated (invented, with no underlying computation or data source) and have been retracted rather than replaced with different numbers.
 
 \section{Scan Throughput \& Memory Usage}
-Figures below are read directly from \texttt{benchmarks/eval-summary.json}'s \texttt{performanceMetrics} block (timestamp 2026-08-18T12:11:41.928Z). Timing and memory figures are machine- and load-dependent measurements captured at a single point in time on the development machine, not a live-tracked guarantee — they will vary run-to-run and across hardware.
 \begin{itemize}
-    \item \textbf{Total Code Base Scanned}: 147 LOC
-    \item \textbf{Scan Duration}: 540.85 ms
-    \item \textbf{Scan Speed}: 271.80 LOC/sec
-    \item \textbf{Peak Heap Memory Delta}: 21.52 MB
+    \item \textbf{Total Code Base Scanned}: 799 LOC
+    \item \textbf{Scan Duration}: 6068.36 ms
+    \item \textbf{Scan Speed}: 132 LOC/sec
+    \item \textbf{Peak Heap Memory Delta}: 199.09 MB
 \end{itemize}

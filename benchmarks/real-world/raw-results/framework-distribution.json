@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-09-02T22:45:14.852Z",
+  "byPrimaryFrameworkLabel": {
+    "React": 5,
+    "Next.js": 5,
+    "Angular": 5,
+    "Vue": 3,
+    "Generic JavaScript": 2,
+    "Generic JavaScript/TypeScript": 1
+  },
+  "primaryFrameworkRepoCount": 15,
+  "totalRepositories": 21
+}

@@ -1,8 +1,35 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
+import AdminSidebar from './AdminSidebar';
 import HeaderBar from './HeaderBar';
+
+// Routes that must render standalone -- no Sidebar/HeaderBar app chrome around them. These are
+// exactly the public, pre-authentication routes (see middleware.ts's isPublicPath): the canonical
+// /auth/* pages, their top-level redirect stubs, and the public research/about page. Previously
+// AppShell wrapped every route unconditionally, so an unauthenticated visitor on the login page
+// saw the authenticated app's Sidebar/HeaderBar (which itself has no real "signed out" state --
+// see HeaderBar's profile control) rendered around the login form. The primary product requirement
+// is "login/register is the first, standalone experience" -- that requires the chrome to not be
+// there at all until a session exists, not just a static/misleading nav.
+function isBareRoute(pathname: string | null): boolean {
+  if (!pathname) return false;
+  return (
+    pathname.startsWith('/auth/') ||
+    pathname === '/login' ||
+    pathname === '/register' ||
+    pathname === '/forgot-password' ||
+    pathname === '/about' ||
+    // RQ1 FCP/TTI experiment fixture pages (docs/research/RQ1_EXPERIMENT_PROTOCOL.md) -- must
+    // render with no dashboard chrome (Sidebar/HeaderBar) around them, since the experiment
+    // measures each fixture's own render/state-management strategy in isolation; the shared
+    // AppShell chrome would add identical DOM/JS weight to every condition and mask the
+    // intentional differences the experiment exists to measure.
+    pathname.startsWith('/rq1-experiment')
+  );
+}
 
 /**
  * Owns the mobile/tablet navigation drawer's open/closed state, shared between HeaderBar (renders
@@ -14,6 +41,7 @@ import HeaderBar from './HeaderBar';
  * 1024px there was previously no way at all to open the primary navigation.
  */
 export default function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -50,9 +78,24 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     }
   }, [sidebarOpen]);
 
+  if (isBareRoute(pathname)) {
+    return <>{children}</>;
+  }
+
+  // The admin/research workspace (see app/admin/layout.tsx, which is the actual server-side
+  // access boundary -- this is presentation only) gets its own nav chrome instead of the normal
+  // user Sidebar, so an ADMIN's own "Admin Panel" link isn't just another item mixed into every
+  // DEVELOPER's workspace nav (the previous state). HeaderBar (search, notifications, account
+  // control) is shared -- nothing role-sensitive lives there.
+  const isAdminWorkspace = pathname?.startsWith('/admin') ?? false;
+
   return (
     <div className="layout-container">
-      <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+      {isAdminWorkspace ? (
+        <AdminSidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+      ) : (
+        <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+      )}
 
       {/* Backdrop: only rendered while the drawer is open (mobile/tablet only in practice, since
           the drawer is permanently visible and this state has no visual effect on desktop widths

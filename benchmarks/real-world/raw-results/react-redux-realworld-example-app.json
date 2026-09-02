@@ -5,19 +5,18 @@
   "primaryFrameworkLabel": "React",
   "filesScanned": 38,
   "totalLOC": 2378,
-  "scanDurationMs": 4083.2820000000065,
-  "totalFigmFindings": 47,
+  "scanDurationMs": 4165.700499999999,
+  "totalFigmFindings": 45,
   "findingsByRule": {
     "FIGM-PERF-04": 21,
     "FIGM-PERF-02": 6,
     "FIGM-REACT-03": 2,
     "FIGM-A11Y-05": 15,
-    "FIGM-PERF-01": 1,
-    "FIGM-REACT-01": 2
+    "FIGM-PERF-01": 1
   },
   "findingsBySeverity": {
     "MEDIUM": 21,
-    "HIGH": 9,
+    "HIGH": 7,
     "CRITICAL": 17
   },
   "frameworksDetected": {
@@ -266,7 +265,7 @@
       "relativePath": "src/reducers/article.js",
       "framework": "GENERIC_ESTREE",
       "loc": 36,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -298,7 +297,7 @@
       "relativePath": "src/reducers/editor.js",
       "framework": "GENERIC_ESTREE",
       "loc": 55,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1496,60 +1495,6 @@
       "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 2",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/reducers/article.js",
-      "location": {
-        "start": {
-          "line": 30,
-          "column": 18
-        },
-        "end": {
-          "line": 30,
-          "column": 76
-        }
-      },
-      "offendingCodeSnippet": "comments: state.comments.filter(comment => comment.id !== commentId)",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 30",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/reducers/editor.js",
-      "location": {
-        "start": {
-          "line": 45,
-          "column": 17
-        },
-        "end": {
-          "line": 45,
-          "column": 64
-        }
-      },
-      "offendingCodeSnippet": "tagList: state.tagList.filter(tag => tag !== action.tag)",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 45",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
       "ruleId": "FIGM-PERF-04",

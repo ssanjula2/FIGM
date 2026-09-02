@@ -5,7 +5,7 @@
   "primaryFrameworkLabel": "React",
   "filesScanned": 10,
   "totalLOC": 340,
-  "scanDurationMs": 1770.8986000000004,
+  "scanDurationMs": 2126.5073,
   "totalFigmFindings": 11,
   "findingsByRule": {
     "FIGM-REACT-01": 1,
@@ -133,11 +133,13 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 88,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 64"
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 64",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -153,12 +155,14 @@
         }
       },
       "offendingCodeSnippet": "onAdd={() => setShowAddTask(!showAddTask)}",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 94"
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 94",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
       "ruleId": "FIGM-A11Y-05",
@@ -183,11 +187,13 @@
       "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
       "confidenceScore": 97,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 27"
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 27",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -203,12 +209,14 @@
         }
       },
       "offendingCodeSnippet": "onChange={(e) => setText(e.target.value)}",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 31"
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 31",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
       "ruleId": "FIGM-A11Y-05",
@@ -233,11 +241,13 @@
       "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
       "confidenceScore": 97,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 36"
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 36",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -253,12 +263,14 @@
         }
       },
       "offendingCodeSnippet": "onChange={(e) => setDay(e.target.value)}",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 40"
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 40",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
       "ruleId": "FIGM-A11Y-05",
@@ -283,11 +295,13 @@
       "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
       "confidenceScore": 97,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 45"
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 45",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -303,12 +317,14 @@
         }
       },
       "offendingCodeSnippet": "onChange={(e) => setReminder(e.currentTarget.checked)}",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 49"
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 49",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
       "ruleId": "FIGM-A11Y-05",
@@ -333,11 +349,13 @@
       "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
       "confidenceScore": 97,
       "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 53"
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 53",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -353,12 +371,14 @@
         }
       },
       "offendingCodeSnippet": "onClick={() => onDelete(task.id)}",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 13"
+      "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
       "ruleId": "FIGM-REACT-02",
@@ -383,7 +403,9 @@
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 96,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [JSXAttribute] at line 7"
+      "evidence": "Legacy text-heuristic pattern match: [JSXAttribute] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     }
   ]
 }

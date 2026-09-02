@@ -56,16 +56,16 @@ test('compare-annotations.ts: computes correct agreement/kappa/confusion-matrix 
   assert.ok(fs.existsSync(GROUND_TRUTH_PATH), 'run `npm run research:generate-annotation-package` before this test');
   const groundTruth: { groundTruthViolations: BlindedGroundTruthItem[] } = JSON.parse(fs.readFileSync(GROUND_TRUTH_PATH, 'utf-8'));
   const items = groundTruth.groundTruthViolations;
-  assert.equal(items.length, 19, 'the controlled benchmark ground truth is expected to have 19 items -- if this changed, the hand-computed expectations below must be recomputed, not adjusted blindly');
+  assert.equal(items.length, 65, 'the controlled benchmark ground truth is expected to have 65 items -- if this changed, the hand-computed expectations below must be recomputed, not adjusted blindly. (Updated Stage 6, 2026-09-03: was 40 against a stale blinded-ground-truth.json that had never been regenerated through two later testbed-expansion passes -- research:generate-annotation-package was re-run to bring it in sync with the current 65-item benchmarks/ground-truth.json, which is what changed this number, not a change to the ground truth\'s own content.)');
 
-  // Construct a synthetic annotator submission: agree (same ruleId, matching line) on the first
-  // 17 items, deliberately miss the last 2 (omit them entirely -- a real annotator who didn't spot
-  // a violation), and add one item the annotator flagged that isn't in ground truth at all (a
+  // Construct a synthetic annotator submission: agree (same ruleId, matching line) on all but the
+  // last 2 items, deliberately miss those 2 (omit them entirely -- a real annotator who didn't
+  // spot a violation), and add one item the annotator flagged that isn't in ground truth at all (a
   // plausible "extra finding" row). This is the same technique tests/inter-rater-reliability.test.ts
   // uses (hand-constructed rating pairs with a known expected kappa), just exercised through the
   // real CSV-parsing/matching script instead of calling the formula directly.
-  const confirmed = items.slice(0, 17);
-  const missed = items.slice(17);
+  const confirmed = items.slice(0, items.length - 2);
+  const missed = items.slice(items.length - 2);
   assert.equal(missed.length, 2);
 
   const rows = [
@@ -88,22 +88,25 @@ test('compare-annotations.ts: computes correct agreement/kappa/confusion-matrix 
   try {
     const output = execFileSync('node', ['--import', 'tsx', SCRIPT_PATH, csvPath], { cwd: ROOT, encoding: 'utf-8' });
 
-    // Hand-computed expectations (see file header):
-    // Presence/absence pairs: 17 confirmed (PRESENT/PRESENT) + 2 missed (PRESENT/ABSENT) +
-    // 1 annotator-only extra (ABSENT/PRESENT) = 20 pairs, 17 agreements.
-    //   observedAgreement = 17/20 = 0.85
-    //   rater1 marginals: PRESENT=19/20=0.95, ABSENT=1/20=0.05
-    //   rater2 marginals: PRESENT=18/20=0.90, ABSENT=2/20=0.10
-    //   expectedAgreement = 0.95*0.90 + 0.05*0.10 = 0.855 + 0.005 = 0.86
-    //   kappa = (0.85 - 0.86) / (1 - 0.86) = -0.01 / 0.14 = -0.0714285714...
-    assert.match(output, /n = 20/);
-    assert.match(output, /Raw \(observed\) agreement: 85\.0%/);
-    assert.match(output, /Expected \(chance\) agreement: 86\.0%/);
-    assert.match(output, /Cohen's kappa: -0\.071/);
+    // Hand-computed expectations (see file header). Updated Stage 6 (2026-09-03) for the 65-item
+    // ground truth (was 40 -- see the items.length assertion above for why):
+    // Presence/absence pairs: 63 confirmed (PRESENT/PRESENT) + 2 missed (PRESENT/ABSENT) +
+    // 1 annotator-only extra (ABSENT/PRESENT) = 66 pairs, 63 agreements.
+    //   observedAgreement = 63/66 = 0.9545454545...
+    //   rater1 marginals: PRESENT=65/66=0.9848484848, ABSENT=1/66=0.0151515152
+    //   rater2 marginals: PRESENT=64/66=0.9696969697, ABSENT=2/66=0.0303030303
+    //   expectedAgreement = (65/66)*(64/66) + (1/66)*(2/66) = 4160/4356 + 2/4356 = 4162/4356 = 0.9554637283...
+    //   kappa = (63/66 - 4162/4356) / (1 - 4162/4356) = (4158/4356 - 4162/4356) / (194/4356) = -4/194 = -0.0206185567...
+    // Independently confirmed by running scripts/compare-annotations.ts directly against this
+    // exact construction (not hand-assumed) -- see the file header's methodology note.
+    assert.match(output, /n = 66/);
+    assert.match(output, /Raw \(observed\) agreement: 95\.5%/);
+    assert.match(output, /Expected \(chance\) agreement: 95\.5%/);
+    assert.match(output, /Cohen's kappa: -0\.021/);
     assert.match(output, /poor \(worse than chance\)/);
 
-    // Confusion matrix: PRESENT/PRESENT=17, PRESENT/ABSENT=2, ABSENT/PRESENT=1, ABSENT/ABSENT=0.
-    assert.match(output, /\| PRESENT \| 17 \| 2 \|/);
+    // Confusion matrix: PRESENT/PRESENT=63, PRESENT/ABSENT=2, ABSENT/PRESENT=1, ABSENT/ABSENT=0.
+    assert.match(output, /\| PRESENT \| 63 \| 2 \|/);
     assert.match(output, /\| ABSENT \| 1 \| 0 \|/);
 
     // Rule classification agreement: unlike the presence/absence pass above, compare-annotations.ts's
@@ -119,10 +122,14 @@ test('compare-annotations.ts: computes correct agreement/kappa/confusion-matrix 
     // hand-assumed. (For real annotator submissions using human-readable line references this
     // heuristic behaves better; this specific collision is a property of the compact synthetic
     // testbed's tight line spacing.)
+    // Updated Stage 6 (2026-09-03) for the 65-item ground truth -- captured from an actual
+    // verified run against the regenerated fixtures/blinded-ground-truth (same methodology as
+    // before: not hand-assumed, since the line-tolerance collision behavior this measures is a
+    // property of the real fixture data, not something derivable from the item count alone).
     assert.match(output, /Rule Classification Agreement/);
-    assert.match(output, /n = 17/);
-    assert.match(output, /Raw agreement: 41\.2%/);
-    assert.match(output, /Cohen's kappa: 0\.303 \(fair\)/);
+    assert.match(output, /n = 63/);
+    assert.match(output, /Raw agreement: 76\.2%/);
+    assert.match(output, /Cohen's kappa: 0\.755 \(substantial\)/);
 
     assert.ok(fs.existsSync(reportPath), 'the script should have written a comparison report');
     const reportContent = fs.readFileSync(reportPath, 'utf-8');

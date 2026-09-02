@@ -487,3 +487,510 @@ code, pre, .font-mono {
   }
 }
 
+/* Visually hides content while keeping it in the accessibility tree -- used to give a
+   screen-reader-only announcement alongside a purely-visual loading indicator (e.g. skeleton
+   loaders), which have no text content of their own for assistive tech to read. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =============================================================================
+   Inspector Design System -- UI-only visual layer for the Live Code Inspector
+   (app/live-scan/page.tsx) and any shared chrome it sits inside. Purely additive:
+   new tokens/classes only, nothing existing above is renamed or removed. Restrained,
+   IDE-like palette (subtle borders, accent-only color, no full-card tints) rather
+   than the marketing-style glow/gradient treatment used elsewhere in the app.
+   ============================================================================= */
+:root {
+  --insp-bg: #0a0f1a;
+  --insp-panel-bg: #0d1420;
+  --insp-panel-bg-alt: #0b1018;
+  --insp-border: rgba(255, 255, 255, 0.07);
+  --insp-border-strong: rgba(255, 255, 255, 0.14);
+  --insp-radius-sm: 6px;
+  --insp-radius-md: 10px;
+  --insp-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+  --sev-critical: #f43f5e;
+  --sev-high: #f59e0b;
+  --sev-medium: #38bdf8;
+  --sev-low: #7c8ba6;
+
+  --status-ok: #22c55e;
+  --status-warn: #eab308;
+  --status-error: #ef4444;
+  --status-info: #38bdf8;
+}
+
+/* Generic small button primitives -- gives real, restrained styling to className="btn-primary"/
+   "btn-secondary", used across several pages (live-scan, diagnostics, profiler) that previously
+   carried no matching CSS rule at all (the class had zero visual effect; every button relied
+   entirely on its own inline style). Purely additive/corrective -- no existing class renamed. */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--insp-radius-sm);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  background: #17b0f0;
+  color: #04101c;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #38bdf8;
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--insp-radius-sm);
+  border: 1px solid var(--insp-border-strong);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Page shell */
+.insp-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Compact top bar (Step 5): brand + framework/status on the left, actions on the right. Height,
+   alignment, and restraint deliberately mirror .header-bar-container rather than introducing a
+   second, differently-proportioned chrome band. */
+.insp-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--insp-panel-bg);
+  border: 1px solid var(--insp-border);
+  border-radius: var(--insp-radius-md);
+}
+
+.insp-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.insp-topbar-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+}
+
+.insp-topbar-sub {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.insp-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Status dot + label (Step 8) -- one shared primitive for "Ready / Scanning / Issues Found" style
+   indicators, reused in the top bar and the bottom status bar. */
+.insp-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.insp-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--status-ok);
+  flex-shrink: 0;
+}
+
+.insp-status.is-scanning .insp-status-dot {
+  background: var(--status-warn);
+  animation: pulseGlow 1s infinite ease-in-out;
+}
+
+.insp-status.is-error .insp-status-dot {
+  background: var(--status-error);
+}
+
+.insp-status.is-warn .insp-status-dot {
+  background: var(--status-warn);
+}
+
+/* Small neutral pill for compact metadata (framework name, sourceKind, fixability label, etc.) --
+   color is supplied per-use via the --chip-color/--chip-bg custom properties so severity/status
+   values (which are computed at render time from real data) don't need a bespoke CSS rule each. */
+.insp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--chip-color, var(--text-muted));
+  background: var(--chip-bg, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--chip-border, rgba(255, 255, 255, 0.12));
+  white-space: nowrap;
+}
+
+/* Two-panel workspace grid (Step 4/6): editor is visually dominant (wider column), collapses to a
+   single column on narrower viewports per Step 15 -- the previous inline grid-template-columns had
+   no responsive fallback at all. */
+.insp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media screen and (max-width: 1100px) {
+  .insp-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.insp-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--insp-panel-bg);
+  border: 1px solid var(--insp-border);
+  border-radius: var(--insp-radius-md);
+}
+
+.insp-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.insp-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.insp-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.insp-toolbar-label {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.insp-tab-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--insp-radius-sm);
+  border: 1px solid var(--insp-border-strong);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.insp-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.insp-editor-frame {
+  border: 1px solid var(--insp-border-strong);
+  border-radius: var(--insp-radius-sm);
+  overflow: hidden;
+}
+
+.insp-editor-tab-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--insp-panel-bg-alt);
+  border-bottom: 1px solid var(--insp-border);
+  font-family: var(--insp-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* Metric tile grid (Step 9 Code Health Overview / Step 6 metrics strip) -- generic column count via
+   --insp-cols so the same primitive serves the 3-, 4-, and (severity breakdown) up-to-5 tile rows,
+   collapsing to 2 columns under 560px so a tile never has to shrink past legibility. */
+.insp-metric-row {
+  display: grid;
+  grid-template-columns: repeat(var(--insp-cols, 4), 1fr);
+  gap: 6px;
+}
+
+@media screen and (max-width: 560px) {
+  .insp-metric-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.insp-metric-tile {
+  padding: 8px 8px;
+  background: var(--insp-panel-bg-alt);
+  border: 1px solid var(--insp-border);
+  border-radius: var(--insp-radius-sm);
+  text-align: center;
+}
+
+.insp-metric-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.insp-metric-value {
+  font-size: 15px;
+  font-weight: 800;
+  margin-top: 3px;
+  font-family: var(--insp-mono);
+}
+
+/* Diagnostic/violation card (Step 7) -- accent color is data-driven (severity, or verified/warn
+   fix state), so it's supplied per-instance via --card-accent rather than baked into the class,
+   keeping the color logic exactly where it already lives (SEV_COLOR / fix-result state) in
+   page.tsx. Deliberately a single flat border accent, not a full-card severity tint. */
+.insp-card {
+  padding: 13px 14px;
+  background: var(--insp-panel-bg-alt);
+  border: 1px solid var(--insp-border-strong);
+  border-left: 3px solid var(--card-accent, var(--insp-border-strong));
+  border-radius: var(--insp-radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.15s ease-out;
+}
+
+.insp-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.insp-card-chips {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.insp-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.insp-card-location {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-family: var(--insp-mono);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.insp-card-snippet {
+  background: rgba(244, 63, 94, 0.06);
+  border: 1px solid rgba(244, 63, 94, 0.18);
+  padding: 8px 10px;
+  border-radius: var(--insp-radius-sm);
+  font-size: 11px;
+  color: #fca5a5;
+  margin: 0;
+  font-family: var(--insp-mono);
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.insp-card-body {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.insp-card-remediation {
+  font-size: 12px;
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.06);
+  border: 1px solid rgba(34, 197, 94, 0.15);
+  padding: 7px 10px;
+  border-radius: var(--insp-radius-sm);
+  line-height: 1.5;
+}
+
+.insp-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--insp-mono);
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--chip-color, var(--cyan));
+  background: var(--chip-bg, rgba(56, 189, 248, 0.08));
+  border: 1px solid var(--chip-border, rgba(56, 189, 248, 0.25));
+  transition: background-color 0.15s ease-out;
+}
+
+.insp-link-btn:hover {
+  filter: brightness(1.15);
+}
+
+.insp-fix-btn {
+  align-self: flex-start;
+  padding: 7px 14px;
+  border-radius: var(--insp-radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--chip-border, rgba(34, 197, 94, 0.35));
+  background: var(--chip-bg, rgba(34, 197, 94, 0.12));
+  color: var(--chip-color, #86efac);
+  cursor: pointer;
+  transition: filter 0.15s ease-out;
+}
+
+.insp-fix-btn:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.insp-fix-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.insp-fix-outcome {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 2px;
+  border-top: 1px dashed var(--insp-border);
+}
+
+.insp-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.insp-empty-icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.insp-notice {
+  font-size: 11px;
+  padding: 8px 12px;
+  border-radius: var(--insp-radius-sm);
+  border: 1px solid var(--insp-border-strong);
+}
+
+/* Bottom status bar (Step 12) -- compact, single line, only ever shows information already
+   computed elsewhere on the page (engine name, rule count, framework, encoding, ready/scanning
+   state); never introduces a new data source. */
+.insp-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 16px;
+  background: var(--insp-panel-bg);
+  border: 1px solid var(--insp-border);
+  border-radius: var(--insp-radius-sm);
+  font-size: 10.5px;
+  color: var(--text-dim);
+  flex-wrap: wrap;
+}
+
+.insp-statusbar-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .insp-status.is-scanning .insp-status-dot {
+    animation: none !important;
+  }
+}
+

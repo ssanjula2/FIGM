@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { UserDB } from '../src/auth/user-db';
 import { RepositoryFactory } from '../src/storage/repository-factory';
 import { GET as logScanGET, POST as logScanPOST } from '../app/api/user-study/log-scan/route';
+import { POST as consentPOST } from '../app/api/user-study/consent/route';
 import { ParticipantRepository } from '../src/engine/participant-repository';
 
 /**
@@ -128,8 +129,14 @@ test('two concurrent POSTs under one valid session both succeed and persist as d
   const provider = RepositoryFactory.getStorageProvider();
   const getRes = await logScanGET(studyRequest('http://localhost:3000/api/user-study/log-scan'));
   const { participantId } = await getRes.json();
-  const cookie = getRes.cookies.get('figm_study_token')?.value;
+  let cookie = getRes.cookies.get('figm_study_token')?.value;
   assert.ok(cookie);
+
+  // Consent is a separate, server-enforced prerequisite (see app/api/user-study/consent/route.ts) --
+  // must be recorded before log-scan POSTs will succeed.
+  const consentRes = await consentPOST(studyRequest('http://localhost:3000/api/user-study/consent', cookie, { method: 'POST' }));
+  cookie = consentRes.cookies.get('figm_study_token')?.value;
+  assert.ok(cookie, 'consent POST must re-issue a consent-bearing session cookie');
 
   const makeRequest = () =>
     studyRequest('http://localhost:3000/api/user-study/log-scan', cookie, {

@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import { trackFixApplied, trackFixVerified } from '../../src/lib/analytics';
 
 export default function AIFixPage() {
   const [loading, setLoading] = useState(false);
   const [aiResult, setAiResult] = useState<{
     engineType: string;
+    provider?: string;
     confidenceScore: number;
     appliedFixDescription: string;
     remediatedCode: string;
@@ -63,6 +65,7 @@ export default function AIFixPage() {
 
       setAiResult({
         engineType: data.engineType,
+        provider: data.provider,
         confidenceScore: data.confidenceScore,
         appliedFixDescription: data.appliedFixDescription,
         remediatedCode: data.remediatedCode,
@@ -71,6 +74,8 @@ export default function AIFixPage() {
         verified: data.verified === true,
         verificationStatus: data.verificationStatus || 'UNRESOLVED',
       });
+      trackFixApplied({ ruleId: sampleDefect.ruleId, strategy: data.engineType === 'AI_ASSISTED' ? 'AI_ASSISTED' : 'DETERMINISTIC' });
+      trackFixVerified({ ruleId: sampleDefect.ruleId, verified: data.verified === true });
     } catch (err: any) {
       // Never fabricate a plausible-looking "AI fix result" (a specific confidence score,
       // invented code, an invented diff) when the request itself failed -- that would show the
@@ -87,13 +92,13 @@ export default function AIFixPage() {
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div>
         <div style={{ fontSize: '12px', color: '#a855f7', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '4px' }}>
-          Gemini 2.5 Flash Engine Integration
+          Claude Opus 5 Engine Integration
         </div>
         <h1 style={{ fontSize: '26px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.5px' }}>
           AI Fix Assistant
         </h1>
         <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '4px' }}>
-          Generate high-confidence AI patches powered by Gemini 2.5 Flash with deterministic template fallback protection.
+          Generate high-confidence AI patches powered by Claude Opus 5 with deterministic AST fallback protection.
         </p>
       </div>
 
@@ -120,7 +125,7 @@ export default function AIFixPage() {
             className="btn-glow"
             style={{ padding: '10px 18px', fontSize: '13px' }}
           >
-            {loading ? '🤖 Generating AI Fix via Gemini...' : '⚡ Generate Gemini AI Fix'}
+            {loading ? '🤖 Generating AI Fix via Claude...' : '⚡ Generate Claude AI Fix'}
           </button>
         </div>
 
@@ -144,8 +149,8 @@ export default function AIFixPage() {
         {aiResult && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '16px' }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <span style={{ fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px', background: aiResult.engineType === 'GEMINI_2_5_FLASH' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(245, 158, 11, 0.15)', color: aiResult.engineType === 'GEMINI_2_5_FLASH' ? '#38bdf8' : '#fbbf24', border: '1px solid currentColor' }}>
-                Engine: {aiResult.engineType}
+              <span style={{ fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px', background: aiResult.engineType === 'AI_ASSISTED_FIX' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(245, 158, 11, 0.15)', color: aiResult.engineType === 'AI_ASSISTED_FIX' ? '#38bdf8' : '#fbbf24', border: '1px solid currentColor' }}>
+                Engine: {aiResult.engineType}{aiResult.provider ? ` (${aiResult.provider})` : ''}
               </span>
               <span style={{ fontSize: '12px', color: '#10b981', fontWeight: 700 }}>
                 Confidence: {aiResult.confidenceScore}%

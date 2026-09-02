@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../../src/research/research-config';
 
 interface ResearchMetricsResponse {
   benchmarkMetrics: {
@@ -111,14 +112,14 @@ export default function AnalyticsPage() {
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>SUS Usability</div>
           <div style={{ fontSize: '18px', fontWeight: 900, color: '#ec4899', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>Pending Data</div>
           <div style={{ fontSize: '10px', color: '#f59e0b', marginTop: '4px', fontWeight: 600 }}>
-            {data ? `${data.userStudy.collectedParticipants}/${data.userStudy.targetParticipants} Real Responses` : '0/85 Real Responses'}
+            {data ? `${data.userStudy.collectedParticipants}/${data.userStudy.targetParticipants} Real Responses` : `0/${HUMAN_STUDY_TARGET_PARTICIPANTS} Real Responses`}
           </div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #06b6d4', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Cronbach α</div>
           <div style={{ fontSize: '18px', fontWeight: 900, color: '#06b6d4', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>Pending Data</div>
-          <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>Target: N=85</div>
+          <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>Target: N={HUMAN_STUDY_TARGET_PARTICIPANTS}</div>
         </div>
       </div>
 
@@ -163,7 +164,7 @@ export default function AnalyticsPage() {
           </div>
 
           <div style={{ padding: '12px 16px', background: 'rgba(30, 41, 59, 0.5)', borderRadius: '8px', fontSize: '12px', color: '#cbd5e1', lineHeight: 1.5 }}>
-            💡 True Negatives are not computed by the dynamic evaluator (no baseline "clean" universe is dynamically counted), so an
+            💡 True Negatives are not computed by the dynamic evaluator (no baseline &quot;clean&quot; universe is dynamically counted), so an
             overall accuracy figure is intentionally not shown here — only the directly computed Precision/Recall/F1 above are reported.
           </div>
         </div>

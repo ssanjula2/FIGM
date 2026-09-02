@@ -18,6 +18,17 @@ export interface RemediationResult {
   requiresManualReview?: boolean;
 }
 
+/**
+ * NOTE (Next.js client-bundle boundary): `applyQuickFix` below is a pure, deterministic string/AST
+ * transformation with zero Node-only dependencies — safe to dynamically import from a Client
+ * Component (see app/live-scan/page.tsx's offline fallback). Patch VALIDATION
+ * (`validatePatch`/`validatePatchAsync`, which need the real Node-only ESLint package and the
+ * sandboxed RuleExecutionEngine re-scan) deliberately lives in a SEPARATE file,
+ * src/engine/remediation-validation.server.ts (`RemediationValidator`, marked `import
+ * 'server-only'`), so that importing this file for `applyQuickFix` alone can never drag ESLint
+ * into a client bundle. Do not re-add validation logic here — see that file's header for the full
+ * rationale.
+ */
 export class RemediationEngine {
   /**
    * Applies an automated quick-fix transformation to source code for a given diagnostic defect
@@ -78,18 +89,29 @@ export class RemediationEngine {
       }
 
       case 'FIGM-PERF-03': {
-        // Add removeEventListener teardown cleanup
+        // Add removeEventListener teardown cleanup. This rule is framework-independent
+        // (isFrameworkIndependent: true, applies to ALL_FRAMEWORKS) and its own documented
+        // compliantExample is a plain "return a teardown closure" idiom -- NOT React's useEffect.
+        // A previous version of this fix always wrapped the call in `useEffect(() => {...}, [])`
+        // regardless of framework or surrounding context; besides not matching the rule's own
+        // compliantExample, this was found (via a fresh detect->apply->verify measurement across
+        // all 50 rules' canonical examples, benchmarks/fix-success-rate.ts) to actively introduce a
+        // NEW violation -- FIGM-REACT-07 (Hook Used Inside Conditional, Loop, or Nested Function)
+        // -- whenever the addEventListener call lives in a plain non-component/non-hook function,
+        // exactly the shape this rule's own nonCompliantExample uses. Appending a bare teardown
+        // return, matching compliantExample exactly, fixes the rule's own example and works
+        // identically across every supported framework/context without depending on React at all.
         if (code.includes(snippet)) {
           const handlerMatch = snippet.match(/addEventListener\((['"][^'"]+['"]),\s*([^)]+)\)/);
           const eventName = handlerMatch ? handlerMatch[1] : "'resize'";
           const handlerName = handlerMatch ? handlerMatch[2] : 'handleResize';
 
-          const fixedSnippet = `// [FIGM Quick-Fix]: Automatic Event Teardown\nuseEffect(() => {\n  ${snippet}\n  return () => window.removeEventListener(${eventName}, ${handlerName});\n}, []);`;
+          const fixedSnippet = `${snippet}\n  return () => window.removeEventListener(${eventName}, ${handlerName});`;
           remediatedCode = code.replace(snippet, fixedSnippet);
-          appliedFixDescription = 'Encapsulated listener registration within useEffect with automatic removeEventListener disposal cleanup.';
+          appliedFixDescription = 'Added an explicit teardown closure that calls removeEventListener, matching this rule\'s documented compliant pattern.';
         } else {
-          remediatedCode = code + '\n// [FIGM Quick-Fix]: Remember to invoke removeEventListener in unmount lifecycle routine.';
-          appliedFixDescription = 'Added event disposal teardown advisory.';
+          requiresManualReview = true;
+          appliedFixDescription = 'Manual review required: return an explicit teardown closure that calls removeEventListener, or invoke it in the lifecycle unmount routine.';
         }
         break;
       }
@@ -142,10 +164,22 @@ export class RemediationEngine {
             remediatedCode = hoistedDecl + code.replace(snippet, '');
             appliedFixDescription = `Hoisted the repeated ${varName} storage read outside the loop so it runs once instead of once per iteration.`;
           } else {
-            appliedFixDescription = 'Hoist this Storage API call outside the loop if its result does not depend on the current loop iteration; otherwise cache the result across iterations.';
+            // The violating call's result isn't assigned to a simple const/let/var (e.g. its
+            // result is discarded, used inline in a condition, or passed straight into another
+            // call) -- the mechanical "hoist into a new const" rewrite above isn't safe to attempt
+            // without knowing what to name/do with the result. Previously this fell through
+            // silently claiming an automated fix while leaving the code completely unchanged (found
+            // via a fresh detect->apply->verify measurement across all 50 rules' canonical
+            // examples, benchmarks/fix-success-rate.ts, using this rule's OWN documented
+            // nonCompliantExample, which is exactly this shape). Honestly flagged manual review
+            // instead, consistent with every other rule in this file that can't safely auto-fix a
+            // given shape.
+            requiresManualReview = true;
+            appliedFixDescription = 'Manual review required: hoist this Storage API call outside the loop if its result does not depend on the current loop iteration; otherwise cache the result across iterations.';
           }
         } else {
-          appliedFixDescription = 'Hoist this Storage API call outside the loop if its result does not depend on the current loop iteration; otherwise cache the result across iterations.';
+          requiresManualReview = true;
+          appliedFixDescription = 'Manual review required: hoist this Storage API call outside the loop if its result does not depend on the current loop iteration; otherwise cache the result across iterations.';
         }
         break;
       }
@@ -201,6 +235,21 @@ export class RemediationEngine {
           }
           remediatedCode = code.replace(snippet, fixedSnippet);
           appliedFixDescription = 'Annotated clickable <div> with ARIA role="button", tabIndex={0}, and keyboard onKeyDown handler.';
+          // NOTE (live-reproduced, see remediation-engine-regressions.test.ts): the onKeyDown
+          // value above is an inline arrow function literal in JSX-attribute position, which
+          // FIGM-PERF-05's real-AST detector flags as an "inline anonymous callback" IF the
+          // element sits inside a component's render scope (a function returning JSX) -- e.g.
+          // `function Panel() { return <div onClick={togglePanel}>...` triggers this collision,
+          // but a bare top-level `<div onClick={handleClick}>...` (no enclosing render function,
+          // as several existing fixtures use) does not, since PERF-05 never fires without a render
+          // scope to attribute the callback to. Whether this specific patch verifies as FIXED or
+          // is safely rejected as PATCH_REJECTED (source left untouched either way -- see
+          // validatePatch/evaluatePatchResults) therefore genuinely depends on the surrounding
+          // code, not a flaw in this branch alone. A hoisted named handler (`const handleKeyDown =
+          // (e) => {...}` above the JSX return, referenced as `onKeyDown={handleKeyDown}`) would
+          // avoid the collision unconditionally, but requires AST-aware statement insertion this
+          // snippet-replacement engine does not yet support -- tracked as follow-up work rather
+          // than blanket-flagging every case (including ones that verify cleanly) manual review.
         } else {
           remediatedCode = code.replace(/onClick=/g, 'role="button" tabIndex={0} onKeyDown={(e) => e.key === "Enter" && e.currentTarget.click()} onClick=');
           appliedFixDescription = 'Injected role="button", tabIndex={0}, and keyboard onKeyDown listener.';
@@ -405,7 +454,7 @@ export class RemediationEngine {
         // Google Fonts <link> tag — this case previously guarded `window.` access instead, a fix
         // for a completely unrelated concern (the same old-taxonomy mismatch found and fixed for
         // FIGM-REACT-01/FIGM-NEXT-02 above; found via the real detect->remediate->re-scan
-        // verification run across all 25 rules, not assumed).
+        // verification run across all 50 rules, not assumed).
         requiresManualReview = true;
         const familyMatch = snippet.match(/family=([^&"']+)/);
         if (familyMatch && code.includes(snippet)) {
@@ -538,9 +587,16 @@ export class RemediationEngine {
       // real ID is 'FIGM-ANG-01') — its logic was correct for what it does, just registered under
       // an ID the live engine never actually emits, so it was completely unreachable dead code.
       case 'FIGM-ANG-01': {
-        // Fix unsubscribed RxJS subscription
+        // Fix unsubscribed RxJS subscription. Previously only matched a direct `this.field$.subscribe(`
+        // access -- the rule's own documented nonCompliantExample (`this.dataService.getStream().subscribe();`,
+        // a chained method call with no `$`-suffixed field at all) silently no-op'd this fix, found
+        // via a fresh detect->apply->verify measurement across all 50 rules' canonical examples
+        // (benchmarks/fix-success-rate.ts). Broadened to match any dotted-identifier/no-nested-paren
+        // call chain ending in `.subscribe(` -- still a single-level regex over the flagged snippet
+        // (same simplifying-assumption class as the other regex-based fixes in this file), not a
+        // real expression parser.
         if (code.includes('.subscribe(')) {
-          remediatedCode = code.replace(/this\.(\w+\$)\.subscribe\(/g, 'this.subscription = this.$1.subscribe(');
+          remediatedCode = code.replace(/[\w$]+(?:\.[\w$]+(?:\([^()]*\))?)*\.subscribe\(/g, 'this.subscription = $&');
           if (!remediatedCode.includes('ngOnDestroy')) {
             remediatedCode = remediatedCode.replace(
               /export class (\w+)\s*\{/,
@@ -633,6 +689,410 @@ export class RemediationEngine {
         break;
       }
 
+      // -----------------------------------------------------------------------------------
+      // Research-backed expansion set (8 rules)
+      // -----------------------------------------------------------------------------------
+
+      case 'FIGM-A11Y-07': {
+        // Accessible name (aria-label) doesn't contain the element's visible text. The safe,
+        // mechanical fix is to overwrite aria-label with the visible text itself — this always
+        // satisfies WCAG 2.5.3 by construction, but can discard a legitimately more descriptive
+        // accessible name a developer wrote on purpose, so it is caveat-flagged rather than
+        // reported as a fully verified fix.
+        const visibleText = defect.offendingCodeSnippet.match(/>([^<{]+)</)?.[1]?.trim();
+        if (code.includes(snippet) && visibleText) {
+          const fixedSnippet = snippet.replace(/aria-label="[^"]*"/, `aria-label="${visibleText.replace(/"/g, '&quot;')}"`);
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = `Replaced aria-label with the element's own visible text ("${visibleText}") so the accessible name contains the visible label, per WCAG 2.5.3 ­— verify this is still an adequate accessible name for screen-reader users.`;
+        } else {
+          appliedFixDescription = 'Manual review required: set aria-label to a value that contains the element\'s visible text (WCAG 2.5.3).';
+          requiresManualReview = true;
+        }
+        break;
+      }
+
+      case 'FIGM-REACT-05': {
+        // Effect used solely to derive state. Safely inlining the computation requires renaming
+        // every read of the now-removed state variable throughout the component — not something
+        // this engine can verify is behavior-preserving from the effect snippet alone.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This Effect only derives state from existing props/state — compute it directly during render instead (see React docs, "You Might Not Need an Effect"), then delete this Effect and its state variable.\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: delete this Effect and compute the value directly during render. Cannot be safely automated because it requires renaming every read of the state variable being removed.';
+        break;
+      }
+
+      case 'FIGM-REACT-06': {
+        // Missing reactive dependency. React's own guidance is explicit that blindly adding a
+        // missing dependency can introduce an infinite loop or unwanted re-fetch — the correct
+        // fix is a human decision, not a mechanical one.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This Effect reads a prop that is missing from its dependency array — add it if the Effect should re-run when that prop changes, or restructure the Effect (see React docs, "Specifying reactive dependencies").\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: add the missing prop to the dependency array, or restructure the Effect. Cannot be safely automated because blindly adding a dependency can introduce an infinite loop or unwanted re-fetch.';
+        break;
+      }
+
+      case 'FIGM-NEXT-05': {
+        // Server-only module imported across the client boundary. Whether the import should move
+        // to a Server Component, become a Server Action, or be replaced is an architectural
+        // decision this engine cannot make safely.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This Node.js server-only module is imported into a "use client" file. Move the logic that depends on it into a Server Component/Server Action and pass only serializable data as props (see Next.js docs, "Preventing environment poisoning").\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: move this server-only import and its dependent logic into a Server Component or Server Action. Cannot be safely automated because it is an architectural change.';
+        break;
+      }
+
+      case 'FIGM-NEXT-06': {
+        // Native <img> instead of next/image. Only safe to auto-convert when width AND height are
+        // already present (next/image requires them outside `fill` mode) — otherwise the correct
+        // dimensions/layout mode is a human decision.
+        const hasDims = /\bwidth=/.test(snippet) && /\bheight=/.test(snippet);
+        if (code.includes(snippet) && hasDims) {
+          const fixedSnippet = snippet.replace(/<img\b/, '<Image');
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          if (!/from\s+['"]next\/image['"]/.test(remediatedCode)) {
+            remediatedCode = `import Image from 'next/image';\n${remediatedCode}`;
+          }
+          appliedFixDescription = 'Replaced native <img> with next/image\'s Image component (and added its import) for automatic image optimization.';
+        } else {
+          requiresManualReview = true;
+          if (code.includes(snippet)) {
+            remediatedCode = code.replace(
+              snippet,
+              `{/* [FIGM Manual Review Required]: Replace with next/image's <Image> component — this <img> has no explicit width/height, so a layout mode (fixed dimensions vs. fill) must be chosen manually. */}\n${snippet}`
+            );
+          }
+          appliedFixDescription = 'Manual review required: replace with next/image\'s Image component. This <img> has no explicit width/height, so the correct layout mode cannot be inferred automatically.';
+        }
+        break;
+      }
+
+      case 'FIGM-ANG-06': {
+        // Impure Angular pipe. Some pipes are genuinely and correctly impure by design; removing
+        // pure: false without redesigning the pipe's data source could silently break it, so this
+        // is a design decision, not a mechanical rewrite.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This @Pipe is declared pure: false, so it re-runs on every change-detection cycle. Remove pure: false (pipes are pure by default) and recompute the derived value only when its real inputs change, unless this pipe genuinely depends on mutable external state (see Angular docs, Pipe decorator).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: remove pure: false and recompute the derived value only when its real inputs change, unless the pipe genuinely needs to be impure. Cannot be safely automated because impurity may be intentional.';
+        break;
+      }
+
+      case 'FIGM-VUE-01': {
+        // Missing/unstable v-for :key. Same remediation strategy and the same documented
+        // assumption as FIGM-REACT-02's fix (item.id exists) — the Vue-directive equivalent.
+        if (code.includes(snippet)) {
+          const forMatch = snippet.match(/v-for\s*=\s*"\s*\(?\s*(\w+)/);
+          const itemVar = forMatch ? forMatch[1] : 'item';
+          let fixedSnippet: string;
+          if (/(?::key|v-bind:key)\s*=\s*"[^"]*"/.test(snippet)) {
+            fixedSnippet = snippet.replace(/(:key|v-bind:key)\s*=\s*"[^"]*"/, `:key="${itemVar}.id"`);
+          } else {
+            fixedSnippet = snippet.replace(/v-for\s*=\s*"([^"]*)"/, `v-for="$1" :key="${itemVar}.id"`);
+          }
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = `Added/replaced :key with a stable identifier (${itemVar}.id) — adjust to match your actual data shape if it has no id field.`;
+        } else {
+          remediatedCode = code.replace(/v-for="([^"]*)"(?!\s*:key)/g, 'v-for="$1" :key="item.id"');
+          appliedFixDescription = 'Added :key bindings using a stable identifier placeholder (item.id) — adjust to match your actual data shape.';
+        }
+        break;
+      }
+
+      case 'FIGM-VUE-02': {
+        // v-if combined with v-for. The correct rewrite (filter into a computed property vs. move
+        // v-if to a wrapping <template>) depends on developer intent this engine cannot infer.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `<!-- [FIGM Manual Review Required]: v-if and v-for on the same element re-evaluates the condition every iteration. Filter the source into a computed property and iterate that instead, or move v-if to a wrapping <template> if the goal is hiding the whole list (see Vue.js Style Guide, "Priority A Rules: Essential"). -->\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: filter into a computed property, or move v-if to a wrapping <template>. Cannot be safely automated because the correct rewrite depends on which case applies.';
+        break;
+      }
+
+      // -----------------------------------------------------------------------------------
+      // Second research-backed expansion set (17 rules, 33 -> 50)
+      // -----------------------------------------------------------------------------------
+
+      case 'FIGM-NEXT-07': {
+        // Async Client Component. Whether to convert to a Server Component or restructure
+        // around useEffect is an architectural decision.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This Client Component is declared async, which React does not support. Remove async and fetch with useEffect, or convert to a Server Component (see Next.js docs, "No async Client Component").\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: remove async and fetch via useEffect, or convert to a Server Component. Cannot be safely automated because it is an architectural decision.';
+        break;
+      }
+
+      case 'FIGM-NEXT-08': {
+        // useSearchParams without Suspense. Where to place the boundary is a layout decision.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: useSearchParams() has no <Suspense> boundary in this file, which opts the page into full client-side rendering. Wrap the component that needs it in <Suspense> (see Next.js docs on useSearchParams).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: wrap the component in a <Suspense> boundary. Cannot be safely automated because this engine cannot see whether a parent file already provides one.';
+        break;
+      }
+
+      case 'FIGM-NEXT-09': {
+        // Metadata API in client boundary. Splitting into a Server Component page + a separate
+        // Client Component is a structural change.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: The metadata API is not supported in a "use client" file. Move this export to a Server Component page/layout and move client-only logic into a separate imported Client Component (see Next.js docs, generateMetadata reference).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: move the metadata export to a Server Component and split out client logic. Cannot be safely automated because it is a structural change.';
+        break;
+      }
+
+      case 'FIGM-NEXT-10': {
+        // Unnecessary force-dynamic. Removing it without verifying real request-time
+        // independence could break the route.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: No cookies()/headers()/draftMode()/no-store fetch was found in this file, so force-dynamic may be unnecessary. Remove it to allow static rendering/caching, unless this route genuinely needs per-request data reached indirectly.\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: remove force-dynamic if the route truly has no request-time dependency. Cannot be safely automated without verifying real request-time independence.';
+        break;
+      }
+
+      case 'FIGM-VUE-03': {
+        // Side effect inside computed getter. Moving it to a watcher/handler is a logic change.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This computed getter has a side effect (mutates another ref or performs I/O). Move it to a watch() or event handler; the getter should only compute and return a value (see Vue.js docs, Computed Properties).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: move the side effect out of the computed getter into a watcher or event handler. Cannot be safely automated because it is a logic change.';
+        break;
+      }
+
+      case 'FIGM-VUE-04': {
+        // Direct mutation of computed result. The correct source-of-truth ref is app-specific.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This mutates a computed ref's own .value contents, not its underlying source data. Mutate the source ref the computed derives from instead (see Vue.js docs, Computed Properties).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: mutate the underlying source ref instead of the computed\'s own output. Cannot be safely automated because the correct source ref is app-specific.';
+        break;
+      }
+
+      case 'FIGM-VUE-05': {
+        // Direct prop mutation. Whether to use a local computed copy or emit an event is
+        // app-specific.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This mutates a prop directly, which Vue overwrites on the next parent re-render. Use a local data/computed copy, or emit an event so the parent owns the update (see Vue.js docs, Props).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: use a local computed copy or emit an event to the parent. Cannot be safely automated because the correct approach is app-specific.';
+        break;
+      }
+
+      case 'FIGM-VUE-06': {
+        // Arrow function as Options API method -- a deterministic, safe mechanical rewrite:
+        // arrow syntax -> regular method shorthand, preserving the parameter list and body.
+        const arrowMatch = snippet.match(/^(\w+)\s*:\s*(async\s+)?\(([^)]*)\)\s*=>\s*/);
+        if (code.includes(snippet) && arrowMatch) {
+          const [fullMatch, methodName, asyncKeyword = '', params] = arrowMatch;
+          const fixedSnippet = snippet.replace(fullMatch, `${asyncKeyword}${methodName}(${params}) `);
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = `Converted arrow function method "${methodName}" to regular method shorthand syntax so \`this\` binds to the component instance.`;
+        } else {
+          appliedFixDescription = 'Manual review required: convert this arrow function to regular method shorthand syntax (methodName() {...}) so `this` binds to the component instance.';
+          requiresManualReview = true;
+        }
+        break;
+      }
+
+      case 'FIGM-ANG-07': {
+        // Complex logic in constructor. Which lifecycle hook/method the logic belongs in is a
+        // design decision.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This constructor contains non-trivial logic (a service call, subscription, or similar). Move it to ngOnInit or a well-named method called from ngOnInit (see Angular style guide).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: move non-trivial logic out of the constructor into ngOnInit or a well-named method. Cannot be safely automated because the correct home is a design decision.';
+        break;
+      }
+
+      case 'FIGM-ANG-08': {
+        // Unstable @for track expression -- rewrite `track $index`/`track <var>` to
+        // `track <var>.id`, the same documented item.id assumption FIGM-REACT-02/FIGM-VUE-01
+        // already make.
+        if (code.includes(snippet)) {
+          const forMatch = snippet.match(/@for\s*\(\s*([\w$]+)\s+of\s+/);
+          const loopVar = forMatch ? forMatch[1] : 'item';
+          const fixedSnippet = snippet.replace(/track\s+([\w$.]+)/, `track ${loopVar}.id`);
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = `Replaced the unstable track expression with a stable identifier (${loopVar}.id) — adjust to match your actual data shape if it has no id field.`;
+        } else {
+          remediatedCode = code.replace(/track\s+\$index/g, 'track item.id');
+          appliedFixDescription = 'Replaced unstable track expressions with a stable identifier placeholder (item.id) — adjust to match your actual data shape.';
+        }
+        break;
+      }
+
+      case 'FIGM-ANG-09': {
+        // Mutable signal input -- a deterministic, safe mechanical rewrite: add readonly.
+        // (?:<[^>]*>)? accounts for an explicit generic type argument on the call (e.g.
+        // `input<string>()`) -- the rule's own documented nonCompliantExample uses this exact
+        // shape, and the pattern below previously required `input(`/`model(` immediately, silently
+        // no-op'ing (found via a fresh detect->apply->verify measurement across all 50 rules'
+        // canonical examples, benchmarks/fix-success-rate.ts) on the one case it's most likely to
+        // meet in practice.
+        if (code.includes(snippet) && !snippet.includes('readonly')) {
+          const fixedSnippet = snippet.replace(/^(\s*)(\w+\s*=\s*(?:input|model)(?:<[^>]*>)?\()/, '$1readonly $2');
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = 'Added the readonly modifier so this signal input property cannot be accidentally reassigned.';
+        } else {
+          remediatedCode = code.replace(/^(\s*)(\w+\s*=\s*(input|model)(?:<[^>]*>)?\()/gm, '$1readonly $2');
+          appliedFixDescription = 'Added the readonly modifier to signal input property declarations.';
+        }
+        break;
+      }
+
+      case 'FIGM-ANG-10': {
+        // Duplicate async pipe subscriptions. Introducing the "as" alias requires restructuring
+        // the surrounding template markup, which is not a safe mechanical rewrite.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `<!-- [FIGM Manual Review Required]: The same observable is piped through | async more than once in this template, creating duplicate subscriptions. Subscribe once with *ngIf="obs$ | async as value" and reuse the local variable (see AsyncPipe subscription behavior). -->\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: subscribe once with an "as" alias and reuse the local template variable. Cannot be safely automated because it requires restructuring the surrounding markup.';
+        break;
+      }
+
+      case 'FIGM-REACT-07': {
+        // Hook called conditionally/in a loop/in a nested function. Restructuring which Hooks
+        // run unconditionally is a logic change only a human can make correctly.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This Hook is called conditionally, in a loop, or inside a nested function, which breaks React's Hook-call-order guarantee. Move it to the top level of the component or custom Hook (see React docs, Rules of Hooks).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: move the Hook call to the top level, unconditionally. Cannot be safely automated because restructuring the surrounding logic is a human decision.';
+        break;
+      }
+
+      case 'FIGM-REACT-08': {
+        // Direct prop mutation. Whether to use a callback prop or a local copy is app-specific.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This mutates a prop directly, which React treats as read-only. Derive a new object/array and pass it up via a callback prop, or copy it into local state (see React docs, Keeping Components Pure).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: derive a new value and pass it up via a callback prop, or copy into local state. Cannot be safely automated because the correct approach is app-specific.';
+        break;
+      }
+
+      case 'FIGM-REACT-09': {
+        // Side effect during render. Whether the correct home is an event handler or an Effect
+        // depends on what triggers the call.
+        requiresManualReview = true;
+        if (code.includes(snippet)) {
+          remediatedCode = code.replace(
+            snippet,
+            `// [FIGM Manual Review Required]: This I/O call runs directly during render, which React may invoke more than once (e.g. Strict Mode). Move it into an event handler or a useEffect callback (see React docs, Keeping Components Pure).\n${snippet}`
+          );
+        }
+        appliedFixDescription = 'Manual review required: move this call into an event handler or useEffect. Cannot be safely automated because the correct home depends on what triggers the call.';
+        break;
+      }
+
+      case 'FIGM-REACT-10': {
+        // Component called as a function instead of rendered as JSX -- safe to auto-fix only
+        // when the call has no arguments (positional arguments cannot be safely mapped to named
+        // JSX props).
+        const noArgsMatch = snippet.match(/\b([A-Z]\w*)\(\)/);
+        if (code.includes(snippet) && noArgsMatch) {
+          const fixedSnippet = snippet.replace(`${noArgsMatch[1]}()`, `<${noArgsMatch[1]} />`);
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = `Replaced the direct function call ${noArgsMatch[1]}() with JSX <${noArgsMatch[1]} /> so React orchestrates when and how it renders.`;
+        } else {
+          requiresManualReview = true;
+          if (code.includes(snippet)) {
+            remediatedCode = code.replace(
+              snippet,
+              `{/* [FIGM Manual Review Required]: Replace this direct function call with JSX (<Component />) -- calling a component as a function can break the Rules of Hooks. This call passes arguments, so they must be mapped to named props by hand. */}\n${snippet}`
+            );
+          }
+          appliedFixDescription = 'Manual review required: replace with JSX and map the call\'s arguments to named props by hand. Only a no-argument call can be safely auto-converted.';
+        }
+        break;
+      }
+
+      case 'FIGM-REACT-11': {
+        // Unmemoized Context Provider value -- a deterministic, safe mechanical rewrite: wrap
+        // the inline literal in useMemo.
+        const valueMatch = snippet.match(/value=\{(\{[^}]*\}|\[[^\]]*\])\}/);
+        if (code.includes(snippet) && valueMatch) {
+          const literalText = valueMatch[1];
+          const identifiers = [...literalText.matchAll(/\b([a-zA-Z_$][\w$]*)\b/g)]
+            .map((m) => m[1])
+            .filter((name) => !['true', 'false', 'null', 'undefined'].includes(name));
+          const deps = [...new Set(identifiers)].join(', ');
+          const fixedSnippet = snippet.replace(valueMatch[0], `value={useMemo(() => (${literalText}), [${deps}])}`);
+          remediatedCode = code.replace(snippet, fixedSnippet);
+          appliedFixDescription = 'Wrapped the inline Context Provider value in useMemo so consumers only re-render when its real inputs change.';
+        } else {
+          remediatedCode = code.replace(/value=\{(\{[^}]*\})\}/g, 'value={useMemo(() => ($1), [])}');
+          appliedFixDescription = 'Wrapped inline Context Provider value literals in useMemo — adjust the dependency array to match the values actually used.';
+        }
+        break;
+      }
+
       default:
         if (defect.ruleId.startsWith('TYPE-TS-')) {
           const tsCode = parseInt(defect.ruleId.replace('TYPE-TS-', ''), 10);
@@ -640,15 +1100,56 @@ export class RemediationEngine {
           // TS2345 — Argument of type 'X' is not assignable to parameter of type 'Y'
           // TS2322 — Type 'X' is not assignable to type 'Y'
           if (tsCode === 2345 || tsCode === 2322) {
-            if (snippet && code.includes(snippet)) {
-              // Try to add type assertion
-              const fixedSnippet = snippet.replace(/(\w+)\s*\)/, '$1 as any)').replace(/=\s*(\w+)/, '= $1 as any');
-              if (fixedSnippet !== snippet) {
+            // Wrap the EXACT offending sub-expression (using the compiler's own precise
+            // start/end column span, not a regex guess) in `(expr as any)`. This is syntactically
+            // safe regardless of whether the flagged token sits inside a function call argument
+            // (TS2345, e.g. `add(1, "two")`) or a direct assignment (TS2322, e.g. `const x:
+            // number = "hello"`) -- unlike the previous approach, which blindly matched the first
+            // `identifier)` or `= identifier` substring in the whole line and, for a call
+            // expression, produced invalid syntax like `add as any(1, "two")` (the assertion
+            // landed on the callee, not the argument), which cross-validation correctly rejected
+            // as a new syntax error every time. A single fixed defect-location span cannot be
+            // ambiguous about which token it means the way a line-wide regex can.
+            const startCol = defect.location?.start?.column ?? defect.column;
+            const endCol = defect.location?.end?.column;
+            if (snippet && code.includes(snippet) && startCol != null && endCol != null && endCol > startCol) {
+              const badToken = snippet.slice(startCol - 1, endCol - 1);
+              // For a `const/let/var NAME: TYPE = INITIALIZER` declaration, TS2322's reported span
+              // covers the DECLARATION'S OWN NAME token, not the initializer expression whose type
+              // actually mismatches (confirmed live: `const age: number = "hello";` reports the
+              // span over `age`, columns 7-10). Wrapping badToken in that position produces
+              // `const (age as any): number = "hello";` -- syntactically invalid, since a binding
+              // name can never be a parenthesized expression. Detected here by checking whether
+              // badToken is immediately followed by `:` (a type annotation) in the snippet, which a
+              // real expression token position never is. When detected, wrap the INITIALIZER
+              // instead (the actual mismatched value) rather than the declaration name.
+              const badTokenIsDeclarationName = new RegExp(`\\b${badToken.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*:`).test(
+                snippet.slice(0, snippet.indexOf(badToken) + badToken.length + 20)
+              );
+              if (badTokenIsDeclarationName) {
+                const declMatch = snippet.match(/^((?:export\s+)?(?:const|let|var)\s+[A-Za-z_$][\w$]*\s*:[^=]+=\s*)(.+?)(;?\s*)$/);
+                if (declMatch) {
+                  const [, prefix, initializer, suffix] = declMatch;
+                  const fixedSnippet = `${prefix}(${initializer} as any)${suffix}`;
+                  remediatedCode = code.replace(snippet, fixedSnippet);
+                  appliedFixDescription = `Wrapped the declaration's initializer value in \`as any\` to resolve TS${tsCode} type mismatch (the compiler's diagnostic span points at the declaration name, not the initializer, for this shape). Review and replace 'any' with the correct type.`;
+                } else {
+                  // Shape not confidently recognized (multi-variable declaration, destructuring,
+                  // multi-line initializer, etc.) -- do not guess which span to wrap; per the "if
+                  // multiple valid repairs exist, do not auto-fix" policy, leave remediatedCode
+                  // unset so this correctly downgrades to NO_SAFE_FIX rather than risking another
+                  // invalid-syntax patch.
+                  appliedFixDescription = `TS${tsCode}: Add explicit type annotation or type assertion on the offending value.`;
+                }
+              } else if (badToken && snippet.includes(badToken)) {
+                const fixedSnippet = snippet.replace(badToken, `(${badToken} as any)`);
                 remediatedCode = code.replace(snippet, fixedSnippet);
-                appliedFixDescription = `Added \`as any\` type assertion to resolve TS${tsCode} type mismatch. Review and replace 'any' with the correct type.`;
+                appliedFixDescription = `Wrapped the offending expression in \`as any\` to resolve TS${tsCode} type mismatch. Review and replace 'any' with the correct type.`;
               } else {
                 appliedFixDescription = `TS${tsCode}: Add explicit type annotation or type assertion on the offending value.`;
               }
+            } else {
+              appliedFixDescription = `TS${tsCode}: Add explicit type annotation or type assertion on the offending value.`;
             }
           }
           // TS2339 — Property 'X' does not exist on type 'Y'
@@ -776,80 +1277,6 @@ export class RemediationEngine {
       suggestedFix,
       requiresManualReview,
     };
-  }
-
-  /**
-   * Re-scan proposed patch in isolated copy to verify if the original issue is resolved and 0 syntax errors exist.
-   * `requiresManualReview` (from RemediationResult) short-circuits straight to MANUAL_REVIEW_REQUIRED — a rule
-   * whose safe fix depends on information that cannot be reliably inferred (e.g. a useMemo dependency array)
-   * must never be reported as FIXED merely because the specific ruleId happens to stop firing on re-scan.
-   */
-  public static validatePatch(
-    originalCode: string,
-    remediatedCode: string,
-    defect: DiagnosticReport,
-    requiresManualReview = false
-  ): { isValid: boolean; status: 'FIXED' | 'PATCH_REJECTED' | 'UNRESOLVED' | 'MANUAL_REVIEW_REQUIRED'; remainingDiagnostics: DiagnosticReport[] } {
-    if (requiresManualReview) {
-      return { isValid: false, status: 'MANUAL_REVIEW_REQUIRED', remainingDiagnostics: [defect] };
-    }
-
-    if (originalCode === remediatedCode) {
-      return { isValid: false, status: 'UNRESOLVED', remainingDiagnostics: [defect] };
-    }
-
-    // Import RuleExecutionEngine dynamically to avoid circular dependencies
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { RuleExecutionEngine } = require('./rule-execution-engine.js');
-    const originalRes = RuleExecutionEngine.analyzeFile(defect.filePath || 'component.tsx', originalCode);
-    const res = RuleExecutionEngine.analyzeFile(defect.filePath || 'component.tsx', remediatedCode);
-
-    const hasSyntaxError = res.diagnostics.some((d: DiagnosticReport) => d.category === 'SYNTAX_ERROR');
-    if (hasSyntaxError) {
-      return { isValid: false, status: 'PATCH_REJECTED', remainingDiagnostics: res.diagnostics };
-    }
-
-    // Reject patches that introduce NEW real TypeScript compile error CODES (e.g. a dangling reference
-    // to a variable the patch itself renamed away) that were not present in the original code. This is
-    // what actually catches "the rule stopped firing but the patch is broken" cases -- confirming the
-    // specific ruleId is gone is not sufficient on its own (found via live testing, see audit docs).
-    // Compared by diagnostic CODE (ruleId, e.g. "TYPE-TS-18004"), not exact message text: the same
-    // pre-existing, unrelated TS error (e.g. a JSX style-prop type mismatch, expected since no
-    // @types/react is loaded in the isolated checker) can get slightly reworded by an otherwise-benign
-    // patch -- e.g. Object.freeze() narrows an object literal's inferred type -- without being a new
-    // problem the patch introduced.
-    const originalTypeErrorCodes = new Set(
-      originalRes.diagnostics.filter((d: DiagnosticReport) => d.category === 'TYPE_COMPILE_ERROR').map((d: DiagnosticReport) => d.ruleId)
-    );
-    const newTypeErrors = res.diagnostics.filter(
-      (d: DiagnosticReport) => d.category === 'TYPE_COMPILE_ERROR' && !originalTypeErrorCodes.has(d.ruleId)
-    );
-    if (newTypeErrors.length > 0) {
-      return { isValid: false, status: 'PATCH_REJECTED', remainingDiagnostics: res.diagnostics };
-    }
-
-    // Reject patches that resolve the target defect but introduce a DIFFERENT FIGM guideline
-    // violation that wasn't present before (e.g. the FIGM-A11Y-01 keyboard-parity fix wrapping the
-    // handler in a fresh inline arrow function, which FIGM-PERF-05 then flags as a new "inline
-    // anonymous callback" violation on the very same element -- found via live black-box testing).
-    // "The target ruleId is gone" is not sufficient on its own; the patch must not trade one
-    // violation for another. Syntax/type-compile diagnostics are excluded here since they're
-    // already covered by the checks above with their own comparison semantics.
-    const originalRuleIds = new Set(originalRes.diagnostics.map((d: DiagnosticReport) => d.ruleId));
-    const newGuidelineViolations = res.diagnostics.filter(
-      (d: DiagnosticReport) =>
-        d.category !== 'SYNTAX_ERROR' && d.category !== 'TYPE_COMPILE_ERROR' && !originalRuleIds.has(d.ruleId)
-    );
-    if (newGuidelineViolations.length > 0) {
-      return { isValid: false, status: 'PATCH_REJECTED', remainingDiagnostics: res.diagnostics };
-    }
-
-    const originalStillPresent = res.diagnostics.some((d: DiagnosticReport) => d.ruleId === defect.ruleId);
-    if (originalStillPresent) {
-      return { isValid: false, status: 'UNRESOLVED', remainingDiagnostics: res.diagnostics };
-    }
-
-    return { isValid: true, status: 'FIXED', remainingDiagnostics: res.diagnostics };
   }
 }
 

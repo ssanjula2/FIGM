@@ -1,5 +1,5 @@
 import { DBUser, DBSettings, DBProject, DBScanRecord } from '../auth/user-db';
-import { hashPassword, verifyPassword } from '../auth/auth-service';
+import { hashPassword, verifyPassword, validatePassword } from '../auth/auth-service';
 import { RepositoryFactory } from '../storage/repository-factory';
 import crypto from 'node:crypto';
 
@@ -50,8 +50,23 @@ export class UserRepository {
       return { success: false, message: 'Current password is incorrect' };
     }
 
+    // Previously unenforced here -- register/route.ts and reset-password/route.ts both already
+    // require this same policy, but CHANGE_PASSWORD let an authenticated caller set an arbitrarily
+    // weak new password (e.g. a single character) despite knowing the current one. Closing that
+    // inconsistency, not introducing a new policy.
+    const strength = validatePassword(newPass);
+    if (!strength.valid) {
+      return { success: false, message: strength.message || 'New password does not meet the required strength policy' };
+    }
+
     const newHash = hashPassword(newPass);
-    await UserRepository.provider.updateUser(userId, { passwordHash: newHash });
+    // `refreshToken: null` (not omitted) -- same explicit-null requirement as logout/reset-password
+    // (Prisma's update() no-ops on an undefined-valued field, only a real null clears the column on
+    // the Postgres backend). A refresh token issued before this change (e.g. one an attacker stole
+    // while the account was compromised) must not go on working after the legitimate owner changes
+    // their password -- that would leave the old, possibly-leaked credential materially equivalent
+    // to a live session even after the password itself is no longer valid.
+    await UserRepository.provider.updateUser(userId, { passwordHash: newHash, refreshToken: null });
     return { success: true, message: 'Password updated successfully' };
   }
 
@@ -82,8 +97,31 @@ export class UserRepository {
     return UserRepository.provider.updateUser(userId, { role }) as Promise<DBUser | undefined>;
   }
 
-  public static async adminResetPassword(userId: string, newPassword: string): Promise<DBUser | undefined> {
+  public static async adminResetPassword(
+    userId: string,
+    newPassword: string
+  ): Promise<{ success: boolean; message: string }> {
+    // Same policy as self-service registration/change-password/reset -- an admin-issued password
+    // is still a real credential the target user will authenticate with, so it must satisfy the
+    // identical strength requirement rather than trusting the admin's input unchecked. Previously
+    // this bypassed validatePassword() entirely, letting an admin set an arbitrarily weak (even
+    // empty-after-hash) password for any account.
+    const strength = validatePassword(newPassword);
+    if (!strength.valid) {
+      return { success: false, message: strength.message || 'New password does not meet the required strength policy' };
+    }
+
+    const user = (await UserRepository.provider.findUserById(userId)) as DBUser | undefined;
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
     const newHash = hashPassword(newPassword);
-    return UserRepository.provider.updateUser(userId, { passwordHash: newHash }) as Promise<DBUser | undefined>;
+    // `refreshToken: null` -- an admin-forced reset must revoke the target user's existing refresh
+    // token for the same reason a self-service change does (see changePassword above): the whole
+    // point of an admin reset is to cut off access using the old credential, which a still-valid
+    // refresh token would undermine.
+    await UserRepository.provider.updateUser(userId, { passwordHash: newHash, refreshToken: null });
+    return { success: true, message: 'Password reset successfully' };
   }
 }

@@ -18,6 +18,8 @@
 import * as ts from 'typescript';
 import { ASTNode, FrameworkType } from '../types/ast-spec.js';
 import { TypeScriptFrameworkParser } from '../parser/typescript-framework-parser.js';
+import { buildAngularTemplateRealSyntaxNodes } from './angular-template-ast-builder.js';
+import { buildVueTemplateRealSyntaxNodes } from './vue-template-ast-builder.js';
 
 /** Rules whose violation shape only exists as real JSX syntax (an element/attribute) -- migrated
  *  only for the two frameworks where JSX is expected. GENERIC_ESTREE/ANGULAR_TEMPLATE files that
@@ -156,6 +158,18 @@ interface BuilderContext {
    *  see findStateLikeNames' doc comment for exactly what counts as evidence. Computed once per
    *  file, not per mutation site. */
   stateLikeNames: Set<string>;
+  /** True when this file has SOME real, positive evidence of React/JSX content -- a `.jsx`/`.tsx`
+   *  extension (REACT_JSX/NEXT_JS), a real `import ... from 'react'`, or actual JSX syntax in a
+   *  plain `.js`/`.ts` file. Same signal findStateLikeNames computes for FIGM-REACT-03's `setX(...)`
+   *  naming-convention gate, reused by FIGM-REACT-01 (buildReact01) for the same reason: a
+   *  GENERIC_ESTREE file with zero React evidence (a build config, a Vue/vanilla-JS script) gets no
+   *  benefit of the doubt before a React-specific remediation ("wrap in React.useMemo") is proposed. */
+  hasReactContext: boolean;
+  /** True when this file has real, positive evidence of being an Angular class file -- see
+   *  `hasAngularContext`'s doc comment for the exact evidence and why FIGM-ANG-07 (buildAng07)
+   *  specifically needs this gate while the other Angular rules sharing GENERIC_ESTREE eligibility
+   *  do not. */
+  hasAngularContext: boolean;
 }
 
 function lineTextFor(ctx: BuilderContext, node: ts.Node): string {
@@ -190,7 +204,13 @@ function pushNode(ctx: BuilderContext, node: ts.Node, astNode: RealAstNodeInput)
 const NON_INTERACTIVE_TAGS = new Set(['div', 'span', 'section', 'article', 'p']);
 const VISUAL_MEDIA_TAGS = new Set(['img', 'video', 'iframe', 'embed']);
 const CUSTOM_CONTROL_TAG_PREFIXES = ['Custom', 'Select', 'Dropdown'];
-const OVERLAY_TAG_PREFIXES = ['Modal', 'Dialog'];
+// FIGM-A11Y-04's own canonical spec (figm-spec.json / four-layer-meta-model.ts's astNodeType:
+// 'JSXElement[name="Modal|Dialog|Overlay|Drawer"]') has always documented all four tag names --
+// the code only ever implemented two of them (Modal/Dialog). Phase 2 (AST/Rule Coverage Gaps)
+// closes that spec-vs-code gap; this is not an independent broadening decision (contrast with
+// FIGM-A11Y-02's CUSTOM_CONTROL_TAG_PREFIXES below, whose narrower-than-generic scope is instead
+// explicitly disclosed as an accepted knownLimitation in the spec itself, and is left unchanged).
+const OVERLAY_TAG_PREFIXES = ['Modal', 'Dialog', 'Overlay', 'Drawer'];
 const ARRAY_MUTATION_METHODS = new Set(['push', 'splice', 'pop', 'shift', 'unshift', 'sort']);
 
 /** The legacy detector matches via `cTrimmed.includes('<Custom')` etc. -- a PREFIX match on the
@@ -199,6 +219,84 @@ const ARRAY_MUTATION_METHODS = new Set(['push', 'splice', 'pop', 'shift', 'unshi
  *  changes detection *mechanism*, not detection *scope*). */
 function startsWithAny(tag: string, prefixes: string[]): boolean {
   return prefixes.some((p) => tag.startsWith(p));
+}
+
+/** Collects every identifier NAME bound by a `ts.BindingName` -- a plain identifier
+ *  (`item`) or an arbitrarily nested destructuring pattern (`{ id, meta: { tag } }`, `[a, b]`) --
+ *  into `names`. Used to resolve exactly which names a loop/iteration-callback binds, so
+ *  buildPerf01's invariance check can recognize a reference to any of them, not just a bare
+ *  single-identifier loop variable. */
+function collectBoundNames(binding: ts.BindingName, names: Set<string>): void {
+  if (ts.isIdentifier(binding)) {
+    names.add(binding.text);
+    return;
+  }
+  for (const el of binding.elements) {
+    if (ts.isOmittedExpression(el)) continue;
+    collectBoundNames(el.name, names);
+  }
+}
+
+/** The names bound by the nearest enclosing loop/array-iteration-callback that `node` sits inside
+ *  -- e.g. `item` for `items.map(item => ...)` or `.forEach(({ id }) => ...)`, or the declared
+ *  variable for `for (const item of items)`/`for (let i = 0; ...)`. Empty for `while`/`do` (which
+ *  bind no per-iteration variable of their own) or when no enclosing loop exists at all. */
+function loopBoundNames(node: ts.Node): Set<string> {
+  const names = new Set<string>();
+  let current: ts.Node | undefined = node.parent;
+  while (current) {
+    if (isArrayIterationCallback(current)) {
+      for (const param of (current as ts.ArrowFunction | ts.FunctionExpression).parameters) {
+        collectBoundNames(param.name, names);
+      }
+      return names;
+    }
+    if (ts.isForOfStatement(current) || ts.isForInStatement(current)) {
+      const init = current.initializer;
+      if (ts.isVariableDeclarationList(init)) {
+        for (const decl of init.declarations) collectBoundNames(decl.name, names);
+      }
+      return names;
+    }
+    if (ts.isForStatement(current)) {
+      if (current.initializer && ts.isVariableDeclarationList(current.initializer)) {
+        for (const decl of current.initializer.declarations) collectBoundNames(decl.name, names);
+      }
+      return names;
+    }
+    if (isLoopStatement(current) || ts.isFunctionLike(current)) return names; // while/do, or exited the loop into an enclosing function
+    current = current.parent;
+  }
+  return names;
+}
+
+/** True if any property VALUE inside `obj` references one of `boundNames` -- a real, per-item
+ *  dependency on the loop's own iteration variable, which makes the object genuinely non-hoistable
+ *  regardless of how deeply the reference is nested (`item.id`, `{ ...item }`, `fn(item)`, etc.).
+ *  Deliberately narrow (identifier-reference matching against a known bound-name set, not general
+ *  data-flow/alias analysis): sufficient to catch the direct "built from the loop variable" shape
+ *  the rule's own name and existing false-positive report describe, without the much larger
+ *  architectural undertaking full data-flow tracking (aliasing, reassignment, calls returning a
+ *  derived value) would require -- see this rule's entry in AST_MIGRATION_MAP.md and the Phase 2
+ *  task's own instruction not to overengineer past what the rule's documented intent needs. */
+function referencesAnyBoundName(obj: ts.ObjectLiteralExpression, boundNames: Set<string>): boolean {
+  if (boundNames.size === 0) return false;
+  let found = false;
+  const visit = (n: ts.Node) => {
+    if (found) return;
+    if (ts.isIdentifier(n) && boundNames.has(n.text)) {
+      found = true;
+      return;
+    }
+    ts.forEachChild(n, visit);
+  };
+  for (const prop of obj.properties) {
+    if (ts.isPropertyAssignment(prop)) visit(prop.initializer);
+    else if (ts.isShorthandPropertyAssignment(prop)) visit(prop.name);
+    else if (ts.isSpreadAssignment(prop)) visit(prop.expression);
+    if (found) break;
+  }
+  return found;
 }
 
 function buildPerf01(ctx: BuilderContext, node: ts.Node): void {
@@ -216,6 +314,14 @@ function buildPerf01(ctx: BuilderContext, node: ts.Node): void {
 
   const scope = classifyScope(node);
   if (scope !== 'LOOP' && scope !== 'RENDER') return;
+
+  // Phase 2 (AST/Rule Coverage Gaps) data-flow improvement: a declaration whose object literal is
+  // built directly FROM the loop's own per-iteration variable (`items.map(item => { const cfg =
+  // { id: item.id }; return cfg; })`) is not actually invariant/hoistable -- the audit's own
+  // reported false positive. Checked only against the NEAREST enclosing loop/iteration-callback's
+  // bound name(s), not full cross-scope data-flow (see referencesAnyBoundName's doc comment).
+  if (referencesAnyBoundName(node, loopBoundNames(node))) return;
+
   pushNode(ctx, node, {
     type: 'ObjectExpression',
     scopeType: scope,
@@ -544,6 +650,47 @@ function containsJsx(sourceFile: ts.SourceFile): boolean {
   return found;
 }
 
+const ANGULAR_CLASS_DECORATORS = new Set(['Component', 'Injectable', 'Directive', 'Pipe', 'NgModule']);
+
+/** Real, file-wide evidence this file is an actual Angular class file -- an `@angular/core` import,
+ *  or a decorator call matching one of the five class-level Angular decorators. Mirrors
+ *  `hasReactContext`'s rationale exactly: FIGM-ANG-07 (buildAng07 below) is eligible on
+ *  GENERIC_ESTREE (see `ANGULAR_CLASS_FRAMEWORKS`) precisely so its Angular-shaped concern still
+ *  reaches a `.ts` file with no `.component.ts`-style filename, but its own detection predicate
+ *  (`IsConstructor(n) AND ContainsNonTrivialStatement(Body(n))`) has no Angular-specific syntax
+ *  requirement at all -- unlike every other Angular rule sharing that eligibility (FIGM-ANG-01/02/
+ *  05/06/09), whose predicates each require actual Angular-specific syntax (RxJS `.subscribe()`,
+ *  `ChangeDetectionStrategy`, `Renderer2`, `@Pipe`, `input()`/`model()`) to match at all, and so are
+ *  structurally incapable of firing on a plain non-Angular class. Confirmed via a real-world
+ *  re-scan (`javascript-algorithms`, a zero-Angular plain-JS repository): FIGM-ANG-07 fired 11
+ *  times on ordinary data-structure class constructors (`Sort.js`, `BloomFilter.js`,
+ *  `HashTable.js`, ...) recommending "move to ngOnInit" -- nonsensical advice for code with no
+ *  Angular runtime. This gate closes exactly that false-positive class without narrowing ANG-07's
+ *  genuine Angular-context detection at all (a real `.component.ts`/`ANGULAR_TEMPLATE` file, or any
+ *  GENERIC_ESTREE `.ts` file that actually imports from `@angular/core` or carries one of these
+ *  decorators, is unaffected). */
+function hasAngularContext(sourceFile: ts.SourceFile): boolean {
+  let found = false;
+  const visit = (node: ts.Node) => {
+    if (found) return;
+    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier) && node.moduleSpecifier.text === '@angular/core') {
+      found = true;
+      return;
+    }
+    if (ts.isDecorator(node)) {
+      const expr = node.expression;
+      const callee = ts.isCallExpression(expr) ? expr.expression : expr;
+      if (ts.isIdentifier(callee) && ANGULAR_CLASS_DECORATORS.has(callee.text)) {
+        found = true;
+        return;
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return found;
+}
+
 /** Real, file-wide search for every local identifier this file has actual positive evidence is
  *  React state -- the allowlist that replaces the old "flag every property assignment/array
  *  mutation unless the root name is on a fixed denylist" behavior. Two independent kinds of
@@ -859,12 +1006,41 @@ function isLikelyNonArrayNamespaceReceiver(receiver: ts.Expression): boolean {
   return ts.isIdentifier(receiver) && /^[A-Z]/.test(receiver.text);
 }
 
+/** True if `node` is itself the receiver of an immediately-chained further derived-computation
+ *  call (e.g. `node` is the `items.filter(a)` in `items.filter(a).sort(b)`). Such a node must NOT
+ *  get its own diagnostic: it is not a separate violation, it is the same logical derived-
+ *  computation chain the outer call (`.sort(b)`) already reports, and that outer node's own source
+ *  span already covers this inner call's text. Without this check, a real `ts.SourceFile` AST
+ *  walk visits both the outer and inner `CallExpression` nodes of one chain and each independently
+ *  satisfies `DERIVED_COMPUTATION_METHODS`, producing two overlapping FIGM-REACT-01 diagnostics for
+ *  what a developer perceives as one violation. Deliberately narrow: it only suppresses a node when
+ *  the very next link in the member-access chain is ALSO a derived-computation method call -- a
+ *  non-derived method in between (e.g. `.filter(a).map(b).sort(c)`) breaks the chain and both
+ *  `.filter()` and `.sort()` are correctly still reported as distinct nodes, and a derived call
+ *  used as an *argument* (not a receiver) to something else is never suppressed either. */
+function isReceiverOfChainedDerivedComputation(node: ts.CallExpression): boolean {
+  const parent = node.parent;
+  if (!parent || !ts.isPropertyAccessExpression(parent) || parent.expression !== node) return false;
+  const grandparent = parent.parent;
+  if (!grandparent || !ts.isCallExpression(grandparent) || grandparent.expression !== parent) return false;
+  return DERIVED_COMPUTATION_METHODS.has(parent.name.text);
+}
+
 function buildReact01(ctx: BuilderContext, node: ts.Node): void {
   if (!ts.isCallExpression(node)) return;
   if (!isPropertyAccessChain(node.expression)) return;
   if (!DERIVED_COMPUTATION_METHODS.has(node.expression.name.text)) return;
   if (isLikelyNonArrayNamespaceReceiver(node.expression.expression)) return;
+  // Confirmed real-world-benchmark finding (SPOT_CHECK.md #6/#18): a GENERIC_ESTREE file with zero
+  // React evidence (a standalone Node build script, a vanilla-JS DOM script) still satisfied this
+  // predicate on an ordinary `.sort()`/`.filter()`/`.reduce()` call, producing a nonsensical "wrap
+  // in React.useMemo" remediation for a file that has no React runtime at all. REACT_JSX/NEXT_JS
+  // are unaffected -- those framework values are themselves already real React evidence (a `.jsx`/
+  // `.tsx` extension or a real React-content marker in detectFramework), so this only narrows the
+  // GENERIC_ESTREE case, which gets no benefit of the doubt without a real import/JSX signal.
+  if (ctx.framework === 'GENERIC_ESTREE' && !ctx.hasReactContext) return;
   if (hasUseMemoAncestor(node)) return;
+  if (isReceiverOfChainedDerivedComputation(node)) return;
   pushNode(ctx, node, {
     type: 'CallExpression',
     name: node.expression.name.text,
@@ -1057,6 +1233,868 @@ function buildNext04(ctx: BuilderContext, node: ts.Node): void {
 }
 
 // ---------------------------------------------------------------------------------------------
+// Group 5 (research-backed expansion set): FIGM-A11Y-07, FIGM-REACT-05, FIGM-REACT-06,
+// FIGM-NEXT-05, FIGM-NEXT-06, FIGM-ANG-06. FIGM-VUE-01/02 are NOT here -- they stay
+// LEGACY_TEXT_HEURISTIC in source-parser.ts (no Vue template AST available; see
+// docs/research/EXPANSION_RESEARCH_TRACEABILITY.md for why).
+// ---------------------------------------------------------------------------------------------
+
+/** Real (non-whitespace/comment) text content of a JSX child, or undefined if the child is not a
+ *  literal JsxText node (i.e. a dynamic `{expr}` child, which this rule deliberately does not
+ *  attempt to evaluate statically -- see FIGM-A11Y-07's knownLimitation). */
+function jsxLiteralTextChild(children: ts.NodeArray<ts.JsxChild>): string | undefined {
+  for (const child of children) {
+    if (ts.isJsxText(child)) {
+      const text = child.text.replace(/\s+/g, ' ').trim();
+      if (text.length > 0) return text;
+    }
+  }
+  return undefined;
+}
+
+function buildA11y07(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isJsxElement(node)) return; // self-closing elements have no children -> no visible text
+  const opening = node.openingElement;
+  const attrs = jsxAttributes(opening);
+  const ariaLabelAttr = findJsxAttribute(attrs, 'aria-label');
+  if (!ariaLabelAttr) return;
+  const ariaLabelValue = jsxAttributeValue(ariaLabelAttr);
+  if (typeof ariaLabelValue !== 'string' || ariaLabelValue.trim().length === 0) return;
+  const visibleText = jsxLiteralTextChild(node.children);
+  if (!visibleText) return;
+  const mismatch = !ariaLabelValue.toLowerCase().includes(visibleText.toLowerCase());
+  if (!mismatch) return;
+  // `name` is deliberately a neutral lowercase placeholder, NOT the real (possibly uppercase,
+  // e.g. <CustomDropdown>) tag name -- evalA11y07 doesn't read node.name at all, but evalA11y02's
+  // predicate has a loose `node.name && /^[A-Z]/.test(node.name)` fallback that treats ANY
+  // uppercase-tag JSXElement node as a "custom control" candidate regardless of which builder
+  // produced it. Using the real tag name here caused a live cross-rule false positive: the
+  // existing FIGM-A11Y-02 negative fixture `<CustomDropdown role="combobox" aria-label="Choose
+  // Option" ...>Custom Select</CustomDropdown>` (role/aria-label both present, so FIGM-A11Y-02
+  // correctly does not fire on ITS OWN node) also genuinely trips FIGM-A11Y-07 (the visible text
+  // "Custom Select" isn't contained in aria-label "Choose Option") -- but this rule's OWN node
+  // only carries isAccessibleNameMismatch/visibleText/ariaLabel attributes, not role/aria-label,
+  // so evalA11y02 mis-evaluated on this second, unrelated node too and reported a phantom
+  // FIGM-A11Y-02 violation. The real tag name (needed only for cosmetic display) is preserved
+  // in the `codeSnippet` attribute below, which is what createReport actually shows the user.
+  // buildA11y03 already established this exact "synthesize a neutral name" precedent for the
+  // same reason (see its `name: 'div'`, always, regardless of the real tag).
+  pushNode(ctx, node, {
+    type: 'JSXElement',
+    name: 'span',
+    scopeType: classifyScope(node),
+    attributes: {
+      isAccessibleNameMismatch: true,
+      codeSnippet: lineTextFor(ctx, node),
+      visibleText,
+      ariaLabel: ariaLabelValue,
+    },
+  });
+}
+
+const STATE_SETTER_RE = /^set[A-Z]/;
+
+/** True iff `callee` resolves (by identifier text, or `React.useEffect`/alias) to React's
+ *  `useEffect` hook. Deliberately simpler than findStateLikeNames' full aliased-import tracing --
+ *  a bare name/namespace check is enough here since useEffect (unlike useState) is never
+ *  destructured into a differently-named local in any real-world pattern this engine has evidence
+ *  for; kept consistent with buildNext01's existing CLIENT_HOOK_NAMES-style bare-name check. */
+function isUseEffectCallee(callee: ts.Expression): boolean {
+  if (ts.isIdentifier(callee)) return callee.text === 'useEffect';
+  if (ts.isPropertyAccessExpression(callee)) return callee.name.text === 'useEffect';
+  return false;
+}
+
+function buildReact05(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isCallExpression(node) || !isUseEffectCallee(node.expression)) return;
+  const fn = node.arguments[0];
+  if (!fn || (!ts.isArrowFunction(fn) && !ts.isFunctionExpression(fn))) return;
+  const body = fn.body;
+  if (!body || !ts.isBlock(body)) return; // a concise-body arrow effect can't be a bare setState call
+  if (body.statements.length !== 1) return;
+  const stmt = body.statements[0];
+  if (!ts.isExpressionStatement(stmt) || !ts.isCallExpression(stmt.expression)) return;
+  const setterCallee = stmt.expression.expression;
+  if (!ts.isIdentifier(setterCallee) || !STATE_SETTER_RE.test(setterCallee.text)) return;
+  pushNode(ctx, node, {
+    type: 'CallExpression',
+    name: 'useEffect',
+    scopeType: classifyScope(node),
+    attributes: { isEffectDerivedState: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+/** Names destructured directly from the enclosing component function's FIRST parameter, e.g.
+ *  `function Profile({ userId, name })` -> {userId, name}. Returns an empty set for anything not
+ *  a plain object-binding-pattern parameter (a single `props` identifier parameter, accessed via
+ *  `props.x`, is out of scope for this pass -- see FIGM-REACT-06's knownLimitation). */
+function destructuredPropNames(fn: ts.Node | undefined): Set<string> {
+  const names = new Set<string>();
+  if (!fn || !ts.isFunctionLike(fn)) return names;
+  const param0 = (fn as ts.SignatureDeclaration).parameters[0];
+  if (!param0 || !ts.isObjectBindingPattern(param0.name)) return names;
+  for (const el of param0.name.elements) {
+    if (ts.isIdentifier(el.name)) names.add(el.name.text);
+  }
+  return names;
+}
+
+/** Nearest enclosing function-like ancestor of `node` that is itself a plausible component
+ *  (returns JSX, per functionReturnsJsx) -- walks past the effect callback itself. */
+function nearestEnclosingComponentFunction(node: ts.Node): ts.SignatureDeclaration | undefined {
+  let current: ts.Node | undefined = node.parent;
+  while (current) {
+    if (ts.isFunctionLike(current) && functionReturnsJsx(current as ts.SignatureDeclaration)) {
+      return current as ts.SignatureDeclaration;
+    }
+    current = current.parent;
+  }
+  return undefined;
+}
+
+/** Every plain Identifier reference inside `body`, not crossing into a nested function boundary
+ *  (a prop read inside a nested inline callback is a separate closure concern this rule doesn't
+ *  attempt to reason about). */
+function collectReferencedIdentifiers(body: ts.Node): Set<string> {
+  const names = new Set<string>();
+  const visit = (n: ts.Node) => {
+    if (n !== body && ts.isFunctionLike(n)) return;
+    if (ts.isIdentifier(n) && !ts.isPropertyAccessExpression(n.parent)) names.add(n.text);
+    else if (ts.isIdentifier(n) && ts.isPropertyAccessExpression(n.parent) && n.parent.expression === n) names.add(n.text);
+    ts.forEachChild(n, visit);
+  };
+  visit(body);
+  return names;
+}
+
+function dependencyArrayNames(node: ts.CallExpression): Set<string> | undefined {
+  const depsArg = node.arguments[1];
+  if (!depsArg || !ts.isArrayLiteralExpression(depsArg)) return undefined;
+  const names = new Set<string>();
+  for (const el of depsArg.elements) {
+    if (ts.isIdentifier(el)) names.add(el.text);
+  }
+  return names;
+}
+
+function buildReact06(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isCallExpression(node) || !isUseEffectCallee(node.expression)) return;
+  const fn = node.arguments[0];
+  if (!fn || (!ts.isArrowFunction(fn) && !ts.isFunctionExpression(fn))) return;
+  const deps = dependencyArrayNames(node);
+  if (!deps) return; // no dependency array at all is a different, deliberate idiom -- not this rule's concern
+  const body = fn.body;
+  if (!body) return;
+  const propNames = destructuredPropNames(nearestEnclosingComponentFunction(node));
+  if (propNames.size === 0) return;
+  const referenced = collectReferencedIdentifiers(body);
+  const missing = [...propNames].find((p) => referenced.has(p) && !deps.has(p) && !STATE_SETTER_RE.test(p));
+  if (!missing) return;
+  pushNode(ctx, node, {
+    type: 'CallExpression',
+    name: 'useEffect',
+    scopeType: classifyScope(node),
+    attributes: { isEffectMissingDependency: true, missingDependency: missing, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+const SERVER_ONLY_MODULES = new Set([
+  'fs', 'node:fs', 'fs/promises', 'node:fs/promises',
+  'path', 'node:path',
+  'crypto', 'node:crypto',
+  'net', 'node:net',
+  'child_process', 'node:child_process',
+  'dns', 'node:dns',
+  'tls', 'node:tls',
+  'http2', 'node:http2',
+  'server-only',
+]);
+
+function buildNext05(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isImportDeclaration(node) || !ts.isStringLiteral(node.moduleSpecifier)) return;
+  if (!hasUseClientDirective(ctx.sourceFile)) return;
+  if (!SERVER_ONLY_MODULES.has(node.moduleSpecifier.text)) return;
+  pushNode(ctx, node, {
+    type: 'ImportDeclaration',
+    name: node.moduleSpecifier.text,
+    scopeType: classifyScope(node),
+    attributes: { isServerOnlyImportInClientBoundary: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+function buildNext06(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isJsxOpeningElement(node) && !ts.isJsxSelfClosingElement(node)) return;
+  if (jsxTagName(node) !== 'img') return;
+  const attrs = jsxAttributes(node);
+  const widthAttr = findJsxAttribute(attrs, 'width');
+  const heightAttr = findJsxAttribute(attrs, 'height');
+  const attributes: Record<string, unknown> = { isNativeImgInNextJs: true, codeSnippet: lineTextFor(ctx, node) };
+  if (widthAttr) attributes.width = jsxAttributeValue(widthAttr);
+  if (heightAttr) attributes.height = jsxAttributeValue(heightAttr);
+  // `name` is deliberately NOT 'img' -- evalPerf02 matches any JSXElement node named
+  // img/video/iframe/embed regardless of which builder produced it, so a second 'img'-named node
+  // for the exact same tag (this one) caused FIGM-PERF-02 to fire TWICE on one un-dimensioned
+  // <img> (once from buildPerf02's own node, once from this one) -- a live-reproduced duplicate
+  // diagnostic, same root cause and same "synthesize a neutral name" fix as buildA11y07 above.
+  // evalNext06 itself never reads node.name, so this is safe for FIGM-NEXT-06's own detection.
+  pushNode(ctx, node, {
+    type: 'JSXElement',
+    name: 'span',
+    scopeType: classifyScope(node),
+    attributes,
+  });
+}
+
+function buildAng06(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isDecorator(node)) return;
+  const expr = node.expression;
+  if (!ts.isCallExpression(expr) || !ts.isIdentifier(expr.expression) || expr.expression.text !== 'Pipe') return;
+  const arg = expr.arguments[0];
+  if (!arg || !ts.isObjectLiteralExpression(arg)) return;
+  const pureProp = arg.properties.find(
+    (p): p is ts.PropertyAssignment => ts.isPropertyAssignment(p) && ts.isIdentifier(p.name) && p.name.text === 'pure'
+  );
+  if (!pureProp || pureProp.initializer.kind !== ts.SyntaxKind.FalseKeyword) return;
+  pushNode(ctx, node, {
+    type: 'ClassDeclaration',
+    name: 'Pipe',
+    scopeType: 'MODULE',
+    attributes: { isImpurePipe: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Group 6 (second expansion pass, Next.js): FIGM-NEXT-07, FIGM-NEXT-08, FIGM-NEXT-09, FIGM-NEXT-10
+// ---------------------------------------------------------------------------------------------
+
+function buildNext07(ctx: BuilderContext, node: ts.Node): void {
+  if (!hasUseClientDirective(ctx.sourceFile)) return;
+  if (!ts.isFunctionDeclaration(node) || !node.body) return;
+  const isAsync = !!node.modifiers?.some((m) => m.kind === ts.SyntaxKind.AsyncKeyword);
+  if (!isAsync) return;
+  if (!functionReturnsJsx(node)) return;
+  pushNode(ctx, node, {
+    type: 'FunctionDeclaration',
+    name: node.name?.text ?? 'anonymous',
+    scopeType: 'MODULE',
+    attributes: { isAsyncClientComponent: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+function fileHasJsxElementNamed(sourceFile: ts.SourceFile, tagName: string): boolean {
+  let found = false;
+  const visit = (node: ts.Node) => {
+    if (found) return;
+    if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) && jsxTagName(node) === tagName) {
+      found = true;
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return found;
+}
+
+/** Root-level (not per-node) check, matching buildNext03Root's own convention -- only the FIRST
+ *  useSearchParams() call site is reported per file, since the file-wide "is there a Suspense
+ *  boundary anywhere" question is a single fact, not a per-call-site one. */
+function buildNext08Root(ctx: BuilderContext): void {
+  if (fileHasJsxElementNamed(ctx.sourceFile, 'Suspense')) return;
+  let callSite: ts.CallExpression | undefined;
+  const visit = (node: ts.Node) => {
+    if (callSite) return;
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === 'useSearchParams') {
+      callSite = node;
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(ctx.sourceFile);
+  if (!callSite) return;
+  pushNode(ctx, callSite, {
+    type: 'CallExpression',
+    name: 'useSearchParams',
+    scopeType: classifyScope(callSite),
+    attributes: { isUnsuspendedSearchParams: true, codeSnippet: lineTextFor(ctx, callSite) },
+  });
+}
+
+const METADATA_EXPORT_NAMES = new Set(['generateMetadata', 'generateViewport']);
+
+function fileMetadataExportNode(sourceFile: ts.SourceFile): ts.Node | undefined {
+  for (const stmt of sourceFile.statements) {
+    if (ts.isVariableStatement(stmt)) {
+      const isExported = !!stmt.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
+      if (isExported && stmt.declarationList.declarations.some((d) => ts.isIdentifier(d.name) && d.name.text === 'metadata')) {
+        return stmt;
+      }
+    }
+    if (ts.isFunctionDeclaration(stmt)) {
+      const isExported = !!stmt.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
+      if (isExported && stmt.name && METADATA_EXPORT_NAMES.has(stmt.name.text)) {
+        return stmt;
+      }
+    }
+  }
+  return undefined;
+}
+
+function buildNext09Root(ctx: BuilderContext): void {
+  if (!hasUseClientDirective(ctx.sourceFile)) return;
+  const node = fileMetadataExportNode(ctx.sourceFile);
+  if (!node) return;
+  pushNode(ctx, node, {
+    type: 'ExportNamedDeclaration',
+    name: 'metadata',
+    scopeType: 'MODULE',
+    attributes: { isMetadataInClientBoundary: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+function fileHasRequestTimeApiCall(code: string): boolean {
+  if (/\bcookies\s*\(/.test(code) || /\bheaders\s*\(/.test(code) || /\bdraftMode\s*\(/.test(code)) return true;
+  if (/cache\s*:\s*['"]no-store['"]/.test(code)) return true;
+  if (/next\s*:\s*\{[^}]*revalidate\s*:\s*0/.test(code)) return true;
+  return false;
+}
+
+function buildNext10Root(ctx: BuilderContext): void {
+  let dynamicNode: ts.Node | undefined;
+  for (const stmt of ctx.sourceFile.statements) {
+    if (!ts.isVariableStatement(stmt)) continue;
+    const isExported = !!stmt.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
+    if (!isExported) continue;
+    for (const decl of stmt.declarationList.declarations) {
+      if (
+        ts.isIdentifier(decl.name) &&
+        decl.name.text === 'dynamic' &&
+        decl.initializer &&
+        ts.isStringLiteral(decl.initializer) &&
+        decl.initializer.text === 'force-dynamic'
+      ) {
+        dynamicNode = stmt;
+      }
+    }
+  }
+  if (!dynamicNode) return;
+  if (fileHasRequestTimeApiCall(ctx.code)) return;
+  pushNode(ctx, dynamicNode, {
+    type: 'ExportNamedDeclaration',
+    name: 'dynamic',
+    scopeType: 'MODULE',
+    attributes: { isUnjustifiedForceDynamic: true, codeSnippet: lineTextFor(ctx, dynamicNode) },
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Group 6 (second expansion pass, Angular class-body): FIGM-ANG-07, FIGM-ANG-09
+// (FIGM-ANG-08/FIGM-ANG-10 are template-markup rules -- LEGACY_TEXT_HEURISTIC in source-parser.ts)
+// ---------------------------------------------------------------------------------------------
+
+function buildAng07(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isConstructorDeclaration(node) || !node.body) return;
+  // Confirmed real-world false-positive class (javascript-algorithms, a zero-Angular plain-JS
+  // repository -- 11 findings on ordinary data-structure class constructors, e.g. Sort.js,
+  // BloomFilter.js, HashTable.js, none related to Angular in any way): unlike every other Angular
+  // rule sharing GENERIC_ESTREE eligibility, this predicate has no Angular-specific syntax
+  // requirement of its own, so a GENERIC_ESTREE file needs real, positive Angular evidence before
+  // this fires at all -- see hasAngularContext's doc comment.
+  if (ctx.framework === 'GENERIC_ESTREE' && !ctx.hasAngularContext) return;
+  const hasCallExpression = (stmt: ts.Node): boolean => {
+    let found = false;
+    const visit = (n: ts.Node) => {
+      if (found) return;
+      if (ts.isCallExpression(n)) {
+        found = true;
+        return;
+      }
+      ts.forEachChild(n, visit);
+    };
+    visit(stmt);
+    return found;
+  };
+  // A bare `this.x = y;` field assignment is trivial; ANY CallExpression inside a constructor
+  // statement (a service method call, subscribe(), an HTTP-shaped call) is not -- see
+  // FIGM-ANG-07's knownLimitation for why this is deliberately broad rather than trying to
+  // distinguish "cheap" from "expensive" calls.
+  const hasNonTrivialLogic = node.body.statements.some(hasCallExpression);
+  if (!hasNonTrivialLogic) return;
+  pushNode(ctx, node, {
+    type: 'ClassDeclaration',
+    name: 'constructor',
+    scopeType: 'MODULE',
+    attributes: { isComplexConstructorLogic: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+function buildAng09(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isPropertyDeclaration(node)) return;
+  if (!node.initializer || !ts.isCallExpression(node.initializer)) return;
+  const callee = node.initializer.expression;
+  if (!ts.isIdentifier(callee) || (callee.text !== 'input' && callee.text !== 'model')) return;
+  const hasReadonly = !!node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ReadonlyKeyword);
+  if (hasReadonly) return;
+  pushNode(ctx, node, {
+    type: 'ClassDeclaration',
+    name: callee.text,
+    scopeType: 'MODULE',
+    attributes: { isMutableSignalInput: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Group 6 (second expansion pass, React): FIGM-REACT-07 .. FIGM-REACT-11
+// ---------------------------------------------------------------------------------------------
+
+const HOOK_NAME_RE = /^use[A-Z0-9]/;
+
+/** Own binding name of a function-like node, where determinable: a FunctionDeclaration's own
+ *  name, or the identifier a function/arrow EXPRESSION is assigned to via `const name = ...`.
+ *  Returns undefined for an anonymous callback argument, matching functionOwnName's limited
+ *  scope everywhere else in this file. */
+function functionOwnName(fn: ts.Node): string | undefined {
+  if (ts.isFunctionDeclaration(fn) && fn.name) return fn.name.text;
+  const parent = fn.parent;
+  if (parent && ts.isVariableDeclaration(parent) && ts.isIdentifier(parent.name)) return parent.name.text;
+  return undefined;
+}
+
+/** True if `fn` is a legitimate place to call a Hook: a custom Hook (name starts with "use") or
+ *  a component (returns JSX, per functionReturnsJsx -- already used throughout this file for the
+ *  identical "is this a component" question). */
+function isValidHookHost(fn: ts.Node): boolean {
+  const name = functionOwnName(fn);
+  if (name && HOOK_NAME_RE.test(name)) return true;
+  return ts.isFunctionLike(fn) && functionReturnsJsx(fn as ts.SignatureDeclaration);
+}
+
+function buildReact07(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isCallExpression(node) || !ts.isIdentifier(node.expression) || !HOOK_NAME_RE.test(node.expression.text)) return;
+  let current: ts.Node | undefined = node.parent;
+  while (current) {
+    if (ts.isIfStatement(current) || ts.isConditionalExpression(current) || isLoopStatement(current) || ts.isSwitchStatement(current) || ts.isCatchClause(current)) {
+      pushNode(ctx, node, {
+        type: 'CallExpression',
+        name: (node.expression as ts.Identifier).text,
+        scopeType: classifyScope(node),
+        attributes: { isMisplacedHookCall: true, codeSnippet: lineTextFor(ctx, node) },
+      });
+      return;
+    }
+    if (ts.isFunctionLike(current)) {
+      // Reached the nearest enclosing function boundary. This half of the predicate is about a
+      // Hook called from inside a NESTED, ordinary function -- e.g. a `.forEach` callback or a
+      // helper defined inside the real component -- not about whether `current` itself "looks
+      // like" a component. A Hook called as a direct top-level statement of `current` is, by
+      // definition, at that function's own top level; whether `current` further up is nested
+      // inside something else is a separate, orthogonal question this predicate does not decide
+      // for `current` itself (only for an inner function found on a later iteration).
+      //
+      // Confirmed as a real, reproducible false positive (not a fixture-shape artifact): the
+      // catalog's own FIGM-REACT-07 compliantExample -- `function Profile({ isActive }) { const
+      // [count, setCount] = useState(0); if (isActive) { ... } }`, a Hook called as literally the
+      // first statement of Profile's body, no nesting at all -- was being flagged solely because
+      // `isValidHookHost` requires a `use`-prefixed name or a JSX return, and this bare example has
+      // neither (see audit/SYNTHETIC-GUIDELINE-COVERAGE-REPORT.md for the full reproduction).
+      // isValidHookHost still correctly gates a genuinely NESTED function (there IS a further
+      // function-like ancestor above `current`), which is the only case that check was ever meant
+      // to cover -- see the two existing [TP] "nested ordinary function" cases in
+      // tests/expansion-2-rules.test.ts, both still green after this change.
+      let outer: ts.Node | undefined = current.parent;
+      while (outer && !ts.isFunctionLike(outer)) outer = outer.parent;
+      const currentIsNestedInAnotherFunction = !!outer;
+      if (currentIsNestedInAnotherFunction && !isValidHookHost(current)) {
+        pushNode(ctx, node, {
+          type: 'CallExpression',
+          name: (node.expression as ts.Identifier).text,
+          scopeType: classifyScope(node),
+          attributes: { isMisplacedHookCall: true, codeSnippet: lineTextFor(ctx, node) },
+        });
+      }
+      return;
+    }
+    current = current.parent;
+  }
+}
+
+function buildReact08(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isExpressionStatement(node)) return;
+  const expr = node.expression;
+  const componentFn = nearestEnclosingComponentFunction(node);
+  if (!componentFn) return;
+  const propNames = destructuredPropNames(componentFn);
+  if (propNames.size === 0) return;
+
+  const isProvablePropTarget = (target: ts.Expression): boolean => {
+    if (isExcludedMutationTarget(target)) return false;
+    const root = getRootIdentifierName(target);
+    return !!root && propNames.has(root);
+  };
+
+  if (ts.isCallExpression(expr) && isPropertyAccessChain(expr.expression) && ARRAY_MUTATION_METHODS.has(expr.expression.name.text)) {
+    if (!isProvablePropTarget(expr.expression.expression)) return;
+    pushNode(ctx, node, {
+      type: 'ExpressionStatement',
+      name: 'mutateProp',
+      scopeType: classifyScope(node),
+      attributes: { isDirectPropMutation: true, codeSnippet: lineTextFor(ctx, node) },
+    });
+    return;
+  }
+  if (ts.isBinaryExpression(expr) && expr.operatorToken.kind === ts.SyntaxKind.EqualsToken && isPropertyAccessChain(expr.left)) {
+    if (!isProvablePropTarget(expr.left)) return;
+    pushNode(ctx, node, {
+      type: 'ExpressionStatement',
+      name: 'mutateProp',
+      scopeType: classifyScope(node),
+      attributes: { isDirectPropMutation: true, codeSnippet: lineTextFor(ctx, node) },
+    });
+  }
+}
+
+const RENDER_SIDE_EFFECT_MEMBER_CALLS: Array<{ objectText: string; methodText: string }> = [
+  { objectText: 'localStorage', methodText: 'setItem' },
+  { objectText: 'sessionStorage', methodText: 'setItem' },
+];
+
+function isRenderSideEffectCall(node: ts.CallExpression): boolean {
+  if (ts.isIdentifier(node.expression) && node.expression.text === 'fetch') return true;
+  if (isPropertyAccessChain(node.expression)) {
+    const obj = node.expression.expression;
+    if (ts.isIdentifier(obj)) {
+      return RENDER_SIDE_EFFECT_MEMBER_CALLS.some((c) => c.objectText === obj.text && c.methodText === (node.expression as ts.PropertyAccessExpression).name.text);
+    }
+  }
+  return false;
+}
+
+/** Nearest function-like ancestor of `node` (the same walk classifyScope does internally, but
+ *  returning the node itself rather than just its RENDER/FUNCTION classification) -- needed so
+ *  buildReact09 can additionally check whether that function is async. */
+function nearestFunctionLikeAncestor(node: ts.Node): ts.Node | undefined {
+  let current: ts.Node | undefined = node.parent;
+  while (current) {
+    if (ts.isFunctionLike(current)) return current;
+    current = current.parent;
+  }
+  return undefined;
+}
+
+function buildReact09(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isCallExpression(node) || !isRenderSideEffectCall(node)) return;
+  // classifyScope walks up to the NEAREST function-like ancestor and classifies by whether THAT
+  // function returns JSX -- a call already inside a useEffect/event-handler callback therefore
+  // classifies as FUNCTION (that inner callback doesn't return JSX), not RENDER, so this check
+  // correctly excludes the legitimate cases without any extra "am I inside an Effect" walk.
+  if (classifyScope(node) !== 'RENDER') return;
+  // An ASYNC component function is a Next.js Server Component (a plain React/Client Component
+  // cannot be async at all -- see FIGM-NEXT-07), which renders once on the server; fetching data
+  // directly in its body is the documented, correct Next.js pattern, not a purity violation --
+  // live-reproduced false positive: `export default async function Page() { const posts = await
+  // fetch(...); return <PostList posts={posts} />; }` (this rule's own FIGM-NEXT-10 compliant
+  // example) was originally flagged here before this exclusion was added.
+  const owner = nearestFunctionLikeAncestor(node);
+  const isAsyncOwner = !!owner && ts.canHaveModifiers(owner) && !!ts.getModifiers(owner)?.some((m) => m.kind === ts.SyntaxKind.AsyncKeyword);
+  if (isAsyncOwner) return;
+  pushNode(ctx, node, {
+    type: 'CallExpression',
+    name: node.expression.getText(ctx.sourceFile),
+    scopeType: 'RENDER',
+    attributes: { isRenderSideEffect: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+function collectInFileComponentNames(sourceFile: ts.SourceFile): Set<string> {
+  const names = new Set<string>();
+  const visit = (node: ts.Node) => {
+    if (ts.isFunctionDeclaration(node) && node.name && /^[A-Z]/.test(node.name.text) && functionReturnsJsx(node)) {
+      names.add(node.name.text);
+    }
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      /^[A-Z]/.test(node.name.text) &&
+      node.initializer &&
+      (ts.isArrowFunction(node.initializer) || ts.isFunctionExpression(node.initializer)) &&
+      functionReturnsJsx(node.initializer)
+    ) {
+      names.add(node.name.text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return names;
+}
+
+function isInsideJsxExpressionContainer(node: ts.Node): boolean {
+  let current: ts.Node | undefined = node.parent;
+  while (current) {
+    if (ts.isJsxExpression(current)) return true;
+    if (ts.isFunctionLike(current)) return false; // don't cross into a nested, non-JSX callback scope
+    current = current.parent;
+  }
+  return false;
+}
+
+function buildReact10(ctx: BuilderContext, node: ts.Node, inFileComponentNames: Set<string>): void {
+  if (!ts.isCallExpression(node) || !ts.isIdentifier(node.expression) || !/^[A-Z]/.test(node.expression.text)) return;
+  if (!inFileComponentNames.has(node.expression.text)) return;
+  if (!isInsideJsxExpressionContainer(node)) return;
+  pushNode(ctx, node, {
+    type: 'CallExpression',
+    name: node.expression.text,
+    scopeType: classifyScope(node),
+    attributes: { isComponentCalledAsFunction: true, hasArgs: node.arguments.length > 0, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+function buildReact11(ctx: BuilderContext, node: ts.Node): void {
+  if (!ts.isJsxAttribute(node)) return;
+  if (node.name.getText(ctx.sourceFile) !== 'value') return;
+  const owner = node.parent?.parent;
+  if (!owner || (!ts.isJsxOpeningElement(owner) && !ts.isJsxSelfClosingElement(owner))) return;
+  if (!jsxTagName(owner).endsWith('.Provider')) return;
+  const init = node.initializer;
+  if (!init || !ts.isJsxExpression(init) || !init.expression) return;
+  const expr = unwrapParens(init.expression);
+  if (!ts.isObjectLiteralExpression(expr) && !ts.isArrayLiteralExpression(expr)) return;
+  pushNode(ctx, node, {
+    type: 'JSXAttribute',
+    name: 'value',
+    scopeType: classifyScope(node),
+    attributes: { isUnmemoizedContextValue: true, codeSnippet: lineTextFor(ctx, node) },
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Group 7 (second expansion pass, Vue <script> block): FIGM-VUE-03 .. FIGM-VUE-06
+//
+// No @vue/compiler-sfc dependency required: a .vue file's <script>/<script setup> block content
+// IS plain TypeScript/JavaScript, so it is extracted with a simple regex boundary-find and
+// re-parsed with the SAME TypeScriptFrameworkParser class every other real-AST rule in this file
+// already uses -- this is a genuine, honest REAL_AST claim (the extracted TEXT is parsed by the
+// real compiler; only locating WHERE that text starts in the original file is a text-level
+// operation, unavoidable for any multi-language container format without a format-aware parser).
+// The <template> block (FIGM-VUE-01/02) stays LEGACY_TEXT_HEURISTIC -- that genuinely needs a
+// real Vue template parser, which this environment could not install (no npm registry access;
+// see docs/research/EXPANSION_2_RESEARCH_TRACEABILITY.md).
+// ---------------------------------------------------------------------------------------------
+
+function extractVueScriptBlock(code: string): { content: string; lineOffset: number } | undefined {
+  const match = /<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/.exec(code);
+  if (!match) return undefined;
+  const openTagEnd = match.index + match[0].indexOf('>') + 1;
+  const startLine = code.slice(0, openTagEnd).split(/\r?\n/).length;
+  return { content: match[1], lineOffset: startLine - 1 };
+}
+
+const VUE_ARRAY_MUTATORS = new Set(['push', 'splice', 'pop', 'shift', 'unshift', 'sort']);
+
+/** True iff `expr` is EXACTLY `<name>.value` for some name in `validNames` -- used to find the
+ *  array-mutator call TARGET (e.g. the `sortedItems.value` object `.push()` is called on). */
+function isExactDotValue(expr: ts.Expression, validNames: Set<string>): string | undefined {
+  if (!ts.isPropertyAccessExpression(expr) || expr.name.text !== 'value' || !ts.isIdentifier(expr.expression)) return undefined;
+  return validNames.has(expr.expression.text) ? expr.expression.text : undefined;
+}
+
+/** True iff `expr` is a chain that goes THROUGH `<name>.value` but is not `<name>.value` itself
+ *  (e.g. `sortedItems.value.foo`) -- deliberately excludes a bare `sortedItems.value = x`
+ *  reassignment, which Vue's OWN reactivity system already runtime-warns about on its own; see
+ *  FIGM-VUE-04's knownLimitation for why that exclusion is the whole point of this rule. */
+function isDeeperThanDotValue(expr: ts.Expression, validNames: Set<string>): string | undefined {
+  if (isExactDotValue(expr, validNames)) return undefined;
+  let base: ts.Expression = expr;
+  while (ts.isPropertyAccessExpression(base) || ts.isElementAccessExpression(base)) {
+    const inner: ts.Expression = ts.isPropertyAccessExpression(base) ? base.expression : (base as ts.ElementAccessExpression).expression;
+    const hit = isExactDotValue(inner, validNames);
+    if (hit) return hit;
+    base = inner;
+  }
+  return undefined;
+}
+
+/** Walks all the way down an access chain to its root identifier and checks membership --
+ *  unlike the computed-ref case above, props mutation has no special "already runtime-warned at
+ *  exactly one depth" carve-out to replicate, so any depth counts (see FIGM-VUE-05's rule
+ *  description: `props.todo.done = true` is the rule's own canonical example). */
+function propsChainRootName(expr: ts.Expression, validNames: Set<string>): string | undefined {
+  let base: ts.Expression = expr;
+  while (ts.isPropertyAccessExpression(base) || ts.isElementAccessExpression(base)) {
+    base = ts.isPropertyAccessExpression(base) ? base.expression : (base as ts.ElementAccessExpression).expression;
+  }
+  return ts.isIdentifier(base) && validNames.has(base.text) ? base.text : undefined;
+}
+
+function vueGetterBlockOf(call: ts.CallExpression): ts.Block | undefined {
+  const arg0 = call.arguments[0];
+  if (arg0 && (ts.isArrowFunction(arg0) || ts.isFunctionExpression(arg0)) && arg0.body && ts.isBlock(arg0.body)) {
+    return arg0.body;
+  }
+  if (arg0 && ts.isObjectLiteralExpression(arg0)) {
+    // Writable computed: { get: () => {...}, set: (v) => {...} } -- only the getter is checked;
+    // the setter's entire purpose is to cause a side effect, so it is deliberately not scanned.
+    const getProp = arg0.properties.find((p): p is ts.MethodDeclaration | ts.PropertyAssignment =>
+      (ts.isMethodDeclaration(p) || ts.isPropertyAssignment(p)) && !!p.name && ts.isIdentifier(p.name) && p.name.text === 'get'
+    );
+    if (getProp && ts.isMethodDeclaration(getProp) && getProp.body) return getProp.body;
+    if (
+      getProp &&
+      ts.isPropertyAssignment(getProp) &&
+      (ts.isArrowFunction(getProp.initializer) || ts.isFunctionExpression(getProp.initializer)) &&
+      getProp.initializer.body &&
+      ts.isBlock(getProp.initializer.body)
+    ) {
+      return getProp.initializer.body;
+    }
+  }
+  return undefined;
+}
+
+function vueComputedBodyHasSideEffect(body: ts.Block): boolean {
+  return body.statements.some((stmt) => {
+    let found = false;
+    const visit = (n: ts.Node) => {
+      if (found) return;
+      if (ts.isBinaryExpression(n) && n.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
+        if (ts.isPropertyAccessExpression(n.left) && n.left.name.text === 'value') {
+          found = true;
+          return;
+        }
+      }
+      if (ts.isCallExpression(n)) {
+        const callee = n.expression;
+        if (ts.isIdentifier(callee) && callee.text === 'fetch') {
+          found = true;
+          return;
+        }
+        if (
+          ts.isPropertyAccessExpression(callee) &&
+          ts.isIdentifier(callee.expression) &&
+          (callee.expression.text === 'localStorage' || callee.expression.text === 'sessionStorage') &&
+          callee.name.text === 'setItem'
+        ) {
+          found = true;
+          return;
+        }
+      }
+      ts.forEachChild(n, visit);
+    };
+    visit(stmt);
+    return found;
+  });
+}
+
+function isWithinComputedDefinition(node: ts.Node): boolean {
+  let current: ts.Node | undefined = node.parent;
+  while (current) {
+    if (ts.isCallExpression(current) && ts.isIdentifier(current.expression) && current.expression.text === 'computed') return true;
+    current = current.parent;
+  }
+  return false;
+}
+
+/**
+ * Builds FIGM-VUE-03/04/05/06's ASTNode set from a .vue file's extracted <script> block. Never
+ * throws (mirrors buildRealSyntaxNodes' own guarantee); returns an empty list if there is no
+ * <script> block or it fails to parse.
+ */
+export function buildVueScriptRealSyntaxNodes(code: string, filePath: string): ASTNode[] {
+  const block = extractVueScriptBlock(code);
+  if (!block) return [];
+
+  const parser = new TypeScriptFrameworkParser();
+  parser.parse(block.content, filePath);
+  const root = parser.getRoot() as ts.SourceFile | null;
+  if (!root) return [];
+
+  const nodes: ASTNode[] = [];
+  const originalLines = code.split(/\r?\n/);
+
+  const push = (node: ts.Node, astNode: RealAstNodeInput): void => {
+    const local = parser.getSourceRange(node);
+    nodes.push({
+      ...astNode,
+      loc: {
+        start: { line: local.start.line + block.lineOffset, column: local.start.column },
+        end: { line: local.end.line + block.lineOffset, column: local.end.column },
+      },
+      sourceKind: 'REAL_AST',
+    });
+  };
+  const snippetFor = (node: ts.Node): string => {
+    const local = parser.getSourceRange(node);
+    const realLine = local.start.line + block.lineOffset;
+    return (originalLines[realLine - 1] ?? node.getText(root)).trim();
+  };
+
+  const computedNames = new Set<string>();
+  const propsNames = new Set<string>();
+  const collectBindings = (node: ts.Node) => {
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer && ts.isCallExpression(node.initializer) && ts.isIdentifier(node.initializer.expression)) {
+      if (node.initializer.expression.text === 'computed') computedNames.add(node.name.text);
+      if (node.initializer.expression.text === 'defineProps') propsNames.add(node.name.text);
+    }
+    ts.forEachChild(node, collectBindings);
+  };
+  collectBindings(root);
+
+  const visitAll = (node: ts.Node) => {
+    // FIGM-VUE-03: side effect inside computed() getter
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === 'computed') {
+      const body = vueGetterBlockOf(node);
+      if (body && vueComputedBodyHasSideEffect(body)) {
+        push(node, { type: 'CallExpression', name: 'computed', attributes: { isComputedSideEffect: true, codeSnippet: snippetFor(node) } });
+      }
+    }
+
+    if (!isWithinComputedDefinition(node)) {
+      // FIGM-VUE-04 (computed result mutation) / FIGM-VUE-05 (prop mutation): assignment shape
+      if (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
+        if (isDeeperThanDotValue(node.left, computedNames)) {
+          push(node, { type: 'BinaryExpression', name: 'mutateComputed', attributes: { isComputedResultMutation: true, codeSnippet: snippetFor(node) } });
+        }
+        if (propsChainRootName(node.left, propsNames)) {
+          push(node, { type: 'BinaryExpression', name: 'mutateProp', attributes: { isPropMutation: true, codeSnippet: snippetFor(node) } });
+        }
+      }
+      // FIGM-VUE-04 / FIGM-VUE-05: array-mutator call shape
+      if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && VUE_ARRAY_MUTATORS.has(node.expression.name.text)) {
+        const target = node.expression.expression;
+        if (isExactDotValue(target, computedNames)) {
+          push(node, { type: 'CallExpression', name: 'mutateComputed', attributes: { isComputedResultMutation: true, codeSnippet: snippetFor(node) } });
+        }
+        if (propsChainRootName(target, propsNames)) {
+          push(node, { type: 'CallExpression', name: 'mutateProp', attributes: { isPropMutation: true, codeSnippet: snippetFor(node) } });
+        }
+      }
+    }
+
+    // FIGM-VUE-06: arrow function used as an Options API methods{} property
+    if (ts.isExportAssignment(node) && !node.isExportEquals && ts.isObjectLiteralExpression(node.expression)) {
+      const methodsProp = node.expression.properties.find(
+        (p): p is ts.PropertyAssignment => ts.isPropertyAssignment(p) && ts.isIdentifier(p.name) && p.name.text === 'methods'
+      );
+      if (methodsProp && ts.isObjectLiteralExpression(methodsProp.initializer)) {
+        for (const m of methodsProp.initializer.properties) {
+          if (ts.isPropertyAssignment(m) && ts.isArrowFunction(m.initializer)) {
+            push(m, {
+              type: 'ArrowFunction',
+              name: ts.isIdentifier(m.name) ? m.name.text : 'method',
+              attributes: { isArrowOptionsMethod: true, codeSnippet: snippetFor(m) },
+            });
+          }
+        }
+      }
+    }
+
+    ts.forEachChild(node, visitAll);
+  };
+  visitAll(root);
+
+  return nodes;
+}
+
+// ---------------------------------------------------------------------------------------------
 // Entry point
 // ---------------------------------------------------------------------------------------------
 
@@ -1071,6 +2109,23 @@ export interface RealAstBuildResult {
  * could not be parsed at all rather than a partial/misleading tree.
  */
 export function buildRealSyntaxNodes(code: string, filePath: string, framework: FrameworkType): RealAstBuildResult {
+  // VUE_SFC is a special case: canAttemptRealAstParse (below) correctly excludes it from the
+  // whole-file TypeScript parse attempt every other framework goes through (a raw .vue file,
+  // template markup and all, is not valid TS/JSX) -- but its <script> block content alone IS,
+  // so FIGM-VUE-03..06 get real detection via buildVueScriptRealSyntaxNodes's own, separate,
+  // self-contained parse of just that extracted block. FIGM-VUE-01/02 (template-markup rules)
+  // get the analogous treatment via buildVueTemplateRealSyntaxNodes, a real @vue/compiler-dom
+  // parse of the <template> block -- the same "extract a sub-language and parse it with its own
+  // real parser" pattern used for both halves of this file and for Angular's inline template.
+  // Returns here rather than falling through to the whole-file parse below, which would fail on
+  // the surrounding <template>/<style> markup.
+  if (framework === 'VUE_SFC') {
+    return {
+      nodes: [...buildVueScriptRealSyntaxNodes(code, filePath), ...buildVueTemplateRealSyntaxNodes(code, filePath)],
+      diagnostics: [],
+    };
+  }
+
   if (!canAttemptRealAstParse(framework)) {
     return { nodes: [], diagnostics: [] };
   }
@@ -1081,6 +2136,21 @@ export function buildRealSyntaxNodes(code: string, filePath: string, framework: 
   if (!root) {
     return { nodes: [], diagnostics: parser.getDiagnostics() };
   }
+
+  // Same "does this file have real React evidence" signal findStateLikeNames computes internally
+  // for its own setX(...) naming-convention gate -- computed once more here (a cheap, import/JSX-
+  // only pass, not a second full walk) so buildReact01 can reuse it without reaching into
+  // findStateLikeNames' private logic.
+  const hasReactContext =
+    framework === 'REACT_JSX' || framework === 'NEXT_JS' ||
+    collectReactHookBindings(root as ts.SourceFile).hasRealReactImport ||
+    containsJsx(root as ts.SourceFile);
+
+  // ANGULAR_TEMPLATE files are already Angular by construction (framework detection already
+  // required real Angular evidence to assign that value); only GENERIC_ESTREE needs the file-wide
+  // scan, mirroring hasReactContext's own framework-vs-scan split.
+  const hasAngularContextValue =
+    framework === 'ANGULAR_TEMPLATE' || hasAngularContext(root as ts.SourceFile);
 
   const ctx: BuilderContext = {
     parser,
@@ -1093,6 +2163,8 @@ export function buildRealSyntaxNodes(code: string, filePath: string, framework: 
     framework,
     nodes: [],
     stateLikeNames: findStateLikeNames(root as ts.SourceFile, framework),
+    hasReactContext,
+    hasAngularContext: hasAngularContextValue,
   };
 
   const jsxEligible = isJsxRealAstEligible(framework);
@@ -1109,8 +2181,22 @@ export function buildRealSyntaxNodes(code: string, filePath: string, framework: 
   // allows REACT_JSX, so it keeps the broader gate.
   const nextEligibleStrict = framework === 'NEXT_JS';
   const nextEligibleNext04 = framework === 'NEXT_JS' || framework === 'REACT_JSX';
+  // Group 5 eligibility: FIGM-REACT-05/06 apply to the same three frameworks as FIGM-REACT-01/03
+  // (REACT_JSX/NEXT_JS/GENERIC_ESTREE) -- deliberately NOT ANGULAR_TEMPLATE, unlike generalEligible,
+  // since useEffect-shaped derived-state/dependency bugs are a React-hooks-specific concern with
+  // no Angular equivalent.
+  const react0506Eligible = framework === 'REACT_JSX' || framework === 'NEXT_JS' || framework === 'GENERIC_ESTREE';
+  // Group 6/7 eligibility (second expansion pass): FIGM-REACT-07..11 apply to the same three
+  // frameworks as FIGM-REACT-05/06 above -- same rationale (React-hooks/JSX-specific concerns).
+  const react0711Eligible = react0506Eligible;
+  const inFileComponentNames = react0711Eligible ? collectInFileComponentNames(ctx.sourceFile) : new Set<string>();
 
-  if (nextEligibleStrict) buildNext03Root(ctx);
+  if (nextEligibleStrict) {
+    buildNext03Root(ctx);
+    buildNext08Root(ctx);
+    buildNext09Root(ctx);
+    buildNext10Root(ctx);
+  }
 
   parser.visit((node) => {
     if (generalEligible) {
@@ -1131,20 +2217,50 @@ export function buildRealSyntaxNodes(code: string, filePath: string, framework: 
       buildA11y05(ctx, node);
       buildA11y06(ctx, node);
       buildReact04(ctx, node);
+      buildA11y07(ctx, node);
     }
     if (angularEligible) {
       buildAng01(ctx, node);
       buildAng02(ctx, node);
       buildAng05(ctx, node);
+      buildAng06(ctx, node);
+      buildAng07(ctx, node);
+      buildAng09(ctx, node);
     }
     if (nextEligibleStrict) {
       buildNext01(ctx, node);
       buildNext02(ctx, node);
+      buildNext05(ctx, node);
+      buildNext06(ctx, node);
+      buildNext07(ctx, node);
     }
     if (nextEligibleNext04) {
       buildNext04(ctx, node);
     }
+    if (react0506Eligible) {
+      buildReact05(ctx, node);
+      buildReact06(ctx, node);
+    }
+    if (react0711Eligible) {
+      buildReact07(ctx, node);
+      buildReact08(ctx, node);
+      buildReact09(ctx, node);
+      buildReact10(ctx, node, inFileComponentNames);
+      buildReact11(ctx, node);
+    }
   });
+
+  // FIGM-ANG-03/04/08/10 (template-markup rules) -- real AST via a SEPARATE parse of the file's
+  // extracted inline template block (angular-html-parser), the same "extract a sub-language's
+  // text and re-parse it" pattern buildVueScriptRealSyntaxNodes already established for Vue.
+  // Deliberately gated on the same angularEligible condition as the class-body Angular rules
+  // above (ANGULAR_TEMPLATE and GENERIC_ESTREE, matching FIGM-ANG-03/04's own existing framework
+  // predicate in ASTDetectionEngine) rather than a narrower one -- extractAngularTemplateBlock is
+  // a safe no-op on any file with no inline `template: \`...\`` property, no `@Component(`
+  // decorator, and a non-`.html` filename (fixed real-world defect -- see its own doc comment).
+  if (angularEligible) {
+    ctx.nodes.push(...buildAngularTemplateRealSyntaxNodes(code, filePath));
+  }
 
   return { nodes: ctx.nodes, diagnostics: parser.getDiagnostics() };
 }

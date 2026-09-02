@@ -70,11 +70,15 @@ export class ALPExtractionEngine {
       case 'ALP-EVENT-KEYBOARD':
         return ['div', 'span', 'section', 'article', 'p'].includes(node.name || '') && attrs.onClick !== undefined;
       case 'ALP-ARIA-NAMING':
-        return attrs.isCustomControl === true || (node.name !== undefined && /^[A-Z]/.test(node.name));
+        // Gated strictly on isCustomControl (see ast-detection-engine.ts's evalA11y02 fix): a
+        // bare "uppercase tag name" fallback matched any component node -- including ones built
+        // for unrelated ALPs like ALP-FOCUS-TRAVERSAL's Modal/Dialog nodes -- overcounting this
+        // primitive's real coverage.
+        return attrs.isCustomControl === true;
       case 'ALP-LIVE-REGION':
         return attrs.isDynamicMutation === true;
       case 'ALP-FOCUS-TRAVERSAL':
-        return attrs.isOverlay === true || ['Modal', 'Dialog', 'Overlay'].includes(node.name || '');
+        return attrs.isOverlay === true || ['Modal', 'Dialog', 'Overlay', 'Drawer'].includes(node.name || '');
       default:
         return false;
     }

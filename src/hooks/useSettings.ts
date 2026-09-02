@@ -7,7 +7,7 @@ export function useSettings() {
     theme: 'dark',
     autoSave: true,
     autoScan: true,
-    aiModel: 'gemini-2.5-flash',
+    aiModel: 'claude-opus-5',
     exportFormat: 'PDF',
   });
   const [loading, setLoading] = useState<boolean>(true);

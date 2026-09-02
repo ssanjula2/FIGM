@@ -1,0 +1,18 @@
+{
+  "experimentVersion": "1.0.0",
+  "conditionId": "SSR_GLOBAL",
+  "framework": "NEXTJS_REACT",
+  "renderingStrategy": "SSR",
+  "stateManagementStrategy": "GLOBAL",
+  "runNumber": 1,
+  "fcpMs": null,
+  "ttiMs": null,
+  "status": "FAILED",
+  "error": "Failed to fetch browser webSocket URL from http://127.0.0.1:6000/json/version: fetch failed\n",
+  "browserVersion": null,
+  "nodeVersion": "v22.14.0",
+  "lighthouseVersion": null,
+  "timestamp": "2026-09-02T21:17:47.643Z",
+  "isSmokeTest": true,
+  "isWarmup": false
+}

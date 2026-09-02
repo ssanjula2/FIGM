@@ -5,21 +5,19 @@
   "primaryFrameworkLabel": "Vue",
   "filesScanned": 34,
   "totalLOC": 2154,
-  "scanDurationMs": 3345.6344999999856,
-  "totalFigmFindings": 42,
+  "scanDurationMs": 3152.404500000004,
+  "totalFigmFindings": 35,
   "findingsByRule": {
-    "FIGM-VUE-01": 9,
     "FIGM-PERF-02": 6,
     "FIGM-PERF-04": 6,
     "FIGM-A11Y-05": 15,
-    "FIGM-REACT-01": 2,
-    "FIGM-REACT-07": 2,
+    "FIGM-VUE-01": 6,
     "FIGM-PERF-01": 2
   },
   "findingsBySeverity": {
-    "HIGH": 19,
+    "HIGH": 14,
     "MEDIUM": 6,
-    "CRITICAL": 17
+    "CRITICAL": 15
   },
   "frameworksDetected": {
     "GENERIC_ESTREE": 14,
@@ -99,7 +97,7 @@
       "relativePath": "src/components/ArticleList.vue",
       "framework": "VUE_SFC",
       "loc": 98,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -171,7 +169,7 @@
       "relativePath": "src/components/VPagination.vue",
       "framework": "VUE_SFC",
       "loc": 46,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -203,7 +201,7 @@
       "relativePath": "src/store/article.js",
       "framework": "GENERIC_ESTREE",
       "loc": 73,
-      "figmFindingCount": 4,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -251,7 +249,7 @@
       "relativePath": "src/views/ArticleEdit.vue",
       "framework": "VUE_SFC",
       "loc": 142,
-      "figmFindingCount": 6,
+      "figmFindingCount": 5,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -305,33 +303,6 @@
     }
   ],
   "rawDiagnostics": [
-    {
-      "ruleId": "FIGM-VUE-01",
-      "ruleName": "Unstable or Missing v-for Key Binding",
-      "domain": "PERFORMANCE",
-      "concern": "LAYOUT_INSTABILITY",
-      "severity": "HIGH",
-      "filePath": "src/components/ArticleList.vue",
-      "location": {
-        "start": {
-          "line": 9,
-          "column": 8
-        },
-        "end": {
-          "line": 9,
-          "column": 44
-        }
-      },
-      "offendingCodeSnippet": "v-for=\"(article, index) in articles\"",
-      "message": "v-for directive missing a stable :key binding, or bound to the loop index.",
-      "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 9",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
     {
       "ruleId": "FIGM-PERF-02",
       "ruleName": "Un-dimensioned Dynamic Layout Elements",
@@ -531,11 +502,11 @@
       "location": {
         "start": {
           "line": 3,
-          "column": 8
+          "column": 4
         },
         "end": {
-          "line": 3,
-          "column": 50
+          "line": 6,
+          "column": 9
         }
       },
       "offendingCodeSnippet": "<li v-for=\"(value, key) in errors\" :key=\"key\">",
@@ -543,8 +514,8 @@
       "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 80,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 3",
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [VForElement] at line 3",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
@@ -557,23 +528,23 @@
       "filePath": "src/components/TagList.vue",
       "location": {
         "start": {
-          "line": 5,
-          "column": 6
+          "line": 3,
+          "column": 4
         },
         "end": {
-          "line": 5,
-          "column": 34
+          "line": 9,
+          "column": 9
         }
       },
-      "offendingCodeSnippet": "v-for=\"(tag, index) of tags\"",
+      "offendingCodeSnippet": "<li",
       "message": "v-for directive missing a stable :key binding, or bound to the loop index.",
       "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 80,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 5",
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [VForElement] at line 3",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+      "fixabilityStatus": "NO_SAFE_FIX"
     },
     {
       "ruleId": "FIGM-PERF-02",
@@ -601,141 +572,6 @@
       "evidence": "Legacy text-heuristic pattern match: [VElement] at line 76",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-VUE-01",
-      "ruleName": "Unstable or Missing v-for Key Binding",
-      "domain": "PERFORMANCE",
-      "concern": "LAYOUT_INSTABILITY",
-      "severity": "HIGH",
-      "filePath": "src/components/VPagination.vue",
-      "location": {
-        "start": {
-          "line": 5,
-          "column": 8
-        },
-        "end": {
-          "line": 5,
-          "column": 29
-        }
-      },
-      "offendingCodeSnippet": "v-for=\"page in pages\"",
-      "message": "v-for directive missing a stable :key binding, or bound to the loop index.",
-      "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 5",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/store/article.js",
-      "location": {
-        "start": {
-          "line": 43,
-          "column": 22
-        },
-        "end": {
-          "line": 43,
-          "column": 69
-        }
-      },
-      "offendingCodeSnippet": "this.comments = this.comments.filter((c) => c.id !== commentId);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 43",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-07",
-      "ruleName": "Hook Used Inside Conditional, Loop, or Nested Function",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "CRITICAL",
-      "filePath": "src/store/article.js",
-      "location": {
-        "start": {
-          "line": 48,
-          "column": 6
-        },
-        "end": {
-          "line": 48,
-          "column": 20
-        }
-      },
-      "offendingCodeSnippet": "useHomeStore().updateArticleInList(data.article);",
-      "message": "Hook called inside a conditional, loop, or nested function instead of the top level.",
-      "remediation": "Move the Hook call to the top level of the component or custom Hook, unconditionally, and move the condition inside the Hook (or around its result) instead. Evidence: React official documentation, \"Rules of Hooks\" -- https://react.dev/reference/rules/rules-of-hooks (\"Don't call Hooks inside loops, conditions, nested functions, or try/catch/finally blocks... Instead, always use Hooks at the top level\").",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 91,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 48",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-07",
-      "ruleName": "Hook Used Inside Conditional, Loop, or Nested Function",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "CRITICAL",
-      "filePath": "src/store/article.js",
-      "location": {
-        "start": {
-          "line": 53,
-          "column": 6
-        },
-        "end": {
-          "line": 53,
-          "column": 20
-        }
-      },
-      "offendingCodeSnippet": "useHomeStore().updateArticleInList(data.article);",
-      "message": "Hook called inside a conditional, loop, or nested function instead of the top level.",
-      "remediation": "Move the Hook call to the top level of the component or custom Hook, unconditionally, and move the condition inside the Hook (or around its result) instead. Evidence: React official documentation, \"Rules of Hooks\" -- https://react.dev/reference/rules/rules-of-hooks (\"Don't call Hooks inside loops, conditions, nested functions, or try/catch/finally blocks... Instead, always use Hooks at the top level\").",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 91,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 53",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/store/article.js",
-      "location": {
-        "start": {
-          "line": 69,
-          "column": 29
-        },
-        "end": {
-          "line": 69,
-          "column": 74
-        }
-      },
-      "offendingCodeSnippet": "this.article.tagList = this.article.tagList.filter((t) => t !== tag);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 69",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
       "ruleId": "FIGM-PERF-04",
@@ -854,23 +690,23 @@
       "filePath": "src/views/Article.vue",
       "location": {
         "start": {
-          "line": 50,
-          "column": 12
+          "line": 49,
+          "column": 10
         },
         "end": {
-          "line": 50,
-          "column": 48
+          "line": 55,
+          "column": 23
         }
       },
-      "offendingCodeSnippet": "v-for=\"(comment, index) in comments\"",
+      "offendingCodeSnippet": "<RwvComment",
       "message": "v-for directive missing a stable :key binding, or bound to the loop index.",
       "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 80,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 50",
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [VForElement] at line 49",
       "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+      "fixabilityStatus": "NO_SAFE_FIX"
     },
     {
       "ruleId": "FIGM-A11Y-05",
@@ -981,33 +817,6 @@
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
-      "ruleId": "FIGM-VUE-01",
-      "ruleName": "Unstable or Missing v-for Key Binding",
-      "domain": "PERFORMANCE",
-      "concern": "LAYOUT_INSTABILITY",
-      "severity": "HIGH",
-      "filePath": "src/views/ArticleEdit.vue",
-      "location": {
-        "start": {
-          "line": 48,
-          "column": 20
-        },
-        "end": {
-          "line": 48,
-          "column": 59
-        }
-      },
-      "offendingCodeSnippet": "v-for=\"(tag, index) of article.tagList\"",
-      "message": "v-for directive missing a stable :key binding, or bound to the loop index.",
-      "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 48",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
       "ruleId": "FIGM-PERF-04",
       "ruleName": "Static Imports in Deferred Execution Paths",
       "domain": "PERFORMANCE",
@@ -1044,7 +853,7 @@
       "location": {
         "start": {
           "line": 63,
-          "column": 22
+          "column": 14
         },
         "end": {
           "line": 63,
@@ -1056,35 +865,8 @@
       "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
       "confidenceScore": 80,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 63",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-VUE-01",
-      "ruleName": "Unstable or Missing v-for Key Binding",
-      "domain": "PERFORMANCE",
-      "concern": "LAYOUT_INSTABILITY",
-      "severity": "HIGH",
-      "filePath": "src/views/Login.vue",
-      "location": {
-        "start": {
-          "line": 13,
-          "column": 16
-        },
-        "end": {
-          "line": 13,
-          "column": 50
-        }
-      },
-      "offendingCodeSnippet": "<li v-for=\"(v, k) in errors\" :key=\"k\">",
-      "message": "v-for directive missing a stable :key binding, or bound to the loop index.",
-      "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 13",
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [VForElement] at line 63",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
@@ -1143,6 +925,33 @@
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
+      "ruleId": "FIGM-VUE-01",
+      "ruleName": "Unstable or Missing v-for Key Binding",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/views/Login.vue",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 12
+        },
+        "end": {
+          "line": 15,
+          "column": 17
+        }
+      },
+      "offendingCodeSnippet": "<li v-for=\"(v, k) in errors\" :key=\"k\">",
+      "message": "v-for directive missing a stable :key binding, or bound to the loop index.",
+      "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [VForElement] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
       "ruleId": "FIGM-PERF-02",
       "ruleName": "Un-dimensioned Dynamic Layout Elements",
       "domain": "PERFORMANCE",
@@ -1166,33 +975,6 @@
       "confidenceScore": 92,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
       "evidence": "Legacy text-heuristic pattern match: [VElement] at line 14",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-VUE-01",
-      "ruleName": "Unstable or Missing v-for Key Binding",
-      "domain": "PERFORMANCE",
-      "concern": "LAYOUT_INSTABILITY",
-      "severity": "HIGH",
-      "filePath": "src/views/Register.vue",
-      "location": {
-        "start": {
-          "line": 13,
-          "column": 16
-        },
-        "end": {
-          "line": 13,
-          "column": 50
-        }
-      },
-      "offendingCodeSnippet": "<li v-for=\"(v, k) in errors\" :key=\"k\">",
-      "message": "v-for directive missing a stable :key binding, or bound to the loop index.",
-      "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [VElement] at line 13",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
@@ -1274,6 +1056,33 @@
       "confidenceScore": 97,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
       "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 37",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-VUE-01",
+      "ruleName": "Unstable or Missing v-for Key Binding",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "src/views/Register.vue",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 12
+        },
+        "end": {
+          "line": 15,
+          "column": 17
+        }
+      },
+      "offendingCodeSnippet": "<li v-for=\"(v, k) in errors\" :key=\"k\">",
+      "message": "v-for directive missing a stable :key binding, or bound to the loop index.",
+      "remediation": "Add a :key binding using a stable, unique identifier from each item (e.g. todo.id) instead of omitting :key or binding it to the array index. Evidence: Vue.js official Style Guide, \"Priority A Rules: Essential\" -- https://vuejs.org/style-guide/rules-essential.html (\"Always use key with v-for\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [VForElement] at line 13",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },

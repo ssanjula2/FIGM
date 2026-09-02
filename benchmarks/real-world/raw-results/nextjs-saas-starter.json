@@ -1,0 +1,1565 @@
+{
+  "name": "nextjs-saas-starter",
+  "url": "https://github.com/nextjs/saas-starter.git",
+  "commit": "6e33e58b1e553a41fe22e6b941a7229a002de361",
+  "primaryFrameworkLabel": "Next.js",
+  "filesScanned": 41,
+  "totalLOC": 3637,
+  "scanDurationMs": 5703.494000000006,
+  "totalFigmFindings": 44,
+  "findingsByRule": {
+    "FIGM-NEXT-03": 4,
+    "FIGM-REACT-04": 2,
+    "FIGM-PERF-05": 2,
+    "FIGM-A11Y-05": 6,
+    "FIGM-PERF-04": 5,
+    "FIGM-A11Y-02": 22,
+    "FIGM-REACT-02": 2,
+    "FIGM-NEXT-08": 1
+  },
+  "findingsBySeverity": {
+    "MEDIUM": 13,
+    "CRITICAL": 6,
+    "HIGH": 25
+  },
+  "frameworksDetected": {
+    "REACT_JSX": 10,
+    "NEXT_JS": 22,
+    "GENERIC_ESTREE": 9
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 12,
+    "totalParseErrorCount": 29
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "app/(dashboard)/dashboard/activity/loading.tsx",
+      "framework": "REACT_JSX",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/dashboard/activity/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 127,
+      "figmFindingCount": 1,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/dashboard/general/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 122,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/dashboard/layout.tsx",
+      "framework": "NEXT_JS",
+      "loc": 74,
+      "figmFindingCount": 4,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/dashboard/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 288,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/dashboard/security/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 168,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/layout.tsx",
+      "framework": "NEXT_JS",
+      "loc": 107,
+      "figmFindingCount": 6,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 131,
+      "figmFindingCount": 1,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/pricing/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 95,
+      "figmFindingCount": 2,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/pricing/submit-button.tsx",
+      "framework": "REACT_JSX",
+      "loc": 31,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(dashboard)/terminal.tsx",
+      "framework": "REACT_JSX",
+      "loc": 69,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(login)/actions.ts",
+      "framework": "NEXT_JS",
+      "loc": 460,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(login)/login.tsx",
+      "framework": "NEXT_JS",
+      "loc": 143,
+      "figmFindingCount": 4,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(login)/sign-in/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 11,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/(login)/sign-up/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 11,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/api/stripe/checkout/route.ts",
+      "framework": "NEXT_JS",
+      "loc": 98,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/api/stripe/webhook/route.ts",
+      "framework": "NEXT_JS",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/api/team/route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/api/user/route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/layout.tsx",
+      "framework": "NEXT_JS",
+      "loc": 45,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "app/not-found.tsx",
+      "framework": "NEXT_JS",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/ui/avatar.tsx",
+      "framework": "REACT_JSX",
+      "loc": 54,
+      "figmFindingCount": 0,
+      "parseErrorCount": 3,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/ui/button.tsx",
+      "framework": "REACT_JSX",
+      "loc": 60,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/ui/card.tsx",
+      "framework": "REACT_JSX",
+      "loc": 93,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/ui/dropdown-menu.tsx",
+      "framework": "REACT_JSX",
+      "loc": 258,
+      "figmFindingCount": 17,
+      "parseErrorCount": 15,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/ui/input.tsx",
+      "framework": "REACT_JSX",
+      "loc": 22,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/ui/label.tsx",
+      "framework": "REACT_JSX",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "components/ui/radio-group.tsx",
+      "framework": "REACT_JSX",
+      "loc": 46,
+      "figmFindingCount": 0,
+      "parseErrorCount": 2,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "drizzle.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 11,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/auth/middleware.ts",
+      "framework": "NEXT_JS",
+      "loc": 76,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/auth/session.ts",
+      "framework": "NEXT_JS",
+      "loc": 60,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/db/drizzle.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/db/queries.ts",
+      "framework": "NEXT_JS",
+      "loc": 131,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/db/schema.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 143,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/db/seed.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 85,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/db/setup.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 217,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/payments/actions.ts",
+      "framework": "NEXT_JS",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/payments/stripe.ts",
+      "framework": "NEXT_JS",
+      "loc": 183,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "lib/utils.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "middleware.ts",
+      "framework": "NEXT_JS",
+      "loc": 50,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "next.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 11,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/(dashboard)/dashboard/activity/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-REACT-04",
+      "ruleName": "Wrap Child Callback Props in useCallback",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "app/(dashboard)/dashboard/layout.tsx",
+      "location": {
+        "start": {
+          "line": 34,
+          "column": 10
+        },
+        "end": {
+          "line": 34,
+          "column": 58
+        }
+      },
+      "offendingCodeSnippet": "onClick={() => setIsSidebarOpen(!isSidebarOpen)}",
+      "message": "Callback prop passed inline to child component without React.useCallback wrapper.",
+      "remediation": "Wrap event handler functions passed as props to child components in React.useCallback.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 87,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXAttribute] at line 34",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "app/(dashboard)/dashboard/layout.tsx",
+      "location": {
+        "start": {
+          "line": 34,
+          "column": 19
+        },
+        "end": {
+          "line": 34,
+          "column": 57
+        }
+      },
+      "offendingCodeSnippet": "onClick={() => setIsSidebarOpen(!isSidebarOpen)}",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 34",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-REACT-04",
+      "ruleName": "Wrap Child Callback Props in useCallback",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "app/(dashboard)/dashboard/layout.tsx",
+      "location": {
+        "start": {
+          "line": 58,
+          "column": 18
+        },
+        "end": {
+          "line": 58,
+          "column": 57
+        }
+      },
+      "offendingCodeSnippet": "onClick={() => setIsSidebarOpen(false)}",
+      "message": "Callback prop passed inline to child component without React.useCallback wrapper.",
+      "remediation": "Wrap event handler functions passed as props to child components in React.useCallback.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 87,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXAttribute] at line 58",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "app/(dashboard)/dashboard/layout.tsx",
+      "location": {
+        "start": {
+          "line": 58,
+          "column": 27
+        },
+        "end": {
+          "line": 58,
+          "column": 56
+        }
+      },
+      "offendingCodeSnippet": "onClick={() => setIsSidebarOpen(false)}",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 58",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "app/(dashboard)/dashboard/page.tsx",
+      "location": {
+        "start": {
+          "line": 158,
+          "column": 18
+        },
+        "end": {
+          "line": 158,
+          "column": 75
+        }
+      },
+      "offendingCodeSnippet": "<input type=\"hidden\" name=\"memberId\" value={member.id} />",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 158",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "app/(dashboard)/layout.tsx",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 48
+        }
+      },
+      "offendingCodeSnippet": "import { Button } from '@/components/ui/button';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "app/(dashboard)/layout.tsx",
+      "location": {
+        "start": {
+          "line": 49,
+          "column": 4
+        },
+        "end": {
+          "line": 49,
+          "column": 65
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 49",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "app/(dashboard)/layout.tsx",
+      "location": {
+        "start": {
+          "line": 50,
+          "column": 6
+        },
+        "end": {
+          "line": 50,
+          "column": 27
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuTrigger>",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 50",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "app/(dashboard)/layout.tsx",
+      "location": {
+        "start": {
+          "line": 61,
+          "column": 6
+        },
+        "end": {
+          "line": 61,
+          "column": 71
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuContent align=\"end\" className=\"flex flex-col gap-1\">",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 61",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "app/(dashboard)/layout.tsx",
+      "location": {
+        "start": {
+          "line": 62,
+          "column": 8
+        },
+        "end": {
+          "line": 62,
+          "column": 53
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuItem className=\"cursor-pointer\">",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 62",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "app/(dashboard)/layout.tsx",
+      "location": {
+        "start": {
+          "line": 70,
+          "column": 12
+        },
+        "end": {
+          "line": 70,
+          "column": 71
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuItem className=\"w-full flex-1 cursor-pointer\">",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 70",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/(dashboard)/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "app/(dashboard)/pricing/page.tsx",
+      "location": {
+        "start": {
+          "line": 89,
+          "column": 8
+        },
+        "end": {
+          "line": 89,
+          "column": 62
+        }
+      },
+      "offendingCodeSnippet": "<input type=\"hidden\" name=\"priceId\" value={priceId} />",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 89",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-REACT-02",
+      "ruleName": "Stable List Key Prop Assignment",
+      "category": "FIGM_GUIDELINE_VIOLATION",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "app/(dashboard)/pricing/page.tsx",
+      "location": {
+        "start": {
+          "line": 82,
+          "column": 14
+        },
+        "end": {
+          "line": 82,
+          "column": 25
+        }
+      },
+      "line": 82,
+      "column": 14,
+      "offendingCodeSnippet": "<li key={index} className=\"flex items-start\">",
+      "sourceSnippet": "<li key={index} className=\"flex items-start\">",
+      "message": "Array index assigned as list key prop causing component re-ordering and state bugs.",
+      "remediation": "Assign a unique stable identifier (item.id) to list key props instead of array index.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 96,
+      "evidence": "Real AST (TypeScript compiler): JsxAttribute \"key\" at app/(dashboard)/pricing/page.tsx:82 resolves to the enclosing .map() callback's index parameter",
+      "fixAvailable": true,
+      "sourceKind": "REAL_AST",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-REACT-02",
+      "ruleName": "Stable List Key Prop Assignment",
+      "category": "FIGM_GUIDELINE_VIOLATION",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "app/(dashboard)/terminal.tsx",
+      "location": {
+        "start": {
+          "line": 58,
+          "column": 14
+        },
+        "end": {
+          "line": 58,
+          "column": 25
+        }
+      },
+      "line": 58,
+      "column": 14,
+      "offendingCodeSnippet": "key={index}",
+      "sourceSnippet": "key={index}",
+      "message": "Array index assigned as list key prop causing component re-ordering and state bugs.",
+      "remediation": "Assign a unique stable identifier (item.id) to list key props instead of array index.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 96,
+      "evidence": "Real AST (TypeScript compiler): JsxAttribute \"key\" at app/(dashboard)/terminal.tsx:58 resolves to the enclosing .map() callback's index parameter",
+      "fixAvailable": true,
+      "sourceKind": "REAL_AST",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "app/(login)/actions.ts",
+      "location": {
+        "start": {
+          "line": 22,
+          "column": 0
+        },
+        "end": {
+          "line": 22,
+          "column": 62
+        }
+      },
+      "offendingCodeSnippet": "import { createCheckoutSession } from '@/lib/payments/stripe';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 22",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "app/(login)/login.tsx",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 23
+        },
+        "end": {
+          "line": 14,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "app/(login)/login.tsx",
+      "location": {
+        "start": {
+          "line": 38,
+          "column": 10
+        },
+        "end": {
+          "line": 38,
+          "column": 72
+        }
+      },
+      "offendingCodeSnippet": "<input type=\"hidden\" name=\"redirect\" value={redirect || ''} />",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 38",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "app/(login)/login.tsx",
+      "location": {
+        "start": {
+          "line": 39,
+          "column": 10
+        },
+        "end": {
+          "line": 39,
+          "column": 70
+        }
+      },
+      "offendingCodeSnippet": "<input type=\"hidden\" name=\"priceId\" value={priceId || ''} />",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 39",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "app/(login)/login.tsx",
+      "location": {
+        "start": {
+          "line": 40,
+          "column": 10
+        },
+        "end": {
+          "line": 40,
+          "column": 72
+        }
+      },
+      "offendingCodeSnippet": "<input type=\"hidden\" name=\"inviteId\" value={inviteId || ''} />",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 40",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/(login)/sign-in/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "app/(login)/sign-up/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 9
+        },
+        "end": {
+          "line": 12,
+          "column": 76
+        }
+      },
+      "offendingCodeSnippet": "return <DropdownMenuPrimitive.Root data-slot=\"dropdown-menu\" {...props} />;",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 4
+        },
+        "end": {
+          "line": 19,
+          "column": 80
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.Portal data-slot=\"dropdown-menu-portal\" {...props} />",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 27,
+          "column": 4
+        },
+        "end": {
+          "line": 30,
+          "column": 6
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.Trigger",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 27",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 40,
+          "column": 4
+        },
+        "end": {
+          "line": 40,
+          "column": 34
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.Portal>",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 40",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 41,
+          "column": 6
+        },
+        "end": {
+          "line": 49,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.Content",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 41",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 58,
+          "column": 4
+        },
+        "end": {
+          "line": 58,
+          "column": 78
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.Group data-slot=\"dropdown-menu-group\" {...props} />",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 58",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 72,
+          "column": 4
+        },
+        "end": {
+          "line": 81,
+          "column": 6
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.Item",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 72",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 92,
+          "column": 4
+        },
+        "end": {
+          "line": 100,
+          "column": 5
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.CheckboxItem",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 92",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 102,
+          "column": 8
+        },
+        "end": {
+          "line": 102,
+          "column": 45
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.ItemIndicator>",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 102",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 115,
+          "column": 4
+        },
+        "end": {
+          "line": 118,
+          "column": 6
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.RadioGroup",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 115",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 128,
+          "column": 4
+        },
+        "end": {
+          "line": 135,
+          "column": 5
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.RadioItem",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 128",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 137,
+          "column": 8
+        },
+        "end": {
+          "line": 137,
+          "column": 45
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.ItemIndicator>",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 137",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 154,
+          "column": 4
+        },
+        "end": {
+          "line": 162,
+          "column": 6
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.Label",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 154",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 171,
+          "column": 4
+        },
+        "end": {
+          "line": 175,
+          "column": 6
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.Separator",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 171",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 198,
+          "column": 9
+        },
+        "end": {
+          "line": 198,
+          "column": 79
+        }
+      },
+      "offendingCodeSnippet": "return <DropdownMenuPrimitive.Sub data-slot=\"dropdown-menu-sub\" {...props} />;",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 198",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 210,
+          "column": 4
+        },
+        "end": {
+          "line": 218,
+          "column": 5
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.SubTrigger",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 210",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "components/ui/dropdown-menu.tsx",
+      "location": {
+        "start": {
+          "line": 230,
+          "column": 4
+        },
+        "end": {
+          "line": 237,
+          "column": 6
+        }
+      },
+      "offendingCodeSnippet": "<DropdownMenuPrimitive.SubContent",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 230",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "components/ui/input.tsx",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 4
+        },
+        "end": {
+          "line": 17,
+          "column": 6
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "lib/auth/middleware.ts",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 4,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "import { redirect } from 'next/navigation';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "lib/db/setup.ts",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 7,
+          "column": 25
+        }
+      },
+      "offendingCodeSnippet": "import os from 'node:os';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "middleware.ts",
+      "location": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 60
+        }
+      },
+      "offendingCodeSnippet": "import { signToken, verifyToken } from '@/lib/auth/session';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 3",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

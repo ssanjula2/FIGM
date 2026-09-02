@@ -1,0 +1,2468 @@
+{
+  "name": "next-learn",
+  "url": "https://github.com/vercel/next-learn.git",
+  "commit": "bb2558441a6673ab76c89914c25018bffa27a2ba",
+  "primaryFrameworkLabel": "Next.js",
+  "filesScanned": 131,
+  "totalLOC": 7166,
+  "scanDurationMs": 17426.879600000015,
+  "totalFigmFindings": 51,
+  "findingsByRule": {
+    "FIGM-PERF-02": 5,
+    "FIGM-NEXT-06": 5,
+    "FIGM-PERF-05": 7,
+    "FIGM-NEXT-03": 8,
+    "FIGM-A11Y-02": 5,
+    "FIGM-PERF-04": 3,
+    "FIGM-PERF-01": 2,
+    "FIGM-NEXT-08": 3,
+    "FIGM-A11Y-05": 5,
+    "FIGM-A11Y-04": 2,
+    "FIGM-NEXT-01": 4,
+    "FIGM-NEXT-04": 2
+  },
+  "findingsBySeverity": {
+    "HIGH": 15,
+    "MEDIUM": 25,
+    "CRITICAL": 11
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 49,
+    "NEXT_JS": 62,
+    "REACT_JSX": 20
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 20,
+    "totalParseErrorCount": 22
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": ".eslintrc.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 11,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/api-routes-starter/components/date.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/api-routes-starter/components/layout.js",
+      "framework": "NEXT_JS",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/api-routes-starter/lib/posts.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/api-routes-starter/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 47,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/api-routes-starter/pages/posts/[id].js",
+      "framework": "NEXT_JS",
+      "loc": 40,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/api-routes-starter/pages/_app.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/assets-metadata-css-starter/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 133,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/assets-metadata-css-starter/pages/posts/first-post.js",
+      "framework": "NEXT_JS",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/basics-final/components/date.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/basics-final/components/layout.js",
+      "framework": "NEXT_JS",
+      "loc": 79,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/basics-final/lib/posts.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/basics-final/pages/api/hello.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 4,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/basics-final/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 47,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/basics-final/pages/posts/[id].js",
+      "framework": "NEXT_JS",
+      "loc": 40,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/basics-final/pages/_app.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/data-fetching-starter/components/layout.js",
+      "framework": "NEXT_JS",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/data-fetching-starter/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 21,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/data-fetching-starter/pages/posts/first-post.js",
+      "framework": "NEXT_JS",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/data-fetching-starter/pages/_app.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/demo/components/date.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/demo/components/layout.js",
+      "framework": "NEXT_JS",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/demo/lib/posts.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/demo/pages/api/hello.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 4,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/demo/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 51,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/demo/pages/posts/[id].js",
+      "framework": "NEXT_JS",
+      "loc": 40,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/demo/pages/_app.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-starter/components/layout.js",
+      "framework": "NEXT_JS",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-starter/lib/posts.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-starter/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-starter/pages/posts/first-post.js",
+      "framework": "NEXT_JS",
+      "loc": 18,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-starter/pages/_app.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-step-1/components/layout.js",
+      "framework": "NEXT_JS",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-step-1/lib/posts.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 61,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-step-1/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-step-1/pages/posts/[id].js",
+      "framework": "NEXT_JS",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/dynamic-routes-step-1/pages/_app.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/learn-starter/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 132,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/navigate-between-pages-starter/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 132,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/snippets/link-classname-example.js",
+      "framework": "NEXT_JS",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/typescript-final/components/date.tsx",
+      "framework": "REACT_JSX",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/typescript-final/components/layout.tsx",
+      "framework": "NEXT_JS",
+      "loc": 76,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/typescript-final/global.d.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 5,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/typescript-final/lib/posts.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/typescript-final/next-env.d.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/typescript-final/pages/api/hello.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/typescript-final/pages/index.tsx",
+      "framework": "NEXT_JS",
+      "loc": 56,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/typescript-final/pages/posts/[id].tsx",
+      "framework": "NEXT_JS",
+      "loc": 49,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "basics/typescript-final/pages/_app.tsx",
+      "framework": "NEXT_JS",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/dashboard/(overview)/loading.tsx",
+      "framework": "REACT_JSX",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/dashboard/(overview)/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 34,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/dashboard/customers/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 26,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/dashboard/invoices/create/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 29,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/dashboard/invoices/error.tsx",
+      "framework": "REACT_JSX",
+      "loc": 32,
+      "figmFindingCount": 1,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/dashboard/invoices/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 45,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/dashboard/invoices/[id]/edit/not-found.tsx",
+      "framework": "NEXT_JS",
+      "loc": 19,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/dashboard/invoices/[id]/edit/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 39,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/dashboard/layout.tsx",
+      "framework": "REACT_JSX",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/layout.tsx",
+      "framework": "NEXT_JS",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/lib/actions.ts",
+      "framework": "NEXT_JS",
+      "loc": 135,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/lib/data.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 219,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/lib/definitions.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 89,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/lib/placeholder-data.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 148,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/lib/utils.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/login/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 21,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 52,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/query/route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/seed/route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 118,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/acme-logo.tsx",
+      "framework": "REACT_JSX",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/button.tsx",
+      "framework": "REACT_JSX",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/customers/table.tsx",
+      "framework": "NEXT_JS",
+      "loc": 121,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/dashboard/cards.tsx",
+      "framework": "REACT_JSX",
+      "loc": 65,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/dashboard/latest-invoices.tsx",
+      "framework": "NEXT_JS",
+      "loc": 62,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/dashboard/nav-links.tsx",
+      "framework": "NEXT_JS",
+      "loc": 50,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/dashboard/revenue-chart.tsx",
+      "framework": "REACT_JSX",
+      "loc": 63,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/dashboard/sidenav.tsx",
+      "framework": "NEXT_JS",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/fonts.ts",
+      "framework": "NEXT_JS",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/invoices/breadcrumbs.tsx",
+      "framework": "NEXT_JS",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/invoices/buttons.tsx",
+      "framework": "NEXT_JS",
+      "loc": 40,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/invoices/create-form.tsx",
+      "framework": "NEXT_JS",
+      "loc": 154,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/invoices/edit-form.tsx",
+      "framework": "NEXT_JS",
+      "loc": 164,
+      "figmFindingCount": 1,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/invoices/pagination.tsx",
+      "framework": "NEXT_JS",
+      "loc": 125,
+      "figmFindingCount": 1,
+      "parseErrorCount": 2,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/invoices/status.tsx",
+      "framework": "REACT_JSX",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/invoices/table.tsx",
+      "framework": "NEXT_JS",
+      "loc": 125,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/login-form.tsx",
+      "framework": "NEXT_JS",
+      "loc": 90,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/search.tsx",
+      "framework": "NEXT_JS",
+      "loc": 44,
+      "figmFindingCount": 3,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/app/ui/skeletons.tsx",
+      "framework": "REACT_JSX",
+      "loc": 219,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/auth.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/auth.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 46,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/next.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/postcss.config.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/proxy.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 10,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/final-example/tailwind.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/layout.tsx",
+      "framework": "REACT_JSX",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/lib/data.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 219,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/lib/definitions.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 89,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/lib/placeholder-data.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 148,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/lib/utils.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 70,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/page.tsx",
+      "framework": "NEXT_JS",
+      "loc": 34,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/query/route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/seed/route.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 118,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/acme-logo.tsx",
+      "framework": "REACT_JSX",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/button.tsx",
+      "framework": "REACT_JSX",
+      "loc": 20,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/customers/table.tsx",
+      "framework": "NEXT_JS",
+      "loc": 124,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/dashboard/cards.tsx",
+      "framework": "REACT_JSX",
+      "loc": 59,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/dashboard/latest-invoices.tsx",
+      "framework": "NEXT_JS",
+      "loc": 65,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/dashboard/nav-links.tsx",
+      "framework": "REACT_JSX",
+      "loc": 38,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/dashboard/revenue-chart.tsx",
+      "framework": "REACT_JSX",
+      "loc": 66,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/dashboard/sidenav.tsx",
+      "framework": "NEXT_JS",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/invoices/breadcrumbs.tsx",
+      "framework": "NEXT_JS",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/invoices/buttons.tsx",
+      "framework": "NEXT_JS",
+      "loc": 37,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/invoices/create-form.tsx",
+      "framework": "NEXT_JS",
+      "loc": 113,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/invoices/edit-form.tsx",
+      "framework": "NEXT_JS",
+      "loc": 124,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/invoices/pagination.tsx",
+      "framework": "NEXT_JS",
+      "loc": 120,
+      "figmFindingCount": 0,
+      "parseErrorCount": 2,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/invoices/status.tsx",
+      "framework": "REACT_JSX",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/invoices/table.tsx",
+      "framework": "NEXT_JS",
+      "loc": 125,
+      "figmFindingCount": 0,
+      "parseErrorCount": 1,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/login-form.tsx",
+      "framework": "REACT_JSX",
+      "loc": 68,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/search.tsx",
+      "framework": "REACT_JSX",
+      "loc": 19,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/app/ui/skeletons.tsx",
+      "framework": "REACT_JSX",
+      "loc": 219,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/next.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/postcss.config.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "dashboard/starter-example/tailwind.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "prettier.config.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "seo/components/CodeSampleModal.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "seo/countries.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "seo/demo/components/CodeSampleModal.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "seo/demo/countries.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "seo/demo/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 127,
+      "figmFindingCount": 6,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "seo/demo/pages/_app.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "seo/pages/index.js",
+      "framework": "NEXT_JS",
+      "loc": 114,
+      "figmFindingCount": 10,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "seo/pages/_app.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "basics/assets-metadata-css-starter/pages/index.js",
+      "location": {
+        "start": {
+          "line": 60,
+          "column": 10
+        },
+        "end": {
+          "line": 60,
+          "column": 72
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"/vercel.svg\" alt=\"Vercel\" className={styles.logo} />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 60",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-06",
+      "ruleName": "Native <img> Instead of next/image",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "MEDIUM",
+      "filePath": "basics/assets-metadata-css-starter/pages/index.js",
+      "location": {
+        "start": {
+          "line": 60,
+          "column": 10
+        },
+        "end": {
+          "line": 60,
+          "column": 72
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"/vercel.svg\" alt=\"Vercel\" className={styles.logo} />",
+      "message": "Native <img> element used in a Next.js file instead of the next/image Image component.",
+      "remediation": "Replace the native <img> element with next/image's Image component and import it at the top of the file. Evidence: Next.js official documentation, Image component reference -- https://nextjs.org/docs/app/api-reference/components/image (\"The Next.js Image component extends the HTML <img> element for automatic image optimization\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 86,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 60",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "basics/basics-final/components/layout.js",
+      "location": {
+        "start": {
+          "line": 33,
+          "column": 16
+        },
+        "end": {
+          "line": 34,
+          "column": 78
+        }
+      },
+      "offendingCodeSnippet": "onLoad={() =>",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 33",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "basics/learn-starter/pages/index.js",
+      "location": {
+        "start": {
+          "line": 59,
+          "column": 10
+        },
+        "end": {
+          "line": 59,
+          "column": 72
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"/vercel.svg\" alt=\"Vercel\" className={styles.logo} />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 59",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-06",
+      "ruleName": "Native <img> Instead of next/image",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "MEDIUM",
+      "filePath": "basics/learn-starter/pages/index.js",
+      "location": {
+        "start": {
+          "line": 59,
+          "column": 10
+        },
+        "end": {
+          "line": 59,
+          "column": 72
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"/vercel.svg\" alt=\"Vercel\" className={styles.logo} />",
+      "message": "Native <img> element used in a Next.js file instead of the next/image Image component.",
+      "remediation": "Replace the native <img> element with next/image's Image component and import it at the top of the file. Evidence: Next.js official documentation, Image component reference -- https://nextjs.org/docs/app/api-reference/components/image (\"The Next.js Image component extends the HTML <img> element for automatic image optimization\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 86,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 59",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "basics/navigate-between-pages-starter/pages/index.js",
+      "location": {
+        "start": {
+          "line": 59,
+          "column": 10
+        },
+        "end": {
+          "line": 59,
+          "column": 72
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"/vercel.svg\" alt=\"Vercel\" className={styles.logo} />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 59",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-06",
+      "ruleName": "Native <img> Instead of next/image",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "MEDIUM",
+      "filePath": "basics/navigate-between-pages-starter/pages/index.js",
+      "location": {
+        "start": {
+          "line": 59,
+          "column": 10
+        },
+        "end": {
+          "line": 59,
+          "column": 72
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"/vercel.svg\" alt=\"Vercel\" className={styles.logo} />",
+      "message": "Native <img> element used in a Next.js file instead of the next/image Image component.",
+      "remediation": "Replace the native <img> element with next/image's Image component and import it at the top of the file. Evidence: Next.js official documentation, Image component reference -- https://nextjs.org/docs/app/api-reference/components/image (\"The Next.js Image component extends the HTML <img> element for automatic image optimization\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 86,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 59",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/dashboard/(overview)/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/dashboard/customers/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "dashboard/final-example/app/dashboard/customers/page.tsx",
+      "location": {
+        "start": {
+          "line": 22,
+          "column": 6
+        },
+        "end": {
+          "line": 22,
+          "column": 46
+        }
+      },
+      "offendingCodeSnippet": "<CustomersTable customers={customers} />",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 22",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/dashboard/invoices/create/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/dashboard/invoices/error.tsx",
+      "location": {
+        "start": {
+          "line": 24,
+          "column": 10
+        },
+        "end": {
+          "line": 24,
+          "column": 23
+        }
+      },
+      "offendingCodeSnippet": "() => reset()",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 24",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/dashboard/invoices/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/dashboard/invoices/[id]/edit/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/dashboard/invoices/[id]/edit/page.tsx",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 4,
+          "column": 43
+        }
+      },
+      "offendingCodeSnippet": "import { notFound } from 'next/navigation';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/lib/actions.ts",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 38
+        }
+      },
+      "offendingCodeSnippet": "import { AuthError } from 'next-auth';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "dashboard/final-example/app/lib/data.ts",
+      "location": {
+        "start": {
+          "line": 172,
+          "column": 31
+        },
+        "end": {
+          "line": 172,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "const customers = await sql<CustomerField[]>`",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 172",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "dashboard/final-example/app/lib/data.ts",
+      "location": {
+        "start": {
+          "line": 189,
+          "column": 26
+        },
+        "end": {
+          "line": 189,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "const data = await sql<CustomersTableType[]>`",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 189",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/login/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "dashboard/final-example/app/ui/invoices/create-form.tsx",
+      "location": {
+        "start": {
+          "line": 16,
+          "column": 30
+        },
+        "end": {
+          "line": 16,
+          "column": 59
+        }
+      },
+      "offendingCodeSnippet": "const initialState: State = { message: null, errors: {} };",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 16",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "dashboard/final-example/app/ui/invoices/edit-form.tsx",
+      "location": {
+        "start": {
+          "line": 22,
+          "column": 30
+        },
+        "end": {
+          "line": 22,
+          "column": 59
+        }
+      },
+      "offendingCodeSnippet": "const initialState: State = { message: null, errors: {} };",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 22",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "dashboard/final-example/app/ui/invoices/pagination.tsx",
+      "location": {
+        "start": {
+          "line": 11,
+          "column": 23
+        },
+        "end": {
+          "line": 11,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 11",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "dashboard/final-example/app/ui/login-form.tsx",
+      "location": {
+        "start": {
+          "line": 16,
+          "column": 23
+        },
+        "end": {
+          "line": 16,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 16",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "dashboard/final-example/app/ui/login-form.tsx",
+      "location": {
+        "start": {
+          "line": 70,
+          "column": 8
+        },
+        "end": {
+          "line": 70,
+          "column": 69
+        }
+      },
+      "offendingCodeSnippet": "<input type=\"hidden\" name=\"redirectTo\" value={callbackUrl} />",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 70",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-08",
+      "ruleName": "useSearchParams Without a Suspense Boundary",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "dashboard/final-example/app/ui/search.tsx",
+      "location": {
+        "start": {
+          "line": 8,
+          "column": 23
+        },
+        "end": {
+          "line": 8,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "const searchParams = useSearchParams();",
+      "message": "useSearchParams() called with no <Suspense> boundary visible in this file.",
+      "remediation": "Wrap the component that calls useSearchParams() in a <Suspense> boundary (ideally around the smallest subtree that needs it) so the rest of the route can still be prerendered. Evidence: Next.js official documentation, useSearchParams reference and \"Missing Suspense boundary with useSearchParams\" -- https://nextjs.org/docs/app/api-reference/functions/use-search-params, https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 78,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 8",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "dashboard/final-example/app/ui/search.tsx",
+      "location": {
+        "start": {
+          "line": 32,
+          "column": 6
+        },
+        "end": {
+          "line": 39,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 32",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/app/ui/search.tsx",
+      "location": {
+        "start": {
+          "line": 35,
+          "column": 18
+        },
+        "end": {
+          "line": 37,
+          "column": 9
+        }
+      },
+      "offendingCodeSnippet": "onChange={(e) => {",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 35",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/final-example/auth.ts",
+      "location": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 28
+        }
+      },
+      "offendingCodeSnippet": "import bcrypt from 'bcrypt';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 3",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "dashboard/starter-example/app/lib/data.ts",
+      "location": {
+        "start": {
+          "line": 172,
+          "column": 31
+        },
+        "end": {
+          "line": 172,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "const customers = await sql<CustomerField[]>`",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 172",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "dashboard/starter-example/app/lib/data.ts",
+      "location": {
+        "start": {
+          "line": 189,
+          "column": 26
+        },
+        "end": {
+          "line": 189,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "const data = await sql<CustomersTableType[]>`",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 189",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-03",
+      "ruleName": "App Router Route Segment Revalidation",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "dashboard/starter-example/app/page.tsx",
+      "location": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "export const revalidate",
+      "message": "Next.js App Router page missing export const revalidate route segment configuration.",
+      "remediation": "Define export const revalidate = <seconds> inside App Router page files.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ExportNamedDeclaration] at line 1",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "dashboard/starter-example/app/ui/search.tsx",
+      "location": {
+        "start": {
+          "line": 11,
+          "column": 6
+        },
+        "end": {
+          "line": 14,
+          "column": 8
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 11",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-04",
+      "ruleName": "Dynamic Focus Containment and Traversal",
+      "domain": "ACCESSIBILITY",
+      "concern": "FOCUS_ORDER",
+      "severity": "CRITICAL",
+      "filePath": "seo/components/CodeSampleModal.js",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 4
+        },
+        "end": {
+          "line": 21,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "<Modal",
+      "message": "Modal or dynamic overlay component unmounts without programmatically restoring focus.",
+      "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically.",
+      "standardReference": "WCAG 2.2 SC 2.4.3 (Focus Order)",
+      "confidenceScore": 95,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-04",
+      "ruleName": "Dynamic Focus Containment and Traversal",
+      "domain": "ACCESSIBILITY",
+      "concern": "FOCUS_ORDER",
+      "severity": "CRITICAL",
+      "filePath": "seo/demo/components/CodeSampleModal.js",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 4
+        },
+        "end": {
+          "line": 21,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "<Modal",
+      "message": "Modal or dynamic overlay component unmounts without programmatically restoring focus.",
+      "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically.",
+      "standardReference": "WCAG 2.2 SC 2.4.3 (Focus Order)",
+      "confidenceScore": 95,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-01",
+      "ruleName": "React Hooks Require \"use client\" Directive",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "CRITICAL",
+      "filePath": "seo/demo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 32
+        },
+        "end": {
+          "line": 14,
+          "column": 51
+        }
+      },
+      "offendingCodeSnippet": "const [results, setResults] = useState(countries);",
+      "message": "React state/lifecycle hook called inside Next.js file lacking \"use client\" directive.",
+      "remediation": "Add \"use client\" directive at the top of component files using React hooks.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 99,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-01",
+      "ruleName": "React Hooks Require \"use client\" Directive",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "CRITICAL",
+      "filePath": "seo/demo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 40
+        },
+        "end": {
+          "line": 15,
+          "column": 55
+        }
+      },
+      "offendingCodeSnippet": "const [isModalOpen, setIsModalOpen] = useState(false);",
+      "message": "React state/lifecycle hook called inside Next.js file lacking \"use client\" directive.",
+      "remediation": "Add \"use client\" directive at the top of component files using React hooks.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 99,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-04",
+      "ruleName": "Zero-Layout-Shift Web Fonts via next/font",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "MEDIUM",
+      "filePath": "seo/demo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 23,
+          "column": 8
+        },
+        "end": {
+          "line": 26,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "<link",
+      "message": "External Google Fonts loaded via CSS link tag causing layout shift; use next/font.",
+      "remediation": "Replace external font link tags with next/font/google or next/font/local imports.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 23",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "seo/demo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 45,
+          "column": 10
+        },
+        "end": {
+          "line": 74,
+          "column": 12
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 45",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "seo/demo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 49,
+          "column": 22
+        },
+        "end": {
+          "line": 73,
+          "column": 13
+        }
+      },
+      "offendingCodeSnippet": "onChange={async (e) => {",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 49",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "seo/demo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 90,
+          "column": 27
+        },
+        "end": {
+          "line": 90,
+          "column": 53
+        }
+      },
+      "offendingCodeSnippet": "<button onClick={() => setIsModalOpen(true)}>Show Me</button>",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 90",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-NEXT-01",
+      "ruleName": "React Hooks Require \"use client\" Directive",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "CRITICAL",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 12,
+          "column": 32
+        },
+        "end": {
+          "line": 12,
+          "column": 51
+        }
+      },
+      "offendingCodeSnippet": "const [results, setResults] = useState(countries);",
+      "message": "React state/lifecycle hook called inside Next.js file lacking \"use client\" directive.",
+      "remediation": "Add \"use client\" directive at the top of component files using React hooks.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 99,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 12",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-01",
+      "ruleName": "React Hooks Require \"use client\" Directive",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "CRITICAL",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 40
+        },
+        "end": {
+          "line": 13,
+          "column": 55
+        }
+      },
+      "offendingCodeSnippet": "const [isModalOpen, setIsModalOpen] = useState(false);",
+      "message": "React state/lifecycle hook called inside Next.js file lacking \"use client\" directive.",
+      "remediation": "Add \"use client\" directive at the top of component files using React hooks.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 99,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-04",
+      "ruleName": "Zero-Layout-Shift Web Fonts via next/font",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "MEDIUM",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 25,
+          "column": 8
+        },
+        "end": {
+          "line": 28,
+          "column": 10
+        }
+      },
+      "offendingCodeSnippet": "<link",
+      "message": "External Google Fonts loaded via CSS link tag causing layout shift; use next/font.",
+      "remediation": "Replace external font link tags with next/font/google or next/font/local imports.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 25",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 37,
+          "column": 10
+        },
+        "end": {
+          "line": 37,
+          "column": 57
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"large-image.jpg\" alt=\"Large Image\" />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 37",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-06",
+      "ruleName": "Native <img> Instead of next/image",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "MEDIUM",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 37,
+          "column": 10
+        },
+        "end": {
+          "line": 37,
+          "column": 57
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"large-image.jpg\" alt=\"Large Image\" />",
+      "message": "Native <img> element used in a Next.js file instead of the next/image Image component.",
+      "remediation": "Replace the native <img> element with next/image's Image component and import it at the top of the file. Evidence: Next.js official documentation, Image component reference -- https://nextjs.org/docs/app/api-reference/components/image (\"The Next.js Image component extends the HTML <img> element for automatic image optimization\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 86,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 37",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-A11Y-05",
+      "ruleName": "Form Input Label Association",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "CRITICAL",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 42,
+          "column": 10
+        },
+        "end": {
+          "line": 63,
+          "column": 12
+        }
+      },
+      "offendingCodeSnippet": "<input",
+      "message": "Form input field missing associated label element or explicit aria-label attribute.",
+      "remediation": "Add an associated <label> with htmlFor attribute or set aria-label.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 42",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 46,
+          "column": 22
+        },
+        "end": {
+          "line": 62,
+          "column": 13
+        }
+      },
+      "offendingCodeSnippet": "onChange={async (e) => {",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 46",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-05",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "MEDIUM",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 79,
+          "column": 27
+        },
+        "end": {
+          "line": 79,
+          "column": 53
+        }
+      },
+      "offendingCodeSnippet": "<button onClick={() => setIsModalOpen(true)}>Show Me</button>",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
+      "remediation": "Extract callback function or pass item ID to memoized event handler.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 85,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ArrowFunctionExpression] at line 79",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-02",
+      "ruleName": "Un-dimensioned Dynamic Layout Elements",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "HIGH",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 95,
+          "column": 12
+        },
+        "end": {
+          "line": 95,
+          "column": 55
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"/vercel.svg\" alt=\"Vercel Logo\" />",
+      "message": "Visual media element missing explicit width/height or aspect-ratio attributes causing CLS.",
+      "remediation": "Add explicit width and height attributes or CSS aspect-ratio properties to all media elements.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 95",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-NEXT-06",
+      "ruleName": "Native <img> Instead of next/image",
+      "domain": "PERFORMANCE",
+      "concern": "LAYOUT_INSTABILITY",
+      "severity": "MEDIUM",
+      "filePath": "seo/pages/index.js",
+      "location": {
+        "start": {
+          "line": 95,
+          "column": 12
+        },
+        "end": {
+          "line": 95,
+          "column": 55
+        }
+      },
+      "offendingCodeSnippet": "<img src=\"/vercel.svg\" alt=\"Vercel Logo\" />",
+      "message": "Native <img> element used in a Next.js file instead of the next/image Image component.",
+      "remediation": "Replace the native <img> element with next/image's Image component and import it at the top of the file. Evidence: Next.js official documentation, Image component reference -- https://nextjs.org/docs/app/api-reference/components/image (\"The Next.js Image component extends the HTML <img> element for automatic image optimization\").",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 86,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 95",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    }
+  ]
+}

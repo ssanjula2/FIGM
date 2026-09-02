@@ -141,7 +141,9 @@ export async function POST(request: Request) {
     }
 
     const targetFile = fileName || 'Component.tsx';
-    const analysis = RuleExecutionEngine.analyzeFile(targetFile, code);
+    // Async variant: this route serves concurrent multi-user traffic -- see
+    // RuleExecutionEngine.analyzeFileAsync's doc comment.
+    const analysis = await RuleExecutionEngine.analyzeFileAsync(targetFile, code);
 
     // A caller-supplied projectId is only honored if the authenticated user actually owns that
     // project (or is ADMIN) -- otherwise a scan could be linked into another user's project,
@@ -173,12 +175,21 @@ export async function POST(request: Request) {
       isFavorite: false,
     });
 
-    await NotificationRepository.createNotification(
-      auth.user.userId,
-      'SCAN_SUCCESS',
-      'Scan Completed',
-      `Scanned ${record.fileName} — Quality Score: ${record.qualityScore}%`
-    );
+    // The scan record above is already durably persisted -- a failure creating its companion
+    // notification is a separate, non-essential write and must not turn an already-successful
+    // save into an HTTP 500. Un-guarded, that previously made the client believe the whole
+    // request failed (and, per this codebase's retry-on-failure conventions, could trigger a
+    // client retry that creates a second, duplicate scan record for the same real scan).
+    try {
+      await NotificationRepository.createNotification(
+        auth.user.userId,
+        'SCAN_SUCCESS',
+        'Scan Completed',
+        `Scanned ${record.fileName} — Quality Score: ${record.qualityScore}%`
+      );
+    } catch (err) {
+      console.error('[api/scans] Scan record saved, but failed to create its notification:', err instanceof Error ? err.message : err);
+    }
 
     return NextResponse.json({
       message: 'Scan record saved successfully',

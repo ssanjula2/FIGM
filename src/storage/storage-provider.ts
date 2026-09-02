@@ -7,6 +7,7 @@ import {
   DBNotification,
   DBSettings,
   DBAuditLog,
+  DBSubmission,
 } from '../auth/user-db';
 
 /** Filter/sort/pagination options for the scan-history LIST view -- pushed all the way down to
@@ -45,6 +46,9 @@ export interface IStorageProvider {
   findUserById(userId: string): Promise<DBUser | undefined> | DBUser | undefined;
   findUserByResetToken(token: string): Promise<DBUser | undefined> | DBUser | undefined;
   findUserByRefreshToken(token: string): Promise<DBUser | undefined> | DBUser | undefined;
+  /** Resolves a "P001"-style research-participant code to its backing User row. See
+   *  src/auth/user-db.ts's UserDB.findUserByParticipantCode for the dual-lookup rationale. */
+  findUserByParticipantCode(code: string): Promise<DBUser | undefined> | DBUser | undefined;
   getAllUsers(): Promise<DBUser[]> | DBUser[];
   createUser(user: Omit<DBUser, 'id' | 'createdAt'> & { id?: string }): Promise<DBUser> | DBUser;
   updateUser(userId: string, updates: Partial<Omit<DBUser, 'id' | 'createdAt'>>): Promise<DBUser | undefined> | DBUser | undefined;
@@ -82,4 +86,9 @@ export interface IStorageProvider {
   // Audit Logs
   addAuditLog(log: Omit<DBAuditLog, 'id' | 'createdAt'>): Promise<DBAuditLog> | DBAuditLog;
   getAuditLogs(limit?: number): Promise<DBAuditLog[]> | DBAuditLog[];
+
+  // Submissions (backs /api/submissions -- see prisma/schema.prisma's Submission model comment)
+  createSubmission(submission: Omit<DBSubmission, 'id' | 'createdAt'>): Promise<DBSubmission> | DBSubmission;
+  getSubmissionsByUserId(userId: string): Promise<DBSubmission[]> | DBSubmission[];
+  deleteSubmission(submissionId: string, userId: string): Promise<boolean> | boolean;
 }

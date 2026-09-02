@@ -1,0 +1,96 @@
+{
+  "name": "nextjs-portfolio-starter",
+  "url": "https://github.com/vercel/nextjs-portfolio-starter.git",
+  "commit": "90cfee0f74c25bb3688369a0587e435f8b8f114d",
+  "primaryFrameworkLabel": "Next.js",
+  "filesScanned": 5,
+  "totalLOC": 128,
+  "scanDurationMs": 842.9147999999986,
+  "totalFigmFindings": 1,
+  "findingsByRule": {
+    "FIGM-PERF-01": 1
+  },
+  "findingsBySeverity": {
+    "HIGH": 1
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 3,
+    "NEXT_JS": 2
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "next.config.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 3,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "pages/_app.js",
+      "framework": "NEXT_JS",
+      "loc": 28,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "pages/_document.js",
+      "framework": "NEXT_JS",
+      "loc": 32,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "scripts/gen-rss.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 43,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "theme.config.js",
+      "framework": "GENERIC_ESTREE",
+      "loc": 22,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "pages/_document.js",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 15
+        },
+        "end": {
+          "line": 8,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "const meta = {",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

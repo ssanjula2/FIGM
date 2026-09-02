@@ -5,25 +5,21 @@
   "primaryFrameworkLabel": "Generic JavaScript/TypeScript",
   "filesScanned": 361,
   "totalLOC": 24363,
-  "scanDurationMs": 39045.826899999985,
-  "totalFigmFindings": 87,
+  "scanDurationMs": 34174.726899999994,
+  "totalFigmFindings": 19,
   "findingsByRule": {
-    "FIGM-REACT-01": 55,
-    "FIGM-PERF-01": 2,
     "FIGM-PERF-05": 17,
-    "FIGM-PERF-04": 2,
-    "FIGM-ANG-07": 11
+    "FIGM-PERF-04": 2
   },
   "findingsBySeverity": {
-    "HIGH": 57,
-    "MEDIUM": 30
+    "MEDIUM": 19
   },
   "frameworksDetected": {
     "GENERIC_ESTREE": 361
   },
   "parserFailures": {
-    "filesWithParseErrors": 4,
-    "totalParseErrorCount": 5
+    "filesWithParseErrors": 2,
+    "totalParseErrorCount": 3
   },
   "engineCrashes": [],
   "perFile": [
@@ -39,7 +35,7 @@
       "relativePath": "src/algorithms/cryptography/caesar-cipher/caesarCipher.js",
       "framework": "GENERIC_ESTREE",
       "loc": 59,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -119,7 +115,7 @@
       "relativePath": "src/algorithms/graph/articulation-points/articulationPoints.js",
       "framework": "GENERIC_ESTREE",
       "loc": 114,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -167,7 +163,7 @@
       "relativePath": "src/algorithms/graph/bridges/graphBridges.js",
       "framework": "GENERIC_ESTREE",
       "loc": 96,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -263,7 +259,7 @@
       "relativePath": "src/algorithms/graph/eulerian-path/eulerianPath.js",
       "framework": "GENERIC_ESTREE",
       "loc": 102,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -311,7 +307,7 @@
       "relativePath": "src/algorithms/graph/kruskal/kruskal.js",
       "framework": "GENERIC_ESTREE",
       "loc": 63,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -351,7 +347,7 @@
       "relativePath": "src/algorithms/graph/strongly-connected-components/__test__/stronglyConnectedComponents.test.js",
       "framework": "GENERIC_ESTREE",
       "loc": 130,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -375,7 +371,7 @@
       "relativePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
       "framework": "GENERIC_ESTREE",
       "loc": 105,
-      "figmFindingCount": 4,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -447,7 +443,7 @@
       "relativePath": "src/algorithms/math/binary-floating-point/bitsToFloat.js",
       "framework": "GENERIC_ESTREE",
       "loc": 120,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -959,7 +955,7 @@
       "relativePath": "src/algorithms/math/horner-method/classicPolynome.js",
       "framework": "GENERIC_ESTREE",
       "loc": 17,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -967,7 +963,7 @@
       "relativePath": "src/algorithms/math/horner-method/hornerMethod.js",
       "framework": "GENERIC_ESTREE",
       "loc": 17,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1231,7 +1227,7 @@
       "relativePath": "src/algorithms/ml/knn/kNN.js",
       "framework": "GENERIC_ESTREE",
       "loc": 61,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1383,7 +1379,7 @@
       "relativePath": "src/algorithms/sets/fisher-yates/__test__/fisherYates.test.js",
       "framework": "GENERIC_ESTREE",
       "loc": 20,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1391,7 +1387,7 @@
       "relativePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
       "framework": "GENERIC_ESTREE",
       "loc": 196,
-      "figmFindingCount": 6,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1631,7 +1627,7 @@
       "relativePath": "src/algorithms/sorting/bucket-sort/BucketSort.js",
       "framework": "GENERIC_ESTREE",
       "loc": 47,
-      "figmFindingCount": 2,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1655,7 +1651,7 @@
       "relativePath": "src/algorithms/sorting/counting-sort/__test__/CountingSort.test.js",
       "framework": "GENERIC_ESTREE",
       "loc": 75,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1695,7 +1691,7 @@
       "relativePath": "src/algorithms/sorting/merge-sort/MergeSort.js",
       "framework": "GENERIC_ESTREE",
       "loc": 61,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1711,7 +1707,7 @@
       "relativePath": "src/algorithms/sorting/quick-sort/QuickSort.js",
       "framework": "GENERIC_ESTREE",
       "loc": 49,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1719,7 +1715,7 @@
       "relativePath": "src/algorithms/sorting/quick-sort/QuickSortInPlace.js",
       "framework": "GENERIC_ESTREE",
       "loc": 79,
-      "figmFindingCount": 2,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1743,7 +1739,7 @@
       "relativePath": "src/algorithms/sorting/radix-sort/RadixSort.js",
       "framework": "GENERIC_ESTREE",
       "loc": 153,
-      "figmFindingCount": 3,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1791,7 +1787,7 @@
       "relativePath": "src/algorithms/sorting/Sort.js",
       "framework": "GENERIC_ESTREE",
       "loc": 35,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1799,7 +1795,7 @@
       "relativePath": "src/algorithms/sorting/SortTester.js",
       "framework": "GENERIC_ESTREE",
       "loc": 73,
-      "figmFindingCount": 18,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1807,7 +1803,7 @@
       "relativePath": "src/algorithms/sorting/__test__/Sort.test.js",
       "framework": "GENERIC_ESTREE",
       "loc": 13,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1824,7 +1820,7 @@
       "framework": "GENERIC_ESTREE",
       "loc": 24,
       "figmFindingCount": 0,
-      "parseErrorCount": 1,
+      "parseErrorCount": 0,
       "engineCrash": null
     },
     {
@@ -2151,7 +2147,7 @@
       "relativePath": "src/algorithms/uncategorized/knight-tour/knightTour.js",
       "framework": "GENERIC_ESTREE",
       "loc": 113,
-      "figmFindingCount": 2,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2375,7 +2371,7 @@
       "relativePath": "src/data-structures/bloom-filter/BloomFilter.js",
       "framework": "GENERIC_ESTREE",
       "loc": 132,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2415,7 +2411,7 @@
       "relativePath": "src/data-structures/disjoint-set/DisjointSetAdhoc.js",
       "framework": "GENERIC_ESTREE",
       "loc": 79,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2487,7 +2483,7 @@
       "relativePath": "src/data-structures/graph/Graph.js",
       "framework": "GENERIC_ESTREE",
       "loc": 209,
-      "figmFindingCount": 2,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2503,7 +2499,7 @@
       "relativePath": "src/data-structures/graph/GraphVertex.js",
       "framework": "GENERIC_ESTREE",
       "loc": 139,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2535,7 +2531,7 @@
       "relativePath": "src/data-structures/hash-table/HashTable.js",
       "framework": "GENERIC_ESTREE",
       "loc": 122,
-      "figmFindingCount": 4,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2567,7 +2563,7 @@
       "relativePath": "src/data-structures/heap/MaxHeapAdhoc.js",
       "framework": "GENERIC_ESTREE",
       "loc": 116,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2583,7 +2579,7 @@
       "relativePath": "src/data-structures/heap/MinHeapAdhoc.js",
       "framework": "GENERIC_ESTREE",
       "loc": 118,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2695,7 +2691,7 @@
       "relativePath": "src/data-structures/priority-queue/PriorityQueue.js",
       "framework": "GENERIC_ESTREE",
       "loc": 99,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2767,7 +2763,7 @@
       "relativePath": "src/data-structures/tree/binary-search-tree/BinarySearchTreeNode.js",
       "framework": "GENERIC_ESTREE",
       "loc": 152,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2799,7 +2795,7 @@
       "relativePath": "src/data-structures/tree/fenwick-tree/FenwickTree.js",
       "framework": "GENERIC_ESTREE",
       "loc": 73,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2816,7 +2812,7 @@
       "framework": "GENERIC_ESTREE",
       "loc": 324,
       "figmFindingCount": 0,
-      "parseErrorCount": 1,
+      "parseErrorCount": 0,
       "engineCrash": null
     },
     {
@@ -2831,7 +2827,7 @@
       "relativePath": "src/data-structures/tree/segment-tree/SegmentTree.js",
       "framework": "GENERIC_ESTREE",
       "loc": 169,
-      "figmFindingCount": 2,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -2918,62 +2914,8 @@
   ],
   "rawDiagnostics": [
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/cryptography/caesar-cipher/caesarCipher.js",
-      "location": {
-        "start": {
-          "line": 13,
-          "column": 9
-        },
-        "end": {
-          "line": 25,
-          "column": 10
-        }
-      },
-      "offendingCodeSnippet": "return alphabet",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 13",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-PERF-01",
-      "ruleName": "Invariant Object Allocation in Iteration Scopes",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/cryptography/caesar-cipher/caesarCipher.js",
-      "location": {
-        "start": {
-          "line": 15,
-          "column": 28
-        },
-        "end": {
-          "line": 15,
-          "column": 43
-        }
-      },
-      "offendingCodeSnippet": "const charsMapClone = { ...charsMap };",
-      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
-      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 95,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 15",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -2989,7 +2931,7 @@
         }
       },
       "offendingCodeSnippet": ".map(() => []);",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -2999,143 +2941,8 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/articulation-points/articulationPoints.js",
-      "location": {
-        "start": {
-          "line": 68,
-          "column": 60
-        },
-        "end": {
-          "line": 80,
-          "column": 9
-        }
-      },
-      "offendingCodeSnippet": "visitedSet[currentVertex.getKey()].lowDiscoveryTime = currentVertex.getNeighbors()",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 68",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/articulation-points/articulationPoints.js",
-      "location": {
-        "start": {
-          "line": 68,
-          "column": 60
-        },
-        "end": {
-          "line": 69,
-          "column": 86
-        }
-      },
-      "offendingCodeSnippet": "visitedSet[currentVertex.getKey()].lowDiscoveryTime = currentVertex.getNeighbors()",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 68",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/bridges/graphBridges.js",
-      "location": {
-        "start": {
-          "line": 55,
-          "column": 60
-        },
-        "end": {
-          "line": 67,
-          "column": 9
-        }
-      },
-      "offendingCodeSnippet": "visitedSet[currentVertex.getKey()].lowDiscoveryTime = currentVertex.getNeighbors()",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 55",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/bridges/graphBridges.js",
-      "location": {
-        "start": {
-          "line": 55,
-          "column": 60
-        },
-        "end": {
-          "line": 56,
-          "column": 86
-        }
-      },
-      "offendingCodeSnippet": "visitedSet[currentVertex.getKey()].lowDiscoveryTime = currentVertex.getNeighbors()",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 55",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/eulerian-path/eulerianPath.js",
-      "location": {
-        "start": {
-          "line": 78,
-          "column": 23
-        },
-        "end": {
-          "line": 78,
-          "column": 77
-        }
-      },
-      "offendingCodeSnippet": "[edgeToDelete] = currentEdges.filter((edge) => !bridges[edge.getKey()]);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 78",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -3151,7 +2958,7 @@
         }
       },
       "offendingCodeSnippet": "const nextVertices = Array(vertices.length).fill(null).map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -3162,7 +2969,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -3178,7 +2985,7 @@
         }
       },
       "offendingCodeSnippet": "const distances = Array(vertices.length).fill(null).map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -3188,170 +2995,8 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/kruskal/kruskal.js",
-      "location": {
-        "start": {
-          "line": 33,
-          "column": 22
-        },
-        "end": {
-          "line": 33,
-          "column": 79
-        }
-      },
-      "offendingCodeSnippet": "const sortedEdges = new QuickSort(sortingCallbacks).sort(graph.getAllEdges());",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 33",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/strongly-connected-components/__test__/stronglyConnectedComponents.test.js",
-      "location": {
-        "start": {
-          "line": 126,
-          "column": 11
-        },
-        "end": {
-          "line": 126,
-          "column": 64
-        }
-      },
-      "offendingCodeSnippet": "expect(components[0].map((vertex) => vertex.getKey()).sort()).toEqual(['A', 'B', 'C']);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 126",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
-      "location": {
-        "start": {
-          "line": 15,
-          "column": 21
-        },
-        "end": {
-          "line": 20,
-          "column": 8
-        }
-      },
-      "offendingCodeSnippet": "const visitedSet = currentPath.reduce((accumulator, vertex) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 15",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-PERF-01",
-      "ruleName": "Invariant Object Allocation in Iteration Scopes",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
-      "location": {
-        "start": {
-          "line": 16,
-          "column": 31
-        },
-        "end": {
-          "line": 16,
-          "column": 49
-        }
-      },
-      "offendingCodeSnippet": "const updatedAccumulator = { ...accumulator };",
-      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
-      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 95,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 16",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
-      "location": {
-        "start": {
-          "line": 23,
-          "column": 29
-        },
-        "end": {
-          "line": 25,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "const unvisitedNeighbors = startVertex.getNeighbors().filter((neighbor) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 23",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/graph/travelling-salesman/bfTravellingSalesman.js",
-      "location": {
-        "start": {
-          "line": 78,
-          "column": 28
-        },
-        "end": {
-          "line": 84,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "const allPossibleCycles = allPossiblePaths.filter((path) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 78",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -3367,66 +3012,12 @@
         }
       },
       "offendingCodeSnippet": ".map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
       "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 52",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/math/binary-floating-point/bitsToFloat.js",
-      "location": {
-        "start": {
-          "line": 68,
-          "column": 27
-        },
-        "end": {
-          "line": 74,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "const exponentUnbiased = exponentBits.reduce(",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 68",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/math/binary-floating-point/bitsToFloat.js",
-      "location": {
-        "start": {
-          "line": 79,
-          "column": 19
-        },
-        "end": {
-          "line": 85,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "const fraction = fractionBits.reduce(",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 79",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
@@ -3458,62 +3049,8 @@
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/math/horner-method/classicPolynome.js",
-      "location": {
-        "start": {
-          "line": 10,
-          "column": 9
-        },
-        "end": {
-          "line": 15,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "return coefficients.reverse().reduce(",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 10",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/math/horner-method/hornerMethod.js",
-      "location": {
-        "start": {
-          "line": 10,
-          "column": 9
-        },
-        "end": {
-          "line": 15,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "return coefficients.reduce(",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 10",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -3529,7 +3066,7 @@
         }
       },
       "offendingCodeSnippet": "const partitionMatrix = Array(number + 1).fill(null).map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -3539,62 +3076,8 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/ml/knn/kNN.js",
-      "location": {
-        "start": {
-          "line": 35,
-          "column": 19
-        },
-        "end": {
-          "line": 40,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "const kNearest = distances.sort((a, b) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 35",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sets/fisher-yates/__test__/fisherYates.test.js",
-      "location": {
-        "start": {
-          "line": 17,
-          "column": 11
-        },
-        "end": {
-          "line": 17,
-          "column": 37
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(shuffledArray)).toEqual(sortedArr);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 17",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -3610,7 +3093,7 @@
         }
       },
       "offendingCodeSnippet": "const knapsackMatrix = Array(numberOfRows).fill(null).map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -3620,143 +3103,8 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
-      "location": {
-        "start": {
-          "line": 15,
-          "column": 25
-        },
-        "end": {
-          "line": 27,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "this.possibleItems = new MergeSort({",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 15",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
-      "location": {
-        "start": {
-          "line": 31,
-          "column": 25
-        },
-        "end": {
-          "line": 43,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "this.possibleItems = new MergeSort({",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 31",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
-      "location": {
-        "start": {
-          "line": 47,
-          "column": 25
-        },
-        "end": {
-          "line": 59,
-          "column": 31
-        }
-      },
-      "offendingCodeSnippet": "this.possibleItems = new MergeSort({",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 47",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
-      "location": {
-        "start": {
-          "line": 184,
-          "column": 11
-        },
-        "end": {
-          "line": 186,
-          "column": 9
-        }
-      },
-      "offendingCodeSnippet": "return this.selectedItems.reduce((accumulator, item) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 184",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sets/knapsack-problem/Knapsack.js",
-      "location": {
-        "start": {
-          "line": 191,
-          "column": 11
-        },
-        "end": {
-          "line": 193,
-          "column": 9
-        }
-      },
-      "offendingCodeSnippet": "return this.selectedItems.reduce((accumulator, item) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 191",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -3772,7 +3120,7 @@
         }
       },
       "offendingCodeSnippet": "const lcsMatrix = Array(set2.length + 1).fill(null).map(() => Array(set1.length + 1).fill(null));",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -3783,7 +3131,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -3799,7 +3147,7 @@
         }
       },
       "offendingCodeSnippet": "const buckets = new Array(bucketsNum).fill(null).map(() => []);",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -3809,224 +3157,8 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/bucket-sort/BucketSort.js",
-      "location": {
-        "start": {
-          "line": 36,
-          "column": 17
-        },
-        "end": {
-          "line": 36,
-          "column": 49
-        }
-      },
-      "offendingCodeSnippet": "buckets[i] = new RadixSort().sort(buckets[i]);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 36",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/counting-sort/__test__/CountingSort.test.js",
-      "location": {
-        "start": {
-          "line": 35,
-          "column": 24
-        },
-        "end": {
-          "line": 35,
-          "column": 82
-        }
-      },
-      "offendingCodeSnippet": "const sortedArray = sorter.sort(notSortedArr, smallestElement, biggestElement);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 35",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/merge-sort/MergeSort.js",
-      "location": {
-        "start": {
-          "line": 19,
-          "column": 28
-        },
-        "end": {
-          "line": 19,
-          "column": 48
-        }
-      },
-      "offendingCodeSnippet": "const leftSortedArray = this.sort(leftArray);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 19",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/merge-sort/MergeSort.js",
-      "location": {
-        "start": {
-          "line": 20,
-          "column": 29
-        },
-        "end": {
-          "line": 20,
-          "column": 50
-        }
-      },
-      "offendingCodeSnippet": "const rightSortedArray = this.sort(rightArray);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 20",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/quick-sort/QuickSort.js",
-      "location": {
-        "start": {
-          "line": 42,
-          "column": 28
-        },
-        "end": {
-          "line": 42,
-          "column": 48
-        }
-      },
-      "offendingCodeSnippet": "const leftArraySorted = this.sort(leftArray);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 42",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/quick-sort/QuickSort.js",
-      "location": {
-        "start": {
-          "line": 43,
-          "column": 29
-        },
-        "end": {
-          "line": 43,
-          "column": 50
-        }
-      },
-      "offendingCodeSnippet": "const rightArraySorted = this.sort(rightArray);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 43",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/quick-sort/QuickSortInPlace.js",
-      "location": {
-        "start": {
-          "line": 72,
-          "column": 6
-        },
-        "end": {
-          "line": 72,
-          "column": 73
-        }
-      },
-      "offendingCodeSnippet": "this.sort(array, inputLowIndex, partitionIndex - 1, RECURSIVE_CALL);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 72",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/quick-sort/QuickSortInPlace.js",
-      "location": {
-        "start": {
-          "line": 73,
-          "column": 6
-        },
-        "end": {
-          "line": 73,
-          "column": 74
-        }
-      },
-      "offendingCodeSnippet": "this.sort(array, partitionIndex + 1, inputHighIndex, RECURSIVE_CALL);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 73",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -4042,7 +3174,7 @@
         }
       },
       "offendingCodeSnippet": "return new Array(numBuckets).fill(null).map(() => []);",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -4052,602 +3184,8 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/radix-sort/RadixSort.js",
-      "location": {
-        "start": {
-          "line": 26,
-          "column": 20
-        },
-        "end": {
-          "line": 28,
-          "column": 12
-        }
-      },
-      "offendingCodeSnippet": "sortedArray = buckets.reduce((acc, val) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 26",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/radix-sort/RadixSort.js",
-      "location": {
-        "start": {
-          "line": 119,
-          "column": 11
-        },
-        "end": {
-          "line": 121,
-          "column": 17
-        }
-      },
-      "offendingCodeSnippet": "return array.reduce((acc, val) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 119",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/algorithms/sorting/Sort.js",
-      "location": {
-        "start": {
-          "line": 12,
-          "column": 2
-        },
-        "end": {
-          "line": 15,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(originalCallbacks) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 12",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 12,
-          "column": 11
-        },
-        "end": {
-          "line": 12,
-          "column": 26
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort([])).toEqual([]);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 12",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 13,
-          "column": 11
-        },
-        "end": {
-          "line": 13,
-          "column": 27
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort([1])).toEqual([1]);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 13",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 14,
-          "column": 11
-        },
-        "end": {
-          "line": 14,
-          "column": 30
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort([1, 2])).toEqual([1, 2]);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 14",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 15,
-          "column": 11
-        },
-        "end": {
-          "line": 15,
-          "column": 30
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort([2, 1])).toEqual([1, 2]);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 15",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 16,
-          "column": 11
-        },
-        "end": {
-          "line": 16,
-          "column": 54
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort([3, 4, 2, 1, 0, 0, 4, 3, 4, 2])).toEqual([0, 0, 1, 2, 2, 3, 3, 4, 4, 4]);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 16",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 17,
-          "column": 11
-        },
-        "end": {
-          "line": 17,
-          "column": 33
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(sortedArr)).toEqual(sortedArr);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 17",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 18,
-          "column": 11
-        },
-        "end": {
-          "line": 18,
-          "column": 34
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(reverseArr)).toEqual(sortedArr);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 18",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 19,
-          "column": 11
-        },
-        "end": {
-          "line": 19,
-          "column": 36
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(notSortedArr)).toEqual(sortedArr);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 19",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 20,
-          "column": 11
-        },
-        "end": {
-          "line": 20,
-          "column": 32
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(equalArr)).toEqual(equalArr);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 20",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 25,
-          "column": 11
-        },
-        "end": {
-          "line": 25,
-          "column": 35
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(negativeArr)).toEqual(negativeArrSorted);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 25",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 40,
-          "column": 11
-        },
-        "end": {
-          "line": 40,
-          "column": 28
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort([''])).toEqual(['']);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 40",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 41,
-          "column": 11
-        },
-        "end": {
-          "line": 41,
-          "column": 29
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(['a'])).toEqual(['a']);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 41",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 42,
-          "column": 11
-        },
-        "end": {
-          "line": 42,
-          "column": 35
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(['aa', 'a'])).toEqual(['a', 'aa']);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 42",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 43,
-          "column": 11
-        },
-        "end": {
-          "line": 43,
-          "column": 50
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(['aa', 'q', 'bbbb', 'ccc'])).toEqual(['q', 'aa', 'ccc', 'bbbb']);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 43",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 44,
-          "column": 11
-        },
-        "end": {
-          "line": 44,
-          "column": 36
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(['aa', 'aa'])).toEqual(['aa', 'aa']);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 44",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 59,
-          "column": 11
-        },
-        "end": {
-          "line": 59,
-          "column": 41
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(['bb', 'aa', 'c'])).toEqual(['c', 'bb', 'aa']);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 59",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 60,
-          "column": 11
-        },
-        "end": {
-          "line": 60,
-          "column": 55
-        }
-      },
-      "offendingCodeSnippet": "expect(sorter.sort(['aa', 'q', 'a', 'bbbb', 'ccc'])).toEqual(['q', 'a', 'aa', 'ccc', 'bbbb']);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 60",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/SortTester.js",
-      "location": {
-        "start": {
-          "line": 68,
-          "column": 4
-        },
-        "end": {
-          "line": 68,
-          "column": 32
-        }
-      },
-      "offendingCodeSnippet": "sorter.sort(arrayToBeSorted);",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 68",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/sorting/__test__/Sort.test.js",
-      "location": {
-        "start": {
-          "line": 7,
-          "column": 6
-        },
-        "end": {
-          "line": 7,
-          "column": 19
-        }
-      },
-      "offendingCodeSnippet": "sorter.sort();",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 7",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -4663,7 +3201,7 @@
         }
       },
       "offendingCodeSnippet": "const distanceMatrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -4674,7 +3212,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -4690,7 +3228,7 @@
         }
       },
       "offendingCodeSnippet": "const substringMatrix = Array(s2.length + 1).fill(null).map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -4701,7 +3239,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -4717,7 +3255,7 @@
         }
       },
       "offendingCodeSnippet": "const matchMatrix = Array(string.length + 1).fill(null).map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -4728,7 +3266,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -4744,7 +3282,7 @@
         }
       },
       "offendingCodeSnippet": "const zArray = new Array(zString.length).fill(null).map(() => 0);",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -4755,7 +3293,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -4771,7 +3309,7 @@
         }
       },
       "offendingCodeSnippet": "const chessboard = Array(chessboardSize).fill(null).map(() => Array(chessboardSize).fill(0));",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -4781,35 +3319,8 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/algorithms/uncategorized/knight-tour/knightTour.js",
-      "location": {
-        "start": {
-          "line": 20,
-          "column": 9
-        },
-        "end": {
-          "line": 23,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "return possibleMoves.filter((move) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 20",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -4825,7 +3336,7 @@
         }
       },
       "offendingCodeSnippet": "const board = Array(height).fill(null).map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -4835,62 +3346,8 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/bloom-filter/BloomFilter.js",
-      "location": {
-        "start": {
-          "line": 5,
-          "column": 2
-        },
-        "end": {
-          "line": 10,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(size = 100) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/disjoint-set/DisjointSetAdhoc.js",
-      "location": {
-        "start": {
-          "line": 24,
-          "column": 2
-        },
-        "end": {
-          "line": 33,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(size) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 24",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -4906,7 +3363,7 @@
         }
       },
       "offendingCodeSnippet": "const adjacencyMatrix = Array(vertices.length).fill(null).map(() => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -4916,62 +3373,8 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/data-structures/graph/Graph.js",
-      "location": {
-        "start": {
-          "line": 136,
-          "column": 11
-        },
-        "end": {
-          "line": 138,
-          "column": 9
-        }
-      },
-      "offendingCodeSnippet": "return this.getAllEdges().reduce((weight, graphEdge) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 136",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/graph/GraphVertex.js",
-      "location": {
-        "start": {
-          "line": 7,
-          "column": 2
-        },
-        "end": {
-          "line": 28,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(value) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -4987,228 +3390,12 @@
         }
       },
       "offendingCodeSnippet": "this.buckets = Array(hashTableSize).fill(null).map(() => new LinkedList());",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
       "evidence": "Legacy text-heuristic pattern match: [ArrowFunctionExpression] at line 15",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/hash-table/HashTable.js",
-      "location": {
-        "start": {
-          "line": 13,
-          "column": 2
-        },
-        "end": {
-          "line": 19,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(hashTableSize = defaultHashTableSize) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 13",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/data-structures/hash-table/HashTable.js",
-      "location": {
-        "start": {
-          "line": 38,
-          "column": 17
-        },
-        "end": {
-          "line": 41,
-          "column": 5
-        }
-      },
-      "offendingCodeSnippet": "const hash = Array.from(key).reduce(",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 38",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "src/data-structures/hash-table/HashTable.js",
-      "location": {
-        "start": {
-          "line": 115,
-          "column": 11
-        },
-        "end": {
-          "line": 119,
-          "column": 10
-        }
-      },
-      "offendingCodeSnippet": "return this.buckets.reduce((values, bucket) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 115",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/heap/MaxHeapAdhoc.js",
-      "location": {
-        "start": {
-          "line": 8,
-          "column": 2
-        },
-        "end": {
-          "line": 11,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(heap = []) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 8",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/heap/MinHeapAdhoc.js",
-      "location": {
-        "start": {
-          "line": 8,
-          "column": 2
-        },
-        "end": {
-          "line": 11,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(heap = []) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 8",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/priority-queue/PriorityQueue.js",
-      "location": {
-        "start": {
-          "line": 7,
-          "column": 2
-        },
-        "end": {
-          "line": 17,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor() {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/tree/binary-search-tree/BinarySearchTreeNode.js",
-      "location": {
-        "start": {
-          "line": 9,
-          "column": 2
-        },
-        "end": {
-          "line": 15,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(value = null, compareFunction = undefined) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 9",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/tree/fenwick-tree/FenwickTree.js",
-      "location": {
-        "start": {
-          "line": 8,
-          "column": 2
-        },
-        "end": {
-          "line": 13,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(arraySize) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 8",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
@@ -5238,33 +3425,6 @@
       "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 1",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-ANG-07",
-      "ruleName": "Complex Logic in Angular Component Constructor",
-      "domain": "PERFORMANCE",
-      "concern": "ARCHITECTURE",
-      "severity": "MEDIUM",
-      "filePath": "src/data-structures/tree/segment-tree/SegmentTree.js",
-      "location": {
-        "start": {
-          "line": 9,
-          "column": 2
-        },
-        "end": {
-          "line": 18,
-          "column": 3
-        }
-      },
-      "offendingCodeSnippet": "constructor(inputArray, operation, operationFallback) {",
-      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
-      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
-      "confidenceScore": 80,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 9",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     }
   ]
 }

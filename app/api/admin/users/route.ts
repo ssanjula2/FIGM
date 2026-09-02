@@ -3,6 +3,8 @@ import { authorizeRole } from '../../../../src/auth/auth-middleware';
 import { UserRepository } from '../../../../src/engine/user-repository';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
+const ALLOWED_ROLES = new Set(['ADMIN', 'AUDITOR', 'DEVELOPER']);
+
 /** SEC-08: an admin listing every OTHER user's API key in plaintext broadens the blast radius of
  *  any single admin-account compromise to every user's key at once. A user views their OWN key in
  *  full via GET /api/profile (a different, self-service-only route this doesn't touch) -- admins
@@ -48,18 +50,29 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: 'userId is required' }, { status: 400 });
     }
 
+    // Explicit application-layer validation, not just the Postgres enum constraint the live DB
+    // happens to have -- the JSON-fallback storage provider has no equivalent DB-level constraint
+    // at all, and relying only on the DB meant a garbage value here previously surfaced as an
+    // opaque 500 (Postgres) or was silently persisted (JSON) rather than a clear 400.
+    if (role !== undefined && !ALLOWED_ROLES.has(role)) {
+      return NextResponse.json({ error: `role must be one of: ${[...ALLOWED_ROLES].join(', ')}` }, { status: 400 });
+    }
+
     if (role) {
       await UserRepository.updateUserRole(userId, role);
     }
 
     if (newPassword) {
-      await UserRepository.adminResetPassword(userId, newPassword);
+      const resetResult = await UserRepository.adminResetPassword(userId, newPassword);
+      if (!resetResult.success) {
+        return NextResponse.json({ error: resetResult.message, code: 'WEAK_PASSWORD' }, { status: 400 });
+      }
     }
 
-    await AuditLogger.logEvent('REGISTER', {
+    await AuditLogger.logEvent('RESET_PASSWORD', {
       userId: auth.user.userId,
       email: auth.user.email,
-      details: `Admin updated user ${userId} settings`,
+      details: `Admin updated user ${userId} settings (role: ${role ?? 'unchanged'}, password: ${newPassword ? 'reset' : 'unchanged'})`,
     });
 
     return NextResponse.json({ message: 'User updated successfully' });

@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useNotifications } from '../src/hooks/useNotifications';
 import { useGlobalSearch } from '../src/hooks/useGlobalSearch';
 
@@ -13,30 +14,88 @@ interface HeaderBarProps {
   onMenuToggle: () => void;
 }
 
+interface StoredUser {
+  fullName?: string;
+  email?: string;
+}
+
 export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: HeaderBarProps) {
-  const [framework, setFramework] = useState('Next.js');
+  const pathname = usePathname();
+  // Inside the admin/research workspace, the account control should land on the admin's own
+  // administrative profile (/admin/profile) rather than the normal-user /profile page it points to
+  // everywhere else -- see app/admin/profile/page.tsx and Phase 6's explicit separation.
+  const profileHref = pathname?.startsWith('/admin') ? '/admin/profile' : '/profile';
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
   const { isOpen: isSearchOpen, setIsOpen: setIsSearchOpen, query, setQuery, results, loading: searchLoading } = useGlobalSearch();
   const { records } = useScans();
+
+  const searchTriggerRef = useRef<HTMLDivElement>(null);
+  const searchDialogRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // The real signed-in user's identity for the profile control below -- previously this always
+  // rendered the literal text "LOGIN" regardless of who was actually signed in, even though the
+  // real name/email is written to localStorage by both auth pages at login/registration time (see
+  // app/auth/login/page.tsx, app/auth/register/page.tsx).
+  const [currentUser, setCurrentUser] = useState<StoredUser | null>(null);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('figm_user');
+      if (raw) setCurrentUser(JSON.parse(raw));
+    } catch {
+      // Corrupt/inaccessible localStorage -- fall back to the generic label below.
+    }
+  }, []);
+  const displayName = currentUser?.fullName || currentUser?.email || 'Account';
+  const displayInitial = displayName.trim().charAt(0).toUpperCase() || '?';
 
   const dynamicScore = records.length > 0
     ? Math.round(records.reduce((acc, s) => acc + (s.qualityScore || 90), 0) / records.length)
     : 90;
   const passed = dynamicScore >= 70;
 
-  // Escape closes the Cmd+K search modal -- the visible "esc" button only handled a mouse click,
-  // leaving keyboard-only users (who this modal's own hint text advertises "esc" to) with no way
-  // to dismiss it via the actual Escape key.
+  // Cmd+K search modal keyboard behavior: focus moves into the dialog on open (the input),
+  // Escape closes it, Tab/Shift+Tab cycle within the dialog's own focusable elements only (a
+  // proper focus trap -- aria-modal="true" alone does not actually prevent Tab from reaching
+  // content behind the dimmed backdrop), and focus returns to the search trigger on close.
   useEffect(() => {
     if (!isSearchOpen) return;
+
+    // Captured now, not read from the ref inside cleanup below -- by the time cleanup runs,
+    // `searchTriggerRef.current` could in principle point at a different node than the one that
+    // was actually focused when this effect opened the dialog.
+    const triggerEl = searchTriggerRef.current;
+    searchInputRef.current?.focus();
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsSearchOpen(false);
+        return;
+      }
+
+      if (e.key !== 'Tab' || !searchDialogRef.current) return;
+      const focusable = searchDialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     };
+
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      triggerEl?.focus();
+    };
   }, [isSearchOpen, setIsSearchOpen]);
 
   return (
@@ -72,6 +131,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
 
         {/* Search Bar Trigger */}
         <div
+          ref={searchTriggerRef}
           role="button"
           tabIndex={0}
           aria-label="Open global search"
@@ -121,33 +181,6 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: passed ? '#34d399' : '#f87171', boxShadow: passed ? '0 0 10px #34d399' : '0 0 10px #f87171' }}></span>
             <span>🛡️ Quality Score: <b>{dynamicScore}% ({passed ? 'PASSED ✅' : 'FAILED ❌'})</b></span>
           </Link>
-
-          {/* Framework Selector */}
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            <select
-              value={framework}
-              onChange={(e) => setFramework(e.target.value)}
-              aria-label="Framework filter"
-              style={{
-                padding: '7px 32px 7px 16px',
-                borderRadius: '20px',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                background: 'rgba(15, 23, 42, 0.6)',
-                color: '#38bdf8',
-                fontSize: '13px',
-                fontWeight: 700,
-                cursor: 'pointer',
-                outline: 'none',
-                appearance: 'none',
-                backdropFilter: 'blur(10px)',
-              }}
-            >
-              <option value="Next.js" style={{ background: '#090d16', color: '#f8fafc' }}>• Next.js</option>
-              <option value="React" style={{ background: '#090d16', color: '#f8fafc' }}>• React</option>
-              <option value="Angular" style={{ background: '#090d16', color: '#f8fafc' }}>• Angular</option>
-            </select>
-            <span style={{ position: 'absolute', right: '12px', pointerEvents: 'none', fontSize: '10px', color: '#38bdf8' }}>⌄</span>
-          </div>
 
           {/* Theme Button */}
           <Link
@@ -307,7 +340,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
           </div>
 
           {/* User Profile */}
-          <Link href="/profile" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Link href={profileHref} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div
               style={{
                 width: '38px',
@@ -323,11 +356,11 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                 boxShadow: '0 0 12px rgba(56, 189, 248, 0.4)',
               }}
             >
-              L
+              {displayInitial}
             </div>
             <div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#f8fafc', lineHeight: 1.2 }}>
-                LOGIN
+                {displayName}
               </div>
             </div>
           </Link>
@@ -352,6 +385,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
           }}
         >
           <div
+            ref={searchDialogRef}
             role="dialog"
             aria-modal="true"
             aria-label="Global search"
@@ -370,8 +404,8 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
             <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span style={{ fontSize: '18px', color: '#7c8ba6' }}>🔍</span>
               <input
+                ref={searchInputRef}
                 type="text"
-                autoFocus
                 placeholder="Type to search projects, reports, rules, users..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -401,7 +435,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
 
               {!searchLoading && query.trim() === '' && (
                 <div style={{ color: '#7c8ba6', fontSize: '13px', textAlign: 'center', padding: '20px' }}>
-                  Search across Projects, Scan Reports, 25 FIGM Guidelines, Repositories, and System Users.
+                  Search across Projects, Scan Reports, 50 FIGM Guidelines, Repositories, and System Users.
                 </div>
               )}
 

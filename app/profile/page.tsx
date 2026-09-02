@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSettings } from '../../src/hooks/useSettings';
+import PasswordField from '../components/PasswordField';
 
 interface UserProfileData {
   user: {
@@ -42,6 +43,48 @@ export default function ProfilePage() {
 
   // Delete modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const deleteModalRef = useRef<HTMLDivElement>(null);
+  const deleteTriggerRef = useRef<HTMLButtonElement>(null);
+  const deleteCancelRef = useRef<HTMLButtonElement>(null);
+
+  // Same focus-trap/Escape/focus-restore pattern as the Cmd+K modal (app/HeaderBar.tsx) --
+  // previously this dialog had no dialog semantics at all: no role, no focus trap, no Escape
+  // handling, and opening it left focus wherever it already was instead of moving into the modal.
+  useEffect(() => {
+    if (!isDeleteModalOpen) return;
+
+    // Captured now, not read from the ref inside cleanup below -- by the time cleanup runs,
+    // `deleteTriggerRef.current` could in principle point at a different node than the one that
+    // was actually focused when this effect opened the dialog (same rationale as HeaderBar.tsx's
+    // Cmd+K modal, which this pattern mirrors).
+    const triggerEl = deleteTriggerRef.current;
+    deleteCancelRef.current?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsDeleteModalOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab' || !deleteModalRef.current) return;
+      const focusable = deleteModalRef.current.querySelectorAll<HTMLElement>('button:not([disabled])');
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      triggerEl?.focus();
+    };
+  }, [isDeleteModalOpen]);
 
   const fetchProfile = async () => {
     try {
@@ -178,6 +221,19 @@ export default function ProfilePage() {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '20px' }}>
+        <h1 style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8', letterSpacing: '1px', textTransform: 'uppercase', margin: 0 }}>
+          👤 My Profile
+        </h1>
+        <p style={{ fontSize: '13px', color: '#7c8ba6', margin: '4px 0 0 0' }}>
+          Manage your personal account and activity.
+        </p>
+      </div>
+
+      {/* Note: the account-name heading below is intentionally a level-two heading, not a second
+          top-level one -- "My Profile" above is this page's single top-level heading; the name is
+          a subsection of it. */}
+
       {/* Header Avatar Banner */}
       <div
         style={{
@@ -215,9 +271,9 @@ export default function ProfilePage() {
 
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <h1 style={{ fontSize: '24px', fontWeight: 900, color: '#f8fafc', margin: 0 }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 900, color: '#f8fafc', margin: 0 }}>
                 {user.fullName}
-              </h1>
+              </h2>
               <span
                 style={{
                   padding: '4px 10px',
@@ -300,8 +356,12 @@ export default function ProfilePage() {
           Use your unique API Key for automated CLI inspections and CI/CD pipeline integration.
         </p>
 
+        <label htmlFor="profile-api-key" style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>
+          Your API Key
+        </label>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           <input
+            id="profile-api-key"
             type={showApiKey ? 'text' : 'password'}
             readOnly
             value={user.apiKey || 'No API key generated'}
@@ -354,38 +414,32 @@ export default function ProfilePage() {
         )}
 
         <form onSubmit={handleChangePassword} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Current Password</label>
-            <input
-              type="password"
-              required
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#f8fafc', fontSize: '13px', boxSizing: 'border-box' }}
-            />
-          </div>
+          <PasswordField
+            id="profile-current-password"
+            label="Current Password"
+            useInputFieldClass={false}
+            autoComplete="current-password"
+            value={currentPassword}
+            onChange={setCurrentPassword}
+          />
 
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>New Password</label>
-            <input
-              type="password"
-              required
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#f8fafc', fontSize: '13px', boxSizing: 'border-box' }}
-            />
-          </div>
+          <PasswordField
+            id="profile-new-password"
+            label="New Password"
+            useInputFieldClass={false}
+            autoComplete="new-password"
+            value={newPassword}
+            onChange={setNewPassword}
+          />
 
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Confirm New Password</label>
-            <input
-              type="password"
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#f8fafc', fontSize: '13px', boxSizing: 'border-box' }}
-            />
-          </div>
+          <PasswordField
+            id="profile-confirm-password"
+            label="Confirm New Password"
+            useInputFieldClass={false}
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+          />
 
           <div style={{ gridColumn: '1 / -1', marginTop: '8px' }}>
             <button
@@ -407,8 +461,9 @@ export default function ProfilePage() {
 
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Theme</label>
+            <label htmlFor="profile-theme" style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Theme</label>
             <select
+              id="profile-theme"
               value={settings.theme}
               onChange={(e) => updateSettings({ theme: e.target.value as any })}
               style={{ padding: '10px 16px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#38bdf8', fontWeight: 700, fontSize: '13px' }}
@@ -431,6 +486,7 @@ export default function ProfilePage() {
         </p>
 
         <button
+          ref={deleteTriggerRef}
           onClick={() => setIsDeleteModalOpen(true)}
           style={{ padding: '10px 18px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #ef4444', color: '#f87171', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}
         >
@@ -440,15 +496,27 @@ export default function ProfilePage() {
 
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(3, 7, 18, 0.85)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
-          <div style={{ background: '#0f172a', border: '1px solid #ef4444', borderRadius: '16px', padding: '32px', maxWidth: '440px', width: '100%', textAlign: 'center' }}>
-            <div style={{ fontSize: '40px', marginBottom: '12px' }}>⚠️</div>
-            <h3 style={{ fontSize: '20px', fontWeight: 900, color: '#f8fafc', margin: 0 }}>Are you absolutely sure?</h3>
+        <div
+          role="presentation"
+          onClick={() => setIsDeleteModalOpen(false)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(3, 7, 18, 0.85)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}
+        >
+          <div
+            ref={deleteModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-account-modal-title"
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: '#0f172a', border: '1px solid #ef4444', borderRadius: '16px', padding: '32px', maxWidth: '440px', width: '100%', textAlign: 'center' }}
+          >
+            <div style={{ fontSize: '40px', marginBottom: '12px' }} aria-hidden="true">⚠️</div>
+            <h3 id="delete-account-modal-title" style={{ fontSize: '20px', fontWeight: 900, color: '#f8fafc', margin: 0 }}>Are you absolutely sure?</h3>
             <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '8px', lineHeight: 1.5 }}>
               This action cannot be undone. All your project records, scan history, settings, and API keys will be deleted immediately.
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '24px' }}>
               <button
+                ref={deleteCancelRef}
                 onClick={() => setIsDeleteModalOpen(false)}
                 style={{ padding: '10px 18px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.1)', background: 'transparent', color: '#94a3b8', fontWeight: 600, cursor: 'pointer' }}
               >

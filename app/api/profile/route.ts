@@ -25,6 +25,7 @@ export async function GET(request: Request) {
       apiKey: user.apiKey,
       avatarUrl: user.avatarUrl,
       createdAt: user.createdAt,
+      lastLoginAt: user.lastLoginAt,
     },
     stats,
     settings,
@@ -86,6 +87,7 @@ export async function PATCH(request: Request) {
             apiKey: updatedUser.apiKey,
             avatarUrl: updatedUser.avatarUrl,
             createdAt: updatedUser.createdAt,
+            lastLoginAt: updatedUser.lastLoginAt,
           }
         : undefined,
     });
@@ -97,18 +99,25 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
   const auth = authenticateUser(request);
-  const userId = auth.user?.userId;
-  if (!userId) {
+  if (!auth.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const userId = auth.user.userId;
 
   const success = await UserRepository.deleteAccount(userId);
   if (!success) {
     return NextResponse.json({ error: 'Failed to delete account' }, { status: 500 });
   }
 
+  // userId is deliberately omitted here (email is kept for traceability): AuditLog.userId is a
+  // real foreign key to User (nullable, ON DELETE SET NULL -- see prisma/schema.prisma). That
+  // cascade only rewrites rows that already existed at delete time; it does nothing for a NEW row
+  // inserted afterward. Referencing the just-deleted userId here has no matching User to satisfy
+  // the constraint, so on the real Postgres backend this INSERT always failed with a foreign-key
+  // violation, turning a successful account deletion into a reported 500 (silently masked on the
+  // JSON fallback backend, which doesn't enforce the constraint -- why the existing test suite,
+  // which runs against JSON, never caught it). Confirmed live against Postgres.
   await AuditLogger.logEvent('LOGOUT', {
-    userId,
     email: auth.user.email,
     details: 'User account deleted',
   });

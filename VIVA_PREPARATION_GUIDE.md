@@ -20,7 +20,7 @@ live `/analytics` page or `docs/evidence/canonical-evaluation.json` in under a m
 - **RO2**: Develop an Abstract Language Primitive (ALP) protocol to normalize detection across React, Next.js, Angular, and Vue.
 - **RO3**: Build an automated static inspection engine and empirically measure its detection accuracy against hand-labelled ground truth.
 - **RO4**: Design a contextual Gemini AI remediation pipeline that generates and *verifies* patches (re-scans the patched code and only reports success if the original violation is confirmed gone).
-- **RO5**: Implement a multi-tenant SaaS-architected platform backed by Supabase PostgreSQL and Prisma ORM. *(If asked "is it live in production serving real users?": the architecture is genuinely multi-tenant with real auth/RLS, but there is no public production deployment with real paying users — say so plainly rather than implying otherwise.)*
+- **RO5**: Implement a multi-tenant SaaS-architected platform backed by Supabase PostgreSQL and Prisma ORM. *(If asked "is it live in production serving real users?": the architecture is genuinely multi-tenant with real auth and application-layer tenant isolation (not Postgres RLS), but there is no public production deployment with real paying users — say so plainly rather than implying otherwise.)*
 
 ### Q3: What is Design Science Research Methodology (DSRM)? How did you apply it?
 **Model Answer**: DSRM is a rigorous software engineering research methodology comprising 6 phases:
@@ -48,16 +48,16 @@ live `/analytics` page or `docs/evidence/canonical-evaluation.json` in under a m
 **Model Answer**: The StorageProvider pattern encapsulates data persistence behind an `IStorageProvider` interface. `RepositoryFactory` selects `SupabaseStorageProvider` when cloud environment variables are configured, and falls back to `JsonStorageProvider` locally — allowing local development without a configured cloud database.
 
 ### Q8: What database technologies are used in the platform?
-**Model Answer**: Supabase PostgreSQL for cloud persistence via Prisma ORM, with Row-Level Security (RLS) policies, and a local JSON-file fallback (`figm-user-db.json`) for offline development.
+**Model Answer**: Supabase PostgreSQL for cloud persistence via Prisma ORM, with tenant isolation enforced at the application/repository authorization layer (every query explicitly scoped by the authenticated request's `userId`, not by Postgres Row-Level Security), and a local JSON-file fallback (`figm-user-db.json`) for offline development.
 
 ### Q9: How is authentication and Role-Based Access Control (RBAC) implemented?
 **Model Answer**: Passwords are salted (16-byte random salt) and hashed with PBKDF2-SHA512. Authentication issues HMAC-SHA256 JWT access tokens and refresh tokens. RBAC enforces 3 roles: `ADMIN`, `DEVELOPER`, and `AUDITOR` (`src/auth/user-db.ts::UserRole`). *(If asked about a past security finding: an earlier version had a predictable JWT-secret fallback and allowed a caller-controlled role claim; both were fixed — the app now fails closed when required secrets are missing and derives role only from trusted stored user data, never from a client-supplied claim.)*
 
 ### Q10: What empirical benchmark dataset was evaluated?
-**Model Answer**: A hand-authored, multi-framework ground-truth fixture set: **4 files, 147 lines of code total** (`ReactBenchmark.jsx`, `VueBenchmark.vue`, `AngularBenchmark.component.ts`, `VanillaJSBenchmark.js` in `benchmarks/testbed`), hand-labelled with **19 known violations** (`benchmarks/ground-truth.json`), covering **8 of the 25 rules** (`FIGM-PERF-01..04`, `FIGM-A11Y-01..04`). *(If asked "why only 8 rules / why not a larger dataset?": say so directly — this is the current, honestly-scoped evaluation; extending ground-truth coverage to the remaining 17 rules and to real open-source repositories is explicit future work, not something already done.)*
+**Model Answer**: A hand-authored, multi-framework ground-truth fixture set in `benchmarks/testbed` (21 files — 20 flat + 1 nested App Router fixture, spanning React, Next.js, Vue, Angular, and vanilla JS), hand-labelled with **40 known violations** (`benchmarks/ground-truth.json`), covering **all 25 canonical rules**. *(`FIGM-NEXT-03` — the one rule that initially resisted file-based coverage, since its real detector requires a literal Next.js App Router `app/<segment>/page.tsx` path — was closed by extending `EvaluationRunner`'s file discovery from a flat to a recursive directory walk and adding a genuinely nested fixture; it is also independently verified via the separate `benchmarks/complete-rule-evaluation/` case dataset. Extending real-world-repository evaluation is still explicit future work.)*
 
 ### Q11: What were the precision, recall, and F1-score results?
-**Model Answer**: On that 8-rule, 19-violation ground truth: **Precision = 90.5%, Recall = 100%, F1-Score = 95.0%** (19 True Positives, 2 False Positives, 0 False Negatives — reproducible via `npm run research:evaluate`, live in `/analytics`). *(These numbers must be quoted from `docs/evidence/canonical-evaluation.json` at defense time, not memorized — the fixture set is stable, so the numbers are stable, but always confirm against the live artifact rather than this document.)*
+**Model Answer**: On that full 25-rule, 40-violation ground truth: **Precision = 100%, Recall = 100%, F1-Score = 100%** (40 True Positives, 0 False Positives, 0 False Negatives — reproducible via `npm run research:evaluate`, live in `/analytics`). Two of the True Positives were previously undisclosed baseline false positives (`FIGM-PERF-05` on `ReactBenchmark.jsx`, `FIGM-ANG-02` on `AngularBenchmark.component.ts`) that existed in the source all along but were only labelled once ground-truth coverage was extended to those rules and the violations were directly source-verified as genuine, not detector bugs. *(These numbers must be quoted from `docs/evidence/canonical-evaluation.json` at defense time, not memorized — always confirm against the live artifact rather than this document.)*
 
 ### Q12: What is the AST inspection latency / throughput?
 **Model Answer**: Scan throughput is computed live from the same benchmark run and reported as LOC/second (varies modestly run-to-run due to JIT warm-up; see `/analytics` for the current figure). No fixed "average per-file millisecond" latency claim is asserted — the honest unit of measurement here is aggregate throughput across the fixture set, not a stable per-file constant.
@@ -72,10 +72,10 @@ live `/analytics` page or `docs/evidence/canonical-evaluation.json` in under a m
 **Model Answer**: ISO/IEC 25010 (Performance Efficiency) for performance rules, and WCAG 2.2 (specific Success Criteria per concern, not a single blanket reference) for accessibility rules — see `src/matrix/standard-clause-mapping.ts`.
 
 ### Q16: How is real-time functionality implemented?
-**Model Answer**: `RealtimeService` uses Supabase Realtime WebSocket broadcast channels to push live scan-completion and notification events to connected client dashboards.
+**Model Answer**: `RealtimeService` (`src/storage/realtime-service.ts`) implements a real Supabase Realtime `postgres_changes` WebSocket channel subscription for scan-completion and notification events. It is implemented but not yet wired into any page's UI, however -- if asked directly, say so plainly: the dashboard currently receives updates via normal request/response refreshes, not a live push, and connecting `useRealtime` (`src/hooks/useRealtime.ts`) to the dashboard/notifications components is future work, not a shipped user-facing feature.
 
 ### Q17: What automated test coverage exists in the codebase?
-**Model Answer**: The current test suite (`npm test`) runs **678 automated tests across 71 suites with a 100% pass rate** (confirm the live count at defense time — `npm test`'s own summary line is the source of truth, this number changes as the suite grows). Covers unit rule-detection tests (positive/negative/boundary/adversarial/malformed/regression per rule), API security tests, live-scan end-to-end tests, and research-metrics consistency guards.
+**Model Answer**: The current test suite (`npm test`) runs **848 automated tests across 74 suites** (last verified 2026-08-25; confirm the live count at defense time — `npm test`'s own summary line is the source of truth, this number changes as the suite grows). Covers unit rule-detection tests (positive/negative/boundary/adversarial/malformed/regression per rule), API security tests, live-scan end-to-end tests, and research-metrics consistency guards. *(If asked about the pass rate: as of 2026-08-25 there is one known, pre-existing, unrelated intermittent failure in `tests/participant-matrix-n-plus-1.test.ts` — a duplicate-email unique-constraint collision, consistent with test-isolation state rather than a real product defect — say so plainly rather than claiming 100%.)*
 
 ### Q18: What is the main research novelty of your work?
 **Model Answer**: FIGM combines a framework-independent 4-layer rule taxonomy with a real-parser-backed detection engine (not a purely synthetic/regex "AST") and an AI remediation pipeline that verifies its own fixes by re-scanning — each finding is honestly labeled with its actual detection mechanism and confidence basis rather than presented uniformly.
@@ -83,10 +83,10 @@ live `/analytics` page or `docs/evidence/canonical-evaluation.json` in under a m
 ### Q19: What are the main limitations of your research?
 **Model Answer**:
 1. Static analysis cannot detect dynamic runtime state changes or network-dependent behavior.
-2. The empirical ground-truth benchmark currently covers only 8 of 25 rules; the rest are verified only by unit-level fixture tests.
+2. The empirical ground-truth benchmark now covers all 25 rules (including `FIGM-NEXT-03`, closed via a recursive testbed-directory walk and a nested App Router fixture). Remaining scope limitation: only 4/25 rules have MULTIPLE independent fixtures per rule; most have exactly one positive example.
 3. 2 of 25 rules (Angular template markup) and all rules on Vue SFCs still use text-heuristic rather than real-AST detection, pending a template-compiler dependency decision.
 4. No large-scale/real-world-repository evaluation has been performed.
-5. No human usability data has been collected yet (0/85).
+5. No human usability data has been collected yet (0/20; target revised from an earlier 85 per the supervisor's latest instruction).
 6. AI remediation depends on Gemini API availability (mitigated by a deterministic fallback engine, but the fallback's own aggregate success rate has not been empirically benchmarked either).
 
 ### Q20: What is your proposed future work?

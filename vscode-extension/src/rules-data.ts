@@ -47,11 +47,11 @@ export const FIGM_RULES: FIGMRuleDefinition[] = [
   },
   {
     ruleId: 'FIGM-PERF-05',
-    ruleName: 'Inline Anonymous Callbacks in Render Loops',
+    ruleName: 'Inline Anonymous Callbacks in Render Scope',
     domain: 'PERFORMANCE',
     concern: 'INVARIANT_ALLOCATIONS',
     severity: 'MEDIUM',
-    description: 'Inline arrow functions or closures passed to JSX props inside render loops re-instantiate callbacks every cycle.',
+    description: 'Inline arrow functions or closures passed to JSX props in render scope -- including but not limited to render loops -- re-instantiate callbacks every render.',
     remediation: 'Wrap event callbacks in React.useCallback or extract them outside the render loop.'
   },
   {

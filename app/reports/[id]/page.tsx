@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { DBScanRecord } from '../../../src/auth/user-db';
 import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
+import { calculateQualityScore } from '../../../src/engine/quality-score';
 
 export default function ReportViewerPage({ params }: { params: { id: string } }) {
   const [record, setRecord] = useState<DBScanRecord | null>(null);
@@ -74,17 +75,15 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
     );
   }
 
-  // Calculate domain breakdown
+  // Calculate domain breakdown. Uses the same canonical severity-weighted formula as the live
+  // scan / dashboard / VS Code extension (src/engine/quality-score.ts) -- not an independent,
+  // ad-hoc per-domain multiplier -- so this can never disagree with those. Only PERFORMANCE and
+  // ACCESSIBILITY exist as real rule domains in the current 50-rule taxonomy; there is no rule
+  // domain for "security" or "maintainability", so those tiles were removed rather than always
+  // rendering a fabricated 100% (diagnostics.filter(d => d.domain === 'SECURITY') is always empty).
   const diagnostics = record.diagnostics || [];
-  const perfCount = diagnostics.filter((d: any) => d.domain === 'PERFORMANCE').length;
-  const a11yCount = diagnostics.filter((d: any) => d.domain === 'ACCESSIBILITY').length;
-  const secCount = diagnostics.filter((d: any) => d.domain === 'SECURITY').length;
-  const maintCount = diagnostics.filter((d: any) => d.domain === 'MAINTAINABILITY').length;
-
-  const perfScore = Math.max(0, 100 - perfCount * 12);
-  const a11yScore = Math.max(0, 100 - a11yCount * 15);
-  const secScore = Math.max(0, 100 - secCount * 20);
-  const maintScore = Math.max(0, 100 - maintCount * 10);
+  const perfScore = calculateQualityScore(diagnostics.filter((d: any) => d.domain === 'PERFORMANCE'));
+  const a11yScore = calculateQualityScore(diagnostics.filter((d: any) => d.domain === 'ACCESSIBILITY'));
 
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
@@ -198,25 +197,9 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
             </div>
           </div>
 
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '6px' }}>
-              <span style={{ color: '#22c55e' }}>🛡️ Security</span>
-              <span style={{ color: '#f8fafc' }}>{secScore}%</span>
-            </div>
-            <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ width: `${secScore}%`, height: '100%', background: '#22c55e', borderRadius: '4px' }} />
-            </div>
-          </div>
-
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '6px' }}>
-              <span style={{ color: '#f59e0b' }}>🔧 Maintainability</span>
-              <span style={{ color: '#f8fafc' }}>{maintScore}%</span>
-            </div>
-            <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ width: `${maintScore}%`, height: '100%', background: '#f59e0b', borderRadius: '4px' }} />
-            </div>
-          </div>
+        </div>
+        <div style={{ fontSize: '11px', color: '#7c8ba6', marginTop: '14px' }}>
+          Security and Maintainability are not scored here -- the current 50-rule FIGM taxonomy has no rule domain for either, so no real data exists to compute a score from.
         </div>
       </div>
 
@@ -224,7 +207,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
       <div style={{ display: 'flex', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '24px', gap: '24px' }}>
         {[
           { id: 'DIAGNOSTICS', label: `Diagnostics (${diagnostics.length})` },
-          { id: 'AI_FIXES', label: `AI Remediation Patches (${record.aiFixCount})` },
+          { id: 'AI_FIXES', label: `Remediation Guidance (${record.aiFixCount})` },
           { id: 'TIMELINE', label: 'Scan Pipeline Timeline' },
           { id: 'METRICS', label: 'ISO/IEC Standards & References' },
         ].map((tab) => (
@@ -335,9 +318,18 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
         </div>
       )}
 
-      {/* Tab 2: AI Remediation Patches */}
+      {/* Tab 2: Remediation Guidance. This is a saved historical report -- the full original
+          source file is never persisted with a scan record (only diagnostics + short code
+          snippets are), so there is no source here to actually patch and re-verify. Applying and
+          verifying a real AI/template fix (AIRemediationPipeline) only happens on the Live Scan
+          page, where the full source is in memory. This tab must never claim to apply anything;
+          it only shows the same remediation guidance already computed at scan time. */}
       {activeTab === 'AI_FIXES' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ fontSize: '12px', color: '#94a3b8', background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '8px', padding: '12px 16px' }}>
+            This report is read-only. To generate and apply a verified AI or template fix, re-scan this file on{' '}
+            <Link href="/live-scan" style={{ color: '#38bdf8', fontWeight: 700 }}>Live Scan</Link>.
+          </div>
           {diagnostics.map((d: any, idx: number) => (
             <div
               key={idx}
@@ -349,35 +341,19 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
                 padding: '24px',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+              <div style={{ marginBottom: '14px' }}>
                 <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#a855f7', margin: 0 }}>
-                  🤖 AI Automated Remediation Patch #{idx + 1} — [{d.ruleId}]
+                  Remediation Guidance #{idx + 1} — [{d.ruleId}]
                 </h4>
-                <button
-                  onClick={() => alert(`Applied patch for [${d.ruleId}] to codebase workspace.`)}
-                  style={{
-                    padding: '6px 14px',
-                    borderRadius: '6px',
-                    background: 'linear-gradient(135deg, #a855f7, #2563eb)',
-                    color: '#fff',
-                    border: 'none',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                  }}
-                >
-                  Apply Patch
-                </button>
               </div>
 
               <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '10px' }}>
                 Rule: <strong>{d.ruleName}</strong> &bull; Target: Line {d.location?.start?.line || 1}
               </div>
 
-              {/* Diff Preview */}
               <div style={{ background: '#090d16', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', padding: '14px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px' }}>
                 <div style={{ color: '#ef4444', marginBottom: '4px' }}>- {d.offendingCodeSnippet || 'Original code'}</div>
-                <div style={{ color: '#22c55e' }}>+ {d.remediation || 'Optimized FIGM implementation'}</div>
+                <div style={{ color: '#94a3b8' }}>{d.remediation || 'No remediation guidance available.'}</div>
               </div>
             </div>
           ))}

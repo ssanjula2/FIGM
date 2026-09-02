@@ -3,6 +3,7 @@ import { ScanRepository } from '../../../src/engine/scan-repository';
 import { ExportService } from '../../../src/engine/export-service';
 import { NotificationRepository } from '../../../src/engine/notification-repository';
 import { authenticateUser } from '../../../src/auth/auth-middleware';
+import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 
 export async function POST(request: Request) {
   try {
@@ -11,6 +12,13 @@ export async function POST(request: Request) {
       return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const userId = auth.user.userId;
+
+    // Every request generates real report content (PDF/CSV/Markdown/JSON) and writes a
+    // notification row -- an authenticated account could otherwise hammer this to force
+    // unlimited generation + DB writes. Same checkRateLimit/getClientIp pattern used by every
+    // other write-triggering auth route in this codebase (see export-dissertation, 5/min).
+    const rateLimitError = await checkRateLimit(getClientIp(request), 10, 60000);
+    if (rateLimitError) return rateLimitError;
 
     const body = await request.json();
     const { scanId, format } = body;

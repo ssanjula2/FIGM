@@ -1,18 +1,18 @@
 /**
  * GET /api/research-metrics
  *
- * Serves LIVE research metrics derived directly from:
- *   - benchmarks/eval-summary.json  (automated benchmark run)
- *   - Dissertation references: IS303.2 Repeat Coursework 2025 (A P H D S Sanjula, 28256)
- *
- * NO values are hardcoded here — everything is read at request time from the
- * canonical evaluation JSON so that the UI always reflects the actual test output.
+ * Serves research metrics and metadata:
+ *   - Empirical evaluation metrics are loaded dynamically at request time from canonical
+ *     evaluation artifacts (benchmarks/eval-summary.json, research/analysis/usability-results.json).
+ *   - Research metadata, questions, objectives, and bibliographic references are declared locally.
  */
 
 import { NextResponse } from 'next/server';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
+import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../../../src/research/research-config';
+import { AIProviderSelector } from '../../../src/ai/ai-provider-selector';
 import type { ProcessedUsabilityReport } from '../../../scripts/import-user-study';
 
 // GET() never reads `request`, so Next.js treats this as static-eligible and executes it once at
@@ -216,11 +216,12 @@ export async function GET() {
   }
 
   // Planned sample size and actual collected count are kept as two distinct fields end-to-end --
-  // never conflated. `targetParticipants` falls back to the pipeline's own default (85, matching
-  // scripts/import-user-study.ts's TARGET_SAMPLE_SIZE) only when the canonical file doesn't exist
-  // yet at all (e.g. a fresh checkout before the import script has ever been run); once it exists,
-  // its own recorded target is authoritative, not a second hardcoded literal here.
-  const targetParticipants = usabilityReport?.provenance.targetSampleSize ?? 85;
+  // never conflated. `targetParticipants` falls back to the single canonical constant
+  // (src/research/research-config.ts's HUMAN_STUDY_TARGET_PARTICIPANTS, also what
+  // scripts/import-user-study.ts writes into targetSampleSize) only when the canonical file
+  // doesn't exist yet at all (e.g. a fresh checkout before the import script has ever been run);
+  // once it exists, its own recorded target is authoritative, not a second hardcoded literal here.
+  const targetParticipants = usabilityReport?.provenance.targetSampleSize ?? HUMAN_STUDY_TARGET_PARTICIPANTS;
   const humanParticipants = usabilityReport?.provenance.validParticipantCount ?? 0;
   const isRealHumanData = usabilityReport?.provenance.isRealHumanData ?? false;
 
@@ -262,7 +263,7 @@ export async function GET() {
             truePositives: overall?.truePositives ?? null,
             falsePositives: overall?.falsePositives ?? null,
             falseNegatives: overall?.falseNegatives ?? null,
-            // Explicit rule-coverage scope: never let a UI consumer imply "all 25 rules" from
+            // Explicit rule-coverage scope: never let a UI consumer imply "all 50 rules" from
             // these Precision/Recall/F1 figures. See src/eval/evaluation-runner.ts's
             // RuleCoverageProvenance -- derived from benchmarks/ground-truth.json's actual
             // contents, not a hardcoded literal.
@@ -278,12 +279,24 @@ export async function GET() {
         totalGuidelineRules: TOTAL_RULE_COUNT,
         totalASTPredicates: TOTAL_RULE_COUNT,
         supportedFrameworks: ['React (JSX/TSX)', 'Next.js App Router', 'Angular Templates', 'Vue 3 SFCs (.vue)', 'Generic JavaScript/TypeScript'],
-        aiRemediationModel: 'Gemini 2.5 Flash',
+        aiRemediationModel: (() => {
+          const activeProvider = AIProviderSelector.getActiveProvider();
+          if (activeProvider.providerName === 'OLLAMA') {
+            return `${process.env.OLLAMA_MODEL || 'qwen2.5-coder:7b'} (local Ollama)`;
+          }
+          if (activeProvider.providerName === 'CLAUDE') {
+            return process.env.ANTHROPIC_MODEL || 'Claude Opus 5';
+          }
+          if (activeProvider.providerName === 'GEMINI') {
+            return process.env.GEMINI_MODEL || 'gemini-3.6-flash';
+          }
+          return 'None configured (Set OLLAMA_BASE_URL/OLLAMA_MODEL, ANTHROPIC_API_KEY, or GEMINI_API_KEY)';
+        })(),
         evaluationDataset: {
-          description: '4 hand-authored, framework-tagged fixture files (React JSX, Vue SFC, Angular template, generic ESTree/vanilla JS)',
-          scope: 'React, Vue, Angular, and framework-agnostic (vanilla JS) SPA code patterns — benchmarks/testbed',
-          sizeTarget: '147 LOC across 4 files, scored against 19 hand-labelled ground-truth violations (benchmarks/ground-truth.json)',
-          groundTruthMethod: 'Manually authored and hand-labelled violations, scored automatically by src/eval/evaluation-runner.ts on every `npm run research:evaluate` run',
+          description: '45 hand-authored, framework-tagged fixture files (React JSX, Next.js, Vue SFC, Angular template, generic ESTree/vanilla JS)',
+          scope: 'React, Next.js, Vue, Angular, and framework-agnostic (vanilla JS) SPA code patterns — benchmarks/testbed',
+          sizeTarget: 'scored against 65 hand-labelled ground-truth violations across all 50 canonical rules (benchmarks/ground-truth.json)',
+          groundTruthMethod: 'Controlled fixture testbed: manually authored and hand-labelled violations scored automatically by src/eval/evaluation-runner.ts (internal baseline; independent annotation PENDING)',
         },
       },
 
@@ -298,11 +311,11 @@ export async function GET() {
         collectedParticipants: humanParticipants,
         collectionStatus: usabilityReport?.provenance.collectionStatus ?? 'NOT_COLLECTED',
         isRealHumanData,
-        cohort: 'Controlled cohort of student developers at NSBM Green University',
+        cohort: 'Target participant group: student developers at NSBM Green University (data collection: NOT YET STARTED)',
         instrument: 'Post-interaction usability feedback survey',
         reliabilityMeasure: "Cronbach's α (computed only after real data is collected)",
         note: !isRealHumanData
-          ? 'No real human participant data has been collected yet. Cronbach α will be computed once responses arrive.'
+          ? `Participant data collection: NOT YET STARTED. (0/${targetParticipants} valid responses). No real human participant data has been collected yet.`
           : `${humanParticipants}/${targetParticipants} real human participants collected.`,
         metrics: isRealHumanData ? usabilityReport!.metrics : null,
         provenance: usabilityReport?.provenance ?? {

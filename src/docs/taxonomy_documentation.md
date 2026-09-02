@@ -3,7 +3,7 @@
 ## Executive Overview
 Single Page Applications (SPAs) execute complex state management, client-side routing, dynamic rendering, and event handling within a unified web browser environment. Unlike traditional multi-page architectures where page transitions reload the DOM and reset client state, SPAs preserve long-lived runtime contexts. This persistence creates specific architectural vulnerabilities in both **Performance** and **Accessibility**.
 
-The Framework-Independent Guideline Model (FIGM) establishes a rigorous taxonomy categorizing SPA defects across two primary domains, ten core architectural concerns (six Performance, four Accessibility), and AST-level Abstract Language Primitives (ALPs) underpinning the 25 canonical FIGM rules.
+The Framework-Independent Guideline Model (FIGM) establishes a rigorous taxonomy categorizing SPA defects across two primary domains, ten core architectural concerns (six Performance, four Accessibility), and AST-level Abstract Language Primitives (ALPs) underpinning the 50 canonical FIGM rules.
 
 ---
 

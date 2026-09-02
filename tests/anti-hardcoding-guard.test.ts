@@ -3,7 +3,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { POST as logScanPOST } from '../app/api/user-study/log-scan/route';
+import { GET as logScanGET, POST as logScanPOST } from '../app/api/user-study/log-scan/route';
+import { POST as consentPOST } from '../app/api/user-study/consent/route';
+import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../src/research/research-config';
+import { TARGET_PARTICIPANT_COUNT } from '../src/engine/participant-repository';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -197,9 +200,29 @@ describe('Source-Level Anti-Hardcoding Guard Suite', () => {
   });
 
   test('POST /api/user-study/log-scan requires real code and never accepts a client-supplied score (regression guard)', async () => {
+    // A valid session is required first -- see the forensic-audit HIGH-finding fix (log-scan
+    // used to accept ANY caller-chosen participantId with zero session binding at all). This test
+    // targets the missing-code validation specifically, so it authenticates properly before
+    // probing that, rather than incidentally re-testing the (separately covered) 401 path.
+    const sessionRes = await logScanGET(new Request('http://localhost:3000/api/user-study/log-scan'));
+    const { participantId } = await sessionRes.json();
+    const cookie = sessionRes.cookies.get('figm_study_token')?.value;
+    assert.ok(cookie, 'GET must issue a session cookie');
+
+    // Consent is a separate, server-enforced prerequisite (see app/api/user-study/consent/route.ts)
+    // -- this test targets the missing-code validation specifically, so it consents first rather
+    // than incidentally re-testing the (separately covered) 403-unconsented path.
+    const consentRes = await consentPOST(new Request('http://localhost:3000/api/user-study/consent', {
+      method: 'POST',
+      headers: { cookie: `figm_study_token=${cookie}` },
+    }));
+    const consentedCookie = consentRes.cookies.get('figm_study_token')?.value;
+    assert.ok(consentedCookie, 'consent POST must re-issue a consent-bearing session cookie');
+
     const noCodeReq = new Request('http://localhost:3000/api/user-study/log-scan', {
       method: 'POST',
-      body: JSON.stringify({ participantId: 'P001', framework: 'React', fileName: 'X.jsx', qualityScore: 99, diagnosticsCount: 0 }),
+      headers: { 'content-type': 'application/json', cookie: `figm_study_token=${consentedCookie}` },
+      body: JSON.stringify({ participantId, framework: 'React', fileName: 'X.jsx', qualityScore: 99, diagnosticsCount: 0 }),
     });
     const noCodeRes = await logScanPOST(noCodeReq);
     assert.equal(noCodeRes.status, 400, 'A request with no real code (even one supplying a client-side score) must be rejected, not silently logged with a fabricated/trusted score');
@@ -207,5 +230,60 @@ describe('Source-Level Anti-Hardcoding Guard Suite', () => {
     const source = fs.readFileSync(path.join(rootDir, 'app/api/user-study/log-scan/route.ts'), 'utf-8');
     assert.equal(/clientScore|clientCount/.test(source), false, 'log-scan must not read a client-supplied qualityScore/diagnosticsCount at all');
     assert.equal(/FIGM-STANDARD-2026/.test(source), false, 'log-scan must not contain the old canned fallback diagnostic');
+  });
+
+  test('HUMAN_STUDY_TARGET_PARTICIPANTS is the single source of truth for the human-study target, currently 20', () => {
+    // Revised from an earlier 85-participant target per the supervisor's latest instruction (see
+    // research/audits/FIGM_PRE_DATA_COLLECTION_AUDIT.md Section 3). This is the one place that
+    // number should ever be asserted in the test suite -- every consumer below must derive it from
+    // src/research/research-config.ts, never redeclare it.
+    assert.equal(HUMAN_STUDY_TARGET_PARTICIPANTS, 20, 'The canonical human-study participant target must be 20');
+
+    // src/engine/participant-repository.ts's TARGET_PARTICIPANT_COUNT (used to build the P001..P0NN
+    // admin research matrix) must be the exact same value, not an independently-maintained copy --
+    // this is the same "two independent numbers that can silently drift apart" shape that previously
+    // produced the 25-vs-50 canonical-rule-count contradiction.
+    assert.equal(TARGET_PARTICIPANT_COUNT, HUMAN_STUDY_TARGET_PARTICIPANTS, 'participant-repository.ts TARGET_PARTICIPANT_COUNT must re-export the canonical constant, not a separate literal');
+  });
+
+  test('No production consumer of the human-study target hardcodes the retired 85-participant literal', () => {
+    // Every file identified in the pre-data-collection audit (Section 3) as having independently
+    // hardcoded "85" as a participant-target fallback/default/display value. Each must now import
+    // HUMAN_STUDY_TARGET_PARTICIPANTS (or read a value that ultimately derives from it) instead.
+    // Deliberately excludes src/eval/research-data-pipeline.ts and research/README.md's "Synthetic
+    // Usability Model (N=85)" -- that N is an independent pipeline-correctness test-fixture size,
+    // not a participant-target claim, and must NOT be changed to match this constant.
+    const consumerFiles = [
+      'scripts/import-user-study.ts',
+      'scripts/user-study-status.ts',
+      'app/admin/page.tsx',
+      'app/analytics/page.tsx',
+      'app/api/research-metrics/route.ts',
+      'app/components/landing/ResearchOverview.tsx',
+      'src/eval/thesis-gap-exporter.ts',
+      'src/docs/dissertation-exporter.ts',
+      'src/engine/participant-repository.ts',
+    ];
+
+    // Matches a bare "85" used as a participant-target fallback/default/count -- e.g. `?? 85`,
+    // `|| 85`, `: 85,`, `N=85`, `/ 85`, `>= 85` -- while deliberately NOT matching an unrelated
+    // decimal like a Cronbach's-alpha value (0.85) or a percentage (85.7%), since those are never
+    // followed directly by a non-digit, non-decimal-point, non-percent boundary the way a bare
+    // integer participant count is.
+    const staleTargetPattern = /(\?\?|\|\||:|N\s*=|\/|>=)\s*85(?!\.\d|%|\d)/;
+
+    for (const relPath of consumerFiles) {
+      const filePath = path.join(rootDir, relPath);
+      const content = fs.readFileSync(filePath, 'utf-8');
+      assert.equal(
+        staleTargetPattern.test(content),
+        false,
+        `${relPath} appears to still hardcode the retired 85-participant target literal instead of importing HUMAN_STUDY_TARGET_PARTICIPANTS`
+      );
+      assert.ok(
+        content.includes('HUMAN_STUDY_TARGET_PARTICIPANTS') || content.includes('TARGET_PARTICIPANT_COUNT') || content.includes('targetSampleSize') || content.includes('targetParticipants'),
+        `${relPath} was expected to reference the participant target in some form -- if this file no longer does, update this test's file list`
+      );
+    }
   });
 });

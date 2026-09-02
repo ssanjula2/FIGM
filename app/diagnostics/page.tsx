@@ -3,6 +3,13 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { primaryResearchDomain } from '../../src/matrix/four-layer-meta-model';
+
+const RESEARCH_DOMAIN_LABEL: Record<string, string> = {
+  ARCHITECTURE: '🏗️ Architecture',
+  STATIC_PERFORMANCE: '⚡ Static Performance',
+  ACCESSIBILITY: '♿ Accessibility',
+};
 
 interface DiagnosticReport {
   ruleId: string;
@@ -75,7 +82,11 @@ function DiagnosticsContent() {
 
   const filteredDiagnostics = diagnostics.filter((d) => {
     if (severityFilter !== 'ALL' && d.severity !== severityFilter) return false;
-    if (domainFilter !== 'ALL' && d.domain !== domainFilter) return false;
+    // Filters against the 3-way research-domain split (ARCHITECTURE / STATIC_PERFORMANCE /
+    // ACCESSIBILITY), not the raw 2-value domain field a diagnostic carries -- see
+    // primaryResearchDomain()'s own doc comment for why the raw field alone under-distinguishes
+    // Architecture findings from Static Performance findings (docs/audit/STAGE_4_PRODUCTION_BROWSER_ACCEPTANCE_REPORT.md).
+    if (domainFilter !== 'ALL' && primaryResearchDomain(d.domain, d.concern) !== domainFilter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const matchesRule = d.ruleId.toLowerCase().includes(q) || d.ruleName.toLowerCase().includes(q);
@@ -144,9 +155,10 @@ function DiagnosticsContent() {
             onChange={(e) => setDomainFilter(e.target.value)}
             className="select-field"
           >
-            <option value="ALL">All Issue Categories</option>
-            <option value="PERF">⚡ Speed & Performance</option>
-            <option value="A11Y">♿ Accessibility & Usability</option>
+            <option value="ALL">All Research Domains</option>
+            <option value="ARCHITECTURE">🏗️ Architecture & Code Quality</option>
+            <option value="STATIC_PERFORMANCE">⚡ Static Performance</option>
+            <option value="ACCESSIBILITY">♿ Accessibility (WCAG 2.2)</option>
           </select>
 
           {/* Clear Filters Button */}
@@ -262,6 +274,9 @@ function DiagnosticsContent() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                   <span className={`badge badge-${d.severity.toLowerCase()}`}>{d.severity}</span>
                   <span className="badge badge-domain">{d.ruleId}</span>
+                  <span className="badge badge-domain" style={{ fontSize: '10px', opacity: 0.85 }}>
+                    {RESEARCH_DOMAIN_LABEL[primaryResearchDomain(d.domain, d.concern)]}
+                  </span>
                   <strong style={{ fontSize: '16px', color: '#f8fafc' }}>{d.ruleName}</strong>
                 </div>
 

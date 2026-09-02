@@ -2,12 +2,13 @@
 
 import React from 'react';
 import { useResearchMetrics } from '../../../src/hooks/useResearchMetrics';
+import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../../../src/research/research-config';
 
 // ── Fallback static DSRM phase descriptions (structural, not metric-bearing) ─
 const DSRM_PHASES = [
   { num: '01', title: 'Problem Identification', desc: 'Fragmented SPA quality tooling across React, Next.js, Angular, and Vue — no unified framework-independent model exists.' },
-  { num: '02', title: 'Objective Definition', desc: 'Formalized 4-layer meta-model & 25 canonical guideline rules (12 framework-independent, 13 framework-specific across Next.js, React & Angular) aligned with WCAG 2.2 and ISO 25010.' },
-  { num: '03', title: 'Design & Development', desc: 'Implemented SourceParser, AST engine, ALP extraction pipeline & Gemini 2.5 Flash AI remediation.' },
+  { num: '02', title: 'Objective Definition', desc: 'Formalized 4-layer meta-model & 50 canonical guideline rules (12 framework-independent, 38 framework-specific across Next.js, React, Angular & Vue) aligned with WCAG 2.2 and ISO 25010.' },
+  { num: '03', title: 'Design & Development', desc: 'Implemented SourceParser, AST engine, ALP extraction pipeline & Claude Opus 5 AI remediation.' },
   { num: '04', title: 'Demonstration', desc: 'Deployed interactive Next.js web application and executable CLI runner (figm-analyze).' },
   { num: '05', title: 'Evaluation', desc: '' /* populated dynamically from API */ },
   { num: '06', title: 'Communication', desc: 'Published LaTeX dissertation artifacts & IEEE tool demo documentation.' },
@@ -22,8 +23,8 @@ export default function ResearchOverview() {
   const us = data?.userStudy;
 
   const phase05Desc = bm
-    ? `Evaluated against ${evalDataset?.sizeTarget ?? 'the hand-labelled ground-truth fixture set'} (P=${(bm.precision * 100).toFixed(1)}%, R=${(bm.recall * 100).toFixed(1)}%, F1=${(bm.f1Score * 100).toFixed(1)}%); human usability study N=${us?.targetParticipants ?? 85} — ${us?.collectionStatus === 'COLLECTED' ? 'data collection complete' : 'collection pending'}.`
-    : 'Evaluated against the hand-labelled ground-truth fixture set; human usability study N=85 — collection pending.';
+    ? `Evaluated against ${evalDataset?.sizeTarget ?? 'the hand-labelled ground-truth fixture set'} (P=${(bm.precision * 100).toFixed(1)}%, R=${(bm.recall * 100).toFixed(1)}%, F1=${(bm.f1Score * 100).toFixed(1)}%); human usability study N=${us?.targetParticipants ?? HUMAN_STUDY_TARGET_PARTICIPANTS} — ${us?.collectionStatus === 'COLLECTED' ? 'data collection complete' : 'collection pending'}.`
+    : `Evaluated against the hand-labelled ground-truth fixture set; human usability study N=${HUMAN_STUDY_TARGET_PARTICIPANTS} — collection pending.`;
 
   const dsrmPhases = DSRM_PHASES.map((p) =>
     p.num === '05' ? { ...p, desc: phase05Desc } : p

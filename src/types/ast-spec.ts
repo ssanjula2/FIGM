@@ -115,5 +115,28 @@ export interface DiagnosticReport {
   /** See DetectionSourceKind. Absent on diagnostic categories this doesn't apply to
    *  (SYNTAX_ERROR, TYPE_COMPILE_ERROR) and on rules not yet touched by the AST migration. */
   sourceKind?: DetectionSourceKind;
+  /** Authoritative separation of the two independent Live Scan diagnostic systems -- see
+   *  src/engine/diagnostic-classifier.ts. Always set by RuleExecutionEngine.buildScanResult;
+   *  optional here only because some callers construct a DiagnosticReport before classification. */
+  kind?: 'FIGM_RULE' | 'GENERAL_CODE_ERROR';
+  /** Pre-fix-attempt classification, computed for every diagnostic regardless of domain (see
+   *  diagnostic-classifier.ts's getFixabilityStatus) -- ambiguity about the right fix is not
+   *  unique to compiler errors, so this applies equally to FIGM_RULE and GENERAL_CODE_ERROR. */
+  fixabilityStatus?: 'AUTO_FIX_AVAILABLE' | 'SUGGESTED_FIX_ONLY' | 'NO_SAFE_FIX';
+  /** Human-facing compiler/parser diagnostic code for a GENERAL_CODE_ERROR (e.g. "TS2322"); absent
+   *  for FIGM_RULE diagnostics, whose ruleId is already the right thing to display. */
+  compilerCode?: string;
+  /** Other diagnostics (never including this one) that a same-line grouping pass (see
+   *  src/engine/general-error-grouping.ts) judged likely caused by the SAME underlying source
+   *  defect as this one -- e.g. three separate TypeScript diagnostics all produced by one keyword
+   *  typo. Populated only on the ONE "representative" DiagnosticReport built for such a group
+   *  (never on a lone/ungrouped diagnostic, and never on a FIGM_RULE diagnostic, which is always
+   *  its own singleton group). Used two ways: (1) src/ai/prompt-builder.ts surfaces these to the AI
+   *  so it understands the full symptom picture instead of one isolated diagnostic; (2)
+   *  src/engine/remediation-validation.server.ts's re-scan check requires every ruleId here to ALSO
+   *  be absent post-fix, not just this defect's own ruleId -- so a "fix" that silences only the
+   *  representative while a sibling symptom of the same defect lingers is correctly rejected, not
+   *  reported FIXED. */
+  relatedDiagnostics?: Array<{ ruleId: string; message: string; location?: SourceRange }>;
 }
 

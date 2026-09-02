@@ -1,8 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: process.env.FIGM_DIST_DIR || '.next',
   reactStrictMode: true,
-  swcMinify: true,
+  swcMinify: false,
   experimental: {
+    workerThreads: false,
+    cpus: 1,
+    // typescript/tsx: kept external (real Node require() at runtime, never webpack-bundled) --
+    // unrelated to the @vue/compiler-sfc history below, not touched by this pass.
     serverComponentsExternalPackages: ['typescript', 'tsx'],
     // P0 security fix (audit finding CRIT-DYNPROF): src/engine/sandbox/profiler-sandbox-runner.cjs
     // is spawned at runtime via a plain string path (child_process.spawnSync), never `import`ed, so
@@ -22,9 +27,9 @@ const nextConfig = {
   // third-party origin this app loads client-side resources from is cdn.jsdelivr.net, Monaco
   // Editor's default script/style/font/worker host (confirmed via
   // node_modules/@monaco-editor/loader's own config: `vs: 'https://cdn.jsdelivr.net/npm/monaco-
-  // editor@.../min/vs'`). Everything else (images, the Gemini AI calls in src/ai/gemini-service.ts)
-  // is same-origin or server-side-only, confirmed by reading every external-resource call site,
-  // not assumed.
+  // editor@.../min/vs'`). Everything else (images, the Claude AI calls in
+  // src/ai/claude-client.server.ts) is same-origin or server-side-only, confirmed by reading every
+  // external-resource call site, not assumed.
   //
   // script-src keeps 'unsafe-inline': Next.js App Router injects its own inline hydration-data
   // scripts, and this codebase's entire UI is built on inline `style={{...}}` JSX props throughout
@@ -71,7 +76,7 @@ const nextConfig = {
       },
     ];
   },
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { dev, isServer, webpack }) => {
     config.resolve.extensionAlias = {
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs']
@@ -102,6 +107,51 @@ const nextConfig = {
         url: false,
       };
     }
+    // @vue/compiler-sfc bundles `consolidate`'s entire template-engine require() map inline in its
+    // OWN compiled dist file (node_modules/@vue/compiler-sfc/dist/compiler-sfc.cjs.js) for optional
+    // <template lang="pug|twig|...">` preprocessing -- none of which this project installs or
+    // needs (FIGM only ever feeds it plain Vue SFC markup; confirmed by reading
+    // src/engine/vue-fix-engine.ts, which never sets a template `lang`).
+    //
+    // HISTORY (live Vercel production testing, this pass -- three fix attempts, this is the one
+    // that actually works):
+    //  1. @vue/compiler-sfc/@vue/compiler-dom marked external (serverComponentsExternalPackages)
+    //     to dodge webpack failing to resolve those template-engine packages at build time
+    //     ("Module not found: Can't resolve 'twig'"). Traded that for a worse problem: `external`
+    //     means a real Node require() at RUNTIME, needing the package's actual files present in
+    //     the deployed Vercel function -- but @vercel/nft's file-tracer crashes outright (TypeError
+    //     [ERR_INVALID_ARG_TYPE], path.join() "Received function") the moment its dependency-graph
+    //     trace reaches @vue/compiler-sfc's lazy-require map, and every outputFileTracingExcludes/
+    //     Includes combination tried either reintroduced that crash or silently dropped the
+    //     package's files from the deployed bundle (`Error: Cannot find module
+    //     '@vue/compiler-sfc'`, confirmed live via `vercel logs` for `POST /api/scan` on Vue
+    //     source, twice).
+    //  2. `resolve.alias: { consolidate: false }` -- wrong tool for a different reason: the
+    //     individual template-engine requires (`twig`, `atpl`, `liquor`, ...) are inlined directly
+    //     in compiler-sfc's own dist file, not proxied through an actual `require('consolidate')`
+    //     call, so aliasing only `consolidate` itself resolved nothing.
+    //
+    // Fix: @vue/compiler-sfc/@vue/compiler-dom are no longer external -- bundled normally into the
+    // route's own compiled JS, which is what actually guarantees their files exist at runtime and
+    // removes nft's crash entirely (there is no separate external package for it to trace once
+    // webpack has already inlined everything). `IgnorePlugin`, scoped by BOTH resource name AND
+    // requesting-file location (`contextRegExp`), stubs out every template-engine require() to an
+    // empty module -- scoped by context deliberately, not a global `resolve.alias`, so this can
+    // never shadow this project's own real `react`/`lodash`/etc. imports elsewhere; it only ever
+    // applies to a require() whose *caller* lives inside @vue/compiler-sfc's own directory. Full
+    // list confirmed exhaustively via `grep -oE "require\\('[a-zA-Z0-9_./-]+'\\)"` against the
+    // actual installed dist file (re-run after the first attempt missed sub-path requires like
+    // `teacup/lib/express` -- prefix-matched below, not exact-matched, specifically so any such
+    // sub-path variant is still caught), not guessed -- Node builtins (fs/path/process/url/util/vm)
+    // and @vue/compiler-sfc's own real dependencies (estree-walker/magic-string/postcss/
+    // source-map-js/lodash) are deliberately excluded from this list; only unresolvable optional
+    // template engines are stubbed.
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^(consolidate|atpl|arc-templates|babel-core|bracket-template|coffee-script|dot|dust|dustjs-helpers|dustjs-linkedin|eco|ect|ejs|haml-coffee|hamlet|hamljs|handlebars|hogan\.js|htmling|jade|jazz|jqtpl|just|liquid-node|liquor|marko|mote|mustache|nunjucks|plates|pug|qejs|ractive|razor-tmpl|react|react-dom|slm|squirrelly|swig|swig-templates|teacup|templayed|then-jade|then-pug|tinyliquid|toffee|twig|twing|underscore|vash|velocityjs|walrus|whiskers)(\/.*)?$/,
+        contextRegExp: /@vue[\\/]compiler-sfc/,
+      })
+    );
     return config;
   }
 };

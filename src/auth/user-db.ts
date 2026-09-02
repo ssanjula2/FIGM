@@ -12,8 +12,11 @@ export interface DBUser {
   passwordHash: string;
   fullName: string;
   role: UserRole;
-  resetToken?: string;
-  resetTokenExpiry?: string;
+  // `| null` (not just optional/absent) for the same reason as `refreshToken` below: an explicit
+  // `null` is required to actually clear these columns on the Postgres backend (see
+  // app/api/auth/reset-password/route.ts).
+  resetToken?: string | null;
+  resetTokenExpiry?: string | null;
   // `| null` (not just optional/absent) is deliberate: an update payload of `{ refreshToken:
   // undefined }` is silently ignored by Prisma's update() (undefined-valued keys are treated as
   // "field not included," not "clear this field") -- only an explicit `null` actually clears the
@@ -23,6 +26,12 @@ export interface DBUser {
   avatarUrl?: string;
   createdAt: string;
   lastLoginAt?: string;
+  // Research-participant fields -- see prisma/schema.prisma's ResearchParticipantStatus doc
+  // comment for the full rationale. Undefined/absent for every ordinary (non-study) user.
+  participantCode?: string | null;
+  researchStatus?: 'ASSIGNED' | 'CONSENT_VERIFIED' | 'REVOKED' | null;
+  researchAssignedAt?: string | null;
+  researchConsentVerifiedAt?: string | null;
 }
 
 export interface DBSubmission {
@@ -111,7 +120,7 @@ export interface DBAuditLog {
   id: string;
   userId?: string;
   email?: string;
-  action: 'REGISTER' | 'LOGIN' | 'LOGOUT' | 'REFRESH_TOKEN' | 'FORGOT_PASSWORD' | 'RESET_PASSWORD' | 'ACCESS_DENIED' | 'CREATE_PROJECT' | 'DELETE_PROJECT' | 'SCAN_RUN';
+  action: 'REGISTER' | 'LOGIN' | 'LOGOUT' | 'REFRESH_TOKEN' | 'FORGOT_PASSWORD' | 'RESET_PASSWORD' | 'ACCESS_DENIED' | 'CREATE_PROJECT' | 'DELETE_PROJECT' | 'SCAN_RUN' | 'RESEARCH_PARTICIPANT_ASSIGNED' | 'RESEARCH_CONSENT_VERIFIED' | 'RESEARCH_CONSENT_REVOKED';
   ipAddress: string;
   userAgent: string;
   status: 'SUCCESS' | 'FAILURE';
@@ -284,6 +293,16 @@ export const UserDB = {
     return db.users.find((u) => u.refreshToken === token);
   },
 
+  /** Resolves a "P001"-style research-participant code to its backing User row. Checks
+   *  `participantCode` first (the authoritative field for every row created after the field was
+   *  introduced) and falls back to `id` (pre-migration rows whose id itself is the code, and any
+   *  edge case where a row was created without the field set). See findUserByParticipantCode's
+   *  Supabase-provider sibling for the identical dual-lookup rationale. */
+  findUserByParticipantCode(code: string): DBUser | undefined {
+    const db = loadDB();
+    return db.users.find((u) => u.participantCode === code || u.id === code);
+  },
+
   getAllUsers(): DBUser[] {
     const db = loadDB();
     return db.users;
@@ -291,6 +310,21 @@ export const UserDB = {
 
   createUser(user: Omit<DBUser, 'id' | 'createdAt'> & { id?: string }): DBUser {
     const db = loadDB();
+    const normalizedEmail = user.email.toLowerCase();
+    // Mirrors Postgres/Prisma's real unique-constraint behavior on `id` and `email` (see
+    // prisma/schema.prisma's User model) with the same `P2002` error code, so callers that need to
+    // safely handle a duplicate (e.g. two concurrent requests racing to provision the same
+    // participant -- see ensureParticipantUser in app/api/user-study/log-scan/route.ts) can use one
+    // identical create-then-catch-P2002 pattern regardless of which storage backend is active. Load
+    // + check + push all happen synchronously here with no `await` in between, so this whole
+    // operation is atomic within a single Node.js event-loop turn -- no other request's handler can
+    // interleave and observe a half-written state.
+    if (user.id && db.users.some((u) => u.id === user.id)) {
+      throw Object.assign(new Error(`Unique constraint failed on the fields: (\`id\`)`), { code: 'P2002' });
+    }
+    if (db.users.some((u) => u.email === normalizedEmail)) {
+      throw Object.assign(new Error(`Unique constraint failed on the fields: (\`email\`)`), { code: 'P2002' });
+    }
     const newUser: DBUser = {
       ...user,
       id: user.id || `usr_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
@@ -574,7 +608,7 @@ export const UserDB = {
       theme: 'dark',
       autoSave: true,
       autoScan: true,
-      aiModel: 'gemini-2.5-flash',
+      aiModel: 'claude-opus-5',
       exportFormat: 'PDF',
     };
   },
@@ -615,6 +649,19 @@ export const UserDB = {
   getSubmissionById(submissionId: string, userId: string): DBSubmission | undefined {
     const db = loadDB();
     return db.submissions.find((s) => s.id === submissionId && s.userId === userId);
+  },
+
+  /** Ownership-checked delete -- only removes the submission if it belongs to `userId`, mirroring
+   *  every other delete path in this module (deleteProject, deleteScanRecord). Returns false (not
+   *  an error) both when the id doesn't exist and when it belongs to someone else, so a caller
+   *  can't distinguish "not found" from "not yours" via the return value alone. */
+  deleteSubmission(submissionId: string, userId: string): boolean {
+    const db = loadDB();
+    const before = db.submissions.length;
+    db.submissions = db.submissions.filter((s) => !(s.id === submissionId && s.userId === userId));
+    if (db.submissions.length === before) return false;
+    saveDB(db);
+    return true;
   },
 
   // --- AUDIT LOGS ---

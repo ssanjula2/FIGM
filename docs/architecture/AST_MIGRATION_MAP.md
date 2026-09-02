@@ -1,5 +1,54 @@
 # FIGM AST Migration Map (Phase 1)
 
+> **UPDATE (Scientific Hardening Pass, 2026-08):** §2/§5/§6/§9 below originally classified
+> `FIGM-ANG-03`/`FIGM-ANG-04` (and the later-added `FIGM-ANG-08`/`FIGM-ANG-10`) as permanently
+> `LEGACY_TEXT_HEURISTIC`, reasoning that a real migration would require `@angular/compiler` as a
+> new, deliberately-undeployed dependency. That reasoning has been superseded: this pass integrated
+> `angular-html-parser` (https://www.npmjs.com/package/angular-html-parser) instead — a real,
+> independently-maintained (by the Prettier project), zero-dependency HTML+Angular-template parser
+> extracted from Angular's own compiler, NOT `@angular/compiler` itself. All four Angular
+> template-markup rules (`FIGM-ANG-03`, `FIGM-ANG-04`, `FIGM-ANG-08`, `FIGM-ANG-10`) are now
+> `REAL_AST` — see `src/ast/angular-template-ast-builder.ts`. The rest of this document is left
+> as-written for historical accuracy about the migration passes it actually documents; treat every
+> "stays legacy" / "No — stays legacy" statement about these four rule IDs specifically as
+> superseded by this note. Vue SFC template markup (`VUE_SFC`, §5 item 1) is unaffected by this
+> update and remains `LEGACY_TEXT_HEURISTIC` as originally documented.
+>
+> **UPDATE (Group 4 Migration — see `docs/architecture/RULE_ENGINEERING_AUDIT.md`):** the seven
+> rules §2/§5/§6 below classify as "Yes, feasible, but not in this batch"/"deferred" —
+> `FIGM-PERF-03`, `FIGM-PERF-05`, `FIGM-PERF-06`, `FIGM-A11Y-05`, `FIGM-A11Y-06`, `FIGM-REACT-01`,
+> `FIGM-REACT-04` — are now `REAL_AST`-migrated for the same JS/TS/JSX/TSX-eligible frameworks as
+> Groups 1-3 (`src/ast/real-syntax-node-builder.ts`'s "Group 4" section, gated in
+> `src/parser/source-parser.ts` behind `useRealAstPerf03/05/06`, `useRealAstA11y05/06`,
+> `useRealAstReact01/04`). Treat every "not in this batch" / "Deferred" statement about these seven
+> rule IDs specifically as superseded by this note; `VUE_SFC` and the two Angular-template-grammar
+> rules (`FIGM-ANG-03`/`FIGM-ANG-04`, already addressed by the update above) are unaffected.
+>
+> Separately, this document's own rule-count framing (`§1`, `§5`, `§6`, `§7` all say "25") predates
+> the FIGM rule set's later growth to 50 canonical rules (`figm-spec.json`) — every specific rule ID
+> and classification above is still accurate for the rules it names, but "all 25 rules" (§5 item 1,
+> §7) should be read as "all rules then in scope," not as the current total.
+>
+> **UPDATE (Phase 2, AST/Rule Coverage Gaps):** `FIGM-VUE-01` (unstable/missing `v-for` `:key`) and
+> `FIGM-VUE-02` (`v-if` combined with `v-for`) — §5 item 1's "Vue SFC template markup... remains
+> `LEGACY_TEXT_HEURISTIC`" note above — are now `REAL_AST`, via a real `@vue/compiler-dom` template
+> parse (`src/ast/vue-template-ast-builder.ts`), the same "extract a sub-language and parse it with
+> its own real parser" pattern already used for Angular's inline template. `FIGM-VUE-03/04/05/06`
+> (the `<script>`-block Vue rules) already had real AST via `buildVueScriptRealSyntaxNodes` before
+> this update; that was not itself documented here previously either. **As of this update, all 50
+> canonical rules are real-AST for at least one supported framework — no rule is `LEGACY_TEXT_HEURISTIC`
+> on every framework** (re-verified directly by re-running `RuleExecutionEngine.analyzeFile` against
+> every fixture in `benchmarks/ground-truth.json`). Coverage remains framework-gated, not universal:
+> `FIGM-A11Y-01`, `FIGM-A11Y-03`, `FIGM-PERF-01`, `FIGM-PERF-02`, and `FIGM-PERF-03` still fall back
+> to `LEGACY_TEXT_HEURISTIC` specifically on Vue SFC and/or Angular template files. Separately,
+> `FIGM-PERF-01`'s real-AST detector (§8's "any object literal in loop/render scope" over-approximation)
+> now performs a narrow, single-hop check for whether the object literal references the nearest
+> enclosing loop/iteration-callback's own bound name(s) (`src/ast/real-syntax-node-builder.ts`'s
+> `loopBoundNames`/`referencesAnyBoundName`) and no longer flags a declaration that is genuinely
+> built from the loop variable (e.g. `items.map(item => { const cfg = { id: item.id }; ... })`) —
+> this is a real, deliberately narrow fix (not full data-flow/alias analysis), not a broadening of
+> scope; §8's other listed over-approximations (A11Y-02/03/04, REACT-03) are unaffected.
+
 **Status:** Written *before* any behavior-changing code in this migration. Every claim below was verified by reading the current source directly (`src/parser/source-parser.ts`, `src/ast/ast-detection-engine.ts`, `src/ast/universal-ast-mapper.ts`, `src/parser/alp-extractor.ts`, `src/analysis/react-ast-rules.ts`, `src/engine/rule-execution-engine.ts`, `src/analysis/complexity/complexity-engine.ts`), not inherited from prior audit prose.
 
 ## 1. What the current architecture actually is

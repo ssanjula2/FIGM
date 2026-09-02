@@ -1,6 +1,6 @@
 /**
  * Framework-Independent Guideline Model (FIGM)
- * AST Predicate Evaluator Engine & Diagnostic Error Reporter (Complete 25 Rules)
+ * AST Predicate Evaluator Engine & Diagnostic Error Reporter (Complete 50 Rules)
  */
 
 import { ASTNode, DiagnosticReport, FrameworkType } from '../types/ast-spec.js';
@@ -34,7 +34,7 @@ export class ASTDetectionEngine {
       reports.push(this.createReport('FIGM-PERF-04', filePath, node, 'Static module import used inside conditional execution scope; should use dynamic import().', 88.0));
     }
     if (this.evalPerf05(node)) {
-      reports.push(this.createReport('FIGM-PERF-05', filePath, node, 'Inline anonymous arrow function defined inside render loop expression causing re-instantiation.', 85.0));
+      reports.push(this.createReport('FIGM-PERF-05', filePath, node, 'Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.', 85.0));
     }
     if (this.evalPerf06(node)) {
       reports.push(this.createReport('FIGM-PERF-06', filePath, node, 'Synchronous Web Storage API accessed repeatedly inside iterative loop scope.', 90.0));
@@ -104,6 +104,85 @@ export class ASTDetectionEngine {
       reports.push(this.createReport('FIGM-ANG-05', filePath, node, 'Direct ElementRef nativeElement DOM manipulation bypasses Angular Renderer2 security.', 97.0));
     }
 
+    // --- RESEARCH-BACKED EXPANSION SET (8 rules) ---
+    if (this.evalA11y07(node, framework)) {
+      reports.push(this.createReport('FIGM-A11Y-07', filePath, node, 'Accessible name (aria-label) does not contain the element\'s visible text label (WCAG 2.5.3).', 89.0));
+    }
+    if (this.evalReact05(node, framework)) {
+      reports.push(this.createReport('FIGM-REACT-05', filePath, node, 'useEffect body consists solely of a state-setter call; this derived value can be computed during render instead.', 84.0));
+    }
+    if (this.evalReact06(node, framework)) {
+      reports.push(this.createReport('FIGM-REACT-06', filePath, node, 'useEffect reads a component prop that is missing from its dependency array.', 82.0));
+    }
+    if (this.evalNext05(node, framework)) {
+      reports.push(this.createReport('FIGM-NEXT-05', filePath, node, 'Node.js server-only module imported into a file marked "use client".', 94.0));
+    }
+    if (this.evalNext06(node, framework)) {
+      reports.push(this.createReport('FIGM-NEXT-06', filePath, node, 'Native <img> element used in a Next.js file instead of the next/image Image component.', 86.0));
+    }
+    if (this.evalAng06(node, framework)) {
+      reports.push(this.createReport('FIGM-ANG-06', filePath, node, 'Angular @Pipe declared with pure: false runs its transform on every change-detection cycle.', 90.0));
+    }
+    if (this.evalVue01(node, framework)) {
+      reports.push(this.createReport('FIGM-VUE-01', filePath, node, 'v-for directive missing a stable :key binding, or bound to the loop index.', 80.0));
+    }
+    if (this.evalVue02(node, framework)) {
+      reports.push(this.createReport('FIGM-VUE-02', filePath, node, 'v-for and v-if directives used together on the same template element.', 83.0));
+    }
+
+    // --- SECOND RESEARCH-BACKED EXPANSION SET (17 rules) ---
+    if (this.evalNext07(node, framework)) {
+      reports.push(this.createReport('FIGM-NEXT-07', filePath, node, 'Component function declared async inside a "use client" file; Client Components do not support async functions.', 93.0));
+    }
+    if (this.evalNext08(node, framework)) {
+      reports.push(this.createReport('FIGM-NEXT-08', filePath, node, 'useSearchParams() called with no <Suspense> boundary visible in this file.', 78.0));
+    }
+    if (this.evalNext09(node, framework)) {
+      reports.push(this.createReport('FIGM-NEXT-09', filePath, node, 'Metadata API export/function present in a file marked "use client".', 94.0));
+    }
+    if (this.evalNext10(node, framework)) {
+      reports.push(this.createReport('FIGM-NEXT-10', filePath, node, 'export const dynamic = "force-dynamic" with no visible request-time dependency in this file.', 74.0));
+    }
+    if (this.evalVue03(node, framework)) {
+      reports.push(this.createReport('FIGM-VUE-03', filePath, node, 'computed() getter body contains a side effect (mutates another ref, or performs an I/O call).', 85.0));
+    }
+    if (this.evalVue04(node, framework)) {
+      reports.push(this.createReport('FIGM-VUE-04', filePath, node, 'Direct mutation of a computed ref\'s .value contents from outside its own definition.', 82.0));
+    }
+    if (this.evalVue05(node, framework)) {
+      reports.push(this.createReport('FIGM-VUE-05', filePath, node, 'Direct mutation of a defineProps()-bound prop.', 90.0));
+    }
+    if (this.evalVue06(node, framework)) {
+      reports.push(this.createReport('FIGM-VUE-06', filePath, node, 'Arrow function used as an Options API method; `this` will not be bound to the component instance.', 92.0));
+    }
+    if (this.evalAng07(node, framework)) {
+      reports.push(this.createReport('FIGM-ANG-07', filePath, node, 'Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.', 80.0));
+    }
+    if (this.evalAng08(node, framework)) {
+      reports.push(this.createReport('FIGM-ANG-08', filePath, node, '@for track expression bound to the index or the bare loop variable instead of a stable identifier.', 84.0));
+    }
+    if (this.evalAng09(node, framework)) {
+      reports.push(this.createReport('FIGM-ANG-09', filePath, node, 'Signal input property missing the readonly modifier.', 88.0));
+    }
+    if (this.evalAng10(node, framework)) {
+      reports.push(this.createReport('FIGM-ANG-10', filePath, node, 'The same observable expression is piped through | async more than once in this template.', 76.0));
+    }
+    if (this.evalReact07(node, framework)) {
+      reports.push(this.createReport('FIGM-REACT-07', filePath, node, 'Hook called inside a conditional, loop, or nested function instead of the top level.', 91.0));
+    }
+    if (this.evalReact08(node, framework)) {
+      reports.push(this.createReport('FIGM-REACT-08', filePath, node, 'Direct mutation of a destructured component prop.', 89.0));
+    }
+    if (this.evalReact09(node, framework)) {
+      reports.push(this.createReport('FIGM-REACT-09', filePath, node, 'I/O or storage call executed directly in the render body instead of an event handler or Effect.', 83.0));
+    }
+    if (this.evalReact10(node, framework)) {
+      reports.push(this.createReport('FIGM-REACT-10', filePath, node, 'Component function called directly instead of rendered as JSX.', 87.0));
+    }
+    if (this.evalReact11(node, framework)) {
+      reports.push(this.createReport('FIGM-REACT-11', filePath, node, 'Context Provider value prop is an unmemoized inline object/array literal.', 86.0));
+    }
+
     // Recursively evaluate children AST nodes
     if (node.children && node.children.length > 0) {
       for (const child of node.children) {
@@ -170,7 +249,15 @@ export class ASTDetectionEngine {
   }
 
   private static evalA11y02(node: ASTNode): boolean {
-    const isCustomControl = (node.type === 'JSXElement' || node.type === 'VElement') && (node.attributes?.isCustomControl === true || (node.name && /^[A-Z]/.test(node.name)));
+    // Gate strictly on the isCustomControl flag that buildA11y02 (and its legacy heuristic
+    // equivalent) set for real Custom/Select/Dropdown-tag nodes. A prior fallback here --
+    // `node.name starts with an uppercase letter` -- matched ANY component node regardless of
+    // which rule's builder produced it (evaluateNode runs every eval* against every pushed node),
+    // so a node built by buildA11y04 for a compliant `<Modal role="dialog" aria-label="...">`
+    // (which never populates role/aria-label -- that's not its job) was misread as "missing"
+    // those attributes and flagged FIGM-A11Y-02 even though they were present in the source.
+    // Live-verified: benchmarks/testbed/ReactBenchmark.jsx's fully-compliant Modal element.
+    const isCustomControl = (node.type === 'JSXElement' || node.type === 'VElement') && node.attributes?.isCustomControl === true;
     if (!isCustomControl) return false;
 
     const attrs = node.attributes || {};
@@ -192,7 +279,12 @@ export class ASTDetectionEngine {
   }
 
   private static evalA11y04(node: ASTNode): boolean {
-    const isOverlay = node.attributes?.isOverlay === true || node.name === 'Modal' || node.name === 'Dialog';
+    // The `isOverlay` attribute (set by both the real-AST and legacy builders whenever the tag
+    // matches the canonical Modal/Dialog/Overlay/Drawer allow-list) is the actual detection
+    // signal; this `node.name` fallback exists only for a node reaching this predicate with the
+    // attribute unset for some other reason, so it is kept in sync with the same four names
+    // rather than the stale two-name subset it previously listed.
+    const isOverlay = node.attributes?.isOverlay === true || node.name === 'Modal' || node.name === 'Dialog' || node.name === 'Overlay' || node.name === 'Drawer';
     if (!isOverlay) return false;
 
     const attrs = node.attributes || {};
@@ -258,6 +350,113 @@ export class ASTDetectionEngine {
 
   private static evalAng05(node: ASTNode, framework: FrameworkType): boolean {
     return (framework === 'ANGULAR_TEMPLATE' || framework === 'GENERIC_ESTREE') && node.attributes?.isDirectNativeElementMutation === true;
+  }
+
+  // --- Research-backed expansion set predicate evaluators ---
+
+  private static evalA11y07(node: ASTNode, framework: FrameworkType): boolean {
+    if (framework !== 'REACT_JSX' && framework !== 'NEXT_JS') return false;
+    return node.attributes?.isAccessibleNameMismatch === true;
+  }
+
+  private static evalReact05(node: ASTNode, framework: FrameworkType): boolean {
+    if (framework !== 'REACT_JSX' && framework !== 'NEXT_JS' && framework !== 'GENERIC_ESTREE') return false;
+    return node.attributes?.isEffectDerivedState === true;
+  }
+
+  private static evalReact06(node: ASTNode, framework: FrameworkType): boolean {
+    if (framework !== 'REACT_JSX' && framework !== 'NEXT_JS' && framework !== 'GENERIC_ESTREE') return false;
+    return node.attributes?.isEffectMissingDependency === true;
+  }
+
+  private static evalNext05(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'NEXT_JS' && node.attributes?.isServerOnlyImportInClientBoundary === true;
+  }
+
+  private static evalNext06(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'NEXT_JS' && node.attributes?.isNativeImgInNextJs === true;
+  }
+
+  private static evalAng06(node: ASTNode, framework: FrameworkType): boolean {
+    return (framework === 'ANGULAR_TEMPLATE' || framework === 'GENERIC_ESTREE') && node.attributes?.isImpurePipe === true;
+  }
+
+  private static evalVue01(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'VUE_SFC' && node.attributes?.isVForUnstableKey === true;
+  }
+
+  private static evalVue02(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'VUE_SFC' && node.attributes?.isVForWithVIf === true;
+  }
+
+  // --- Second research-backed expansion set predicate evaluators ---
+
+  private static evalNext07(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'NEXT_JS' && node.attributes?.isAsyncClientComponent === true;
+  }
+
+  private static evalNext08(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'NEXT_JS' && node.attributes?.isUnsuspendedSearchParams === true;
+  }
+
+  private static evalNext09(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'NEXT_JS' && node.attributes?.isMetadataInClientBoundary === true;
+  }
+
+  private static evalNext10(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'NEXT_JS' && node.attributes?.isUnjustifiedForceDynamic === true;
+  }
+
+  private static evalVue03(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'VUE_SFC' && node.attributes?.isComputedSideEffect === true;
+  }
+
+  private static evalVue04(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'VUE_SFC' && node.attributes?.isComputedResultMutation === true;
+  }
+
+  private static evalVue05(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'VUE_SFC' && node.attributes?.isPropMutation === true;
+  }
+
+  private static evalVue06(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'VUE_SFC' && node.attributes?.isArrowOptionsMethod === true;
+  }
+
+  private static evalAng07(node: ASTNode, framework: FrameworkType): boolean {
+    return (framework === 'ANGULAR_TEMPLATE' || framework === 'GENERIC_ESTREE') && node.attributes?.isComplexConstructorLogic === true;
+  }
+
+  private static evalAng08(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'ANGULAR_TEMPLATE' && node.attributes?.isUnstableForTrack === true;
+  }
+
+  private static evalAng09(node: ASTNode, framework: FrameworkType): boolean {
+    return (framework === 'ANGULAR_TEMPLATE' || framework === 'GENERIC_ESTREE') && node.attributes?.isMutableSignalInput === true;
+  }
+
+  private static evalAng10(node: ASTNode, framework: FrameworkType): boolean {
+    return framework === 'ANGULAR_TEMPLATE' && node.attributes?.isDuplicateAsyncPipe === true;
+  }
+
+  private static evalReact07(node: ASTNode, framework: FrameworkType): boolean {
+    return (framework === 'REACT_JSX' || framework === 'NEXT_JS' || framework === 'GENERIC_ESTREE') && node.attributes?.isMisplacedHookCall === true;
+  }
+
+  private static evalReact08(node: ASTNode, framework: FrameworkType): boolean {
+    return (framework === 'REACT_JSX' || framework === 'NEXT_JS' || framework === 'GENERIC_ESTREE') && node.attributes?.isDirectPropMutation === true;
+  }
+
+  private static evalReact09(node: ASTNode, framework: FrameworkType): boolean {
+    return (framework === 'REACT_JSX' || framework === 'NEXT_JS' || framework === 'GENERIC_ESTREE') && node.attributes?.isRenderSideEffect === true;
+  }
+
+  private static evalReact10(node: ASTNode, framework: FrameworkType): boolean {
+    return (framework === 'REACT_JSX' || framework === 'NEXT_JS' || framework === 'GENERIC_ESTREE') && node.attributes?.isComponentCalledAsFunction === true;
+  }
+
+  private static evalReact11(node: ASTNode, framework: FrameworkType): boolean {
+    return (framework === 'REACT_JSX' || framework === 'NEXT_JS' || framework === 'GENERIC_ESTREE') && node.attributes?.isUnmemoizedContextValue === true;
   }
 
   private static createReport(

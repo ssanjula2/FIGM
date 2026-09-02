@@ -1,0 +1,3136 @@
+{
+  "name": "coreui-free-angular-admin-template",
+  "url": "https://github.com/coreui/coreui-free-angular-admin-template.git",
+  "commit": "5f66f95b19edf4092fd2f95f5c5b34e185bba033",
+  "primaryFrameworkLabel": "Angular",
+  "filesScanned": 141,
+  "totalLOC": 6369,
+  "scanDurationMs": 12891.296700000006,
+  "totalFigmFindings": 73,
+  "findingsByRule": {
+    "FIGM-ANG-02": 58,
+    "FIGM-ANG-07": 8,
+    "FIGM-ANG-05": 2,
+    "FIGM-A11Y-02": 2,
+    "FIGM-A11Y-04": 1,
+    "FIGM-PERF-01": 1,
+    "FIGM-PERF-04": 1
+  },
+  "findingsBySeverity": {
+    "HIGH": 63,
+    "MEDIUM": 9,
+    "CRITICAL": 1
+  },
+  "frameworksDetected": {
+    "GENERIC_ESTREE": 83,
+    "ANGULAR_TEMPLATE": 58
+  },
+  "parserFailures": {
+    "filesWithParseErrors": 0,
+    "totalParseErrorCount": 0
+  },
+  "engineCrashes": [],
+  "perFile": [
+    {
+      "relativePath": "src/app/app.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 58,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 31,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/app.routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 52,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/icons/apple.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 5,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/icons/chatgpt.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 5,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/icons/eye.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 7,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/icons/google.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/icons/icon-subset.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 329,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/icons/linkedin-badge.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/icons/logo.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 25,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/icons/signet.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 9,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/icons/twitter-x.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 5,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/layout/default-layout/default-footer/default-footer.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/layout/default-layout/default-footer/default-footer.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 14,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/layout/default-layout/default-header/default-header.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 46,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/layout/default-layout/default-header/default-header.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 107,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/layout/default-layout/default-layout.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 53,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/layout/default-layout/index.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 4,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/layout/default-layout/_nav.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 451,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/layout/index.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 2,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/change-password/change-password.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 29,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/change-password/change-password.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 33,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/check-email/check-email.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/check-email/check-email.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 22,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/login/login.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/login/login.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 51,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/password-changed/password-changed.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/password-changed/password-changed.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 22,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/register/register.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/register/register.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 61,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/reset-password/reset-password.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 30,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/reset-password/reset-password.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 33,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/authentication/routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 65,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/charts/charts.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/charts/charts.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 143,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/charts/routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 8,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/accordion/accordions.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/accordion/accordions.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 41,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/alerts/alerts.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/alerts/alerts.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 45,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/badges/badges.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/badges/badges.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 21,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/breadcrumbs/breadcrumbs.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/breadcrumbs/breadcrumbs.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 40,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/button-groups/button-groups.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/button-groups/button-groups.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 53,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/buttons/buttons.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/buttons/buttons.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 18,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/cards/cards.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 50,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/cards/cards.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 58,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/carousels/carousel.config.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 14,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/carousels/carousels.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 52,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/carousels/carousels.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 91,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/collapses/collapses.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 45,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/collapses/collapses.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 18,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/dropdowns/dropdowns.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 53,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/dropdowns/dropdowns.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 69,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/list-groups/list-groups.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/list-groups/list-groups.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 63,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/modals/modals.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 61,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/modals/modals.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 35,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/navs/navs.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/navs/navs.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 25,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/paginations/paginations.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/paginations/paginations.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 21,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/placeholders/placeholders.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/placeholders/placeholders.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 26,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/popovers/popovers.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 46,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/popovers/popovers.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 21,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/progress/progress.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/progress/progress.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 32,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 179,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/search-button/search-button.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 46,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/search-button/search-button.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 37,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/spinners/spinners.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/spinners/spinners.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 11,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/tables/tables.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/tables/tables.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 22,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/tabs/tabs.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/tabs/tabs.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 51,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/toasters/toast-simple/toast-sample-icon.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 9,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/toasters/toast-simple/toast.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 33,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/toasters/toast-simple/toast.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 21,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/toasters/toasters.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 53,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/toasters/toasters.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 107,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/tooltips/tooltips.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 45,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/components/tooltips/tooltips.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 21,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/dashboard/dashboard-brand/dashboard-brand.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/dashboard/dashboard-brand/dashboard-brand.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 35,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/dashboard/dashboard-charts-data.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 194,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/dashboard/dashboard.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 188,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/dashboard/routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 13,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/dashboard/utils.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 16,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/error-pages/page404/page404.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/error-pages/page404/page404.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 19,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/error-pages/page500/page500.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/error-pages/page500/page500.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 19,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/error-pages/routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 32,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/checks-radios/checks-radios.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/checks-radios/checks-radios.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 65,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/floating-labels/floating-labels.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/floating-labels/floating-labels.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 24,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/form-controls/form-controls.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 35,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/form-controls/form-controls.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 30,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/input-groups/input-groups.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/input-groups/input-groups.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 31,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/layout/layout.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/layout/layout.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 29,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/ranges/ranges.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/ranges/ranges.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 11,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 74,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/select/select.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 34,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/select/select.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 12,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/validation/validation.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/forms/validation/validation.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 67,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/icons/coreui-icons.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 60,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/icons/routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 39,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/widgets/routes.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 12,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/widgets/widgets/widgets.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 45,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/widgets/widgets/widgets.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 33,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/widgets/widgets-brand/widgets-brand.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/widgets/widgets-brand/widgets-brand.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 112,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/widgets/widgets-dropdown/widgets-dropdown.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 36,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/widgets/widgets-dropdown/widgets-dropdown.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 260,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/widgets/widgets-e/widgets-e.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 41,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/app/views/widgets/widgets-e/widgets-e.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 138,
+      "figmFindingCount": 2,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-callout/docs-callout.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 27,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-callout/docs-callout.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 28,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-components/docs-components.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-components/docs-components.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 12,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-example/docs-example.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 38,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-example/docs-example.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 34,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-icons/docs-icons.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 24,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-icons/docs-icons.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 12,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-link/docs-link.component.spec.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 26,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/docs-link/docs-link.component.ts",
+      "framework": "ANGULAR_TEMPLATE",
+      "loc": 25,
+      "figmFindingCount": 1,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/index.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 2,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/components/public-api.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/declarations.d.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 6,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    },
+    {
+      "relativePath": "src/main.ts",
+      "framework": "GENERIC_ESTREE",
+      "loc": 10,
+      "figmFindingCount": 0,
+      "parseErrorCount": 0,
+      "engineCrash": null
+    }
+  ],
+  "rawDiagnostics": [
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/app.component.ts",
+      "location": {
+        "start": {
+          "line": 11,
+          "column": 0
+        },
+        "end": {
+          "line": 15,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 11",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/app.component.ts",
+      "location": {
+        "start": {
+          "line": 27,
+          "column": 2
+        },
+        "end": {
+          "line": 33,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 27",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/layout/default-layout/default-footer/default-footer.component.ts",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/layout/default-layout/default-footer/default-footer.component.ts",
+      "location": {
+        "start": {
+          "line": 10,
+          "column": 2
+        },
+        "end": {
+          "line": 12,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 10",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/layout/default-layout/default-header/default-header.component.ts",
+      "location": {
+        "start": {
+          "line": 51,
+          "column": 0
+        },
+        "end": {
+          "line": 81,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 51",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/layout/default-layout/default-header/default-header.component.ts",
+      "location": {
+        "start": {
+          "line": 98,
+          "column": 2
+        },
+        "end": {
+          "line": 100,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 98",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/layout/default-layout/default-layout.component.ts",
+      "location": {
+        "start": {
+          "line": 28,
+          "column": 0
+        },
+        "end": {
+          "line": 49,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 28",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/authentication/change-password/change-password.component.ts",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 0
+        },
+        "end": {
+          "line": 31,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/authentication/check-email/check-email.component.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 20,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/authentication/login/login.component.ts",
+      "location": {
+        "start": {
+          "line": 23,
+          "column": 0
+        },
+        "end": {
+          "line": 49,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 23",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/authentication/password-changed/password-changed.component.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 20,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/authentication/register/register.component.ts",
+      "location": {
+        "start": {
+          "line": 24,
+          "column": 0
+        },
+        "end": {
+          "line": 51,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 24",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/authentication/reset-password/reset-password.component.ts",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 0
+        },
+        "end": {
+          "line": 31,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-05",
+      "ruleName": "Renderer2 DOM Manipulation Safety",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/charts/charts.component.spec.ts",
+      "location": {
+        "start": {
+          "line": 24,
+          "column": 21
+        },
+        "end": {
+          "line": 24,
+          "column": 42
+        }
+      },
+      "offendingCodeSnippet": "const compiled = fixture.nativeElement as HTMLElement;",
+      "message": "Direct ElementRef nativeElement DOM manipulation bypasses Angular Renderer2 security.",
+      "remediation": "Use Renderer2 service methods for all DOM manipulations instead of nativeElement.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [MemberExpression] at line 24",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/charts/charts.component.ts",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/accordion/accordions.component.ts",
+      "location": {
+        "start": {
+          "line": 17,
+          "column": 0
+        },
+        "end": {
+          "line": 22,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 17",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/alerts/alerts.component.ts",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 0
+        },
+        "end": {
+          "line": 24,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/badges/badges.component.ts",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 0
+        },
+        "end": {
+          "line": 19,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/breadcrumbs/breadcrumbs.component.ts",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/button-groups/button-groups.component.ts",
+      "location": {
+        "start": {
+          "line": 25,
+          "column": 0
+        },
+        "end": {
+          "line": 29,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 25",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/buttons/buttons.component.ts",
+      "location": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 7",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/cards/cards.component.ts",
+      "location": {
+        "start": {
+          "line": 35,
+          "column": 0
+        },
+        "end": {
+          "line": 39,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 35",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/carousels/carousels.component.ts",
+      "location": {
+        "start": {
+          "line": 22,
+          "column": 0
+        },
+        "end": {
+          "line": 27,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 22",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/views/components/carousels/carousels.component.ts",
+      "location": {
+        "start": {
+          "line": 35,
+          "column": 2
+        },
+        "end": {
+          "line": 79,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 35",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/collapses/collapses.component.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/dropdowns/dropdowns.component.spec.ts",
+      "location": {
+        "start": {
+          "line": 20,
+          "column": 31
+        },
+        "end": {
+          "line": 20,
+          "column": 52
+        }
+      },
+      "offendingCodeSnippet": "let fixture: ComponentFixture<DropdownsComponent>;",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 20",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/dropdowns/dropdowns.component.ts",
+      "location": {
+        "start": {
+          "line": 31,
+          "column": 0
+        },
+        "end": {
+          "line": 63,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 31",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/list-groups/list-groups.component.ts",
+      "location": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 24,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 20",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-04",
+      "ruleName": "Dynamic Focus Containment and Traversal",
+      "domain": "ACCESSIBILITY",
+      "concern": "FOCUS_ORDER",
+      "severity": "CRITICAL",
+      "filePath": "src/app/views/components/modals/modals.component.spec.ts",
+      "location": {
+        "start": {
+          "line": 30,
+          "column": 31
+        },
+        "end": {
+          "line": 30,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "let fixture: ComponentFixture<ModalsComponent>;",
+      "message": "Modal or dynamic overlay component unmounts without programmatically restoring focus.",
+      "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically.",
+      "standardReference": "WCAG 2.2 SC 2.4.3 (Focus Order)",
+      "confidenceScore": 95,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 30",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/modals/modals.component.ts",
+      "location": {
+        "start": {
+          "line": 22,
+          "column": 0
+        },
+        "end": {
+          "line": 26,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 22",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/navs/navs.component.ts",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 0
+        },
+        "end": {
+          "line": 23,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/paginations/paginations.component.ts",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 0
+        },
+        "end": {
+          "line": 19,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/placeholders/placeholders.component.ts",
+      "location": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 24,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 20",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/popovers/popovers.component.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/progress/progress.component.ts",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/views/components/progress/progress.component.ts",
+      "location": {
+        "start": {
+          "line": 24,
+          "column": 2
+        },
+        "end": {
+          "line": 29,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 24",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/search-button/search-button.component.ts",
+      "location": {
+        "start": {
+          "line": 26,
+          "column": 0
+        },
+        "end": {
+          "line": 30,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 26",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/spinners/spinners.component.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/tables/tables.component.ts",
+      "location": {
+        "start": {
+          "line": 16,
+          "column": 0
+        },
+        "end": {
+          "line": 20,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 16",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/tabs/tabs.component.ts",
+      "location": {
+        "start": {
+          "line": 18,
+          "column": 0
+        },
+        "end": {
+          "line": 36,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 18",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/toasters/toast-simple/toast-sample-icon.component.ts",
+      "location": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 3",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/toasters/toast-simple/toast.component.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/views/components/toasters/toast-simple/toast.component.ts",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 2
+        },
+        "end": {
+          "line": 16,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/toasters/toasters.component.ts",
+      "location": {
+        "start": {
+          "line": 46,
+          "column": 0
+        },
+        "end": {
+          "line": 50,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 46",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-PERF-01",
+      "ruleName": "Invariant Object Allocation in Iteration Scopes",
+      "domain": "PERFORMANCE",
+      "concern": "INVARIANT_ALLOCATIONS",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/toasters/toasters.component.ts",
+      "location": {
+        "start": {
+          "line": 93,
+          "column": 37
+        },
+        "end": {
+          "line": 93,
+          "column": 92
+        }
+      },
+      "offendingCodeSnippet": "const { position, ...props } = { ...formValues, title, position: formValues.position };",
+      "message": "Object or closure literal instantiated inside loop/render iteration scope without hoisting.",
+      "remediation": "Hoist static object/array literals and helper callbacks outside the iteration scope or memoize invariant allocations.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 95,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ObjectExpression] at line 93",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "NO_SAFE_FIX"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/components/tooltips/tooltips.component.ts",
+      "location": {
+        "start": {
+          "line": 15,
+          "column": 0
+        },
+        "end": {
+          "line": 19,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 15",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/dashboard/dashboard-brand/dashboard-brand.component.ts",
+      "location": {
+        "start": {
+          "line": 11,
+          "column": 0
+        },
+        "end": {
+          "line": 15,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 11",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/views/dashboard/dashboard-charts-data.ts",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 2
+        },
+        "end": {
+          "line": 23,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-PERF-04",
+      "ruleName": "Static Imports in Deferred Execution Paths",
+      "domain": "PERFORMANCE",
+      "concern": "BUNDLE_SIZE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/views/dashboard/dashboard.component.ts",
+      "location": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 40
+        }
+      },
+      "offendingCodeSnippet": "import { ChartOptions } from 'chart.js';",
+      "message": "Static module import used inside conditional execution scope; should use dynamic import().",
+      "remediation": "Replace static top-level module imports with dynamic import() expressions inside deferred execution paths.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
+      "confidenceScore": 88,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ImportDeclaration] at line 3",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/dashboard/dashboard.component.ts",
+      "location": {
+        "start": {
+          "line": 40,
+          "column": 0
+        },
+        "end": {
+          "line": 44,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 40",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/error-pages/page404/page404.component.ts",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 17,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/error-pages/page500/page500.component.ts",
+      "location": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 17,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 13",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/forms/checks-radios/checks-radios.component.ts",
+      "location": {
+        "start": {
+          "line": 18,
+          "column": 0
+        },
+        "end": {
+          "line": 22,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 18",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/forms/floating-labels/floating-labels.component.ts",
+      "location": {
+        "start": {
+          "line": 18,
+          "column": 0
+        },
+        "end": {
+          "line": 22,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 18",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/forms/form-controls/form-controls.component.ts",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 0
+        },
+        "end": {
+          "line": 24,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/forms/input-groups/input-groups.component.ts",
+      "location": {
+        "start": {
+          "line": 25,
+          "column": 0
+        },
+        "end": {
+          "line": 29,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 25",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/forms/layout/layout.component.ts",
+      "location": {
+        "start": {
+          "line": 23,
+          "column": 0
+        },
+        "end": {
+          "line": 27,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 23",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/forms/ranges/ranges.component.ts",
+      "location": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 5",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-A11Y-02",
+      "ruleName": "Accessible Name and Role for Custom UI Controls",
+      "domain": "ACCESSIBILITY",
+      "concern": "NAME_ROLE_VALUE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/forms/select/select.component.spec.ts",
+      "location": {
+        "start": {
+          "line": 11,
+          "column": 31
+        },
+        "end": {
+          "line": 11,
+          "column": 49
+        }
+      },
+      "offendingCodeSnippet": "let fixture: ComponentFixture<SelectComponent>;",
+      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
+      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
+      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
+      "confidenceScore": 94,
+      "sourceKind": "LEGACY_TEXT_HEURISTIC",
+      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 11",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/forms/select/select.component.ts",
+      "location": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/forms/validation/validation.component.ts",
+      "location": {
+        "start": {
+          "line": 25,
+          "column": 0
+        },
+        "end": {
+          "line": 29,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 25",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/icons/coreui-icons.component.ts",
+      "location": {
+        "start": {
+          "line": 9,
+          "column": 0
+        },
+        "end": {
+          "line": 22,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 9",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/widgets/widgets/widgets.component.ts",
+      "location": {
+        "start": {
+          "line": 21,
+          "column": 0
+        },
+        "end": {
+          "line": 25,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 21",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/widgets/widgets-brand/widgets-brand.component.ts",
+      "location": {
+        "start": {
+          "line": 16,
+          "column": 0
+        },
+        "end": {
+          "line": 20,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 16",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/widgets/widgets-dropdown/widgets-dropdown.component.ts",
+      "location": {
+        "start": {
+          "line": 19,
+          "column": 0
+        },
+        "end": {
+          "line": 23,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 19",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/widgets/widgets-dropdown/widgets-dropdown.component.ts",
+      "location": {
+        "start": {
+          "line": 179,
+          "column": 0
+        },
+        "end": {
+          "line": 183,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 179",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/app/views/widgets/widgets-e/widgets-e.component.ts",
+      "location": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-07",
+      "ruleName": "Complex Logic in Angular Component Constructor",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "MEDIUM",
+      "filePath": "src/app/views/widgets/widgets-e/widgets-e.component.ts",
+      "location": {
+        "start": {
+          "line": 14,
+          "column": 2
+        },
+        "end": {
+          "line": 18,
+          "column": 3
+        }
+      },
+      "offendingCodeSnippet": "constructor() {",
+      "message": "Non-trivial logic in component constructor; move it to ngOnInit or a well-named method.",
+      "remediation": "Move non-trivial initialization out of the constructor and into ngOnInit or a dedicated, well-named method called from ngOnInit; reserve the constructor for dependency injection and simple field assignment. Evidence: Angular official coding style guide -- https://angular.dev/style-guide (recommends avoiding long or complex logic directly in constructors/lifecycle hooks, preferring well-named methods called from them; corroborated independently across the style guide's constructor and lifecycle-hook guidance).",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 80,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 14",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/components/docs-callout/docs-callout.component.ts",
+      "location": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 6",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/components/docs-components/docs-components.component.ts",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-05",
+      "ruleName": "Renderer2 DOM Manipulation Safety",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/components/docs-example/docs-example.component.spec.ts",
+      "location": {
+        "start": {
+          "line": 34,
+          "column": 21
+        },
+        "end": {
+          "line": 34,
+          "column": 42
+        }
+      },
+      "offendingCodeSnippet": "const compiled = fixture.nativeElement as HTMLElement;",
+      "message": "Direct ElementRef nativeElement DOM manipulation bypasses Angular Renderer2 security.",
+      "remediation": "Use Renderer2 service methods for all DOM manipulations instead of nativeElement.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 97,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [MemberExpression] at line 34",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/components/docs-icons/docs-icons.component.ts",
+      "location": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 4",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    },
+    {
+      "ruleId": "FIGM-ANG-02",
+      "ruleName": "Angular OnPush Change Detection Strategy",
+      "domain": "PERFORMANCE",
+      "concern": "ARCHITECTURE",
+      "severity": "HIGH",
+      "filePath": "src/components/docs-link/docs-link.component.ts",
+      "location": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
+          "column": 2
+        }
+      },
+      "offendingCodeSnippet": "@Component({",
+      "message": "Angular component missing ChangeDetectionStrategy.OnPush specification.",
+      "remediation": "Add changeDetection: ChangeDetectionStrategy.OnPush to Angular component decorator.",
+      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Time Behaviour",
+      "confidenceScore": 92,
+      "sourceKind": "REAL_AST",
+      "evidence": "Real AST (TypeScript compiler): [ClassDeclaration] at line 3",
+      "kind": "FIGM_RULE",
+      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
+    }
+  ]
+}

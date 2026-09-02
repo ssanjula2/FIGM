@@ -31,15 +31,20 @@ test('Multi-Tenant Authentication & Session Management', async (t) => {
   });
 
   await t.test('UserDB enforces tenant isolation for submissions', () => {
+    // Unique per run -- the JSON storage backend persists to a real file across separate `npm
+    // test` invocations, and UserDB.createUser now correctly rejects a duplicate email (mirroring
+    // Postgres's real unique constraint; see the Phase 11 participant-provisioning-race fix), so a
+    // hardcoded literal here would collide with this same test's leftover data from a prior run.
+    const suffix = `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     const userA = UserDB.createUser({
-      email: 'usera@test.com',
+      email: `usera_${suffix}@test.com`,
       passwordHash: hashPassword('passA'),
       fullName: 'User A',
       role: 'DEVELOPER',
     });
 
     const userB = UserDB.createUser({
-      email: 'userb@test.com',
+      email: `userb_${suffix}@test.com`,
       passwordHash: hashPassword('passB'),
       fullName: 'User B',
       role: 'DEVELOPER',

@@ -41,6 +41,12 @@ export function middleware(request: NextRequest) {
     // metrics endpoint (see the API route matrix in the forensic audit): they're evidence for an
     // external reviewer, not application data.
     path.startsWith('/eval-results/') ||
+    // RQ1 FCP/TTI experiment fixture pages (docs/research/RQ1_EXPERIMENT_PROTOCOL.md) -- these
+    // are minimal, isolated research fixtures navigated to by an unauthenticated Lighthouse/
+    // chrome-launcher process (research/rq1-experiment/scripts/run-experiment.ts), not
+    // application surfaces; gating them behind login would make the measured page include an
+    // auth redirect in every run, confounding the very metric being measured.
+    path.startsWith('/rq1-experiment') ||
     path.startsWith('/_next') ||
     path === '/favicon.ico' ||
     path === '/icon.svg';

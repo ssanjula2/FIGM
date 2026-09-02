@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -17,6 +17,21 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const router = useRouter();
   const asideRef = useRef<HTMLElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
+
+  // Whether the signed-in user is an ADMIN -- read the same way HeaderBar reads the display name,
+  // from the localStorage copy both auth pages write at login/registration time. This is only used
+  // to decide whether to show a link *into* the admin workspace; the actual boundary is enforced
+  // server-side by app/admin/layout.tsx, so a forged/absent value here can at most hide or show a
+  // link, never grant access.
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('figm_user');
+      if (raw) setIsAdmin(JSON.parse(raw)?.role === 'ADMIN');
+    } catch {
+      // Corrupt/inaccessible localStorage -- default to not showing the admin link.
+    }
+  }, []);
 
   // Previously just a plain nav link to /login (the app's OLDER, duplicate auth page) with no
   // actual logout behavior at all -- clicking it left the real httpOnly session cookie fully
@@ -96,12 +111,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       ],
     },
     {
-      groupName: 'ACCOUNT & ADMIN',
+      groupName: 'ACCOUNT',
       items: [
         { href: '/security', label: 'Tenant Security', icon: '🛡️' },
-        { href: '/admin', label: 'Admin Panel', icon: '⚙️' },
-        { href: '/profile', label: 'User Profile', icon: '👤' },
+        { href: '/profile', label: 'My Profile', icon: '👤' },
         { href: '/settings', label: 'Settings', icon: '🔧' },
+        // Only ever shown to an authenticated ADMIN (see isAdmin above) -- a normal user's own
+        // workspace nav must never surface a link into the admin/research workspace at all, per
+        // the role-separation requirement this replaces the old unconditional "Admin Panel" link
+        // to satisfy: previously every DEVELOPER saw this link regardless of role.
+        ...(isAdmin ? [{ href: '/admin', label: 'Admin Workspace', icon: '🛡️' }] : []),
         { href: '/auth/login', label: 'Log out', icon: '🚪', isLogout: true },
       ],
     },
@@ -194,6 +213,25 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           >
             <span aria-hidden="true">✕</span>
           </button>
+        </div>
+
+        <div
+          role="note"
+          aria-label="Workspace indicator"
+          style={{
+            fontSize: '10px',
+            fontWeight: 800,
+            color: '#7dd3fc',
+            background: 'rgba(56, 189, 248, 0.1)',
+            border: '1px solid rgba(56, 189, 248, 0.25)',
+            borderRadius: '8px',
+            padding: '6px 10px',
+            marginBottom: '20px',
+            letterSpacing: '0.5px',
+            textAlign: 'center',
+          }}
+        >
+          👤 MY WORKSPACE
         </div>
 
         {/* Navigation Link Groups */}

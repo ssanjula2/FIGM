@@ -41,6 +41,7 @@ export class TypeCheckerService {
    * TS2686 — 'X' refers to a UMD global, only available with --module
    * TS2503 — Cannot find namespace 'JSX'
    * TS7016 — Could not find a declaration file for module
+   * TS2875 — This JSX tag requires the module path 'react/jsx-runtime' to exist (see below)
    */
   private static readonly SNIPPET_NOISE_CODES = new Set<number>([
     2792, // Cannot find module (e.g. 'react', 'vue', '@angular/core')
@@ -50,6 +51,19 @@ export class TypeCheckerService {
     2686, // 'X' refers to a UMD global — only available with --module
     2503, // Cannot find namespace 'JSX'
     7016, // Could not find a declaration file for module
+    // Root-caused live (previously tracked as audit finding NEW-09, "open, not root-caused"):
+    // under `jsx: ReactJSX` the compiler must resolve the *implicit* 'react/jsx-runtime' module for
+    // every JSX tag. Empirically reproduced: this resolution silently fails in this isolated
+    // single-file CompilerHost whenever the snippet has no top-level statement that imports from
+    // 'react' to anchor module resolution -- even though the real `react` package (and its
+    // `jsx-runtime` entry point) is present on disk in this project's own node_modules, and even
+    // though modern React/Next.js code deliberately never imports React at all under the automatic
+    // JSX runtime. Confirmed by direct A/B test: identical JSX-returning snippets differ ONLY in the
+    // presence of `import React from 'react'`, and only the no-import variant reports TS2875 -- so
+    // this is a snippet-checking-environment artifact, not a defect in the user's source. A real
+    // project compile (with a real tsconfig's module graph) never has this problem: react/jsx-runtime
+    // always resolves once 'react' is an actual installed dependency, import or no import.
+    2875,
     2584, // Cannot find name 'console' (missing lib.dom.d.ts in isolated mode)
     2585, // Cannot find name 'Promise' (missing lib.es2015.promise)
     2339, // Property does not exist on JSX intrinsic elements (no JSX types loaded)
@@ -74,9 +88,15 @@ export class TypeCheckerService {
     }
 
     const isTS = filePath.endsWith('.ts') || filePath.endsWith('.tsx') || filePath.endsWith('.vue');
-    if (!isTS && !codeToTypeCheck.includes(': ') && !codeToTypeCheck.includes('interface ') && !codeToTypeCheck.includes('type ')) {
-      return { hasTypeErrors: false, diagnostics: [] };
-    }
+    // BUG (found live, reproduced from a real report): this used to skip TypeScript diagnostics
+    // ENTIRELY for a .js/.jsx file with no type-annotation-shaped substring — including genuine
+    // SYNTAX errors (e.g. an unclosed JSX tag, `TS17008`) that the compiler's own PARSER catches
+    // independent of type checking. A plain .jsx file containing only `<SomeComponent>` (no closing
+    // tag) came back with zero diagnostics and a 100/100 quality score, silently reporting broken
+    // code as clean. `runSemanticCheck` below only gates the expensive type-INFERENCE pass (which
+    // genuinely has nothing useful to do on a file with no type annotations); the cheap syntactic
+    // parse diagnostics further down now always run regardless of file extension or this heuristic.
+    const runSemanticCheck = isTS || codeToTypeCheck.includes(': ') || codeToTypeCheck.includes('interface ') || codeToTypeCheck.includes('type ');
 
     const fileName = filePath.endsWith('.tsx') || filePath.endsWith('.jsx') ? 'sample.tsx' : 'sample.ts';
 
@@ -126,7 +146,15 @@ export class TypeCheckerService {
 
       const program = ts.createProgram([fileName], compilerOptions, host, TypeCheckerService.lastProgram);
       TypeCheckerService.lastProgram = program;
-      tsDiagnostics = ts.getPreEmitDiagnostics(program);
+      // Syntactic diagnostics (pure parser output — unclosed brackets/tags, malformed JSX, etc.)
+      // always run: they cost nothing extra (the parse already happened above) and are correct
+      // regardless of whether the file has any types to check. The full semantic/type-inference
+      // pass (getPreEmitDiagnostics = syntactic + semantic + declaration diagnostics) only runs
+      // when there's actually something type-shaped to check — running it on plain untyped JS is
+      // both wasted work and the source of the SNIPPET_NOISE_CODES false positives filtered below.
+      tsDiagnostics = runSemanticCheck
+        ? ts.getPreEmitDiagnostics(program)
+        : program.getSyntacticDiagnostics(sourceFile);
     } catch (err: any) {
       // Reset the incremental-program cache: a corrupted/partial Program from a failed parse
       // should never be reused as `oldProgram` for the next (unrelated) file's checkCode() call.

@@ -5,15 +5,14 @@
   "primaryFrameworkLabel": "Next.js",
   "filesScanned": 131,
   "totalLOC": 7166,
-  "scanDurationMs": 16669.54740000001,
-  "totalFigmFindings": 59,
+  "scanDurationMs": 16360.911999999997,
+  "totalFigmFindings": 51,
   "findingsByRule": {
-    "FIGM-REACT-01": 6,
     "FIGM-PERF-02": 5,
     "FIGM-NEXT-06": 5,
     "FIGM-PERF-05": 7,
     "FIGM-NEXT-03": 8,
-    "FIGM-A11Y-02": 7,
+    "FIGM-A11Y-02": 5,
     "FIGM-PERF-04": 3,
     "FIGM-PERF-01": 2,
     "FIGM-NEXT-08": 3,
@@ -23,7 +22,7 @@
     "FIGM-NEXT-04": 2
   },
   "findingsBySeverity": {
-    "HIGH": 23,
+    "HIGH": 15,
     "MEDIUM": 25,
     "CRITICAL": 11
   },
@@ -66,7 +65,7 @@
       "relativePath": "basics/api-routes-starter/lib/posts.js",
       "framework": "GENERIC_ESTREE",
       "loc": 70,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -130,7 +129,7 @@
       "relativePath": "basics/basics-final/lib/posts.js",
       "framework": "GENERIC_ESTREE",
       "loc": 70,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -218,7 +217,7 @@
       "relativePath": "basics/demo/lib/posts.js",
       "framework": "GENERIC_ESTREE",
       "loc": 70,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -266,7 +265,7 @@
       "relativePath": "basics/dynamic-routes-starter/lib/posts.js",
       "framework": "GENERIC_ESTREE",
       "loc": 36,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -306,7 +305,7 @@
       "relativePath": "basics/dynamic-routes-step-1/lib/posts.js",
       "framework": "GENERIC_ESTREE",
       "loc": 61,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -386,7 +385,7 @@
       "relativePath": "basics/typescript-final/lib/posts.ts",
       "framework": "GENERIC_ESTREE",
       "loc": 70,
-      "figmFindingCount": 1,
+      "figmFindingCount": 0,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1026,7 +1025,7 @@
       "relativePath": "seo/components/CodeSampleModal.js",
       "framework": "GENERIC_ESTREE",
       "loc": 35,
-      "figmFindingCount": 2,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1042,7 +1041,7 @@
       "relativePath": "seo/demo/components/CodeSampleModal.js",
       "framework": "GENERIC_ESTREE",
       "loc": 35,
-      "figmFindingCount": 2,
+      "figmFindingCount": 1,
       "parseErrorCount": 0,
       "engineCrash": null
     },
@@ -1088,33 +1087,6 @@
     }
   ],
   "rawDiagnostics": [
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "basics/api-routes-starter/lib/posts.js",
-      "location": {
-        "start": {
-          "line": 30,
-          "column": 9
-        },
-        "end": {
-          "line": 36,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "return allPostsData.sort((a, b) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 30",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
     {
       "ruleId": "FIGM-PERF-02",
       "ruleName": "Un-dimensioned Dynamic Layout Elements",
@@ -1171,7 +1143,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -1187,7 +1159,7 @@
         }
       },
       "offendingCodeSnippet": "onLoad={() =>",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -1197,114 +1169,6 @@
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
     {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "basics/basics-final/lib/posts.js",
-      "location": {
-        "start": {
-          "line": 30,
-          "column": 9
-        },
-        "end": {
-          "line": 36,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "return allPostsData.sort((a, b) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 30",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "basics/demo/lib/posts.js",
-      "location": {
-        "start": {
-          "line": 30,
-          "column": 9
-        },
-        "end": {
-          "line": 36,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "return allPostsData.sort((a, b) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 30",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "basics/dynamic-routes-starter/lib/posts.js",
-      "location": {
-        "start": {
-          "line": 28,
-          "column": 9
-        },
-        "end": {
-          "line": 34,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "return allPostsData.sort((a, b) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 28",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "basics/dynamic-routes-step-1/lib/posts.js",
-      "location": {
-        "start": {
-          "line": 28,
-          "column": 9
-        },
-        "end": {
-          "line": 34,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "return allPostsData.sort((a, b) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 28",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
       "ruleId": "FIGM-PERF-02",
       "ruleName": "Un-dimensioned Dynamic Layout Elements",
       "domain": "PERFORMANCE",
@@ -1409,33 +1273,6 @@
       "confidenceScore": 86,
       "sourceKind": "REAL_AST",
       "evidence": "Real AST (TypeScript compiler): [JSXElement] at line 59",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "SUGGESTED_FIX_ONLY"
-    },
-    {
-      "ruleId": "FIGM-REACT-01",
-      "ruleName": "Memoize Expensive Derived Computations",
-      "domain": "PERFORMANCE",
-      "concern": "INVARIANT_ALLOCATIONS",
-      "severity": "HIGH",
-      "filePath": "basics/typescript-final/lib/posts.ts",
-      "location": {
-        "start": {
-          "line": 30,
-          "column": 9
-        },
-        "end": {
-          "line": 36,
-          "column": 4
-        }
-      },
-      "offendingCodeSnippet": "return allPostsData.sort((a, b) => {",
-      "message": "Expensive derived array computation inside render routine should be wrapped in useMemo.",
-      "remediation": "Wrap heavy derived data computations inside React.useMemo.",
-      "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
-      "confidenceScore": 88,
-      "sourceKind": "REAL_AST",
-      "evidence": "Real AST (TypeScript compiler): [CallExpression] at line 30",
       "kind": "FIGM_RULE",
       "fixabilityStatus": "SUGGESTED_FIX_ONLY"
     },
@@ -1549,7 +1386,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -1565,7 +1402,7 @@
         }
       },
       "offendingCodeSnippet": "() => reset()",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -1981,7 +1818,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -1997,7 +1834,7 @@
         }
       },
       "offendingCodeSnippet": "onChange={(e) => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -2142,33 +1979,6 @@
       "fixabilityStatus": "AUTO_FIX_AVAILABLE"
     },
     {
-      "ruleId": "FIGM-A11Y-02",
-      "ruleName": "Accessible Name and Role for Custom UI Controls",
-      "domain": "ACCESSIBILITY",
-      "concern": "NAME_ROLE_VALUE",
-      "severity": "HIGH",
-      "filePath": "seo/components/CodeSampleModal.js",
-      "location": {
-        "start": {
-          "line": 21,
-          "column": 4
-        },
-        "end": {
-          "line": 21,
-          "column": 10
-        }
-      },
-      "offendingCodeSnippet": "<Modal",
-      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
-      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
-      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
-      "confidenceScore": 94,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 21",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
       "ruleId": "FIGM-A11Y-04",
       "ruleName": "Dynamic Focus Containment and Traversal",
       "domain": "ACCESSIBILITY",
@@ -2190,33 +2000,6 @@
       "remediation": "Implement focus containment traps inside active modal overlays and restore focus programmatically.",
       "standardReference": "WCAG 2.2 SC 2.4.3 (Focus Order)",
       "confidenceScore": 95,
-      "sourceKind": "LEGACY_TEXT_HEURISTIC",
-      "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 21",
-      "kind": "FIGM_RULE",
-      "fixabilityStatus": "AUTO_FIX_AVAILABLE"
-    },
-    {
-      "ruleId": "FIGM-A11Y-02",
-      "ruleName": "Accessible Name and Role for Custom UI Controls",
-      "domain": "ACCESSIBILITY",
-      "concern": "NAME_ROLE_VALUE",
-      "severity": "HIGH",
-      "filePath": "seo/demo/components/CodeSampleModal.js",
-      "location": {
-        "start": {
-          "line": 21,
-          "column": 4
-        },
-        "end": {
-          "line": 21,
-          "column": 10
-        }
-      },
-      "offendingCodeSnippet": "<Modal",
-      "message": "Custom interactive control element missing explicit ARIA role and accessible name (aria-label).",
-      "remediation": "Add an appropriate ARIA role attribute along with aria-label or aria-labelledby.",
-      "standardReference": "WCAG 2.2 SC 4.1.2 (Name, Role, Value)",
-      "confidenceScore": 94,
       "sourceKind": "LEGACY_TEXT_HEURISTIC",
       "evidence": "Legacy text-heuristic pattern match: [JSXElement] at line 21",
       "kind": "FIGM_RULE",
@@ -2359,7 +2142,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -2375,7 +2158,7 @@
         }
       },
       "offendingCodeSnippet": "onChange={async (e) => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -2386,7 +2169,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -2402,7 +2185,7 @@
         }
       },
       "offendingCodeSnippet": "<button onClick={() => setIsModalOpen(true)}>Show Me</button>",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -2575,7 +2358,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -2591,7 +2374,7 @@
         }
       },
       "offendingCodeSnippet": "onChange={async (e) => {",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,
@@ -2602,7 +2385,7 @@
     },
     {
       "ruleId": "FIGM-PERF-05",
-      "ruleName": "Inline Anonymous Callbacks in Render Loops",
+      "ruleName": "Inline Anonymous Callbacks in Render Scope",
       "domain": "PERFORMANCE",
       "concern": "INVARIANT_ALLOCATIONS",
       "severity": "MEDIUM",
@@ -2618,7 +2401,7 @@
         }
       },
       "offendingCodeSnippet": "<button onClick={() => setIsModalOpen(true)}>Show Me</button>",
-      "message": "Inline anonymous arrow function defined inside render loop expression causing re-instantiation.",
+      "message": "Inline anonymous arrow function defined in render scope (loop or non-loop) causing re-instantiation on every render.",
       "remediation": "Extract callback function or pass item ID to memoized event handler.",
       "standardReference": "ISO/IEC 25010 — Performance Efficiency: Resource Utilization",
       "confidenceScore": 85,

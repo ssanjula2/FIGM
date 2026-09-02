@@ -334,7 +334,7 @@ setUser(user);`,
           </div>
 
           <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
-            "{activeStage.description}"
+            &quot;{activeStage.description}&quot;
           </p>
 
           {/* Render Stage Specific Content Example */}
@@ -468,7 +468,7 @@ setUser(user);`,
           }}
         >
           <p style={{ fontSize: '16px', fontWeight: 700, color: '#f8fafc', maxWidth: '850px', margin: '0 auto 28px auto', lineHeight: 1.6 }}>
-            "FIGM separates framework syntax from reusable software-quality logic, enabling the same analysis model to identify comparable patterns across modern SPA frameworks."
+            &quot;FIGM separates framework syntax from reusable software-quality logic, enabling the same analysis model to identify comparable patterns across modern SPA frameworks.&quot;
           </p>
 
           <div

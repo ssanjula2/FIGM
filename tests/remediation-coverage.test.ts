@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { SourceParser } from '../src/parser/source-parser.js';
 import { ASTDetectionEngine } from '../src/ast/ast-detection-engine.js';
 import { RemediationEngine } from '../src/engine/remediation-engine.js';
+import { RemediationValidator } from '../src/engine/remediation-validation.server.js';
 
 /**
  * Phase 10 coverage: for every one of the real 25 rule IDs, run a real positive fixture through
@@ -74,7 +75,7 @@ describe('Phase 10: remediation coverage and honesty for all 25 real rules', () 
       assert.ok(defect, `${c.ruleId} must be detected by its own positive fixture`);
 
       const fix = RemediationEngine.applyQuickFix(c.code, defect!);
-      const verification = RemediationEngine.validatePatch(c.code, fix.remediatedCode, defect!, fix.requiresManualReview);
+      const verification = RemediationValidator.validatePatch(c.code, fix.remediatedCode, defect!, fix.requiresManualReview);
 
       if (EXPECTED_MANUAL_REVIEW.has(c.ruleId)) {
         assert.equal(verification.status, 'MANUAL_REVIEW_REQUIRED', `${c.ruleId} must honestly flag manual review, not fake a complete fix`);
