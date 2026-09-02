@@ -41,6 +41,25 @@ enum AuditAction {
   CREATE_PROJECT
   DELETE_PROJECT
   SCAN_RUN
+  RESEARCH_PARTICIPANT_ASSIGNED
+  RESEARCH_CONSENT_VERIFIED
+  RESEARCH_CONSENT_REVOKED
+}
+
+// Server-verifiable research-eligibility state for a participant User row (see
+// app/api/user-study/log-scan/route.ts). ASSIGNED = a participant code has been issued and bound
+// to a signed session token, but no consent verification has occurred yet -- this is the only
+// state a participant can be in while running the benchmark-scan portion of the study, because the
+// study protocol itself has the participant complete the scan task BEFORE submitting the external
+// consent/questionnaire Google Form (see app/user-study/page.tsx's own instructions). Never
+// auto-promoted to CONSENT_VERIFIED; that only happens via an ADMIN-operated action once the
+// researcher has reconciled a real Google Form submission against this participant code. REVOKED
+// marks a participant assignment (e.g. known QA/test contamination) as no longer able to accept
+// further research-scan writes, without deleting its existing historical records.
+enum ResearchParticipantStatus {
+  ASSIGNED
+  CONSENT_VERIFIED
+  REVOKED
 }
 
 enum ExportFormat {
@@ -65,6 +84,20 @@ model User {
   updatedAt        DateTime    @updatedAt @map("updated_at")
   lastLoginAt      DateTime?   @map("last_login_at")
 
+  // Research-participant fields. Null/unused for every ordinary (non-study) account. See
+  // ResearchParticipantStatus's own doc comment and src/engine/participant-repository.ts.
+  // `participantCode` is the single authoritative "P001".."P085"-shaped identity every UI/API/
+  // export surface must resolve through -- deliberately NOT the same as `id` for any row assigned
+  // after this field was introduced (id is a normal random UUID like every other user), closing
+  // the audit finding that the displayed participant code and the database primary key were
+  // previously the same value. Existing pre-migration participant rows keep their original
+  // P-shaped `id` and are backfilled with a matching `participantCode` so every consumer can query
+  // through this one field uniformly regardless of when the row was created.
+  participantCode           String?                    @unique @map("participant_code")
+  researchStatus            ResearchParticipantStatus? @map("research_status")
+  researchAssignedAt        DateTime?                  @map("research_assigned_at")
+  researchConsentVerifiedAt DateTime?                  @map("research_consent_verified_at")
+
   projects            Project[]
   scanReports         ScanReport[]
   notifications       Notification[]
@@ -75,6 +108,7 @@ model User {
   researchEvaluations ResearchEvaluation[]
   aiHistories         AiHistory[]
   exportHistories     ExportHistory[]
+  submissions         Submission[]
 
   @@map("users")
 }
@@ -253,6 +287,28 @@ model AiHistory {
   scanReport ScanReport? @relation(fields: [scanReportId], references: [id], onDelete: SetNull)
 
   @@map("ai_history")
+}
+
+// Backs POST/GET /api/submissions -- previously that route bypassed the storage-provider
+// abstraction entirely and wrote straight to the JSON-file-backed UserDB, so submissions never
+// reached Postgres regardless of STORAGE_PROVIDER configuration. This model + the corresponding
+// IStorageProvider methods close that gap; the route now goes through RepositoryFactory like every
+// other production data path.
+model Submission {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  fileName          String   @map("file_name")
+  framework         String
+  codeContent       String   @map("code_content")
+  executionTimeMs   Float    @default(0.0) @map("execution_time_ms")
+  qualityScore      Int      @default(0) @map("quality_score")
+  diagnosticsCount  Int      @default(0) @map("diagnostics_count")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("submissions")
 }
 
 model ExportHistory {
