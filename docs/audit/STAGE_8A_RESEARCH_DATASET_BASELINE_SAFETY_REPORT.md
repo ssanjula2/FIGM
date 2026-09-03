@@ -149,15 +149,43 @@ and out of this commit.
 
 ```
 RESEARCH_FREEZE_V5_CREATED: YES
-FREEZE_V5_COMMIT: <recorded after commit — see Stage 8B deployment/acceptance record>
-FREEZE_V5_TAG_TARGET: <recorded after commit — see Stage 8B deployment/acceptance record>
+FREEZE_V5_COMMIT: 0d287d6d8408c319bae839811d1ac52c0cd71f3f
+FREEZE_V5_TAG_TARGET: 0d287d6d8408c319bae839811d1ac52c0cd71f3f
 ```
 
-## 9–11. Production deployment and acceptance
+## 9–11. Production deployment and acceptance (Stage 8B)
 
-See the Stage 8B session record (commit message and PR/deployment history) for the exact
-deployment ID, Production URL, and short non-research acceptance-check results for this exact
-frozen version.
+Deployed this exact commit to Vercel Production (`vercel deploy --prod --yes`):
+
+```
+PRODUCTION_DEPLOYMENT_ID: dpl_GPHEyVS38bLQvDHJKp7XBmKqBNZ9
+PRODUCTION_URL: https://figm-code-inspector.vercel.app
+```
+
+Short non-research acceptance check, all against the live Production URL:
+
+| Check | Result |
+|---|---|
+| `GET /api/health` | 200, `database: CONNECTED_POSTGRES`, `storageProvider: supabase` |
+| Register + login (disposable `curltest_stage8b_*@figm.io` account) | 200 / 200 |
+| `GET /api/dashboard/summary` for the fresh account | 200, all-zero stats — correctly per-user scoped, not global |
+| Scanner smoke (`POST /api/scan`, a real `addEventListener` w/o cleanup) | 200, real AST-derived `FIGM-PERF-03` finding returned |
+| Logout | 200 |
+| Same access token replayed after logout | 401 `TOKEN_REVOKED` — stale-token rejection confirmed |
+| `GET /api/admin/participants`, anonymous | 401 |
+| `GET /api/admin/participants`, DEVELOPER-role token | 403 — admin RBAC gate live and enforcing (no real admin credentials were used/created; enforcement verified in both directions instead) |
+| `ParticipantRepository.getResearchDataset()` re-verified server-side against the live Production DB (no exposed HTTP endpoint by design — repository-level only) | `ASSIGNED_COUNT: 10`, `RESEARCH_DATASET_TOTAL_ROWS: 0`, `ASSIGNED_ROWS_EXPORTED: 0` |
+
+No blocking 5xx observed (one transient 500 during manual testing was a malformed JSON body on
+the caller's side — a bad shell escape — not a server defect; re-sent with valid JSON and it
+returned 200).
+
+Two disposable engineering-test accounts (`curltest_stage8b_*@figm.io`, matching this repo's
+existing `curltest*` cleanup convention, both with no `researchStatus`) were created for this
+acceptance pass and deleted immediately after, with an id- and email-pattern safety check before
+each deletion. Post-cleanup verification: 0 Stage 8B test accounts remain, and all 10 original
+`P001`–`P010` rows are unchanged (`ASSIGNED`, `researchConsentVerifiedAt` still null on every one).
+No participant status was changed; no historical QA scan was deleted.
 
 ## 12. Final summary
 
