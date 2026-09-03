@@ -28,7 +28,7 @@ function authedRequest(url: string, opts: RequestInit, jwt?: string): Request {
 }
 
 function tokenFor(userId: string, role: 'DEVELOPER' | 'ADMIN' | 'AUDITOR' = 'DEVELOPER'): string {
-  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role });
+  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role }, 0);
 }
 
 function createTestUser(label: string) {
@@ -55,7 +55,7 @@ test('API Security Fixes — dashboard/reports, projects, scans ownership, rate-
   });
 
   await t.test('GET /api/dashboard/reports: expired JWT is rejected with 401', async () => {
-    const expired = signJWT({ userId: 'usr_x', email: 'x@figm.io', fullName: 'X', role: 'DEVELOPER' }, -10);
+    const expired = signJWT({ userId: 'usr_x', email: 'x@figm.io', fullName: 'X', role: 'DEVELOPER' }, 0, -10);
     const res = await reportsGET(authedRequest('http://localhost:3000/api/dashboard/reports', {}, expired));
     assert.equal(res.status, 401);
   });
@@ -109,7 +109,7 @@ test('API Security Fixes — dashboard/reports, projects, scans ownership, rate-
   });
 
   await t.test('GET /api/projects: expired JWT is rejected with 401', async () => {
-    const expired = signJWT({ userId: 'usr_y', email: 'y@figm.io', fullName: 'Y', role: 'DEVELOPER' }, -30);
+    const expired = signJWT({ userId: 'usr_y', email: 'y@figm.io', fullName: 'Y', role: 'DEVELOPER' }, 0, -30);
     const res = await projectsGET(authedRequest('http://localhost:3000/api/projects', {}, expired));
     assert.equal(res.status, 401);
   });

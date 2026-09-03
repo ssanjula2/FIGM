@@ -24,6 +24,14 @@ const RULE_LOOKUP = new Map(RULE_CATALOG.map((r) => [r.id, r]));
  * this is genuine production usage data, distinct from (and never conflated with) the controlled
  * benchmark numbers in benchmarks/eval-summary.json. Never fabricates a count for a rule that has
  * zero real occurrences -- such rules simply don't appear in `ruleStats`.
+ *
+ * Stage 7D (Section 6): deliberately NOT filtered by engineering-test-account status. This is an
+ * ADMIN-only operational tool (app/api/admin/rule-stats/route.ts, authorizeRole(['ADMIN'])), not a
+ * public or research-facing metric -- an admin auditing which rules actually fire needs full
+ * visibility, including an engineering-QA walkthrough's own scans, to do that job. Contrast with
+ * the public app/api/dashboard/statistics/route.ts and DashboardRepository.getSummary()/
+ * getActivityFeed, which DO exclude engineering-test data because they're shown to real visitors
+ * or feed research-facing aggregates.
  */
 export class RuleAnalyticsRepository {
   private static get provider() {

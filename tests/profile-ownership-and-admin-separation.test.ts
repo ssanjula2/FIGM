@@ -25,7 +25,7 @@ function makeRealUser(label: string, role: 'DEVELOPER' | 'ADMIN' | 'AUDITOR' = '
     fullName: `${label} Test User`,
     role,
   });
-  const token = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: user.role });
+  const token = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: user.role }, user.tokenVersion ?? 0);
   return { user, token };
 }
 

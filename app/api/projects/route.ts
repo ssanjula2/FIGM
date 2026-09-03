@@ -5,7 +5,7 @@ import { AuditLogger } from '../../../src/auth/audit-logger';
 import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 
 export async function GET(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

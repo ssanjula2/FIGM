@@ -42,7 +42,7 @@ function parseDate(raw: string | null, label: string): { value?: string; error?:
 }
 
 export async function GET(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
   // trusted a client-supplied `participantId` as the record's userId (letting anyone attribute a
   // forged scan to any known account id), and trusted client-supplied qualityScore/diagnostics
   // verbatim (letting anyone forge arbitrary results into their own history).
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

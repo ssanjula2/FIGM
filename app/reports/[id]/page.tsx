@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { DBScanRecord } from '../../../src/auth/user-db';
 import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
 import { calculateQualityScore } from '../../../src/engine/quality-score';
+import { formatScanDuration, formatMemoryDelta } from '../../../src/lib/engine-diagnostics-format';
 
 export default function ReportViewerPage({ params }: { params: { id: string } }) {
   const [record, setRecord] = useState<DBScanRecord | null>(null);
@@ -157,9 +158,9 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
           <div style={{ fontSize: '12px', color: '#7c8ba6', fontWeight: 700 }}>Scan Duration</div>
           <div style={{ fontSize: '36px', fontWeight: 900, color: '#38bdf8', marginTop: '6px' }}>
-            {record.scanTimeMs}ms
+            {formatScanDuration(record.scanTimeMs)}
           </div>
-          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Peak Memory: {record.memoryUsageMb} MB</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Engine Memory Delta: {formatMemoryDelta(record.memoryUsageMb)}</div>
         </div>
 
         <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
@@ -377,7 +378,7 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
                   duration, and the real scanTimeMs value was mislabeled two steps down as when the
                   "AI Remediation Engine Finished", even though AI remediation is a separate,
                   often-never-invoked action -- see aiFixCount below). */}
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8' }}>{record.scanTimeMs}ms — Rule Execution Engine Completed</div>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8' }}>{formatScanDuration(record.scanTimeMs)} — Rule Execution Engine Completed</div>
               <div style={{ fontSize: '12px', color: '#94a3b8' }}>Executed {TOTAL_RULE_COUNT} FIGM rules against target framework: {record.framework}. Found {record.ruleCount} diagnostic{record.ruleCount === 1 ? '' : 's'}. Overall score: {record.qualityScore}%.</div>
             </div>
             {record.aiFixCount > 0 && (
@@ -397,7 +398,6 @@ export default function ReportViewerPage({ params }: { params: { id: string } })
           <ul style={{ color: '#94a3b8', fontSize: '13px', lineHeight: 1.8 }}>
             <li><strong>ISO/IEC 25010</strong>: Systems and software Quality Requirements and Evaluation (SQuaRE) framework.</li>
             <li><strong>W3C WCAG 2.2 AA</strong>: Web Content Accessibility Guidelines for perceivable, operable, understandable, and robust UI.</li>
-            <li><strong>Google Core Web Vitals</strong>: Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS).</li>
             <li><strong>FIGM Specification v3.0</strong>: 3-stage extraction protocol (parse → normalize → extract) for framework-independent static analysis.</li>
           </ul>
         </div>

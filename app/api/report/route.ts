@@ -7,7 +7,7 @@ import { authenticateUser } from '../../../src/auth/auth-middleware';
 import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 
 export async function GET(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

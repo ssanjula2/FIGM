@@ -4,7 +4,7 @@ import { authenticateUser } from '../../../src/auth/auth-middleware';
 import { NotificationRepository } from '../../../src/engine/notification-repository';
 
 export async function GET(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -50,7 +50,7 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

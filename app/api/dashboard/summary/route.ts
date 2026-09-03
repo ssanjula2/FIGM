@@ -3,7 +3,7 @@ import { authenticateUser } from '../../../../src/auth/auth-middleware';
 import { DashboardRepository } from '../../../../src/engine/dashboard-repository';
 
 export async function GET(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   // This endpoint is intentionally public: it serves platform-wide aggregate counts (total
   // scans/projects, average quality score, framework distribution), not per-user data, for the
   // public dashboard showcase. `role` must never default to 'ADMIN' for an unauthenticated

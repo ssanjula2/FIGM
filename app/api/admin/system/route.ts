@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 export async function GET(request: Request) {
-  const auth = authorizeRole(request, ['ADMIN']);
+  const auth = await authorizeRole(request, ['ADMIN']);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

@@ -10,6 +10,15 @@ import { AuditLogger } from '../../../src/auth/audit-logger';
 
 const MAX_CODE_LENGTH = 500000; // 500KB limit
 
+// Stage 7B Vercel-readiness note: this route does real work beyond a typical request -- AST
+// parsing, a disposable child-process sandbox spawn (DynamicProfiler, hard 3s internal timeout),
+// and, on the fix/verify path, a real AI-provider network call (Claude/Gemini) that can take
+// several seconds. Declared explicitly rather than left to whatever the platform default happens
+// to be, so a slow AI provider response fails as a clean timeout instead of silently depending on
+// undocumented platform behavior. Not yet verified end-to-end against an actual Vercel preview
+// deployment -- see docs/audit/STAGE_7B_PRE_DEPLOYMENT_HARDENING_REPORT.md Section 31.
+export const maxDuration = 60;
+
 /**
  * A compact, stable identifier for the calling CLIENT (not the network hop) derived from headers
  * that survive an IP rotation (proxy/VPN switch) but stay consistent for one scripted caller --
@@ -140,7 +149,7 @@ export async function POST(request: Request) {
     }
 
     // Optional Authentication Context
-    const auth = authenticateUser(request);
+    const auth = await authenticateUser(request);
     const userId = auth.user ? auth.user.userId : 'usr_anonymous_guest';
 
     // Persist scan record under authenticated user or guest audit log
@@ -157,8 +166,18 @@ export async function POST(request: Request) {
           fileName: targetFile,
           framework: scanResult.framework,
           qualityScore: scanResult.qualityScore ?? 0,
-          scanTimeMs: scanResult.profile?.executionTimeMs || 0.12,
-          memoryUsageMb: scanResult.profile?.peakMemoryMb || 0.45,
+          // Real values only -- scanResult.profile is always populated by RuleExecutionEngine
+          // (never optional), and executionTimeMs is always a real perf.now() delta, never falsy
+          // in a way that would need a fallback. `?? 0` (not the previous `|| 0.12`/`|| 0.45`
+          // hardcoded-fallback pattern, removed in the Stage 5A audit -- see
+          // src/engine/dynamic-profiler.ts's buildProfileMetrics doc comment): the
+          // scan_reports.memory_usage_mb column is a non-nullable Float (no schema change is
+          // justified here, since a genuinely-unmeasured reading, peakMemoryMb: null, is only
+          // theoretically possible on this server-side path -- Node's process.memoryUsage() is
+          // always available in this deployment's real runtime) -- 0 here means "not measured this
+          // run," never a plausible-looking invented reading like the previous 0.45.
+          scanTimeMs: scanResult.profile.executionTimeMs,
+          memoryUsageMb: scanResult.profile.peakMemoryMb ?? 0,
           ruleCount: scanResult.diagnostics.length,
           aiFixCount: 0,
           diagnostics: scanResult.diagnostics as any,

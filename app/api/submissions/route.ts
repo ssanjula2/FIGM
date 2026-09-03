@@ -6,7 +6,7 @@ import { calculateQualityScore } from '../../../src/engine/quality-score';
 import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 
 export async function GET(request: Request) {
-  const { user, errorResponse } = authenticateUser(request);
+  const { user, errorResponse } = await authenticateUser(request);
   if (errorResponse || !user) {
     return errorResponse;
   }
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const { user, errorResponse } = authenticateUser(request);
+  const { user, errorResponse } = await authenticateUser(request);
   if (errorResponse || !user) {
     return errorResponse;
   }
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const { user, errorResponse } = authenticateUser(request);
+  const { user, errorResponse } = await authenticateUser(request);
   if (errorResponse || !user) {
     return errorResponse;
   }

@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useScans } from '../../src/hooks/useScans';
+import { formatScanDuration, formatMemoryDelta } from '../../src/lib/engine-diagnostics-format';
 
 export default function HistoryPage() {
   const {
@@ -294,8 +295,8 @@ export default function HistoryPage() {
                   <td style={{ padding: '14px 16px', color: '#94a3b8' }}>
                     {r.ruleCount} violations ({r.aiFixCount} AI fixes)
                   </td>
-                  <td style={{ padding: '14px 16px', color: '#94a3b8' }}>{r.scanTimeMs} ms</td>
-                  <td style={{ padding: '14px 16px', color: '#94a3b8' }}>{r.memoryUsageMb} MB</td>
+                  <td style={{ padding: '14px 16px', color: '#94a3b8' }}>{formatScanDuration(r.scanTimeMs)}</td>
+                  <td style={{ padding: '14px 16px', color: '#94a3b8' }}>{formatMemoryDelta(r.memoryUsageMb)}</td>
                   <td style={{ padding: '14px 16px', color: '#7c8ba6', fontSize: '12px' }}>
                     {new Date(r.createdAt).toLocaleString()}
                   </td>

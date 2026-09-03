@@ -97,6 +97,13 @@ export class UserRepository {
     return UserRepository.provider.updateUser(userId, { role }) as Promise<DBUser | undefined>;
   }
 
+  // Stage 7D: the ONLY trusted write path for User.accountType. Called exclusively from the
+  // ADMIN-authorized PATCH /api/admin/users route -- never reachable from public registration or
+  // any other client-facing endpoint (see AccountType's doc comment in prisma/schema.prisma).
+  public static async updateAccountType(userId: string, accountType: 'NORMAL' | 'ENGINEERING_TEST'): Promise<DBUser | undefined> {
+    return UserRepository.provider.updateUser(userId, { accountType }) as Promise<DBUser | undefined>;
+  }
+
   public static async adminResetPassword(
     userId: string,
     newPassword: string

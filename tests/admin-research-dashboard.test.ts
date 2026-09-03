@@ -30,7 +30,7 @@ function authedRequest(url: string, jwt?: string): Request {
 }
 
 function tokenFor(userId: string, role: 'DEVELOPER' | 'ADMIN' | 'AUDITOR' = 'DEVELOPER'): string {
-  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role });
+  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role }, 0);
 }
 
 function createTestUser(label: string, role: 'DEVELOPER' | 'ADMIN' | 'AUDITOR' = 'DEVELOPER') {

@@ -3,7 +3,7 @@ import { authenticateUser } from '../../../src/auth/auth-middleware';
 import { UserRepository } from '../../../src/engine/user-repository';
 
 export async function GET(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 const ALLOWED_SETTINGS_FIELDS = ['theme', 'autoSave', 'autoScan', 'aiModel', 'exportFormat'] as const;
 
 export async function PATCH(request: Request) {
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

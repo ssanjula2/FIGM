@@ -29,6 +29,8 @@ function mapUser(u: any): DBUser {
     resetToken: u.resetToken ?? undefined,
     resetTokenExpiry: toIso(u.resetTokenExpiry),
     refreshToken: u.refreshToken ?? undefined,
+    tokenVersion: typeof u.tokenVersion === 'number' ? u.tokenVersion : 0,
+    accountType: u.accountType ?? 'NORMAL',
     apiKey: u.apiKey ?? undefined,
     avatarUrl: u.avatarUrl ?? undefined,
     createdAt: u.createdAt.toISOString(),

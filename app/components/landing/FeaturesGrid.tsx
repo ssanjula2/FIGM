@@ -1,89 +1,62 @@
 'use client';
 
 import React from 'react';
+import { getDomainCounts } from '../../../src/matrix/domain-counts';
 
 export default function FeaturesGrid() {
-  const features = [
+  const counts = getDomainCounts();
+
+  const domains = [
     {
-      icon: '⚡',
-      title: '50 Canonical Rules & Formal Predicates',
-      desc: 'Formally defined static inspection predicates detecting invariant allocations, un-dimensioned elements, missing ARIA names, and RxJS memory leaks.',
-      tag: 'AST Engine',
+      title: 'Architecture / Code Quality',
+      count: counts.ARCHITECTURE,
+      color: '#38bdf8',
+      desc: 'Structural and maintainability patterns -- state handling, component boundaries, and framework-specific anti-patterns that undermine long-term code health.',
     },
     {
-      icon: '🤖',
-      title: 'Claude Opus 5 AI Remediation',
-      desc: 'Generates syntactically valid unified git diff patches with AST re-parsing syntax validation and automatic deterministic fallback protection.',
-      tag: 'AI Pipeline',
+      title: 'Static Performance',
+      count: counts.STATIC_PERFORMANCE,
+      color: '#eab308',
+      desc: 'Source-level risk patterns associated with runtime cost -- allocation inside render/loop scopes, un-dimensioned layout elements, missing memoization. Static findings only; runtime performance is not measured during a static scan.',
     },
     {
-      icon: '⏱️',
-      title: 'Dynamic Profiler Engine',
-      desc: 'Measures real-time V8 heap memory usage and execution latency, computing estimated Web Vitals proxies (FCP / TTI).',
-      tag: 'Runtime Profiler',
-    },
-    {
-      icon: '🔒',
-      title: 'Multi-Tenant Auth & RBAC',
-      desc: 'JWT authentication with salted password hashing, refresh token rotation, and role-based permissions (ADMIN, DEVELOPER, AUDITOR).',
-      tag: 'Security & Auth',
-    },
-    {
-      icon: '💻',
-      title: 'CLI Static Scanner',
-      desc: 'Executable command-line runner (figm-analyze) with configurable quality gates (--threshold) for CI/CD integration pipelines.',
-      tag: 'DevOps & CLI',
-    },
-    {
-      icon: '📄',
-      title: 'Interactive Exporters',
-      desc: 'Generates structured JSON scan data and self-contained glassmorphic HTML dashboards featuring CSS severity badges and rule traceability.',
-      tag: 'Reporting Engine',
+      title: 'Accessibility',
+      count: counts.ACCESSIBILITY,
+      color: '#a855f7',
+      desc: 'WCAG 2.2-aligned static checks -- keyboard operability, labelling, and semantic structure that a static analyzer can verify from source alone.',
     },
   ];
 
   return (
-    <section style={{ padding: '80px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
-        <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
-          SYSTEM ARCHITECTURE CAPABILITIES
+    <section style={{ padding: '72px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
+        <div style={{ marginBottom: '40px' }}>
+          <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '8px' }}>
+            Three Research-Facing Domains
+          </div>
+          <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', margin: '0 0 12px 0', letterSpacing: '-0.5px' }}>
+            Every finding falls into exactly one domain
+          </h2>
+          <p style={{ color: '#94a3b8', fontSize: '14px', maxWidth: '640px', lineHeight: 1.6, margin: 0 }}>
+            Rule counts below come directly from the live rule registry -- the same source the
+            scanner and admin dashboard read from.
+          </p>
         </div>
-        <h2 style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', margin: '0 0 16px 0', letterSpacing: '-0.5px' }}>
-          Core System Components
-        </h2>
-        <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '700px', margin: '0 auto 48px auto', lineHeight: 1.6 }}>
-          Designed with modular, decoupled architecture following SOLID principles and aligned with ISO/IEC 25010 quality characteristics.
-        </p>
 
-        {/* 6 Features Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
-          {features.map((feat) => (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '16px' }}>
+          {domains.map((d) => (
             <div
-              key={feat.title}
+              key={d.title}
               style={{
                 background: 'rgba(15, 23, 42, 0.6)',
-                backdropFilter: 'blur(16px)',
                 border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '16px',
-                padding: '28px',
-                textAlign: 'left',
-                transition: 'transform 0.2s ease, border-color 0.2s ease',
+                borderRadius: '12px',
+                padding: '24px',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <span style={{ fontSize: '28px', background: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '12px' }}>
-                  {feat.icon}
-                </span>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', padding: '4px 10px', borderRadius: '20px' }}>
-                  {feat.tag}
-                </span>
-              </div>
-              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: '0 0 8px 0' }}>
-                {feat.title}
-              </h3>
-              <p style={{ color: '#94a3b8', fontSize: '13px', margin: 0, lineHeight: 1.6 }}>
-                {feat.desc}
-              </p>
+              <div style={{ fontSize: '30px', fontWeight: 800, color: d.color, marginBottom: '6px' }}>{d.count}</div>
+              <div style={{ color: '#f8fafc', fontSize: '15px', fontWeight: 700, marginBottom: '8px' }}>{d.title}</div>
+              <p style={{ color: '#94a3b8', fontSize: '13px', margin: 0, lineHeight: 1.6 }}>{d.desc}</p>
             </div>
           ))}
         </div>

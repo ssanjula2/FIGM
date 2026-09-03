@@ -5,7 +5,7 @@
 ## 5.0 Provenance
 
 - **Dataset**: `benchmarks/ground-truth.json` (50 rules, hand-labelled) scored against fixture files in `benchmarks/testbed`
-- **Generated at**: 2026-09-02T23:23:44.330Z
+- **Generated at**: 2026-09-03T10:40:17.004Z
 - **Calculation method**: TP/FP/FN computed by dynamically re-running RuleExecutionEngine.analyzeFile against every file in benchmarks/testbed and diffing the resulting diagnostics against benchmarks/ground-truth.json (exact filePath+ruleId match). Precision = TP/(TP+FP), Recall = TP/(TP+FN), F1 = 2*P*R/(P+R). No cached or hand-typed confusion matrix is used at any step.
 - **Rule coverage**: 50 of 50 FIGM rules have empirical ground-truth coverage (FIGM-A11Y-01, FIGM-A11Y-02, FIGM-A11Y-03, FIGM-A11Y-04, FIGM-A11Y-05, FIGM-A11Y-06, FIGM-A11Y-07, FIGM-ANG-01, FIGM-ANG-02, FIGM-ANG-03, FIGM-ANG-04, FIGM-ANG-05, FIGM-ANG-06, FIGM-ANG-07, FIGM-ANG-08, FIGM-ANG-09, FIGM-ANG-10, FIGM-NEXT-01, FIGM-NEXT-02, FIGM-NEXT-03, FIGM-NEXT-04, FIGM-NEXT-05, FIGM-NEXT-06, FIGM-NEXT-07, FIGM-NEXT-08, FIGM-NEXT-09, FIGM-NEXT-10, FIGM-PERF-01, FIGM-PERF-02, FIGM-PERF-03, FIGM-PERF-04, FIGM-PERF-05, FIGM-PERF-06, FIGM-REACT-01, FIGM-REACT-02, FIGM-REACT-03, FIGM-REACT-04, FIGM-REACT-05, FIGM-REACT-06, FIGM-REACT-07, FIGM-REACT-08, FIGM-REACT-09, FIGM-REACT-10, FIGM-REACT-11, FIGM-VUE-01, FIGM-VUE-02, FIGM-VUE-03, FIGM-VUE-04, FIGM-VUE-05, FIGM-VUE-06). All FIGM rules now have empirical ground-truth coverage; none remain unit-test-only.
 

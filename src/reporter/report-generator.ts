@@ -70,9 +70,13 @@ export class ReportGenerator {
     else if (qualityScore >= 50) performanceRating = 'C';
     else performanceRating = 'F';
 
-    // Aggregate performance & complexity metrics
-    const totalExecutionTimeMs = fileResults.reduce((sum, f) => sum + (f.profile?.executionTimeMs || 0.15), 0);
-    const maxPeakMemoryMb = fileResults.reduce((max, f) => Math.max(max, f.profile?.peakMemoryMb || 0.5), 0);
+    // Aggregate performance & complexity metrics -- real values only, no hardcoded fallback (Stage
+    // 5A audit; see src/engine/dynamic-profiler.ts's buildProfileMetrics doc comment). profile is
+    // always populated on a real ScanResult; peakMemoryMb can legitimately be null (unmeasured) or
+    // negative (GC ran mid-scan), and `?? 0` here means "excluded from this max/sum," never a
+    // plausible-looking invented reading.
+    const totalExecutionTimeMs = fileResults.reduce((sum, f) => sum + (f.profile?.executionTimeMs ?? 0), 0);
+    const maxPeakMemoryMb = fileResults.reduce((max, f) => Math.max(max, f.profile?.peakMemoryMb ?? 0), 0);
     const maxCyclomaticComplexity = fileResults.reduce((max, f) => Math.max(max, f.complexity?.cyclomaticComplexity || 1), 0);
 
     const submissionId = `sub_${Math.random().toString(36).substring(2, 10)}`;

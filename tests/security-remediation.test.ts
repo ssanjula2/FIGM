@@ -15,6 +15,7 @@ import { RepositoryFactory } from '../src/storage/repository-factory';
 import { POST as registerPOST } from '../app/api/auth/register/route';
 import { POST as refreshPOST } from '../app/api/auth/refresh/route';
 import { POST as logoutPOST } from '../app/api/auth/logout/route';
+import { GET as profileGET } from '../app/api/profile/route';
 
 /**
  * Regression coverage for the SEC-01/SEC-02 remediation in audit/new.md:
@@ -67,7 +68,7 @@ test('Security Remediation Regression Suite', async (t) => {
     for (const nodeEnv of ['production', 'staging', undefined]) {
       withEnv({ NODE_ENV: nodeEnv, JWT_SECRET: undefined }, () => {
         assert.throws(
-          () => signJWT(payload),
+          () => signJWT(payload, 0),
           /FATAL: JWT_SECRET environment variable is missing/,
           `signJWT must throw when JWT_SECRET is unset and NODE_ENV=${nodeEnv ?? '(unset)'}`
         );
@@ -76,7 +77,7 @@ test('Security Remediation Regression Suite', async (t) => {
 
     // Explicitly confirm it does NOT throw in development -- the fallback must still work locally.
     withEnv({ NODE_ENV: 'development', JWT_SECRET: undefined }, () => {
-      assert.doesNotThrow(() => signJWT(payload));
+      assert.doesNotThrow(() => signJWT(payload, 0));
     });
   });
 
@@ -96,22 +97,22 @@ test('Security Remediation Regression Suite', async (t) => {
 
   await t.test('a short or placeholder-looking secret is rejected outside development/test even if present', () => {
     withEnv({ NODE_ENV: 'production', JWT_SECRET: 'too-short' }, () => {
-      assert.throws(() => signJWT({ userId: 'u', email: 'u@figm.io', fullName: 'U', role: 'DEVELOPER' }), /at least 32 characters/);
+      assert.throws(() => signJWT({ userId: 'u', email: 'u@figm.io', fullName: 'U', role: 'DEVELOPER' }, 0), /at least 32 characters/);
     });
     withEnv({ NODE_ENV: 'production', JWT_SECRET: 'YOUR_PRODUCTION_JWT_SECRET_STRING_PADDED_TO_32_CHARS' }, () => {
-      assert.throws(() => signJWT({ userId: 'u', email: 'u@figm.io', fullName: 'U', role: 'DEVELOPER' }), /unfilled template placeholder/);
+      assert.throws(() => signJWT({ userId: 'u', email: 'u@figm.io', fullName: 'U', role: 'DEVELOPER' }, 0), /unfilled template placeholder/);
     });
   });
 
   await t.test('forged ADMIN role: signJWT/verifyJWT clamp any role outside {ADMIN, AUDITOR, DEVELOPER} to DEVELOPER', () => {
     // @ts-expect-error -- deliberately passing an invalid role to prove it cannot survive signing.
-    const forgedToken = signJWT({ userId: 'usr_attacker', email: 'a@figm.io', fullName: 'A', role: 'SUPERADMIN' });
+    const forgedToken = signJWT({ userId: 'usr_attacker', email: 'a@figm.io', fullName: 'A', role: 'SUPERADMIN' }, 0);
     const decoded = verifyJWT(forgedToken);
     assert.equal(decoded?.role, 'DEVELOPER');
 
     // A syntactically valid token correctly signed with role: 'ADMIN' still decodes as ADMIN --
     // the clamp only rejects values outside the known enum, it doesn't strip legitimate elevation.
-    const legitAdminToken = signJWT({ userId: 'usr_real_admin', email: 'admin@figm.io', fullName: 'Admin', role: 'ADMIN' });
+    const legitAdminToken = signJWT({ userId: 'usr_real_admin', email: 'admin@figm.io', fullName: 'Admin', role: 'ADMIN' }, 0);
     assert.equal(verifyJWT(legitAdminToken)?.role, 'ADMIN');
   });
 
@@ -227,10 +228,17 @@ test('Security Remediation Regression Suite', async (t) => {
       role: 'DEVELOPER',
     });
     const payload = { userId: user.id, email: user.email, fullName: user.fullName, role: user.role };
-    const accessToken = signJWT(payload);
+    const accessToken = signJWT(payload, user.tokenVersion ?? 0);
     const refreshToken = signRefreshToken(payload);
     UserDB.updateUser(user.id, { refreshToken });
     assert.equal(UserDB.getAllUsers().find((u) => u.id === user.id)?.refreshToken, refreshToken, 'sanity check: the refresh token is actually stored before logout');
+
+    // Sanity check: the pre-logout access token is accepted by a real protected route (proves the
+    // later 401 is actually caused by logout, not by some unrelated reason the token never worked).
+    const preLogoutProfileRes = await profileGET(
+      new Request('http://localhost:3000/api/profile', { headers: { Authorization: `Bearer ${accessToken}` } })
+    );
+    assert.equal(preLogoutProfileRes.status, 200, 'sanity check: the access token works before logout');
 
     const logoutReq = new Request('http://localhost:3000/api/auth/logout', {
       method: 'POST',
@@ -254,13 +262,64 @@ test('Security Remediation Regression Suite', async (t) => {
     assert.equal(refreshBody.code, 'TOKEN_REVOKED');
   });
 
+  await t.test('REGRESSION (Stage 7B): logout also revokes the still-unexpired ACCESS token itself, not just the refresh token', async () => {
+    // This is the exact reported bug: refresh-token revocation alone (the test above) does not
+    // stop a copy of the short-lived ACCESS token that already exists elsewhere -- a second open
+    // tab's localStorage, or a value captured via XSS before logout -- from continuing to work
+    // against every API route for up to its own remaining ~1h lifetime. Fixed via a DB-backed
+    // `tokenVersion` column (prisma/schema.prisma) that authenticateUser() now checks on every
+    // request (src/auth/auth-middleware.ts).
+    RepositoryFactory.resetProvider();
+    const email = `access_token_revoke_${Date.now()}@figm.io`;
+    const user = UserDB.createUser({
+      email,
+      passwordHash: hashPassword('AccessRevokeTest123!'),
+      fullName: 'Access Token Revocation Test User',
+      role: 'DEVELOPER',
+    });
+    const payload = { userId: user.id, email: user.email, fullName: user.fullName, role: user.role };
+    // Simulates a second tab: this exact access token is never used for the logout call itself
+    // below, standing in for a copy that already exists somewhere else in the browser.
+    const staleAccessToken = signJWT(payload, user.tokenVersion ?? 0);
+
+    const preLogoutRes = await profileGET(
+      new Request('http://localhost:3000/api/profile', { headers: { Authorization: `Bearer ${staleAccessToken}` } })
+    );
+    assert.equal(preLogoutRes.status, 200, 'sanity check: the stale token works before logout');
+
+    // Logout happens via a freshly-signed token for the same user (e.g. the tab that actually
+    // clicked "Log out") -- proving the revocation is per-USER (tokenVersion bump), not merely
+    // per-token, so it reaches the OTHER tab's token too.
+    const logoutToken = signJWT(payload, user.tokenVersion ?? 0);
+    const logoutRes = await logoutPOST(
+      new Request('http://localhost:3000/api/auth/logout', { method: 'POST', headers: { Authorization: `Bearer ${logoutToken}` } })
+    );
+    assert.equal(logoutRes.status, 200);
+
+    const afterLogout = UserDB.getAllUsers().find((u) => u.id === user.id);
+    assert.equal(afterLogout?.tokenVersion, 1, 'logout must increment tokenVersion exactly once');
+
+    // The real bug, closed: the stale access token from "the other tab" must now be rejected, even
+    // though it has not expired and its signature is still perfectly valid.
+    const postLogoutRes = await profileGET(
+      new Request('http://localhost:3000/api/profile', { headers: { Authorization: `Bearer ${staleAccessToken}` } })
+    );
+    assert.equal(postLogoutRes.status, 401, 'a stale access token from before logout must be rejected after logout');
+    const postLogoutBody = await postLogoutRes.json();
+    assert.equal(postLogoutBody.code, 'TOKEN_REVOKED');
+  });
+
   await t.test('source-level guard: the logout route clears refreshToken with null, never undefined', () => {
     // Direct regression guard for the exact Prisma-specific bug above -- catches a future edit
     // reverting to `refreshToken: undefined` even in a change that doesn't touch this test's
     // JSON-provider-based functional assertions (which, as documented above, would not by
     // themselves detect a regression back to `undefined`).
     const src = fs.readFileSync(path.resolve(process.cwd(), 'app/api/auth/logout/route.ts'), 'utf-8');
-    assert.match(src, /refreshToken:\s*null\s*\}/, 'logout must clear refreshToken with an explicit null');
+    // Not anchored to `}` immediately after `null` -- Stage 7B added a sibling `tokenVersion` field
+    // to the same update() call (see the access-token-revocation regression test above), so the
+    // object no longer closes right after refreshToken. The guard's actual intent (an explicit
+    // `null`, never a silently-ignored `undefined`) is unaffected by what other fields sit next to it.
+    assert.match(src, /refreshToken:\s*null\s*[,}]/, 'logout must clear refreshToken with an explicit null');
     assert.doesNotMatch(src, /refreshToken:\s*undefined/, 'logout must never clear refreshToken with undefined (a no-op against Prisma)');
   });
 

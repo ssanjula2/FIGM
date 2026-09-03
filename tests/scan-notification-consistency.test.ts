@@ -24,7 +24,7 @@ function authedRequest(url: string, opts: RequestInit, jwt?: string): Request {
 }
 
 function tokenFor(userId: string): string {
-  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role: 'DEVELOPER' });
+  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role: 'DEVELOPER' }, 0);
 }
 
 function createTestUser(label: string) {

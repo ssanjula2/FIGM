@@ -64,7 +64,7 @@ export async function POST(request: Request) {
       role: user.role || 'DEVELOPER',
     };
 
-    const newAccessToken = signJWT(userPayload, 3600);
+    const newAccessToken = signJWT(userPayload, user.tokenVersion ?? 0, 3600);
     const newRefreshToken = signRefreshToken(userPayload, 604800);
 
     await provider.updateUser(user.id, { refreshToken: newRefreshToken });

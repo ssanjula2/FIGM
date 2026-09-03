@@ -22,6 +22,9 @@ export interface DBUser {
   // "field not included," not "clear this field") -- only an explicit `null` actually clears the
   // column. See app/api/auth/logout/route.ts, the one real call site that needs to clear this.
   refreshToken?: string | null;
+  // See prisma/schema.prisma's tokenVersion doc comment. Absent/undefined is treated as 0
+  // everywhere it's read (a pre-migration user row with no column value is not yet revoked).
+  tokenVersion?: number;
   apiKey?: string;
   avatarUrl?: string;
   createdAt: string;
@@ -32,6 +35,11 @@ export interface DBUser {
   researchStatus?: 'ASSIGNED' | 'CONSENT_VERIFIED' | 'REVOKED' | null;
   researchAssignedAt?: string | null;
   researchConsentVerifiedAt?: string | null;
+  // Stage 7D: real, persisted account provenance (prisma/schema.prisma's AccountType enum).
+  // Server-controlled only -- see app/api/admin/users/route.ts's PATCH handler, the sole trusted
+  // write path. Absent/undefined is treated as 'NORMAL' everywhere it's read (matches the DB
+  // column's own default and every pre-migration row).
+  accountType?: 'NORMAL' | 'ENGINEERING_TEST';
 }
 
 export interface DBSubmission {

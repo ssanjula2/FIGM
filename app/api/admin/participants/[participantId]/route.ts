@@ -7,7 +7,7 @@ import { getClientIp } from '../../../../../src/auth/rate-limiter';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request, { params }: { params: { participantId: string } }) {
-  const auth = authorizeRole(request, ['ADMIN']);
+  const auth = await authorizeRole(request, ['ADMIN']);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -35,7 +35,7 @@ export async function GET(request: Request, { params }: { params: { participantI
  * to accept further research-scan writes, without deleting its existing historical records.
  */
 export async function PATCH(request: Request, { params }: { params: { participantId: string } }) {
-  const auth = authorizeRole(request, ['ADMIN']);
+  const auth = await authorizeRole(request, ['ADMIN']);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

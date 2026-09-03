@@ -1,277 +1,144 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { useResearchMetrics } from '../../../src/hooks/useResearchMetrics';
+import { getDomainCounts } from '../../../src/matrix/domain-counts';
 
 export default function HeroSection() {
-  const [activeTab, setActiveTab] = useState<'nonCompliant' | 'compliant'>('nonCompliant');
-  const { data } = useResearchMetrics();
-  const f1 = data?.benchmarkMetrics?.f1Score;
-  const benchmarkStatsLabel = typeof f1 === 'number' ? `Benchmark Stats (F1 = ${(f1 * 100).toFixed(1)}%)` : 'Benchmark Stats';
-
-  const nonCompliantCode = `// ❌ FIGM-REACT-03 & FIGM-PERF-05 Violation
-function UserList({ users }) {
-  const [userState, setUserState] = useState(users);
-  
-  // Direct mutation of React state
-  const handleUpdate = (id) => {
-    userState.find(u => u.id === id).active = true;
-    setUserState(userState); // Same object reference!
-  };
+  const counts = getDomainCounts();
 
   return (
-    <div>
-      {users.map(u => (
-        // Inline callback in render loop
-        <UserCard key={u.id} onClick={() => handleUpdate(u.id)} />
-      ))}
-    </div>
-  );
-}`;
-
-  const compliantCode = `// ✅ FIGM Compliant Implementation
-function UserList({ users }) {
-  const [userState, setUserState] = useState(users);
-  
-  // Immutable functional state update
-  const handleUpdate = useCallback((id: string) => {
-    setUserState(prev => prev.map(u => 
-      u.id === id ? { ...u, active: true } : u
-    ));
-  }, []);
-
-  return (
-    <div>
-      {userState.map(u => (
-        // Stable reference callback
-        <UserCard key={u.id} userId={u.id} onSelect={handleUpdate} />
-      ))}
-    </div>
-  );
-}`;
-
-  return (
-    <section
-      style={{
-        position: 'relative',
-        padding: '60px 0 80px 0',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Animated Background Mesh */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '-15%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '1000px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(168, 85, 247, 0.1) 40%, rgba(3, 7, 18, 0) 70%)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: '1000px', margin: '0 auto' }}>
-        {/* Research Badge */}
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '6px 16px',
-            borderRadius: '20px',
-            background: 'rgba(56, 189, 248, 0.1)',
-            border: '1px solid rgba(56, 189, 248, 0.3)',
-            color: '#38bdf8',
-            fontSize: '12px',
-            fontWeight: 700,
-            marginBottom: '24px',
-            boxShadow: '0 0 20px rgba(56, 189, 248, 0.2)',
-          }}
-        >
-          <span style={{ fontSize: '14px' }}>🎓</span>
-          <span>NSBM Green University · IS303.2 Research Methodology — Framework-Independent Guideline Model</span>
-        </div>
-
-        {/* Hero Title */}
-        <h1
-          style={{
-            fontSize: '52px',
-            fontWeight: 900,
-            lineHeight: 1.1,
-            letterSpacing: '-1.5px',
-            color: '#f8fafc',
-            margin: '0 0 20px 0',
-          }}
-        >
-          Automated Code Quality Inspection &{' '}
-          <span
+    <section id="top" style={{ padding: '72px 0 64px 0' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
+        <div style={{ maxWidth: '760px' }}>
+          <div
             style={{
-              background: 'linear-gradient(135deg, #38bdf8 0%, #a855f7 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            AI Remediation
-          </span>{' '}
-          for Modern SPAs
-        </h1>
-
-        {/* Tagline */}
-        <p
-          style={{
-            fontSize: '18px',
-            color: '#94a3b8',
-            maxWidth: '760px',
-            margin: '0 auto 36px auto',
-            lineHeight: 1.6,
-          }}
-        >
-          Unifying performance, accessibility, and architectural quality assurance across{' '}
-          <strong style={{ color: '#f1f5f9' }}>React</strong>,{' '}
-          <strong style={{ color: '#f1f5f9' }}>Next.js App Router</strong>,{' '}
-          <strong style={{ color: '#f1f5f9' }}>Angular</strong>, and{' '}
-          <strong style={{ color: '#f1f5f9' }}>Vue 3 SFCs</strong> via 4-Layer Meta-Model primitives and Claude Opus 5.
-        </p>
-
-        {/* CTA Buttons */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '60px' }}>
-          <Link
-            href="/live-scan"
-            style={{
-              padding: '14px 28px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, #38bdf8 0%, #818cf8 100%)',
-              color: '#0f172a',
-              fontSize: '15px',
-              fontWeight: 800,
-              textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              boxShadow: '0 8px 24px rgba(56, 189, 248, 0.35)',
-              transition: 'transform 0.2s ease',
-            }}
-          >
-            <span>▶</span>
-            <span>Launch Live Inspector</span>
-          </Link>
-
-          <Link
-            href="/guidelines"
-            style={{
-              padding: '14px 28px',
-              borderRadius: '12px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              color: '#f8fafc',
-              fontSize: '15px',
+              padding: '5px 14px',
+              borderRadius: '20px',
+              background: 'rgba(56, 189, 248, 0.08)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              color: '#38bdf8',
+              fontSize: '12px',
               fontWeight: 700,
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              backdropFilter: 'blur(10px)',
+              marginBottom: '24px',
             }}
           >
-            <span>🔍</span>
-            <span>Explore {data?.systemCapabilities?.totalGuidelineRules ?? 50} Rules</span>
-          </Link>
-
-          <Link
-            href="/analytics"
-            style={{
-              padding: '14px 28px',
-              borderRadius: '12px',
-              background: 'rgba(168, 85, 247, 0.1)',
-              border: '1px solid rgba(168, 85, 247, 0.3)',
-              color: '#c084fc',
-              fontSize: '15px',
-              fontWeight: 700,
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-            }}
-          >
-            <span>📊</span>
-            <span>{benchmarkStatsLabel}</span>
-          </Link>
-        </div>
-
-        {/* Code Diff Preview Widget */}
-        <div
-          style={{
-            background: 'rgba(15, 23, 42, 0.8)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            borderRadius: '16px',
-            padding: '24px',
-            textAlign: 'left',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6)',
-            maxWidth: '820px',
-            margin: '0 auto',
-          }}
-        >
-          {/* Header Bar */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '12px' }}>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
-              <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
-              <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
-              <span style={{ marginLeft: '12px', color: '#94a3b8', fontSize: '13px', fontWeight: 600 }}>figm-inspector // UserList.tsx</span>
-            </div>
-
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button
-                onClick={() => setActiveTab('nonCompliant')}
-                style={{
-                  padding: '6px 12px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  background: activeTab === 'nonCompliant' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
-                  color: activeTab === 'nonCompliant' ? '#fca5a5' : '#7c8ba6',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                🔴 Anti-Pattern (Sample A)
-              </button>
-              <button
-                onClick={() => setActiveTab('compliant')}
-                style={{
-                  padding: '6px 12px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  background: activeTab === 'compliant' ? 'rgba(16, 185, 129, 0.2)' : 'transparent',
-                  color: activeTab === 'compliant' ? '#6ee7b7' : '#7c8ba6',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                🟢 Claude AI Patch (Sample B)
-              </button>
-            </div>
+            Framework-Independent Guideline Model
           </div>
 
-          {/* Code Block */}
-          <pre
+          <h1
             style={{
-              fontFamily: "'Fira Code', 'Cascadia Code', monospace",
-              fontSize: '13px',
-              color: activeTab === 'nonCompliant' ? '#fca5a5' : '#86efac',
-              margin: 0,
-              lineHeight: 1.6,
-              overflowX: 'auto',
+              fontSize: '44px',
+              fontWeight: 800,
+              lineHeight: 1.15,
+              letterSpacing: '-1px',
+              color: '#f8fafc',
+              margin: '0 0 20px 0',
             }}
           >
-            <code>{activeTab === 'nonCompliant' ? nonCompliantCode : compliantCode}</code>
-          </pre>
+            Framework-independent code quality analysis for modern SPAs
+          </h1>
+
+          <p style={{ fontSize: '17px', color: '#94a3b8', lineHeight: 1.6, margin: '0 0 32px 0' }}>
+            FIGM analyzes architecture, static performance, and accessibility risks before
+            deployment and provides actionable findings with validated remediation.
+          </p>
+
+          <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+            <Link
+              href="/live-scan"
+              style={{
+                padding: '13px 24px',
+                borderRadius: '10px',
+                background: '#38bdf8',
+                color: '#020617',
+                fontSize: '14px',
+                fontWeight: 800,
+                textDecoration: 'none',
+              }}
+            >
+              Start a Scan
+            </Link>
+            <Link
+              href="/guidelines"
+              style={{
+                padding: '13px 24px',
+                borderRadius: '10px',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                color: '#f8fafc',
+                fontSize: '14px',
+                fontWeight: 700,
+                textDecoration: 'none',
+              }}
+            >
+              Explore Guidelines
+            </Link>
+          </div>
+        </div>
+
+        {/* Product Preview -- a representative, clearly-labelled UI mockup of a real scan result
+            shape, never presented as a live/claimed measurement. Domain counts are the real,
+            registry-derived rule totals; the finding card below is illustrative sample content. */}
+        <div
+          id="product-preview"
+          style={{
+            marginTop: '56px',
+            background: 'rgba(15, 23, 42, 0.6)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '14px',
+            padding: '24px',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: 700, color: '#6ee7b7', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.28)', borderRadius: '999px', padding: '3px 10px' }}>
+                Scan Complete
+              </span>
+              <span style={{ fontSize: '11px', color: '#7c8ba6' }}>UserProfile.jsx</span>
+            </div>
+            <span style={{ fontSize: '10px', color: '#5c6b85', fontStyle: 'italic' }}>Product preview — not a live scan</span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', marginBottom: '20px' }}>
+            {[
+              { label: 'Architecture', value: counts.ARCHITECTURE, color: '#38bdf8' },
+              { label: 'Static Performance', value: counts.STATIC_PERFORMANCE, color: '#eab308' },
+              { label: 'Accessibility', value: counts.ACCESSIBILITY, color: '#a855f7' },
+            ].map((d) => (
+              <div key={d.label} style={{ background: '#020617', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', padding: '14px' }}>
+                <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '4px' }}>{d.label} rules</div>
+                <div style={{ fontSize: '22px', fontWeight: 800, color: d.color }}>{d.value}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: '#020617', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', padding: '18px' }}>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: '#ef4444', background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)', padding: '2px 8px', borderRadius: '5px' }}>
+                HIGH
+              </span>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: '#38bdf8', fontFamily: 'monospace' }}>FIGM-A11Y-01</span>
+              <span style={{ fontSize: '11px', color: '#94a3b8' }}>UserProfile.jsx:22</span>
+            </div>
+            <div style={{ color: '#f8fafc', fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>
+              Keyboard Event Parity on Pointer Handlers
+            </div>
+            <div style={{ color: '#94a3b8', fontSize: '13px', lineHeight: 1.5, marginBottom: '12px' }}>
+              Recommendation: use a native interactive element (&lt;button&gt;) or add tabIndex=&quot;0&quot; with an onKeyDown handler.
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              <span
+                aria-hidden="true"
+                style={{ fontSize: '12px', fontWeight: 700, color: '#020617', background: '#6ee7b7', padding: '6px 14px', borderRadius: '7px' }}
+              >
+                Apply Fix
+              </span>
+              <span style={{ fontSize: '11px', color: '#7c8ba6' }}>Deterministic fix — verified after re-scan</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

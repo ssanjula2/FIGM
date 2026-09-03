@@ -312,6 +312,27 @@ test('Regression: the application requires authentication before showing the pro
     assert.match(src, /pathname\.startsWith\('\/auth\/'\)/);
   });
 
+  await t.test('REGRESSION (Stage 7C visual polish): every single-literal public page route in middleware.ts\'s isPublicPath also renders standalone via AppShell.tsx\'s isBareRoute -- these two hand-maintained lists must not drift', () => {
+    // Caught live in this session's own browser walkthrough: /methodology was added to
+    // middleware.ts's isPublicPath (so an unauthenticated visitor isn't redirected to login) but
+    // NOT to AppShell.tsx's isBareRoute, so the page rendered -- but wrapped in the authenticated
+    // app's Sidebar/HeaderBar chrome, the same class of bug this file's other tests already guard
+    // against for /login, /register, and /about.
+    const middlewareSrc = read('middleware.ts');
+    const appShellSrc = read('app/AppShell.tsx');
+
+    const middlewarePublicPages = [...middlewareSrc.matchAll(/path === '(\/[a-z-]+)'/g)].map((m) => m[1]);
+    assert.ok(middlewarePublicPages.length > 0, 'sanity: middleware.ts declares at least one literal public page path');
+
+    for (const route of middlewarePublicPages) {
+      assert.match(
+        appShellSrc,
+        new RegExp(`pathname === '${route.replace('/', '\\/')}'`),
+        `middleware.ts treats ${route} as public (unauthenticated-visitable) but AppShell.tsx's isBareRoute does not render it standalone -- it would show the authenticated app's Sidebar/HeaderBar around a page an unauthenticated visitor can reach`
+      );
+    }
+  });
+
   await t.test('the homepage renders the authenticated dashboard, not a public landing page', () => {
     const src = read('app/page.tsx');
     assert.match(src, /LiveDashboardContent/);

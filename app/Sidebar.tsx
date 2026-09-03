@@ -94,7 +94,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         { href: '/', label: 'Overview', icon: '📊' },
         { href: '/live-scan', label: 'Live Scan', icon: '⚡' },
         { href: '/diagnostics', label: 'Diagnostics', icon: '🔍' },
-        { href: '/ai-fix', label: 'AI Fix Assistant', icon: '🤖' },
         { href: '/profiler', label: 'Runtime Profiler', icon: '⏱️' },
       ],
     },
@@ -104,16 +103,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         { href: '/guidelines', label: 'Guidelines', icon: '📚' },
         { href: '/analytics', label: 'Performance Analytics', icon: '📈' },
         { href: '/accessibility', label: 'Accessibility', icon: '♿' },
-        { href: '/performance', label: 'Web Vitals', icon: '⚡' },
+        { href: '/performance', label: 'Static Analysis Timing', icon: '⚡' },
         { href: '/history', label: 'Scan History', icon: '📜' },
-        { href: '/user-study', label: 'User Usability Study', icon: '📝' },
         { href: '/notifications', label: 'Notifications', icon: '🔔' },
       ],
     },
     {
       groupName: 'ACCOUNT',
       items: [
-        { href: '/security', label: 'Tenant Security', icon: '🛡️' },
         { href: '/profile', label: 'My Profile', icon: '👤' },
         { href: '/settings', label: 'Settings', icon: '🔧' },
         // Only ever shown to an authenticated ADMIN (see isAdmin above) -- a normal user's own

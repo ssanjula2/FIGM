@@ -22,6 +22,11 @@ function isBareRoute(pathname: string | null): boolean {
     pathname === '/register' ||
     pathname === '/forgot-password' ||
     pathname === '/about' ||
+    // Stage 7C visual-polish pass: the full DSRM/benchmark methodology page, linked from the
+    // public landing page and footer -- must render standalone like /about, not wrapped in the
+    // authenticated app's Sidebar/HeaderBar chrome (see middleware.ts's isPublicPath, which this
+    // list must stay in sync with).
+    pathname === '/methodology' ||
     // RQ1 FCP/TTI experiment fixture pages (docs/research/RQ1_EXPERIMENT_PROTOCOL.md) -- must
     // render with no dashboard chrome (Sidebar/HeaderBar) around them, since the experiment
     // measures each fixture's own render/state-management strategy in isolation; the shared

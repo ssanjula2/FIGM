@@ -71,7 +71,7 @@ export async function POST(request: Request) {
       role: user.role || 'DEVELOPER',
     };
 
-    const accessToken = signJWT(payload, 3600); // 1 hr
+    const accessToken = signJWT(payload, user.tokenVersion ?? 0, 3600); // 1 hr
     const refreshToken = signRefreshToken(payload, 604800); // 7 days
 
     // SEC-06: transparently upgrade a legacy PBKDF2 hash to scrypt now that the real plaintext

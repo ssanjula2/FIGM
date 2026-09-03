@@ -36,6 +36,11 @@ export function middleware(request: NextRequest) {
     path === '/forgot-password' ||
     path.startsWith('/auth/') ||
     path === '/about' ||
+    // Stage 7C visual-polish pass: the full DSRM/benchmark methodology write-up moved off the
+    // main landing page to its own route, linked from the public landing page and footer -- it
+    // must stay reachable by the same unauthenticated visitors /about already is (external
+    // reviewers, evaluators), not silently become login-gated by moving.
+    path === '/methodology' ||
     // Published research evidence artifacts (benchmark CSV/MD/tex under public/eval-results/) --
     // intentionally fetchable without an account, same rationale as the public /api/research-
     // metrics endpoint (see the API route matrix in the forensic audit): they're evidence for an

@@ -20,7 +20,7 @@ export async function GET(request: Request) {
   // for userId=undefined, and the admin user-search branch was already isAdmin-gated), but the
   // endpoint was reachable without authentication at all, unlike its apparent intent. Now matches
   // the same authenticateUser/errorResponse/401 pattern used by every other authenticated route.
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

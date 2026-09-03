@@ -21,7 +21,7 @@ test('Multi-Tenant Authentication & Session Management', async (t) => {
       role: 'DEVELOPER' as const,
     };
 
-    const token = signJWT(payload);
+    const token = signJWT(payload, 0);
     assert.ok(token);
 
     const decoded = verifyJWT(token);

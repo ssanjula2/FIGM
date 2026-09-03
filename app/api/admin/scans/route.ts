@@ -16,9 +16,14 @@ const VALID_SORT_FIELDS = new Set(['createdAt', 'qualityScore', 'scanTimeMs', 'm
  *
  * Authorization: ADMIN only, enforced by authorizeRole -- never falls back to "no filter means
  * every user's data" for a non-admin caller, because a non-admin caller never reaches this far.
+ *
+ * Stage 7D (Section 6): deliberately NOT filtered by engineering-test-account status, unlike the
+ * public dashboard endpoints -- this route's entire purpose is admin visibility into every scan
+ * including engineering-QA ones (it's how an admin identifies which accounts to clean up in the
+ * first place), so excluding them here would be counterproductive.
  */
 export async function GET(request: Request) {
-  const auth = authorizeRole(request, ['ADMIN']);
+  const auth = await authorizeRole(request, ['ADMIN']);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

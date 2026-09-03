@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { DashboardRepository } from '../../../../src/engine/dashboard-repository';
 import { RepositoryFactory } from '../../../../src/storage/repository-factory';
 import { calculateDomainScore } from '../../../../src/engine/quality-score';
+import { isEngineeringTestAccount } from '../../../../src/lib/engineering-test-accounts';
+import { DBUser } from '../../../../src/auth/user-db';
 
 // GET() never reads `request`, so Next.js treats this as static-eligible and executes it once
 // at `next build` time, freezing whatever these scores looked like on the build machine into the
@@ -24,7 +26,19 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   const summary = await DashboardRepository.getSummary();
   const provider = RepositoryFactory.getStorageProvider();
-  const scans = (await provider.getScanRecords()) || [];
+  const [scansRaw, allUsersRaw] = await Promise.all([
+    provider.getScanRecords(),
+    provider.getAllUsers(),
+  ]);
+  // Stage 7D (Section 6): this is a public, unauthenticated, platform-wide metric -- same
+  // "no engineering-QA noise in a public-facing aggregate" rule already applied to
+  // DashboardRepository.getSummary()/getActivityFeed. Without this, a hardening-pass browser
+  // walkthrough's own test scans could visibly skew the accessibility/performance scores shown to
+  // real visitors.
+  const engineeringTestUserIds = new Set(
+    ((allUsersRaw as DBUser[]) || []).filter((u) => isEngineeringTestAccount(u)).map((u) => u.id)
+  );
+  const scans = ((scansRaw as any[]) || []).filter((s) => !engineeringTestUserIds.has(s.userId));
 
   return NextResponse.json({
     metrics: {

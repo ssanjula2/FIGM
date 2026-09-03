@@ -4,7 +4,7 @@ import { AuditLogger } from '../../../../src/auth/audit-logger';
 
 export async function GET(request: Request) {
   // Only ADMIN or AUDITOR roles can view audit logs
-  const auth = authorizeRole(request, ['ADMIN', 'AUDITOR']);
+  const auth = await authorizeRole(request, ['ADMIN', 'AUDITOR']);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

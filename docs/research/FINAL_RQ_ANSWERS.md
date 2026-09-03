@@ -38,13 +38,29 @@ as a result of this reconciliation — only the framing of which RQ set is autho
 - Supporting artifact: `figm-spec.json`, `docs/evidence/canonical-evaluation.json`, `docs/dissertation/chapter3_methodology.md` §3.2.1 (corrected this session).
 
 **Set B (now confirmed sourced verbatim from Proposal §2.3 and Interim02 §1.4) — How do different SPA render and state-management strategies influence FCP and TTI?**
-- Method: none exists.
-- Dataset: none.
-- Sample size: 0.
-- Measurement: no runtime infrastructure exists (`app/performance/page.tsx`'s numbers are an explicitly-disclosed scan-duration proxy, not FCP/TTI).
-- Result: none.
-- Answer: **NOT ANSWERED. No evidence exists.** Building the infrastructure requires a human research decision on experimental factors (rendering/state-management strategy set, browser/hardware/network profile, repetition count, TTI measurement tooling) not available in this repository — explicitly not attempted this session per the stop condition this task itself specifies.
-- Supporting artifact: none (absence is the finding).
+- Method: real, frozen-protocol measurement — Lighthouse 12.8.2 (`first-contentful-paint`/`interactive` audits) against 4 real Next.js/React fixture routes (CSR/SSR × LOCAL/GLOBAL state management), headless Chrome 152.0.7977.65, Lighthouse's real `desktop-config.js` throttling preset, cold navigation, 1 warm-up + 10 measured runs per condition. Collected 2026-09-03 (Stage 8) under the frozen `research-freeze-v1` baseline (commit `61686e7aabad6f8c2c71b09ca0a5b52c36d08946`) — see `docs/audit/STAGE_8_REAL_RQ1_DATA_COLLECTION_REPORT.md`.
+- Dataset: `research/rq1-experiment/raw-results/` (44 real browser executions: 4 warm-up + 40 measured, 0 failures, 0 smoke-test contamination).
+- Sample size: 10 valid measured runs per condition (40 total), 4 conditions.
+- Measurement: real Lighthouse `numericValue` fields, not a proxy — see `docs/research/RQ1_EXPERIMENT_PROTOCOL.md` §5/§6 for the mechanism and its verification.
+- Result (descriptive statistics only, this specific controlled fixture and environment):
+  CSR_LOCAL FCP mean 447.5ms / TTI mean 480.7ms; CSR_GLOBAL FCP mean 444.2ms / TTI mean 475.6ms;
+  SSR_LOCAL FCP mean 444.2ms / TTI mean 476.7ms; SSR_GLOBAL FCP mean 444.8ms / TTI mean 478.0ms.
+  Pooled CSR (n=20) FCP mean 445.8ms vs. pooled SSR (n=20) FCP mean 444.5ms; pooled LOCAL (n=20)
+  FCP mean 445.8ms vs. pooled GLOBAL (n=20) FCP mean 444.5ms. Full per-condition mean/median/SD/
+  min/max for both FCP and TTI: `research/rq1-experiment/processed-results/summary.md`.
+- Answer: **Answered, under an explicitly narrow, disclosed scope.** Under this controlled
+  React/Next.js fixture and frozen environment, the observed FCP/TTI differences between rendering
+  strategies (CSR vs. SSR) and between state-management strategies (LOCAL vs. GLOBAL) are small
+  (a few milliseconds in mean FCP/TTI, on the same order as each condition's own standard
+  deviation). No statistical significance test is computed or claimed (the analysis pipeline is
+  descriptive-only by design — `docs/research/RQ1_EXPERIMENT_PROTOCOL.md` §10), so these
+  differences must be read as observed, not established as real population-level effects. This
+  result is specific to this fixture (50 simple cards, no external data fetching, no images) and
+  this environment; it must never be generalized to Angular (no Angular RQ1 runtime fixture exists
+  — a deliberate, disclosed scope limitation, `docs/research/KNOWN_LIMITATIONS_REGISTER.md` §2), to
+  more complex real applications, or presented as a causal claim beyond "under the controlled
+  frozen React/Next.js fixture and environment, these are the FCP/TTI values observed."
+- Supporting artifact: `research/rq1-experiment/raw-results/` (raw), `research/rq1-experiment/processed-results/summary.json`/`summary.md` (processed, frozen pipeline output), `research/rq1-experiment/processed-results/PROVENANCE.md` (freeze/version stamp), `docs/audit/STAGE_8_REAL_RQ1_DATA_COLLECTION_REPORT.md`.
 
 ## RQ2
 
@@ -94,6 +110,10 @@ qualification.
 
 ## Overall
 
-No RQ is fully and finally answered by this session's work. RQ3 (and, if Set A is confirmed, RQ2)
-have real, defensible, evidence-backed answers for their *mechanism*. RQ1 (Set B) and RQ4 (both
-sets) remain open pending human-only work this session correctly did not attempt to fabricate.
+**Updated 2026-09-03 (Stage 8).** RQ1 (Set B) is now answered under the frozen protocol's explicit
+narrow scope (real FCP/TTI data collected, above) — this is real, evidence-backed empirical work,
+not a mechanism-only answer. RQ3 (and, if Set A is confirmed, RQ2) have real, defensible,
+evidence-backed answers for their *mechanism*. RQ4 (both sets) remains open — 0 real expert
+submissions, 0 real study participants — pending human-only recruitment work no session can
+fabricate. RQ1 (Set A) remains partially answered as previously described (independent-corpus
+precision preservation unmeasured).

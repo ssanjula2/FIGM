@@ -37,7 +37,7 @@ function authedRequest(url: string, jwt: string, body: unknown, method = 'PATCH'
 test('PATCH /api/profile CHANGE_PASSWORD rejects a weak new password', async () => {
   RepositoryFactory.resetProvider();
   const user = createTestUser('weakpw_reject', 'DEVELOPER', 'ValidPass123');
-  const jwt = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: 'DEVELOPER' });
+  const jwt = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: 'DEVELOPER' }, user.tokenVersion ?? 0);
 
   const res = await profilePATCH(
     authedRequest('http://localhost:3000/api/profile', jwt, {
@@ -58,7 +58,7 @@ test('PATCH /api/profile CHANGE_PASSWORD rejects a weak new password', async () 
 test('PATCH /api/profile CHANGE_PASSWORD accepts a strong new password (no regression)', async () => {
   RepositoryFactory.resetProvider();
   const user = createTestUser('strongpw_accept', 'DEVELOPER', 'ValidPass123');
-  const jwt = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: 'DEVELOPER' });
+  const jwt = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: 'DEVELOPER' }, user.tokenVersion ?? 0);
 
   const res = await profilePATCH(
     authedRequest('http://localhost:3000/api/profile', jwt, {
@@ -74,7 +74,7 @@ test('PATCH /api/admin/users rejects an invalid role value with 400, does not pe
   RepositoryFactory.resetProvider();
   const admin = createTestUser('role_admin', 'ADMIN');
   const target = createTestUser('role_target', 'DEVELOPER');
-  const adminJwt = signJWT({ userId: admin.id, email: admin.email, fullName: admin.fullName, role: 'ADMIN' });
+  const adminJwt = signJWT({ userId: admin.id, email: admin.email, fullName: admin.fullName, role: 'ADMIN' }, admin.tokenVersion ?? 0);
 
   const res = await adminUsersPATCH(
     authedRequest('http://localhost:3000/api/admin/users', adminJwt, {
@@ -92,7 +92,7 @@ test('PATCH /api/admin/users accepts a valid role value (no regression)', async 
   RepositoryFactory.resetProvider();
   const admin = createTestUser('role_admin_valid', 'ADMIN');
   const target = createTestUser('role_target_valid', 'DEVELOPER');
-  const adminJwt = signJWT({ userId: admin.id, email: admin.email, fullName: admin.fullName, role: 'ADMIN' });
+  const adminJwt = signJWT({ userId: admin.id, email: admin.email, fullName: admin.fullName, role: 'ADMIN' }, admin.tokenVersion ?? 0);
 
   const res = await adminUsersPATCH(
     authedRequest('http://localhost:3000/api/admin/users', adminJwt, {
@@ -110,7 +110,7 @@ test('PATCH /api/admin/users is still rejected for a non-ADMIN caller (role vali
   RepositoryFactory.resetProvider();
   const developer = createTestUser('role_dev_unauthorized', 'DEVELOPER');
   const target = createTestUser('role_target_unauth', 'DEVELOPER');
-  const devJwt = signJWT({ userId: developer.id, email: developer.email, fullName: developer.fullName, role: 'DEVELOPER' });
+  const devJwt = signJWT({ userId: developer.id, email: developer.email, fullName: developer.fullName, role: 'DEVELOPER' }, developer.tokenVersion ?? 0);
 
   const res = await adminUsersPATCH(
     authedRequest('http://localhost:3000/api/admin/users', devJwt, {
@@ -125,7 +125,7 @@ test('PATCH /api/admin/users rejects a weak admin-supplied password with 400, do
   RepositoryFactory.resetProvider();
   const admin = createTestUser('pw_admin_reject', 'ADMIN');
   const target = createTestUser('pw_target_reject', 'DEVELOPER', 'OriginalPass123');
-  const adminJwt = signJWT({ userId: admin.id, email: admin.email, fullName: admin.fullName, role: 'ADMIN' });
+  const adminJwt = signJWT({ userId: admin.id, email: admin.email, fullName: admin.fullName, role: 'ADMIN' }, admin.tokenVersion ?? 0);
 
   const res = await adminUsersPATCH(
     authedRequest('http://localhost:3000/api/admin/users', adminJwt, {
@@ -146,7 +146,7 @@ test('CHANGE_PASSWORD (self-service) revokes the account\'s existing refresh tok
   RepositoryFactory.resetProvider();
   const user = createTestUser('pw_revoke_self', 'DEVELOPER', 'ValidPass123');
   UserDB.updateUser(user.id, { refreshToken: 'a-live-refresh-token-issued-before-the-change' });
-  const jwt = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: 'DEVELOPER' });
+  const jwt = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: 'DEVELOPER' }, user.tokenVersion ?? 0);
 
   const res = await profilePATCH(
     authedRequest('http://localhost:3000/api/profile', jwt, {

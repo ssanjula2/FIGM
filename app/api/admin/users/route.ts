@@ -4,6 +4,11 @@ import { UserRepository } from '../../../../src/engine/user-repository';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
 const ALLOWED_ROLES = new Set(['ADMIN', 'AUDITOR', 'DEVELOPER']);
+// Stage 7D: the only client-facing surface that may ever set accountType -- gated ADMIN-only by
+// this route's own authorizeRole check above every handler. Normal public registration
+// (app/api/auth/register/route.ts) never reads or forwards a client-supplied accountType field at
+// all, so ENGINEERING_TEST can only ever be reached through this explicit, audited admin action.
+const ALLOWED_ACCOUNT_TYPES = new Set(['NORMAL', 'ENGINEERING_TEST']);
 
 /** SEC-08: an admin listing every OTHER user's API key in plaintext broadens the blast radius of
  *  any single admin-account compromise to every user's key at once. A user views their OWN key in
@@ -17,7 +22,7 @@ function maskApiKey(apiKey: string | null | undefined): string | null {
 }
 
 export async function GET(request: Request) {
-  const auth = authorizeRole(request, ['ADMIN']);
+  const auth = await authorizeRole(request, ['ADMIN']);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -28,6 +33,7 @@ export async function GET(request: Request) {
     email: u.email,
     fullName: u.fullName,
     role: u.role,
+    accountType: u.accountType ?? 'NORMAL',
     apiKey: maskApiKey(u.apiKey),
     createdAt: u.createdAt,
     lastLoginAt: u.lastLoginAt || u.createdAt,
@@ -37,14 +43,14 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const auth = authorizeRole(request, ['ADMIN']);
+  const auth = await authorizeRole(request, ['ADMIN']);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     const body = await request.json();
-    const { userId, role, newPassword } = body;
+    const { userId, role, newPassword, accountType } = body;
 
     if (!userId) {
       return NextResponse.json({ error: 'userId is required' }, { status: 400 });
@@ -58,8 +64,16 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: `role must be one of: ${[...ALLOWED_ROLES].join(', ')}` }, { status: 400 });
     }
 
+    if (accountType !== undefined && !ALLOWED_ACCOUNT_TYPES.has(accountType)) {
+      return NextResponse.json({ error: `accountType must be one of: ${[...ALLOWED_ACCOUNT_TYPES].join(', ')}` }, { status: 400 });
+    }
+
     if (role) {
       await UserRepository.updateUserRole(userId, role);
+    }
+
+    if (accountType) {
+      await UserRepository.updateAccountType(userId, accountType);
     }
 
     if (newPassword) {
@@ -72,7 +86,7 @@ export async function PATCH(request: Request) {
     await AuditLogger.logEvent('RESET_PASSWORD', {
       userId: auth.user.userId,
       email: auth.user.email,
-      details: `Admin updated user ${userId} settings (role: ${role ?? 'unchanged'}, password: ${newPassword ? 'reset' : 'unchanged'})`,
+      details: `Admin updated user ${userId} settings (role: ${role ?? 'unchanged'}, accountType: ${accountType ?? 'unchanged'}, password: ${newPassword ? 'reset' : 'unchanged'})`,
     });
 
     return NextResponse.json({ message: 'User updated successfully' });
@@ -83,7 +97,7 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const auth = authorizeRole(request, ['ADMIN']);
+  const auth = await authorizeRole(request, ['ADMIN']);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

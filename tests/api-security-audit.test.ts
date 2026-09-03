@@ -27,14 +27,14 @@ function authedRequest(url: string, opts: RequestInit, jwt: string): Request {
 }
 
 function tokenFor(userId: string, role: 'DEVELOPER' | 'ADMIN' | 'AUDITOR' = 'DEVELOPER'): string {
-  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role });
+  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role }, 0);
 }
 
 test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', async (t) => {
-  await t.test('JWT validation: missing, malformed, expired, and tampered tokens are all rejected', () => {
+  await t.test('JWT validation: missing, malformed, expired, and tampered tokens are all rejected', async () => {
     // Missing token
     const noAuthReq = new Request('http://localhost:3000/api/profile');
-    const noAuthResult = authenticateUser(noAuthReq);
+    const noAuthResult = await authenticateUser(noAuthReq);
     assert.equal(noAuthResult.user, null);
     assert.equal(noAuthResult.errorResponse?.status, 401);
 
@@ -45,11 +45,11 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
     assert.equal(verifyJWT('a.b'), null);
 
     // Expired token (negative TTL so exp is already in the past)
-    const expiredToken = signJWT({ userId: 'usr_x', email: 'x@figm.io', fullName: 'X', role: 'DEVELOPER' }, -10);
+    const expiredToken = signJWT({ userId: 'usr_x', email: 'x@figm.io', fullName: 'X', role: 'DEVELOPER' }, 0, -10);
     assert.equal(verifyJWT(expiredToken), null);
 
     // Tampered signature (valid token with the last signature character flipped)
-    const validToken = signJWT({ userId: 'usr_x', email: 'x@figm.io', fullName: 'X', role: 'DEVELOPER' });
+    const validToken = signJWT({ userId: 'usr_x', email: 'x@figm.io', fullName: 'X', role: 'DEVELOPER' }, 0);
     const lastChar = validToken.slice(-1);
     const flipped = lastChar === 'A' ? 'B' : 'A';
     const tamperedToken = validToken.slice(0, -1) + flipped;
@@ -59,24 +59,24 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
     const expiredReq = new Request('http://localhost:3000/api/profile', {
       headers: { Authorization: `Bearer ${expiredToken}` },
     });
-    const expiredResult = authenticateUser(expiredReq);
+    const expiredResult = await authenticateUser(expiredReq);
     assert.equal(expiredResult.user, null);
     assert.equal(expiredResult.errorResponse?.status, 401);
   });
 
-  await t.test('authorizeRole rejects insufficient roles and accepts sufficient ones', () => {
+  await t.test('authorizeRole rejects insufficient roles and accepts sufficient ones', async () => {
     const devToken = tokenFor('usr_dev_role_test', 'DEVELOPER');
     const devReq = new Request('http://localhost:3000/api/admin/users', {
       headers: { Authorization: `Bearer ${devToken}` },
     });
-    const devResult = authorizeRole(devReq, ['ADMIN']);
+    const devResult = await authorizeRole(devReq, ['ADMIN']);
     assert.equal(devResult.errorResponse?.status, 403);
 
     const adminToken = tokenFor('usr_admin_role_test', 'ADMIN');
     const adminReq = new Request('http://localhost:3000/api/admin/users', {
       headers: { Authorization: `Bearer ${adminToken}` },
     });
-    const adminResult = authorizeRole(adminReq, ['ADMIN']);
+    const adminResult = await authorizeRole(adminReq, ['ADMIN']);
     assert.equal(adminResult.errorResponse, undefined);
     assert.equal(adminResult.user?.role, 'ADMIN');
   });

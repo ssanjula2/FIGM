@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   const rateLimitError = await checkRateLimit(ip, 5, 60000);
   if (rateLimitError) return rateLimitError;
 
-  const auth = authenticateUser(request);
+  const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

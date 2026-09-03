@@ -27,18 +27,18 @@ export default function BenchmarkSection() {
     ? [
         {
           value: `${(bm.f1Score * 100).toFixed(1)}%`,
-          label: 'Empirical F1-Score',
-          sub: 'Ground Truth Accuracy',
+          label: 'Controlled Benchmark F1',
+          sub: 'Self-authored fixtures, not real-world accuracy',
         },
         {
           value: `${(bm.precision * 100).toFixed(1)}%`,
-          label: 'Precision Rate',
-          sub: 'Low False Positives',
+          label: 'Controlled Benchmark Precision',
+          sub: 'Self-authored fixtures, not real-world accuracy',
         },
         {
           value: `${(bm.recall * 100).toFixed(1)}%`,
-          label: 'Recall Rate',
-          sub: 'High Defect Coverage',
+          label: 'Controlled Benchmark Recall',
+          sub: 'Self-authored fixtures, not real-world accuracy',
         },
         {
           value: perf?.scanSpeedLOCPerSec
@@ -60,17 +60,23 @@ export default function BenchmarkSection() {
     : null;
 
   return (
-    <section style={{ padding: '80px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
-        <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
-          EMPIRICAL EVALUATION &amp; RESULTS
+    <section id="research-credibility" style={{ padding: '72px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: '0 24px' }}>
+        <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '8px' }}>
+          Research Credibility
         </div>
-        <h2 style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', margin: '0 0 16px 0', letterSpacing: '-0.5px' }}>
-          Real-World Benchmark Performance
+        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', margin: '0 0 16px 0', letterSpacing: '-0.5px' }}>
+          Controlled benchmark, real-world corpus, reproducible protocol
         </h2>
-        <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '720px', margin: '0 auto 48px auto', lineHeight: 1.6 }}>
-          Evaluated against a hand-labelled, multi-framework ground-truth benchmark suite (React, Vue, Angular, vanilla JS).
-          Metrics are computed live from <code style={{ color: '#38bdf8', fontSize: '13px' }}>benchmarks/eval-summary.json</code>.
+        <p style={{ color: '#94a3b8', fontSize: '14px', maxWidth: '720px', margin: '0 auto 20px auto', lineHeight: 1.6 }}>
+          The figures below come from FIGM&apos;s <strong style={{ color: '#f1f5f9' }}>controlled benchmark</strong> --
+          a hand-labelled fixture suite (<code style={{ color: '#38bdf8', fontSize: '13px' }}>benchmarks/eval-summary.json</code>)
+          built and labelled by the same team that built the rules. This is a construction-validity
+          check, not an independent real-world accuracy measurement -- that requires expert
+          validation against manual architectural review, which has not yet been collected.
+          Separately, FIGM has been run across a real, pinned-commit 21-repository open-source
+          corpus (React, Next.js, Angular, plus Vue and generic JS/TS) under a reproducible
+          experiment protocol; no precision/recall is claimed for that corpus without expert review.
         </p>
 
         {/* Loading placeholder */}
@@ -78,7 +84,7 @@ export default function BenchmarkSection() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
               gap: '16px',
               marginBottom: '60px',
             }}
@@ -100,7 +106,7 @@ export default function BenchmarkSection() {
 
         {/* 5 Stats Counter Grid — from API */}
         {!loading && stats && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '60px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginBottom: '60px' }}>
             {stats.map((st) => (
               <div
                 key={st.label}

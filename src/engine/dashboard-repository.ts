@@ -1,5 +1,6 @@
 import { DBSubmission, DBScanRecord, DBAuditLog, UserDB } from '../auth/user-db';
 import { RepositoryFactory } from '../storage/repository-factory';
+import { isEngineeringTestEmail, isEngineeringTestAccount } from '../lib/engineering-test-accounts';
 
 export interface DashboardSummary {
   totalProjects: number;
@@ -55,9 +56,32 @@ export class DashboardRepository {
   }
 
   public static async getSummary(userId?: string, role = 'DEVELOPER'): Promise<DashboardSummary> {
-    const scanRecords = ((await DashboardRepository.provider.getScanRecords(userId)) as DBScanRecord[]) || [];
+    // Stage 7C latency pass (Section 23): these two/three provider calls are independent DB reads
+    // (no query depends on another's result) -- previously awaited sequentially, which serializes
+    // their real network round-trips to Supabase. Same real data, same query count, just no longer
+    // paying for N round-trips back-to-back when they can overlap.
+    const [scanRecordsRaw, projectsRaw, allUsersRaw] = await Promise.all([
+      DashboardRepository.provider.getScanRecords(userId),
+      DashboardRepository.provider.getProjects(userId),
+      userId ? Promise.resolve(undefined) : DashboardRepository.provider.getAllUsers(),
+    ]);
+    let scanRecords = (scanRecordsRaw as DBScanRecord[]) || [];
     const submissions = userId ? UserDB.getSubmissionsByUserId(userId) : [];
-    const projects = ((await DashboardRepository.provider.getProjects(userId)) as any[]) || [];
+    let projects = (projectsRaw as any[]) || [];
+
+    // Stage 7C/7D engineering-test-data separation (Section 20/6): only the admin-wide aggregate
+    // (userId undefined -- a single user's own dashboard never needs this) can be polluted by
+    // engineering-QA accounts' scan/project records. Excluded via the real, persisted
+    // `accountType` column (falling back to the email convention for pre-migration rows) -- see
+    // src/lib/engineering-test-accounts.ts's isEngineeringTestAccount doc comment.
+    if (!userId) {
+      const allUsers = (allUsersRaw as Array<{ id: string; email: string; accountType?: string | null }>) || [];
+      const engineeringTestUserIds = new Set(allUsers.filter((u) => isEngineeringTestAccount(u)).map((u) => u.id));
+      if (engineeringTestUserIds.size > 0) {
+        scanRecords = scanRecords.filter((s) => !engineeringTestUserIds.has(s.userId));
+        projects = projects.filter((p) => !engineeringTestUserIds.has(p.userId));
+      }
+    }
 
     // Real counts only — no artificial minimum floors. A brand-new/low-traffic deployment must
     // show its real (possibly small or zero) numbers, not a padded-up minimum designed to make
@@ -138,7 +162,22 @@ export class DashboardRepository {
   }
 
   public static async getActivityFeed(limit = 10): Promise<ActivityItem[]> {
-    const logs = ((await DashboardRepository.provider.getAuditLogs(limit)) as DBAuditLog[]) || [];
+    // Fetch extra headroom above `limit` -- the research-participant filter below can drop rows,
+    // and without this the feed would silently return fewer than `limit` items whenever a
+    // participant event happened to be among the most recent ones.
+    const rawLogs = ((await DashboardRepository.provider.getAuditLogs(limit * 3)) as DBAuditLog[]) || [];
+    // Stage 7B fix: this feed is served publicly/unauthenticated (see the comment below) as a
+    // "platform pulse" showcase -- it must never include human-study participant activity.
+    // RESEARCH_* actions and the synthetic @user-study.figm.local email domain
+    // (src/engine/participant-repository.ts, app/api/user-study/*) are the two ways a participant
+    // event is tagged; excluding both is belt-and-suspenders. Previously a participant's real
+    // consent/scan events (identifiable by participant code, e.g. "P007") were visible to any
+    // unauthenticated visitor -- inconsistent with the study's own consent protocol, which commits
+    // to presenting results only in aggregated/anonymized form (docs/research/FINAL_RESEARCH_CONTRACT.md
+    // Section 12), not as an individually-attributable live event stream.
+    const logs = rawLogs
+      .filter((log) => !log.action.startsWith('RESEARCH_') && !(log.email || '').endsWith('@user-study.figm.local') && !isEngineeringTestEmail(log.email))
+      .slice(0, limit);
     if (logs.length > 0) {
       return logs.map((log) => {
         // This feed is served publicly (unauthenticated) as a live "platform pulse" showcase on
@@ -199,41 +238,10 @@ export class DashboardRepository {
       return combined.slice(-limit);
     }
 
-    const now = new Date();
-    return [
-      {
-        id: 'rep_1',
-        fileName: 'UserProfile.tsx',
-        framework: 'REACT_JSX',
-        qualityScore: 82,
-        defectsCount: 3,
-        criticalCount: 1,
-        highCount: 1,
-        scanTimeMs: 0.34,
-        createdAt: new Date(now.getTime() - 10 * 60000).toISOString(),
-      },
-      {
-        id: 'rep_2',
-        fileName: 'SearchPanel.component.ts',
-        framework: 'ANGULAR_TEMPLATE',
-        qualityScore: 78,
-        defectsCount: 4,
-        criticalCount: 2,
-        highCount: 1,
-        scanTimeMs: 0.42,
-        createdAt: new Date(now.getTime() - 40 * 60000).toISOString(),
-      },
-      {
-        id: 'rep_3',
-        fileName: 'AppRouter.page.tsx',
-        framework: 'NEXT_JS',
-        qualityScore: 94,
-        defectsCount: 1,
-        criticalCount: 0,
-        highCount: 1,
-        scanTimeMs: 0.28,
-        createdAt: new Date(now.getTime() - 120 * 60000).toISOString(),
-      },
-    ];
+    // Real, empty result only -- no fabricated placeholder reports. This mirrors the same
+    // fabrication-removal already applied to getSummary() above; this fallback was missed in that
+    // pass. The dashboard UI (LiveDashboardContent.tsx) already renders an honest empty state
+    // ("No scan reports found. Run a new scan to populate reports.") for exactly this case.
+    return [];
   }
 }

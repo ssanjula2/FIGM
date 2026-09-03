@@ -4,6 +4,46 @@ Complete guide to all environment variables required for local development, auto
 
 ---
 
+## Categorized quick reference (Stage 7C)
+
+Every variable below is classified into exactly one of four categories. This is the
+categorization Stage 7B left unfinished; the detailed matrix further down is unchanged and
+remains the authoritative per-variable description.
+
+**REQUIRED_PRODUCTION** — the app fails closed (refuses to start, or refuses a specific
+operation) without these outside local development/test:
+`JWT_SECRET`, `REFRESH_SECRET`, `ADMIN_BOOTSTRAP_PASSWORD` (only at first-admin-seed time),
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
+`DATABASE_URL`, `DIRECT_URL` (Prisma CLI/migrations only, not runtime request traffic), `NODE_ENV`.
+
+**OPTIONAL_PRODUCTION** — safe to leave unset in production; the corresponding feature degrades
+to an honest "unavailable"/no-op state rather than failing:
+`STORAGE_PROVIDER` (see `src/storage/repository-factory.ts` — leaving it unset in production
+without Supabase credentials configured is a fatal error, not a silent fallback; explicit
+`STORAGE_PROVIDER=json` in production is accepted but logs a loud warning), `AI_PRIMARY_PROVIDER`,
+`AI_FALLBACK_PROVIDER`, `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`, `ANTHROPIC_TIMEOUT_MS`,
+`GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TIMEOUT_MS`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`,
+`NEXT_PUBLIC_APP_URL`, `PORT`.
+
+**DEVELOPMENT_ONLY** — must never be set in a deployed environment (Vercel preview or
+production):
+`OLLAMA_BASE_URL`, `OLLAMA_MODEL`, `OLLAMA_TIMEOUT_MS` (Vercel's serverless runtime has no network
+path to a local machine's Ollama instance — setting either Ollama variable there activates a
+provider that will always fail to connect, and would displace Claude/Gemini as the higher-precedence
+provider), `ALLOW_TEST_RESET_TOKEN` (has no effect unless `NODE_ENV=test` is also true, but must
+still never be set outside local test runs as defense-in-depth).
+
+**RESEARCH_ONLY** — used exclusively by local research tooling under `research/rq1-experiment/`
+and `research/independent-annotation/`, never read by the deployed Next.js application:
+none. The RQ1 Lighthouse experiment scripts (`research/rq1-experiment/scripts/*`) read no
+custom environment variables of their own beyond the app's own already-listed `NODE_ENV`/DB
+variables (they spawn a real local `next start` and a local headless Chrome directly) — confirmed
+by inspection, not assumed. They remain local-only tooling regardless (see
+`docs/audit/STAGE_7B_PRE_DEPLOYMENT_HARDENING_REPORT.md` Section 5, Vercel compatibility) and are
+never deployed to Vercel.
+
+---
+
 ## Environment Variables Matrix
 
 | Variable Name | Required | Default / Example Value | Environment | Description |
@@ -19,6 +59,9 @@ Complete guide to all environment variables required for local development, auto
 | `SUPABASE_SERVICE_ROLE_KEY` | Cloud | `eyJhbGciOi...` | Server Only | Privileged service role key for administrative data migration. |
 | `DATABASE_URL` | Cloud | `postgresql://postgres:...@...pooler.supabase.com:6543/postgres?pgbouncer=true` | Server Only | PgBouncer pooler connection string for Prisma ORM. |
 | `DIRECT_URL` | Cloud | `postgresql://postgres:...@...supabase.com:5432/postgres` | Server Only | Direct PostgreSQL connection string for DDL migrations. |
+| `NEXT_PUBLIC_APP_URL` | No | `https://your-app.vercel.app` | Client | The deployment's own public base URL (used in absolute-URL contexts, e.g. links in emails/exports). |
+| `AI_PRIMARY_PROVIDER` | No | `CLAUDE` | Server Only | Explicitly pins which AI provider serves first (`OLLAMA`\|`CLAUDE`\|`GEMINI`), overriding the default precedence. Ignored if the named provider's own credential isn't configured. |
+| `AI_FALLBACK_PROVIDER` | No | `GEMINI` | Server Only | Explicitly pins the provider `src/ai/ai-remediation-pipeline.ts` switches to when the primary becomes unavailable mid-remediation, overriding the default fallback order. Never resolves to the same provider that just failed. |
 | `OLLAMA_BASE_URL` | Optional | `http://127.0.0.1:11434` | Server Only | Local Ollama server endpoint for AI-assisted remediation (`src/ai/providers/ollama-provider.ts`). LOCAL DEVELOPMENT ONLY — setting this (or `OLLAMA_MODEL`) makes Ollama the highest-precedence provider, above `ANTHROPIC_API_KEY`/`GEMINI_API_KEY` — see `src/ai/ai-provider-selector.ts`. Never point this at anything a Vercel/production deployment cannot actually reach. The browser never calls this endpoint directly. |
 | `OLLAMA_MODEL` | Optional | `qwen2.5-coder:7b` | Server Only | The exact locally-pulled Ollama model tag to use. The server always uses this configured value; no client request can override it. Defaults to `qwen2.5-coder:7b` when `OLLAMA_BASE_URL` is set but this is not. |
 | `OLLAMA_TIMEOUT_MS` | No | `120000` | Server Only | Overrides the default per-request timeout (ms) for local Ollama generation calls. |

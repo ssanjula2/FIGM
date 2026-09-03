@@ -32,7 +32,7 @@ const RULE_UI_CONTENT: Record<string, RuleUiContent> = {
     concern: 'Creating new objects inside loops causes high memory usage and slows down execution.',
     targetConstruct: 'For Loops / While Loops / Array Map Loops',
     predicate: 'Creating static objects inside a loop body',
-    standard: 'Core Web Vitals (Speed & Memory)',
+    standard: 'Static Performance (Memory Allocation)',
     tips: [
       { framework: 'Next.js', tip: 'Hoist static configs outside Server & Client Component map functions' },
       { framework: 'React', tip: 'Move constant objects outside render loops or wrap with useMemo' },
@@ -44,7 +44,7 @@ const RULE_UI_CONTENT: Record<string, RuleUiContent> = {
     concern: 'Images without fixed dimensions cause web pages to jump around while loading (Cumulative Layout Shift).',
     targetConstruct: '<img> tags or Next.js <Image> components',
     predicate: 'Image tag missing explicit width, height, or CSS aspect-ratio',
-    standard: 'W3C CSS & Web Vitals Layout Standards',
+    standard: 'Static Performance (Layout Stability)',
     tips: [
       { framework: 'Next.js', tip: 'Use Next.js <Image src="..." width={500} height={300} alt="..." />' },
       { framework: 'React', tip: 'Always pass explicit width and height props to <img> JSX elements' },
@@ -197,7 +197,7 @@ const RULE_UI_CONTENT: Record<string, RuleUiContent> = {
     concern: 'Loading external web fonts via standard <link> tags causes text invisible flash (FOIT) and layout shifts.',
     targetConstruct: 'Next.js App Layout / Font Import',
     predicate: 'External font loaded via raw HTML link tag instead of next/font/google',
-    standard: 'Next.js Zero-CLS Font Loading Standard',
+    standard: 'Static Performance (Font Loading Pattern)',
     tips: [{ framework: 'Next.js', tip: 'Use next/font/google to automatically optimize and inline font CSS files' }],
   },
   'FIGM-REACT-01': {

@@ -57,7 +57,7 @@ test('DELETE /api/profile actually succeeds end-to-end and the account is gone a
     fullName: 'Delete FK Regression User',
     role: 'DEVELOPER',
   });
-  const jwt = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: 'DEVELOPER' });
+  const jwt = signJWT({ userId: user.id, email: user.email, fullName: user.fullName, role: 'DEVELOPER' }, user.tokenVersion ?? 0);
 
   const res = await profileDELETE(authedRequest('http://localhost:3000/api/profile', { method: 'DELETE' }, jwt));
   assert.equal(res.status, 200, 'account deletion must succeed, not 500 on the audit-log FK violation');

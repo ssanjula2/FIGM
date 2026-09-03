@@ -6,6 +6,12 @@ export interface UserPayload {
   email: string;
   fullName: string;
   role: UserRole;
+  // Present (and meaningful) only when this payload came from decoding a real access JWT via
+  // verifyJWT -- see signJWT's tokenVersion parameter and auth-middleware.ts's authenticateUser,
+  // which is the only real consumer (compares this against the user's current DB tokenVersion to
+  // detect a revoked-by-logout token). Optional so every other UserPayload construction site
+  // (login/register/refresh response bodies, tests) is unaffected.
+  tokenVersion?: number;
 }
 
 export interface AuthSession {
@@ -166,9 +172,17 @@ export function needsRehash(storedHash: string): boolean {
 }
 
 /**
- * Sign Access JWT token for user session (Default: 1 hour / 3600s)
+ * Sign Access JWT token for user session (Default: 1 hour / 3600s).
+ *
+ * `tokenVersion` must be the signing-time value of the user's DB `tokenVersion` column (every
+ * caller has just read the user row anyway -- login/register/refresh routes). It is embedded in
+ * the claim so authenticateUser() can detect and reject this exact token if the user logs out
+ * (which bumps the DB value) before the token's own `exp` -- see prisma/schema.prisma's
+ * tokenVersion doc comment. Required (positioned before the defaulted `expiresInSeconds`, since TS
+ * forbids a required parameter after an optional one), so a caller can't accidentally mint a token
+ * that silently bypasses revocation by omitting it.
  */
-export function signJWT(payload: UserPayload, expiresInSeconds = 3600): string {
+export function signJWT(payload: UserPayload, tokenVersion: number, expiresInSeconds = 3600): string {
   const header = { alg: 'HS256', typ: 'JWT' };
   const now = Math.floor(Date.now() / 1000);
   const claim = {
@@ -180,6 +194,7 @@ export function signJWT(payload: UserPayload, expiresInSeconds = 3600): string {
     // handlers must still only ever pass a role read from the authenticated user's own DB record,
     // never a client-supplied field; this is defense-in-depth, not a substitute for that.
     role: validateRole(payload.role),
+    tokenVersion,
     iat: now,
     exp: now + expiresInSeconds,
   };
@@ -250,6 +265,10 @@ export function verifyJWT(token: string): UserPayload | null {
       // role claim is outside {ADMIN, AUDITOR, DEVELOPER} is clamped to the least-privileged role
       // rather than trusted verbatim.
       role: validateRole(claim.role),
+      // A token signed before this field existed (or any other malformed claim) decodes as 0 --
+      // the same value a freshly-created/never-logged-out user's DB row starts at, so an old token
+      // from before this feature shipped is treated as not-yet-revoked, not rejected outright.
+      tokenVersion: typeof claim.tokenVersion === 'number' ? claim.tokenVersion : 0,
     };
   } catch {
     return null;

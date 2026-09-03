@@ -31,6 +31,16 @@ const SANDBOX_MAX_OLD_SPACE_MB = 64;
 interface SandboxRunResult {
   hasRuntimeError: boolean;
   runtimeErrorDetails?: { message: string; stack?: string; line?: number };
+  // Stage 7C (Section 22, Vercel child-process risk): true only when the sandbox INFRASTRUCTURE
+  // itself could not run at all (runner script missing, or spawn/spawnSync could not start a
+  // child process) -- distinct from hasRuntimeError, which also covers the SCANNED CODE's own
+  // runtime behavior (it threw, or it hung and was killed as a likely infinite loop). A caller
+  // needs this distinction: "your code has a bug" and "this environment cannot run the dynamic
+  // profiler at all" are different, actionable situations. Never set for a timeout, non-zero
+  // exit, or unparseable output -- those remain ambiguous between an environment constraint and
+  // code the sandbox correctly rejected, and are already described honestly by
+  // runtimeErrorDetails.message.
+  infrastructureUnavailable?: boolean;
 }
 
 const IS_SERVER = typeof window === 'undefined';
@@ -156,6 +166,7 @@ function runInSandboxProcess(code: string): SandboxRunResult {
   if (!sandboxRunnerPath) {
     return {
       hasRuntimeError: true,
+      infrastructureUnavailable: true,
       runtimeErrorDetails: { message: 'Dynamic profiling sandbox runner script could not be located; execution skipped for safety.' },
     };
   }
@@ -189,6 +200,7 @@ function runInSandboxProcess(code: string): SandboxRunResult {
     if (result.error) {
       return {
         hasRuntimeError: true,
+        infrastructureUnavailable: true,
         runtimeErrorDetails: { message: `sandbox spawn failed: ${result.error.message}` },
       };
     }
@@ -217,9 +229,12 @@ function runInSandboxProcess(code: string): SandboxRunResult {
     }
   } catch (err: any) {
     // Absolute last-resort guard: whatever happens, never throw out of the profiler and never
-    // execute untrusted code in this process as a fallback.
+    // execute untrusted code in this process as a fallback. Reaching this catch means something
+    // failed before/around the child process itself (e.g. `require('child_process')` unavailable
+    // in this runtime) -- an infrastructure problem, not the scanned code's fault.
     return {
       hasRuntimeError: true,
+      infrastructureUnavailable: true,
       runtimeErrorDetails: { message: `sandbox execution error: ${err?.message || String(err)}` },
     };
   }
@@ -261,6 +276,7 @@ function runInSandboxProcessAsync(code: string): Promise<SandboxRunResult> {
   if (!sandboxRunnerPath) {
     return Promise.resolve({
       hasRuntimeError: true,
+      infrastructureUnavailable: true,
       runtimeErrorDetails: { message: 'Dynamic profiling sandbox runner script could not be located; execution skipped for safety.' },
     });
   }
@@ -273,19 +289,22 @@ function runInSandboxProcessAsync(code: string): Promise<SandboxRunResult> {
       resolve(result);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { spawn } = require('child_process');
-
     let child: import('child_process').ChildProcess;
     try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { spawn } = require('child_process');
       child = spawn(process.execPath, [sandboxRunnerPath], {
         env: buildSandboxEnv(),
         windowsHide: true,
         stdio: ['pipe', 'pipe', 'pipe'],
       });
     } catch (err: any) {
+      // Covers both `require('child_process')` and `spawn()` itself throwing -- e.g. a serverless
+      // runtime where the child_process module is unavailable or restricted. A real environment
+      // limitation, not a bug in the scanned code.
       settle({
         hasRuntimeError: true,
+        infrastructureUnavailable: true,
         runtimeErrorDetails: { message: `sandbox spawn failed: ${err?.message || String(err)}` },
       });
       return;
@@ -326,8 +345,11 @@ function runInSandboxProcessAsync(code: string): Promise<SandboxRunResult> {
 
     child.on('error', (err: Error) => {
       clearTimeout(timeoutHandle);
+      // The child process could not even be started/communicated with (e.g. ENOENT/EACCES) --
+      // an infrastructure problem, not the scanned code's fault.
       settle({
         hasRuntimeError: true,
+        infrastructureUnavailable: true,
         runtimeErrorDetails: { message: `sandbox spawn failed: ${err.message}` },
       });
     });
@@ -387,15 +409,49 @@ function runInSandboxProcessAsync(code: string): Promise<SandboxRunResult> {
 }
 
 export interface DynamicProfileMetrics {
+  /** Real elapsed milliseconds (perf.now() delta) the profiler's own execution step took --
+   *  never padded, floored, or derived from the submitted code's static shape. See
+   *  buildProfileMetrics's doc comment for the Stage 5A correction this replaced. */
   executionTimeMs: number;
-  peakMemoryMb: number;
-  measurementType: 'MEASURED' | 'ESTIMATED';
+  /** Real heap-used delta in MB (endMemory - startMemory), or `null` when no memory API was
+   *  available to measure from -- never a fabricated placeholder number. Can legitimately be
+   *  negative (garbage collection freed more than this scan allocated during the window); never
+   *  clamped positive.
+   *
+   *  Precision note (be exact about what this measures): on the server this is
+   *  process.memoryUsage().heapUsed of FIGM's OWN server process, read immediately before spawning
+   *  the sandboxed child process and again immediately after it exits -- i.e. the parent process's
+   *  heap growth across the spawn-wait-parse-result window, not a direct reading of the sandboxed
+   *  child's own memory (the sandbox runner, src/engine/sandbox/profiler-sandbox-runner.cjs, does
+   *  not currently report its own process.memoryUsage() back to the parent). It is a real,
+   *  unfabricated measurement, but a real limitation: for tiny scans it partly reflects Node's own
+   *  child_process/IPC bookkeeping, not purely the submitted code's allocations. A future pass could
+   *  have the sandbox runner report its own memoryUsage() for a more precise child-process reading;
+   *  not implemented in the Stage 5A audit that added this note (out of scope: reading the metric
+   *  honestly, not upgrading the sandbox IPC protocol). In a browser (no server sandbox process)
+   *  this is instead the browser's own performance.memory.usedJSHeapSize delta where exposed. */
+  peakMemoryMb: number | null;
+  /** Whether peakMemoryMb is a real reading ('MEASURED') or the runtime provided no memory API at
+   *  all ('UNAVAILABLE', in which case peakMemoryMb is null). executionTimeMs has no corresponding
+   *  unavailable state -- perf.now() (or its Date.now() fallback) is always available. */
+  measurementType: 'MEASURED' | 'UNAVAILABLE';
   hasRuntimeError: boolean;
   runtimeErrorDetails?: {
     message: string;
     stack?: string;
     line?: number;
   };
+  /** Stage 7C (Section 22): 'OK' unless the sandbox INFRASTRUCTURE itself could not run at all in
+   *  this environment (runner script missing, or spawn/spawnSync could not start a child process
+   *  -- e.g. child_process unavailable/restricted on some serverless runtimes). Distinct from
+   *  hasRuntimeError, which also covers the scanned code's own behavior (it threw, or hung and was
+   *  killed). Static analysis (parsing, AST detection, rule evaluation) never depends on this --
+   *  it runs and returns real findings regardless of profilerStatus. A caller/UI should render
+   *  'UNAVAILABLE' as an honest "dynamic profiling unavailable in this environment" state, never
+   *  fabricate a duration/memory reading to paper over it (executionTimeMs/peakMemoryMb above
+   *  remain real numbers either way -- perf.now()/getHeapUsed() succeed independently of whether
+   *  the sandboxed execution itself could run). */
+  profilerStatus: 'OK' | 'UNAVAILABLE';
 }
 
 const getHeapUsed = (): number | null => {
@@ -415,58 +471,51 @@ const getHeapUsed = (): number | null => {
 type RuntimeErrorState = {
   hasRuntimeError: boolean;
   runtimeErrorDetails?: { message: string; stack?: string; line?: number };
+  infrastructureUnavailable?: boolean;
 };
 
 /** Shared post-execution measurement/scoring step for both profileExecution (sync) and
  *  profileExecutionAsync -- identical in every respect except how `execState` was obtained. Kept
- *  as one function so the two entry points can never silently drift in behavior. */
+ *  as one function so the two entry points can never silently drift in behavior.
+ *
+ *  STAGE 5A CORRECTION (2026-09-03): this previously computed a real base elapsed-time/memory-delta
+ *  reading and then added a synthetic "Dynamic Code Structural Analysis" formula on top -- extra
+ *  milliseconds/megabytes derived from a static regex count of the submitted code's lines, loops,
+ *  allocation-shaped tokens, and nesting depth, floored at a hardcoded minimum (0.12ms / 0.20MB).
+ *  That is not a measurement of anything that actually happened during execution; it is a static
+ *  heuristic dressed up as a dynamic profiling result, and it silently overstated every scan's real
+ *  timing/memory numbers (worse for larger files, regardless of how fast the sandbox actually ran).
+ *  Found via a real-code audit trace (UI -> API response -> here), not assumed. Now returns the
+ *  real, unmodified deltas only: `endTime - startTime` for duration (perf.now() is a real monotonic
+ *  timer -- see the `perf` const above), and `endMemory - startMemory` for memory when both
+ *  readings were available. Neither is padded, floored to a "looks-real" minimum, or clamped
+ *  positive -- a fast/trivial scan can legitimately report a very small duration, and a memory
+ *  delta can legitimately be negative if garbage collection ran during the measurement window and
+ *  freed more than this scan allocated; both are reported as-is rather than hidden. */
 function buildProfileMetrics(code: string, startTime: number, startMemory: number | null, execState: RuntimeErrorState): DynamicProfileMetrics {
   const endTime = perf.now();
   const endMemory = getHeapUsed();
 
-  // 100% Dynamic Code Structural Analysis Engine
-  const lines = code.split('\n').filter((l) => l.trim().length > 0);
-  const lineCount = lines.length;
-
-  // Detect loops: for, while, map, forEach, reduce, filter
-  const loops = code.match(/for\s*\(|while\s*\(|\.map\(|\.forEach\(|\.reduce\(|\.filter\(/g) || [];
-  const loopCount = loops.length;
-
-  // Detect memory allocations: object literals, new keyword, array pushes
-  const allocations = code.match(/\{[\s\S]*?\}|new\s+|\.push\(|\[[\s\S]*?\]/g) || [];
-  const allocCount = allocations.length;
-
-  // Detect nesting depth
-  const nestingMatch = code.match(/for[\s\S]*?for|while[\s\S]*?while|\.map[\s\S]*?\.map/g) || [];
-  const nestingDepth = nestingMatch.length;
-
-  // Detect hoisting & immutability optimizations
-  const isHoisted = code.includes('Object.freeze') || (code.includes('const ') && (code.includes('DEFAULT') || code.includes('STATIC')));
-
-  // Calculate real microsecond CPU latency dynamically
-  let baseTime = Math.max(0.08, endTime - startTime);
-  let executionTimeMs = parseFloat(
-    Math.max(
-      0.12,
-      baseTime + (lineCount * 0.04) + (loopCount * 2.8) + (allocCount * 0.45) + (nestingDepth * 4.2) - (isHoisted ? 2.5 : 0)
-    ).toFixed(2)
-  );
+  // Real elapsed wall-clock time this call spent inside execState's execution step (the sandboxed
+  // child-process run on the server, or the direct new Function() evaluation in the browser) plus
+  // this function's own negligible overhead. Math.max(0, ...) guards only against theoretical
+  // negative clock jitter on a non-monotonic Date.now() fallback -- it is not a floor that
+  // fabricates a minimum "looks real" value.
+  const executionTimeMs = parseFloat(Math.max(0, endTime - startTime).toFixed(2));
 
   const isMeasured = startMemory !== null && endMemory !== null;
-  let baseMemory = isMeasured ? Math.max(0.15, (endMemory! - startMemory!) / (1024 * 1024)) : 0.20;
-  let peakMemoryMb = parseFloat(
-    Math.max(
-      0.20,
-      baseMemory + (lineCount * 0.008) + (loopCount * 0.35) + (allocCount * 0.12) - (isHoisted ? 0.25 : 0)
-    ).toFixed(2)
-  );
+  // null (never a fabricated placeholder number) when the runtime provided no memory API to
+  // measure from (see getHeapUsed() above) -- the UI must render this as genuinely unavailable,
+  // not as a real zero-byte reading.
+  const peakMemoryMb = isMeasured ? parseFloat(((endMemory! - startMemory!) / (1024 * 1024)).toFixed(2)) : null;
 
   return {
     executionTimeMs,
     peakMemoryMb,
-    measurementType: isMeasured ? 'MEASURED' : 'ESTIMATED',
+    measurementType: isMeasured ? 'MEASURED' : 'UNAVAILABLE',
     hasRuntimeError: execState.hasRuntimeError,
     runtimeErrorDetails: execState.runtimeErrorDetails,
+    profilerStatus: execState.infrastructureUnavailable ? 'UNAVAILABLE' : 'OK',
   };
 }
 
@@ -509,7 +558,7 @@ export class DynamicProfiler {
       // this runs the original, always-browser-safe new Function() evaluation directly.
       const execResult = IS_SERVER ? runInSandboxProcess(code) : runInBrowserUnsandboxed(code);
       if (execResult.hasRuntimeError) {
-        execState = { hasRuntimeError: true, runtimeErrorDetails: execResult.runtimeErrorDetails };
+        execState = { hasRuntimeError: true, runtimeErrorDetails: execResult.runtimeErrorDetails, infrastructureUnavailable: execResult.infrastructureUnavailable };
       }
     } catch (err: any) {
       execState = toRuntimeErrorState(err);
@@ -536,7 +585,7 @@ export class DynamicProfiler {
       checkZeroDivisionFixture(code);
       const execResult = IS_SERVER ? await runInSandboxProcessAsync(code) : runInBrowserUnsandboxed(code);
       if (execResult.hasRuntimeError) {
-        execState = { hasRuntimeError: true, runtimeErrorDetails: execResult.runtimeErrorDetails };
+        execState = { hasRuntimeError: true, runtimeErrorDetails: execResult.runtimeErrorDetails, infrastructureUnavailable: execResult.infrastructureUnavailable };
       }
     } catch (err: any) {
       execState = toRuntimeErrorState(err);

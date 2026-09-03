@@ -23,7 +23,7 @@ function authedRequest(url: string, opts: RequestInit, jwt: string): Request {
 }
 
 function tokenFor(userId: string): string {
-  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role: 'DEVELOPER' });
+  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role: 'DEVELOPER' }, 0);
 }
 
 test('QA Matrix — network / API failure resilience', async (t) => {

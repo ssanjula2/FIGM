@@ -25,7 +25,7 @@ import { GET as searchGET } from '../app/api/search/route';
 const TEST_IP = `10.90.${Math.floor(Math.random() * 200)}.${Math.floor(Math.random() * 200)}`;
 
 function tokenFor(userId: string, role: 'DEVELOPER' | 'ADMIN' = 'DEVELOPER'): string {
-  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role });
+  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role }, 0);
 }
 
 function createTestUser(label: string, role: 'DEVELOPER' | 'ADMIN' = 'DEVELOPER') {
@@ -56,7 +56,7 @@ test('GET /api/search auth enforcement', async (t) => {
     const malformedRes = await searchGET(searchRequest('anything', 'this-is-not-a-real-jwt'));
     assert.equal(malformedRes.status, 401, 'a malformed/garbage token must be rejected with 401');
 
-    const expiredToken = signJWT({ userId: 'usr_search_expired', email: 'x@figm.io', fullName: 'X', role: 'DEVELOPER' }, -10);
+    const expiredToken = signJWT({ userId: 'usr_search_expired', email: 'x@figm.io', fullName: 'X', role: 'DEVELOPER' }, 0, -10);
     const expiredRes = await searchGET(searchRequest('anything', expiredToken));
     assert.equal(expiredRes.status, 401, 'an expired token must be rejected with 401');
   });

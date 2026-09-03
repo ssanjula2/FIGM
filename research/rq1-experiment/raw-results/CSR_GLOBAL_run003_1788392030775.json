@@ -1,0 +1,18 @@
+{
+  "experimentVersion": "1.0.0",
+  "conditionId": "CSR_GLOBAL",
+  "framework": "NEXTJS_REACT",
+  "renderingStrategy": "CSR",
+  "stateManagementStrategy": "GLOBAL",
+  "runNumber": 3,
+  "fcpMs": 443.477,
+  "ttiMs": 476.477,
+  "status": "OK",
+  "error": null,
+  "browserVersion": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+  "nodeVersion": "v22.14.0",
+  "lighthouseVersion": "12.8.2",
+  "timestamp": "2026-09-02T23:33:43.152Z",
+  "isSmokeTest": false,
+  "isWarmup": false
+}

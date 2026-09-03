@@ -5,7 +5,7 @@ import { RuleAnalyticsRepository } from '../../../../src/engine/rule-analytics-r
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  const auth = authorizeRole(request, ['ADMIN']);
+  const auth = await authorizeRole(request, ['ADMIN']);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

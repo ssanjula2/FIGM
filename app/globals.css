@@ -799,6 +799,22 @@ code, pre, .font-mono {
   text-align: center;
 }
 
+/* Engine Diagnostics card (Stage 7C visual-polish pass, Section 13): always exactly 2 columns on
+   desktop regardless of the panel's own width (auto-fit/minmax would otherwise pack in more
+   columns than intended the wider this nested panel happens to render), collapsing to a single
+   column only once genuinely too narrow for two ~150px metric columns plus their icons. */
+.insp-diag-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media screen and (max-width: 360px) {
+  .insp-diag-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .insp-metric-label {
   font-size: 9px;
   font-weight: 700;

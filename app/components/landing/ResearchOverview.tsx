@@ -38,8 +38,8 @@ export default function ResearchOverview() {
   ];
 
   return (
-    <section style={{ padding: '60px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
+    <section id="methodology" style={{ padding: '60px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: '0 24px' }}>
         <div style={{ fontSize: '11px', color: '#a855f7', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
           RESEARCH METHODOLOGY &amp; FRAMEWORK
         </div>
@@ -51,7 +51,7 @@ export default function ResearchOverview() {
         </p>
 
         {/* DSRM 6-Phase Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '60px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '60px' }}>
           {dsrmPhases.map((phase) => (
             <div
               key={phase.num}
@@ -90,7 +90,7 @@ export default function ResearchOverview() {
           <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#f8fafc', margin: '0 0 28px 0' }}>
             Threefold Literature Gap
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
             {gaps.map((gap) => (
               <div
                 key={gap.id}
@@ -149,27 +149,13 @@ export default function ResearchOverview() {
         {/* Problem Statement Banner */}
         <div
           style={{
-            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%)',
+            background: 'rgba(15, 23, 42, 0.6)',
             border: '1px solid rgba(56, 189, 248, 0.2)',
             borderRadius: '16px',
             padding: '32px',
             textAlign: 'left',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '24px',
           }}
         >
-          <div
-            style={{
-              fontSize: '36px',
-              background: 'rgba(56, 189, 248, 0.1)',
-              padding: '16px',
-              borderRadius: '14px',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
-            }}
-          >
-            ⚖️
-          </div>
           <div>
             <h3 style={{ color: '#f8fafc', fontSize: '18px', fontWeight: 800, margin: '0 0 6px 0' }}>
               The Research Problem Statement

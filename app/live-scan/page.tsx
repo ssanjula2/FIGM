@@ -5,6 +5,18 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import type { OnMount } from '@monaco-editor/react';
 import { trackScanStarted, trackScanCompleted } from '../../src/lib/analytics';
+import { primaryResearchDomain } from '../../src/matrix/four-layer-meta-model';
+import { TOTAL_RULE_COUNT } from '../../src/matrix/rule-registry';
+import { formatScanDuration, formatMemoryDelta, formatScanEngineStatus, scanEngineStatusBadge } from '../../src/lib/engine-diagnostics-format';
+import { Clock, MemoryStick, FileCode, ListChecks, CheckCircle2, AlertTriangle, AlertCircle, HelpCircle } from 'lucide-react';
+
+// Same labels as app/diagnostics/page.tsx's RESEARCH_DOMAIN_LABEL -- kept in sync deliberately so
+// the two pages never disagree about how a domain is presented to a user.
+const RESEARCH_DOMAIN_CHIP: Record<string, string> = {
+  ARCHITECTURE: '🏗️ Architecture',
+  STATIC_PERFORMANCE: '⚡ Static Performance',
+  ACCESSIBILITY: '♿ Accessibility',
+};
 
 // Monaco is a heavy browser-only editor bundle (FIGM's own FIGM-NEXT-02 rule: "Heavy browser
 // module imported statically in Next.js instead of next/dynamic with ssr: false"). Code-split it
@@ -190,7 +202,12 @@ interface ScanResultResponse {
   extractedALPsCount: number;
   diagnostics: DiagnosticItem[];
   qualityScore?: number;
-  profile?: { executionTimeMs: number; peakMemoryMb: number };
+  // peakMemoryMb is null when the runtime exposed no memory API to measure from (see
+  // src/engine/dynamic-profiler.ts's buildProfileMetrics) -- never a fabricated placeholder
+  // number. Can also legitimately be negative (GC freed more than this scan allocated).
+  // profilerStatus 'UNAVAILABLE' means the sandbox infrastructure itself could not run in this
+  // environment (Section 22) -- static findings above are entirely unaffected either way.
+  profile?: { executionTimeMs: number; peakMemoryMb: number | null; profilerStatus?: 'OK' | 'UNAVAILABLE' };
   complexity?: {
     cyclomaticComplexity: number;
     complexityRating: string;
@@ -532,6 +549,7 @@ export default function LiveScanPage() {
   const [batchResults, setBatchResults] = useState<Record<string, { status: 'scanning' | 'done' | 'error'; result?: ScanResultResponse; error?: string }>>({});
   const [batchExpanded, setBatchExpanded] = useState<Record<string, boolean>>({});
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [diagnosticsHelpOpen, setDiagnosticsHelpOpen] = useState<boolean>(false);
 
   const readFilesAsText = (fileList: FileList): Promise<{ fileName: string; code: string }[]> =>
     Promise.all(
@@ -1054,6 +1072,28 @@ export default function LiveScanPage() {
     return counts;
   }, [result]);
 
+  // The three research-facing domains (Architecture / Static Performance / Accessibility) via the
+  // same canonical primaryResearchDomain() the detection engine and app/diagnostics/page.tsx both
+  // use as their single source of truth -- never a locally re-derived grouping. Scoped to
+  // kind !== 'GENERAL_CODE_ERROR' only: a general (non-FIGM-rule) code error carries a placeholder
+  // domain: 'PERFORMANCE' at the server (rule-execution-engine.ts) purely so it fits the shared
+  // DiagnosticItem shape, which is not a real research-domain classification -- counting it here
+  // would misrepresent e.g. a TypeScript syntax error as a "Static Performance" finding. This
+  // mirrors the page's own pre-existing, deliberate FIGM_RULE vs GENERAL_CODE_ERROR separation
+  // (see the "Two-system summary" tiles below).
+  const domainCounts = useMemo(() => {
+    const counts: Record<'ARCHITECTURE' | 'STATIC_PERFORMANCE' | 'ACCESSIBILITY', number> = {
+      ARCHITECTURE: 0,
+      STATIC_PERFORMANCE: 0,
+      ACCESSIBILITY: 0,
+    };
+    for (const d of result?.diagnostics ?? []) {
+      if (d.kind === 'GENERAL_CODE_ERROR') continue;
+      counts[primaryResearchDomain(d.domain, d.concern)] += 1;
+    }
+    return counts;
+  }, [result]);
+
   // ── Render ────────────────────────────────────────────────────────────
   return (
     <div className="insp-shell animate-fade-in">
@@ -1307,7 +1347,7 @@ export default function LiveScanPage() {
                   Analyzing Code…
                 </div>
                 <div style={{ fontSize: '12px', marginTop: '4px' }}>
-                  Running all 50 FIGM guideline rules against your code
+                  Running all {TOTAL_RULE_COUNT} FIGM guideline rules against your code
                 </div>
               </div>
             ) : result && (
@@ -1318,7 +1358,7 @@ export default function LiveScanPage() {
                   {[
                     { label: 'Quality Score', value: `${result.qualityScore ?? 100}`, color: scoreColor(result.qualityScore ?? 100) },
                     { label: 'Total Issues', value: `${figmRuleCount + generalCodeErrorCount}`, color: figmRuleCount + generalCodeErrorCount > 0 ? '#f59e0b' : 'var(--status-ok)' },
-                    { label: 'Rules Checked', value: '50', color: 'var(--text-muted)' },
+                    { label: 'Rules Checked', value: `${TOTAL_RULE_COUNT}`, color: 'var(--text-muted)' },
                     { label: 'Complexity', value: `v(G)=${result.complexity?.cyclomaticComplexity ?? 1}`, color: '#eab308' },
                   ].map((m) => (
                     <div key={m.label} className="insp-metric-tile">
@@ -1345,32 +1385,127 @@ export default function LiveScanPage() {
                   ))}
                 </div>
 
-                {/* Performance metrics */}
-                <div className="insp-metric-row" style={{ ['--insp-cols' as any]: 2 }}>
+                {/* Research domain breakdown -- the canonical Architecture / Static Performance /
+                  Accessibility split (primaryResearchDomain(), see domainCounts above), computed
+                  from FIGM rule violations only (general code errors excluded -- they have no
+                  domain classification of their own). This is the tool's actual finding taxonomy;
+                  it must never be collapsed back into the older 2-domain PERF/A11Y grouping. */}
+                <div className="insp-metric-row" style={{ ['--insp-cols' as any]: 3 }}>
                   {[
-                    {
-                      label: '⏱️ Speed',
-                      value: result.profile?.executionTimeMs != null
-                        ? `${result.profile.executionTimeMs.toFixed(2)} ms`
-                        : '—',
-                      color: '#38bdf8',
-                    },
-                    {
-                      label: '💾 Memory',
-                      value: result.profile?.peakMemoryMb != null
-                        ? `${result.profile.peakMemoryMb.toFixed(2)} MB`
-                        : '—',
-                      color: '#a855f7',
-                    },
+                    { label: '🏗️ Architecture', value: domainCounts.ARCHITECTURE, color: '#38bdf8' },
+                    { label: '⚡ Static Performance', value: domainCounts.STATIC_PERFORMANCE, color: '#eab308' },
+                    { label: '♿ Accessibility', value: domainCounts.ACCESSIBILITY, color: '#a855f7' },
                   ].map((m) => (
                     <div key={m.label} className="insp-metric-tile">
                       <div className="insp-metric-label">{m.label}</div>
-                      <div className="insp-metric-value" style={{ color: m.color, fontSize: '12px' }}>
-                        {m.value}
-                      </div>
+                      <div className="insp-metric-value" style={{ color: m.color }}>{m.value}</div>
                     </div>
                   ))}
                 </div>
+
+                {/* Engine Diagnostics (Stage 5A audit) -- real, auditable measurements of FIGM's
+                  OWN analysis execution: a real perf.now() elapsed-time delta and a real
+                  process.memoryUsage() heap delta, with no synthetic formula layered on top (see
+                  src/engine/dynamic-profiler.ts's buildProfileMetrics doc comment for the
+                  fabrication this replaced) and no hardcoded fallback if a value happens to be
+                  falsy. This describes the analysis TOOL's own execution, never the scanned
+                  application's runtime performance -- FCP/TTI/Web Vitals are not measured by a
+                  static scan; see /performance and the explicit note below. Visually secondary/
+                  smaller than the domain and severity tiles above, which describe the actual
+                  findings in the scanned code. */}
+                {(() => {
+                  const badge = result.analysis?.figmStatus ? scanEngineStatusBadge(result.analysis.figmStatus) : null;
+                  const badgeToneColors: Record<string, { fg: string; bg: string; border: string }> = {
+                    success: { fg: '#6ee7b7', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.28)' },
+                    warning: { fg: '#fbbf24', bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.28)' },
+                    danger: { fg: '#fca5a5', bg: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.28)' },
+                    neutral: { fg: 'var(--text-dim)', bg: 'var(--insp-panel-bg)', border: 'var(--insp-border-strong)' },
+                  };
+                  const tone = badgeToneColors[badge?.tone || 'neutral'];
+                  const metrics = [
+                    { key: 'duration', label: 'Scan Duration', value: result.profile?.executionTimeMs != null ? formatScanDuration(result.profile.executionTimeMs) : 'Unavailable', Icon: Clock },
+                    { key: 'memory', label: 'Engine Memory Delta', value: formatMemoryDelta(result.profile?.peakMemoryMb ?? null), Icon: MemoryStick },
+                    { key: 'units', label: 'Source Units', value: '1', Icon: FileCode },
+                    { key: 'rules', label: 'Rules Evaluated', value: String(TOTAL_RULE_COUNT), Icon: ListChecks },
+                  ];
+                  return (
+                    <div
+                      className="insp-notice"
+                      style={{ background: 'var(--insp-panel-bg-alt)', border: '1px solid var(--insp-border)', borderRadius: 'var(--insp-radius-md)', padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap' }}>
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>Engine Diagnostics</div>
+                          <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '2px' }}>FIGM analysis execution metrics</div>
+                        </div>
+                        {badge && result.analysis?.figmStatus && (
+                          <span
+                            title={formatScanEngineStatus(result.analysis.figmStatus)}
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: 700, color: tone.fg, background: tone.bg, border: `1px solid ${tone.border}`, borderRadius: '999px', padding: '4px 10px' }}
+                          >
+                            {badge.tone === 'success' ? <CheckCircle2 size={12} /> : badge.tone === 'danger' ? <AlertCircle size={12} /> : <AlertTriangle size={12} />}
+                            {badge.label}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="insp-diag-grid">
+                        {metrics.map((m) => (
+                          <div key={m.key} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                            <m.Icon size={15} style={{ color: 'var(--text-dim)', marginTop: '3px', flexShrink: 0 }} aria-hidden="true" />
+                            <div>
+                              <div style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{m.label}</div>
+                              <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', marginTop: '2px' }}>{m.value}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {result.profile?.profilerStatus === 'UNAVAILABLE' && (
+                        <div
+                          role="status"
+                          style={{ fontSize: '11px', color: '#fbbf24', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.25)', borderRadius: '6px', padding: '8px 10px' }}
+                        >
+                          Dynamic profiler unavailable in this environment this run -- static findings
+                          above are unaffected and complete; only this scan&apos;s Engine Memory Delta
+                          reading reflects a sandboxed-execution attempt that could not run.
+                        </div>
+                      )}
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ fontSize: '10.5px', color: 'var(--text-dim)', lineHeight: 1.5 }}>
+                            Measures FIGM&apos;s analysis execution only -- not runtime performance of the scanned application.
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setDiagnosticsHelpOpen((v) => !v)}
+                            aria-expanded={diagnosticsHelpOpen}
+                            aria-controls="engine-diagnostics-help"
+                            aria-label="What do these metrics mean?"
+                            title="What do these metrics mean?"
+                            style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--text-dim)', display: 'inline-flex', flexShrink: 0 }}
+                          >
+                            <HelpCircle size={13} />
+                          </button>
+                        </div>
+                        <div style={{ fontSize: '10.5px', color: 'var(--text-dim)' }}>
+                          Runtime performance →{' '}
+                          <Link href="/performance" style={{ color: '#38bdf8' }}>Static Analysis Timing</Link>
+                          {' / '}RQ1 FCP-TTI experiment
+                        </div>
+                        {diagnosticsHelpOpen && (
+                          <div id="engine-diagnostics-help" style={{ fontSize: '11px', color: 'var(--text-dim)', lineHeight: 1.6, background: 'var(--insp-panel-bg)', border: '1px solid var(--insp-border)', borderRadius: 'var(--insp-radius-sm)', padding: '10px 12px', marginTop: '2px' }}>
+                            <div><strong style={{ color: 'var(--text-main)' }}>Scan Duration</strong> -- time FIGM spent analyzing the submitted source.</div>
+                            <div><strong style={{ color: 'var(--text-main)' }}>Engine Memory Delta</strong> -- change in FIGM&apos;s process heap during the analysis window.</div>
+                            <div><strong style={{ color: 'var(--text-main)' }}>Source Units</strong> -- number of source units analyzed in this scan.</div>
+                            <div><strong style={{ color: 'var(--text-main)' }}>Rules Evaluated</strong> -- all {TOTAL_RULE_COUNT} canonical FIGM rule-checks are run against every parsed node of this source; framework-specific rules execute but can only match when this file&apos;s framework and AST shape satisfy their condition.</div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Summary row */}
                 <div className="insp-notice" style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-dim)', background: 'var(--insp-panel-bg-alt)' }}>
@@ -1564,6 +1699,12 @@ export default function LiveScanPage() {
                                       }}
                                     >
                                       {d.ruleId}
+                                    </span>
+                                    <span
+                                      className="insp-chip"
+                                      style={{ ['--chip-color' as any]: '#7c8ba6', ['--chip-bg' as any]: 'rgba(100,116,139,0.1)', ['--chip-border' as any]: 'rgba(100,116,139,0.3)' }}
+                                    >
+                                      {RESEARCH_DOMAIN_CHIP[primaryResearchDomain(d.domain, d.concern)]}
                                     </span>
                                     {d.sourceKind && (
                                       <span

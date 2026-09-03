@@ -66,7 +66,7 @@ export class SupabaseAuthService {
       email: user.email,
       fullName: user.fullName,
       role: user.role,
-    });
+    }, user.tokenVersion ?? 0);
 
     const refreshToken = signRefreshToken({
       userId: user.id,

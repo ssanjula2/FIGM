@@ -13,7 +13,7 @@ import { GET as exportDissertationGET } from '../app/api/export-dissertation/rou
  */
 
 function tokenFor(userId: string): string {
-  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role: 'DEVELOPER' });
+  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role: 'DEVELOPER' }, 0);
 }
 
 test('GET /api/export-dissertation is rate-limited (was previously unthrottled)', async () => {

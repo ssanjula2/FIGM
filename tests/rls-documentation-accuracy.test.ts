@@ -59,17 +59,15 @@ test('DATABASE.md accurately documents application-layer tenant isolation instea
   assert.match(content, /application\/repository authorization layer/i);
 });
 
-test('app/security/page.tsx (a LIVE in-app page shown to real users) does not claim RLS is active', () => {
-  // Worse than a stale doc: this page literally rendered "Row-Level Security (RLS) Active" with a
-  // green checkmark to any signed-in user who visited /security. Also fixed two other stale claims
-  // found on the same page while verifying this one: "24-hour" JWT expiration (real value is 1
-  // hour access / 7 day refresh -- src/auth/auth-service.ts) and "PBKDF2 Password Hashing" as the
-  // primary algorithm (real primary algorithm is scrypt since the SEC-06 migration; PBKDF2 is only
-  // the legacy format transparently upgraded on next login).
-  const content = fs.readFileSync(path.join(rootDir, 'app/security/page.tsx'), 'utf-8');
-  assert.doesNotMatch(content, /Row-Level Security \(RLS\) Active/);
-  assert.doesNotMatch(content, /24-hour expiration/);
-  assert.doesNotMatch(content, /PBKDF2 Password Hashing/);
-  assert.match(content, /Application-Layer Tenant Isolation Active/);
-  assert.match(content, /scrypt/);
+test('app/security/page.tsx (the standalone Tenant Security page) was removed, not left behind with a stale RLS claim', () => {
+  // This test used to read app/security/page.tsx directly and assert it didn't claim RLS was
+  // active (it previously rendered "Row-Level Security (RLS) Active" with a green checkmark to any
+  // signed-in user). Stage 7B (UI cleanup pass) removed the standalone page entirely -- it exposed
+  // internal security implementation detail (JWT algorithm, password-hashing scheme, tenant-
+  // isolation mechanism) to normal users, which belongs in documentation/security architecture, not
+  // a product page. The underlying tenant isolation, JWT guards, and password hashing themselves
+  // were NOT touched (see tests/auth-isolation.test.ts, tests/idor-closure-regressions.test.ts,
+  // tests/security-remediation.test.ts) -- only this presentation surface is gone. This assertion
+  // guards against the page silently reappearing with the same stale claim.
+  assert.equal(fs.existsSync(path.join(rootDir, 'app/security/page.tsx')), false, 'the standalone /security page must stay removed');
 });

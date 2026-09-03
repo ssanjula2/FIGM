@@ -60,7 +60,7 @@ export async function POST(request: Request) {
       role: user.role,
     };
 
-    const accessToken = signJWT(payload, 3600); // 1 hour
+    const accessToken = signJWT(payload, user.tokenVersion ?? 0, 3600); // 1 hour
     const refreshToken = signRefreshToken(payload, 604800); // 7 days
 
     await provider.updateUser(user.id, { refreshToken });

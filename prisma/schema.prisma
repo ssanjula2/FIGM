@@ -17,6 +17,27 @@ enum UserRole {
   AUDITOR
 }
 
+// Stage 7C data-provenance separation (Section 20). Distinguishes an engineering-QA account
+// (created to exercise a real feature during a hardening pass -- e.g. "ENGTEST Stage7B
+// Walkthrough", curltest*@figm.io) from a normal product account, so admin-wide and
+// research-facing aggregates can exclude engineering noise. Deliberately NOT `researchStatus`'s
+// enum (that one means "this account IS a human-study participant" -- a different, independent
+// concept) and deliberately additive/nullable-default so every existing row is unambiguously
+// NORMAL with no backfill required.
+//
+// NOT YET WIRED INTO RUNTIME CODE. The migration for this field
+// (prisma/migrations/*_add_account_type/) has been generated but deliberately NOT applied to the
+// live database, and `prisma generate` has deliberately NOT been re-run. Writing code that reads
+// or writes `accountType` before both of those happen would repeat the exact incident recorded in
+// docs/audit/STAGE_7B_PRE_DEPLOYMENT_HARDENING_REPORT.md's "Continuation" section (the
+// `tokenVersion` field broke logout in production for this same reason). Until this is applied,
+// engineering-test-account exclusion runs on the real, immediately-effective email-convention
+// filter in src/lib/engineering-test-accounts.ts instead.
+enum AccountType {
+  NORMAL
+  ENGINEERING_TEST
+}
+
 enum ProjectStatus {
   ACTIVE
   ARCHIVED
@@ -78,6 +99,16 @@ model User {
   resetToken       String?     @map("reset_token")
   resetTokenExpiry DateTime?   @map("reset_token_expiry")
   refreshToken     String?     @map("refresh_token")
+  // Bumped by POST /api/auth/logout. Every access JWT embeds the tokenVersion that was current at
+  // the moment it was signed; authenticateUser() (src/auth/auth-middleware.ts) compares the two on
+  // every request and rejects a mismatch as TOKEN_REVOKED. This is what makes logout actually
+  // revoke an already-issued, still-unexpired access token -- previously only the refresh token was
+  // revoked in the DB, so a copy of the access JWT sitting in a second tab's localStorage (or
+  // captured via XSS) remained a fully valid credential for up to its own 1h lifetime after
+  // "logout." See docs/audit/STAGE_7B_PRE_DEPLOYMENT_HARDENING_REPORT.md Section 12.
+  tokenVersion     Int         @default(0) @map("token_version")
+  // See AccountType's own doc comment above -- prepared, not yet applied/wired into runtime code.
+  accountType      AccountType @default(NORMAL) @map("account_type")
   apiKey           String?     @unique @map("api_key")
   avatarUrl        String?     @map("avatar_url")
   createdAt        DateTime    @default(now()) @map("created_at")

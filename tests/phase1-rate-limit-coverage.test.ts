@@ -26,7 +26,7 @@ import { POST as duplicatePOST } from '../app/api/projects/[id]/duplicate/route'
  */
 
 function tokenFor(userId: string): string {
-  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role: 'DEVELOPER' });
+  return signJWT({ userId, email: `${userId}@figm.io`, fullName: userId, role: 'DEVELOPER' }, 0);
 }
 
 function fakeIp(prefix: number): string {
