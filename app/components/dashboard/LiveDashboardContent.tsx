@@ -11,7 +11,7 @@ interface SummaryData {
   totalReports: number;
   totalRulesTriggered: number;
   totalAiSuggestions: number;
-  avgQualityScore: number;
+  avgQualityScore: number | null;
   avgScanDurationMs: number;
   avgMemoryUsageMb: number;
   totalActiveUsers: number;
@@ -120,13 +120,13 @@ export default function LiveDashboardContent() {
 
   const radius = 62;
   const circumference = 2 * Math.PI * radius;
-  // `?? 0` (nullish coalescing), not `|| N` — the backend now reports real data, including real
-  // zeros for a fresh/quiet deployment, and `||` would silently swap any real 0 back out for a
-  // fabricated placeholder number (0 is falsy in JS). Every metric below in this component was
-  // previously affected by exactly this bug: even after the backend (DashboardRepository) was
-  // fixed to stop padding its own numbers with hardcoded floors, this component's `|| 30`-style
-  // fallbacks would have silently reintroduced fake numbers on the screen whenever the real
-  // value was genuinely 0.
+  // `avgQualityScore` is `null` (not 0) when this user has no persisted scans yet -- a real 0%
+  // average is a distinct, legitimate value from "no data exists to average." `hasQualityScore`
+  // gates the gauge between the real-score ring and an honest "No scans yet" empty state; the
+  // `?? 0` below only feeds the SVG arc math (which needs a number either way) and is never shown
+  // as a percentage on its own -- the displayed `{healthScore}%` text is only rendered when
+  // `hasQualityScore` is true, right below.
+  const hasQualityScore = summary?.avgQualityScore !== null && summary?.avgQualityScore !== undefined;
   const healthScore = summary?.avgQualityScore ?? 0;
   const strokeDashoffset = circumference - (healthScore / 100) * circumference;
 
@@ -217,11 +217,16 @@ export default function LiveDashboardContent() {
         </div>
       </div>
 
-      {/* Top 5 Metrics Cards Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
-        {/* Card 1: Total Projects */}
+      {/* Top 4 Metrics Cards Grid -- every value here is scoped to the authenticated user's own
+          projects/scans/findings (see /api/dashboard/summary), never a platform-wide total. A
+          5th "Active Developers" card previously sat here showing a global user count on every
+          developer's personal workspace; removed rather than relabeled, since a per-user scope
+          has no honest equivalent of "active developers" to show (platform-wide activity belongs
+          on the Admin dashboard only). */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+        {/* Card 1: My Projects */}
         <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #38bdf8' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Projects</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My Projects</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalProjects ?? 0}</span>
             {/* Previously a static "Active" status badge implying project activity with no real
@@ -231,9 +236,9 @@ export default function LiveDashboardContent() {
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.35) 100%)', borderTop: '1px solid #38bdf8' }} />
         </div>
 
-        {/* Card 2: Total Scans */}
+        {/* Card 2: My Scans */}
         <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #10b981' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Repository Scans</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My Scans</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalScans ?? 0}</span>
             {/* Previously a static "+100%" trend badge with no real historical data behind it —
@@ -244,9 +249,9 @@ export default function LiveDashboardContent() {
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.35) 100%)', borderTop: '1px solid #10b981' }} />
         </div>
 
-        {/* Card 3: Rules Triggered */}
+        {/* Card 3: My Findings */}
         <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #f59e0b' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Rules Triggered</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My Findings</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalRulesTriggered ?? 0}</span>
             <span className="badge-trend-green">{TOTAL_RULE_COUNT} Rules</span>
@@ -254,9 +259,9 @@ export default function LiveDashboardContent() {
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.35) 100%)', borderTop: '1px solid #f59e0b' }} />
         </div>
 
-        {/* Card 4: AI Suggestions */}
+        {/* Card 4: My AI Fix Suggestions */}
         <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #a855f7' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Fix Suggestions</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My AI Fix Suggestions</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
             <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalAiSuggestions ?? 0}</span>
             {/* Previously a static "100% Valid" badge — no per-suggestion validity tracking
@@ -264,25 +269,6 @@ export default function LiveDashboardContent() {
                 removed rather than presented as if it were measured. */}
           </div>
           <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0.35) 100%)', borderTop: '1px solid #a855f7' }} />
-        </div>
-
-        {/* Card 5: Avg Scan Speed / Users */}
-        <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #f43f5e' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            Active Developers
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
-            <span style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>
-              {`${summary?.totalActiveUsers ?? 0}`}
-            </span>
-            {/* Previously a hardcoded "N=85 Cohort" badge, unconditionally displayed regardless
-                of the real totalActiveUsers count above it — the same fabricated-participant-
-                count shape this codebase's research-integrity work explicitly guards against
-                elsewhere (see docs/audit/HUMAN_STUDY_PROVENANCE_AUDIT.md). This is real active-
-                user telemetry, not a human-study cohort, so it now just labels what it is. */}
-            <span className="badge-trend-green">Active Users</span>
-          </div>
-          <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(244, 63, 94, 0.1) 0%, rgba(244, 63, 94, 0.35) 100%)', borderTop: '1px solid #f43f5e' }} />
         </div>
       </div>
 
@@ -292,28 +278,30 @@ export default function LiveDashboardContent() {
         <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
             <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '2px' }}>
-              Composite Health Score
+              My Quality Score
             </h2>
             <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>
-              Live aggregate across analyzed repositories
+              Average across your own persisted scans
             </p>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '20px 0', position: 'relative' }}>
             <svg width="160" height="160" viewBox="0 0 160 160">
               <circle cx="80" cy="80" r={radius} fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth="12" />
-              <circle
-                cx="80"
-                cy="80"
-                r={radius}
-                fill="none"
-                stroke="url(#blue-gradient-dash)"
-                strokeWidth="12"
-                strokeDasharray={circumference}
-                strokeDashoffset={strokeDashoffset}
-                strokeLinecap="round"
-                transform="rotate(-90 80 80)"
-              />
+              {hasQualityScore && (
+                <circle
+                  cx="80"
+                  cy="80"
+                  r={radius}
+                  fill="none"
+                  stroke="url(#blue-gradient-dash)"
+                  strokeWidth="12"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={strokeDashoffset}
+                  strokeLinecap="round"
+                  transform="rotate(-90 80 80)"
+                />
+              )}
               <defs>
                 <linearGradient id="blue-gradient-dash" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#38bdf8" />
@@ -322,8 +310,17 @@ export default function LiveDashboardContent() {
               </defs>
             </svg>
             <div style={{ position: 'absolute', textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', lineHeight: 1 }}>{healthScore}%</div>
-              <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 700, marginTop: '4px' }}>VERIFIED</div>
+              {hasQualityScore ? (
+                <>
+                  <div style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', lineHeight: 1 }}>{healthScore}%</div>
+                  <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 700, marginTop: '4px' }}>VERIFIED</div>
+                </>
+              ) : (
+                <>
+                  <div style={{ fontSize: '15px', fontWeight: 800, color: '#94a3b8', lineHeight: 1.3 }}>No scans yet</div>
+                  <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginTop: '4px' }}>RUN A SCAN TO SEE YOUR SCORE</div>
+                </>
+              )}
             </div>
           </div>
 
@@ -339,13 +336,14 @@ export default function LiveDashboardContent() {
           </div>
         </div>
 
-        {/* Framework Distribution Cards */}
+        {/* Framework Distribution Cards -- from summary.frameworkDistribution, already scoped to
+            this user's own scans by /api/dashboard/summary */}
         <div className="glass-panel" style={{ padding: '24px' }}>
           <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '4px' }}>
-            Framework Distribution Breakdown
+            My Framework Distribution
           </h2>
           <p style={{ fontSize: '12px', color: '#94a3b8', margin: '0 0 18px 0' }}>
-            Parsed files across Single-Page Application targets
+            Your own scanned files, by framework
           </p>
 
           {(() => {
@@ -397,19 +395,23 @@ export default function LiveDashboardContent() {
           })()}
         </div>
 
-        {/* Activity Timeline Feed */}
+        {/* Activity Timeline Feed -- scoped to this user's own account/scan events only, see
+            /api/dashboard/activity */}
         <div className="glass-panel" style={{ padding: '24px' }}>
           <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '4px' }}>
-            Recent Activity Feed
+            My Recent Activity
           </h2>
           <p style={{ fontSize: '12px', color: '#94a3b8', margin: '0 0 16px 0' }}>
-            Live inspection & user events
+            Your own scans & account events
           </p>
 
           {activity.length === 0 ? (
             <div style={{ padding: '24px 0', textAlign: 'center', color: '#94a3b8' }}>
               <span style={{ fontSize: '22px' }}>🕓</span>
               <p style={{ marginTop: '6px', fontSize: '12px' }}>No recent activity yet.</p>
+              <Link href="/live-scan" className="btn-glow" style={{ display: 'inline-flex', marginTop: '14px', fontSize: '12px', padding: '8px 16px' }}>
+                Run your first scan
+              </Link>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -441,10 +443,10 @@ export default function LiveDashboardContent() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
           <div>
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
-              Recent Static Inspection Reports
+              My Recent Scans
             </h2>
             <p style={{ fontSize: '13px', color: '#94a3b8', margin: '4px 0 0 0' }}>
-              Persisted scan output reports across project target files
+              Your own persisted scan output reports
             </p>
           </div>
           <Link href="/history" style={{ fontSize: '13px', color: '#38bdf8', fontWeight: 700, textDecoration: 'none' }}>
@@ -456,6 +458,9 @@ export default function LiveDashboardContent() {
           <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
             <span style={{ fontSize: '28px' }}>📂</span>
             <p style={{ marginTop: '8px' }}>No scan reports found. Run a new scan to populate reports.</p>
+            <Link href="/live-scan" className="btn-glow" style={{ display: 'inline-flex', marginTop: '16px', fontSize: '13px', padding: '10px 20px' }}>
+              Run your first scan
+            </Link>
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>

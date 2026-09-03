@@ -8,7 +8,10 @@ export interface DashboardSummary {
   totalReports: number;
   totalRulesTriggered: number;
   totalAiSuggestions: number;
-  avgQualityScore: number;
+  // null (not 0) when the scope (this user, or the whole platform) has zero real scans -- a real
+  // 0% average is a legitimate, distinct value from "no data exists yet to average," and the UI
+  // must render an honest no-data state rather than a fabricated-looking "0% (FAILED)" score.
+  avgQualityScore: number | null;
   avgScanDurationMs: number;
   avgMemoryUsageMb: number;
   totalActiveUsers: number;
@@ -143,7 +146,7 @@ export class DashboardRepository {
       else fwDist.generic++;
     });
 
-    const avgQualityScore = totalScans > 0 ? Math.round(totalQualityScore / totalScans) : 0;
+    const avgQualityScore = totalScans > 0 ? Math.round(totalQualityScore / totalScans) : null;
     const avgScanDurationMs = totalScans > 0 ? parseFloat((totalScanDurationMs / totalScans).toFixed(2)) : 0;
     const avgMemoryUsageMb = totalScans > 0 ? parseFloat((totalMemoryUsageMb / totalScans).toFixed(2)) : 0;
 
@@ -161,11 +164,17 @@ export class DashboardRepository {
     };
   }
 
-  public static async getActivityFeed(limit = 10): Promise<ActivityItem[]> {
+  /**
+   * `userId` scopes the feed to one account's own activity (the authenticated developer
+   * dashboard) -- when omitted, this is the admin-wide/platform feed (see the "platform pulse"
+   * comment below), never something a non-admin caller should receive. Callers must derive
+   * `userId` server-side from the authenticated session, never trust one supplied by the client.
+   */
+  public static async getActivityFeed(limit = 10, userId?: string): Promise<ActivityItem[]> {
     // Fetch extra headroom above `limit` -- the research-participant filter below can drop rows,
     // and without this the feed would silently return fewer than `limit` items whenever a
     // participant event happened to be among the most recent ones.
-    const rawLogs = ((await DashboardRepository.provider.getAuditLogs(limit * 3)) as DBAuditLog[]) || [];
+    const rawLogs = ((await DashboardRepository.provider.getAuditLogs(limit * 3, userId)) as DBAuditLog[]) || [];
     // Stage 7B fix: this feed is served publicly/unauthenticated (see the comment below) as a
     // "platform pulse" showcase -- it must never include human-study participant activity.
     // RESEARCH_* actions and the synthetic @user-study.figm.local email domain

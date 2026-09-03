@@ -616,9 +616,13 @@ export class SupabaseStorageProvider implements IStorageProvider {
     return mapAuditLog(created);
   }
 
-  async getAuditLogs(limit = 100): Promise<DBAuditLog[]> {
-    if (!this.prisma) return this.fallback!.getAuditLogs(limit);
-    const logs = await this.db().auditLog.findMany({ orderBy: { createdAt: 'desc' }, take: limit });
+  async getAuditLogs(limit = 100, userId?: string): Promise<DBAuditLog[]> {
+    if (!this.prisma) return this.fallback!.getAuditLogs(limit, userId);
+    const logs = await this.db().auditLog.findMany({
+      where: userId ? { userId } : undefined,
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+    });
     return logs.map(mapAuditLog);
   }
 

@@ -85,7 +85,7 @@ export interface IStorageProvider {
 
   // Audit Logs
   addAuditLog(log: Omit<DBAuditLog, 'id' | 'createdAt'>): Promise<DBAuditLog> | DBAuditLog;
-  getAuditLogs(limit?: number): Promise<DBAuditLog[]> | DBAuditLog[];
+  getAuditLogs(limit?: number, userId?: string): Promise<DBAuditLog[]> | DBAuditLog[];
 
   // Submissions (backs /api/submissions -- see prisma/schema.prisma's Submission model comment)
   createSubmission(submission: Omit<DBSubmission, 'id' | 'createdAt'>): Promise<DBSubmission> | DBSubmission;

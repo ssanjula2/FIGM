@@ -688,8 +688,9 @@ export const UserDB = {
     return newLog;
   },
 
-  getAuditLogs(limit = 100): DBAuditLog[] {
+  getAuditLogs(limit = 100, userId?: string): DBAuditLog[] {
     const db = loadDB();
-    return db.auditLogs.slice(-limit).reverse();
+    const logs = userId ? db.auditLogs.filter((l) => l.userId === userId) : db.auditLogs;
+    return logs.slice(-limit).reverse();
   },
 };

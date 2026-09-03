@@ -81,6 +81,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         { href: '/admin?tab=RESEARCH', label: 'Research Metrics', icon: '📊' },
         { href: '/admin?tab=FRAMEWORKS', label: 'Framework Analytics', icon: '📈' },
         { href: '/admin?tab=RULES', label: 'Rule Analytics', icon: '📐' },
+        { href: '/admin?tab=WEBSITE_ANALYTICS', label: 'Website Analytics (GA4)', icon: '🌐' },
         { href: '/admin?tab=AUDIT', label: 'Audit Logs', icon: '🗂️' },
         { href: '/admin?tab=HEALTH', label: 'System Health', icon: '💚' },
       ],

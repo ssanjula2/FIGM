@@ -50,10 +50,15 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
   const displayName = currentUser?.fullName || currentUser?.email || 'Account';
   const displayInitial = displayName.trim().charAt(0).toUpperCase() || '?';
 
-  const dynamicScore = records.length > 0
-    ? Math.round(records.reduce((acc, s) => acc + (s.qualityScore || 90), 0) / records.length)
-    : 90;
-  const passed = dynamicScore >= 70;
+  // The most recent scan only (useScans() defaults to sortBy=createdAt/sortOrder=desc, so
+  // records[0] is the latest) -- not an average across every scan ever run. Previously this
+  // averaged every record with a `|| 90` fallback (masking a real 0% score back to a fabricated
+  // 90 percent) and fell back to a hardcoded 90-percent "PASSED" badge for a brand-new account
+  // with zero real scans, presenting an invented result as if it were measured. `null` now means "no scans
+  // yet" and is rendered as an honest no-data state below, never a fake percentage.
+  const latestScan = records.length > 0 ? records[0] : null;
+  const dynamicScore = typeof latestScan?.qualityScore === 'number' ? latestScan.qualityScore : null;
+  const passed = dynamicScore !== null && dynamicScore >= 70;
 
   // Cmd+K search modal keyboard behavior: focus moves into the dialog on open (the input),
   // Escape closes it, Tab/Shift+Tab cycle within the dialog's own focusable elements only (a
@@ -159,7 +164,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
 
         {/* Right Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          {/* DevSecOps Live Quality Score Status Bar Badge */}
+          {/* DevSecOps Live Quality Score Status Bar Badge -- this user's latest scan only */}
           <Link
             href="/history"
             style={{
@@ -167,19 +172,23 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: passed ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-              border: passed ? '1px solid rgba(16, 185, 129, 0.35)' : '1px solid rgba(239, 68, 68, 0.35)',
+              background: dynamicScore === null ? 'rgba(148, 163, 184, 0.12)' : passed ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+              border: dynamicScore === null ? '1px solid rgba(148, 163, 184, 0.3)' : passed ? '1px solid rgba(16, 185, 129, 0.35)' : '1px solid rgba(239, 68, 68, 0.35)',
               padding: '6px 14px',
               borderRadius: '20px',
               fontSize: '12px',
               fontWeight: 700,
-              color: passed ? '#34d399' : '#f87171',
-              boxShadow: passed ? '0 0 16px rgba(16, 185, 129, 0.2)' : '0 0 16px rgba(239, 68, 68, 0.2)',
+              color: dynamicScore === null ? '#94a3b8' : passed ? '#34d399' : '#f87171',
+              boxShadow: dynamicScore === null ? 'none' : passed ? '0 0 16px rgba(16, 185, 129, 0.2)' : '0 0 16px rgba(239, 68, 68, 0.2)',
               transition: 'all 0.2s ease',
             }}
           >
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: passed ? '#34d399' : '#f87171', boxShadow: passed ? '0 0 10px #34d399' : '0 0 10px #f87171' }}></span>
-            <span>🛡️ Quality Score: <b>{dynamicScore}% ({passed ? 'PASSED ✅' : 'FAILED ❌'})</b></span>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: dynamicScore === null ? '#94a3b8' : passed ? '#34d399' : '#f87171', boxShadow: dynamicScore === null ? 'none' : passed ? '0 0 10px #34d399' : '0 0 10px #f87171' }}></span>
+            {dynamicScore === null ? (
+              <span>🛡️ No scans yet</span>
+            ) : (
+              <span>🛡️ Latest Scan: <b>{dynamicScore}% ({passed ? 'PASSED ✅' : 'FAILED ❌'})</b></span>
+            )}
           </Link>
 
           {/* Theme Button */}

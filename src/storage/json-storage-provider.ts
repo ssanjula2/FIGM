@@ -205,8 +205,8 @@ export class JsonStorageProvider implements IStorageProvider {
     return UserDB.addAuditLog(log);
   }
 
-  getAuditLogs(limit?: number): DBAuditLog[] {
-    return UserDB.getAuditLogs(limit);
+  getAuditLogs(limit?: number, userId?: string): DBAuditLog[] {
+    return UserDB.getAuditLogs(limit, userId);
   }
 
   // Submissions

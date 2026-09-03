@@ -7,7 +7,7 @@ import { AuditLogger } from '../src/auth/audit-logger';
 import { RepositoryFactory } from '../src/storage/repository-factory';
 
 test('Dashboard Analytics & Repository Suite', async (t) => {
-  await t.test('DashboardRepository.getSummary reports honest zeros for a user with no real activity (no fabricated floor)', async () => {
+  await t.test('DashboardRepository.getSummary reports honest zeros (and null quality score) for a user with no real activity (no fabricated floor)', async () => {
     // 'usr_demo' genuinely has zero real scan records in the store. Previously getSummary()
     // padded every aggregate field with a hardcoded minimum (totalScans/totalReports >= 30,
     // totalRulesTriggered >= 823, totalAiSuggestions >= 175, totalActiveUsers >= 85,
@@ -16,13 +16,18 @@ test('Dashboard Analytics & Repository Suite', async (t) => {
     // aggregation logic. A dashboard showing a padded-up minimum for a user/deployment with no
     // real activity is exactly the kind of fabricated production statistic this codebase must
     // not present — so the correct, honest expectation for a genuinely-empty user is real zeros.
+    //
+    // avgQualityScore is asserted `null`, not `0` -- Stage 7G (Section 5/7/22-A/D): a real 0%
+    // average and "no scans exist to average" are different facts, and the dashboard/header must
+    // render an honest no-data state for the latter rather than a number that reads as a real
+    // (and alarming) 0% score.
     const summary = await DashboardRepository.getSummary('usr_demo_no_real_activity', 'ADMIN');
 
     assert.equal(summary.totalScans, 0);
     assert.equal(summary.totalReports, 0);
     assert.equal(summary.totalRulesTriggered, 0);
     assert.equal(summary.totalAiSuggestions, 0);
-    assert.equal(summary.avgQualityScore, 0);
+    assert.equal(summary.avgQualityScore, null);
     assert.equal(summary.avgScanDurationMs, 0);
     assert.equal(summary.avgMemoryUsageMb, 0);
     assert.equal(summary.totalActiveUsers, 0);
@@ -215,5 +220,99 @@ test('Dashboard Analytics & Repository Suite', async (t) => {
     const userSummary = await DashboardRepository.getSummary(testUserId, 'DEVELOPER');
     assert.ok(userSummary.totalScans >= 1);
     assert.strictEqual(userSummary.avgQualityScore, 92);
+  });
+
+  // Stage 7G Section 22: developer-dashboard user-scoping regression tests.
+
+  await t.test('REGRESSION (Stage 7G-A): a brand-new developer sees all-zero/null scoped metrics and an empty activity feed, even while other users have real activity', async () => {
+    // Seed unrelated activity from a different, already-active user first -- the point of this
+    // test is that a genuinely brand-new account's own scoped view must not be polluted by it.
+    const otherUserId = `usr_stage7g_other_${Date.now()}`;
+    await ScanRepository.createScanRecord({
+      userId: otherUserId,
+      fileName: 'OtherUsersFile.tsx',
+      framework: 'REACT_JSX',
+      qualityScore: 77,
+      scanTimeMs: 10,
+      memoryUsageMb: 1,
+      ruleCount: 4,
+      aiFixCount: 1,
+      diagnostics: [],
+      isFavorite: false,
+    } as any);
+    await AuditLogger.logEvent('LOGIN', { userId: otherUserId, email: `stage7g.other.${Date.now()}@figm.io`, status: 'SUCCESS' });
+
+    const newUserId = `usr_stage7g_new_${Date.now()}`;
+    const summary = await DashboardRepository.getSummary(newUserId, 'DEVELOPER');
+    assert.equal(summary.totalProjects, 0);
+    assert.equal(summary.totalScans, 0);
+    assert.equal(summary.totalRulesTriggered, 0);
+    assert.equal(summary.totalAiSuggestions, 0);
+    assert.equal(summary.avgQualityScore, null, 'a brand-new developer with no scans must get a null (no-data) score, never a fabricated number');
+
+    const reports = await DashboardRepository.getRecentReports(newUserId, 10);
+    assert.deepEqual(reports, []);
+
+    const activity = await DashboardRepository.getActivityFeed(10, newUserId);
+    assert.deepEqual(activity, [], "a brand-new developer's own-scoped activity feed must be empty, not show other users' events");
+  });
+
+  await t.test("REGRESSION (Stage 7G-B): User A's scoped summary/activity never reflects User B's data, and vice versa", async () => {
+    const userA = `usr_stage7g_a_${Date.now()}`;
+    const userB = `usr_stage7g_b_${Date.now()}`;
+    const emailA = `stage7g.a.${Date.now()}@figm.io`;
+    const emailB = `stage7g.b.${Date.now()}@figm.io`;
+
+    await ScanRepository.createScanRecord({
+      userId: userA,
+      fileName: 'UserAOnly.tsx',
+      framework: 'REACT_JSX',
+      qualityScore: 60,
+      scanTimeMs: 5,
+      memoryUsageMb: 1,
+      ruleCount: 2,
+      aiFixCount: 0,
+      diagnostics: [],
+      isFavorite: false,
+    } as any);
+    await AuditLogger.logEvent('SCAN_RUN', { userId: userA, email: emailA, status: 'SUCCESS', details: 'UserAOnly.tsx' });
+
+    await ScanRepository.createScanRecord({
+      userId: userB,
+      fileName: 'UserBOnly.tsx',
+      framework: 'ANGULAR',
+      qualityScore: 95,
+      scanTimeMs: 8,
+      memoryUsageMb: 2,
+      ruleCount: 1,
+      aiFixCount: 2,
+      diagnostics: [],
+      isFavorite: false,
+    } as any);
+    await AuditLogger.logEvent('SCAN_RUN', { userId: userB, email: emailB, status: 'SUCCESS', details: 'UserBOnly.tsx' });
+
+    const summaryA = await DashboardRepository.getSummary(userA, 'DEVELOPER');
+    assert.equal(summaryA.totalScans, 1);
+    assert.equal(summaryA.avgQualityScore, 60);
+
+    const summaryB = await DashboardRepository.getSummary(userB, 'DEVELOPER');
+    assert.equal(summaryB.totalScans, 1);
+    assert.equal(summaryB.avgQualityScore, 95);
+
+    const reportsA = await DashboardRepository.getRecentReports(userA, 10);
+    assert.equal(reportsA.length, 1);
+    assert.equal(reportsA[0].fileName, 'UserAOnly.tsx');
+    assert.ok(!reportsA.some((r) => r.fileName === 'UserBOnly.tsx'), "User A's reports must never include User B's scan");
+
+    const reportsB = await DashboardRepository.getRecentReports(userB, 10);
+    assert.equal(reportsB.length, 1);
+    assert.equal(reportsB[0].fileName, 'UserBOnly.tsx');
+    assert.ok(!reportsB.some((r) => r.fileName === 'UserAOnly.tsx'), "User B's reports must never include User A's scan");
+
+    const activityA = await DashboardRepository.getActivityFeed(50, userA);
+    assert.ok(!JSON.stringify(activityA).includes(emailB), "User A's activity feed must never contain User B's email/events");
+
+    const activityB = await DashboardRepository.getActivityFeed(50, userB);
+    assert.ok(!JSON.stringify(activityB).includes(emailA), "User B's activity feed must never contain User A's email/events");
   });
 });

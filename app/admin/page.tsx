@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import PasswordField from '../components/PasswordField';
 import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../../src/research/research-config';
 
-type Tab = 'OVERVIEW' | 'USERS' | 'PARTICIPANTS' | 'SCANS' | 'RESEARCH' | 'FRAMEWORKS' | 'RULES' | 'AUDIT' | 'HEALTH';
+type Tab = 'OVERVIEW' | 'USERS' | 'PARTICIPANTS' | 'SCANS' | 'RESEARCH' | 'FRAMEWORKS' | 'RULES' | 'WEBSITE_ANALYTICS' | 'AUDIT' | 'HEALTH';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'OVERVIEW', label: 'Overview' },
@@ -16,6 +16,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'RESEARCH', label: 'Research Metrics' },
   { id: 'FRAMEWORKS', label: 'Framework Analytics' },
   { id: 'RULES', label: 'Rule Analytics' },
+  { id: 'WEBSITE_ANALYTICS', label: 'Website Analytics (GA4)' },
   { id: 'AUDIT', label: 'Audit Logs' },
   { id: 'HEALTH', label: 'System Health' },
 ];
@@ -616,6 +617,8 @@ function AdminDashboard() {
         </div>
       )}
 
+      {tab === 'WEBSITE_ANALYTICS' && <WebsiteAnalyticsPanel />}
+
       {tab === 'AUDIT' && (
         <div style={card}>
           <input
@@ -757,6 +760,70 @@ function AdminDashboard() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Deliberately separate from Product Analytics (Overview/Users/Scans/etc., all Supabase/Postgres-
+ * derived) -- GA4 is supplementary website-traffic analytics only, never merged into the same
+ * semantic metric. Renders an honest "not configured" state rather than fabricated charts when
+ * the server-side GA4 Data API integration (GA4 Property ID + service-account credential) is not
+ * set up; see src/lib/ga4-admin-reporting.ts and app/api/admin/analytics/website/route.ts.
+ */
+function WebsiteAnalyticsPanel() {
+  const [status, setStatus] = useState<{ configured: boolean; clientTrackingConfigured: boolean; reason?: string } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/admin/analytics/website', { headers: authHeaders() })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then(setStatus)
+      .catch((e) => setError(e.message || 'Failed to load website analytics status'));
+  }, []);
+
+  return (
+    <div style={card}>
+      <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', margin: '0 0 4px 0' }}>Website Analytics (GA4)</h2>
+      <p style={{ fontSize: '12px', color: '#94a3b8', margin: '0 0 18px 0' }}>
+        Supplementary website-traffic analytics from Google Analytics 4 -- separate from Product Analytics above,
+        which is derived from Supabase/Postgres and remains this platform&apos;s canonical source for users, projects,
+        scans, and findings.
+      </p>
+
+      {error && <div style={{ color: '#f87171', fontSize: '13px' }}>{error}</div>}
+
+      {!error && !status && <div style={{ color: '#94a3b8', fontSize: '13px' }}>Loading...</div>}
+
+      {status && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 700 }}>Client tracking:</span>
+            {status.clientTrackingConfigured ? (
+              <span style={badge('#34d399', 'rgba(16,185,129,0.12)')}>CONFIGURED</span>
+            ) : (
+              <span style={badge('#f87171', 'rgba(239,68,68,0.12)')}>NOT CONFIGURED</span>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 700 }}>Admin reporting (GA4 Data API):</span>
+            {status.configured ? (
+              <span style={badge('#34d399', 'rgba(16,185,129,0.12)')}>CONFIGURED</span>
+            ) : (
+              <span style={badge('#f59e0b', 'rgba(245,158,11,0.12)')}>NOT CONFIGURED</span>
+            )}
+          </div>
+
+          {!status.configured && (
+            <div style={{ ...card, background: 'rgba(245, 158, 11, 0.06)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '16px' }}>
+              <div style={{ color: '#f59e0b', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
+                GA4 Website Analytics — Not configured for admin reporting
+              </div>
+              <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>{status.reason}</p>
+            </div>
+          )}
         </div>
       )}
     </div>

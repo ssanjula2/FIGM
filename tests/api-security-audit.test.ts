@@ -362,13 +362,38 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
     }
   });
 
-  await t.test('GET /api/dashboard/summary never treats an unauthenticated caller as ADMIN', async () => {
+  await t.test('GET /api/dashboard/summary requires authentication and never treats an unauthenticated caller as ADMIN', async () => {
+    // Stage 7G: this endpoint now backs the authenticated "My Workspace" dashboard and returns
+    // the caller's own scoped metrics -- an unauthenticated request must be rejected outright
+    // (previously it silently served platform-wide aggregate data to anyone, unauthenticated).
     const req = new Request('http://localhost:3000/api/dashboard/summary');
     const res = await dashboardSummaryGET(req);
-    // Must not throw/500, and must not require a token (this endpoint is intentionally public
-    // platform-aggregate data) -- the regression this guards is the `role` variable silently
-    // defaulting to 'ADMIN' for an anonymous caller.
+    assert.equal(res.status, 401);
+  });
+
+  await t.test('REGRESSION (Stage 7G): GET /api/dashboard/summary scopes a DEVELOPER caller to their own userId, never the platform-wide total', async () => {
+    const scopedUserId = `usr_sec_audit_scope_${Date.now()}`;
+    const req = authedRequest('http://localhost:3000/api/dashboard/summary', {}, tokenFor(scopedUserId, 'DEVELOPER'));
+    const res = await dashboardSummaryGET(req);
     assert.equal(res.status, 200);
+    const body = await res.json();
+    // A freshly-minted, never-before-seen userId has zero real scans/projects -- if this endpoint
+    // were still returning the platform-wide aggregate (hundreds of scans across all users), these
+    // would not be zero.
+    assert.equal(body.totalScans, 0);
+    assert.equal(body.totalProjects, 0);
+    assert.equal(body.avgQualityScore, null);
+  });
+
+  await t.test('REGRESSION (Stage 7G): GET /api/dashboard/summary still serves the platform-wide aggregate to ADMIN', async () => {
+    const req = authedRequest('http://localhost:3000/api/dashboard/summary', {}, tokenFor('usr_sec_audit_admin', 'ADMIN'));
+    const res = await dashboardSummaryGET(req);
+    assert.equal(res.status, 200);
+    // Not asserting an exact count (shared mutable store across this suite) -- only that ADMIN's
+    // view is not artificially scoped down to a single (nonexistent) admin-owned project/scan set,
+    // i.e. the admin-wide aggregate path is still reachable and did not throw.
+    const body = await res.json();
+    assert.ok(typeof body.totalScans === 'number');
   });
 
   await t.test('SEC-08: GET /api/admin/users never returns a plaintext apiKey', async () => {
