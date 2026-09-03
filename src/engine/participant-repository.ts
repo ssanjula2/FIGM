@@ -56,6 +56,18 @@ export interface RuleFindingCount {
   severity: string | null;
 }
 
+/** One consent-gated, research-eligible scan row -- see getResearchDataset's doc comment. */
+export interface ResearchDatasetScanRow {
+  participantId: string;
+  userId: string;
+  scanId: string;
+  fileName: string;
+  framework: string;
+  qualityScore: number;
+  ruleCount: number;
+  createdAt: string;
+}
+
 export interface ParticipantDetail {
   participantId: string;
   status: ParticipantStatus;
@@ -429,5 +441,66 @@ export class ParticipantRepository {
     if (status === 'CONSENT_VERIFIED') updates.researchConsentVerifiedAt = new Date().toISOString();
     await provider.updateUser(user.id, updates);
     return { userId: user.id };
+  }
+
+  /**
+   * The ONLY safe source of scan-level data for real research analysis/exports (e.g. RQ1
+   * quantitative benchmark-scan telemetry). Deliberately separate from getMatrix/getDetail, which
+   * intentionally show an admin EVERY real scan for a participant slot -- including pre-consent
+   * activity -- because that operational visibility is what lets a human decide whether to
+   * CONSENT_VERIFIED or REVOKE a given code (see setResearchStatus's doc comment); gating that
+   * view would blind admins to exactly the QA/test-contamination signal they need to act on.
+   *
+   * This method applies the study's actual eligibility rule instead: a scan counts as research
+   * data only if its owning user is CONSENT_VERIFIED (a human researcher has reconciled a real,
+   * external consent-form submission against this exact participant code) AND the scan itself was
+   * created at/after that exact verification timestamp. ASSIGNED (not yet reconciled) and REVOKED
+   * (confirmed contamination / no-longer-active, per setResearchStatus's doc comment) participants
+   * contribute zero rows -- not a special-cased exclusion, it falls out of the single inclusion
+   * rule below. A non-participant (ordinary product) user can never appear here either, since
+   * isParticipantUser is checked first. Never source a real research export/analysis from
+   * getMatrix/getDetail's raw totals; only from this method.
+   */
+  public static async getResearchDataset(): Promise<ResearchDatasetScanRow[]> {
+    const provider = ParticipantRepository.provider;
+    const allUsers = ((await provider.getAllUsers()) as DBUser[]) || [];
+    const eligibleUsers = allUsers.filter(
+      (u): u is DBUser & { researchConsentVerifiedAt: string } =>
+        ParticipantRepository.isParticipantUser(u) &&
+        u.researchStatus === 'CONSENT_VERIFIED' &&
+        !!u.researchConsentVerifiedAt
+    );
+    if (eligibleUsers.length === 0) return [];
+
+    const allScans = ((await provider.getScanRecords()) as DBScanRecord[]) || [];
+    const scansByUser = new Map<string, DBScanRecord[]>();
+    for (const scan of allScans) {
+      if (!scan.userId) continue;
+      const list = scansByUser.get(scan.userId) || [];
+      list.push(scan);
+      scansByUser.set(scan.userId, list);
+    }
+
+    const rows: ResearchDatasetScanRow[] = [];
+    for (const user of eligibleUsers) {
+      const consentAtMs = new Date(user.researchConsentVerifiedAt).getTime();
+      const scans = scansByUser.get(user.id) || [];
+      for (const scan of scans) {
+        if (new Date(scan.createdAt).getTime() >= consentAtMs) {
+          rows.push({
+            participantId: user.participantCode || user.id,
+            userId: user.id,
+            scanId: scan.id,
+            fileName: scan.fileName,
+            framework: scan.framework,
+            qualityScore: scan.qualityScore,
+            ruleCount: scan.ruleCount,
+            createdAt: scan.createdAt,
+          });
+        }
+      }
+    }
+
+    return rows.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }
 }
