@@ -139,6 +139,7 @@ export class AIRemediationPipeline {
     // other path uses, and accept only if it actually resolves the violation.
     if (decision.deterministicFixAvailable && decision.deterministicOutcome) {
       const outcome = decision.deterministicOutcome;
+      logRemediationEvent('DETERMINISTIC_ATTEMPTED', defect, framework, { strategy: decision.strategy });
       const verification = await RemediationValidator.validatePatchAsync(code, outcome.patchedCode, defect);
       if (verification.isValid) {
         const suggestedFix = PatchGenerator.generateGitDiff(
@@ -164,6 +165,20 @@ export class AIRemediationPipeline {
       // The deterministic engine produced a patch but it didn't verify on re-scan (e.g. it
       // introduced a new violation) — fall through to Claude below rather than reporting a false
       // "fixed", exactly like an instance the engine declined to transform in the first place.
+      //
+      // Stage 7E: this fallthrough previously had no log line of its own, so a real deterministic
+      // rejection (e.g. FIGM-A11Y-01's onKeyDown patch tripping FIGM-PERF-05 — see
+      // remediation-validation.server.ts's own comment) was silently invisible between the earlier
+      // 'ROUTED' (strategy=AST_DETERMINISTIC, logged before this instance's patch was even
+      // generated/verified) and 'AI_PROVIDER_SELECTED' log lines — reading the log in isolation
+      // looked contradictory (routed deterministic, then AI ran with no explanation) even though the
+      // actual behavior was always correct (never reports a patch that introduces a new violation as
+      // "fixed"). This line closes that observability gap without changing any decision logic.
+      logRemediationEvent('DETERMINISTIC_REJECTED', defect, framework, {
+        verificationStatus: verification.status,
+        reason: verification.rejectionReason ?? 'Deterministic patch failed re-scan validation (see remainingDiagnostics).',
+        finalResult: 'AI_FALLBACK_SELECTED',
+      });
     }
 
     // Path 2 — rule-level MANUAL_REVIEW_ONLY (FIGM-NEXT-08/09, FIGM-REACT-06 — see
@@ -201,7 +216,13 @@ export class AIRemediationPipeline {
     // continues the SAME bounded attempt loop rather than starting a second, separate one — this is
     // what keeps "Claude 429 → Gemini" from ever costing more than the existing MAX_AI_ATTEMPTS total.
     let provider = AIProviderSelector.getActiveProvider();
-    logRemediationEvent('AI_PROVIDER_SELECTED', defect, framework, { provider: provider.providerName });
+    // Stage 7E: explicit, unambiguous marker for whether this AI attempt is the rule's normal route
+    // (no deterministic fixer at all) or a fallback after a deterministic patch was generated and
+    // then rejected on re-scan above — see the 'DETERMINISTIC_REJECTED' log line for the reason.
+    logRemediationEvent('AI_PROVIDER_SELECTED', defect, framework, {
+      provider: provider.providerName,
+      viaDeterministicFallback: decision.deterministicFixAvailable,
+    });
     // True once the loop has switched providers — a fallback provider itself has no further
     // fallback (AIProviderSelector.getFallbackProvider only ever defines ONE hop), and this also
     // guards against ever switching back-and-forth even if a future config made that possible.
