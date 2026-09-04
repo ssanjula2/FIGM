@@ -14,10 +14,8 @@ const BENCHMARKS = {
 export function UserProfile({ user, onUpdate }) {
   const [data, setData] = useState(user);
 
-  // FIGM-PERF-01: Invariant object allocation inside render scope
   const options = { theme: 'dark', lang: 'en' };
 
-  // FIGM-PERF-03: Inline event handler closure allocation
   return (
     <div className="user-profile">
       <h2>{data.name}</h2>
@@ -33,11 +31,9 @@ export function UserProfile({ user, onUpdate }) {
     file: 'DashboardPage.tsx',
     code: `import React, { useState } from 'react';
 
-// FIGM-NEXT-01: React state hook used in Next.js Server Component without "use client"
 export default function DashboardPage() {
   const [data, setData] = useState({ title: 'Analytics Dashboard' });
 
-  // FIGM-PERF-04: Static import in deferred execution path
   return (
     <div className="dashboard-page">
       <h2>{data.title}</h2>
@@ -54,9 +50,7 @@ export default function DashboardPage() {
   selector: 'app-search-panel',
   template: \`
     <div class="search-box">
-      <!-- FIGM-A11Y-02: Missing form control label -->
       <input type="text" [(ngModel)]="query" placeholder="Search items..." />
-      <!-- FIGM-A11Y-01: Non-semantic interactive element -->
       <div class="btn-search" (click)="onSearch()">Search</div>
     </div>
   \`
@@ -72,7 +66,6 @@ export class SearchPanelComponent {
     file: 'DataGrid.vue',
     code: `<template>
   <div class="data-grid">
-    <!-- FIGM-A11Y-04: Missing img alt attribute -->
     <img src="/avatar.png" />
     <table class="grid-table">
       <tr v-for="item in items" :key="item.id">

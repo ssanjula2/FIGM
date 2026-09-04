@@ -254,6 +254,18 @@ export function verifyJWT(token: string): UserPayload | null {
     const payloadJson = Buffer.from(encodedPayload, 'base64url').toString('utf-8');
     const claim = JSON.parse(payloadJson);
 
+    // Stage 11A fix: a plain access token signed by signJWT() never carries a `kind` claim, but a
+    // refresh token (kind: 'refresh') and a research-participant session token (kind:
+    // 'research_participant', see signResearchParticipantToken) both share this same HMAC secret
+    // and would otherwise verify here too. Without this check, a research-participant token --
+    // issued anonymously to anyone who visits /user-study, no login required -- decoded to a
+    // structurally-valid UserPayload (userId: the participant code, role: 'DEVELOPER' via
+    // validateRole's fallback for the missing `role` claim), authenticating it as a real logged-in
+    // user on every authenticateUser()-gated route with no role restriction. Confirmed via a real,
+    // reproduced test (tests/human-study-readiness.test.ts) before this fix. Reject any token
+    // carrying a `kind` claim outright -- a real access token never has one.
+    if (claim.kind) return null;
+
     const now = Math.floor(Date.now() / 1000);
     if (claim.exp && claim.exp < now) return null;
 

@@ -1,0 +1,654 @@
+{
+  "_warning": "INTERNAL USE ONLY -- never copy into research/independent-annotation/package-v1.1/. Maps neutral case IDs back to original filenames and reveals intended positive/negative status and the internal (researcher-authored) ground-truth rule IDs.",
+  "generatedAt": "2026-09-03T19:49:36.905Z",
+  "packageVersion": "1.1.0",
+  "cases": [
+    {
+      "caseId": "RQ4V11-CASE-001",
+      "originalRelPath": "Next06Benchmark.tsx",
+      "wasNegativeControl": false,
+      "framework": "NEXT_JS",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-06"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-002",
+      "originalRelPath": "Next02Benchmark.tsx",
+      "wasNegativeControl": false,
+      "framework": "NEXT_JS",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-02"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-003",
+      "originalRelPath": "VueBenchmark.vue",
+      "wasNegativeControl": false,
+      "framework": "VUE_SFC",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-PERF-02",
+        "FIGM-A11Y-01",
+        "FIGM-PERF-01",
+        "FIGM-A11Y-03",
+        "FIGM-PERF-03"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-004",
+      "originalRelPath": "negative/A11y01Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-005",
+      "originalRelPath": "Ang04Benchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-04"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-006",
+      "originalRelPath": "negative/React05Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-007",
+      "originalRelPath": "Ang09Benchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-09"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-008",
+      "originalRelPath": "negative/A11y02Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-009",
+      "originalRelPath": "negative/A11y05Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-010",
+      "originalRelPath": "negative/React03Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-011",
+      "originalRelPath": "React11Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-11"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-012",
+      "originalRelPath": "Vue04Benchmark.vue",
+      "wasNegativeControl": false,
+      "framework": "VUE_SFC",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-VUE-04"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-013",
+      "originalRelPath": "Perf05Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-PERF-05",
+        "FIGM-REACT-04"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-014",
+      "originalRelPath": "negative/Perf01Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-015",
+      "originalRelPath": "negative/React02Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-016",
+      "originalRelPath": "Ang05Benchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-05"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-017",
+      "originalRelPath": "Ang02Benchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-02"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-018",
+      "originalRelPath": "Vue03Benchmark.vue",
+      "wasNegativeControl": false,
+      "framework": "VUE_SFC",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-VUE-03"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-019",
+      "originalRelPath": "React10Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-10"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-020",
+      "originalRelPath": "React06Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-06"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-021",
+      "originalRelPath": "A11y05Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-A11Y-05"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-022",
+      "originalRelPath": "Vue06Benchmark.vue",
+      "wasNegativeControl": false,
+      "framework": "VUE_SFC",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-VUE-06"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-023",
+      "originalRelPath": "Next08Benchmark.tsx",
+      "wasNegativeControl": false,
+      "framework": "NEXT_JS",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-08"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-024",
+      "originalRelPath": "React09Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-09"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-025",
+      "originalRelPath": "next03/app/demo/page.tsx",
+      "wasNegativeControl": false,
+      "framework": "NEXT_JS",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-03"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-026",
+      "originalRelPath": "Ang07Benchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-07"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-027",
+      "originalRelPath": "Ang06Benchmark.pipe.ts",
+      "wasNegativeControl": false,
+      "framework": "GENERIC_ESTREE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-06"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-028",
+      "originalRelPath": "negative/A11y06Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-029",
+      "originalRelPath": "Vue01Benchmark.vue",
+      "wasNegativeControl": false,
+      "framework": "VUE_SFC",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-VUE-01"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-030",
+      "originalRelPath": "Ang10Benchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-10"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-031",
+      "originalRelPath": "Ang01Benchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-01"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-032",
+      "originalRelPath": "VanillaJSBenchmark.js",
+      "wasNegativeControl": false,
+      "framework": "GENERIC_ESTREE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-PERF-04",
+        "FIGM-PERF-03"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-033",
+      "originalRelPath": "negative/Vue06Negative.vue",
+      "wasNegativeControl": true,
+      "framework": "VUE_SFC",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-034",
+      "originalRelPath": "negative/React01Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-035",
+      "originalRelPath": "AngularBenchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-PERF-02",
+        "FIGM-A11Y-01",
+        "FIGM-A11Y-03",
+        "FIGM-PERF-03",
+        "FIGM-ANG-02"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-036",
+      "originalRelPath": "negative/Next01Negative.tsx",
+      "wasNegativeControl": true,
+      "framework": "NEXT_JS",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-037",
+      "originalRelPath": "Ang08Benchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-08"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-038",
+      "originalRelPath": "negative/Ang01Negative.component.ts",
+      "wasNegativeControl": true,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-039",
+      "originalRelPath": "negative/Perf02Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-040",
+      "originalRelPath": "negative/A11y04Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-041",
+      "originalRelPath": "negative/Next08Negative.tsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-042",
+      "originalRelPath": "Next09Benchmark.tsx",
+      "wasNegativeControl": false,
+      "framework": "NEXT_JS",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-09"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-043",
+      "originalRelPath": "React05Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-05"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-044",
+      "originalRelPath": "React03Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-03"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-045",
+      "originalRelPath": "React08Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-08"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-046",
+      "originalRelPath": "negative/Perf03Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-047",
+      "originalRelPath": "ReactBenchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-PERF-04",
+        "FIGM-PERF-03",
+        "FIGM-PERF-02",
+        "FIGM-A11Y-01",
+        "FIGM-A11Y-02",
+        "FIGM-A11Y-03",
+        "FIGM-PERF-01",
+        "FIGM-A11Y-04",
+        "FIGM-PERF-05"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-048",
+      "originalRelPath": "A11y06Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-A11Y-06"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-049",
+      "originalRelPath": "Next10Benchmark.tsx",
+      "wasNegativeControl": false,
+      "framework": "NEXT_JS",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-10"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-050",
+      "originalRelPath": "Next05Benchmark.tsx",
+      "wasNegativeControl": false,
+      "framework": "NEXT_JS",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-05"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-051",
+      "originalRelPath": "Vue02Benchmark.vue",
+      "wasNegativeControl": false,
+      "framework": "VUE_SFC",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-VUE-02"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-052",
+      "originalRelPath": "negative/React06Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-053",
+      "originalRelPath": "React04Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-04",
+        "FIGM-PERF-05"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-054",
+      "originalRelPath": "A11y07Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-A11Y-07"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-055",
+      "originalRelPath": "negative/A11y03Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-056",
+      "originalRelPath": "negative/Vue01Negative.vue",
+      "wasNegativeControl": true,
+      "framework": "VUE_SFC",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-057",
+      "originalRelPath": "Next01Benchmark.tsx",
+      "wasNegativeControl": false,
+      "framework": "NEXT_JS",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-01"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-058",
+      "originalRelPath": "React01Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-01"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-059",
+      "originalRelPath": "React02Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-02"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-060",
+      "originalRelPath": "Next07Benchmark.tsx",
+      "wasNegativeControl": false,
+      "framework": "NEXT_JS",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-07"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-061",
+      "originalRelPath": "Ang03Benchmark.component.ts",
+      "wasNegativeControl": false,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-ANG-03"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-062",
+      "originalRelPath": "negative/Ang02Negative.component.ts",
+      "wasNegativeControl": true,
+      "framework": "ANGULAR_TEMPLATE",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-063",
+      "originalRelPath": "negative/A11y07Negative.jsx",
+      "wasNegativeControl": true,
+      "framework": "REACT_JSX",
+      "frameworkSource": "CONTENT_HEURISTIC",
+      "groundTruthRuleIds": []
+    },
+    {
+      "caseId": "RQ4V11-CASE-064",
+      "originalRelPath": "Perf06Benchmark.js",
+      "wasNegativeControl": false,
+      "framework": "GENERIC_ESTREE",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-PERF-06"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-065",
+      "originalRelPath": "Vue05Benchmark.vue",
+      "wasNegativeControl": false,
+      "framework": "VUE_SFC",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-VUE-05"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-066",
+      "originalRelPath": "Next04Benchmark.tsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-NEXT-04"
+      ]
+    },
+    {
+      "caseId": "RQ4V11-CASE-067",
+      "originalRelPath": "React07Benchmark.jsx",
+      "wasNegativeControl": false,
+      "framework": "REACT_JSX",
+      "frameworkSource": "GROUND_TRUTH_AUTHORED",
+      "groundTruthRuleIds": [
+        "FIGM-REACT-07"
+      ]
+    }
+  ]
+}

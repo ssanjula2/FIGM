@@ -1,0 +1,18 @@
+{
+  "experimentVersion": "1.0.0",
+  "conditionId": "SSR_LOCAL",
+  "framework": "NEXTJS_REACT",
+  "renderingStrategy": "SSR",
+  "stateManagementStrategy": "LOCAL",
+  "runNumber": 7,
+  "fcpMs": 436.5863,
+  "ttiMs": 459.58630000000005,
+  "status": "OK",
+  "error": null,
+  "browserVersion": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+  "nodeVersion": "v22.14.0",
+  "lighthouseVersion": "12.8.2",
+  "timestamp": "2026-09-03T19:21:41.881Z",
+  "isSmokeTest": false,
+  "isWarmup": false
+}

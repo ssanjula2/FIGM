@@ -1,0 +1,385 @@
+{
+  "generatedAt": "2026-09-03T19:24:34.376Z",
+  "evidenceDir": "research/rq1-experiment/raw-results/STAGE9_REAL_RUN_20260903T192350Z",
+  "totalFiles": 44,
+  "totalWarmup": 4,
+  "totalMeasured": 40,
+  "totalFailed": 0,
+  "perConditionCounts": {
+    "CSR_GLOBAL": {
+      "warmup": 1,
+      "measured": 10,
+      "failed": 0
+    },
+    "CSR_LOCAL": {
+      "warmup": 1,
+      "measured": 10,
+      "failed": 0
+    },
+    "SSR_GLOBAL": {
+      "warmup": 1,
+      "measured": 10,
+      "failed": 0
+    },
+    "SSR_LOCAL": {
+      "warmup": 1,
+      "measured": 10,
+      "failed": 0
+    }
+  },
+  "duplicateRunIds": 0,
+  "files": [
+    {
+      "file": "CSR_GLOBAL_run001_1788463188939.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 1,
+      "status": "OK",
+      "sha256": "9e58f537473b3fb294214340ef6cdcf2a91dbdb29f5c0c9ef128c0d8475e1904"
+    },
+    {
+      "file": "CSR_GLOBAL_run002_1788463195897.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 2,
+      "status": "OK",
+      "sha256": "1c5e5729291e93ce2694e49a49aa1ae3406b4dc896bc3c1404168430badf6d8d"
+    },
+    {
+      "file": "CSR_GLOBAL_run003_1788463202855.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 3,
+      "status": "OK",
+      "sha256": "76fd21c20d0fb56014ffebc5755c9b1dafa5810b965845ca9f3c5e250c9c6ec8"
+    },
+    {
+      "file": "CSR_GLOBAL_run004_1788463210882.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 4,
+      "status": "OK",
+      "sha256": "b639a2b893818bf6b0b09eb8c65f4e6ce08b6510cdb52979fe13a3e61fd48cca"
+    },
+    {
+      "file": "CSR_GLOBAL_run005_1788463218303.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 5,
+      "status": "OK",
+      "sha256": "09ef6c2e379a61350745351264a022c2e11e4898b4ef73d59b12ff15d31227f8"
+    },
+    {
+      "file": "CSR_GLOBAL_run006_1788463225296.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 6,
+      "status": "OK",
+      "sha256": "84f1d7c56f54a0e9dbc401d2f1ae3102e7ed882725e4a438c0e8eac4ec0a1c65"
+    },
+    {
+      "file": "CSR_GLOBAL_run007_1788463232218.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 7,
+      "status": "OK",
+      "sha256": "9912f158ddf725604f985232a77228b0a44d4768be20fc96cc782e96661edc3c"
+    },
+    {
+      "file": "CSR_GLOBAL_run008_1788463239102.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 8,
+      "status": "OK",
+      "sha256": "ae2a6a55be011eb6b70e5e0f2fdc939b39aed49ee94bdc38e5cd71bf940a0210"
+    },
+    {
+      "file": "CSR_GLOBAL_run009_1788463246046.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 9,
+      "status": "OK",
+      "sha256": "61a50ff235a4083c730f8115192454a981f18f3bbbbdc9731a15f469edd9d6cf"
+    },
+    {
+      "file": "CSR_GLOBAL_run010_1788463252995.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 10,
+      "status": "OK",
+      "sha256": "bb5ccf95e316bc2527038755befa07217ad1bf740fe923204cef332015cf4998"
+    },
+    {
+      "file": "CSR_GLOBAL_warmup001_1788463182013.json",
+      "conditionId": "CSR_GLOBAL",
+      "isWarmup": true,
+      "runNumber": 1,
+      "status": "OK",
+      "sha256": "18cfe11ab91205e0ad993735d7218fdad5a1d8028a79c173f0b9310f74fbcc0a"
+    },
+    {
+      "file": "CSR_LOCAL_run001_1788463112091.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 1,
+      "status": "OK",
+      "sha256": "d4a29a4c267d4c407039598b70f576a69b7b920235f63fcb2264f8904fe0227f"
+    },
+    {
+      "file": "CSR_LOCAL_run002_1788463119073.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 2,
+      "status": "OK",
+      "sha256": "c0dcedfa133e26bba431cbd3a213ca12b4b593c4cabe097fd596471e99c1e8c9"
+    },
+    {
+      "file": "CSR_LOCAL_run003_1788463126078.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 3,
+      "status": "OK",
+      "sha256": "bda4374da133984300a7671ef94fe162a4c70142f86d8a08ef4767b00064ae4f"
+    },
+    {
+      "file": "CSR_LOCAL_run004_1788463133124.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 4,
+      "status": "OK",
+      "sha256": "8af5f47af4209a24fc660fe25c3cf41cb4a191f899b2b282569b722f5bf727fa"
+    },
+    {
+      "file": "CSR_LOCAL_run005_1788463140187.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 5,
+      "status": "OK",
+      "sha256": "720f3948db8e979d1cec4d1d421afc945ed3fcf8321f4373f0d84c964c1b60ab"
+    },
+    {
+      "file": "CSR_LOCAL_run006_1788463147123.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 6,
+      "status": "OK",
+      "sha256": "b6875636ac11077147f99bdfad83ef7f4875509cb2f7d15be0d4b780e4dd9b91"
+    },
+    {
+      "file": "CSR_LOCAL_run007_1788463154077.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 7,
+      "status": "OK",
+      "sha256": "0d586d3a7d0c08fca7c1a8fe725ab9ef8187edad2cca4034a412c209537629cf"
+    },
+    {
+      "file": "CSR_LOCAL_run008_1788463161026.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 8,
+      "status": "OK",
+      "sha256": "3c8394655fa0fe779e722cc674d6feb08568e2ca37c067de3a071605fd3e9247"
+    },
+    {
+      "file": "CSR_LOCAL_run009_1788463168091.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 9,
+      "status": "OK",
+      "sha256": "20ea741bb3f37a9aced9a912c9c0d5314f9dc13c7a8e1196d178fb0a53207d7d"
+    },
+    {
+      "file": "CSR_LOCAL_run010_1788463175039.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 10,
+      "status": "OK",
+      "sha256": "c2daf1c1eb4be6aaef0686181aaf1de9f4f6edeb8fccf8e0215e502bdaf1da5f"
+    },
+    {
+      "file": "CSR_LOCAL_warmup001_1788463105085.json",
+      "conditionId": "CSR_LOCAL",
+      "isWarmup": true,
+      "runNumber": 1,
+      "status": "OK",
+      "sha256": "c7f24bb2b189cef31d215089ee06b6cb2832b80132bf48f71bc418b9c48dacdd"
+    },
+    {
+      "file": "SSR_GLOBAL_run001_1788463344069.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 1,
+      "status": "OK",
+      "sha256": "d609940ab9fc8b339c19d0a7075a6810675d31e03fdb4f1f6462d2d9a67dc164"
+    },
+    {
+      "file": "SSR_GLOBAL_run002_1788463351045.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 2,
+      "status": "OK",
+      "sha256": "2d45ef71e854d0f9f7b4088a14e789ba682b7eaec5604d85ab1762fe07af185c"
+    },
+    {
+      "file": "SSR_GLOBAL_run003_1788463358036.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 3,
+      "status": "OK",
+      "sha256": "98ff7deebbb05b7ad696f5e29934377e3f25022f6bb521015485293b1d4d8a47"
+    },
+    {
+      "file": "SSR_GLOBAL_run004_1788463365040.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 4,
+      "status": "OK",
+      "sha256": "4a597aea6c626cad9f5187ff701344e9c140f144ed1483d5ca8b41b7de4f68d9"
+    },
+    {
+      "file": "SSR_GLOBAL_run005_1788463372033.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 5,
+      "status": "OK",
+      "sha256": "1b35e504c8c8833971ee4653efc9cd02a540da88eabcfed1b48d59a7e67e0966"
+    },
+    {
+      "file": "SSR_GLOBAL_run006_1788463378994.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 6,
+      "status": "OK",
+      "sha256": "feb79dadf7bb05eb7676917d5925bad15c4e97ab62f21b40d7a4975dea5e7418"
+    },
+    {
+      "file": "SSR_GLOBAL_run007_1788463386064.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 7,
+      "status": "OK",
+      "sha256": "686594d130f86bc362ad164e5ba61020fa7c2487b0b3807b8f6faad88cf61525"
+    },
+    {
+      "file": "SSR_GLOBAL_run008_1788463393037.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 8,
+      "status": "OK",
+      "sha256": "df1c809312887bbf769a400b909690c86e751290afcbdb88f50ae1671da2972e"
+    },
+    {
+      "file": "SSR_GLOBAL_run009_1788463400864.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 9,
+      "status": "OK",
+      "sha256": "888fc56b7cf834b913deba228fb14706a79d687b37bd7f65993ff6b1f93fc350"
+    },
+    {
+      "file": "SSR_GLOBAL_run010_1788463408399.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": false,
+      "runNumber": 10,
+      "status": "OK",
+      "sha256": "e400f01f81cec3422dc841745e2e04174e8b9c0b1c84694f533923a18c3d8f5d"
+    },
+    {
+      "file": "SSR_GLOBAL_warmup001_1788463337053.json",
+      "conditionId": "SSR_GLOBAL",
+      "isWarmup": true,
+      "runNumber": 1,
+      "status": "OK",
+      "sha256": "377600db6c6b41f0d25fd6f6d25defee4f05bf63347259773c4f16929e8b8384"
+    },
+    {
+      "file": "SSR_LOCAL_run001_1788463267020.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 1,
+      "status": "OK",
+      "sha256": "d18b28ba5ca54025801b5810be2e52f352211ed227364ed44d4a91d1387949af"
+    },
+    {
+      "file": "SSR_LOCAL_run002_1788463274000.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 2,
+      "status": "OK",
+      "sha256": "869383ad6486a84dab89f1dd752227f834a6962385df702f4d0f5c989c7fcfa7"
+    },
+    {
+      "file": "SSR_LOCAL_run003_1788463280981.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 3,
+      "status": "OK",
+      "sha256": "cf40d2119647fed6ae37d2401c20736e6424b7ae7ea7d91d5acbaf375c6ff6a6"
+    },
+    {
+      "file": "SSR_LOCAL_run004_1788463287933.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 4,
+      "status": "OK",
+      "sha256": "1fb086efa37b026f51eb806fb8391d6c8c2281ba0286e8dedffbe08c1b833a12"
+    },
+    {
+      "file": "SSR_LOCAL_run005_1788463294898.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 5,
+      "status": "OK",
+      "sha256": "eedfe7e6549a8dd2a48df29edb25b5bfc37f64d00e88614224b52f86f48faeff"
+    },
+    {
+      "file": "SSR_LOCAL_run006_1788463301881.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 6,
+      "status": "OK",
+      "sha256": "a699fa5bf8053545e82c6a2625ff42cbdf05ab4ec1170b7f8ea44228776a385b"
+    },
+    {
+      "file": "SSR_LOCAL_run007_1788463308871.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 7,
+      "status": "OK",
+      "sha256": "80f0650aea08a5ecf5b7e3f5d8184f0e657e8afb80d30778a2487f4d0db40c17"
+    },
+    {
+      "file": "SSR_LOCAL_run008_1788463315847.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 8,
+      "status": "OK",
+      "sha256": "8994b5af202148bc3949b4cd7016208ece6cd10852ec01b34ab12ef4994d2a6d"
+    },
+    {
+      "file": "SSR_LOCAL_run009_1788463322856.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 9,
+      "status": "OK",
+      "sha256": "d015ac2d114246a9f856bfc298fdc50981bfbc25d361d7ab370bfeb921892c0e"
+    },
+    {
+      "file": "SSR_LOCAL_run010_1788463330027.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": false,
+      "runNumber": 10,
+      "status": "OK",
+      "sha256": "e154b5c6c36e006e1e846dc25265e97b9f5e62d60c88385dedc8de565204805a"
+    },
+    {
+      "file": "SSR_LOCAL_warmup001_1788463260038.json",
+      "conditionId": "SSR_LOCAL",
+      "isWarmup": true,
+      "runNumber": 1,
+      "status": "OK",
+      "sha256": "dfe602d824eb8ee5287ecf755a555ea31e168aba4037f931b1fd4a10c50aa483"
+    }
+  ]
+}

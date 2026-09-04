@@ -240,6 +240,38 @@ function AdminDashboard() {
     }
   };
 
+  const [exportingResearchDataset, setExportingResearchDataset] = useState(false);
+  const [exportResearchDatasetError, setExportResearchDatasetError] = useState<string | null>(null);
+
+  /** Downloads ParticipantRepository.getResearchDataset()'s CSV export (app/api/admin
+   *  /research-dataset/route.ts). A plain <a href> can't carry the Authorization: Bearer header
+   *  every other admin fetch in this page relies on (see authHeaders()), so this fetches the file
+   *  as a Blob and triggers the save via a temporary object URL instead. */
+  const handleExportResearchDataset = async () => {
+    setExportingResearchDataset(true);
+    setExportResearchDatasetError(null);
+    try {
+      const res = await fetch('/api/admin/research-dataset?format=csv', { headers: authHeaders() });
+      if (!res.ok) {
+        setExportResearchDatasetError(res.status === 403 ? 'This area requires an ADMIN role account.' : `Export failed (${res.status}).`);
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `figm-research-dataset-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      setExportResearchDatasetError('Export failed.');
+    } finally {
+      setExportingResearchDataset(false);
+    }
+  };
+
   const handleDeleteUser = async (userId: string) => {
     if (!confirm('Are you sure you want to delete this user?')) return;
     const res = await fetch(`/api/admin/users?userId=${userId}`, { method: 'DELETE', headers: authHeaders() });
@@ -556,6 +588,24 @@ function AdminDashboard() {
                 <div style={{ color: research.userStudy?.isRealHumanData ? '#22c55e' : '#f59e0b', fontSize: '12px', fontWeight: 700, marginTop: '8px' }}>
                   {research.userStudy?.collectionStatus}
                 </div>
+              </div>
+              <div style={card}>
+                <h4 style={{ margin: '0 0 8px 0', color: '#f8fafc' }}>Research Dataset Export</h4>
+                <p style={{ color: '#94a3b8', fontSize: '12px', margin: '0 0 14px 0' }}>
+                  Exports ParticipantRepository.getResearchDataset() -- only P001..P020 rows past a
+                  human-verified consent timestamp, with PRIMARY/SECONDARY attempt classification.
+                  REVOKED and pre-consent activity are never included.
+                </p>
+                <button
+                  onClick={handleExportResearchDataset}
+                  disabled={exportingResearchDataset}
+                  style={{ padding: '10px 18px', borderRadius: '8px', background: exportingResearchDataset ? '#4b5563' : '#0284c7', color: '#ffffff', border: 'none', fontWeight: 700, fontSize: '13px', cursor: exportingResearchDataset ? 'wait' : 'pointer' }}
+                >
+                  {exportingResearchDataset ? 'Exporting…' : '⬇ Export Research Dataset (CSV)'}
+                </button>
+                {exportResearchDatasetError && (
+                  <p role="alert" style={{ color: '#f87171', fontSize: '12px', marginTop: '10px' }}>{exportResearchDatasetError}</p>
+                )}
               </div>
             </>
           )}

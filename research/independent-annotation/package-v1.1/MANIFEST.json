@@ -1,0 +1,360 @@
+{
+  "packageVersion": "1.1.0",
+  "createdAt": "2026-09-03T19:50:31.849Z",
+  "supersedes": "research/independent-annotation/package/ (v1.0.0) -- preserved on disk, unused, never sent to any real expert",
+  "caseCount": 67,
+  "cases": [
+    {
+      "caseId": "RQ4V11-CASE-001",
+      "fileName": "RQ4V11-CASE-001.tsx",
+      "contentSha256": "e3a4f748ef4fdc8cd8c17fb84d9cf881c68d2c80b48091f7404f91b4d89e8bd8"
+    },
+    {
+      "caseId": "RQ4V11-CASE-002",
+      "fileName": "RQ4V11-CASE-002.tsx",
+      "contentSha256": "efcd46277ba53521954e61acde35eaa9c1f171cfa28ed064bd0f800724e869a2"
+    },
+    {
+      "caseId": "RQ4V11-CASE-003",
+      "fileName": "RQ4V11-CASE-003.vue",
+      "contentSha256": "04850adbcd758f09c39a733536590139affd50d39710974ba94810b2ad4b0483"
+    },
+    {
+      "caseId": "RQ4V11-CASE-004",
+      "fileName": "RQ4V11-CASE-004.jsx",
+      "contentSha256": "b1cc415bf434a18a954753809146a94ddb0cad8af8929320d61f83905b7e04df"
+    },
+    {
+      "caseId": "RQ4V11-CASE-005",
+      "fileName": "RQ4V11-CASE-005.component.ts",
+      "contentSha256": "c1065b5275970182a8abfcf8efc785380610fdcbf8178614df2d9fe15be99af0"
+    },
+    {
+      "caseId": "RQ4V11-CASE-006",
+      "fileName": "RQ4V11-CASE-006.jsx",
+      "contentSha256": "9f633cd54eb5de76a93ffab53d7276b565762eecf60faf4d917e3024c7fa17d7"
+    },
+    {
+      "caseId": "RQ4V11-CASE-007",
+      "fileName": "RQ4V11-CASE-007.component.ts",
+      "contentSha256": "687e3d4990b52bb8a97add6b1cc9ae1baf1e584f2dda36abe10fb54b71dfe4c0"
+    },
+    {
+      "caseId": "RQ4V11-CASE-008",
+      "fileName": "RQ4V11-CASE-008.jsx",
+      "contentSha256": "772759f7c11533ac324592212b54270a24fd3ff608e9653ea2caa6bf6b062865"
+    },
+    {
+      "caseId": "RQ4V11-CASE-009",
+      "fileName": "RQ4V11-CASE-009.jsx",
+      "contentSha256": "09089bf01d504f133493da748f094afa7054f0b0e47c59b840e4904402f1e8e4"
+    },
+    {
+      "caseId": "RQ4V11-CASE-010",
+      "fileName": "RQ4V11-CASE-010.jsx",
+      "contentSha256": "bcaecff3f81a02552ce4b8cb35394a3a9e9b19b988e5a1787e3c001ba891c915"
+    },
+    {
+      "caseId": "RQ4V11-CASE-011",
+      "fileName": "RQ4V11-CASE-011.jsx",
+      "contentSha256": "8f3c57a595dbebb5d54ad836234bafaf8cd96d6b30cc795242951cfb3557d157"
+    },
+    {
+      "caseId": "RQ4V11-CASE-012",
+      "fileName": "RQ4V11-CASE-012.vue",
+      "contentSha256": "3d590d2c18af5372ef70474b6ded7a1c9ffaf2b261db87f50f27aea01ae82cce"
+    },
+    {
+      "caseId": "RQ4V11-CASE-013",
+      "fileName": "RQ4V11-CASE-013.jsx",
+      "contentSha256": "05cf5acba6b4c91d8bd7c3d3222a4c5a0a51a39265a501e1cbd7981e226571b3"
+    },
+    {
+      "caseId": "RQ4V11-CASE-014",
+      "fileName": "RQ4V11-CASE-014.jsx",
+      "contentSha256": "57acdc3dc310f6672eff8cd8a652661a9a6d4c719240f14201b82109b3cade29"
+    },
+    {
+      "caseId": "RQ4V11-CASE-015",
+      "fileName": "RQ4V11-CASE-015.jsx",
+      "contentSha256": "2c0d978c302afe16cd1cd568f22024fe509640bffe3ffcb8dc7829b0191df0f8"
+    },
+    {
+      "caseId": "RQ4V11-CASE-016",
+      "fileName": "RQ4V11-CASE-016.component.ts",
+      "contentSha256": "1ff9d8a78236073f9a8a11cfab23b944adb14f0f37c54b7cfdf1a8c50f5264ef"
+    },
+    {
+      "caseId": "RQ4V11-CASE-017",
+      "fileName": "RQ4V11-CASE-017.component.ts",
+      "contentSha256": "cebf329bff2521a26697b2787dc3a9957725a8efc8bf0a9c08aef5092296925a"
+    },
+    {
+      "caseId": "RQ4V11-CASE-018",
+      "fileName": "RQ4V11-CASE-018.vue",
+      "contentSha256": "43fb16ede05be5b50bce7b3e2f655696acc6b836becf1a05213ea6f63a7ec2e2"
+    },
+    {
+      "caseId": "RQ4V11-CASE-019",
+      "fileName": "RQ4V11-CASE-019.jsx",
+      "contentSha256": "61313252c292973d3625c1d92b37b0485c7a4027e801832241320c19111164eb"
+    },
+    {
+      "caseId": "RQ4V11-CASE-020",
+      "fileName": "RQ4V11-CASE-020.jsx",
+      "contentSha256": "bf2fe4a1fef12a7fae8862b7d4c21b91052fe507a3df92343e6ce382d7408b74"
+    },
+    {
+      "caseId": "RQ4V11-CASE-021",
+      "fileName": "RQ4V11-CASE-021.jsx",
+      "contentSha256": "9d2eb38e96813454901431244cecba2db896e774e3d60e07a95f787efaeeaaf4"
+    },
+    {
+      "caseId": "RQ4V11-CASE-022",
+      "fileName": "RQ4V11-CASE-022.vue",
+      "contentSha256": "d457286e2e7e25496f76e1f237e209bf9dd2bf070f37ff036800f66253cb1d73"
+    },
+    {
+      "caseId": "RQ4V11-CASE-023",
+      "fileName": "RQ4V11-CASE-023.tsx",
+      "contentSha256": "5a236e6b0743664d387a324433291658b93f9ffb9a8ded5713b08cae2af5dd7d"
+    },
+    {
+      "caseId": "RQ4V11-CASE-024",
+      "fileName": "RQ4V11-CASE-024.jsx",
+      "contentSha256": "0b77652ffc75e7c2aa353d0c8e631914d9698c9d3a60e90cb257fc6076347314"
+    },
+    {
+      "caseId": "RQ4V11-CASE-025",
+      "fileName": "RQ4V11-CASE-025.tsx",
+      "contentSha256": "8f546e5edc4ba992b424bee0bc28d33fa68179ad8edfbaaea49854f2cf87512b"
+    },
+    {
+      "caseId": "RQ4V11-CASE-026",
+      "fileName": "RQ4V11-CASE-026.component.ts",
+      "contentSha256": "369ff785efdc27a7e0905d26ca400695b0880b618d150b55250a6a5d8c313d02"
+    },
+    {
+      "caseId": "RQ4V11-CASE-027",
+      "fileName": "RQ4V11-CASE-027.pipe.ts",
+      "contentSha256": "c8f94883ccb67d82baf495080100e194d0e1079b82abb40a381b62421b795d08"
+    },
+    {
+      "caseId": "RQ4V11-CASE-028",
+      "fileName": "RQ4V11-CASE-028.jsx",
+      "contentSha256": "c702ed32573fcab55eba8014ab023d827055c4ac852f7252ac73db14619fbb75"
+    },
+    {
+      "caseId": "RQ4V11-CASE-029",
+      "fileName": "RQ4V11-CASE-029.vue",
+      "contentSha256": "975b108e0c35c8ba56e6af02d8747b062c757c703312b25682b03e906c114050"
+    },
+    {
+      "caseId": "RQ4V11-CASE-030",
+      "fileName": "RQ4V11-CASE-030.component.ts",
+      "contentSha256": "ef960794961d7cd4f1bb726e99a13a03f175c1c9bdc7e35a666130afac71972b"
+    },
+    {
+      "caseId": "RQ4V11-CASE-031",
+      "fileName": "RQ4V11-CASE-031.component.ts",
+      "contentSha256": "f73b7dd3738436155792292620c3d0a743ec51dd15fcdc4b95527fdb1db56526"
+    },
+    {
+      "caseId": "RQ4V11-CASE-032",
+      "fileName": "RQ4V11-CASE-032.js",
+      "contentSha256": "9df6d9a13d96f99e3dd165c79d8bd3ca72b437d5ac734f47c98b252fb6e72c67"
+    },
+    {
+      "caseId": "RQ4V11-CASE-033",
+      "fileName": "RQ4V11-CASE-033.vue",
+      "contentSha256": "adfcce5de9030f17c283930daf4a4674ceb4357327baa7152ffdb8c77141eff0"
+    },
+    {
+      "caseId": "RQ4V11-CASE-034",
+      "fileName": "RQ4V11-CASE-034.jsx",
+      "contentSha256": "e76a8c88c1abeceea6b8670b80116618538db940b78b6e4c5d2025382b1176c3"
+    },
+    {
+      "caseId": "RQ4V11-CASE-035",
+      "fileName": "RQ4V11-CASE-035.component.ts",
+      "contentSha256": "ee83afe19c5fb2acc0b9077daf1c5bc6ff8f34361f6e957512146a87d1b5efff"
+    },
+    {
+      "caseId": "RQ4V11-CASE-036",
+      "fileName": "RQ4V11-CASE-036.tsx",
+      "contentSha256": "e65df15b7126fc8ca25f2edc936a2510c9e17c118f39a6a3859225efb0f85ea5"
+    },
+    {
+      "caseId": "RQ4V11-CASE-037",
+      "fileName": "RQ4V11-CASE-037.component.ts",
+      "contentSha256": "9bcd8f99b1bc46b9adf742208d35db8d937e9d19b72ea85c2f70c19aea1c9f76"
+    },
+    {
+      "caseId": "RQ4V11-CASE-038",
+      "fileName": "RQ4V11-CASE-038.component.ts",
+      "contentSha256": "aa24e8dc7f12c4d43fcb656908f7e6f18196135219c3066b3e4fef515cc0c2ba"
+    },
+    {
+      "caseId": "RQ4V11-CASE-039",
+      "fileName": "RQ4V11-CASE-039.jsx",
+      "contentSha256": "71a89c8e77e0056eccb0d89f3fb7c9ce07dab7b0317fb1694eaaa9abd5d38d2c"
+    },
+    {
+      "caseId": "RQ4V11-CASE-040",
+      "fileName": "RQ4V11-CASE-040.jsx",
+      "contentSha256": "3f881a405c9fad73212174b70707e692cf68d8b54f039cd1fc280fafa06a02a1"
+    },
+    {
+      "caseId": "RQ4V11-CASE-041",
+      "fileName": "RQ4V11-CASE-041.tsx",
+      "contentSha256": "222e2b67308223d287140229da98b59eacdd47a3ec593958e15edcb64bb44ae8"
+    },
+    {
+      "caseId": "RQ4V11-CASE-042",
+      "fileName": "RQ4V11-CASE-042.tsx",
+      "contentSha256": "0d7f6342769306e2153198833d2a07eb48a300a512069a53d0d333aa8667dd65"
+    },
+    {
+      "caseId": "RQ4V11-CASE-043",
+      "fileName": "RQ4V11-CASE-043.jsx",
+      "contentSha256": "7673b63710537de7333015e52a6ffacc6f6aafcee3a289fec8dafae399855425"
+    },
+    {
+      "caseId": "RQ4V11-CASE-044",
+      "fileName": "RQ4V11-CASE-044.jsx",
+      "contentSha256": "82628d557f4441bd7ec879944a2ee77c990026c2efe8c7c8370d2006a87621bd"
+    },
+    {
+      "caseId": "RQ4V11-CASE-045",
+      "fileName": "RQ4V11-CASE-045.jsx",
+      "contentSha256": "e118e5cf01939774f2e522a6a7384f435fde93dff53118f7f3099a64de8a29e6"
+    },
+    {
+      "caseId": "RQ4V11-CASE-046",
+      "fileName": "RQ4V11-CASE-046.jsx",
+      "contentSha256": "d86775a5fddf8c4ddf11ca4f5f198c85751e9d552ec793cf1c07d3aabc7cee52"
+    },
+    {
+      "caseId": "RQ4V11-CASE-047",
+      "fileName": "RQ4V11-CASE-047.jsx",
+      "contentSha256": "671fa1e6f1273bb637a1c6cbf12c11a6e5a5df16e4d34c7190f55ff8840203d2"
+    },
+    {
+      "caseId": "RQ4V11-CASE-048",
+      "fileName": "RQ4V11-CASE-048.jsx",
+      "contentSha256": "d0ceddd8043f4f2ddacd7e16a0a954829277d7bbca0d5f9b99cd92c90a712a6d"
+    },
+    {
+      "caseId": "RQ4V11-CASE-049",
+      "fileName": "RQ4V11-CASE-049.tsx",
+      "contentSha256": "a9818bba52ecde32949204d18de2f31678f871e5630ceaa54380fc5a78720ca3"
+    },
+    {
+      "caseId": "RQ4V11-CASE-050",
+      "fileName": "RQ4V11-CASE-050.tsx",
+      "contentSha256": "ff445a185afd982a8c0dc4b52dbd9cdc1b11ea23a3857d1f539f3d8340a24b6f"
+    },
+    {
+      "caseId": "RQ4V11-CASE-051",
+      "fileName": "RQ4V11-CASE-051.vue",
+      "contentSha256": "4404538b9fa9d8257b0f764440d8ccf93a05624705f91c8d877aee5137936edd"
+    },
+    {
+      "caseId": "RQ4V11-CASE-052",
+      "fileName": "RQ4V11-CASE-052.jsx",
+      "contentSha256": "65e3bedcf12a0b4d3c55794d25a58a7ce9f4f3ea701fe955795abfcec9e466c7"
+    },
+    {
+      "caseId": "RQ4V11-CASE-053",
+      "fileName": "RQ4V11-CASE-053.jsx",
+      "contentSha256": "e1953abcfa518f297567f68bab0693e68de58b852d717f3c37be7d08148190c3"
+    },
+    {
+      "caseId": "RQ4V11-CASE-054",
+      "fileName": "RQ4V11-CASE-054.jsx",
+      "contentSha256": "f95ed6f96738902bb087e84301a1caa3e13f45e44b8ffa2ef0dc110ea73bd8fd"
+    },
+    {
+      "caseId": "RQ4V11-CASE-055",
+      "fileName": "RQ4V11-CASE-055.jsx",
+      "contentSha256": "1ae6ed189a3319d2c64056e39386d0a9fbbc35783ee5d7add7aca7af2aa40062"
+    },
+    {
+      "caseId": "RQ4V11-CASE-056",
+      "fileName": "RQ4V11-CASE-056.vue",
+      "contentSha256": "3adcc931c99423df6ef168942358cc424e80470afeff85a25ef230cbaebf66f5"
+    },
+    {
+      "caseId": "RQ4V11-CASE-057",
+      "fileName": "RQ4V11-CASE-057.tsx",
+      "contentSha256": "3acc75c430dd7743d597b28a064b008c8c71be1e8af2b6f945f879015c011e4c"
+    },
+    {
+      "caseId": "RQ4V11-CASE-058",
+      "fileName": "RQ4V11-CASE-058.jsx",
+      "contentSha256": "2adb2c2cdbd01ab3a77b57e6deee64ea4860d0956c74357c4f84916baeb747eb"
+    },
+    {
+      "caseId": "RQ4V11-CASE-059",
+      "fileName": "RQ4V11-CASE-059.jsx",
+      "contentSha256": "48e8c9c70ea4e84b9906ea6afcd2a817b59ddca89f4b14671c74d749d95734b7"
+    },
+    {
+      "caseId": "RQ4V11-CASE-060",
+      "fileName": "RQ4V11-CASE-060.tsx",
+      "contentSha256": "ca07315176b07f40bf34dd1d7d85505880a74e4f0d2442d75a982f63c17be0fe"
+    },
+    {
+      "caseId": "RQ4V11-CASE-061",
+      "fileName": "RQ4V11-CASE-061.component.ts",
+      "contentSha256": "0e5db93dc95aa5d6cbf6d322e658a07b1f630968ae5f1a4f822da59f2b4935f7"
+    },
+    {
+      "caseId": "RQ4V11-CASE-062",
+      "fileName": "RQ4V11-CASE-062.component.ts",
+      "contentSha256": "4374d6500d3267c97e0e6a2f8402b449c958defa615a461b71d635efd7aed834"
+    },
+    {
+      "caseId": "RQ4V11-CASE-063",
+      "fileName": "RQ4V11-CASE-063.jsx",
+      "contentSha256": "2c9d838b5d3c0365488943edddef96bde8c60e8108f53136438f1bbdc47e4c9d"
+    },
+    {
+      "caseId": "RQ4V11-CASE-064",
+      "fileName": "RQ4V11-CASE-064.js",
+      "contentSha256": "dadbabbcde9f5fe86023fb78c18b05551b0382b92968e319d5dc8ffaca669600"
+    },
+    {
+      "caseId": "RQ4V11-CASE-065",
+      "fileName": "RQ4V11-CASE-065.vue",
+      "contentSha256": "199efab6e7c499849c2743b0b350d2bfe42c8a6c98d719ff5f991b14576c064e"
+    },
+    {
+      "caseId": "RQ4V11-CASE-066",
+      "fileName": "RQ4V11-CASE-066.tsx",
+      "contentSha256": "5bab71dc3b585429add5a36362283bd5b3d01a368ffe376d37c4f2fb62bb639c"
+    },
+    {
+      "caseId": "RQ4V11-CASE-067",
+      "fileName": "RQ4V11-CASE-067.jsx",
+      "contentSha256": "a4c361fbdaabe8848d2aab8d4780ce7346c685c007c4b09a7967fce67700db80"
+    }
+  ],
+  "ruleReference": {
+    "path": "research/independent-annotation/package-v1.1/RULE_REFERENCE.md",
+    "sha256": "4d017eb80d5c83a5353113dfab49938904f2ab4e90ec18098d6256e3937b0a95"
+  },
+  "annotationInstructions": {
+    "path": "research/independent-annotation/package-v1.1/ANNOTATION_INSTRUCTIONS.md",
+    "sha256": "0d5c94fdec821c43d2e13e780c2f6c179beaff38d6b62829862eac3568a0c4fb"
+  },
+  "annotationTemplate": {
+    "path": "research/independent-annotation/package-v1.1/annotation-template.csv",
+    "sha256": "13d1635eeda147ec0fbf02a44fecbad0054de2d0746112b470ea53d5ed52d0ef"
+  },
+  "candidateJudgmentMatrix": {
+    "path": "research/independent-annotation/package-v1.1/candidate-judgment-matrix.json",
+    "sha256": "b896efacf4c74bea2349111149942093cc3e33f0388402eb48ba39aa783571a0"
+  },
+  "freezePolicy": "Cases and the candidate judgment matrix must not be modified after this manifest is generated and annotation work begins. If a case must be corrected, bump packageVersion, rebuild via build-rq4-package-v1_1.ts, regenerate this manifest, and treat any annotation collected against a prior packageVersion as invalidated for that case -- never silently edit a case in place."
+}

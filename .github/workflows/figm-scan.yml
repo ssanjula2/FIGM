@@ -44,10 +44,14 @@ jobs:
         run: npm run build
 
       - name: 🧪 Execute Automated Unit & Integration Tests
+        # Deliberately no DATABASE_URL/DIRECT_URL here (see docs/audit/PRE_STUDY_DATA_INTEGRITY_FINAL.md,
+        # Phase 3): `npm test` never needs a real Postgres connection -- RepositoryFactory falls back
+        # to the local JSON-file storage provider whenever these are unset, which is exactly what
+        # automated tests are meant to run against. Previously this step injected the real secret (or
+        # a harmless localhost fallback) into every test's environment for no reason the tests
+        # actually needed; src/db/db-safety-guard.ts now also fails the whole run fast if a hosted
+        # Supabase URL is ever detected under NODE_ENV=test, as defense in depth.
         run: npm test
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/postgres' }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL || 'postgresql://postgres:postgres@localhost:5432/postgres' }}
 
       - name: ⚡ Execute FIGM AST Static Analysis Engine
         id: figm_scan

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-03T10:58:20.352Z",
+  "timestamp": "2026-09-04T10:41:07.295Z",
   "calculationMethod": "TP/FP/FN computed by dynamically re-running RuleExecutionEngine.analyzeFile against every file in benchmarks/testbed and diffing the resulting diagnostics against benchmarks/ground-truth.json (exact filePath+ruleId match). Precision = TP/(TP+FP), Recall = TP/(TP+FN), F1 = 2*P*R/(P+R). No cached or hand-typed confusion matrix is used at any step.",
   "ruleCoverage": {
     "totalFigmRules": 50,
@@ -621,11 +621,11 @@
     }
   ],
   "performanceMetrics": {
-    "totalScanDurationMs": 8790.486499999999,
+    "totalScanDurationMs": 6546.1266,
     "totalLinesOfCode": 799,
     "totalASTNodes": 648,
-    "scanSpeedLOCPerSec": 90.89371788466998,
-    "astNodesPerSec": 73.71605655727929,
+    "scanSpeedLOCPerSec": 122.05691225097908,
+    "astNodesPerSec": 98.98983621856625,
     "peakMemoryMB": 0.1
   }
 }

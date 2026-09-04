@@ -148,6 +148,25 @@ export interface DBUserStore {
 
 const DB_FILE = path.resolve(process.cwd(), 'figm-user-db.json');
 
+/**
+ * Guards the three fire-and-forget Supabase Cloud sync side effects below (createUser,
+ * updateUser, createScanRecord). This store's whole purpose is to be a fully local, JSON-file-
+ * backed fallback -- but historically it ALSO opportunistically dual-writes to a real Supabase
+ * project whenever NEXT_PUBLIC_SUPABASE_URL/SUPABASE_URL + a key happen to be present in the
+ * process environment, entirely independent of RepositoryFactory's provider selection. Found
+ * during the pre-study data-integrity audit (docs/audit/PRE_STUDY_DATA_INTEGRITY_FINAL.md): if
+ * those env vars were ever present during an automated test run (e.g. a misconfigured CI step, or
+ * a developer's shell exporting them broadly), every user/scan a test creates would also be
+ * written into the real, live Supabase `users`/`scan_reports` tables -- a completely separate
+ * contamination path from the Prisma/DATABASE_URL one src/db/db-safety-guard.ts guards.
+ * NODE_ENV==='test' (set by tests/test-env-setup.mjs before any test file loads) unconditionally
+ * disables this sync, regardless of which specific project the URL points at -- there is no
+ * legitimate reason for the JSON-file test fallback to ever write to any hosted Supabase project.
+ */
+function isSupabaseSyncAllowed(): boolean {
+  return process.env.NODE_ENV !== 'test';
+}
+
 export interface DefaultAdminAccount {
   id: string;
   email: string;
@@ -353,7 +372,7 @@ export const UserDB = {
     try {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
       const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key) {
+      if (url && key && isSupabaseSyncAllowed()) {
         const { createClient } = require('@supabase/supabase-js');
         const supabase = createClient(url, key, { auth: { persistSession: false } });
         supabase.from('users').upsert({
@@ -388,7 +407,7 @@ export const UserDB = {
     try {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
       const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key) {
+      if (url && key && isSupabaseSyncAllowed()) {
         const { createClient } = require('@supabase/supabase-js');
         const supabase = createClient(url, key, { auth: { persistSession: false } });
         supabase.from('users').update({
@@ -501,7 +520,7 @@ export const UserDB = {
     try {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
       const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key) {
+      if (url && key && isSupabaseSyncAllowed()) {
         const { createClient } = require('@supabase/supabase-js');
         const supabase = createClient(url, key, { auth: { persistSession: false } });
         supabase.from('scan_reports').insert({

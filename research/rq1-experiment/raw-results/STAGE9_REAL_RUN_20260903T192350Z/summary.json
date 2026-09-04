@@ -1,0 +1,180 @@
+{
+  "meta": {
+    "generatedAt": "2026-09-03T19:24:49.059Z",
+    "sourceDir": "C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\research\\rq1-experiment\\raw-results\\STAGE9_REAL_RUN_20260903T192350Z\\raw"
+  },
+  "breakdown": {
+    "totalExecutions": 44,
+    "smokeExecutions": 0,
+    "warmupExecutions": 4,
+    "measuredExecutions": 40,
+    "validMeasuredN": 40,
+    "failedMeasuredN": 0
+  },
+  "stats": [
+    {
+      "conditionId": "CSR_LOCAL",
+      "n_valid": 10,
+      "n_failed": 0,
+      "fcp": {
+        "mean": 439.85325,
+        "median": 439.0992,
+        "sd": 2.515817409577521,
+        "min": 437.21,
+        "max": 445.4389
+      },
+      "tti": {
+        "mean": 464.45325,
+        "median": 463.09785,
+        "sd": 4.428880409626992,
+        "min": 459.21000000000004,
+        "max": 472.43890000000005
+      }
+    },
+    {
+      "conditionId": "CSR_GLOBAL",
+      "n_valid": 10,
+      "n_failed": 0,
+      "fcp": {
+        "mean": 441.57776,
+        "median": 437.55494999999996,
+        "sd": 9.352299334649686,
+        "min": 435.7737,
+        "max": 462.5672
+      },
+      "tti": {
+        "mean": 463.97775999999993,
+        "median": 460.03295,
+        "sd": 9.030974142139918,
+        "min": 457.77369999999996,
+        "max": 484.56719999999996
+      }
+    },
+    {
+      "conditionId": "SSR_LOCAL",
+      "n_valid": 10,
+      "n_failed": 0,
+      "fcp": {
+        "mean": 438.79618,
+        "median": 439.10735,
+        "sd": 1.263364448869226,
+        "min": 436.5863,
+        "max": 440.3558
+      },
+      "tti": {
+        "mean": 463.29618,
+        "median": 462.46315,
+        "sd": 4.350450903527133,
+        "min": 459.58630000000005,
+        "max": 474.35580000000004
+      }
+    },
+    {
+      "conditionId": "SSR_GLOBAL",
+      "n_valid": 10,
+      "n_failed": 0,
+      "fcp": {
+        "mean": 438.77919999999995,
+        "median": 438.2308,
+        "sd": 2.059739260197754,
+        "min": 436.9656,
+        "max": 443.943
+      },
+      "tti": {
+        "mean": 464.47920000000005,
+        "median": 463.44655,
+        "sd": 4.7988555624116,
+        "min": 459.1732,
+        "max": 476.0685
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "dimension": "renderingStrategy",
+      "groups": [
+        {
+          "label": "CSR",
+          "n_valid": 20,
+          "n_failed": 0,
+          "fcp": {
+            "mean": 440.715505,
+            "median": 438.2637,
+            "sd": 6.723968261492069,
+            "min": 435.7737,
+            "max": 462.5672
+          },
+          "tti": {
+            "mean": 464.21550499999995,
+            "median": 461.36885,
+            "sd": 6.927032228692315,
+            "min": 457.77369999999996,
+            "max": 484.56719999999996
+          }
+        },
+        {
+          "label": "SSR",
+          "n_valid": 20,
+          "n_failed": 0,
+          "fcp": {
+            "mean": 438.78768999999994,
+            "median": 438.6567,
+            "sd": 1.663050171063299,
+            "min": 436.5863,
+            "max": 443.943
+          },
+          "tti": {
+            "mean": 463.88769000000013,
+            "median": 462.79699999999997,
+            "sd": 4.499102960637932,
+            "min": 459.1732,
+            "max": 476.0685
+          }
+        }
+      ]
+    },
+    {
+      "dimension": "stateManagementStrategy",
+      "groups": [
+        {
+          "label": "LOCAL",
+          "n_valid": 20,
+          "n_failed": 0,
+          "fcp": {
+            "mean": 439.324715,
+            "median": 439.10735,
+            "sd": 2.012014278037387,
+            "min": 436.5863,
+            "max": 445.4389
+          },
+          "tti": {
+            "mean": 463.8747150000001,
+            "median": 462.7102,
+            "sd": 4.313788770940168,
+            "min": 459.21000000000004,
+            "max": 474.35580000000004
+          }
+        },
+        {
+          "label": "GLOBAL",
+          "n_valid": 20,
+          "n_failed": 0,
+          "fcp": {
+            "mean": 440.17848000000004,
+            "median": 437.99974999999995,
+            "sd": 6.745493420959698,
+            "min": 435.7737,
+            "max": 462.5672
+          },
+          "tti": {
+            "mean": 464.22848000000005,
+            "median": 461.59929999999997,
+            "sd": 7.043267738740223,
+            "min": 457.77369999999996,
+            "max": 484.56719999999996
+          }
+        }
+      ]
+    }
+  ]
+}

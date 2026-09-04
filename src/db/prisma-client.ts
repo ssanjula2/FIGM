@@ -1,3 +1,5 @@
+import { assertSafeTestDatabaseEnvironment } from './db-safety-guard';
+
 export const isPostgresConfigured = (): boolean => {
   return Boolean(process.env.DATABASE_URL && process.env.DATABASE_URL.trim().length > 0);
 };
@@ -11,6 +13,11 @@ const globalForPrisma = globalThis as unknown as { __figmPrisma?: any; __figmPgP
 
 export const getPrismaClient = (): any => {
   if (!globalForPrisma.__figmPrisma && isPostgresConfigured()) {
+    // Defense in depth: test-env-setup.mjs already aborts the whole test run before this can be
+    // reached in the normal case, but this guards any code path (a script run with NODE_ENV=test,
+    // a test file that imports this module before the bootstrap runs, etc.) that reaches a real
+    // Postgres connection attempt without going through that bootstrap. See db-safety-guard.ts.
+    assertSafeTestDatabaseEnvironment();
     try {
       const { PrismaClient } = require('@prisma/client');
       const { PrismaPg } = require('@prisma/adapter-pg');

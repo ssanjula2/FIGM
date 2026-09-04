@@ -30,6 +30,27 @@ export const PARTICIPANT_ID_PATTERN = /^P\d{3,6}$/;
  *  correlate anywhere in this codebase, dashboard, or dissertation text. */
 export const TARGET_PARTICIPANT_COUNT = HUMAN_STUDY_TARGET_PARTICIPANTS;
 
+/** Whether `code` is one of the declared REAL-STUDY identifiers P001..P0<HUMAN_STUDY_TARGET_PARTICIPANTS>
+ *  (canonically zero-padded to 3 digits), inclusive -- derived from HUMAN_STUDY_TARGET_PARTICIPANTS,
+ *  never a second hardcoded "20". Deliberately narrower than PARTICIPANT_ID_PATTERN: that pattern
+ *  also matches operational/QA-fixture codes this repo's own tests generate (e.g. P900000-P989999,
+ *  see tests/research-dataset-consent-gate.test.ts's uniqueParticipantCode()) and any future
+ *  assignNewParticipant() slot beyond the declared cohort size. A code can have the right *shape*
+ *  (PARTICIPANT_ID_PATTERN) without being a real *study* participant -- only getResearchDataset()
+ *  needs that stricter distinction (see its own doc comment); getMatrix/getDetail intentionally
+ *  keep using the broader isParticipantUser() check for full operational/QA visibility. */
+export function isRealStudyParticipantCode(code: string | null | undefined): boolean {
+  if (!code) return false;
+  const match = /^P(\d+)$/.exec(code);
+  if (!match) return false;
+  const n = parseInt(match[1], 10);
+  if (Number.isNaN(n)) return false;
+  // Reject non-canonical zero-padding (e.g. "P0020" numerically equals 20 but is not the exact
+  // "P020" string assignNewParticipant()/getMatrix() ever produce or look up).
+  if (`P${String(n).padStart(3, '0')}` !== code) return false;
+  return n >= 1 && n <= HUMAN_STUDY_TARGET_PARTICIPANTS;
+}
+
 export type ParticipantStatus = 'NOT_REGISTERED' | 'REGISTERED' | 'SCANNED' | 'SUBMITTED';
 
 /** Server-verifiable research-eligibility state -- mirrors prisma/schema.prisma's
@@ -56,7 +77,15 @@ export interface RuleFindingCount {
   severity: string | null;
 }
 
-/** One consent-gated, research-eligible scan row -- see getResearchDataset's doc comment. */
+/** One consent-gated, research-eligible scan row -- see getResearchDataset's doc comment.
+ *
+ *  `attemptType` (Stage 11B repeated-scan policy): a real participant may scan the same study
+ *  fixture more than once -- the UI never blocks this. Within each (userId, fileName) group of
+ *  eligible (post-consent) rows, the single earliest `createdAt` is `'PRIMARY'` (the one
+ *  observation primary human-study analysis -- e.g. task-performance/SUS-adjacent metrics keyed
+ *  one-per-participant-per-fixture -- must use); every later valid attempt for that same pair is
+ *  `'SECONDARY'` -- preserved (never dropped, never overwritten), available for secondary
+ *  interaction-pattern analysis, but never counted as an additional primary observation. */
 export interface ResearchDatasetScanRow {
   participantId: string;
   userId: string;
@@ -66,6 +95,22 @@ export interface ResearchDatasetScanRow {
   qualityScore: number;
   ruleCount: number;
   createdAt: string;
+  attemptType: 'PRIMARY' | 'SECONDARY';
+  /** Real elapsed engine time for this scan (RuleExecutionEngine.analyzeFileAsync's own
+   *  perf.now() delta, persisted verbatim) -- never estimated or fabricated. */
+  scanTimeMs: number;
+  /** Same value as ruleCount, exposed under the name the research-export consumers expect --
+   *  intentionally not a second independently-computed figure. */
+  totalFindings: number;
+  /** Derived from this scan's own persisted diagnostics -- src/matrix/four-layer-meta-model.ts's
+   *  real taxonomy has exactly two top-level `domain` values (PERFORMANCE, ACCESSIBILITY);
+   *  "architecture" is not a third domain but a `concern` value WITHIN PERFORMANCE (e.g. `domain:
+   *  'PERFORMANCE', concern: 'ARCHITECTURE'`), so this is a sub-count of performanceFindings, not
+   *  an independent category. Never fabricated -- a scan with no diagnostics array yields 0, not
+   *  an invented figure. */
+  architectureFindings: number;
+  performanceFindings: number;
+  accessibilityFindings: number;
 }
 
 export interface ParticipantDetail {
@@ -160,11 +205,30 @@ export class ParticipantRepository {
     // Keyed by the authoritative participantCode (falling back to id for pre-migration rows whose
     // id itself is the code) -- NOT by id alone, since a row created via assignNewParticipant()
     // has a real random id distinct from its displayed "P001"-style code.
-    const participantUsers = new Map(
-      allUsers
-        .filter((u) => ParticipantRepository.isParticipantUser(u))
-        .map((u) => [u.participantCode || u.id, u])
-    );
+    //
+    // Built with explicit first-occurrence-wins semantics (NOT `new Map(pairs)`, which keeps the
+    // LAST entry for a duplicate key) so this agrees with getDetail()'s resolution order --
+    // getDetail() resolves a code via findUserByParticipantCode(), which is `Array.find` under
+    // both storage backends and therefore always returns the FIRST matching row. Real Postgres
+    // enforces `participantCode` as `@unique` (prisma/schema.prisma), so two rows sharing a code
+    // cannot exist there -- but the local JSON test-storage backend's `createUser` only checks
+    // `id`/`email` for uniqueness, not `participantCode`, so a duplicate CAN accumulate there
+    // across repeated test runs. Before this fix, getMatrix (last-wins) and getDetail
+    // (first-wins) could then silently resolve the same code to two different physical rows and
+    // disagree on submission counts -- confirmed by a real, reproduced test failure in
+    // tests/participant-matrix-n-plus-1.test.ts, not a hypothetical. Matching getDetail's
+    // first-wins order here (rather than changing getDetail to last-wins) is the correct choice
+    // because getDetail's order is also what a real Postgres `findFirst`-style query would return
+    // for a properly-unique column, and is therefore the more defensible semantics to standardize
+    // on if the two ever need to be reconciled.
+    const participantUsers = new Map<string, DBUser>();
+    for (const u of allUsers) {
+      if (!ParticipantRepository.isParticipantUser(u)) continue;
+      const code = u.participantCode || u.id;
+      if (!participantUsers.has(code)) {
+        participantUsers.set(code, u);
+      }
+    }
 
     const allScans = ((await ParticipantRepository.provider.getScanRecords()) as DBScanRecord[]) || [];
     const scansByUser = new Map<string, DBScanRecord[]>();
@@ -452,21 +516,37 @@ export class ParticipantRepository {
    * view would blind admins to exactly the QA/test-contamination signal they need to act on.
    *
    * This method applies the study's actual eligibility rule instead: a scan counts as research
-   * data only if its owning user is CONSENT_VERIFIED (a human researcher has reconciled a real,
-   * external consent-form submission against this exact participant code) AND the scan itself was
-   * created at/after that exact verification timestamp. ASSIGNED (not yet reconciled) and REVOKED
-   * (confirmed contamination / no-longer-active, per setResearchStatus's doc comment) participants
-   * contribute zero rows -- not a special-cased exclusion, it falls out of the single inclusion
-   * rule below. A non-participant (ordinary product) user can never appear here either, since
-   * isParticipantUser is checked first. Never source a real research export/analysis from
-   * getMatrix/getDetail's raw totals; only from this method.
+   * data only if its owning user is (a) a REAL study participant -- participant code in the exact
+   * declared P001..P0<HUMAN_STUDY_TARGET_PARTICIPANTS> range, via isRealStudyParticipantCode(),
+   * NOT merely PARTICIPANT_ID_PATTERN-shaped -- and (b) CONSENT_VERIFIED (a human researcher has
+   * reconciled a real, external consent-form submission against this exact participant code) AND
+   * the scan itself was created at/after that exact verification timestamp. ASSIGNED (not yet
+   * reconciled) and REVOKED (confirmed contamination / no-longer-active, per setResearchStatus's
+   * doc comment) participants contribute zero rows -- not a special-cased exclusion, it falls out
+   * of the single inclusion rule below. A non-participant (ordinary product) user can never appear
+   * here either. Never source a real research export/analysis from getMatrix/getDetail's raw
+   * totals; only from this method.
+   *
+   * Range restriction added after a forensic audit found the prior isParticipantUser()-only check
+   * would (in principle, though the live database was verified to contain zero such rows -- see
+   * docs/audit/PRE_STUDY_SYNTHETIC_DB_RESIDUE_AUDIT.md) let an out-of-range operational/QA-fixture
+   * participant code (e.g. this repo's own test-generated P900000+ codes) leak into a real
+   * research export merely by having CONSENT_VERIFIED set on it. isRealStudyParticipantCode()
+   * closes that by construction rather than relying on the database happening to stay clean.
+   *
+   * Stage 11B: repeat scans of the same fixture are real, honestly-recorded interactions -- never
+   * blocked in the UI, never dropped or overwritten here. Every eligible row is returned; the
+   * earliest per (userId, fileName) is tagged `attemptType: 'PRIMARY'`, every later one
+   * `'SECONDARY'` -- see ResearchDatasetScanRow's own doc comment, and
+   * filterPrimaryResearchAttempts/filterSecondaryResearchAttempts below for the two named views
+   * primary vs. secondary human-study analysis should read from.
    */
   public static async getResearchDataset(): Promise<ResearchDatasetScanRow[]> {
     const provider = ParticipantRepository.provider;
     const allUsers = ((await provider.getAllUsers()) as DBUser[]) || [];
     const eligibleUsers = allUsers.filter(
       (u): u is DBUser & { researchConsentVerifiedAt: string } =>
-        ParticipantRepository.isParticipantUser(u) &&
+        isRealStudyParticipantCode(u.participantCode || u.id) &&
         u.researchStatus === 'CONSENT_VERIFIED' &&
         !!u.researchConsentVerifiedAt
     );
@@ -485,22 +565,55 @@ export class ParticipantRepository {
     for (const user of eligibleUsers) {
       const consentAtMs = new Date(user.researchConsentVerifiedAt).getTime();
       const scans = scansByUser.get(user.id) || [];
-      for (const scan of scans) {
-        if (new Date(scan.createdAt).getTime() >= consentAtMs) {
-          rows.push({
-            participantId: user.participantCode || user.id,
-            userId: user.id,
-            scanId: scan.id,
-            fileName: scan.fileName,
-            framework: scan.framework,
-            qualityScore: scan.qualityScore,
-            ruleCount: scan.ruleCount,
-            createdAt: scan.createdAt,
-          });
-        }
+      // Sorted per-user so the (userId, fileName) grouping below can pick "earliest eligible
+      // attempt" with a single forward pass, without re-sorting per group.
+      const eligibleScans = scans
+        .filter((scan) => new Date(scan.createdAt).getTime() >= consentAtMs)
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+      const seenFixtures = new Set<string>();
+      for (const scan of eligibleScans) {
+        const isFirstForThisFixture = !seenFixtures.has(scan.fileName);
+        seenFixtures.add(scan.fileName);
+        const diagnostics = (scan.diagnostics || []) as Array<{ domain?: string; concern?: string }>;
+        const performanceFindings = diagnostics.filter((d) => d.domain === 'PERFORMANCE').length;
+        const accessibilityFindings = diagnostics.filter((d) => d.domain === 'ACCESSIBILITY').length;
+        const architectureFindings = diagnostics.filter(
+          (d) => d.domain === 'PERFORMANCE' && d.concern === 'ARCHITECTURE'
+        ).length;
+        rows.push({
+          participantId: user.participantCode || user.id,
+          userId: user.id,
+          scanId: scan.id,
+          fileName: scan.fileName,
+          framework: scan.framework,
+          qualityScore: scan.qualityScore,
+          ruleCount: scan.ruleCount,
+          createdAt: scan.createdAt,
+          attemptType: isFirstForThisFixture ? 'PRIMARY' : 'SECONDARY',
+          scanTimeMs: scan.scanTimeMs,
+          totalFindings: scan.ruleCount,
+          architectureFindings,
+          performanceFindings,
+          accessibilityFindings,
+        });
       }
     }
 
     return rows.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  }
+
+  /** Stage 11B: the exact one-observation-per-participant-per-fixture view primary human-study
+   *  analysis must use -- the earliest eligible (post-consent) attempt only. Pure filter over an
+   *  already-fetched getResearchDataset() result; never re-queries. */
+  public static filterPrimaryResearchAttempts(rows: ResearchDatasetScanRow[]): ResearchDatasetScanRow[] {
+    return rows.filter((r) => r.attemptType === 'PRIMARY');
+  }
+
+  /** Stage 11B: every later valid (post-consent) repeat attempt for a (participant, fixture) pair
+   *  already represented by a PRIMARY row -- real interaction data, preserved for secondary
+   *  analysis, never counted as an additional primary observation. */
+  public static filterSecondaryResearchAttempts(rows: ResearchDatasetScanRow[]): ResearchDatasetScanRow[] {
+    return rows.filter((r) => r.attemptType === 'SECONDARY');
   }
 }

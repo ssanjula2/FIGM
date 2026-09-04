@@ -53,7 +53,33 @@ test('the batched matrix still reports the correct submission count for a partic
   // "not registered," and the createUser below would then collide on the already-taken email
   // (P2002) rather than being skipped. Checking the actual uniqueness key (email) matches both id
   // schemes and correctly no-ops when the slot is already registered by either one.
+  // Other files in this suite (tests/research-dataset-range-guard.test.ts and friends) also draw
+  // random in-range P001..P0NN codes but decouple their email from the code with a random suffix
+  // -- which can leave a SEPARATE stale row sharing this exact participantCode/id from an earlier
+  // test/run, with a different email. getMatrix (builds a Map keyed by code -- last-registered row
+  // wins) and getDetail (Array.find -- first-registered row wins) would then resolve the same code
+  // to two DIFFERENT physical rows and disagree on submission counts, exactly the flakiness this
+  // guards against.
+  //
+  // Ensure at most one row exists for this exact code before proceeding -- and, critically, remove
+  // EVERY stale row matching it, not just the first. `findUserByParticipantCode` is `Array.find`
+  // under both storage backends, so it only ever surfaces the first match; on the local JSON
+  // test-storage backend (never reset between test runs, unlike a real Postgres test database, and
+  // whose `createUser` does not enforce `participantCode` uniqueness the way Postgres's `@unique`
+  // constraint does), more than one stale row can accumulate for the same code across repeated
+  // runs of this suite. A single-row cleanup based only on `findUserByParticipantCode`'s first
+  // match left a second, un-deleted duplicate behind that could still collide with this test's own
+  // `createUser({ id: participantId, ... })` call below (`P2002` on `id`) -- confirmed by a real,
+  // reproduced failure, not a hypothetical.
   let existing = await provider.findUserByEmail(email);
+  const allUsersBeforeCleanup = await provider.getAllUsers();
+  const staleRows = allUsersBeforeCleanup.filter(
+    (u: { id: string; participantCode?: string | null }) =>
+      (u.participantCode === participantId || u.id === participantId) && u.id !== existing?.id
+  );
+  for (const stale of staleRows) {
+    await provider.deleteUser(stale.id);
+  }
   if (!existing) {
     existing = UserDB.createUser({
       id: participantId,
