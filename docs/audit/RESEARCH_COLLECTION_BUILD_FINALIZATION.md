@@ -1,8 +1,9 @@
 # FIGM Research-Collection Build — Finalization Report
 
 Date: 2026-09-06
-Branch: `main` | HEAD at start and end of this pass: `2887a66ada624f48cf8946ff94a310dc78de3e93`
-(working tree modified but not committed — see §16/§17)
+Branch: `main` | Base commit this pass started from: `2887a66ada624f48cf8946ff94a310dc78de3e93`
+**Frozen collection-build commit (this pass's reviewed changes only):
+`bab8c770c20caf303fc462064926bce787546241`** — see §17.
 
 Scope: take FIGM from the state recorded in `docs/audit/FINAL_PRODUCT_END_TO_END_AUDIT.md` to a
 verified, safe **research-collection build** — not a public-beta or v1.0 product release. Every
@@ -420,14 +421,17 @@ by a "verify, don't just apply and move on" process:
   (unchanged limitation from the prior full-product audit).
 - VS Code extension remains a 5-rule lightweight preview by design decision, now honestly labeled
   as such — not a limitation to "fix" further before collection.
-- The working tree is not yet committed (see §17) — this build has no immutable commit hash yet.
+- This build was committed at `bab8c770c20caf303fc462064926bce787546241` (see §17 and
+  `docs/audit/RESEARCH_COLLECTION_BUILD_FREEZE.md` for the immutable commit hash and freeze record).
 
 ## 17. Release-Readiness Decision
 
 ```
 CURRENT_BRANCH=main
-HEAD_COMMIT=2887a66ada624f48cf8946ff94a310dc78de3e93 (working tree modified, not yet committed --
-  no immutable commit hash exists for this exact reviewed state until a commit is made)
+BASE_COMMIT=2887a66ada624f48cf8946ff94a310dc78de3e93 (baseline this pass started from)
+FROZEN_COLLECTION_BUILD_COMMIT=bab8c770c20caf303fc462064926bce787546241
+  (chore(collection-build): freeze FIGM for real participant collection -- the immutable commit
+  hash for this exact reviewed state; see docs/audit/RESEARCH_COLLECTION_BUILD_FREEZE.md)
 
 NEXTJS_VERSION=16.3.4
 NPM_AUDIT_TOTAL=6

@@ -5,12 +5,20 @@ Branch: `main`
 Base commit: `2887a66ada624f48cf8946ff94a310dc78de3e93` (`chore(research): finalize thesis stages
 and harden study data integrity`)
 
-**Immutable commit hash status:** NOT YET ASSIGNED. The working tree reviewed and verified in
-`docs/audit/RESEARCH_COLLECTION_BUILD_FINALIZATION.md` contains uncommitted changes on top of the
-base commit above (both this pass's product fixes and a separate, pre-existing, unrelated
-thesis-export workstream). This build cannot receive a final immutable commit hash — and therefore
-cannot be tagged — until those reviewed changes are committed. Per instruction, that commit is not
-made automatically; see the finalization report's "Exact Next Step After Freeze."
+**FROZEN COLLECTION-BUILD COMMIT:** `bab8c770c20caf303fc462064926bce787546241`
+(`chore(collection-build): freeze FIGM for real participant collection`)
+
+This is the exact, immutable commit this record certifies. It contains only the reviewed
+research-collection-build hardening pass described in
+`docs/audit/RESEARCH_COLLECTION_BUILD_FINALIZATION.md` (33 files) — the separate, pre-existing,
+unrelated thesis-export workstream present in the working tree at the time was deliberately left
+uncommitted and untouched (confirmed via `git status` immediately after this commit: those files
+remain modified/untracked, exactly as before). `package.json` required one surgical staging step:
+its `test` script is a single-line, space-separated file list that the concurrent thesis work had
+also appended to (`tests/thesis-exporter-canonical-guard.test.ts`) on the same line as this pass's
+own addition (`tests/vscode-extension-scope-honesty.test.ts`) — the committed version includes only
+this pass's own addition; the thesis reference was excluded from the commit and remains, uncommitted,
+in the working tree's copy of `package.json`.
 
 ## Frozen Product Identity
 
@@ -125,9 +133,9 @@ consentVersion:        1.0.0 (CONSENT_PROTOCOL_VERSION, unchanged)
 ## Freeze Status
 
 ```
-RESEARCH_COLLECTION_BUILD_READY=YES (pending commit -- see "Immutable commit hash status" above)
+RESEARCH_COLLECTION_BUILD_READY=YES
+RESEARCH_COLLECTION_BUILD_COMMIT=bab8c770c20caf303fc462064926bce787546241
 ```
 
-This record should be re-read and cross-checked against the actual commit hash once the reviewed
-changes are committed, so a future reader never confuses "the build that was verified" with "an
-uncommitted, potentially-since-changed working tree."
+This record has been cross-checked against the actual commit hash above, so a future reader never
+confuses "the build that was verified" with any later, different commit on `main`.
