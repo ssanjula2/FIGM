@@ -53,9 +53,19 @@ export interface ScanServiceStatus {
 }
 
 export async function POST(request: Request) {
+  // Parsing is validated separately from the rest of the handler: a missing, empty, or malformed
+  // request body is a client input-validation failure (400), not a scan-service failure -- it must
+  // never fall through to the generic 500 catch-all below, which is reserved for genuinely
+  // unexpected failures once a well-formed request is already being processed.
+  let body: any;
   try {
-    const body = await request.json();
-    const { code, fileName, action, defect } = body;
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid or missing JSON request body' }, { status: 400 });
+  }
+
+  try {
+    const { code, fileName, action, defect } = body ?? {};
 
     // A fix action (either pipeline) calls out to the Claude API on arbitrary (including fully
     // anonymous) input -- that's a real cost/abuse vector, so it gets a tighter limit than a plain

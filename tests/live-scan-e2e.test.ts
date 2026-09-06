@@ -270,6 +270,44 @@ test('Live Scan E2E — empty source is rejected with a clear 400, not a crash',
   assert.ok(body.error);
 });
 
+test('Live Scan E2E — no request body is rejected with a controlled 400, not an unhandled 500', async () => {
+  const res = await scanPOST(
+    new Request('http://localhost:3000/api/scan', {
+      method: 'POST',
+      headers: { 'x-forwarded-for': '203.0.113.13' },
+    })
+  );
+  assert.equal(res.status, 400);
+  const body = await res.json();
+  assert.ok(body.error);
+});
+
+test('Live Scan E2E — malformed JSON body is rejected with a controlled 400, not an unhandled 500', async () => {
+  const res = await scanPOST(
+    new Request('http://localhost:3000/api/scan', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-forwarded-for': '203.0.113.14' },
+      body: '{not valid json',
+    })
+  );
+  assert.equal(res.status, 400);
+  const body = await res.json();
+  assert.ok(body.error);
+});
+
+test('Live Scan E2E — empty JSON object still hits the existing "Code string is required" 400 validation', async () => {
+  const res = await scanPOST(
+    new Request('http://localhost:3000/api/scan', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-forwarded-for': '203.0.113.15' },
+      body: '{}',
+    })
+  );
+  assert.equal(res.status, 400);
+  const body = await res.json();
+  assert.equal(body.error, 'Code string is required');
+});
+
 test('Live Scan E2E — huge source is rejected with 413, not a crash or hang', async () => {
   const huge = 'const x = 1;\n'.repeat(50000); // ~650KB, over the 500KB limit
   const res = await scanPOST(scanRequest(huge, 'Huge.js', '203.0.113.9'));
