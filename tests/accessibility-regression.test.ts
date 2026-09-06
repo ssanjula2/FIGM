@@ -133,15 +133,28 @@ test('Accessibility regression: app/notifications/page.tsx', async (t) => {
 });
 
 test('Accessibility regression: app/user-study/page.tsx', async (t) => {
+  // Repurposed (docs/audit/NORMAL_LIVE_SCAN_RESEARCH_INTEGRATION.md) into an authenticated
+  // study-enrollment/onboarding page -- the old diagnostics-only benchmark scanner (task-selector
+  // cards, scan-result status span) no longer exists here at all; real scanning now happens on the
+  // real, unmodified /live-scan page. These checks cover the new page's own real interactive
+  // elements instead.
   const src = read('app/user-study/page.tsx');
 
-  await t.test('task-selector cards are real <button> elements with aria-pressed, not a clickable <div>', () => {
-    assert.equal(/<div\s*\n\s*key=\{t\.num\}\s*\n\s*onClick/.test(src), false, 'must not regress to a bare clickable div for task selection');
-    assert.match(src, /aria-pressed=\{activeTask === t\.num\}/);
+  await t.test('joining the study is a real <button> element, not a clickable <div>', () => {
+    assert.equal(/<div\s+onClick=\{handleJoinStudy\}/.test(src), false, 'must not regress to a bare clickable div for joining the study');
+    assert.match(src, /<button[^>]*onClick=\{handleJoinStudy\}/);
   });
 
-  await t.test('the scan-result outcome is announced via role="status"', () => {
-    assert.match(src, /<span role="status">/);
+  await t.test('the informed-consent checkbox has a real, associated text label', () => {
+    assert.match(src, /<label[^>]*>[\s\S]*?<input type="checkbox"[\s\S]*?I have read the study description/);
+  });
+
+  await t.test('the loading state is announced via role="status"', () => {
+    assert.match(src, /role="status"/);
+  });
+
+  await t.test('the error notice uses role="alert" so it is announced when it appears', () => {
+    assert.match(src, /role="alert"/);
   });
 });
 

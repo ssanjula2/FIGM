@@ -10,6 +10,7 @@ import {
   DBSettings,
   DBAuditLog,
   DBSubmission,
+  DBAiHistory,
 } from '../auth/user-db';
 
 export class JsonStorageProvider implements IStorageProvider {
@@ -220,5 +221,13 @@ export class JsonStorageProvider implements IStorageProvider {
 
   deleteSubmission(submissionId: string, userId: string): boolean {
     return UserDB.deleteSubmission(submissionId, userId);
+  }
+
+  createAiHistoryRecord(record: Omit<DBAiHistory, 'id' | 'createdAt'>): DBAiHistory {
+    return UserDB.createAiHistoryRecord(record);
+  }
+
+  getAiHistoryByUserId(userId: string): DBAiHistory[] {
+    return UserDB.getAiHistoryByUserId(userId);
   }
 }

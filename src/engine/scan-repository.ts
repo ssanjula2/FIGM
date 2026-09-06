@@ -1,4 +1,4 @@
-import { DBScanRecord, DBScanRecordSummary, ScanRecordInput } from '../auth/user-db';
+import { DBScanRecord, DBScanRecordSummary, ScanRecordInput, DBAiHistory } from '../auth/user-db';
 import { RepositoryFactory } from '../storage/repository-factory';
 import { ScanListQuery } from '../storage/storage-provider';
 
@@ -37,6 +37,16 @@ export class ScanRepository {
 
   public static async createScanRecord(scan: ScanRecordInput): Promise<DBScanRecord> {
     return ScanRepository.provider.createScanRecord(scan) as Promise<DBScanRecord>;
+  }
+
+  /** Fix/remediation interaction telemetry -- see DBAiHistory's own doc comment
+   *  (src/auth/user-db.ts) and app/api/scan/route.ts's fix-action branch, the sole caller. */
+  public static async createAiHistoryRecord(record: Omit<DBAiHistory, 'id' | 'createdAt'>): Promise<DBAiHistory> {
+    return ScanRepository.provider.createAiHistoryRecord(record) as Promise<DBAiHistory>;
+  }
+
+  public static async getAiHistoryByUserId(userId: string): Promise<DBAiHistory[]> {
+    return ScanRepository.provider.getAiHistoryByUserId(userId) as Promise<DBAiHistory[]>;
   }
 
   public static async getScanRecordById(id: string): Promise<DBScanRecord | undefined> {

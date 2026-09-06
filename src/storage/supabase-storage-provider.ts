@@ -13,6 +13,7 @@ import {
   DBSettings,
   DBAuditLog,
   DBSubmission,
+  DBAiHistory,
 } from '../auth/user-db';
 import { severityCountsFromDiagnostics } from '../engine/quality-score';
 
@@ -204,6 +205,18 @@ function mapSubmission(s: any): DBSubmission {
     qualityScore: s.qualityScore,
     diagnosticsCount: s.diagnosticsCount,
     createdAt: s.createdAt.toISOString(),
+  };
+}
+
+function mapAiHistory(h: any): DBAiHistory {
+  return {
+    id: h.id,
+    userId: h.userId,
+    scanReportId: h.scanReportId ?? null,
+    ruleId: h.ruleId,
+    applied: h.applied,
+    patchContent: h.patchContent,
+    createdAt: h.createdAt.toISOString(),
   };
 }
 
@@ -697,5 +710,25 @@ export class SupabaseStorageProvider implements IStorageProvider {
     // without a separate read-then-delete round trip.
     const result = await this.db().submission.deleteMany({ where: { id: submissionId, userId } });
     return result.count > 0;
+  }
+
+  async createAiHistoryRecord(record: Omit<DBAiHistory, 'id' | 'createdAt'>): Promise<DBAiHistory> {
+    if (!this.prisma) return this.fallback!.createAiHistoryRecord(record);
+    const created = await this.db().aiHistory.create({
+      data: {
+        userId: record.userId,
+        scanReportId: record.scanReportId ?? null,
+        ruleId: record.ruleId,
+        applied: record.applied,
+        patchContent: record.patchContent,
+      },
+    });
+    return mapAiHistory(created);
+  }
+
+  async getAiHistoryByUserId(userId: string): Promise<DBAiHistory[]> {
+    if (!this.prisma) return this.fallback!.getAiHistoryByUserId(userId);
+    const rows = await this.db().aiHistory.findMany({ where: { userId }, orderBy: { createdAt: 'desc' } });
+    return rows.map(mapAiHistory);
   }
 }

@@ -155,6 +155,34 @@ export async function POST(request: Request) {
         pipeline === CodeErrorFixPipeline
           ? await CodeErrorFixPipeline.apply(code, defect, scanResult.framework, scanResult.diagnostics)
           : await pipeline.apply(code, defect, scanResult.framework);
+
+      // Real fix/remediation interaction telemetry (see docs/audit/NORMAL_LIVE_SCAN_RESEARCH_INTEGRATION.md
+      // and DBAiHistory's own doc comment) -- only for an authenticated caller (there is no userId
+      // to honestly attribute this to for an anonymous one). `applied` is the pipeline's own real
+      // `verified` flag: true only when the patched code was actually re-scanned and the original
+      // violation confirmed gone -- the exact same condition under which the Live Scan UI itself
+      // mutates the editor's code (see live-scan/page.tsx's applyFix). Never inferred merely from a
+      // candidate patch having been generated. `scanReportId` is always null here: this endpoint
+      // operates on ad-hoc submitted code, not a specific persisted ScanReport id -- an honest,
+      // documented limitation, not a fabricated link. Awaited (not fire-and-forget): an unawaited
+      // write here is not reliably guaranteed to complete before a serverless function's execution
+      // context is torn down once the response is sent. A telemetry-write failure is logged but
+      // never fails the actual fix response the user is waiting on.
+      const fixAuth = await authenticateUser(request);
+      if (fixAuth.user) {
+        try {
+          await ScanRepository.createAiHistoryRecord({
+            userId: fixAuth.user.userId,
+            scanReportId: null,
+            ruleId: defect.ruleId,
+            applied: aiResult?.verified === true,
+            patchContent: aiResult?.remediatedCode || '',
+          });
+        } catch (err) {
+          console.error('[api/scan] failed to persist fix-interaction telemetry:', err instanceof Error ? err.message : err);
+        }
+      }
+
       return NextResponse.json(aiResult);
     }
 

@@ -54,6 +54,27 @@ export interface DBSubmission {
   createdAt: string;
 }
 
+/** Backs prisma/schema.prisma's `AiHistory` model (`ai_history` table -- already live in
+ *  production since the initial baseline migration, prisma/migrations/20260818075914_init_baseline).
+ *  Real fix/remediation interaction telemetry -- one row per fix ATTEMPT (never per scan), written
+ *  only for an authenticated caller (see app/api/scan/route.ts's fix-action branch). `applied` is
+ *  the pipeline's own `verified` flag -- true only when the patched code was actually re-scanned
+ *  and the original violation confirmed gone, matching the real "apply" semantics the Live Scan UI
+ *  itself uses (see live-scan/page.tsx's applyFix: the editor's code is only ever mutated when
+ *  `verified === true`). Never set true merely because a candidate patch was generated.
+ *  `scanReportId` is null whenever the fix action isn't tied to a specific persisted scan record
+ *  (the current fix endpoint operates on ad-hoc submitted code, not a saved ScanReport id) -- an
+ *  honest limitation, not a bug; see docs/audit/NORMAL_LIVE_SCAN_RESEARCH_INTEGRATION.md. */
+export interface DBAiHistory {
+  id: string;
+  userId: string;
+  scanReportId?: string | null;
+  ruleId: string;
+  applied: boolean;
+  patchContent: string;
+  createdAt: string;
+}
+
 export interface DBProject {
   id: string;
   userId: string;
@@ -144,6 +165,7 @@ export interface DBUserStore {
   notifications: DBNotification[];
   settings: DBSettings[];
   auditLogs: DBAuditLog[];
+  aiHistories: DBAiHistory[];
 }
 
 const DB_FILE = path.resolve(process.cwd(), 'figm-user-db.json');
@@ -261,6 +283,7 @@ function loadDB(): DBUserStore {
         notifications: parsed.notifications || [],
         settings: parsed.settings || [],
         auditLogs: parsed.auditLogs || [],
+        aiHistories: parsed.aiHistories || [],
       };
     } catch {
       // Fallback
@@ -276,6 +299,7 @@ function loadDB(): DBUserStore {
       notifications: [],
       settings: [],
       auditLogs: [],
+      aiHistories: [],
     };
   }
 
@@ -624,6 +648,24 @@ export const UserDB = {
     if (db.submissions.length === before) return false;
     saveDB(db);
     return true;
+  },
+
+  // --- AI HISTORY (fix/remediation interaction telemetry -- see DBAiHistory's own doc comment) ---
+  createAiHistoryRecord(record: Omit<DBAiHistory, 'id' | 'createdAt'>): DBAiHistory {
+    const db = loadDB();
+    const newRecord: DBAiHistory = {
+      ...record,
+      id: `aih_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      createdAt: new Date().toISOString(),
+    };
+    db.aiHistories.push(newRecord);
+    saveDB(db);
+    return newRecord;
+  },
+
+  getAiHistoryByUserId(userId: string): DBAiHistory[] {
+    const db = loadDB();
+    return db.aiHistories.filter((h) => h.userId === userId);
   },
 
   // --- AUDIT LOGS ---

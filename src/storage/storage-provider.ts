@@ -8,6 +8,7 @@ import {
   DBSettings,
   DBAuditLog,
   DBSubmission,
+  DBAiHistory,
 } from '../auth/user-db';
 
 /** Filter/sort/pagination options for the scan-history LIST view -- pushed all the way down to
@@ -91,4 +92,8 @@ export interface IStorageProvider {
   createSubmission(submission: Omit<DBSubmission, 'id' | 'createdAt'>): Promise<DBSubmission> | DBSubmission;
   getSubmissionsByUserId(userId: string): Promise<DBSubmission[]> | DBSubmission[];
   deleteSubmission(submissionId: string, userId: string): Promise<boolean> | boolean;
+
+  // Fix/remediation interaction telemetry -- see DBAiHistory's own doc comment (src/auth/user-db.ts)
+  createAiHistoryRecord(record: Omit<DBAiHistory, 'id' | 'createdAt'>): Promise<DBAiHistory> | DBAiHistory;
+  getAiHistoryByUserId(userId: string): Promise<DBAiHistory[]> | DBAiHistory[];
 }

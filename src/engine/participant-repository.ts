@@ -435,6 +435,23 @@ export class ParticipantRepository {
     return allUsers.filter((u) => ParticipantRepository.isParticipantUser(u)).length;
   }
 
+  /** GET /api/user-study/enroll's own resume-state check: whether THIS already-authenticated
+   *  user's own row has ever been enrolled, and its current server-verifiable research state.
+   *  Returns all-null (never an error) for a normal user who hasn't joined the study -- that is
+   *  the expected, common case for most product users, not a failure. */
+  public static async getOwnParticipantStatus(userId: string): Promise<{
+    participantCode: string | null;
+    researchStatus: ResearchStatus;
+    researchConsentVerifiedAt: string | null;
+  }> {
+    const user = (await ParticipantRepository.provider.findUserById(userId)) as DBUser | undefined;
+    return {
+      participantCode: user?.participantCode ?? null,
+      researchStatus: (user?.researchStatus as ResearchStatus) ?? null,
+      researchConsentVerifiedAt: user?.researchConsentVerifiedAt ?? null,
+    };
+  }
+
   /**
    * The single authoritative way to mint a new participant identity, replacing the log-scan
    * route's previous client-supplied-participantId model (see the auth/authz forensic audit
@@ -444,19 +461,27 @@ export class ParticipantRepository {
    * already used by the prior ensureParticipantUser, and by UserDB.createUser's own doc comment)
    * rather than a check-then-act race.
    */
+  /** Shared by assignNewParticipant() and enrollAuthenticatedUserAsParticipant(): the set of
+   *  P-code numbers already in use across every user row, however that row got its code (the
+   *  `participantCode` field for every row created after that field existed, or a pre-migration
+   *  row whose `id` itself is the P-shaped code). Pure/no I/O -- callers fetch allUsers once. */
+  private static usedParticipantNumbers(allUsers: DBUser[]): Set<number> {
+    return new Set(
+      allUsers
+        .map((u) => u.participantCode || (ParticipantRepository.isParticipantUser(u) ? u.id : null))
+        .filter((code): code is string => !!code && PARTICIPANT_ID_PATTERN.test(code))
+        .map((code) => parseInt(code.slice(1), 10))
+        .filter((n) => !Number.isNaN(n))
+    );
+  }
+
   public static async assignNewParticipant(): Promise<{ userId: string; participantCode: string }> {
     const provider = ParticipantRepository.provider;
     const maxAttempts = 8;
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const allUsers = ((await provider.getAllUsers()) as DBUser[]) || [];
-      const usedNumbers = new Set(
-        allUsers
-          .map((u) => u.participantCode || (ParticipantRepository.isParticipantUser(u) ? u.id : null))
-          .filter((code): code is string => !!code && PARTICIPANT_ID_PATTERN.test(code))
-          .map((code) => parseInt(code.slice(1), 10))
-          .filter((n) => !Number.isNaN(n))
-      );
+      const usedNumbers = ParticipantRepository.usedParticipantNumbers(allUsers);
       // Smallest unused number, not max+1: fills gaps (e.g. a revoked/never-real slot) instead of
       // growing unboundedly past any historical outlier (e.g. a very-high synthetic id left behind
       // by an unrelated concurrency test against a long-lived local test fixture).
@@ -483,6 +508,70 @@ export class ParticipantRepository {
       }
     }
     throw new Error('Failed to assign a new participant code after multiple concurrent attempts.');
+  }
+
+  /**
+   * The same-User-row enrollment path for the normal-login -> Live Scan study integration (see
+   * docs/audit/NORMAL_LIVE_SCAN_RESEARCH_INTEGRATION.md). Unlike assignNewParticipant() (which
+   * mints a brand-new, separate shadow User row for the anonymous /user-study flow, and is
+   * deliberately left uncapped/unchanged), this method links participant identity onto the
+   * CALLER'S OWN already-authenticated User row -- one human, one account, one optional P-code.
+   *
+   * Idempotent: a user who already has a participantCode gets that same code back
+   * (`alreadyEnrolled: true`) rather than an error or a second code -- this is what makes
+   * re-clicking "Join the Study" (or the enrollment page's own on-load resume check) safe.
+   *
+   * Strictly capped at HUMAN_STUDY_TARGET_PARTICIPANTS (P001..P020): unlike the anonymous flow's
+   * assignNewParticipant(), which intentionally has no upper bound (it also backs
+   * operational/QA-fixture codes above the real cohort size), a REAL study enrollment must refuse
+   * once the declared cohort is full rather than silently minting an out-of-range code that
+   * isRealStudyParticipantCode()/getResearchDataset() would then just as silently exclude.
+   *
+   * Concurrency-safe the same way as assignNewParticipant(): re-scans on every attempt and retries
+   * on a genuine unique-constraint race (Postgres's real `participantCode @unique` column, or a
+   * concurrent JSON-backend writer) rather than a check-then-act race.
+   */
+  public static async enrollAuthenticatedUserAsParticipant(
+    userId: string
+  ): Promise<{ userId: string; participantCode: string; alreadyEnrolled: boolean }> {
+    const provider = ParticipantRepository.provider;
+    const existing = (await provider.findUserById(userId)) as DBUser | undefined;
+    if (!existing) {
+      throw new Error('No user account exists for this session. Please log in again.');
+    }
+    if (existing.participantCode) {
+      return { userId, participantCode: existing.participantCode, alreadyEnrolled: true };
+    }
+
+    const maxAttempts = TARGET_PARTICIPANT_COUNT;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const allUsers = ((await provider.getAllUsers()) as DBUser[]) || [];
+      const usedNumbers = ParticipantRepository.usedParticipantNumbers(allUsers);
+      let nextNumber = 1;
+      while (usedNumbers.has(nextNumber) && nextNumber <= TARGET_PARTICIPANT_COUNT) nextNumber++;
+      if (nextNumber > TARGET_PARTICIPANT_COUNT) {
+        throw new Error(
+          `The study has reached its target of ${TARGET_PARTICIPANT_COUNT} participants (P001-P${String(TARGET_PARTICIPANT_COUNT).padStart(3, '0')}). No further participant codes are available.`
+        );
+      }
+      const participantCode = `P${String(nextNumber).padStart(3, '0')}`;
+
+      try {
+        const updated = await provider.updateUser(userId, {
+          participantCode,
+          researchStatus: 'ASSIGNED',
+          researchAssignedAt: new Date().toISOString(),
+        });
+        if (!updated) {
+          throw new Error('No user account exists for this session. Please log in again.');
+        }
+        return { userId, participantCode, alreadyEnrolled: false };
+      } catch (err: any) {
+        if (err?.code === 'P2002') continue;
+        throw err;
+      }
+    }
+    throw new Error('Failed to assign a participant code after multiple concurrent attempts.');
   }
 
   /**

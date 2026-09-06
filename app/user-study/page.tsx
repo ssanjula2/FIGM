@@ -1,589 +1,169 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../../src/research/research-config';
-import { trackUserStudyTaskStarted, trackUserStudyTaskCompleted } from '../../src/lib/analytics';
 
-const BENCHMARKS = {
-  react: {
-    name: 'React SPA Fixture (UserProfile.jsx)',
-    framework: 'React JSX',
-    file: 'UserProfile.jsx',
-    code: `import React, { useState } from 'react';
-
-export function UserProfile({ user, onUpdate }) {
-  const [data, setData] = useState(user);
-
-  const options = { theme: 'dark', lang: 'en' };
-
-  return (
-    <div className="user-profile">
-      <h2>{data.name}</h2>
-      <input type="text" onChange={(e) => setData({ ...data, name: e.target.value })} />
-      <button onClick={() => onUpdate(data)}>Save Profile</button>
-    </div>
-  );
-}`
-  },
-  nextjs: {
-    // Filename deliberately shaped as a real Next.js App Router page path (app/.../page.tsx) --
-    // FIGM's framework detector (src/parser/source-parser.ts detectFramework) classifies NEXT_JS
-    // by app/pages route-segment + page.(tsx|jsx|ts|js) filename shape OR a Next-specific content
-    // hint; this code has neither on a flat 'DashboardPage.tsx' name, so it was previously
-    // misclassified REACT_JSX and never exercised any FIGM-NEXT-* rule. The code itself already
-    // contains a genuine FIGM-NEXT-01 pattern (useState with no "use client" directive) -- only
-    // the filename needed to change for the frozen engine to see it as Next.js.
-    name: 'Next.js App Router Fixture (app/dashboard/page.tsx)',
-    framework: 'Next.js App Router',
-    file: 'app/dashboard/page.tsx',
-    code: `import React, { useState } from 'react';
-
-export default function DashboardPage() {
-  const [data, setData] = useState({ title: 'Analytics Dashboard' });
-
-  return (
-    <div className="dashboard-page">
-      <h2>{data.title}</h2>
-      <button onClick={() => setData({ title: 'Updated Analytics' })}>Refresh Data</button>
-    </div>
-  );
-}`
-  },
-  angular: {
-    name: 'Angular Component Fixture (SearchPanel.component.ts)',
-    framework: 'Angular TypeScript',
-    file: 'SearchPanel.component.ts',
-    code: `@Component({
-  selector: 'app-search-panel',
-  template: \`
-    <div class="search-box">
-      <input type="text" [(ngModel)]="query" placeholder="Search items..." />
-      <div class="btn-search" (click)="onSearch()">Search</div>
-    </div>
-  \`
-})
-export class SearchPanelComponent {
-  query = '';
-  onSearch() { console.log('Searching:', this.query); }
-}`
-  },
-  vue: {
-    name: 'Vue SFC Fixture (DataGrid.vue)',
-    framework: 'Vue SFC',
-    file: 'DataGrid.vue',
-    code: `<template>
-  <div class="data-grid">
-    <img src="/avatar.png" />
-    <table class="grid-table">
-      <tr v-for="item in items" :key="item.id">
-        <td>{{ item.name }}</td>
-      </tr>
-    </table>
-  </div>
-</template>`
-  }
-};
-
+/**
+ * Study enrollment / onboarding page (see docs/audit/NORMAL_LIVE_SCAN_RESEARCH_INTEGRATION.md).
+ *
+ * Previously this page ran its own anonymous STUDY_COOKIE session (GET /api/user-study/log-scan)
+ * and a self-contained, diagnostics-only benchmark scanner that duplicated a small slice of the
+ * real Live Scan experience. That anonymous flow and its backing routes
+ * (/api/user-study/log-scan, /api/user-study/consent) still exist unchanged for whatever
+ * QA/back-compat purposes still need them -- this page just no longer calls them.
+ *
+ * This page now does exactly one thing: let an already-logged-in normal product user join the
+ * real human study by linking a P001-P020 participant code onto their OWN account (never a
+ * second shadow account), record their session-level informed-consent confirmation, and then
+ * send them to the real, unmodified /live-scan page -- the same scanner every other product user
+ * uses, backed by the same RuleExecutionEngine and the same real fix/remediation pipelines.
+ * Nothing here re-implements or duplicates any of that.
+ */
 export default function UserStudyPage() {
-  const [selectedFramework, setSelectedFramework] = useState<'react' | 'nextjs' | 'angular' | 'vue'>('react');
-  const [isScanning, setIsScanning] = useState(false);
-  const [scanCompleted, setScanCompleted] = useState(false);
-  const [activeTask, setActiveTask] = useState<number | null>(1);
-  const [participantId, setParticipantId] = useState<string>('P001');
-  const [sessionError, setSessionError] = useState<string | null>(null);
-  const [consentGiven, setConsentGiven] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(true);
+  const [participantCode, setParticipantCode] = useState<string | null>(null);
+  const [researchStatus, setResearchStatus] = useState<string | null>(null);
   const [consentChecked, setConsentChecked] = useState(false);
-  const [consentSubmitting, setConsentSubmitting] = useState(false);
-  const [consentError, setConsentError] = useState<string | null>(null);
-  // The real, server-persisted outcome of the study-interaction log write -- distinct from
-  // dynamicScanResult (the live /api/scan display result). A failed write here must never be
-  // presented to the participant as a successful, recorded research observation.
-  const [logScanStatus, setLogScanStatus] = useState<'idle' | 'pending' | 'recorded' | 'failed'>('idle');
+  const [joining, setJoining] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf7XA39VT1Gx5inZstWj7sXkquAb04aK70BWz8uYWWtjMZDOw/viewform';
+  const authHeaders = (): HeadersInit => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('figm_token') : null;
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
 
-  // The server issues (or resumes) a signed, httpOnly session cookie on every GET here -- that
-  // cookie, not anything read from this response or from localStorage, is what actually authorizes
-  // a subsequent POST for this participantId (see app/api/user-study/log-scan/route.ts). The value
-  // stored below is a display-only convenience so the UI doesn't flash while the request is in
-  // flight; it is never trusted as a credential. A failure here is surfaced (not silently
-  // swallowed) since without a session neither consent nor scan-logging can proceed at all.
   useEffect(() => {
-    fetch('/api/user-study/log-scan', { credentials: 'same-origin' })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Session request failed (HTTP ${res.status})`);
-        return res.json();
-      })
-      .then((data) => {
-        if (data.participantId) {
-          setParticipantId(data.participantId);
-          setSessionError(null);
-          if (typeof window !== 'undefined') {
-            localStorage.setItem('figm_study_participant_id_display', data.participantId);
-          }
-        }
-      })
-      .catch((err) => {
-        setSessionError(err?.message || 'Unable to start a research session. Please reload the page.');
-      });
-  }, []);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('figm_token') : null;
+    setIsLoggedIn(!!token);
+    setAuthChecked(true);
 
-  const handleStartNewParticipantSession = () => {
-    // ?fresh=1 forces the server to assign (and cookie-bind) a brand new participant code even if
-    // this browser already holds a valid session -- used when the same machine is being handed to
-    // the next study participant. A fresh session always starts unconsented -- the previous
-    // participant's consent must never silently carry over to the next person using this browser.
-    fetch('/api/user-study/log-scan?fresh=1', { credentials: 'same-origin' })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Session request failed (HTTP ${res.status})`);
-        return res.json();
-      })
-      .then((data) => {
-        if (data.participantId) {
-          setParticipantId(data.participantId);
-          setSessionError(null);
-          if (typeof window !== 'undefined') {
-            localStorage.setItem('figm_study_participant_id_display', data.participantId);
-          }
-        }
-        setScanCompleted(false);
-        setLogScanStatus('idle');
-        setConsentGiven(false);
-        setConsentChecked(false);
-      })
-      .catch((err) => {
-        setSessionError(err?.message || 'Unable to start a new research session. Please reload the page.');
-      });
-  };
-
-  const handleConfirmConsent = async () => {
-    if (!consentChecked || consentSubmitting) return;
-    setConsentSubmitting(true);
-    setConsentError(null);
-    try {
-      const res = await fetch('/api/user-study/consent', { method: 'POST', credentials: 'same-origin' });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body?.error || `Consent could not be recorded (HTTP ${res.status})`);
-      }
-      setConsentGiven(true);
-    } catch (err: any) {
-      setConsentError(err?.message || 'Unable to record consent right now. Please try again.');
-    } finally {
-      setConsentSubmitting(false);
-    }
-  };
-
-  const [dynamicScanResult, setDynamicScanResult] = useState<any>(null);
-
-  const handleRunScan = async () => {
-    if (!consentGiven) {
-      setConsentError('Please confirm consent above before running a scan.');
+    if (!token) {
+      setLoadingStatus(false);
       return;
     }
-    setIsScanning(true);
-    setDynamicScanResult(null);
-    setLogScanStatus('pending');
-    const benchmarkForEvent = BENCHMARKS[selectedFramework];
-    trackUserStudyTaskStarted({ framework: benchmarkForEvent.framework });
+
+    fetch('/api/user-study/enroll', { headers: authHeaders(), credentials: 'same-origin' })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Unable to check study status (HTTP ${res.status})`);
+        return res.json();
+      })
+      .then((data) => {
+        setParticipantCode(data.participantCode ?? null);
+        setResearchStatus(data.researchStatus ?? null);
+      })
+      .catch((err) => setError(err?.message || 'Unable to check study status.'))
+      .finally(() => setLoadingStatus(false));
+  }, []);
+
+  const handleJoinStudy = async () => {
+    if (!consentChecked || joining) return;
+    setJoining(true);
+    setError(null);
     try {
-      const benchmark = BENCHMARKS[selectedFramework];
-      const res = await fetch('/api/scan', {
+      const res = await fetch('/api/user-study/enroll', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: benchmark.code, fileName: benchmark.file }),
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        credentials: 'same-origin',
+        body: JSON.stringify({ consentConfirmed: true }),
       });
-      if (res.ok) {
-        const data = await res.json();
-        setDynamicScanResult(data);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || `Unable to join the study (HTTP ${res.status})`);
       }
-
-      // Send the real source (`code`) rather than a client-computed score/count -- the research
-      // log-scan endpoint independently re-runs the real analysis engine on it server-side
-      // (src/engine/rule-execution-engine.ts) and persists THAT result. Previously this sent a
-      // hardcoded qualityScore/diagnosticsCount (88 / 4) for every participant regardless of
-      // framework or actual findings, which meant the benchmark-task portion of the study's
-      // "research data" was fabricated rather than measured.
-      //
-      // AWAITED and checked for failure (previously fire-and-forget with .catch(() => {}) --
-      // a failed write here silently lost the participant's task record while the UI still
-      // reported the task as complete). A failure now sets logScanStatus='failed' so the UI can
-      // offer a retry rather than silently recording nothing.
-      const logRes = await fetch('/api/user-study/log-scan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          participantId,
-          framework: benchmark.framework,
-          fileName: benchmark.file,
-          code: benchmark.code,
-        })
-      });
-      const succeeded = logRes.ok;
-      setLogScanStatus(succeeded ? 'recorded' : 'failed');
-      trackUserStudyTaskCompleted({ framework: benchmarkForEvent.framework, success: succeeded });
-    } catch (err) {
-      console.error('Dynamic scan error:', err);
-      setLogScanStatus('failed');
-      trackUserStudyTaskCompleted({ framework: benchmarkForEvent.framework, success: false });
+      setParticipantCode(data.participantCode);
+    } catch (err: any) {
+      setError(err?.message || 'Unable to join the study right now. Please try again.');
     } finally {
-      setIsScanning(false);
-      setScanCompleted(true);
+      setJoining(false);
     }
   };
 
-  const handleRetryLogScan = async () => {
-    setLogScanStatus('pending');
-    try {
-      const benchmark = BENCHMARKS[selectedFramework];
-      const logRes = await fetch('/api/user-study/log-scan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          participantId,
-          framework: benchmark.framework,
-          fileName: benchmark.file,
-          code: benchmark.code,
-        })
-      });
-      const succeeded = logRes.ok;
-      setLogScanStatus(succeeded ? 'recorded' : 'failed');
-      trackUserStudyTaskCompleted({ framework: benchmark.framework, success: succeeded });
-    } catch {
-      setLogScanStatus('failed');
-      trackUserStudyTaskCompleted({ framework: BENCHMARKS[selectedFramework].framework, success: false });
-    }
-  };
+  const consentVerified = researchStatus === 'CONSENT_VERIFIED';
 
   return (
-    <div className="user-study-container" style={{ padding: '32px 24px', maxWidth: '1200px', width: '100%', margin: '0 auto', color: '#f8fafc', fontFamily: 'system-ui, -apple-system, sans-serif', boxSizing: 'border-box' }}>
-      {/* Header Banner */}
-      <div className="user-study-hero" style={{ background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px', boxSizing: 'border-box' }}>
-        <span style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '9999px', background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', fontSize: '13px', fontWeight: 600, marginBottom: '12px', whiteSpace: 'normal', lineHeight: '1.4' }}>
-          ACADEMIC RESEARCH USER STUDY — TARGET N={HUMAN_STUDY_TARGET_PARTICIPANTS} PARTICIPANTS (HUMAN COLLECTION PENDING)
+    <div
+      className="user-study-container"
+      style={{ padding: '32px 24px', maxWidth: '900px', width: '100%', margin: '0 auto', color: '#f8fafc', fontFamily: 'system-ui, -apple-system, sans-serif', boxSizing: 'border-box' }}
+    >
+      <div
+        className="user-study-hero"
+        style={{ background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px', boxSizing: 'border-box' }}
+      >
+        <span style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '9999px', background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', fontSize: '13px', fontWeight: 600, marginBottom: '12px' }}>
+          ACADEMIC RESEARCH USER STUDY — TARGET N={HUMAN_STUDY_TARGET_PARTICIPANTS} PARTICIPANTS
         </span>
-        <h1 style={{ fontSize: '32px', fontWeight: 700, margin: '0 0 8px 0', color: '#ffffff', lineHeight: '1.2' }}>
-          FIGM Code Inspector — User Study
+        <h1 style={{ fontSize: '28px', fontWeight: 700, margin: '0 0 8px 0', color: '#ffffff' }}>
+          Join the FIGM Code Inspector Usability Study
         </h1>
-        <h2 style={{ fontSize: '18px', color: '#94a3b8', fontWeight: 400, margin: '0 0 16px 0', lineHeight: '1.4' }}>
-          Usability Evaluation of the Framework-Independent Guideline Model for Single Page Applications
-        </h2>
-        <div style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6' }}>
-          <p style={{ margin: '0 0 8px 0' }}><strong>Institution:</strong> NSBM Green University | <strong>Module:</strong> IS303.2 Research Methodology | <strong>Candidate:</strong> A P H D S Sanjula (ID: 28256)</p>
-          <p style={{ margin: 0 }}><strong>Estimated Duration:</strong> 15–25 minutes | <strong>Eligibility:</strong> 18 years or older | <strong>Privacy:</strong> 100% Anonymous (No PII collected)</p>
-        </div>
+        <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', margin: 0 }}>
+          Institution: NSBM Green University | Module: IS303.2 Research Methodology | Candidate: A P H D S Sanjula (ID: 28256)
+        </p>
       </div>
 
-      {sessionError && (
-        <div role="alert" style={{ background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(248, 113, 113, 0.4)', borderRadius: '10px', padding: '14px 18px', marginBottom: '24px', color: '#fca5a5', fontSize: '14px' }}>
-          ⚠️ {sessionError} If this persists, reload the page.
+      {!authChecked || loadingStatus ? (
+        <div role="status" style={{ color: '#94a3b8' }}>Loading…</div>
+      ) : !isLoggedIn ? (
+        <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(96, 165, 250, 0.35)' }}>
+          <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: '#60a5fa' }}>Log in to join the study</h3>
+          <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', margin: '0 0 16px 0' }}>
+            Study participation now uses your normal FIGM account and the real Live Scan experience —
+            register or log in first, then come back to this page to join.
+          </p>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Link href="/auth/login?redirect=%2Fuser-study" style={{ padding: '12px 24px', borderRadius: '8px', background: '#2563eb', color: '#fff', textDecoration: 'none', fontWeight: 600 }}>
+              Log In
+            </Link>
+            <Link href="/auth/register" style={{ padding: '12px 24px', borderRadius: '8px', background: 'rgba(255,255,255,0.08)', color: '#e2e8f0', textDecoration: 'none', fontWeight: 600 }}>
+              Register
+            </Link>
+          </div>
+        </div>
+      ) : participantCode ? (
+        <div className="user-study-card" style={{ background: consentVerified ? 'rgba(16, 185, 129, 0.08)' : 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: consentVerified ? '1px solid rgba(52, 211, 153, 0.35)' : '1px solid rgba(96, 165, 250, 0.35)' }}>
+          <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: consentVerified ? '#34d399' : '#60a5fa' }}>
+            {consentVerified ? '✅ Consent Verified — You are ' : '👤 You are '}
+            <span style={{ fontFamily: 'monospace', fontWeight: 800 }}>{participantCode}</span>
+          </h3>
+          <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', margin: '0 0 16px 0' }}>
+            {consentVerified
+              ? 'Your consent has been verified by the research team. Real scans you run on the Live Scan page from now on are eligible research data.'
+              : 'Your enrollment and session-level consent have been recorded. A member of the research team must verify your consent before your scans become eligible research data — this can take a little time.'}
+          </p>
+          <Link href="/live-scan" style={{ display: 'inline-block', padding: '14px 28px', borderRadius: '8px', background: '#10b981', color: '#fff', textDecoration: 'none', fontWeight: 700 }}>
+            ⚡ Go to Live Scan
+          </Link>
+        </div>
+      ) : (
+        <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(96, 165, 250, 0.35)' }}>
+          <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: '#60a5fa' }}>📋 Informed Consent</h3>
+          <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', margin: '0 0 12px 0' }}>
+            Participation is voluntary. Full details: <code>research/CONSENT_FORM.md</code>. Joining links a
+            study participant code to your account and records this consent confirmation; a researcher must
+            separately verify your consent before any of your scans count as research data.
+          </p>
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: '#e2e8f0', marginBottom: '16px', cursor: 'pointer' }}>
+            <input type="checkbox" checked={consentChecked} onChange={(e) => setConsentChecked(e.target.checked)} style={{ marginTop: '3px', width: '18px', height: '18px', flexShrink: 0 }} />
+            I have read the study description and voluntarily consent to participate.
+          </label>
+          <button
+            type="button"
+            onClick={handleJoinStudy}
+            disabled={!consentChecked || joining}
+            style={{ padding: '12px 24px', borderRadius: '8px', background: !consentChecked || joining ? '#4b5563' : '#2563eb', color: '#fff', border: 'none', fontSize: '15px', fontWeight: 600, cursor: !consentChecked || joining ? 'not-allowed' : 'pointer', minHeight: '44px' }}
+          >
+            {joining ? 'Joining…' : 'Join the Study'}
+          </button>
         </div>
       )}
 
-      {/* Consent Gate -- study-interaction logging is refused server-side until this exact
-          session has recorded consent (see app/api/user-study/consent/route.ts). This is not
-          purely a UI convenience: POST /api/user-study/log-scan independently checks the same
-          consent flag from the signed session token, so a participant cannot reach a recorded
-          research observation without going through this step first. */}
-      <div className="user-study-card" style={{ background: consentGiven ? 'rgba(16, 185, 129, 0.08)' : 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: consentGiven ? '1px solid rgba(52, 211, 153, 0.35)' : '1px solid rgba(96, 165, 250, 0.35)', marginBottom: '32px', boxSizing: 'border-box' }}>
-        <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: consentGiven ? '#34d399' : '#60a5fa' }}>
-          {consentGiven ? '✅ Consent Recorded for This Session' : '📋 Informed Consent Required'}
-        </h3>
-        {!consentGiven && (
-          <>
-            <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', margin: '0 0 12px 0' }}>
-              Participation is voluntary and anonymous. No name, email, or other personally
-              identifying information is collected. Full details: <code>research/CONSENT_FORM.md</code>.
-              You must confirm consent before any of your scan interactions below are recorded as
-              research data.
-            </p>
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: '#e2e8f0', marginBottom: '14px', cursor: 'pointer' }}>
-              <input
-                type="checkbox"
-                checked={consentChecked}
-                onChange={(e) => setConsentChecked(e.target.checked)}
-                style={{ marginTop: '3px', width: '18px', height: '18px', flexShrink: 0 }}
-              />
-              I have read the study description and voluntarily consent to participate.
-            </label>
-            <button
-              type="button"
-              className="touch-target"
-              onClick={handleConfirmConsent}
-              disabled={!consentChecked || consentSubmitting}
-              style={{
-                padding: '12px 24px',
-                borderRadius: '8px',
-                background: !consentChecked || consentSubmitting ? '#4b5563' : '#2563eb',
-                color: '#ffffff',
-                border: 'none',
-                fontSize: '15px',
-                fontWeight: 600,
-                cursor: !consentChecked || consentSubmitting ? 'not-allowed' : 'pointer',
-                minHeight: '44px',
-              }}
-            >
-              {consentSubmitting ? 'Recording consent…' : 'Confirm Consent'}
-            </button>
-            {consentError && (
-              <div role="alert" style={{ marginTop: '10px', color: '#fca5a5', fontSize: '13px' }}>⚠️ {consentError}</div>
-            )}
-          </>
-        )}
-      </div>
-
-      {/* Main Instructions & Action Buttons */}
-      <div className="user-study-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '32px' }}>
-        <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', boxSizing: 'border-box' }}>
-          <h3 style={{ fontSize: '20px', margin: '0 0 12px 0', color: '#38bdf8' }}>📖 How to Participate</h3>
-          <ol style={{ paddingLeft: '20px', margin: 0, lineHeight: '1.8', color: '#cbd5e1', fontSize: '15px' }}>
-            <li><strong>Step 1:</strong> Select a benchmark fixture (React, Next.js, Angular, or Vue) below.</li>
-            <li><strong>Step 2:</strong> Click <strong>&quot;Run FIGM Scan&quot;</strong> to inspect detected guidelines.</li>
-            <li><strong>Step 3:</strong> Review the reported diagnostics, rule IDs, and recommendations.</li>
-            <li><strong>Step 4:</strong> Click <strong>&quot;Open Google Form Questionnaire&quot;</strong> to record your feedback.</li>
-          </ol>
+      {error && (
+        <div role="alert" style={{ marginTop: '16px', background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(248, 113, 113, 0.4)', borderRadius: '10px', padding: '14px 18px', color: '#fca5a5', fontSize: '14px' }}>
+          ⚠️ {error}
         </div>
-
-        <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px', boxSizing: 'border-box' }}>
-          <button
-            className="user-study-cta-btn touch-target"
-            onClick={() => {
-              const el = document.getElementById('benchmark-section');
-              el?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            style={{ padding: '14px 24px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', border: 'none', fontSize: '16px', fontWeight: 600, cursor: 'pointer', minHeight: '44px', width: '100%', boxSizing: 'border-box' }}
-          >
-            ⚡ Start FIGM User Study Tasks
-          </button>
-          <a
-            className="user-study-cta-btn touch-target"
-            href={googleFormUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '14px 24px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', border: '1px solid rgba(52, 211, 153, 0.4)', textAlign: 'center', fontSize: '16px', fontWeight: 600, textDecoration: 'none', minHeight: '44px', width: '100%', boxSizing: 'border-box' }}
-          >
-            📝 Open Google Form Questionnaire ↗
-          </a>
-        </div>
-      </div>
-
-      {/* Task Guide Overview */}
-      <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '32px', boxSizing: 'border-box' }}>
-        <h3 style={{ fontSize: '20px', margin: '0 0 16px 0', color: '#f59e0b' }}>🎯 Structured Evaluation Tasks (Questions 9–15)</h3>
-        <div className="user-study-grid-tasks" role="group" aria-label="Structured evaluation tasks" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
-          {[
-            { num: 1, title: 'Identify Rule ID', desc: 'Find rule associated with an issue (e.g. FIGM-PERF-01)' },
-            { num: 2, title: 'Understand Diagnostic', desc: 'Review what the issue is & why it matters' },
-            { num: 3, title: 'Locate Source Code', desc: 'Identify reported line numbers in source file' },
-            { num: 4, title: 'Understand Fix', desc: 'Evaluate confidence in recommended improvement' },
-            { num: 5, title: 'Manual Comparison', desc: 'Evaluate if FIGM helped spot issues hard to spot manually' }
-          ].map((t) => (
-            <button
-              key={t.num}
-              type="button"
-              onClick={() => setActiveTask(t.num)}
-              aria-pressed={activeTask === t.num}
-              className="touch-target"
-              style={{
-                padding: '16px',
-                borderRadius: '8px',
-                background: activeTask === t.num ? 'rgba(59, 130, 246, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                border: activeTask === t.num ? '1px solid #3b82f6' : '1px solid rgba(255, 255, 255, 0.05)',
-                cursor: 'pointer',
-                minHeight: '44px',
-                boxSizing: 'border-box',
-                display: 'block',
-                textAlign: 'left',
-                font: 'inherit',
-                width: '100%',
-              }}
-            >
-              <div style={{ fontSize: '12px', fontWeight: 600, color: '#60a5fa', marginBottom: '4px' }}>TASK {t.num}</div>
-              <div style={{ fontSize: '15px', fontWeight: 600, color: '#ffffff', marginBottom: '4px' }}>{t.title}</div>
-              <div style={{ fontSize: '13px', color: '#94a3b8' }}>{t.desc}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Interactive Benchmark Selector & Code Inspector Section */}
-      <div id="benchmark-section" className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px', boxSizing: 'border-box' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-              <h3 style={{ fontSize: '20px', margin: 0, color: '#ffffff' }}>🧪 Interactive FIGM Benchmark Inspector</h3>
-              <span style={{ fontSize: '12px', padding: '4px 10px', borderRadius: '20px', background: 'rgba(6, 182, 212, 0.15)', color: '#22d3ee', border: '1px solid rgba(6, 182, 212, 0.35)', fontWeight: 800, fontFamily: 'monospace' }}>
-                👤 Participant ID: {participantId}
-              </span>
-              <button
-                onClick={handleStartNewParticipantSession}
-                style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '6px', background: 'rgba(255, 255, 255, 0.05)', color: '#94a3b8', border: '1px solid rgba(255, 255, 255, 0.1)', cursor: 'pointer', fontWeight: 600 }}
-                title="Start session as next participant (e.g. P002, P003...)"
-              >
-                🔄 New Participant
-              </button>
-            </div>
-            <span style={{ fontSize: '14px', color: '#94a3b8' }}>Select a Single Page Application framework fixture to inspect static diagnostics.</span>
-          </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', width: '100%', maxWidth: '400px' }}>
-            {(['react', 'nextjs', 'angular', 'vue'] as const).map((fw) => (
-              <button
-                key={fw}
-                className="touch-target"
-                onClick={() => { setSelectedFramework(fw); setScanCompleted(false); }}
-                style={{
-                  flex: 1,
-                  padding: '8px 12px',
-                  borderRadius: '6px',
-                  background: selectedFramework === fw ? '#2563eb' : 'rgba(255, 255, 255, 0.05)',
-                  color: selectedFramework === fw ? '#ffffff' : '#cbd5e1',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                  fontSize: '13px',
-                  minHeight: '44px'
-                }}
-              >
-                {fw === 'nextjs' ? 'Next.js' : fw === 'react' ? 'React' : fw === 'angular' ? 'Angular' : 'Vue'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Source Code Viewer */}
-        <div className="code-scroll-container" style={{ background: '#090d16', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '20px', fontFamily: 'monospace', fontSize: '13px', lineHeight: '1.5', overflowX: 'auto', boxSizing: 'border-box' }}>
-          <div style={{ color: '#7c8ba6', fontSize: '12px', marginBottom: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '4px' }}>
-            FIXTURE: {BENCHMARKS[selectedFramework].name}
-          </div>
-          <pre style={{ margin: 0, color: '#e2e8f0', whiteSpace: 'pre', minWidth: 'fit-content' }}>{BENCHMARKS[selectedFramework].code}</pre>
-        </div>
-
-        {/* Scan Action */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
-          <button
-            className="touch-target user-study-cta-btn"
-            onClick={handleRunScan}
-            disabled={isScanning || !consentGiven}
-            title={!consentGiven ? 'Confirm consent above first' : undefined}
-            style={{ padding: '12px 24px', borderRadius: '8px', background: isScanning ? '#7c8ba6' : !consentGiven ? '#4b5563' : '#10b981', color: '#ffffff', border: 'none', fontSize: '15px', fontWeight: 600, cursor: isScanning ? 'wait' : !consentGiven ? 'not-allowed' : 'pointer', minHeight: '44px' }}
-          >
-            {isScanning ? '⏳ Running FIGM Rules Analysis...' : !consentGiven ? '🔒 Confirm Consent Above First' : '⚡ Run FIGM Scan on Benchmark'}
-          </button>
-          <span role="status">
-            {scanCompleted && dynamicScanResult && (
-              <span style={{ color: '#34d399', fontSize: '14px', fontWeight: 600 }}>
-                ✅ Scan Complete: {dynamicScanResult.diagnostics?.length ?? 0} Guideline Diagnostics Detected
-              </span>
-            )}
-            {scanCompleted && !dynamicScanResult && (
-              <span style={{ color: '#f87171', fontSize: '14px', fontWeight: 600 }}>
-                ⚠️ Scan request failed — no result to report
-              </span>
-            )}
-          </span>
-        </div>
-
-        {/* Research-data persistence status -- separate from the display-only scan result above.
-            A 'failed' write here means the participant's task record was NOT saved server-side;
-            the UI must say so explicitly and offer a retry, never imply success. */}
-        {logScanStatus === 'failed' && (
-          <div role="alert" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(248, 113, 113, 0.4)', borderRadius: '10px', padding: '12px 16px', marginBottom: '24px' }}>
-            <span style={{ color: '#fca5a5', fontSize: '13px' }}>
-              ⚠️ Your scan ran, but this task result was <strong>not saved</strong> to the research record. Please retry before continuing.
-            </span>
-            <button
-              type="button"
-              className="touch-target"
-              onClick={handleRetryLogScan}
-              style={{ padding: '8px 16px', borderRadius: '6px', background: '#dc2626', color: '#ffffff', border: 'none', fontSize: '13px', fontWeight: 600, cursor: 'pointer', minHeight: '36px' }}
-            >
-              Retry Saving Result
-            </button>
-          </div>
-        )}
-        {logScanStatus === 'recorded' && (
-          <div style={{ color: '#34d399', fontSize: '13px', marginBottom: '24px' }}>✅ Task result saved to the research record.</div>
-        )}
-
-        {/* Calculated Benchmark Metrics & Diagnostics Summary -- rendered from the real,
-            live /api/scan response (dynamicScanResult) captured in handleRunScan above, never
-            from static placeholder content. If the request failed, nothing is shown rather than
-            substituting a fabricated result. */}
-        {scanCompleted && dynamicScanResult && (
-          <div style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', marginBottom: '16px' }}>
-              <div style={{ padding: '12px 16px', background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '10px', textAlign: 'center' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>QUALITY SCORE</div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#38bdf8', fontFamily: 'monospace' }}>{dynamicScanResult.qualityScore ?? '—'} / 100</div>
-              </div>
-              <div style={{ padding: '12px 16px', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.25)', borderRadius: '10px', textAlign: 'center' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>ISSUES DETECTED</div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#f59e0b', fontFamily: 'monospace' }}>{dynamicScanResult.diagnostics?.length ?? 0} Violations</div>
-              </div>
-              <div style={{ padding: '12px 16px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.25)', borderRadius: '10px', textAlign: 'center' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>SCAN LATENCY</div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#34d399', fontFamily: 'monospace' }}>{dynamicScanResult.profile?.executionTimeMs?.toFixed?.(2) ?? '—'} ms</div>
-              </div>
-              <div style={{ padding: '12px 16px', background: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.25)', borderRadius: '10px', textAlign: 'center' }}>
-                <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>FRAMEWORK ENGINE</div>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: '#c084fc', marginTop: '2px' }}>{dynamicScanResult.framework ?? selectedFramework.toUpperCase()}</div>
-              </div>
-            </div>
-
-            <div className="table-scroll-container" style={{ background: 'rgba(9, 13, 22, 0.6)', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)', overflowX: 'auto', width: '100%' }}>
-            <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ background: 'rgba(255, 255, 255, 0.05)', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#94a3b8' }}>
-                  <th style={{ padding: '12px 16px', minWidth: '100px' }}>Rule ID</th>
-                  <th style={{ padding: '12px 16px', minWidth: '160px' }}>Guideline Name</th>
-                  <th style={{ padding: '12px 16px', minWidth: '110px' }}>Domain</th>
-                  <th style={{ padding: '12px 16px', minWidth: '90px' }}>Severity</th>
-                  <th style={{ padding: '12px 16px', minWidth: '70px' }}>Line</th>
-                  <th style={{ padding: '12px 16px', minWidth: '200px' }}>Recommendation</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(dynamicScanResult.diagnostics ?? []).length === 0 ? (
-                  <tr>
-                    <td colSpan={6} style={{ padding: '16px', color: '#94a3b8', textAlign: 'center' }}>
-                      No guideline violations detected in this scan.
-                    </td>
-                  </tr>
-                ) : (
-                  dynamicScanResult.diagnostics.map((d: any, idx: number) => (
-                    <tr key={`${d.ruleId}-${idx}`} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                      <td style={{ padding: '12px 16px', fontWeight: 700, color: '#60a5fa', whiteSpace: 'nowrap' }}>{d.ruleId}</td>
-                      <td style={{ padding: '12px 16px', color: '#ffffff' }}>{d.ruleName}</td>
-                      <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{d.domain}</td>
-                      <td style={{ padding: '12px 16px', color: d.severity === 'CRITICAL' ? '#ef4444' : '#f59e0b', fontWeight: 600 }}>{d.severity}</td>
-                      <td style={{ padding: '12px 16px', color: '#94a3b8', whiteSpace: 'nowrap' }}>Line {d.location?.start?.line ?? d.line ?? '—'}</td>
-                      <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{d.remediation}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        )}
-      </div>
-
-      {/* Completion Banner & Questionnaire Link */}
-      <div className="user-study-hero" style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 95, 70, 0.25))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(52, 211, 153, 0.3)', textAlign: 'center', boxSizing: 'border-box' }}>
-        <h3 style={{ fontSize: '24px', margin: '0 0 8px 0', color: '#ffffff' }}>Finish Your Usability Evaluation</h3>
-        <p style={{ fontSize: '15px', color: '#a7f3d0', margin: '0 0 20px 0', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}>
-          Please answer the questionnaire based on your actual experience using FIGM Code Inspector. There are no right or wrong answers.
-        </p>
-        <a
-          className="user-study-cta-btn touch-target"
-          href={googleFormUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '16px 36px', borderRadius: '12px', background: '#10b981', color: '#ffffff', fontSize: '18px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)', minHeight: '44px', boxSizing: 'border-box' }}
-        >
-          📝 Open User Study Questionnaire ↗
-        </a>
-      </div>
+      )}
     </div>
   );
 }
