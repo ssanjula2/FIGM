@@ -69,7 +69,7 @@ were created:
 ```
 EXISTING_PARTICIPANT_TASKS = YES
 EXISTING_REACT_FIXTURE     = app/user-study/page.tsx -> BENCHMARKS.react   (file: UserProfile.jsx)
-EXISTING_NEXTJS_FIXTURE    = app/user-study/page.tsx -> BENCHMARKS.nextjs  (file: DashboardPage.tsx)
+EXISTING_NEXTJS_FIXTURE    = app/user-study/page.tsx -> BENCHMARKS.nextjs  (file: app/dashboard/page.tsx -- corrected, see §12)
 EXISTING_ANGULAR_FIXTURE   = app/user-study/page.tsx -> BENCHMARKS.angular (file: SearchPanel.component.ts)
 EXISTING_VUE_FIXTURE       = app/user-study/page.tsx -> BENCHMARKS.vue     (file: DataGrid.vue)
 ```
@@ -79,7 +79,7 @@ EXISTING_VUE_FIXTURE       = app/user-study/page.tsx -> BENCHMARKS.vue     (file
 | Fixture ID | Framework | Source location | Scan identity (`fileName`) |
 |---|---|---|---|
 | `FIGM-STUDY-REACT-01` | React | `app/user-study/page.tsx` → `BENCHMARKS.react.code` | `UserProfile.jsx` |
-| `FIGM-STUDY-NEXT-01` | Next.js | `app/user-study/page.tsx` → `BENCHMARKS.nextjs.code` | `DashboardPage.tsx` |
+| `FIGM-STUDY-NEXT-01` | Next.js | `app/user-study/page.tsx` → `BENCHMARKS.nextjs.code` | `app/dashboard/page.tsx` (corrected, see §12) |
 | `FIGM-STUDY-ANGULAR-01` | Angular | `app/user-study/page.tsx` → `BENCHMARKS.angular.code` | `SearchPanel.component.ts` |
 | `FIGM-STUDY-VUE-01` | Vue | `app/user-study/page.tsx` → `BENCHMARKS.vue.code` | `DataGrid.vue` |
 
@@ -214,49 +214,41 @@ the frozen collection build.
 | FIXTURE_ID | FRAMEWORK (as detected) | PARSE_STATUS | SCAN_STATUS | FINDING_COUNT | RULE_IDS_TRIGGERED |
 |---|---|---|---|---|---|
 | `FIGM-STUDY-REACT-01` | `REACT_JSX` | OK | OK | 4 | FIGM-PERF-01, FIGM-A11Y-05, FIGM-PERF-05, FIGM-PERF-05 |
-| `FIGM-STUDY-NEXT-01` | `REACT_JSX` (see §12) | OK | OK | 1 | FIGM-PERF-05 |
+| `FIGM-STUDY-NEXT-01` | `NEXT_JS` (corrected, see §12) | OK | OK | 3 | FIGM-NEXT-03, FIGM-NEXT-01, FIGM-PERF-05 |
 | `FIGM-STUDY-ANGULAR-01` | `ANGULAR_TEMPLATE` | OK | OK | 3 | FIGM-A11Y-05, FIGM-A11Y-01, FIGM-ANG-02 |
 | `FIGM-STUDY-VUE-01` | `VUE_SFC` | OK | OK | 1 | FIGM-PERF-02 |
 
 No fixture was modified to change its finding count. All four parse and scan successfully against
-the exact frozen collection-build commit (`b33456db`).
+the frozen collection-build commit that corrected the Next.js classification (see §12/§14).
 
-## 12. Fairness / Comparability Check — one confirmed gap, NOT auto-fixed
+## 12. Fairness / Comparability Check — Next.js classification gap, CORRECTED
 
-Reviewing all four fixtures together surfaced a real, evidence-backed classification gap in the
-Next.js task, distinct from ordinary violation-count variance:
+An earlier revision of this document reviewed all four fixtures together and surfaced a real,
+evidence-backed classification gap in the Next.js task, distinct from ordinary violation-count
+variance. This has since been fixed and re-verified; the record is kept below for traceability.
 
-- **Violation-count spread** (React 4, Angular 3, Next.js 1, Vue 1) is a real but modest
-  imbalance. Per protocol, exact equal counts are not forced where that would make an example
-  unnatural — this alone is not treated as a blocking defect.
-- **Next.js framework misclassification (confirmed, more serious)**: `BENCHMARKS.nextjs`'s fixture
-  is submitted with `fileName: 'DashboardPage.tsx'`, a flat filename with no `app/`/`pages/` route
-  segment and no Next.js-specific import or content hint (`next/link`, `next/image`,
-  `getServerSideProps`, etc. — see `src/parser/source-parser.ts`'s `detectFramework`). As a
-  result, FIGM classifies it as generic `REACT_JSX`, not `NEXT_JS`, and it never exercises any
-  `FIGM-NEXT-*` rule. Diagnostic-only re-test (same code, `fileName: 'app/dashboard/page.tsx'`,
-  never submitted to production, no record persisted): correctly classified `NEXT_JS`, 3 findings
-  (`FIGM-NEXT-03`, `FIGM-NEXT-01`, `FIGM-PERF-05`) — which would also close most of the
-  violation-count gap against React/Angular.
-- **This was not corrected in this pass.** Fixing it means editing the `file:` value inside
-  `app/user-study/page.tsx` — a file that is part of the already-tagged, already-deployed
-  collection build (`figm-research-collection-v1` @ `b33456db`). That is a real code change to a
-  frozen, deployed, tagged artifact, which requires the same commit → CI → deploy → smoke-test →
-  (possible) tag-move cycle already used for the two prior post-freeze fixes, and is outside what
-  this documentation-freeze pass unilaterally decides. It is reported here for an explicit
-  decision rather than silently patched or silently ignored.
-
-```
-Recommended minimal fix (not yet applied): change BENCHMARKS.nextjs.file in
-app/user-study/page.tsx from 'DashboardPage.tsx' to 'app/dashboard/page.tsx'. No change to
-BENCHMARKS.nextjs.code is needed -- the existing code already contains a genuine FIGM-NEXT-01
-pattern (useState without a "use client" directive) that only fails to trigger today because of
-the filename-based framework misclassification above.
-```
-
-Until this is explicitly approved and applied, real participant Next.js task data will reflect
-generic React findings rather than Next.js-specific findings — a known, documented limitation of
-this collection round, not a fabrication or a silent gap.
+- **Violation-count spread**: with the fix below, React 4 / Angular 3 / Next.js 3 / Vue 1 — a
+  modest, natural spread. Per protocol, exact equal counts are not forced where that would make an
+  example unnatural.
+- **Next.js framework misclassification (confirmed, then fixed)**: `BENCHMARKS.nextjs`'s fixture
+  was originally submitted with `fileName: 'DashboardPage.tsx'`, a flat filename with no
+  `app/`/`pages/` route segment and no Next.js-specific import or content hint (`next/link`,
+  `next/image`, `getServerSideProps`, etc. — see `src/parser/source-parser.ts`'s
+  `detectFramework`). As a result, FIGM classified it as generic `REACT_JSX`, not `NEXT_JS`, and it
+  never exercised any `FIGM-NEXT-*` rule.
+- **Fix applied**: `BENCHMARKS.nextjs.file` in `app/user-study/page.tsx` changed from
+  `'DashboardPage.tsx'` to `'app/dashboard/page.tsx'`. `BENCHMARKS.nextjs.code` was **not**
+  changed — the existing code already contained a genuine `FIGM-NEXT-01` pattern (`useState`
+  without a `"use client"` directive) that only failed to trigger because of the filename-based
+  misclassification. Re-run through the real, unmodified `RuleExecutionEngine`: correctly
+  classified `NEXT_JS`, 3 findings (`FIGM-NEXT-03`, `FIGM-NEXT-01`, `FIGM-PERF-05`) — see §11.
+- PRIMARY/SECONDARY tracking is unaffected: `ParticipantRepository.getResearchDataset()` groups
+  attempts by the literal `(userId, fileName)` string pair with no path-shape assumptions
+  (`seenFixtures: Set<string>`, confirmed by reading `src/engine/participant-repository.ts`), so
+  the new fileName value works identically to the old one as a grouping key.
+- This fix was applied, tested (`tsc`, targeted participant/user-study/accessibility tests, full
+  1538-test suite, build), committed, deployed, and production-verified before any real
+  participant data collection began — see §14 for the exact commit.
 
 ## 13. Do Not Change (re-affirmed, unchanged by this pass)
 

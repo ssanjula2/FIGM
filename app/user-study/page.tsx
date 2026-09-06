@@ -26,9 +26,16 @@ export function UserProfile({ user, onUpdate }) {
 }`
   },
   nextjs: {
-    name: 'Next.js App Router Fixture (DashboardPage.tsx)',
+    // Filename deliberately shaped as a real Next.js App Router page path (app/.../page.tsx) --
+    // FIGM's framework detector (src/parser/source-parser.ts detectFramework) classifies NEXT_JS
+    // by app/pages route-segment + page.(tsx|jsx|ts|js) filename shape OR a Next-specific content
+    // hint; this code has neither on a flat 'DashboardPage.tsx' name, so it was previously
+    // misclassified REACT_JSX and never exercised any FIGM-NEXT-* rule. The code itself already
+    // contains a genuine FIGM-NEXT-01 pattern (useState with no "use client" directive) -- only
+    // the filename needed to change for the frozen engine to see it as Next.js.
+    name: 'Next.js App Router Fixture (app/dashboard/page.tsx)',
     framework: 'Next.js App Router',
-    file: 'DashboardPage.tsx',
+    file: 'app/dashboard/page.tsx',
     code: `import React, { useState } from 'react';
 
 export default function DashboardPage() {
