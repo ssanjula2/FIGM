@@ -32,7 +32,12 @@ function isBareRoute(pathname: string | null): boolean {
     // measures each fixture's own render/state-management strategy in isolation; the shared
     // AppShell chrome would add identical DOM/JS weight to every condition and mask the
     // intentional differences the experiment exists to measure.
-    pathname.startsWith('/rq1-experiment')
+    pathname.startsWith('/rq1-experiment') ||
+    // The anonymous real-participant usability study entry point (see middleware.ts's
+    // isPublicPath, which this list must stay in sync with) -- an unauthenticated participant must
+    // never see the authenticated app's Sidebar/HeaderBar (no real "signed out" state) around the
+    // study page.
+    pathname === '/user-study'
   );
 }
 

@@ -52,6 +52,15 @@ export function middleware(request: NextRequest) {
     // application surfaces; gating them behind login would make the measured page include an
     // auth redirect in every run, confounding the very metric being measured.
     path.startsWith('/rq1-experiment') ||
+    // Real-participant usability study entry point: this page's own anonymous session flow
+    // (GET/POST /api/user-study/log-scan, POST /api/user-study/consent -- all under /api/, already
+    // exempt from this gate above) issues a signed, cookie-bound study session and assigns a
+    // P001-P020 participant code from INSIDE the page itself. Gating the page behind a regular
+    // figm_token login (as the authenticated-by-default default would) makes it unreachable by the
+    // very anonymous participants the study is designed for -- there is no other route to the
+    // study for someone without an existing product account. Admin/API protections are unaffected:
+    // /admin and /api/admin/* are not touched by this change.
+    path === '/user-study' ||
     path.startsWith('/_next') ||
     path === '/favicon.ico' ||
     path === '/icon.svg';
