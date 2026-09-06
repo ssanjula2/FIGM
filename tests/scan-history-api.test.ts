@@ -134,7 +134,7 @@ test('Scan History API — full persistence flow (register -> login -> scan -> l
     // Single-scan detail endpoint DOES include full diagnostics.
     const detailRes = await scanGET(
       authedRequest(`http://localhost:3000/api/scans/${scanBody.record.id}`, {}, reloginBody.accessToken),
-      { params: { id: scanBody.record.id } }
+      { params: Promise.resolve({ id: scanBody.record.id }) }
     );
     assert.equal(detailRes.status, 200);
     const detailBody = await detailRes.json();
@@ -151,12 +151,12 @@ test('Scan History API — cross-user security', async (t) => {
   });
 
   await t.test('anonymous GET /api/scans/[id] -> 401', async () => {
-    const res = await scanGET(new Request('http://localhost:3000/api/scans/anything'), { params: { id: 'anything' } });
+    const res = await scanGET(new Request('http://localhost:3000/api/scans/anything'), { params: Promise.resolve({ id: 'anything' }) });
     assert.equal(res.status, 401);
   });
 
   await t.test('anonymous DELETE /api/scans/[id] -> 401', async () => {
-    const res = await scanDELETE(new Request('http://localhost:3000/api/scans/anything', { method: 'DELETE' }), { params: { id: 'anything' } });
+    const res = await scanDELETE(new Request('http://localhost:3000/api/scans/anything', { method: 'DELETE' }), { params: Promise.resolve({ id: 'anything' }) });
     assert.equal(res.status, 401);
   });
 
@@ -197,21 +197,21 @@ test('Scan History API — cross-user security', async (t) => {
     // Cannot open: B opening A's scan by ID must be denied, not served.
     const openRes = await scanGET(
       authedRequest(`http://localhost:3000/api/scans/${scanA.id}`, {}, tokenFor(userB.id)),
-      { params: { id: scanA.id } }
+      { params: Promise.resolve({ id: scanA.id }) }
     );
     assert.equal(openRes.status, 403);
 
     // Cannot modify (favorite-toggle uses the same ownership gate as delete).
     const patchRes = await scanPATCH(
       authedRequest(`http://localhost:3000/api/scans/${scanA.id}`, { method: 'PATCH' }, tokenFor(userB.id)),
-      { params: { id: scanA.id } }
+      { params: Promise.resolve({ id: scanA.id }) }
     );
     assert.equal(patchRes.status, 403);
 
     // Cannot delete: B deleting A's scan must be denied, and the record must still exist after.
     const deleteRes = await scanDELETE(
       authedRequest(`http://localhost:3000/api/scans/${scanA.id}`, { method: 'DELETE' }, tokenFor(userB.id)),
-      { params: { id: scanA.id } }
+      { params: Promise.resolve({ id: scanA.id }) }
     );
     assert.equal(deleteRes.status, 403);
     const stillThere = await ScanRepository.getScanRecordById(scanA.id);
@@ -220,7 +220,7 @@ test('Scan History API — cross-user security', async (t) => {
     // A can still access their own scan.
     const ownerOpenRes = await scanGET(
       authedRequest(`http://localhost:3000/api/scans/${scanA.id}`, {}, tokenFor(userA.id)),
-      { params: { id: scanA.id } }
+      { params: Promise.resolve({ id: scanA.id }) }
     );
     assert.equal(ownerOpenRes.status, 200);
   });
@@ -229,7 +229,7 @@ test('Scan History API — cross-user security', async (t) => {
     const user = createTestUser('missing_scan_user');
     const res = await scanGET(
       authedRequest('http://localhost:3000/api/scans/does-not-exist', {}, tokenFor(user.id)),
-      { params: { id: 'does-not-exist' } }
+      { params: Promise.resolve({ id: 'does-not-exist' }) }
     );
     assert.equal(res.status, 404);
   });
@@ -251,7 +251,7 @@ test('Scan History API — cross-user security', async (t) => {
 
     const deleteRes = await scanDELETE(
       authedRequest(`http://localhost:3000/api/scans/${scan.id}`, { method: 'DELETE' }, tokenFor(owner.id)),
-      { params: { id: scan.id } }
+      { params: Promise.resolve({ id: scan.id }) }
     );
     assert.equal(deleteRes.status, 200);
 
@@ -261,7 +261,7 @@ test('Scan History API — cross-user security', async (t) => {
     // Deleting it again is a 404, not a crash.
     const secondDeleteRes = await scanDELETE(
       authedRequest(`http://localhost:3000/api/scans/${scan.id}`, { method: 'DELETE' }, tokenFor(owner.id)),
-      { params: { id: scan.id } }
+      { params: Promise.resolve({ id: scan.id }) }
     );
     assert.equal(secondDeleteRes.status, 404);
   });
@@ -283,7 +283,7 @@ test('Scan History API — cross-user security', async (t) => {
 
     const adminRes = await scanGET(
       authedRequest(`http://localhost:3000/api/scans/${scan.id}`, {}, tokenFor('usr_admin_probe', 'ADMIN')),
-      { params: { id: scan.id } }
+      { params: Promise.resolve({ id: scan.id }) }
     );
     assert.equal(adminRes.status, 200);
   });

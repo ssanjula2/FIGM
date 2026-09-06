@@ -29,7 +29,7 @@ test('Security & Vulnerability Regression Test Suite', async (t) => {
 
   await t.test('GET /api/projects/[id] blocks unauthenticated cross-user IDOR access', async () => {
     const req = new Request('http://localhost:3000/api/projects/prj_demo_react');
-    const res = await projectGET(req, { params: { id: 'prj_demo_react' } });
+    const res = await projectGET(req, { params: Promise.resolve({ id: 'prj_demo_react' }) });
 
     // This must be 401 specifically. Previously the route only checked ownership when
     // `auth.user` was truthy (`if (auth.user && ...)`), so an unauthenticated request skipped

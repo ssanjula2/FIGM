@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import { DBScanRecord } from '../../../src/auth/user-db';
 import { TOTAL_RULE_COUNT } from '../../../src/matrix/rule-registry';
 import { calculateQualityScore } from '../../../src/engine/quality-score';
 import { formatScanDuration, formatMemoryDelta } from '../../../src/lib/engine-diagnostics-format';
 
-export default function ReportViewerPage({ params }: { params: { id: string } }) {
+export default function ReportViewerPage(props: { params: Promise<{ id: string }> }) {
+  const params = use(props.params);
   const [record, setRecord] = useState<DBScanRecord | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

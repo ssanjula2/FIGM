@@ -3,7 +3,8 @@ import { authenticateUser } from '../../../../src/auth/auth-middleware';
 import { ProjectRepository } from '../../../../src/engine/project-repository';
 import { AuditLogger } from '../../../../src/auth/audit-logger';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -21,7 +22,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
   return NextResponse.json({ project });
 }
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -56,7 +58,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

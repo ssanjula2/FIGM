@@ -149,23 +149,24 @@ export interface DBUserStore {
 const DB_FILE = path.resolve(process.cwd(), 'figm-user-db.json');
 
 /**
- * Guards the three fire-and-forget Supabase Cloud sync side effects below (createUser,
- * updateUser, createScanRecord). This store's whole purpose is to be a fully local, JSON-file-
- * backed fallback -- but historically it ALSO opportunistically dual-writes to a real Supabase
- * project whenever NEXT_PUBLIC_SUPABASE_URL/SUPABASE_URL + a key happen to be present in the
- * process environment, entirely independent of RepositoryFactory's provider selection. Found
- * during the pre-study data-integrity audit (docs/audit/PRE_STUDY_DATA_INTEGRITY_FINAL.md): if
- * those env vars were ever present during an automated test run (e.g. a misconfigured CI step, or
- * a developer's shell exporting them broadly), every user/scan a test creates would also be
- * written into the real, live Supabase `users`/`scan_reports` tables -- a completely separate
- * contamination path from the Prisma/DATABASE_URL one src/db/db-safety-guard.ts guards.
- * NODE_ENV==='test' (set by tests/test-env-setup.mjs before any test file loads) unconditionally
- * disables this sync, regardless of which specific project the URL points at -- there is no
- * legitimate reason for the JSON-file test fallback to ever write to any hosted Supabase project.
+ * REMOVED (research-collection-build hardening pass, see
+ * docs/audit/RESEARCH_COLLECTION_BUILD_FINALIZATION.md, SEC-03/D-03): `createUser`, `updateUser`,
+ * and `createScanRecord` below used to ALSO opportunistically dual-write to a real Supabase
+ * project via a direct `@supabase/supabase-js` client, entirely independent of
+ * `RepositoryFactory`'s provider selection, whenever `NEXT_PUBLIC_SUPABASE_URL`/`SUPABASE_URL` + a
+ * key happened to be present in the process environment -- guarded (not removed) in the prior P0
+ * data-integrity pass via `isSupabaseSyncAllowed()`/`NODE_ENV==='test'`
+ * (docs/audit/PRE_STUDY_DATA_INTEGRITY_FINAL.md). Removed entirely now: the hand-mapped
+ * column payloads were already missing several real schema fields
+ * (`participant_code`/`research_status`/`token_version`/`account_type`, ...) that
+ * `SupabaseStorageProvider`'s Prisma-based writes always include, so this side channel was not
+ * merely redundant in the correctly-configured case -- it would have silently written an
+ * incomplete row had it ever actually fired via `SupabaseStorageProvider`'s internal
+ * Prisma-unavailable fallback path. `RepositoryFactory -> SupabaseStorageProvider -> Prisma ->
+ * Supabase Postgres` is now the sole production write path for every field this store persists;
+ * this JSON-file store's own writes (`saveDB` below) are unaffected and remain the correct
+ * behavior for local dev without Supabase configured, and for automated tests.
  */
-function isSupabaseSyncAllowed(): boolean {
-  return process.env.NODE_ENV !== 'test';
-}
 
 export interface DefaultAdminAccount {
   id: string;
@@ -368,26 +369,6 @@ export const UserDB = {
     db.users.push(newUser);
     saveDB(db);
 
-    // Sync new user to Supabase Cloud Database
-    try {
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key && isSupabaseSyncAllowed()) {
-        const { createClient } = require('@supabase/supabase-js');
-        const supabase = createClient(url, key, { auth: { persistSession: false } });
-        supabase.from('users').upsert({
-          id: newUser.id,
-          email: newUser.email,
-          password_hash: newUser.passwordHash,
-          full_name: newUser.fullName,
-          role: newUser.role,
-          api_key: newUser.apiKey,
-          created_at: newUser.createdAt,
-          updated_at: newUser.createdAt,
-        }).then();
-      }
-    } catch {}
-
     return newUser;
   },
 
@@ -402,23 +383,6 @@ export const UserDB = {
     };
     db.users[index] = updatedUser;
     saveDB(db);
-
-    // Sync user updates to Supabase Cloud Database
-    try {
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key && isSupabaseSyncAllowed()) {
-        const { createClient } = require('@supabase/supabase-js');
-        const supabase = createClient(url, key, { auth: { persistSession: false } });
-        supabase.from('users').update({
-          full_name: updatedUser.fullName,
-          role: updatedUser.role,
-          refresh_token: updatedUser.refreshToken,
-          last_login_at: updatedUser.lastLoginAt,
-          updated_at: new Date().toISOString(),
-        }).eq('id', userId).then();
-      }
-    } catch {}
 
     return updatedUser;
   },
@@ -515,35 +479,6 @@ export const UserDB = {
     }
 
     saveDB(db);
-
-    // Asynchronously sync new scan report to Supabase Cloud Database
-    try {
-      const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-      const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      if (url && key && isSupabaseSyncAllowed()) {
-        const { createClient } = require('@supabase/supabase-js');
-        const supabase = createClient(url, key, { auth: { persistSession: false } });
-        supabase.from('scan_reports').insert({
-          id: newScan.id,
-          user_id: newScan.userId,
-          project_id: newScan.projectId,
-          file_name: newScan.fileName,
-          framework: newScan.framework,
-          scan_time_ms: newScan.scanTimeMs,
-          memory_usage_mb: newScan.memoryUsageMb,
-          quality_score: newScan.qualityScore,
-          rule_count: newScan.ruleCount,
-          critical_count: newScan.criticalCount,
-          high_count: newScan.highCount,
-          medium_count: newScan.mediumCount,
-          low_count: newScan.lowCount,
-          ai_fix_count: newScan.aiFixCount,
-          diagnostics: newScan.diagnostics,
-          is_favorite: newScan.isFavorite,
-          created_at: newScan.createdAt,
-        }).then();
-      }
-    } catch {}
 
     return newScan;
   },

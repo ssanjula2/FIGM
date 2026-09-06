@@ -2,21 +2,27 @@
 const nextConfig = {
   distDir: process.env.FIGM_DIST_DIR || '.next',
   reactStrictMode: true,
-  swcMinify: false,
+  // Research-collection-build Next.js 14->16 upgrade (SEC-01): `swcMinify` was removed as a
+  // config option -- SWC minification is now always-on/default and can no longer be disabled via
+  // this flag, so the key is simply dropped (Next 16 otherwise fails config validation on it).
+  // typescript/tsx: kept external (real Node require() at runtime, never bundled) -- unrelated to
+  // the @vue/compiler-sfc history below, not touched by this pass. Moved from
+  // experimental.serverComponentsExternalPackages (removed key in Next 16) to the now-stable
+  // top-level serverExternalPackages.
+  serverExternalPackages: ['typescript', 'tsx'],
+  // P0 security fix (audit finding CRIT-DYNPROF): src/engine/sandbox/profiler-sandbox-runner.cjs
+  // is spawned at runtime via a plain string path (child_process.spawnSync), never `import`ed, so
+  // Next's static file-tracing cannot discover it on its own and would otherwise omit it from a
+  // production/serverless build output -- silently breaking the sandbox (and, worse, inviting a
+  // "just fall back to in-process eval" fix later). This forces it to always ship. Moved from
+  // experimental.outputFileTracingIncludes (removed key in Next 16) to the now-stable top-level
+  // outputFileTracingIncludes.
+  outputFileTracingIncludes: {
+    '/api/**/*': ['./src/engine/sandbox/profiler-sandbox-runner.cjs'],
+  },
   experimental: {
     workerThreads: false,
     cpus: 1,
-    // typescript/tsx: kept external (real Node require() at runtime, never webpack-bundled) --
-    // unrelated to the @vue/compiler-sfc history below, not touched by this pass.
-    serverComponentsExternalPackages: ['typescript', 'tsx'],
-    // P0 security fix (audit finding CRIT-DYNPROF): src/engine/sandbox/profiler-sandbox-runner.cjs
-    // is spawned at runtime via a plain string path (child_process.spawnSync), never `import`ed, so
-    // Next's static file-tracing cannot discover it on its own and would otherwise omit it from a
-    // production/serverless build output -- silently breaking the sandbox (and, worse, inviting a
-    // "just fall back to in-process eval" fix later). This forces it to always ship.
-    outputFileTracingIncludes: {
-      '/api/**/*': ['./src/engine/sandbox/profiler-sandbox-runner.cjs'],
-    },
   },
   // Baseline response headers -- applied to every route. CORS is handled separately per-request
   // in middleware.ts (src/lib/cors.ts), since it needs to react to the request's Origin header,

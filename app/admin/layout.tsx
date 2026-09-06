@@ -19,7 +19,7 @@ import { verifyJWT } from '../../src/auth/auth-service';
  * audit-log access extends to. DEVELOPER and anonymous visitors never reach children below.
  */
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const token = cookies().get('figm_token')?.value;
+  const token = (await cookies()).get('figm_token')?.value;
   const user = token ? verifyJWT(token) : null;
 
   if (!user) {

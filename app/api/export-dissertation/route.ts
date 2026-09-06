@@ -26,6 +26,10 @@ export async function GET(request: Request) {
       exportedFiles,
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    // SEC-02 (research-collection-build hardening): never return a raw exception message to the
+    // client -- it can contain internal file paths (DissertationExporter writes to disk) or other
+    // server-internal detail. Full detail stays server-side only.
+    console.error('[api/export-dissertation] export failed:', err instanceof Error ? err.stack || err.message : err);
+    return NextResponse.json({ error: 'Dissertation export failed. Please try again.' }, { status: 500 });
   }
 }

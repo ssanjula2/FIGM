@@ -38,7 +38,7 @@ test('QA Matrix — network / API failure resilience', async (t) => {
 
     let res: Response;
     await assert.doesNotReject(async () => {
-      res = await projectPATCH(req, { params: { id: owner.id } });
+      res = await projectPATCH(req, { params: Promise.resolve({ id: owner.id }) });
     }, 'a malformed JSON body must not throw an unhandled exception out of the route handler');
 
     assert.ok(res!.status >= 400 && res!.status < 600, `malformed body should produce an HTTP error status, got ${res!.status}`);
@@ -68,7 +68,7 @@ test('QA Matrix — network / API failure resilience', async (t) => {
       body: JSON.stringify({ name: 'x' }),
       headers: { 'Content-Type': 'application/json' },
     }, jwt);
-    const res = await projectPATCH(req, { params: { id: 'does-not-exist-xyz' } });
+    const res = await projectPATCH(req, { params: Promise.resolve({ id: 'does-not-exist-xyz' }) });
     assert.equal(res.status, 404, 'a lookup miss must be reported as 404, not surfaced as a raw storage-layer error');
   });
 });

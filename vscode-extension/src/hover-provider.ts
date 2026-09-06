@@ -21,7 +21,11 @@ export class FIGMHoverProvider implements vscode.HoverProvider {
         markdown.appendMarkdown(`**Description**: ${rule.description}\n\n`);
         markdown.appendMarkdown(`---\n\n`);
         markdown.appendMarkdown(`**Remediation Guidance**:\n${rule.remediation}\n\n`);
-        markdown.appendMarkdown(`---\n*Powered by FIGM Code Inspector AST Engine*`);
+        // Honest scope label (research-collection-build hardening, EXT-01): this extension is a
+        // lightweight, client-side line-heuristic preview covering 5 of FIGM's 50 canonical
+        // rules -- it does not run the real AST-based RuleExecutionEngine. Never claim otherwise
+        // in user-facing text; see README.md's "Scope" section for the exact supported rule IDs.
+        markdown.appendMarkdown(`---\n*FIGM Code Inspector — Lightweight Preview (see README for supported scope)*`);
 
         return new vscode.Hover(markdown, range);
       }

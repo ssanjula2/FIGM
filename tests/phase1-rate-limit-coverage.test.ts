@@ -181,7 +181,7 @@ test('POST /api/projects/[id]/duplicate is rate-limited (was previously unthrott
       method: 'POST',
       headers: { Authorization: `Bearer ${jwt}`, 'x-forwarded-for': testIp },
     });
-    const res = await duplicatePOST(req, { params: { id: 'does-not-exist' } });
+    const res = await duplicatePOST(req, { params: Promise.resolve({ id: 'does-not-exist' }) });
     if (res.status === 429) {
       sawRateLimit = true;
       assert.ok(res.headers.get('Retry-After'), '429 response must include a Retry-After header');

@@ -11,7 +11,7 @@ import { verifyJWT } from '../../../src/auth/auth-service';
  * repeated here rather than assumed, since layouts can be restructured independently later.
  */
 export default async function AdminProfileLayout({ children }: { children: React.ReactNode }) {
-  const token = cookies().get('figm_token')?.value;
+  const token = (await cookies()).get('figm_token')?.value;
   const user = token ? verifyJWT(token) : null;
 
   if (!user) {

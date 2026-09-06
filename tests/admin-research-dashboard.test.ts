@@ -51,7 +51,7 @@ const ADMIN_ROUTES: Array<{ label: string; call: (jwt?: string) => Promise<Respo
     label: 'GET /api/admin/participants/[id]',
     call: (jwt) =>
       participantDetailGET(authedRequest('http://localhost:3000/api/admin/participants/P001', jwt), {
-        params: { participantId: 'P001' },
+        params: Promise.resolve({ participantId: 'P001' }),
       }),
   },
   {
@@ -201,7 +201,7 @@ test('A real participant scan is reflected accurately end-to-end (no fabrication
   await t.test('the participant detail endpoint shows the real scan, not invented data', async () => {
     const res = await participantDetailGET(
       authedRequest(`http://localhost:3000/api/admin/participants/${participantId}`, adminToken),
-      { params: { participantId } }
+      { params: Promise.resolve({ participantId }) }
     );
     assert.equal(res.status, 200);
     const body = await res.json();
@@ -220,7 +220,7 @@ test('A real participant scan is reflected accurately end-to-end (no fabrication
   await t.test('an invalid participant id format is rejected, not silently treated as valid', async () => {
     const res = await participantDetailGET(
       authedRequest('http://localhost:3000/api/admin/participants/not-a-participant', adminToken),
-      { params: { participantId: 'not-a-participant' } }
+      { params: Promise.resolve({ participantId: 'not-a-participant' }) }
     );
     assert.equal(res.status, 400);
   });

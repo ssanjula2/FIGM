@@ -73,13 +73,13 @@ test('a research-participant session token cannot be used to authenticate agains
   // verifyResearchParticipantToken (separate, non-overlapping code paths).
   const asCookie = await participantDetailGET(
     new Request('http://localhost:3000/api/admin/participants/P001', { headers: { cookie: cookieHeader('figm_token', studyCookie) } }),
-    { params: { participantId: 'P001' } }
+    { params: Promise.resolve({ participantId: 'P001' }) }
   );
   assert.equal(asCookie.status, 401);
 
   const asBearer = await participantDetailGET(
     new Request('http://localhost:3000/api/admin/participants/P001', { headers: { authorization: `Bearer ${studyCookie}` } }),
-    { params: { participantId: 'P001' } }
+    { params: Promise.resolve({ participantId: 'P001' }) }
   );
   assert.equal(asBearer.status, 401, 'a research-participant token must be rejected outright by verifyJWT (kind claim guard), never decoded into a DEVELOPER-role UserPayload');
 });
@@ -117,7 +117,7 @@ test('a non-admin real user cannot set researchStatus to CONSENT_VERIFIED (the c
       headers: { authorization: `Bearer ${devToken}`, 'content-type': 'application/json' },
       body: JSON.stringify({ status: 'CONSENT_VERIFIED' }),
     }),
-    { params: { participantId: 'P001' } }
+    { params: Promise.resolve({ participantId: 'P001' }) }
   );
   assert.equal(res.status, 403, 'only an ADMIN may verify consent -- a DEVELOPER-role account must be refused');
 });

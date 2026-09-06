@@ -9,7 +9,7 @@ import { verifyJWT } from '../../../src/auth/auth-service';
  * this narrows the remaining AUDITOR case.
  */
 export default async function AdminParticipantsLayout({ children }: { children: React.ReactNode }) {
-  const token = cookies().get('figm_token')?.value;
+  const token = (await cookies()).get('figm_token')?.value;
   const user = token ? verifyJWT(token) : null;
 
   if (!user) {

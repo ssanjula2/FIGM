@@ -18,6 +18,14 @@ import { RuleExecutionEngine, ScanResult } from '../engine/rule-execution-engine
 import { ReportGenerator, AggregateScanReport } from '../reporter/report-generator.js';
 import { calculateQualityScoreFromCounts } from '../engine/quality-score.js';
 
+// P-01 (research-collection-build hardening): matches app/api/scan/route.ts's MAX_CODE_LENGTH --
+// the web scan path has always enforced this; the CLI path never did, so an oversized/generated
+// file (a bundled/minified build artifact swept up by a broad --path, say) could previously make a
+// single scan pass consume disproportionate time/memory with no guard at all. Per-file, not
+// per-run: one oversized file is skipped (like an unreadable one already was, below), not treated
+// as a fatal error for the whole scan.
+const MAX_CLI_FILE_SIZE_BYTES = 500_000;
+
 export interface CLIOptions {
   targetDir: string;
   framework: string;
@@ -87,6 +95,11 @@ export function runCLI(args: string[]): number {
   for (const file of filePaths) {
     const relativePath = path.relative(resolvedDir, file);
     try {
+      const sizeBytes = fs.statSync(file).size;
+      if (sizeBytes > MAX_CLI_FILE_SIZE_BYTES) {
+        console.warn(`  [WARN] Skipping ${relativePath}: ${sizeBytes} bytes exceeds the ${MAX_CLI_FILE_SIZE_BYTES}-byte scan limit.`);
+        continue;
+      }
       const code = fs.readFileSync(file, 'utf-8');
       const scanRes = RuleExecutionEngine.analyzeFile(relativePath, code);
       

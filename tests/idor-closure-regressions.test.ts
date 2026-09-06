@@ -50,7 +50,7 @@ test('DELETE /api/projects/[id] is ownership-checked (IDOR)', async (t) => {
 
   await t.test('anonymous cannot delete', async () => {
     const res = await projectDELETE(new Request(`http://localhost:3000/api/projects/${project.id}`, { method: 'DELETE' }), {
-      params: { id: project.id },
+      params: Promise.resolve({ id: project.id }),
     });
     assert.equal(res.status, 401);
   });
@@ -58,7 +58,7 @@ test('DELETE /api/projects/[id] is ownership-checked (IDOR)', async (t) => {
   await t.test('a non-owner DEVELOPER cannot delete another user\'s project', async () => {
     const res = await projectDELETE(
       authedRequest(`http://localhost:3000/api/projects/${project.id}`, { method: 'DELETE' }, tokenFor(strangerId)),
-      { params: { id: project.id } }
+      { params: Promise.resolve({ id: project.id }) }
     );
     assert.equal(res.status, 403);
 
@@ -69,7 +69,7 @@ test('DELETE /api/projects/[id] is ownership-checked (IDOR)', async (t) => {
   await t.test('the real owner can delete their own project', async () => {
     const res = await projectDELETE(
       authedRequest(`http://localhost:3000/api/projects/${project.id}`, { method: 'DELETE' }, tokenFor(ownerId)),
-      { params: { id: project.id } }
+      { params: Promise.resolve({ id: project.id }) }
     );
     assert.equal(res.status, 200);
 

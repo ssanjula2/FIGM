@@ -1,7 +1,7 @@
 {
   "name": "figm-code-inspector",
-  "displayName": "FIGM Code Inspector — AST Quality & Accessibility Engine",
-  "description": "Framework-Independent static analysis, WCAG 2.2 accessibility mapping, and AI remediation for React, Next.js, Angular, and Vue.",
+  "displayName": "FIGM Code Inspector — Lightweight Preview",
+  "description": "Lightweight, client-side preview of 5 FIGM rules (line-text heuristics, not AST analysis) for React/Next.js/Vue/Angular files. Full 50-rule AST-based analysis and AI-assisted remediation live in the FIGM web application, not this extension.",
   "version": "1.0.0",
   "publisher": "figm-inspector",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "wcag",
     "accessibility",
     "performance",
-    "ast",
+    "preview",
     "react",
     "angular",
     "vue",
@@ -55,7 +55,7 @@
       },
       {
         "command": "figm.fixAll",
-        "title": "FIGM: Apply Auto-Fixes to File",
+        "title": "FIGM: Insert Remediation Comments (Preview — not an automated code fix)",
         "category": "FIGM Code Inspector",
         "icon": "$(wand)"
       },
@@ -78,12 +78,12 @@
         "figm.scanOnSave": {
           "type": "boolean",
           "default": true,
-          "description": "Trigger AST static inspection automatically whenever a file is saved."
+          "description": "Trigger the lightweight-preview line-heuristic scan automatically whenever a file is saved (not AST analysis -- see README for scope)."
         },
         "figm.scanOnType": {
           "type": "boolean",
           "default": true,
-          "description": "Trigger real-time background inspection while typing (with 300ms debounce)."
+          "description": "Trigger the lightweight-preview line-heuristic scan while typing (with 300ms debounce; not AST analysis -- see README for scope)."
         },
         "figm.ignoreRules": {
           "type": "array",

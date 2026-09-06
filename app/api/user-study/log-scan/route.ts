@@ -239,6 +239,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, recordId: newRecord.id, participantId });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message || 'Failed to log study scan' }, { status: 500 });
+    // SEC-02 (research-collection-build hardening): never return a raw exception message to the
+    // client. Full detail stays server-side only.
+    console.error('[api/user-study/log-scan] failed:', err instanceof Error ? err.stack || err.message : err);
+    return NextResponse.json({ error: 'Failed to log study scan. Please try again.' }, { status: 500 });
   }
 }

@@ -229,7 +229,7 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
 
     // Unauthenticated: must be 401, not a silent 200 leak
     const anonRes = await projectGET(new Request(`http://localhost:3000/api/projects/${project.id}`), {
-      params: { id: project.id },
+      params: Promise.resolve({ id: project.id }),
     });
     assert.equal(anonRes.status, 401);
 
@@ -239,12 +239,12 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
       {},
       tokenFor(strangerId)
     );
-    const strangerRes = await projectGET(strangerReq, { params: { id: project.id } });
+    const strangerRes = await projectGET(strangerReq, { params: Promise.resolve({ id: project.id }) });
     assert.equal(strangerRes.status, 403);
 
     // The owner: must succeed
     const ownerReq = authedRequest(`http://localhost:3000/api/projects/${project.id}`, {}, tokenFor(ownerId));
-    const ownerRes = await projectGET(ownerReq, { params: { id: project.id } });
+    const ownerRes = await projectGET(ownerReq, { params: Promise.resolve({ id: project.id }) });
     assert.equal(ownerRes.status, 200);
     const ownerBody = await ownerRes.json();
     assert.equal(ownerBody.project.id, project.id);
@@ -269,7 +269,7 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
       { method: 'POST' },
       tokenFor(strangerId)
     );
-    const strangerRes = await duplicatePOST(strangerReq, { params: { id: project.id } });
+    const strangerRes = await duplicatePOST(strangerReq, { params: Promise.resolve({ id: project.id }) });
     assert.equal(strangerRes.status, 403);
 
     const ownerReq = authedRequest(
@@ -277,7 +277,7 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
       { method: 'POST' },
       tokenFor(ownerId)
     );
-    const ownerRes = await duplicatePOST(ownerReq, { params: { id: project.id } });
+    const ownerRes = await duplicatePOST(ownerReq, { params: Promise.resolve({ id: project.id }) });
     assert.equal(ownerRes.status, 200);
   });
 
@@ -303,7 +303,7 @@ test('API Security Audit — Authorization, IDOR, JWT, Rate Limiting, CORS', asy
       },
       tokenFor(ownerId)
     );
-    const res = await projectPATCH(req, { params: { id: project.id } });
+    const res = await projectPATCH(req, { params: Promise.resolve({ id: project.id }) });
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.project.name, 'Updated Name', 'allow-listed field must still be updatable');

@@ -45,7 +45,14 @@ export class FIGMDiagnosticsManager {
     const ignoreRules = config.get<string[]>('ignoreRules', []);
     const diagnostics: vscode.Diagnostic[] = [];
 
-    // AST rule pattern detection heuristics
+    // Lightweight-preview line-text heuristics (EXT-01, research-collection-build hardening):
+    // this is deliberately NOT AST analysis -- it is plain substring/pattern matching over raw
+    // source lines, covering exactly 5 of FIGM's 50 canonical rules (FIGM-REACT-02, FIGM-PERF-02/
+    // 04/05, FIGM-A11Y-01). The real, full 50-rule AST-based RuleExecutionEngine only runs in the
+    // FIGM web application (src/engine/rule-execution-engine.ts) and CLI (src/cli/figm-analyze.ts).
+    // See tests/vscode-extension-scope-honesty.test.ts, which fails the build if this rule set
+    // ever silently grows without updating README.md's documented scope, or if a rule listed here
+    // stops actually running.
     const lines = text.split('\n');
     lines.forEach((lineText, index) => {
       // Check for inline map allocations
