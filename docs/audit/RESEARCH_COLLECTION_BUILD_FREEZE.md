@@ -5,6 +5,58 @@ Branch: `main`
 Base commit: `2887a66ada624f48cf8946ff94a310dc78de3e93` (`chore(research): finalize thesis stages
 and harden study data integrity`)
 
+## FINAL FROZEN, DEPLOYED & TAGGED COMMIT (supersedes the initial freeze below)
+
+**FINAL COLLECTION-BUILD COMMIT:** `b33456dbcb485ada536b66ab5d492e4d5deb178d`
+(`fix(scan): return controlled 400 on malformed/missing request body`)
+
+**TAG:** `figm-research-collection-v1` — moved to this commit (explicitly approved) from its
+initial target `9eac19a93d7abe89582d54dab7bec80ec613e73d` after two necessary, narrowly-scoped
+post-freeze fixes surfaced during first production deployment and verification:
+
+1. `72743e1f85bb0403d73f2ebb4dc71b64cf0307a6` (`fix(deploy): force verified webpack build on
+   Vercel`) — `vercel.json` hard-coded `buildCommand` to plain `next build`, silently overriding
+   the Project Settings dashboard and shipping the wrong bundler config. Fixed to
+   `npx prisma generate && npm run build`. Config-only; no application code touched.
+2. `b33456dbcb485ada536b66ab5d492e4d5deb178d` (`fix(scan): return controlled 400 on
+   malformed/missing request body`) — production smoke testing found `POST /api/scan` returning
+   an unhandled `500` for a missing/unparseable request body instead of a controlled `400`. Fixed
+   by isolating `request.json()` parsing into its own try/catch ahead of the rest of the handler.
+   Scope: `app/api/scan/route.ts` request-body parsing only, plus regression tests in
+   `tests/live-scan-e2e.test.ts`. No change to rule detection, scoring, participant/consent logic,
+   PRIMARY/SECONDARY policy, Supabase architecture, or remediation semantics.
+
+Neither follow-up commit touched `ruleSetVersion`, the 50-rule catalog, scoring, framework scope,
+participant P001-P020 eligibility, consent semantics, PRIMARY/SECONDARY policy, Supabase
+architecture, or remediation/VERIFIED semantics — all remain exactly as certified by the original
+freeze pass below.
+
+**Post-fix verification (this commit, live production):**
+
+```
+CI (GitHub Actions, figm-scan.yml):        PASS
+Vercel Production deployment:              READY (alias https://figm-model.vercel.app confirmed
+                                            serving this exact commit -- the malformed-body 400
+                                            fix, which exists only in this commit, was observed live)
+Production smoke test:                     PASS
+  POST /api/scan, no body            -> 400 "Invalid or missing JSON request body"
+  POST /api/scan, malformed JSON     -> 400 "Invalid or missing JSON request body"
+  POST /api/scan, {}                 -> 400 "Code string is required" (unchanged existing behavior)
+  POST /api/scan, valid request      -> 200, unchanged normal scan behavior
+  GET  /api/health                   -> 200, status=HEALTHY, storageProvider=supabase,
+                                         database=CONNECTED_POSTGRES
+  GET  /admin (unauthenticated)      -> 307 redirect to /auth/login (protected)
+  GET  /api/admin/participants       -> 401 UNAUTHORIZED (unauthenticated)
+  GET  /api/admin/research-dataset   -> 401 UNAUTHORIZED (unauthenticated)
+  Runtime errors observed this round: 0
+Supabase production database:              CONNECTED_POSTGRES (confirmed via live /api/health)
+REAL_DATA_COLLECTION_READY:                YES
+```
+
+---
+
+## Initial Freeze Pass (historical — commit superseded by the pointer above)
+
 **FROZEN COLLECTION-BUILD COMMIT:** `bab8c770c20caf303fc462064926bce787546241`
 (`chore(collection-build): freeze FIGM for real participant collection`)
 
@@ -134,8 +186,19 @@ consentVersion:        1.0.0 (CONSENT_PROTOCOL_VERSION, unchanged)
 
 ```
 RESEARCH_COLLECTION_BUILD_READY=YES
-RESEARCH_COLLECTION_BUILD_COMMIT=bab8c770c20caf303fc462064926bce787546241
+RESEARCH_COLLECTION_BUILD_COMMIT=bab8c770c20caf303fc462064926bce787546241 (initial freeze pass --
+  superseded, see below)
+FINAL_COLLECTION_BUILD_COMMIT=b33456dbcb485ada536b66ab5d492e4d5deb178d (deployed, tagged
+  figm-research-collection-v1, production-verified)
+CI=PASS
+VERCEL_PRODUCTION=READY
+PRODUCTION_SMOKE_TEST=PASS
+SUPABASE_PRODUCTION_DATABASE=CONNECTED_POSTGRES
+REAL_DATA_COLLECTION_READY=YES
 ```
 
 This record has been cross-checked against the actual commit hash above, so a future reader never
-confuses "the build that was verified" with any later, different commit on `main`.
+confuses "the build that was verified" with any later, different commit on `main`. The tag
+`figm-research-collection-v1` points to `FINAL_COLLECTION_BUILD_COMMIT` above, not to the initial
+freeze pass's commit — see "FINAL FROZEN, DEPLOYED & TAGGED COMMIT" near the top of this file for
+why the tag was moved and what changed between the two.
