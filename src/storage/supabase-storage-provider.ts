@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import { IStorageProvider, ScanListQuery, ScanListResult } from './storage-provider';
 import { JsonStorageProvider } from './json-storage-provider';
 import { getPrismaClient } from '../db/prisma-client';
+import { isInsecureFallbackAllowed } from '../auth/auth-service';
 import {
   DBUser,
   DBProject,
@@ -231,9 +232,29 @@ function isNotFoundError(err: any): boolean {
 
 /**
  * Real Postgres-backed storage provider (via Prisma, targeting the Supabase-hosted database
- * configured by DATABASE_URL/DIRECT_URL). Falls back to JsonStorageProvider ONLY when Prisma
- * cannot be initialized (e.g. DATABASE_URL missing/unreachable) -- and that fallback is logged
- * loudly exactly once per process so it can never silently masquerade as a live DB connection.
+ * configured by DATABASE_URL/DIRECT_URL). Falls back to JsonStorageProvider when Prisma cannot be
+ * initialized (e.g. DATABASE_URL missing/unreachable) ONLY in development/test (same allow-list as
+ * RepositoryFactory's own top-level fallback check and resolveBootstrapAdminPassword's, see
+ * isInsecureFallbackAllowed's doc comment) -- and that fallback is logged loudly exactly once per
+ * process so it can never silently masquerade as a live DB connection there either.
+ *
+ * Outside that allow-list (production, staging, an unset NODE_ENV, anything else), a Prisma
+ * connection failure now fails the constructor itself instead of silently degrading every method
+ * below to the legacy JSON/UserDB backend while still reporting `name: 'supabase'` -- this was a
+ * real incident: `provider.name`/`isConnected()` (read by /api/health) reflect only THIS instance's
+ * own state, but Vercel gives every serverless cold start its own independent module scope, so one
+ * instance reporting a healthy Postgres connection proves nothing about a different instance whose
+ * Prisma init failed (e.g. a transient DATABASE_URL/pooler connection issue at that cold start). That
+ * other instance would previously keep working, silently backed by ephemeral per-invocation JSON
+ * storage -- and since UserDB.loadDB() unconditionally seeds the two DEFAULT_ADMIN_ACCOUNTS via
+ * resolveBootstrapAdminPassword() on any empty store, a completely unrelated NORMAL user
+ * registration would incorrectly require ADMIN_BOOTSTRAP_PASSWORD and fail if that var wasn't set,
+ * with no indication anywhere that the real cause was a lost Postgres connection, not a missing
+ * secret. Throwing here instead means: (a) this exact silent-masquerade is now impossible outside
+ * dev/test, and (b) RepositoryFactory.instance (which only gets assigned AFTER this constructor
+ * returns) stays unset on failure, so the very next call to getStorageProvider() retries
+ * construction -- and therefore retries the real Postgres connection -- fresh, rather than pinning
+ * a degraded instance for its whole warm-instance lifetime.
  */
 export class SupabaseStorageProvider implements IStorageProvider {
   public name: 'supabase' = 'supabase';
@@ -244,6 +265,15 @@ export class SupabaseStorageProvider implements IStorageProvider {
   constructor() {
     this.prisma = getPrismaClient();
     if (!this.prisma) {
+      if (!isInsecureFallbackAllowed()) {
+        throw new Error(
+          'FATAL: SupabaseStorageProvider selected (Supabase credentials configured) but the ' +
+          'Postgres/Prisma connection is unavailable (DATABASE_URL missing, invalid, or unreachable). ' +
+          'Refusing to silently fall back to the JSON-file storage provider outside local ' +
+          'development/test -- on a serverless deployment (Vercel) that provider\'s writes do not ' +
+          'persist across invocations. Fix the Postgres connection (DATABASE_URL) and retry.'
+        );
+      }
       this.fallback = new JsonStorageProvider();
       this.warnFallback();
     }
@@ -261,7 +291,15 @@ export class SupabaseStorageProvider implements IStorageProvider {
   }
 
   public isConnected(): boolean {
-    return this.prisma !== null;
+    // Bug found while adding this session's regression tests: getPrismaClient() (src/db/prisma-client.ts)
+    // only ever explicitly assigns `null` inside its catch block (a construction that actually threw);
+    // when DATABASE_URL is simply absent, isPostgresConfigured() is false, the whole init block is
+    // skipped, and the cached value stays at its natural default of `undefined` -- so a bare
+    // `this.prisma !== null` check wrongly returns `true` for `undefined` (`undefined !== null` is
+    // `true` in JS), reporting a live Postgres connection that never existed. `!!this.prisma` treats
+    // both null and undefined (and any other falsy value) as "not connected", matching the exact same
+    // truthiness check the constructor's own `if (!this.prisma)` gate already uses.
+    return Boolean(this.prisma);
   }
 
   private db(): any {
