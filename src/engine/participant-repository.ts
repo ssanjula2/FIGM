@@ -138,6 +138,37 @@ export interface ResearchDatasetScanRow {
  *  inclusion rule getResearchDataset() applies to scans, applied here to AiHistory rows instead.
  *  `applied` is the pipeline's own re-scan-verified flag (see DBAiHistory's doc comment) -- never
  *  assume a fix was applied just because a row exists here. */
+/** A real, already-persisted scan belonging to a real study participant (P001-P020) who is NOT
+ *  currently eligible for the consent-gated research dataset (i.e. getEligibleParticipants()
+ *  excludes them -- not CONSENT_VERIFIED, or REVOKED). This is a SEPARATE, clearly-labeled
+ *  provenance lane from ResearchDatasetScanRow: it exists so a real participant's genuine
+ *  pre-consent/not-yet-consented activity is not silently invisible from every export surface,
+ *  without ever claiming it is PRIMARY/SECONDARY consent-gated research data (see attemptType's
+ *  own doc comment). REVOKED participants are excluded entirely, even here -- a revocation means
+ *  "do not use my data," which this lane must respect the same as the consent-gated one does. */
+export interface HistoricalRealParticipantScanRow {
+  participantId: string;
+  userId: string;
+  scanId: string;
+  fileName: string;
+  framework: string;
+  /** Deliberately never 'PRIMARY'/'SECONDARY' -- those are consent-gated, protocol-defined
+   *  classifications this row has not earned (no verified consent timestamp exists to measure
+   *  "post-consent" against). 'HISTORICAL_REAL' is the one value this field ever takes here. */
+  attemptType: 'HISTORICAL_REAL';
+  createdAt: string;
+  qualityScore: number;
+  totalFindings: number;
+  architectureFindings: number;
+  performanceFindings: number;
+  accessibilityFindings: number;
+  scanTimeMs: number;
+  /** Always 'PRODUCTION_REAL_HISTORICAL_PARTICIPANT' -- present so a consumer that concatenates
+   *  this lane with ResearchDatasetScanRow's consent-gated rows (which have no such column) can
+   *  still tell the two provenances apart after the fact. */
+  dataSource: 'PRODUCTION_REAL_HISTORICAL_PARTICIPANT';
+}
+
 export interface ResearchRemediationEventRow {
   participantId: string;
   userId: string;
@@ -800,6 +831,63 @@ export class ParticipantRepository {
       }
     }
 
+    return rows.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  }
+
+  /** Real, already-persisted scans for real study-participant codes (P001-P020) who are NOT
+   *  currently eligible for the consent-gated dataset -- the exact complement of
+   *  getEligibleParticipants(). Never touches raw ScanReport records, never invents a value, and
+   *  never assigns PRIMARY/SECONDARY (see HistoricalRealParticipantScanRow's own doc comment).
+   *  REVOKED participants are excluded here too, by the same rationale getResearchDataset() would
+   *  apply if they ever became eligible: a revocation means their data is not used, full stop. */
+  public static async getHistoricalRealParticipantScans(): Promise<HistoricalRealParticipantScanRow[]> {
+    const allUsers = ((await ParticipantRepository.provider.getAllUsers()) as DBUser[]) || [];
+    const eligibleUserIds = new Set((await ParticipantRepository.getEligibleParticipants()).map((e) => e.user.id));
+
+    const historicalUsers = allUsers.filter((u) => {
+      const code = u.participantCode || u.id;
+      if (!isRealStudyParticipantCode(code)) return false;
+      if (eligibleUserIds.has(u.id)) return false; // already covered by the consent-gated lane
+      if (u.researchStatus === 'REVOKED') return false; // a revocation is never used, even historically
+      return true;
+    });
+    if (historicalUsers.length === 0) return [];
+
+    const allScans = ((await ParticipantRepository.provider.getScanRecords()) as DBScanRecord[]) || [];
+    const scansByUser = new Map<string, DBScanRecord[]>();
+    for (const scan of allScans) {
+      if (!scan.userId) continue;
+      const list = scansByUser.get(scan.userId) || [];
+      list.push(scan);
+      scansByUser.set(scan.userId, list);
+    }
+
+    const rows: HistoricalRealParticipantScanRow[] = [];
+    for (const user of historicalUsers) {
+      const scans = scansByUser.get(user.id) || [];
+      for (const scan of scans) {
+        const diagnostics = (scan.diagnostics || []) as Array<{ domain?: string; concern?: string }>;
+        const performanceFindings = diagnostics.filter((d) => d.domain === 'PERFORMANCE').length;
+        const accessibilityFindings = diagnostics.filter((d) => d.domain === 'ACCESSIBILITY').length;
+        const architectureFindings = diagnostics.filter((d) => d.domain === 'PERFORMANCE' && d.concern === 'ARCHITECTURE').length;
+        rows.push({
+          participantId: user.participantCode || user.id,
+          userId: user.id,
+          scanId: scan.id,
+          fileName: scan.fileName,
+          framework: scan.framework,
+          attemptType: 'HISTORICAL_REAL',
+          createdAt: scan.createdAt,
+          qualityScore: scan.qualityScore,
+          totalFindings: scan.ruleCount,
+          architectureFindings,
+          performanceFindings,
+          accessibilityFindings,
+          scanTimeMs: scan.scanTimeMs,
+          dataSource: 'PRODUCTION_REAL_HISTORICAL_PARTICIPANT',
+        });
+      }
+    }
     return rows.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }
 

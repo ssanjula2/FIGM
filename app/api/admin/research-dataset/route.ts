@@ -13,6 +13,15 @@ export const dynamic = 'force-dynamic';
  * that method already enforces -- see its own doc comment in
  * src/engine/participant-repository.ts for the full rule.
  *
+ * Also includes ParticipantRepository.getHistoricalRealParticipantScans() -- real, already-
+ * persisted scans belonging to real study participants (P001-P020) who are not yet (or not
+ * currently) consent-gate-eligible. These are a SEPARATE provenance lane (`dataSource` column),
+ * never assigned PRIMARY/SECONDARY (`attemptType: 'HISTORICAL_REAL'` only), and never affect the
+ * consent-gated rows' own eligibility, ordering, or PRIMARY/SECONDARY classification in any way --
+ * see that method's own doc comment for the exact (complementary, REVOKED-excluded) inclusion
+ * rule. Historical rows are listed first, consent-gated rows after, matching the order real
+ * historical activity was recorded relative to when consent-gated collection began.
+ *
  * `?format=csv` returns a downloadable CSV for the admin export action; the default (or
  * `?format=json`) returns the raw JSON rows.
  */
@@ -22,9 +31,18 @@ export async function GET(request: Request) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const rows = await ParticipantRepository.getResearchDataset();
-  const primaryCount = ParticipantRepository.filterPrimaryResearchAttempts(rows).length;
-  const secondaryCount = ParticipantRepository.filterSecondaryResearchAttempts(rows).length;
+  const consentGatedRows = await ParticipantRepository.getResearchDataset();
+  const historicalRows = await ParticipantRepository.getHistoricalRealParticipantScans();
+  const primaryCount = ParticipantRepository.filterPrimaryResearchAttempts(consentGatedRows).length;
+  const secondaryCount = ParticipantRepository.filterSecondaryResearchAttempts(consentGatedRows).length;
+
+  // Unified row shape for export: every consent-gated row also gets a `dataSource` column (never
+  // blank) so a downloaded CSV/JSON consumer can always tell the two provenances apart, without
+  // ever touching consent-gated rows' own attemptType (PRIMARY/SECONDARY untouched, unrelabeled).
+  const rows = [
+    ...historicalRows,
+    ...consentGatedRows.map((r) => ({ ...r, dataSource: 'CONSENT_GATED_RESEARCH_DATASET' as const })),
+  ];
 
   const { searchParams } = new URL(request.url);
   if (searchParams.get('format') === 'csv') {
@@ -40,6 +58,7 @@ export async function GET(request: Request) {
       'performanceFindings',
       'accessibilityFindings',
       'scanTimeMs',
+      'dataSource',
     ];
     const csvEscape = (value: unknown) => {
       const s = String(value ?? '');
@@ -47,7 +66,7 @@ export async function GET(request: Request) {
     };
     const lines = [
       columns.join(','),
-      ...rows.map((row) => columns.map((c) => csvEscape(row[c])).join(',')),
+      ...rows.map((row) => columns.map((c) => csvEscape((row as any)[c])).join(',')),
     ];
     return new NextResponse(lines.join('\n'), {
       status: 200,
@@ -63,6 +82,7 @@ export async function GET(request: Request) {
     totalRows: rows.length,
     primaryCount,
     secondaryCount,
+    historicalRealCount: historicalRows.length,
     rows,
   });
 }
