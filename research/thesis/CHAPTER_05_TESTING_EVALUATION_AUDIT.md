@@ -11,7 +11,7 @@
 1. **Chapter 5, as it currently stands, is entirely a benchmark/evaluation-results chapter — it contains zero software-testing content.** No test count, no test-runner description, no representative test case, no build/type-check status, and no framework-by-framework test-coverage discussion appear anywhere in either current Chapter 5 file. Given the task's own framing that Chapter 5 "should primarily report... system testing, verification... representative test cases," this is a real, substantial gap, not a wording issue.
 2. **The internal controlled benchmark is canonical, current, and independently re-confirmed twice this session** (once via a live `evaluation-runner.ts` run at Stage T1, once by simply reading the auto-regenerated Chapter 5 files just now, timestamped 2026-09-04T09:48Z — after the Stage-T1 run, meaning the pipeline has run again since, on its own, via `npm test`'s hook into `research:evaluate`, and reproduced the identical figures). **TP=65, FP=0, FN=0, Precision=Recall=F1=100.0%, 50/50 rule coverage** is confirmed, current, and correctly, consistently labelled as an internal, self-authored, circular benchmark in both current Chapter 5 files — never presented as external validation.
 3. **The old contradictory 96.15%/100%/98.04%/25-of-50 figure (from `docs/validation-report.md` / `functional-validator.ts`) does not appear anywhere in current Chapter 5.** It was never adopted by the auto-generated chapter files in the first place — the contradiction Stage T1 resolved was between `docs/validation-report.md` and the canonical pipeline, not within Chapter 5 itself. No correction is needed to Chapter 5 on this point; it was already clean.
-4. **A new, distinct, small numeric inconsistency was found this session** (not previously flagged): Chapter 5 §5.3 states "20 are auto-attempted (the other 30 correctly route to manual review by rule design)." The 20-auto-attempted figure matches `benchmarks/fix-success-rate-results.json`'s own `autoAttemptedCount` field exactly, but that file's actual `manualReviewCount` field is **18, not 30** — the "30" in the chapter text appears to have been computed as 50−20 by whoever wrote the prose, rather than read from the file, and does not match the file's own count. The file itself was generated 2026-08-25, over a week before the most recent 50-rule-catalogue confirmation (2026-09-04), so it should be regenerated fresh before this figure is cited numerically in any rewrite.
+4. **A new, distinct, small numeric inconsistency was found this session, now fully diagnosed (§7.1):** Chapter 5 §5.3 states "20 are auto-attempted (the other 30 correctly route to manual review by rule design)." **This "30" is simply wrong — computed as 50−20 by whoever wrote the prose, never read from the source file.** The file's own field is `manualReviewCount: 18`. Reading `benchmarks/fix-success-rate.ts`'s actual logic (§7.1) shows why 18+20 ≠ 50: of the 50 rules, 12 never fire a diagnostic at all against their own canonical `nonCompliantExample` and are excluded from *both* buckets entirely (18 manual-review + 20 auto-attempted + 12 did-not-fire = 50). A second, more consequential finding: this script measures a **different, legacy remediation entry point** (`src/engine/remediation-engine.ts`'s `RemediationEngine.applyQuickFix`), not the current production pipeline (`AIRemediationRouter` → `AstDeterministicFixEngine`/`AIRemediationPipeline`) Chapter 4 now documents — its hard-coded `MANUAL_REVIEW_ONLY_RULE_IDS` set is only 3 rules, a different number again. Chapter 5's rewrite should either correct the citation to the file's real 18/20/12 split with a caveat about which code path it measures, or re-run the benchmark against the current production pipeline if a true current-architecture figure is wanted.
 5. **Chapter 6 contains its own internal contradiction**, found while reading it for boundary purposes: §6.1 ("Summary of Contributions") states *"A large-scale multi-repository evaluation was not conducted... It remains future work (Section 6.4)"*, while §6.2 (the RQ3 answer, in the same file) and §6.4 item 3 both correctly report that the 21-repository real-world evaluation **was** conducted. This is a Chapter 6 issue, out of this stage's scope to fix, but is recorded here since it directly concerns evaluation evidence this audit was asked to trace.
 6. **Chapter 6 §6.1 also contains two other stale passages this Chapter 4 rewrite has now superseded**: the AST-coverage note ("23 of the 25 rules... has not been re-verified... treat as stale") — itself now internally inconsistent with §6.3's *own*, later, corrected version of the same claim within the same file — and the AI-remediation description ("Integrated Gemini... a first-choice AST-deterministic fixer... sandboxed bounded-retry Gemini path"), which no longer reflects the three-provider (Ollama/Claude/Gemini) architecture Chapter 4 §4.8 now documents. Both are recorded here for the record; neither is fixed, per this stage's explicit instruction not to modify Chapter 6.
 7. **The Stage 5 real-world corpus figures were independently re-verified this session directly against source JSON** (not merely re-cited from a prior report): repoCount 21, totalFilesScanned 2512, totalFilesWithParseErrors 117, totalEngineCrashes 0, totalFigmFindings 2649, domain split ARCHITECTURE 393 / STATIC_PERFORMANCE 1578 / ACCESSIBILITY 678, distinctRulesTriggered 36, and the 15-primary (React 5 / Next.js 5 / Angular 5) + 6-additional (Vue 3 / Generic 3) split — every figure matches exactly what Chapter 6 §6.2 already states and what this stage's instruction gave as the canonical values.
@@ -97,7 +97,28 @@ Independently re-verified this session directly from `benchmarks/real-world/raw-
 
 ## 7. Remediation Validation
 
-Chapter 5 §5.3 already states the correct high-level shape (deterministic-first, AI-assisted where needed, every fix re-scanned, "no aggregate success-rate benchmark... has been computed against a real, reproducible defect corpus" honestly disclosed as not-yet-measured). This is consistent with Chapter 4 §4.7's now-current description. **No instance was found of Chapter 5 reporting an AI-generated patch as successful merely because generation returned output** — every reference to a "verified" or "FIXED" outcome in the current chapter text is qualified by re-scan confirmation, matching the code-level guarantee Chapter 4 §4.7.3 documents. The one numeric issue in this area is the §5.3 manual-review-count discrepancy already flagged in §0.4/§9 of this audit.
+Chapter 5 §5.3 already states the correct high-level shape (deterministic-first, AI-assisted where needed, every fix re-scanned, "no aggregate success-rate benchmark... has been computed against a real, reproducible defect corpus" honestly disclosed as not-yet-measured). This is consistent with Chapter 4 §4.7's now-current description. **No instance was found of Chapter 5 reporting an AI-generated patch as successful merely because generation returned output** — every reference to a "verified" or "FIXED" outcome in the current chapter text is qualified by re-scan confirmation, matching the code-level guarantee Chapter 4 §4.7.3 documents.
+
+### 7.1 Manual-Review Rule Count — Full Diagnosis (Stage T5A)
+
+Investigated per instruction, from source, not by guessing. `benchmarks/fix-success-rate.ts`'s exact classification logic (read in full):
+
+1. For each of the 50 canonical rules, its own documented `nonCompliantExample` is scanned by the real `RuleExecutionEngine.analyzeFile`. If the rule **does not fire on its own example**, the outcome is recorded with `attempted: false` and excluded from every subsequent bucket — **12 of the 50 rules** fall here.
+2. Of the remaining 38 (`fired`), each is run through `RemediationEngine.applyQuickFix` (note: **this is `src/engine/remediation-engine.ts`'s `RemediationEngine` class — a separate, older module from the current production remediation pipeline documented in Chapter 4, `src/ai/ai-remediation-router.ts`'s `AIRemediationRouter` → `AstDeterministicFixEngine`/`AIRemediationPipeline`**). If this legacy engine itself reports `requiresManualReview: true`, the rule is counted in `manualReviewCount` — **18 rules**.
+3. The remaining rules are `autoAttemptedCount` — **20 rules**, of which `autoVerifiedCount` — **19** — pass re-scan verification (matching Chapter 5 §5.3's "19 of those 20 verify as FIXED," which is correct).
+
+**18 + 20 + 12 = 50** — this is why the file's own `manualReviewCount` (18) does not sum to 50 together with `autoAttemptedCount` (20): the missing 12 are excluded entirely, not folded into either bucket. Chapter 5 §5.3's "(the other 30 correctly route to manual review by rule design)" is simply an incorrect 50−20 arithmetic assumption that was never read from this file.
+
+**A second, more consequential finding:** this benchmark's manual/auto split describes a **different, legacy code path** than Chapter 4 §4.7 documents as the current production remediation architecture. The current production `MANUAL_REVIEW_ONLY_RULE_IDS` set (`ai-remediation-router.ts`) contains only **3** rule IDs (`FIGM-NEXT-08`, `FIGM-NEXT-09`, `FIGM-REACT-06`) — a third, different number again from both 18 and 30. None of 18, 20, 30, or 3 should be treated as interchangeable; each describes a different thing.
+
+```
+MANUAL_REVIEW_RULE_COUNT_CURRENT=18 (from benchmarks/fix-success-rate-results.json's own manualReviewCount field, via the legacy RemediationEngine.applyQuickFix path)
+OLD_CHAPTER5_VALUE=30
+CLAIM_STALE=YES (never matched the source file at any point -- an arithmetic error, not a drift-over-time staleness)
+REGENERATION_REQUIRED=NO (to fix the 30-vs-18 number itself -- the file's own fields are internally self-consistent and current; the fix is correcting Chapter 5's prose to cite 18/20/12, not regenerating the file)
+```
+
+**Recommendation for the Chapter 5 rewrite, not implemented here:** either (a) correct the citation to "18 manual-review, 20 auto-attempted (19 verified), 12 rules whose canonical example does not self-trigger," with an explicit note that this specific benchmark measures the legacy `RemediationEngine.applyQuickFix` path rather than the current production `AIRemediationRouter` pipeline, or (b) re-run an equivalent benchmark against the current production pipeline if a same-architecture figure is wanted, and cite that instead. Neither was performed in this stage, consistent with the instruction not to regenerate unrelated artifacts unless necessary and not to rewrite Chapter 5 yet.
 
 ## 8. Framework Testing
 
@@ -132,7 +153,7 @@ None of the following currently appear in Chapter 5: auth isolation, admin autho
 | "Core Web Vitals" used as static-rule validation | No | Clean |
 | "production SaaS" | No | Clean |
 | "ISO verified" | No | Clean |
-| **New finding this session: "(the other 30 correctly route to manual review by rule design)"** | **Yes, §5.3** | **STALE/INCONSISTENT — does not match `benchmarks/fix-success-rate-results.json`'s own `manualReviewCount: 18` field; flagged in §0.4, §9 above** |
+| **New finding this session: "(the other 30 correctly route to manual review by rule design)"** | **Yes, §5.3** | **STALE/INCONSISTENT — does not match `benchmarks/fix-success-rate-results.json`'s own `manualReviewCount: 18` field; fully diagnosed in §0.4, §7.1 above** |
 
 **Overall: Chapter 5 is clean of every specifically-flagged legacy stale claim.** The single numeric issue found is new, narrow, and precisely located (§5.3's manual-review count).
 
@@ -155,43 +176,66 @@ STALE_IMPLEMENTATION_CLAIMS=0
 RQ4_OVERCLAIMS=0
 UNSUPPORTED_100_PERCENT_CLAIMS=0
 CHAPTER5_CHAPTER6_BOUNDARY=PASS
-UNRESOLVED_CHAPTER_5_ISSUES=6
+UNRESOLVED_CHAPTER_5_ISSUES=4
 READY_TO_REWRITE_CHAPTER_5=YES
 ```
 
-**Notes on the ratings:**
+**Notes on the ratings (updated post Stage T5A):**
 - `CHAPTER_5_STRUCTURE_ALIGNMENT=PARTIAL`: the benchmark/evaluation content that exists is accurate and well-structured; the chapter is rated PARTIAL because an entire expected category (system-testing/verification evidence) is absent, not because anything present is wrong.
-- `TEST_EVIDENCE_CONSISTENCY=PASS`: the live full-suite run (addendum below) now provides a verified, exact, current figure — 1,526 tests / 99 suites / 1,525 pass / 1 fail — replacing both the stale historical logs and the unverified "0 failures" figure that was suggested. This is rated PASS because the evidence is now genuinely verified and internally consistent, not because the suite is defect-free — it is not, and the one real failure found must be disclosed accurately in any rewrite (see the addendum and issue 6 below).
+- `TEST_EVIDENCE_CONSISTENCY=PASS`: the live full-suite run, re-run after the Stage T5A fix, now shows **1,526 tests / 99 suites / 1,526 pass / 0 fail** — a genuinely clean, verified, current result, not an assumed one (see the addendum for the full root-cause diagnosis and fix).
 - `SECURITY_TESTING_SCOPE=PARTIAL`: reflects the §11 recommendation to include a small, explicitly-supplementary selection of data-integrity tests if/when a testing section is added, not a current defect.
-- **The 6 unresolved issues**: (1) the missing system-testing/verification section itself; (2) the §5.3 manual-review-count discrepancy and the underlying `fix-success-rate-results.json` file's staleness (generated Aug 25, pre-dating the current rule catalogue's most recent confirmation); (3) **the 1 genuine, current test failure found by the live run** (`tests/participant-matrix-n-plus-1.test.ts`, batched-vs-detail-view submission-count disagreement — see addendum), which must be either fixed or explicitly, honestly disclosed as a known issue before or within the Chapter 5 rewrite; (4) Chapter 6's own internal contradiction on whether the large-scale repository evaluation was conducted (§0.5) — flagged for a future Chapter 6 pass, not fixed here; (5) Chapter 6 §6.1's two stale passages (AST-coverage re-verification note, Gemini-only remediation description) now superseded by the Chapter 4 rewrite (§0.6) — likewise flagged, not fixed; (6) `benchmarks/fix-success-rate-results.json` itself should be regenerated fresh (it is over a week older than the most recent rule-catalogue confirmation) before its figures are cited numerically in the rewrite.
-- `READY_TO_REWRITE_CHAPTER_5=YES`: every open item now has either a concrete, already-executed resolution (the live test run) or an identified, low-effort fix (regenerating `fix-success-rate-results.json`; drawing the missing section's content from the Chapter 4 audit's testing-architecture findings) — nothing blocks starting the rewrite, provided the rewrite reports the test-suite figures exactly as found in the addendum (1,525/1,526, not "0 failures") and discloses the one real failure rather than omitting it.
+- **The 4 remaining unresolved issues** (down from 6 — the test failure is now fixed and verified, not merely disclosed): (1) the missing system-testing/verification section itself; (2) the §5.3 manual-review-count citation needs correcting from the incorrect "30" to the real 18/20/12 split, with a caveat that the underlying benchmark measures a legacy remediation code path distinct from Chapter 4's current production pipeline (full diagnosis in §7.1); (3) Chapter 6's own internal contradiction on whether the large-scale repository evaluation was conducted (§0.5) — flagged for a future Chapter 6 pass, not fixed here, out of this stage's scope; (4) Chapter 6 §6.1's two stale passages (AST-coverage re-verification note, Gemini-only remediation description) now superseded by the Chapter 4 rewrite (§0.6) — likewise flagged, not fixed, out of scope.
+- `READY_TO_REWRITE_CHAPTER_5=YES`: the test suite is now genuinely clean (1,526/1,526), `tsc --noEmit` and `npm run build` both pass, and every remaining open item is a documentation/citation correction with a clear, evidence-backed resolution already identified — nothing blocks starting the rewrite.
+
+```
+PARTICIPANT_MATRIX_FAILURE_ROOT_CAUSE=getMatrix() (last-duplicate-wins Map) and getDetail() (first-duplicate-wins Array.find) disagreed on which physical row a participantCode resolves to when the local JSON test store held >1 row sharing a code; compounded by the test's own cleanup only removing one stale duplicate
+PRODUCTION_LOGIC_BUG=YES
+TEST_ISOLATION_BUG=YES
+FIX_APPLIED=YES
+
+TARGETED_TESTS=PASS
+FULL_TEST_SUITES=99
+FULL_TESTS_TOTAL=1526
+FULL_TESTS_PASSED=1526
+FULL_TESTS_FAILED=0
+
+TSC=PASS
+BUILD=PASS
+
+MANUAL_REVIEW_RULE_COUNT_CURRENT=18
+MANUAL_REVIEW_CLAIM_STATUS=STALE
+
+CHAPTER_5_AUDIT_UPDATED=YES
+READY_TO_REWRITE_CHAPTER_5=YES
+```
 
 ---
 
-## Addendum: Live Full-Suite Test Run Result
+## Addendum: Live Full-Suite Test Run Result — RESOLVED (Stage T5A)
 
-**Run completed this session** via `npm test` (`node --test`, the full enumerated file list from `package.json`), exit code 0, total duration 393.3 seconds (~6.6 minutes). Final Node test-runner summary, quoted exactly:
+**Original finding (superseded below):** the first live run completed via `npm test`, exit code 0, duration 393.3s, with the summary `# tests 1526 / # suites 99 / # pass 1525 / # fail 1`. This did not match the "1526 tests passed, 0 failures" figure suggested as the most recently known result — the live run found one genuine, current failure.
 
-```
-# tests 1526
-# suites 99
-# pass 1525
-# fail 1
-# cancelled 0
-# skipped 0
-# todo 0
-# duration_ms 393303.6707
-```
+### Root-cause diagnosis (Stage T5A)
 
-**This does not match the "1526 tests passed, 0 failures" figure suggested as the most recently known result.** The live run found **1 genuine, current failure**, not zero. The task's own instruction to verify before treating that figure as canonical was correct to require — the figure as stated would have been wrong.
+The failure was **reproduced, then confirmed non-deterministic across repeated isolated runs** — 2 of 3 initial isolated runs passed, 1 failed, ruling out a simple, always-on logic error and pointing to a data-dependent race. Two distinct, real root causes were found on inspection, not assumed:
 
-**The failing test, exact detail:**
+1. **A genuine production-logic inconsistency** between `ParticipantRepository.getMatrix()` and `ParticipantRepository.getDetail()` (`src/engine/participant-repository.ts`). `getMatrix()` built its participant lookup via `new Map(allUsers.map(u => [code, u]))`, which keeps the **last** entry for a duplicate key, while `getDetail()` resolves a code via `findUserByParticipantCode()`, which is `Array.find` under both storage backends and therefore always returns the **first** match. When two rows share a `participantCode` — impossible under real Postgres's `@unique` constraint on that column, but not prevented by the local JSON test-storage backend's `createUser`, which only checks `id`/`email` uniqueness — the two methods could silently resolve to two different physical rows and disagree on submission counts.
+2. **A test-isolation/data-hygiene issue**, found only after the first fix still failed intermittently: the test's own stale-row cleanup guard used `findUserByParticipantCode()` (first-match only) to find and delete *one* stale duplicate before creating a fresh row — but the persistent local JSON test-storage file (never reset between runs, unlike a fresh Postgres test database) had accumulated **more than one** stale row for some participant codes, so the single-row cleanup could leave a second duplicate behind to collide on `id` (`P2002`) on a later run.
 
-- **File:** `tests/participant-matrix-n-plus-1.test.ts`
-- **Test name:** "the batched matrix still reports the correct submission count for a participant with real submissions"
-- **Assertion:** `matrix and detail view must agree on submission count for the same participant` — expected `1`, actual `0` (`strictEqual` failure)
-- **Location:** `tests/participant-matrix-n-plus-1.test.ts:103`
+### Fix applied
 
-This test asserts that `ParticipantRepository.getMatrix()`'s batched submission-count computation (verified working correctly by the immediately-preceding, passing test, "getMatrix calls getSubmissionsByUserId exactly once (batched), not once per participant") agrees with the per-participant detail view's own count for a participant known to have a real submission. The failure indicates the batched count returned `0` where `1` was expected — a genuine discrepancy between the batched-matrix code path and the detail-view code path for this specific scenario, not a flaky/environmental failure (no timeout, no network error, no test-isolation warning in the surrounding log). This is a real, current, reproducible defect in the research-participant admin matrix's submission-count reporting, separate from any of the research-dataset eligibility/consent logic verified elsewhere (that logic is covered by different, passing tests — `research-dataset-consent-gate`, `research-dataset-range-guard`, `repeated-scan-attempt-policy`, all of which passed in this run).
+- **Production code** (`src/engine/participant-repository.ts`, `getMatrix()`): rewrote the participant-lookup map construction to explicit first-occurrence-wins semantics, matching `getDetail()`'s `Array.find` order, so the two methods now always agree on which physical row a participant code resolves to, regardless of how many duplicate rows the storage backend happens to contain.
+- **Test isolation** (`tests/participant-matrix-n-plus-1.test.ts`): generalized the stale-row cleanup from "delete the one row `findUserByParticipantCode` finds" to "delete every row matching this code" (via `getAllUsers()` + filter), so the test no longer assumes at most one stale duplicate can exist.
+- No assertion was weakened, no test was skipped, and no expected value was changed — both fixes address genuine root causes identified by reading the code, not the symptom.
 
-**Required framing for any Chapter 5 rewrite:** report **1,526 tests, 99 suites, 1,525 passing, 1 known failing** — never "0 failures" or an unqualified "all tests pass." If the failing test is fixed before submission, this section should be re-run and updated with the new result and its timestamp, not silently assumed fixed. This defect does not affect any of the figures reported elsewhere in this dissertation (RQ1/RQ3/RQ4/internal-benchmark/human-study), since none of those draw on the participant-matrix submission-count code path — but it is a genuine, current implementation defect that should be disclosed, not omitted, consistent with this project's own established practice of disclosing known limitations rather than hiding them.
+### Verification performed
+
+- `tests/participant-matrix-n-plus-1.test.ts` alone: **20 consecutive isolated runs, 20/20 clean** (compared with the original ~1-in-3 failure rate observed pre-fix).
+- Targeted group (`participant-matrix-n-plus-1`, `research-dataset-range-guard`, `research-dataset-consent-gate`, `repeated-scan-attempt-policy`, `qa-baseline-cleanup-regression`): **4 consecutive runs, 32/32 tests passing every time**, confirming the research-dataset eligibility, range-guard, and PRIMARY/SECONDARY logic were untouched by either fix.
+- **Full suite, run in isolation** (`npm test`): `# tests 1526 / # suites 99 / # pass 1526 / # fail 0`, duration 374.4s, exit code 0.
+- `npx tsc --noEmit`: exit code 0, zero output — no type errors introduced.
+- `npm run build`: exit code 0, production build completed cleanly with a full route manifest.
+
+### Final, current test-suite status for any Chapter 5 rewrite
+
+**1,526 tests, 99 suites, 1,526 passing, 0 failing.** This is now the genuinely verified, current figure — confirmed by a fresh, isolated full-suite run performed after the fix, not assumed. The earlier 1-failure result was real at the time it was observed, has been root-caused and fixed (not hidden, retried past, or skipped), and is documented here for transparency about how the current clean result was reached.
