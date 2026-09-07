@@ -181,6 +181,26 @@ export async function POST(request: Request) {
         } catch (err) {
           console.error('[api/scan] failed to persist fix-interaction telemetry:', err instanceof Error ? err.message : err);
         }
+      } else {
+        // Previously silent: a real production incident (a verified, AI-assisted fix producing no
+        // AiHistory row) was undiagnosable from server logs alone because nothing recorded WHY
+        // telemetry was skipped -- see docs/audit/NORMAL_LIVE_SCAN_RESEARCH_INTEGRATION.md. This
+        // never creates a record for an unauthenticated caller (there is still no userId to honestly
+        // attribute one to) -- it only makes the skip observable. `code` is authenticateUser's own
+        // machine-readable reason (UNAUTHORIZED: no token: INVALID_TOKEN: bad signature/expired;
+        // TOKEN_REVOKED: tokenVersion mismatch since issuance).
+        let reasonCode = 'UNKNOWN';
+        try {
+          if (fixAuth.errorResponse) {
+            const body = await fixAuth.errorResponse.clone().json();
+            reasonCode = body?.code || 'UNKNOWN';
+          }
+        } catch {
+          // Reading the diagnostic reason must never itself break the fix response.
+        }
+        console.warn(
+          `[api/scan] fix-interaction telemetry skipped: caller not authenticated (reason=${reasonCode}, ruleId=${defect.ruleId})`
+        );
       }
 
       return NextResponse.json(aiResult);
