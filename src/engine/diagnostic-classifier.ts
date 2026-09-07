@@ -17,8 +17,7 @@
 
 import { DiagnosticReport } from '../types/ast-spec.js';
 import { FOUR_LAYER_MAPPINGS } from '../matrix/four-layer-meta-model.js';
-import { RemediationEngine } from './remediation-engine.js';
-import { LexicalTypoFixEngine } from './lexical-typo-fix-engine.js';
+import { decideRemediation } from '../ai/remediation-decision.js';
 
 export type DiagnosticKind = 'FIGM_RULE' | 'GENERAL_CODE_ERROR';
 
@@ -38,44 +37,43 @@ export function classifyDiagnosticKind(ruleId: string): DiagnosticKind {
 }
 
 /**
- * Derives a pre-attempt fixability classification WITHOUT calling Claude or mutating any state --
- * a single pure, synchronous dry-run of the deterministic engine (RemediationEngine.applyQuickFix
- * itself performs no I/O and has no side effects), so this can never drift from what the real "Fix"
- * button will actually attempt. Applies uniformly to BOTH diagnostic domains (FIGM_RULE and
- * GENERAL_CODE_ERROR) -- ambiguity about the right fix is not unique to compiler errors.
+ * Derives a pre-attempt fixability classification WITHOUT calling an AI provider or mutating any
+ * state -- delegates to decideRemediation(), the SAME rule-ID-routed, per-instance decision
+ * AIRemediationPipeline.remediateDefect itself uses to decide what the "Fix" button will actually
+ * attempt, so this can never drift from real behavior. Applies uniformly to BOTH diagnostic domains
+ * (FIGM_RULE and GENERAL_CODE_ERROR) -- AIRemediationRouter.route() already routes any non-FIGM
+ * ruleId (TYPE-TS-<code>, SYNTAX-PARSE-ERROR) to AI_ASSISTED by definition, and decideRemediation()
+ * already tries LexicalTypoFixEngine first for exactly that domain -- so no separate handling is
+ * needed here.
  *
- *  - NO_SAFE_FIX: the deterministic engine produced no candidate patch at all
- *    (remediatedCode === code) -- there is nothing to show but an explanation of why automatic
- *    correction cannot be guaranteed. The source is never touched for this status.
- *  - SUGGESTED_FIX_ONLY: the engine DID produce a candidate transform, but flagged it as unsafe to
- *    auto-apply (multiple valid interpretations exist -- e.g. a useMemo dependency array it cannot
- *    reliably infer, or a per-item closure it cannot reliably curry). The candidate is shown for
- *    review; AIRemediationPipeline.remediateDefect enforces server-side that this status can never
- *    be reported as `verified: true` (see its own guard), so the source can never be modified
- *    automatically for this status even if an AI-generated patch happens to validate.
- *  - AUTO_FIX_AVAILABLE: the deterministic engine produced a real, unambiguous structural transform
- *    -- the same patch the "Fix" button will attempt to apply/verify/rollback.
+ * Previously this ran an INDEPENDENT dry-run against the legacy, pre-AI RemediationEngine
+ * .applyQuickFix -- a second decision path that could (and did) disagree with the real pipeline.
+ * Root-caused live for FIGM-PERF-02: the real per-instance decision is decideRemediation() ->
+ * AI_ASSISTED (its deterministic fixer deliberately DECLINES rather than hallucinate <img>
+ * dimensions -- see ast-fix-engine.ts's fixPerf02), but the legacy engine's own FIGM-PERF-02
+ * regex-replace silently produced a no-op for a truncated single-token offendingCodeSnippet (e.g.
+ * "<img" with no trailing whitespace, captured from a multi-line JSX element) -- so
+ * `remediatedCode === code` and this function permanently reported NO_SAFE_FIX, disabling the Live
+ * Scan "Fix" button even though AI-assisted remediation (with full sandbox validation + re-scan
+ * before ever being marked verified) was genuinely available. A declined deterministic fixer must
+ * route to whatever decideRemediation() says next (AI_ASSISTED, or for the small MANUAL_REVIEW_ONLY
+ * set, genuinely nothing) -- never be conflated with "no fix exists at all."
  *
- * GENERAL_CODE_ERROR defects are checked against LexicalTypoFixEngine FIRST, before the legacy
- * RemediationEngine.applyQuickFix dry-run below -- mirroring remediation-decision.ts's own real
- * online precedence (LexicalTypoFixEngine is tried before AI for exactly this diagnostic domain).
- * Root-caused live: RemediationEngine.applyQuickFix's TYPE-TS-<code> branch only special-cases a
- * handful of codes (2345/2322/2339/2551/2531/7006) and silently leaves `remediatedCode` unchanged
- * for anything else -- including TS1435/TS1434/TS2552 "Did you mean 'X'?" keyword-typo diagnostics,
- * which LexicalTypoFixEngine (added later, wired into the real remediation path) already fixes
- * deterministically. Without this check, a genuinely auto-fixable typo (e.g. `cont` for `const`)
- * was permanently misreported NO_SAFE_FIX and its "Fix" button disabled, even though the real
- * pipeline would have fixed it instantly if given the chance -- a real drift between this pre-
- * attempt prediction and what the "Fix" button actually does, which this function's own doc
- * comment above promises can never happen. */
+ *  - NO_SAFE_FIX: decideRemediation() found no automated path at all for this instance (rule-level
+ *    MANUAL_REVIEW_ONLY -- see AIRemediationRouter's own doc comment for the specific rules and
+ *    why this small set cannot be safely attempted even with AI assistance). The source is never
+ *    touched for this status.
+ *  - AUTO_FIX_AVAILABLE: decideRemediation() found either a real, already-produced deterministic
+ *    patch for this instance, or an AI-assisted attempt is allowed -- both are attempted, verified
+ *    via the same full sandbox + re-scan pipeline, and applied only once VERIFIED, by the same
+ *    "Fix" button this status enables.
+ *  - SUGGESTED_FIX_ONLY: retained in the type for UI/API compatibility, but decideRemediation() has
+ *    no state that maps to it -- every non-MANUAL_REVIEW_ONLY instance either has a verified
+ *    deterministic patch or a real AI-assisted attempt path, never an ambiguous preview-only
+ *    candidate that can structurally never be applied. */
 export function getFixabilityStatus(code: string, defect: DiagnosticReport): FixabilityStatus {
-  if (LexicalTypoFixEngine.isEligible(defect) && LexicalTypoFixEngine.tryFix(code, defect).success) {
-    return 'AUTO_FIX_AVAILABLE';
-  }
-  const dryRun = RemediationEngine.applyQuickFix(code, defect);
-  if (dryRun.remediatedCode === code) return 'NO_SAFE_FIX';
-  if (dryRun.requiresManualReview) return 'SUGGESTED_FIX_ONLY';
-  return 'AUTO_FIX_AVAILABLE';
+  const decision = decideRemediation(code, defect, defect.filePath);
+  return decision.requiresManualReview ? 'NO_SAFE_FIX' : 'AUTO_FIX_AVAILABLE';
 }
 
 /**

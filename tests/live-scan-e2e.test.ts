@@ -112,12 +112,17 @@ test('Live Scan E2E — Next.js', async () => {
   // Unlike this suite's other scanFixVerify() cases (FIGM-PERF-01/ANG-02/VUE-01), which all have
   // real deterministic fixers and so pass with or without a configured Claude key, FIGM-PERF-02
   // has no safe deterministic fixer for an image with no statically-determinable dimensions (the
-  // live scan response reports fixabilityStatus: 'NO_SAFE_FIX' -- the system correctly declines
-  // to hallucinate width/height rather than guess) and so genuinely routes AI_ASSISTED, exactly
-  // like the FIGM-PERF-05 REGRESSION case below. `npm test` deliberately runs without
-  // ANTHROPIC_API_KEY (see tests/test-env-setup.mjs); `npm run test:claude` is the dedicated suite
-  // that loads .env.local and exercises live Claude calls. Branch on the actual environment
-  // rather than hardcoding either outcome, so this test is correct in both.
+  // deterministic engine correctly declines to hallucinate width/height rather than guess) and so
+  // genuinely routes AI_ASSISTED. The live scan response must report fixabilityStatus:
+  // 'AUTO_FIX_AVAILABLE' for this -- NOT 'NO_SAFE_FIX' -- since AI-assisted remediation is a real,
+  // available path here; see tests/fixability-status-ai-fallback-regression.test.ts for the full
+  // regression coverage of this exact bug (getFixabilityStatus() used to consult an independent
+  // legacy dry-run instead of decideRemediation(), the same decision this pipeline actually uses).
+  // `npm test` deliberately runs without ANTHROPIC_API_KEY (see tests/test-env-setup.mjs);
+  // `npm run test:claude` is the dedicated suite that loads .env.local and exercises live Claude
+  // calls. Branch on the actual environment rather than hardcoding either outcome, so this test is
+  // correct in both.
+  assert.equal(defect.fixabilityStatus, 'AUTO_FIX_AVAILABLE', 'AI-assisted remediation is available for FIGM-PERF-02; the Live Scan card must not show "No Safe Fix Available"');
   const fixRes = await scanPOST(aiFixRequest(code, 'app/dashboard/page.tsx', defect, '203.0.113.2'));
   assert.equal(fixRes.status, 200);
   const fixData = await fixRes.json();
