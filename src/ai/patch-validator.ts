@@ -4,7 +4,7 @@
  */
 
 import { SourceParser } from '../parser/source-parser.js';
-import { parseVueSfc } from '../parser/vue-sfc-parser.js';
+import { assertSingleVueSfcStructure } from '../parser/vue-sfc-parser.js';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -45,15 +45,9 @@ export class AIPatchValidator {
     // bucket, which also mixes in generic React/JS syntax heuristics -- scoping this to `.vue` files
     // only means it can never affect React/Next.js/Angular patch validation.
     if (filePath.endsWith('.vue')) {
-      const vueParse = parseVueSfc(remediatedCode, filePath);
-      if (!vueParse) {
-        return { isValid: false, reason: 'Remediated Vue SFC could not be parsed by @vue/compiler-sfc.' };
-      }
-      if (vueParse.errors.length > 0) {
-        return {
-          isValid: false,
-          reason: `Remediated Vue SFC is structurally invalid: ${vueParse.errors.map((e) => e.message).join('; ').slice(0, 300)}`,
-        };
+      const structural = assertSingleVueSfcStructure(remediatedCode, filePath);
+      if (!structural.valid) {
+        return { isValid: false, reason: `Remediated Vue SFC is structurally invalid: ${structural.reason}` };
       }
     }
 

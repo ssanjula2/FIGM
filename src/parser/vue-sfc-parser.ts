@@ -49,6 +49,58 @@ export function parseVueSfc(code: string, filePath: string): VueSfcParseResult |
   }
 }
 
+export interface VueSfcStructuralAssertion {
+  valid: boolean;
+  reason?: string;
+}
+
+/**
+ * Explicit, independently-auditable assertion that `code` is exactly ONE valid Vue SFC: at most
+ * one <template> block and at most one <script setup> block. Exists as its own function (rather
+ * than callers only ever checking `parseVueSfc(...).errors.length === 0`) for two reasons:
+ *
+ *  1. A real production incident: a Gemini-generated Vue AI remediation candidate contained TWO
+ *     complete <template>/<script setup> blocks (the model appended a full "corrected" copy of the
+ *     SFC after the original instead of editing it in place). @vue/compiler-sfc's own `errors`
+ *     array DOES already catch this ("Single file component can contain only one <template>
+ *     element" / "...only one <script setup> element" -- confirmed empirically), so this assertion
+ *     is not the only thing standing between a duplicated candidate and acceptance.
+ *  2. Belt-and-suspenders: this ALSO independently counts raw `<template` / `<script setup` opening
+ *     tag occurrences directly on the source text, so the single-template/single-script-setup
+ *     contract is verifiable without depending on @vue/compiler-sfc's error-reporting behavior
+ *     never changing across a future version bump -- every caller that needs "is this genuinely
+ *     ONE SFC" should call this function, not re-derive the check itself.
+ *
+ * Used by both src/ai/patch-validator.ts's cheap PRE_FILTER stage and
+ * src/ai/sandbox-validation-pipeline.ts's heavier FRAMEWORK_STRUCTURAL stage -- one definition,
+ * never duplicated logic that could silently drift between the two call sites.
+ */
+export function assertSingleVueSfcStructure(code: string, filePath: string): VueSfcStructuralAssertion {
+  const parsed = parseVueSfc(code, filePath);
+  if (!parsed) {
+    return { valid: false, reason: 'Could not be parsed by @vue/compiler-sfc.' };
+  }
+  if (parsed.errors.length > 0) {
+    return { valid: false, reason: parsed.errors.map((e) => e.message).join('; ').slice(0, 300) };
+  }
+
+  // Independent, text-level count -- deliberately excludes a self-closing `<template/>` (which
+  // @vue/compiler-sfc itself would already reject as invalid SFC content) and a `<script>` whose
+  // `setup` appears as part of a longer attribute/word (the `\b`/word-boundary and required
+  // whitespace-or-`>` terminator keep e.g. `<script setuponclick>` — not real syntax, but a
+  // deliberately hostile input — from being miscounted as a match).
+  const templateOpenCount = (code.match(/<template(?=[\s>])/g) || []).length;
+  const scriptSetupOpenCount = (code.match(/<script\s+setup\b(?=[\s=>])/g) || []).length;
+  if (templateOpenCount > 1) {
+    return { valid: false, reason: `Found ${templateOpenCount} <template> opening tags in the source text -- a valid SFC has at most one.` };
+  }
+  if (scriptSetupOpenCount > 1) {
+    return { valid: false, reason: `Found ${scriptSetupOpenCount} <script setup> opening tags in the source text -- a valid SFC has at most one.` };
+  }
+
+  return { valid: true };
+}
+
 /**
  * The single script block this engine should read: `<script setup>` when present (the dominant
  * modern Vue 3 Composition API style, where `computed()`/`ref()` calls actually live), otherwise

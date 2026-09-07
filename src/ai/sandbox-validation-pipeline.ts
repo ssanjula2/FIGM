@@ -41,10 +41,10 @@ import * as os from 'os';
 import * as path from 'path';
 import * as ts from 'typescript';
 import { spawnSync } from 'child_process';
-import { parse as parseVueSfc } from '@vue/compiler-sfc';
 import { parseHtml } from 'angular-html-parser';
 import { DiagnosticReport } from '../types/ast-spec.js';
 import { RemediationValidator, PatchValidationResult } from '../engine/remediation-validation.server.js';
+import { assertSingleVueSfcStructure } from '../parser/vue-sfc-parser.js';
 
 export type SandboxStageName = 'ISOLATION' | 'SYNTAX' | 'PATCH_SCOPE' | 'COMPILE_AND_RESCAN' | 'FRAMEWORK_STRUCTURAL' | 'TEST';
 
@@ -250,15 +250,15 @@ export class SandboxValidationPipeline {
 
   private static frameworkStructuralCheck(patchedCode: string, framework: string): SandboxStageResult {
     if (framework === 'VUE_SFC') {
-      try {
-        const { errors } = parseVueSfc(patchedCode, { filename: 'sandbox.vue' });
-        if (errors.length > 0) {
-          return { stage: 'FRAMEWORK_STRUCTURAL', status: 'FAIL', detail: `@vue/compiler-sfc reported ${errors.length} error(s): ${errors.map((e) => String(e)).join('; ').slice(0, 300)}` };
-        }
-        return { stage: 'FRAMEWORK_STRUCTURAL', status: 'PASS', detail: 'Patched Vue SFC parses cleanly via @vue/compiler-sfc (template + script block structure intact).' };
-      } catch (err) {
-        return { stage: 'FRAMEWORK_STRUCTURAL', status: 'FAIL', detail: `@vue/compiler-sfc threw: ${err instanceof Error ? err.message : String(err)}` };
+      // Shared with src/ai/patch-validator.ts's cheap PRE_FILTER stage (one definition, never
+      // duplicated/drifting logic) -- see assertSingleVueSfcStructure's own doc comment for why
+      // this checks BOTH @vue/compiler-sfc's own errors AND an independent raw-text
+      // template/script-setup occurrence count.
+      const structural = assertSingleVueSfcStructure(patchedCode, 'sandbox.vue');
+      if (!structural.valid) {
+        return { stage: 'FRAMEWORK_STRUCTURAL', status: 'FAIL', detail: `@vue/compiler-sfc structural validation failed: ${structural.reason}` };
       }
+      return { stage: 'FRAMEWORK_STRUCTURAL', status: 'PASS', detail: 'Patched Vue SFC parses cleanly via @vue/compiler-sfc (template + script block structure intact).' };
     }
 
     if (framework === 'ANGULAR_TEMPLATE') {
