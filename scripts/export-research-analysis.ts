@@ -39,6 +39,7 @@ import {
   computeExclusions,
   computeDescriptiveStats,
   toCsv,
+  HistoricalParticipantActivity,
   SCAN_EXPORT_COLUMNS,
   SCAN_LEVEL_FIELDS_NOT_AVAILABLE,
   DOMAIN_ANALYSIS_COLUMNS,
@@ -113,7 +114,31 @@ async function main() {
   flags.HUMAN_PRIMARY_SCAN_EXPORT = 'PASS';
   flags.HUMAN_SECONDARY_SCAN_EXPORT = 'PASS';
 
-  const participantSummary = buildParticipantSummary(HUMAN_STUDY_TARGET_PARTICIPANTS, allUsers, datasetRows, remediationEvents);
+  // Real, non-consent-gated admin activity per participant code -- ParticipantRepository.getDetail()
+  // is the exact same method the admin dashboard's own per-participant view uses (works regardless
+  // of consent status, see that method's own doc comment). Fetched once per target code so
+  // buildParticipantSummary() can surface a real, already-active-but-not-yet-consented
+  // participant's genuine historical activity in a clearly separate, honestly-labeled lane --
+  // never touching the consent-gated columns, never reclassifying anything as PRIMARY/SECONDARY.
+  const historicalActivity = new Map<string, HistoricalParticipantActivity>();
+  for (let i = 1; i <= HUMAN_STUDY_TARGET_PARTICIPANTS; i++) {
+    const code = `P${String(i).padStart(3, '0')}`;
+    const detail = await ParticipantRepository.getDetail(code);
+    if (!detail || detail.scanSummary.totalScans === 0) continue;
+    historicalActivity.set(code, {
+      totalScans: detail.scanSummary.totalScans,
+      successfulScans: detail.scanSummary.successfulScans,
+      failedScans: detail.scanSummary.failedScans,
+      averageQualityScore: detail.scanSummary.averageQualityScore,
+      latestQualityScore: detail.scanHistory[0]?.qualityScore ?? null,
+      averageScanTimeMs: detail.scanSummary.averageScanTimeMs,
+      totalFindings: detail.scanSummary.totalFindings,
+      frameworkUsage: detail.frameworkUsage,
+      latestActivity: detail.scanSummary.latestScan,
+    });
+  }
+
+  const participantSummary = buildParticipantSummary(HUMAN_STUDY_TARGET_PARTICIPANTS, allUsers, datasetRows, remediationEvents, historicalActivity);
   writeFile('research-participant-summary.csv', toCsv(participantSummary, PARTICIPANT_SUMMARY_COLUMNS));
   flags.PARTICIPANT_SUMMARY_EXPORT = 'PASS';
 
@@ -252,6 +277,10 @@ async function main() {
       },
       exclusions,
       fieldsNotAvailable: SCAN_LEVEL_FIELDS_NOT_AVAILABLE,
+      // Count of participants with a real, non-consent-gated historicalActivity entry actually
+      // surfaced in research-participant-summary.csv (i.e. real activity AND not CONSENT_VERIFIED
+      // -- see buildParticipantSummary's own inclusion rule, not re-derived here).
+      historicalParticipantCount: participantSummary.filter((p) => p.historicalDataSource !== '').length,
     },
     questionnaire,
     controlledBenchmark: {
@@ -350,6 +379,7 @@ repeat scan of the same fixture is \`SECONDARY\` -- preserved for repeat-interac
 ## 4. Participant completion
 
 See \`research-participant-summary.csv\` for the full P001-P${String(h.targetParticipantCount).padStart(3, '0').slice(-3)} table.
+${h.historicalParticipantCount > 0 ? `\n${h.historicalParticipantCount} participant(s) not yet CONSENT_VERIFIED have real, already-persisted admin-visible activity from before/without consent verification, preserved in the same CSV's \`historical*\` columns (\`historicalDataSource=PRODUCTION_REAL_HISTORICAL_PARTICIPANT\`). This is real data from real users, but it is NOT consent-gated, NOT PRIMARY/SECONDARY research data, and is excluded from every statistic in Sections 5-14 below -- see \`ParticipantSummaryRow\`'s own doc comment in src/eval/research-analysis-exporter.ts for the exact inclusion rule.\n` : ''}
 
 ## 5. Framework distribution
 

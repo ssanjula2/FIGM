@@ -406,13 +406,59 @@ export interface ParticipantSummaryRow {
   fixesApplied: number;
   rescans: number;
   lastActivity: string | typeof NOT_AVAILABLE;
+  /** Everything below is a SEPARATE provenance lane from the columns above. The columns above are
+   *  always derived from ParticipantRepository.getResearchDataset() -- real, post-consent,
+   *  eligible activity ONLY, per the study protocol. These `historical*` columns instead surface a
+   *  real participant's REAL, already-persisted admin-visible activity (ParticipantRepository
+   *  .getDetail(), the same non-consent-gated method the admin dashboard's own per-participant view
+   *  uses) for a participant who has NOT (yet, or ever) been CONSENT_VERIFIED -- e.g. pre-consent
+   *  pilot/dogfooding activity the researcher wants preserved for reference while collection
+   *  continues with later participant codes. Populated ONLY when real activity exists AND the
+   *  participant is not CONSENT_VERIFIED (see buildParticipantSummary's own logic) -- never
+   *  fabricated, never reclassified as PRIMARY/SECONDARY, and never a substitute for the real
+   *  consent-gated columns above. A CONSENT_VERIFIED participant's real activity is already fully
+   *  represented by the columns above; these stay blank/NOT_AVAILABLE for that participant to avoid
+   *  ambiguity about which numbers are authoritative. */
+  historicalDataSource: string;
+  historicalEligibility: string;
+  historicalTotalScans: number | typeof NOT_AVAILABLE;
+  historicalSuccessfulScans: number | typeof NOT_AVAILABLE;
+  historicalFailedScans: number | typeof NOT_AVAILABLE;
+  historicalAvgQualityScore: number | typeof NOT_AVAILABLE;
+  historicalLatestQualityScore: number | typeof NOT_AVAILABLE;
+  historicalAvgScanTimeMs: number | typeof NOT_AVAILABLE;
+  historicalTotalFindings: number | typeof NOT_AVAILABLE;
+  historicalFrameworkUsage: string | typeof NOT_AVAILABLE;
+  historicalLatestActivity: string | typeof NOT_AVAILABLE;
+}
+
+/** One participant's real, already-persisted admin-visible activity, independent of consent
+ *  status -- the exact shape ParticipantRepository.getDetail()'s scanSummary/frameworkUsage
+ *  already computes (the admin dashboard's own per-participant view). Fetching this is a real
+ *  DB read, so (per this file's own "pure transform" design) it is gathered by the caller
+ *  (scripts/export-research-analysis.ts) and passed in here, never fetched by this module. */
+export interface HistoricalParticipantActivity {
+  totalScans: number;
+  successfulScans: number;
+  failedScans: number;
+  averageQualityScore: number | null;
+  latestQualityScore: number | null;
+  averageScanTimeMs: number | null;
+  totalFindings: number;
+  frameworkUsage: Array<{ framework: string; count: number }>;
+  latestActivity: string | null;
 }
 
 export function buildParticipantSummary(
   targetCount: number,
   allUsers: DBUser[],
   datasetRows: ResearchDatasetScanRow[],
-  remediationEvents: ResearchRemediationEventRow[]
+  remediationEvents: ResearchRemediationEventRow[],
+  /** Optional: real, non-consent-gated admin activity per participant code, keyed exactly like
+   *  every other map in this function ("P001", ...). Omitted entirely (or a participant absent
+   *  from it) simply leaves that participant's historical* columns at NOT_AVAILABLE -- backward
+   *  compatible with every existing caller/test that doesn't pass this argument at all. */
+  historicalActivity?: Map<string, HistoricalParticipantActivity>
 ): ParticipantSummaryRow[] {
   const userByCode = new Map<string, DBUser>();
   for (const u of allUsers) {
@@ -449,6 +495,13 @@ export function buildParticipantSummary(
     )[0];
     const latestScan = [...rows].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
 
+    // Historical (non-consent-gated) lane -- see ParticipantSummaryRow's own doc comment. Only
+    // populated for a real, already-active participant who is NOT currently CONSENT_VERIFIED;
+    // never overwrites or duplicates the consent-gated columns above.
+    const isConsentVerified = user?.researchStatus === 'CONSENT_VERIFIED';
+    const historical = historicalActivity?.get(code);
+    const includeHistorical = !isConsentVerified && !!historical && historical.totalScans > 0;
+
     out.push({
       participantCode: code,
       researchStatus: user?.researchStatus || 'NOT_REGISTERED',
@@ -473,6 +526,19 @@ export function buildParticipantSummary(
       fixesApplied: events.filter((e) => e.applied).length,
       rescans: secondary.length,
       lastActivity: latestByActivity ? latestByActivity.createdAt : NOT_AVAILABLE,
+      historicalDataSource: includeHistorical ? 'PRODUCTION_REAL_HISTORICAL_PARTICIPANT' : '',
+      historicalEligibility: includeHistorical ? 'HISTORICAL_REAL_USER_NOT_CONSENT_GATED' : '',
+      historicalTotalScans: includeHistorical ? historical!.totalScans : NOT_AVAILABLE,
+      historicalSuccessfulScans: includeHistorical ? historical!.successfulScans : NOT_AVAILABLE,
+      historicalFailedScans: includeHistorical ? historical!.failedScans : NOT_AVAILABLE,
+      historicalAvgQualityScore: includeHistorical && historical!.averageQualityScore !== null ? historical!.averageQualityScore : NOT_AVAILABLE,
+      historicalLatestQualityScore: includeHistorical && historical!.latestQualityScore !== null ? historical!.latestQualityScore : NOT_AVAILABLE,
+      historicalAvgScanTimeMs: includeHistorical && historical!.averageScanTimeMs !== null ? historical!.averageScanTimeMs : NOT_AVAILABLE,
+      historicalTotalFindings: includeHistorical ? historical!.totalFindings : NOT_AVAILABLE,
+      historicalFrameworkUsage: includeHistorical
+        ? historical!.frameworkUsage.map((f) => `${f.framework}:${f.count}`).join(';')
+        : NOT_AVAILABLE,
+      historicalLatestActivity: includeHistorical && historical!.latestActivity ? historical!.latestActivity : NOT_AVAILABLE,
     });
   }
   return out;
@@ -486,6 +552,13 @@ export const PARTICIPANT_SUMMARY_COLUMNS: Array<keyof ParticipantSummaryRow> = [
   'criticalTotal', 'highTotal', 'mediumTotal', 'lowTotal',
   'meanScanDurationMs', 'meanEngineMemoryUsageMb',
   'fixEvents', 'fixesGenerated', 'fixesApplied', 'rescans', 'lastActivity',
+  // Appended, not interleaved -- a separate provenance lane, see ParticipantSummaryRow's doc
+  // comment. Never populated for a CONSENT_VERIFIED participant (that row's real activity is
+  // already fully represented by the columns above).
+  'historicalDataSource', 'historicalEligibility',
+  'historicalTotalScans', 'historicalSuccessfulScans', 'historicalFailedScans',
+  'historicalAvgQualityScore', 'historicalLatestQualityScore', 'historicalAvgScanTimeMs',
+  'historicalTotalFindings', 'historicalFrameworkUsage', 'historicalLatestActivity',
 ];
 
 // ---------------------------------------------------------------------------

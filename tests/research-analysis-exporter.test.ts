@@ -16,6 +16,7 @@ import {
   computeExclusions,
   toCsv,
   NOT_AVAILABLE,
+  HistoricalParticipantActivity,
 } from '../src/eval/research-analysis-exporter.js';
 
 /**
@@ -191,6 +192,79 @@ describe('research-analysis-exporter: participant summary', () => {
     assert.equal(summary[0].meanQualityScore, 70, 'mean must be computed over PRIMARY rows only');
     assert.equal(summary[0].fixEvents, 1);
     assert.equal(summary[0].fixesApplied, 1);
+    // No historicalActivity argument was passed -- the new lane must stay fully blank/NOT_AVAILABLE,
+    // never fabricated, and must never be confused with the real consent-gated columns above.
+    assert.equal(summary[0].historicalDataSource, '');
+    assert.equal(summary[0].historicalTotalScans, NOT_AVAILABLE);
+  });
+});
+
+describe('research-analysis-exporter: historical (non-consent-gated) participant activity lane', () => {
+  const activity = (overrides: Partial<HistoricalParticipantActivity> = {}): HistoricalParticipantActivity => ({
+    totalScans: 3,
+    successfulScans: 3,
+    failedScans: 0,
+    averageQualityScore: 82,
+    latestQualityScore: 90,
+    averageScanTimeMs: 55.5,
+    totalFindings: 7,
+    frameworkUsage: [{ framework: 'React', count: 2 }, { framework: 'Vue', count: 1 }],
+    latestActivity: '2026-09-07T16:00:00.000Z',
+    ...overrides,
+  });
+
+  test('surfaces real historical activity for an ASSIGNED (not yet consent-verified) participant, clearly labeled and never touching the consent-gated columns', () => {
+    const users: any[] = [{ id: 'u1', participantCode: 'P001', researchStatus: 'ASSIGNED', researchConsentVerifiedAt: null }];
+    const historical = new Map([['P001', activity()]]);
+    const summary = buildParticipantSummary(1, users, [], [], historical);
+    const p = summary[0];
+
+    assert.equal(p.researchStatus, 'ASSIGNED');
+    assert.equal(p.consentVerifiedAtPresent, false, 'consent status must be preserved exactly as stored, never marked verified');
+    assert.equal(p.eligiblePrimaryScans, 0, 'no fabricated PRIMARY rows -- pre-consent activity is never reclassified as eligible');
+    assert.equal(p.secondaryScans, 0);
+
+    assert.equal(p.historicalDataSource, 'PRODUCTION_REAL_HISTORICAL_PARTICIPANT');
+    assert.equal(p.historicalEligibility, 'HISTORICAL_REAL_USER_NOT_CONSENT_GATED');
+    assert.equal(p.historicalTotalScans, 3);
+    assert.equal(p.historicalSuccessfulScans, 3);
+    assert.equal(p.historicalFailedScans, 0);
+    assert.equal(p.historicalAvgQualityScore, 82);
+    assert.equal(p.historicalLatestQualityScore, 90);
+    assert.equal(p.historicalAvgScanTimeMs, 55.5);
+    assert.equal(p.historicalTotalFindings, 7);
+    assert.equal(p.historicalFrameworkUsage, 'React:2;Vue:1');
+    assert.equal(p.historicalLatestActivity, '2026-09-07T16:00:00.000Z');
+  });
+
+  test('never populates the historical lane for a CONSENT_VERIFIED participant, even if historical activity data is passed for them', () => {
+    const users: any[] = [{ id: 'u1', participantCode: 'P001', researchStatus: 'CONSENT_VERIFIED', researchConsentVerifiedAt: '2026-01-01T00:00:00.000Z' }];
+    const historical = new Map([['P001', activity()]]);
+    const summary = buildParticipantSummary(1, users, [], [], historical);
+    const p = summary[0];
+
+    assert.equal(p.historicalDataSource, '', 'a CONSENT_VERIFIED participant\'s real activity is already fully represented by the consent-gated columns -- the historical lane must not duplicate or override it');
+    assert.equal(p.historicalTotalScans, NOT_AVAILABLE);
+  });
+
+  test('leaves the historical lane at NOT_AVAILABLE for a participant with zero recorded activity, even if present in the map', () => {
+    const users: any[] = [{ id: 'u1', participantCode: 'P001', researchStatus: 'ASSIGNED', researchConsentVerifiedAt: null }];
+    const historical = new Map([['P001', activity({ totalScans: 0, successfulScans: 0, failedScans: 0, frameworkUsage: [] })]]);
+    const summary = buildParticipantSummary(1, users, [], [], historical);
+    assert.equal(summary[0].historicalDataSource, '');
+    assert.equal(summary[0].historicalTotalScans, NOT_AVAILABLE);
+  });
+
+  test('leaves every other participant\'s historical lane untouched when only one participant has an entry', () => {
+    const users: any[] = [
+      { id: 'u1', participantCode: 'P001', researchStatus: 'ASSIGNED', researchConsentVerifiedAt: null },
+      { id: 'u2', participantCode: 'P002', researchStatus: 'ASSIGNED', researchConsentVerifiedAt: null },
+    ];
+    const historical = new Map([['P001', activity()]]);
+    const summary = buildParticipantSummary(2, users, [], [], historical);
+    assert.equal(summary[0].historicalDataSource, 'PRODUCTION_REAL_HISTORICAL_PARTICIPANT');
+    assert.equal(summary[1].historicalDataSource, '', 'P002 has no entry in the historical map and must not inherit or fabricate one');
+    assert.equal(summary[1].historicalTotalScans, NOT_AVAILABLE);
   });
 });
 

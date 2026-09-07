@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-07T08:55:07.016Z",
+  "generatedAt": "2026-09-07T19:12:28.423Z",
   "humanStudy": {
     "targetParticipantCount": 20,
     "primaryScanCount": 0,
@@ -53,9 +53,9 @@
       "status": "NOT_AVAILABLE"
     },
     "exclusions": {
-      "preConsentScansExcluded": 0,
+      "preConsentScansExcluded": 60,
       "revokedParticipants": 0,
-      "assignedNotYetVerifiedParticipants": 1,
+      "assignedNotYetVerifiedParticipants": 5,
       "secondaryScansExcludedFromPrimary": 0,
       "qaOrOutOfRangeFixtureCodesExcludedByConstruction": 0,
       "invalidRows": 0
@@ -66,7 +66,8 @@
       "complexity",
       "sourceUnits",
       "alpsExtracted"
-    ]
+    ],
+    "historicalParticipantCount": 5
   },
   "questionnaire": {
     "status": "PENDING",

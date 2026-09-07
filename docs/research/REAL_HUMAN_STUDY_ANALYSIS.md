@@ -1,6 +1,6 @@
 # Real Human Study Analysis
 
-Generated: 2026-09-07T08:55:07.016Z
+Generated: 2026-09-07T19:12:28.423Z
 
 This report covers three methodologically distinct datasets, kept separate throughout: the real
 human study (Sections 1-16), the internal controlled benchmark (Appendix A), and RQ1 runtime
@@ -35,6 +35,9 @@ repeat scan of the same fixture is `SECONDARY` -- preserved for repeat-interacti
 ## 4. Participant completion
 
 See `research-participant-summary.csv` for the full P001-P020 table.
+
+5 participant(s) not yet CONSENT_VERIFIED have real, already-persisted admin-visible activity from before/without consent verification, preserved in the same CSV's `historical*` columns (`historicalDataSource=PRODUCTION_REAL_HISTORICAL_PARTICIPANT`). This is real data from real users, but it is NOT consent-gated, NOT PRIMARY/SECONDARY research data, and is excluded from every statistic in Sections 5-14 below -- see `ParticipantSummaryRow`'s own doc comment in src/eval/research-analysis-exporter.ts for the exact inclusion rule.
+
 
 ## 5. Framework distribution
 
@@ -130,9 +133,9 @@ the violation gone.
 
 | Exclusion reason | Count |
 |---|---|
-| Pre-consent scans (created before the participant's verification timestamp) | 0 |
+| Pre-consent scans (created before the participant's verification timestamp) | 60 |
 | REVOKED participants | 0 |
-| ASSIGNED (not yet consent-verified) participants | 1 |
+| ASSIGNED (not yet consent-verified) participants | 5 |
 | SECONDARY scans excluded from PRIMARY-only analysis | 0 |
 | Operational/QA-fixture participant codes (P-shaped but out of the P001-P020 range) excluded by construction | 0 |
 | Invalid/malformed rows | 0 (none observed -- getResearchDataset() only ever returns structurally valid rows) |
