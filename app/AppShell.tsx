@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Sidebar from './Sidebar';
 import AdminSidebar from './AdminSidebar';
 import HeaderBar from './HeaderBar';
+import { sessionClient, SESSION_EXPIRED_EVENT } from '../src/auth/session-client';
 
 // Routes that must render standalone -- no Sidebar/HeaderBar app chrome around them. These are
 // exactly the public, pre-authentication routes (see middleware.ts's isPublicPath): the canonical
@@ -52,8 +53,27 @@ function isBareRoute(pathname: string | null): boolean {
  */
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Resumes (or starts) silent access-token refresh for the lifetime of the app -- see
+  // src/auth/session-client.ts's own doc comment for the real production incident this closes.
+  // Runs once per app mount (this layout persists across client-side route changes; only a hard
+  // page reload re-runs it, which is exactly when the in-memory refresh timer needs resuming from
+  // the expiry persisted in storage). A no-op for a visitor with no known session -- never treats
+  // an anonymous visitor as authenticated. On a confirmed-dead session (refresh failed, or a
+  // non-retriable 401 occurred somewhere in the app), redirects to /auth/login -- the same
+  // destination Sidebar's own logout handler already uses, so a session ending because it expired
+  // looks the same to the user as choosing to log out.
+  useEffect(() => {
+    sessionClient.init();
+    const handleSessionExpired = () => {
+      router.push('/auth/login');
+    };
+    window.addEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
+  }, [router]);
 
   const closeSidebar = useCallback(() => {
     setSidebarOpen(false);

@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { sessionClient } from '../src/auth/session-client';
 
 interface SidebarProps {
   /** Whether the mobile/tablet off-canvas sidebar is currently open (< 1024px only -- on desktop
@@ -54,6 +55,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     } catch {
       // localStorage can throw in some privacy-mode browser configurations; logout must not crash.
     }
+    // Cancels any pending silent-refresh timer and marks this session explicitly logged out, so a
+    // stray already-scheduled refresh (or a later 401 from some in-flight request) can never
+    // silently re-establish a session after the user chose to log out -- see
+    // src/auth/session-client.ts's markLoggedOut doc comment.
+    sessionClient.markLoggedOut();
     router.push('/auth/login');
   };
 

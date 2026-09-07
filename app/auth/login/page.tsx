@@ -4,6 +4,7 @@ import React, { Suspense, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { isSafeRedirect } from '../../../src/utils/safe-redirect';
+import { sessionClient } from '../../../src/auth/session-client';
 import PasswordField from '../../components/PasswordField';
 
 // useSearchParams() opts a component out of static prerendering unless it's wrapped in its own
@@ -58,10 +59,16 @@ function LoginForm() {
       }
 
       if (data.token || data.accessToken) {
-        localStorage.setItem('figm_token', data.token || data.accessToken);
+        const accessToken = data.token || data.accessToken;
+        localStorage.setItem('figm_token', accessToken);
         if (data.user) {
           localStorage.setItem('figm_user', JSON.stringify(data.user));
         }
+        // Schedules the silent-refresh timer against this token's real expiry -- see
+        // src/auth/session-client.ts's own doc comment for why this exists (a real production
+        // incident: authenticated side effects like AI-fix telemetry silently stopped working
+        // after the access token's 1-hour lifetime, since nothing ever refreshed it).
+        sessionClient.recordSession(accessToken);
       }
 
       // middleware.ts already gates every protected route by the httpOnly figm_token cookie the

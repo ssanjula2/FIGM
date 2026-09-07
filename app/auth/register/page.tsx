@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { sessionClient } from '../../../src/auth/session-client';
 import PasswordField from '../../components/PasswordField';
 
 export default function RegisterPage() {
@@ -51,10 +52,15 @@ export default function RegisterPage() {
       }
 
       if (data.accessToken || data.token) {
-        localStorage.setItem('figm_token', data.accessToken || data.token);
+        const accessToken = data.accessToken || data.token;
+        localStorage.setItem('figm_token', accessToken);
         if (data.user) {
           localStorage.setItem('figm_user', JSON.stringify(data.user));
         }
+        // See src/auth/session-client.ts -- schedules silent refresh against this token's real
+        // expiry so authenticated side effects (e.g. AI-fix telemetry) survive past the access
+        // token's 1-hour lifetime.
+        sessionClient.recordSession(accessToken);
       }
 
       // Registration issues a real session immediately (see app/api/auth/register/route.ts) --

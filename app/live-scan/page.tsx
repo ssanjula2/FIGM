@@ -5,6 +5,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import type { OnMount } from '@monaco-editor/react';
 import { trackScanStarted, trackScanCompleted } from '../../src/lib/analytics';
+import { sessionClient } from '../../src/auth/session-client';
 import { primaryResearchDomain } from '../../src/matrix/four-layer-meta-model';
 import { TOTAL_RULE_COUNT } from '../../src/matrix/rule-registry';
 import { formatScanDuration, formatMemoryDelta, formatScanEngineStatus, scanEngineStatusBadge } from '../../src/lib/engine-diagnostics-format';
@@ -993,7 +994,14 @@ export default function LiveScanPage() {
     }
 
     try {
-      const res = await fetch('/api/scan', {
+      // authFetch (src/auth/session-client.ts): if the access token had already expired by the
+      // time this fires, transparently refreshes it and retries once -- this is specifically what
+      // was missing when a real production AI-assisted fix (FIGM-REACT-01, provider GEMINI,
+      // verified:true) produced no AiHistory row (see that module's own doc comment). The fix
+      // action itself never requires auth (an anonymous caller still gets a real fix); this only
+      // gives the fix-interaction TELEMETRY the best chance of being attributed to a real,
+      // still-authenticated session.
+      const res = await sessionClient.authFetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code, fileName, action, defect }),
