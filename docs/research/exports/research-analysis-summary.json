@@ -1,0 +1,466 @@
+{
+  "generatedAt": "2026-09-07T08:55:07.016Z",
+  "humanStudy": {
+    "targetParticipantCount": 20,
+    "primaryScanCount": 0,
+    "secondaryScanCount": 0,
+    "domainTotals": [
+      {
+        "domain": "ARCHITECTURE",
+        "findings": 0,
+        "percentageOfTotal": null
+      },
+      {
+        "domain": "STATIC_PERFORMANCE",
+        "findings": 0,
+        "percentageOfTotal": null
+      },
+      {
+        "domain": "ACCESSIBILITY",
+        "findings": 0,
+        "percentageOfTotal": null
+      }
+    ],
+    "frameworkDomainMatrix": [],
+    "severityAnalysis": [
+      {
+        "scope": "ALL",
+        "frameworkRole": "ALL",
+        "criticalTotal": 0,
+        "highTotal": 0,
+        "mediumTotal": 0,
+        "lowTotal": 0,
+        "totalFindings": 0
+      }
+    ],
+    "ruleFrequency": [],
+    "descriptiveStatistics": {
+      "qualityScore": null,
+      "totalFindings": null,
+      "architectureFindings": null,
+      "staticPerformanceFindings": null,
+      "accessibilityFindings": null,
+      "scanDurationMs": null,
+      "engineMemoryUsageMb": null
+    },
+    "remediation": {
+      "totalFixEvents": 0,
+      "totalFixesApplied": 0
+    },
+    "beforeAfter": {
+      "validPairCount": 0,
+      "candidateGroupsWithoutQualifyingFixEvent": 0,
+      "status": "NOT_AVAILABLE"
+    },
+    "exclusions": {
+      "preConsentScansExcluded": 0,
+      "revokedParticipants": 0,
+      "assignedNotYetVerifiedParticipants": 1,
+      "secondaryScansExcludedFromPrimary": 0,
+      "qaOrOutOfRangeFixtureCodesExcludedByConstruction": 0,
+      "invalidRows": 0
+    },
+    "fieldsNotAvailable": [
+      "rulesChecked",
+      "rulesEvaluated",
+      "complexity",
+      "sourceUnits",
+      "alpsExtracted"
+    ]
+  },
+  "questionnaire": {
+    "status": "PENDING",
+    "susStatus": "PENDING",
+    "cronbachAlphaStatus": "PENDING"
+  },
+  "controlledBenchmark": {
+    "label": "INTERNAL_CONTROLLED_BENCHMARK",
+    "overall": {
+      "scope": "OVERALL",
+      "ruleId": "OVERALL",
+      "domain": "ALL",
+      "truePositives": 65,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "groundTruthItems": 65,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1
+    },
+    "perRuleCount": 50
+  },
+  "rq1RuntimePerformance": {
+    "label": "RQ1_RUNTIME_PERFORMANCE",
+    "note": "Real, independently re-collected FCP/TTI dataset, per research/thesis/THESIS_BLOCKER_RESOLUTION.md DECISION 1 (RESOLVED). Batch 1 is the PRIMARY dataset (research-freeze-v1, committed); Batch 2 (\"Stage 9\") is a true REPLICATION of the same frozen protocol (research-freeze-v5 baseline, currently uncommitted on disk). No documented reason for Batch 2 to supersede Batch 1 -- both are reported here separately and are NEVER pooled into one figure.",
+    "batch1Primary": {
+      "source": "research/rq1-experiment/processed-results/summary.json",
+      "freezeBasis": "research-freeze-v1 (committed)",
+      "available": true,
+      "data": {
+        "meta": {
+          "generatedAt": "2026-09-03T04:28:15.683Z",
+          "sourceDir": "C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\research\\rq1-experiment\\raw-results"
+        },
+        "breakdown": {
+          "totalExecutions": 44,
+          "smokeExecutions": 0,
+          "warmupExecutions": 4,
+          "measuredExecutions": 40,
+          "validMeasuredN": 40,
+          "failedMeasuredN": 0
+        },
+        "stats": [
+          {
+            "conditionId": "CSR_LOCAL",
+            "n_valid": 10,
+            "n_failed": 0,
+            "fcp": {
+              "mean": 447.4829000000001,
+              "median": 446.59659999999997,
+              "sd": 2.511129918316987,
+              "min": 443.7421,
+              "max": 450.7466
+            },
+            "tti": {
+              "mean": 480.68289999999996,
+              "median": 479.22090000000003,
+              "sd": 7.776547085807312,
+              "min": 471.20860000000005,
+              "max": 490.5886000000001
+            }
+          },
+          {
+            "conditionId": "CSR_GLOBAL",
+            "n_valid": 10,
+            "n_failed": 0,
+            "fcp": {
+              "mean": 444.19213,
+              "median": 443.9432,
+              "sd": 2.473628520592564,
+              "min": 441.4346,
+              "max": 448.7001
+            },
+            "tti": {
+              "mean": 475.5921300000001,
+              "median": 475.09465,
+              "sd": 5.082058884185926,
+              "min": 468.0175000000001,
+              "max": 483.4141000000001
+            }
+          },
+          {
+            "conditionId": "SSR_LOCAL",
+            "n_valid": 10,
+            "n_failed": 0,
+            "fcp": {
+              "mean": 444.19392,
+              "median": 443.9889,
+              "sd": 2.033519951982553,
+              "min": 441.7967,
+              "max": 448.7713
+            },
+            "tti": {
+              "mean": 476.69392000000005,
+              "median": 474.04345000000006,
+              "sd": 6.339123936633501,
+              "min": 470.49840000000006,
+              "max": 486.7713
+            }
+          },
+          {
+            "conditionId": "SSR_GLOBAL",
+            "n_valid": 10,
+            "n_failed": 0,
+            "fcp": {
+              "mean": 444.7750199999999,
+              "median": 444.8412,
+              "sd": 1.8535459966717183,
+              "min": 441.6801,
+              "max": 447.7578
+            },
+            "tti": {
+              "mean": 477.97502000000003,
+              "median": 475.68800000000005,
+              "sd": 8.697892559925068,
+              "min": 465.68010000000004,
+              "max": 490.7578
+            }
+          }
+        ],
+        "comparisons": [
+          {
+            "dimension": "renderingStrategy",
+            "groups": [
+              {
+                "label": "CSR",
+                "n_valid": 20,
+                "n_failed": 0,
+                "fcp": {
+                  "mean": 445.83751500000005,
+                  "median": 445.7658,
+                  "sd": 2.9555241737028877,
+                  "min": 441.4346,
+                  "max": 450.7466
+                },
+                "tti": {
+                  "mean": 478.13751500000006,
+                  "median": 476.5179,
+                  "sd": 6.906510123695656,
+                  "min": 468.0175000000001,
+                  "max": 490.5886000000001
+                }
+              },
+              {
+                "label": "SSR",
+                "n_valid": 20,
+                "n_failed": 0,
+                "fcp": {
+                  "mean": 444.48447,
+                  "median": 444.3562,
+                  "sd": 1.91704146321466,
+                  "min": 441.6801,
+                  "max": 448.7713
+                },
+                "tti": {
+                  "mean": 477.3344700000001,
+                  "median": 474.9144500000001,
+                  "sd": 7.4365616399190575,
+                  "min": 465.68010000000004,
+                  "max": 490.7578
+                }
+              }
+            ]
+          },
+          {
+            "dimension": "stateManagementStrategy",
+            "groups": [
+              {
+                "label": "LOCAL",
+                "n_valid": 20,
+                "n_failed": 0,
+                "fcp": {
+                  "mean": 445.8384100000001,
+                  "median": 445.51395,
+                  "sd": 2.7914883688776055,
+                  "min": 441.7967,
+                  "max": 450.7466
+                },
+                "tti": {
+                  "mean": 478.6884100000001,
+                  "median": 477.44990000000007,
+                  "sd": 7.201945639741363,
+                  "min": 470.49840000000006,
+                  "max": 490.5886000000001
+                }
+              },
+              {
+                "label": "GLOBAL",
+                "n_valid": 20,
+                "n_failed": 0,
+                "fcp": {
+                  "mean": 444.4835749999999,
+                  "median": 444.4854,
+                  "sd": 2.1483046086268556,
+                  "min": 441.4346,
+                  "max": 448.7001
+                },
+                "tti": {
+                  "mean": 476.78357500000004,
+                  "median": 475.09465,
+                  "sd": 7.040173222814665,
+                  "min": 465.68010000000004,
+                  "max": 490.7578
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "batch2Replication": {
+      "source": "research/rq1-experiment/raw-results/STAGE9_REAL_RUN_20260903T192350Z/summary.json",
+      "freezeBasis": "research-freeze-v5 baseline (uncommitted)",
+      "available": true,
+      "data": {
+        "meta": {
+          "generatedAt": "2026-09-03T19:24:49.059Z",
+          "sourceDir": "C:\\Users\\MSI\\.gemini\\antigravity-ide\\scratch\\figm-model\\research\\rq1-experiment\\raw-results\\STAGE9_REAL_RUN_20260903T192350Z\\raw"
+        },
+        "breakdown": {
+          "totalExecutions": 44,
+          "smokeExecutions": 0,
+          "warmupExecutions": 4,
+          "measuredExecutions": 40,
+          "validMeasuredN": 40,
+          "failedMeasuredN": 0
+        },
+        "stats": [
+          {
+            "conditionId": "CSR_LOCAL",
+            "n_valid": 10,
+            "n_failed": 0,
+            "fcp": {
+              "mean": 439.85325,
+              "median": 439.0992,
+              "sd": 2.515817409577521,
+              "min": 437.21,
+              "max": 445.4389
+            },
+            "tti": {
+              "mean": 464.45325,
+              "median": 463.09785,
+              "sd": 4.428880409626992,
+              "min": 459.21000000000004,
+              "max": 472.43890000000005
+            }
+          },
+          {
+            "conditionId": "CSR_GLOBAL",
+            "n_valid": 10,
+            "n_failed": 0,
+            "fcp": {
+              "mean": 441.57776,
+              "median": 437.55494999999996,
+              "sd": 9.352299334649686,
+              "min": 435.7737,
+              "max": 462.5672
+            },
+            "tti": {
+              "mean": 463.97775999999993,
+              "median": 460.03295,
+              "sd": 9.030974142139918,
+              "min": 457.77369999999996,
+              "max": 484.56719999999996
+            }
+          },
+          {
+            "conditionId": "SSR_LOCAL",
+            "n_valid": 10,
+            "n_failed": 0,
+            "fcp": {
+              "mean": 438.79618,
+              "median": 439.10735,
+              "sd": 1.263364448869226,
+              "min": 436.5863,
+              "max": 440.3558
+            },
+            "tti": {
+              "mean": 463.29618,
+              "median": 462.46315,
+              "sd": 4.350450903527133,
+              "min": 459.58630000000005,
+              "max": 474.35580000000004
+            }
+          },
+          {
+            "conditionId": "SSR_GLOBAL",
+            "n_valid": 10,
+            "n_failed": 0,
+            "fcp": {
+              "mean": 438.77919999999995,
+              "median": 438.2308,
+              "sd": 2.059739260197754,
+              "min": 436.9656,
+              "max": 443.943
+            },
+            "tti": {
+              "mean": 464.47920000000005,
+              "median": 463.44655,
+              "sd": 4.7988555624116,
+              "min": 459.1732,
+              "max": 476.0685
+            }
+          }
+        ],
+        "comparisons": [
+          {
+            "dimension": "renderingStrategy",
+            "groups": [
+              {
+                "label": "CSR",
+                "n_valid": 20,
+                "n_failed": 0,
+                "fcp": {
+                  "mean": 440.715505,
+                  "median": 438.2637,
+                  "sd": 6.723968261492069,
+                  "min": 435.7737,
+                  "max": 462.5672
+                },
+                "tti": {
+                  "mean": 464.21550499999995,
+                  "median": 461.36885,
+                  "sd": 6.927032228692315,
+                  "min": 457.77369999999996,
+                  "max": 484.56719999999996
+                }
+              },
+              {
+                "label": "SSR",
+                "n_valid": 20,
+                "n_failed": 0,
+                "fcp": {
+                  "mean": 438.78768999999994,
+                  "median": 438.6567,
+                  "sd": 1.663050171063299,
+                  "min": 436.5863,
+                  "max": 443.943
+                },
+                "tti": {
+                  "mean": 463.88769000000013,
+                  "median": 462.79699999999997,
+                  "sd": 4.499102960637932,
+                  "min": 459.1732,
+                  "max": 476.0685
+                }
+              }
+            ]
+          },
+          {
+            "dimension": "stateManagementStrategy",
+            "groups": [
+              {
+                "label": "LOCAL",
+                "n_valid": 20,
+                "n_failed": 0,
+                "fcp": {
+                  "mean": 439.324715,
+                  "median": 439.10735,
+                  "sd": 2.012014278037387,
+                  "min": 436.5863,
+                  "max": 445.4389
+                },
+                "tti": {
+                  "mean": 463.8747150000001,
+                  "median": 462.7102,
+                  "sd": 4.313788770940168,
+                  "min": 459.21000000000004,
+                  "max": 474.35580000000004
+                }
+              },
+              {
+                "label": "GLOBAL",
+                "n_valid": 20,
+                "n_failed": 0,
+                "fcp": {
+                  "mean": 440.17848000000004,
+                  "median": 437.99974999999995,
+                  "sd": 6.745493420959698,
+                  "min": 435.7737,
+                  "max": 462.5672
+                },
+                "tti": {
+                  "mean": 464.22848000000005,
+                  "median": 461.59929999999997,
+                  "sd": 7.043267738740223,
+                  "min": 457.77369999999996,
+                  "max": 484.56719999999996
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

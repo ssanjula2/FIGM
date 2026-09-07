@@ -1,0 +1,1 @@
+participantCode,attemptType,userId,fileName,framework,frameworkRole,createdAt,qualityScore,totalIssues,totalFindings,criticalCount,highCount,mediumCount,lowCount,architectureFindings,staticPerformanceFindings,accessibilityFindings,figmRuleViolations,generalCodeErrors,scanDurationMs,engineMemoryUsageMb,rescanCount
