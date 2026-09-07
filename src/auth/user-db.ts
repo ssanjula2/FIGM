@@ -324,7 +324,9 @@ export const UserDB = {
   // --- USERS ---
   findUserByEmail(email: string): DBUser | undefined {
     const db = loadDB();
-    return db.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    // .trim() the incoming lookup value -- same rationale as SupabaseStorageProvider's own
+    // findUserByEmail (kept consistent across both backends). See that method's comment.
+    return db.users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
   },
 
   findUserById(userId: string): DBUser | undefined {

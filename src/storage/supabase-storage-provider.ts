@@ -326,7 +326,13 @@ export class SupabaseStorageProvider implements IStorageProvider {
   // --- USERS ---
   async findUserByEmail(email: string): Promise<DBUser | undefined> {
     if (!this.prisma) return this.fallback!.findUserByEmail(email);
-    const u = await this.db().user.findUnique({ where: { email: email.toLowerCase() } });
+    // .trim() matters: `email` (Postgres `text`, plain @unique, no citext/case-insensitive
+    // collation) is an exact-match column -- a caller-supplied value with incidental leading/
+    // trailing whitespace (e.g. from a copy-paste into a login form) would otherwise silently
+    // never match an already-clean stored row, indistinguishable from "wrong password" to the
+    // caller. Found during the 2026-09-07 admin-login-recovery investigation
+    // (docs/audit/ADMIN_LOGIN_RECOVERY_ROOT_CAUSE.md).
+    const u = await this.db().user.findUnique({ where: { email: email.trim().toLowerCase() } });
     return u ? mapUser(u) : undefined;
   }
 

@@ -1,4 +1,4 @@
-import { DBSubmission, DBScanRecord, DBAuditLog, UserDB } from '../auth/user-db';
+import { DBSubmission, DBScanRecord, DBAuditLog } from '../auth/user-db';
 import { RepositoryFactory } from '../storage/repository-factory';
 import { isEngineeringTestEmail, isEngineeringTestAccount } from '../lib/engineering-test-accounts';
 
@@ -69,7 +69,9 @@ export class DashboardRepository {
       userId ? Promise.resolve(undefined) : DashboardRepository.provider.getAllUsers(),
     ]);
     let scanRecords = (scanRecordsRaw as DBScanRecord[]) || [];
-    const submissions = userId ? UserDB.getSubmissionsByUserId(userId) : [];
+    const submissions = userId
+      ? await DashboardRepository.provider.getSubmissionsByUserId(userId)
+      : [];
     let projects = (projectsRaw as any[]) || [];
 
     // Stage 7C/7D engineering-test-data separation (Section 20/6): only the admin-wide aggregate
@@ -216,7 +218,9 @@ export class DashboardRepository {
 
   public static async getRecentReports(userId?: string, limit = 10): Promise<ReportSummaryItem[]> {
     const records = ((await DashboardRepository.provider.getScanRecords(userId)) as DBScanRecord[]) || [];
-    const submissions = userId ? UserDB.getSubmissionsByUserId(userId) : [];
+    const submissions = userId
+      ? await DashboardRepository.provider.getSubmissionsByUserId(userId)
+      : [];
 
     if (records.length > 0 || submissions.length > 0) {
       const combined = [

@@ -1,8 +1,10 @@
 import crypto from 'node:crypto';
-import { DBUser, DBScanRecord, DBSubmission } from '../auth/user-db';
+import { DBUser, DBScanRecord, DBSubmission, DBAiHistory } from '../auth/user-db';
 import { RepositoryFactory } from '../storage/repository-factory';
 import { hashPassword } from '../auth/auth-service';
 import { HUMAN_STUDY_TARGET_PARTICIPANTS } from '../research/research-config';
+import { ScanRepository } from './scan-repository';
+import { classifyDiagnosticKind } from './diagnostic-classifier';
 
 /** Matches the synthetic participant-identity format app/api/user-study/log-scan/route.ts itself
  *  generates and enforces (PARTICIPANT_ID_PATTERN there) -- the single definition of what counts
@@ -111,6 +113,56 @@ export interface ResearchDatasetScanRow {
   architectureFindings: number;
   performanceFindings: number;
   accessibilityFindings: number;
+  /** Server-computed per-scan severity counts, persisted verbatim from
+   *  src/engine/quality-score.ts's severityCountsFromDiagnostics at scan-persistence time --
+   *  never re-derived here (same convention as architectureFindings above). */
+  criticalCount: number;
+  highCount: number;
+  mediumCount: number;
+  lowCount: number;
+  /** RuleExecutionEngine's own peak-memory measurement for this scan (see app/api/scan/route.ts's
+   *  `scanResult.profile.peakMemoryMb`, persisted as DBScanRecord.memoryUsageMb) -- a real engine
+   *  diagnostic, NOT a runtime-application memory delta and NOT comparable to RQ1's FCP/TTI
+   *  browser-runtime measurements. */
+  engineMemoryUsageMb: number;
+  /** Split of this scan's diagnostics by src/engine/diagnostic-classifier.ts's authoritative
+   *  membership check against the 50 canonical FIGM rules -- falls back to re-deriving from
+   *  ruleId (classifyDiagnosticKind) only when an older persisted diagnostic lacks the `kind`
+   *  field RuleExecutionEngine.buildScanResult now sets directly. */
+  figmRuleViolations: number;
+  generalCodeErrors: number;
+}
+
+/** One real fix/remediation attempt (src/auth/user-db.ts's DBAiHistory) for a research-eligible
+ *  (real study participant, CONSENT_VERIFIED, post-consent-timestamp) participant -- the same
+ *  inclusion rule getResearchDataset() applies to scans, applied here to AiHistory rows instead.
+ *  `applied` is the pipeline's own re-scan-verified flag (see DBAiHistory's doc comment) -- never
+ *  assume a fix was applied just because a row exists here. */
+export interface ResearchRemediationEventRow {
+  participantId: string;
+  userId: string;
+  scanReportId: string | null;
+  ruleId: string;
+  applied: boolean;
+  createdAt: string;
+}
+
+/** One diagnostic entry from a research-eligible scan, flattened for rule-frequency and
+ *  domain-level analysis that needs ruleId-level granularity beyond ResearchDatasetScanRow's
+ *  per-scan totals. Never fabricated -- absent entirely for a scan with no diagnostics. */
+export interface ResearchDiagnosticRow {
+  participantId: string;
+  userId: string;
+  scanId: string;
+  fileName: string;
+  framework: string;
+  attemptType: 'PRIMARY' | 'SECONDARY';
+  createdAt: string;
+  ruleId: string;
+  severity: string | null;
+  domain: string | null;
+  concern: string | null;
+  kind: 'FIGM_RULE' | 'GENERAL_CODE_ERROR';
 }
 
 export interface ParticipantDetail {
@@ -662,18 +714,30 @@ export class ParticipantRepository {
    * filterPrimaryResearchAttempts/filterSecondaryResearchAttempts below for the two named views
    * primary vs. secondary human-study analysis should read from.
    */
-  public static async getResearchDataset(): Promise<ResearchDatasetScanRow[]> {
-    const provider = ParticipantRepository.provider;
-    const allUsers = ((await provider.getAllUsers()) as DBUser[]) || [];
-    const eligibleUsers = allUsers.filter(
-      (u): u is DBUser & { researchConsentVerifiedAt: string } =>
-        isRealStudyParticipantCode(u.participantCode || u.id) &&
-        u.researchStatus === 'CONSENT_VERIFIED' &&
-        !!u.researchConsentVerifiedAt
-    );
-    if (eligibleUsers.length === 0) return [];
+  /** The single, shared inclusion rule getResearchDataset(), getResearchDiagnostics() and
+   *  getResearchRemediationEvents() all build on -- factored out so the eligibility rule (real
+   *  study participant code + CONSENT_VERIFIED + post-consent-timestamp) is defined exactly once.
+   *  Never call provider.getAllUsers()/filter this rule again anywhere else; add a new method here
+   *  instead. */
+  private static async getEligibleParticipants(): Promise<
+    Array<{ user: DBUser & { researchConsentVerifiedAt: string }; consentAtMs: number }>
+  > {
+    const allUsers = ((await ParticipantRepository.provider.getAllUsers()) as DBUser[]) || [];
+    return allUsers
+      .filter(
+        (u): u is DBUser & { researchConsentVerifiedAt: string } =>
+          isRealStudyParticipantCode(u.participantCode || u.id) &&
+          u.researchStatus === 'CONSENT_VERIFIED' &&
+          !!u.researchConsentVerifiedAt
+      )
+      .map((user) => ({ user, consentAtMs: new Date(user.researchConsentVerifiedAt).getTime() }));
+  }
 
-    const allScans = ((await provider.getScanRecords()) as DBScanRecord[]) || [];
+  public static async getResearchDataset(): Promise<ResearchDatasetScanRow[]> {
+    const eligible = await ParticipantRepository.getEligibleParticipants();
+    if (eligible.length === 0) return [];
+
+    const allScans = ((await ParticipantRepository.provider.getScanRecords()) as DBScanRecord[]) || [];
     const scansByUser = new Map<string, DBScanRecord[]>();
     for (const scan of allScans) {
       if (!scan.userId) continue;
@@ -683,8 +747,7 @@ export class ParticipantRepository {
     }
 
     const rows: ResearchDatasetScanRow[] = [];
-    for (const user of eligibleUsers) {
-      const consentAtMs = new Date(user.researchConsentVerifiedAt).getTime();
+    for (const { user, consentAtMs } of eligible) {
       const scans = scansByUser.get(user.id) || [];
       // Sorted per-user so the (userId, fileName) grouping below can pick "earliest eligible
       // attempt" with a single forward pass, without re-sorting per group.
@@ -696,12 +759,21 @@ export class ParticipantRepository {
       for (const scan of eligibleScans) {
         const isFirstForThisFixture = !seenFixtures.has(scan.fileName);
         seenFixtures.add(scan.fileName);
-        const diagnostics = (scan.diagnostics || []) as Array<{ domain?: string; concern?: string }>;
+        const diagnostics = (scan.diagnostics || []) as Array<{
+          ruleId?: string;
+          domain?: string;
+          concern?: string;
+          kind?: 'FIGM_RULE' | 'GENERAL_CODE_ERROR';
+        }>;
         const performanceFindings = diagnostics.filter((d) => d.domain === 'PERFORMANCE').length;
         const accessibilityFindings = diagnostics.filter((d) => d.domain === 'ACCESSIBILITY').length;
         const architectureFindings = diagnostics.filter(
           (d) => d.domain === 'PERFORMANCE' && d.concern === 'ARCHITECTURE'
         ).length;
+        const figmRuleViolations = diagnostics.filter(
+          (d) => (d.kind ?? (d.ruleId ? classifyDiagnosticKind(d.ruleId) : 'GENERAL_CODE_ERROR')) === 'FIGM_RULE'
+        ).length;
+        const generalCodeErrors = diagnostics.length - figmRuleViolations;
         rows.push({
           participantId: user.participantCode || user.id,
           userId: user.id,
@@ -717,6 +789,13 @@ export class ParticipantRepository {
           architectureFindings,
           performanceFindings,
           accessibilityFindings,
+          criticalCount: scan.criticalCount,
+          highCount: scan.highCount,
+          mediumCount: scan.mediumCount,
+          lowCount: scan.lowCount,
+          engineMemoryUsageMb: scan.memoryUsageMb,
+          figmRuleViolations,
+          generalCodeErrors,
         });
       }
     }
@@ -736,5 +815,92 @@ export class ParticipantRepository {
    *  analysis, never counted as an additional primary observation. */
   public static filterSecondaryResearchAttempts(rows: ResearchDatasetScanRow[]): ResearchDatasetScanRow[] {
     return rows.filter((r) => r.attemptType === 'SECONDARY');
+  }
+
+  /** Flattened, ruleId-level diagnostics for every research-eligible scan (same inclusion rule as
+   *  getResearchDataset(), including both PRIMARY and SECONDARY attempts -- callers that need
+   *  PRIMARY-only rule frequency should filter by `attemptType` themselves, same convention as
+   *  filterPrimaryResearchAttempts above). Used for rule-frequency and ruleId-level domain
+   *  breakdowns that ResearchDatasetScanRow's per-scan totals can't express. */
+  public static async getResearchDiagnostics(): Promise<ResearchDiagnosticRow[]> {
+    const eligible = await ParticipantRepository.getEligibleParticipants();
+    if (eligible.length === 0) return [];
+
+    const allScans = ((await ParticipantRepository.provider.getScanRecords()) as DBScanRecord[]) || [];
+    const scansByUser = new Map<string, DBScanRecord[]>();
+    for (const scan of allScans) {
+      if (!scan.userId) continue;
+      const list = scansByUser.get(scan.userId) || [];
+      list.push(scan);
+      scansByUser.set(scan.userId, list);
+    }
+
+    const out: ResearchDiagnosticRow[] = [];
+    for (const { user, consentAtMs } of eligible) {
+      const scans = scansByUser.get(user.id) || [];
+      const eligibleScans = scans
+        .filter((scan) => new Date(scan.createdAt).getTime() >= consentAtMs)
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+      const seenFixtures = new Set<string>();
+      for (const scan of eligibleScans) {
+        const isFirstForThisFixture = !seenFixtures.has(scan.fileName);
+        seenFixtures.add(scan.fileName);
+        const diagnostics = (scan.diagnostics || []) as Array<{
+          ruleId?: string;
+          severity?: string;
+          domain?: string;
+          concern?: string;
+          kind?: 'FIGM_RULE' | 'GENERAL_CODE_ERROR';
+        }>;
+        for (const d of diagnostics) {
+          if (!d.ruleId) continue;
+          out.push({
+            participantId: user.participantCode || user.id,
+            userId: user.id,
+            scanId: scan.id,
+            fileName: scan.fileName,
+            framework: scan.framework,
+            attemptType: isFirstForThisFixture ? 'PRIMARY' : 'SECONDARY',
+            createdAt: scan.createdAt,
+            ruleId: d.ruleId,
+            severity: d.severity ?? null,
+            domain: d.domain ?? null,
+            concern: d.concern ?? null,
+            kind: d.kind ?? classifyDiagnosticKind(d.ruleId),
+          });
+        }
+      }
+    }
+    return out;
+  }
+
+  /** Real fix/remediation interaction telemetry (DBAiHistory) for research-eligible participants
+   *  only, gated by the exact same rule as getResearchDataset() (real study participant code,
+   *  CONSENT_VERIFIED, and the fix attempt itself created at/after that verification timestamp).
+   *  `scanReportId` is frequently null (see DBAiHistory's own doc comment -- the fix endpoint
+   *  usually operates on ad-hoc submitted code, not a saved ScanReport id), so this cannot always
+   *  be joined back to a specific scan row; callers needing a before/after pairing must infer it
+   *  from timestamp ordering within a (userId, fileName) group, never from scanReportId alone. */
+  public static async getResearchRemediationEvents(): Promise<ResearchRemediationEventRow[]> {
+    const eligible = await ParticipantRepository.getEligibleParticipants();
+    if (eligible.length === 0) return [];
+
+    const out: ResearchRemediationEventRow[] = [];
+    for (const { user, consentAtMs } of eligible) {
+      const history = ((await ScanRepository.getAiHistoryByUserId(user.id)) as DBAiHistory[]) || [];
+      for (const h of history) {
+        if (new Date(h.createdAt).getTime() < consentAtMs) continue;
+        out.push({
+          participantId: user.participantCode || user.id,
+          userId: user.id,
+          scanReportId: h.scanReportId ?? null,
+          ruleId: h.ruleId,
+          applied: h.applied,
+          createdAt: h.createdAt,
+        });
+      }
+    }
+    return out.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }
 }
