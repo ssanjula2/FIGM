@@ -456,8 +456,18 @@ ${evalResults.frameworkMetrics
   }
 }
 
-// Auto-run when invoked directly
-if (process.argv[1] && process.argv[1].includes('evaluation-runner')) {
+// Auto-run when invoked directly.
+// Stage T6A (Dissertation Integrity): this used to be `process.argv[1].includes('evaluation-runner')`
+// -- a substring check, not an identity check. `node --test` runs each test file as its own main
+// module and can set process.argv[1] to that file's own path; tests/evaluation-runner.test.ts's
+// path contains the substring "evaluation-runner", so importing this module from that test file
+// spuriously satisfied the guard and fired this block -- including the unguarded, no-argument
+// ThesisGapExporter.exportAllChapters() call -- during a plain `npm test` run, silently overwriting
+// the canonical, hand-authored docs/dissertation/chapter5_empirical_validation_and_benchmarks.md
+// (confirmed via checksum: this fired mid-suite and reverted Chapter 5 to auto-generated content).
+// Exact-path comparison against this module's own resolved file URL is immune to that, the same
+// class of fix already applied to src/cli/figm-analyze.ts's entry guard.
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
   const evalResults = EvaluationRunner.runEvaluation();
   EvaluationRunner.exportReports(evalResults);
   ThesisGapExporter.exportAllChapters();

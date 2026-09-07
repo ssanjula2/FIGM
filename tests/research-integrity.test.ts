@@ -77,12 +77,26 @@ test('Research Integrity & Metric Consistency Test Suite', async (t) => {
     assert.ok(fs.existsSync(ch5Path), 'chapter5_empirical_validation_and_benchmarks.md must exist (run npm run research:evaluate)');
     const ch5 = fs.readFileSync(ch5Path, 'utf-8');
 
+    // Stage T6A (Dissertation Integrity): Chapter 5 was promoted to a hand-authored document at
+    // Stage T5 and reports the confusion matrix as a Markdown table ("| True Positives (TP) | 65 |")
+    // rather than the old auto-exporter's inline-bold format ("**True Positives (TP)**: 65"). This
+    // assertion previously assumed the exporter's exact literal template and would have failed
+    // against the new hand-authored table -- it was passing only because a separate entry-guard bug
+    // in evaluation-runner.ts (also fixed at Stage T6A) let the exporter silently regenerate this
+    // canonical file mid-suite, masking the drift. The check below matches either format so it stays
+    // meaningful (still a real equality check against the live canonical figures) regardless of
+    // which prose style currently renders the table.
+    const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const embeds = (label: string, value: number) =>
+      ch5.includes(`**${label}**: ${value}`) ||
+      new RegExp(`\\|\\s*${escapeRegExp(label)}\\s*\\|\\s*${value}\\s*\\|`).test(ch5);
+
     assert.ok(
-      ch5.includes(`**True Positives (TP)**: ${canonical.overall.truePositives}`),
+      embeds('True Positives (TP)', canonical.overall.truePositives),
       `chapter 5's embedded TP must equal canonical-evaluation.json's ${canonical.overall.truePositives} -- run npm run research:evaluate to regenerate if this drifted`
     );
-    assert.ok(ch5.includes(`**False Positives (FP)**: ${canonical.overall.falsePositives}`));
-    assert.ok(ch5.includes(`**False Negatives (FN)**: ${canonical.overall.falseNegatives}`));
+    assert.ok(embeds('False Positives (FP)', canonical.overall.falsePositives));
+    assert.ok(embeds('False Negatives (FN)', canonical.overall.falseNegatives));
   });
 
   await t.test('benchmarks/eval-summary.json ruleCoverage is present and internally consistent with FOUR_LAYER_MAPPINGS', () => {

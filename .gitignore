@@ -54,3 +54,9 @@ vscode-extension/out/
 *migration-secret*
 *scratchpad*
 
+# Exporter default output directory (thesis-gap-exporter.ts) -- a regenerated duplicate of the real
+# tracked source in docs/dissertation/, produced whenever a test or manual run doesn't redirect the
+# exporter's output. Never the source of truth; never commit it. See docs/audit/
+# FINAL_PRE_SUBMISSION_AUDIT_2026.md's repo-hygiene finding.
+docs/generated/
+

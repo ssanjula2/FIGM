@@ -5,8 +5,14 @@ import { UserStudyEvaluator } from './user-study-evaluator.js';
 import { EvaluationRunner } from './evaluation-runner.js';
 
 export class ThesisGapExporter {
-  public static exportAllChapters(): void {
-    const outputDir = path.resolve(process.cwd(), 'docs/dissertation');
+  // Stage T6A (Dissertation Integrity): `outputDir` used to be hardcoded to `docs/dissertation` --
+  // the canonical, hand-reviewed dissertation location -- so ANY caller of this method, including
+  // an automated test, silently overwrote hand-authored chapter files. The default below preserves
+  // exact prior behavior for the one legitimate, human-invoked export path (`npm run eval` /
+  // `npm run research:evaluate`, gated behind evaluation-runner.ts's own direct-invocation guard).
+  // Automated tests (tests/research-gap-eval.test.ts) must now pass an explicit non-canonical
+  // directory (docs/generated/) instead of relying on this default -- see that test's own comment.
+  public static exportAllChapters(outputDir: string = path.resolve(process.cwd(), 'docs/dissertation')): void {
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
@@ -184,6 +190,6 @@ ${userStudy.questions.map(q => `| ${q.id} | ${q.questionText} | **${q.meanScore.
 
     fs.writeFileSync(path.join(outputDir, 'chapter6_user_study_and_validity.md'), ch6Content, 'utf-8');
 
-    console.log('[THESIS EXPORTER] Exported updated Markdown dissertation chapters to docs/dissertation/');
+    console.log(`[THESIS EXPORTER] Exported updated Markdown dissertation chapters to ${outputDir}/`);
   }
 }
