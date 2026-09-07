@@ -1,6 +1,6 @@
 # FIGM REAL HUMAN USER STUDY — PARTICIPANT INFORMED CONSENT FORM
 
-**Research Title**: "Usability Evaluation of the Framework-Independent Guideline Model (FIGM) Code Inspector for Single Page Applications"  
+**Research Title**: "Usability Evaluation of the Framework-Agnostic Guideline Model (FIGM) Code Inspector for Single Page Applications"  
 **Institution**: NSBM Green University  
 **Module**: IS303.2 Research Methodology Repeat Coursework 2025  
 **Investigator**: A P H D S Sanjula  
@@ -11,7 +11,7 @@
 ---
 
 ## 1. PURPOSE OF THE STUDY
-You are invited to participate in an empirical research study evaluating the usability, understandability, usefulness, and task completion experience of the **Framework-Independent Guideline Model (FIGM) Code Inspector** when evaluating Single Page Application (SPA) source code across Next.js, React, Angular, and Vue.
+You are invited to participate in an empirical research study evaluating the usability, understandability, usefulness, and task completion experience of the **Framework-Agnostic Guideline Model (FIGM) Code Inspector** when evaluating Single Page Application (SPA) source code across Next.js, React, Angular, and Vue.
 
 ## 2. STUDY PROCEDURE & EXPECTED DURATION
 If you agree to participate:
@@ -29,6 +29,7 @@ Participation in this study is **completely voluntary**. You have the absolute r
 ## 4. CONFIDENTIALITY, ANONYMITY & DATA PROTECTION
 - **Zero Personally Identifiable Information (PII)**: We do NOT collect your full name, email address, phone number, national ID, IP address, or employee ID.
 - **Anonymous Participant IDs**: Each valid submission is assigned an anonymous sequential identifier (e.g., `P001`, `P002`, ... up to the target sample size) after data ingestion and validation.
+- **One participant, one code**: each human participant may hold exactly one participant code. If you have previously registered or been assigned a code, please do not create a second account to participate again — the study administrator reviews enrollments for this before verifying consent, and a duplicate enrollment by the same person will be rejected.
 - **Research-Only Use**: Collected anonymized data will be stored securely and used exclusively for academic research publication and thesis evaluation at NSBM Green University.
 
 ## 5. CONTACT INFORMATION

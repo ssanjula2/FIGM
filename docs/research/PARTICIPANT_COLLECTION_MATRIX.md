@@ -5,6 +5,15 @@ and is updated by the researcher only after the corresponding real event actuall
 `docs/research/PARTICIPANT_TASK_PROTOCOL.md` for the task set, fixture IDs, and eligibility rules
 this tracks against).
 
+**Enrollment policy: one human participant = one participant code.** Enrollment
+(`enrollAuthenticatedUserAsParticipant`) is idempotent per authenticated account, but nothing in
+the account-registration flow itself prevents one person from registering two separate accounts and
+enrolling each independently. Before setting a participant's status to `CONSENT_VERIFIED`, the
+admin performing verification MUST check this matrix (and the admin participant panel) for any
+other row that plausibly belongs to the same person (matching name, contact detail, or a
+participant who mentions a prior code) and reject/decline verification of a duplicate enrollment by
+the same human. This is a manual review step — there is no automated technical control for it.
+
 Column meaning:
 - **React / Next.js / Angular / Vue**: `PENDING` until that participant's PRIMARY scan for that
   fixture (`FIGM-STUDY-REACT-01` / `FIGM-STUDY-NEXT-01` / `FIGM-STUDY-ANGULAR-01` /
