@@ -191,8 +191,28 @@ export class ParticipantRepository {
     return RepositoryFactory.getStorageProvider();
   }
 
+  /** BUG FOUND 2026-09-07 (docs/audit/ADMIN_PARTICIPANTS_SPLIT_TRUTH_FIX.md): this check predates
+   *  enrollAuthenticatedUserAsParticipant() (the same-User-row enrollment path) and only ever
+   *  recognized the OLD anonymous-shadow-account signals -- an `id` that itself happens to be
+   *  P-shaped, or the `@user-study.figm.local` email convention `assignNewParticipant()` uses for
+   *  the row it creates. A user enrolled via enrollAuthenticatedUserAsParticipant() keeps their own
+   *  real random `usr_...` id and their own real email -- neither legacy signal ever matches, even
+   *  though `participantCode` (the actual authoritative field, per its own doc comment above) is
+   *  correctly set. That gap is exactly why GET /api/admin/participants (getMatrix(), below) and
+   *  countAssigned() silently treated a real, successfully-enrolled participant as
+   *  NOT_REGISTERED/uncounted, while getResearchDataset() and usedParticipantNumbers() (both of
+   *  which already checked `u.participantCode` FIRST) were correct the whole time -- confirmed by
+   *  every enrollment/consent/research-dataset test passing throughout, since none of them
+   *  exercised getMatrix() for a same-row-enrolled user specifically.
+   *  `participantCode` is checked FIRST now, matching the same priority every other correct call
+   *  site already used -- the two legacy checks remain as fallbacks for old shadow-account rows
+   *  that predate the `participantCode` column entirely. */
   private static isParticipantUser(u: DBUser): boolean {
-    return PARTICIPANT_ID_PATTERN.test(u.id) || u.email.endsWith('@user-study.figm.local');
+    return (
+      (!!u.participantCode && PARTICIPANT_ID_PATTERN.test(u.participantCode)) ||
+      PARTICIPANT_ID_PATTERN.test(u.id) ||
+      u.email.endsWith('@user-study.figm.local')
+    );
   }
 
   /**
@@ -565,6 +585,18 @@ export class ParticipantRepository {
         if (!updated) {
           throw new Error('No user account exists for this session. Please log in again.');
         }
+
+        // Post-write verification: re-read through the SAME canonical provider (never trust the
+        // write call's own return value alone) before ever reporting success to the caller. A
+        // participant code must never be told to the client unless it is genuinely, verifiably
+        // persisted -- see docs/audit/ADMIN_PARTICIPANTS_SPLIT_TRUTH_FIX.md.
+        const verified = (await provider.findUserById(userId)) as DBUser | undefined;
+        if (!verified || verified.participantCode !== participantCode || verified.researchStatus !== 'ASSIGNED') {
+          throw new Error(
+            'Enrollment write could not be verified after persisting -- refusing to report success. Please try again.'
+          );
+        }
+
         return { userId, participantCode, alreadyEnrolled: false };
       } catch (err: any) {
         if (err?.code === 'P2002') continue;
