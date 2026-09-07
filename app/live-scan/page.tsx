@@ -536,6 +536,63 @@ export default function LiveScanPage() {
   const [savingToHistory, setSavingToHistory] = useState<boolean>(false);
   const [saveHistoryStatus, setSaveHistoryStatus] = useState<{ kind: 'success' | 'error' | 'auth'; message: string } | null>(null);
 
+  // ── Research study enrollment (see docs/audit/LIVE_SCAN_ONLY_RESEARCH_FLOW.md) ─────────────
+  // Same pattern as savingToHistory above: no client-side auth-state hook, no localStorage check
+  // -- just attempt the real, cookie-authenticated GET and let the server's own 401 decide whether
+  // this visitor is even signed in. `studyStatus === null` after loading means "anonymous, or
+  // genuinely not enrolled" and the panel renders nothing for a visitor who was never
+  // authenticated at all (a 401 is treated identically to "don't show this panel").
+  const [studyStatusLoaded, setStudyStatusLoaded] = useState(false);
+  const [studySignedIn, setStudySignedIn] = useState(false);
+  const [studyParticipantCode, setStudyParticipantCode] = useState<string | null>(null);
+  const [studyResearchStatus, setStudyResearchStatus] = useState<'ASSIGNED' | 'CONSENT_VERIFIED' | 'REVOKED' | null>(null);
+  const [showJoinStudyForm, setShowJoinStudyForm] = useState(false);
+  const [studyConsentChecked, setStudyConsentChecked] = useState(false);
+  const [joiningStudy, setJoiningStudy] = useState(false);
+  const [studyError, setStudyError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/user-study/enroll')
+      .then((res) => {
+        if (res.status === 401) return null; // not signed in -- panel stays hidden, not an error
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        setStudySignedIn(true);
+        return res.json();
+      })
+      .then((data) => {
+        if (!data) return;
+        setStudyParticipantCode(data.participantCode ?? null);
+        setStudyResearchStatus(data.researchStatus ?? null);
+      })
+      .catch(() => {
+        // Transient failure to check status -- fail silent (hide the panel) rather than show an
+        // alarming error for what is, for most visitors, an entirely optional feature.
+      })
+      .finally(() => setStudyStatusLoaded(true));
+  }, []);
+
+  const handleJoinStudy = async () => {
+    if (!studyConsentChecked || joiningStudy) return;
+    setJoiningStudy(true);
+    setStudyError(null);
+    try {
+      const res = await fetch('/api/user-study/enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ consentConfirmed: true }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || `Unable to join the study (HTTP ${res.status})`);
+      setStudyParticipantCode(data.participantCode);
+      setStudyResearchStatus('ASSIGNED');
+      setShowJoinStudyForm(false);
+    } catch (err: any) {
+      setStudyError(err?.message || 'Unable to join the study right now. Please try again.');
+    } finally {
+      setJoiningStudy(false);
+    }
+  };
+
   // ── File upload (paste is the default; this adds real local-file input) ────
   // A single uploaded file is fed straight into the existing single-editor flow above (same
   // code/fileName state, same handleScan/result rendering -- no new code path). Two or more files
@@ -1124,6 +1181,95 @@ export default function LiveScanPage() {
       <p style={{ color: 'var(--text-dim)', fontSize: '12.5px', margin: 0 }}>
         Paste <strong style={{ color: 'var(--text-muted)' }}>any</strong> code below — FIGM detects real violations from your actual code and applies targeted fixes. Nothing is hardcoded.
       </p>
+
+      {/* Research study enrollment panel -- only ever shown to a signed-in visitor (the GET check
+          above hides it entirely for an anonymous one, matching this page's own established
+          convention of never gating UI on a client-side auth guess). See
+          docs/audit/LIVE_SCAN_ONLY_RESEARCH_FLOW.md for the full state-machine this mirrors. */}
+      {studyStatusLoaded && studySignedIn && (
+        <div
+          className="insp-notice"
+          style={
+            studyResearchStatus === 'CONSENT_VERIFIED'
+              ? { color: '#86efac', background: 'rgba(34,197,94,0.08)', borderColor: 'rgba(34,197,94,0.25)' }
+              : studyResearchStatus === 'REVOKED'
+                ? { color: '#f87171', background: 'rgba(239,68,68,0.08)', borderColor: 'rgba(239,68,68,0.25)' }
+                : { color: '#7dd3fc', background: 'rgba(56,189,248,0.08)', borderColor: 'rgba(56,189,248,0.2)' }
+          }
+        >
+          {!studyParticipantCode && !showJoinStudyForm && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+              <span>🔬 Research study: <strong>Not enrolled</strong></span>
+              <button
+                type="button"
+                onClick={() => setShowJoinStudyForm(true)}
+                className="btn-secondary"
+                style={{ padding: '5px 12px', fontSize: '11px', whiteSpace: 'nowrap' }}
+              >
+                Join Research Study
+              </button>
+            </div>
+          )}
+
+          {!studyParticipantCode && showJoinStudyForm && (
+            <div>
+              <p style={{ margin: '0 0 10px 0' }}>
+                Participation is voluntary. Full details: <code>research/CONSENT_FORM.md</code>. Joining links a
+                study participant code to your account; a researcher must separately verify your consent before
+                any of your scans count as research data.
+              </p>
+              <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '10px', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={studyConsentChecked}
+                  onChange={(e) => setStudyConsentChecked(e.target.checked)}
+                  style={{ marginTop: '2px' }}
+                />
+                I have read the study description and voluntarily consent to participate.
+              </label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  type="button"
+                  onClick={handleJoinStudy}
+                  disabled={!studyConsentChecked || joiningStudy}
+                  className="btn-secondary"
+                  style={{ padding: '5px 12px', fontSize: '11px' }}
+                >
+                  {joiningStudy ? 'Joining…' : 'Confirm & Join'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setShowJoinStudyForm(false); setStudyError(null); }}
+                  className="btn-secondary"
+                  style={{ padding: '5px 12px', fontSize: '11px' }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {studyParticipantCode && studyResearchStatus === 'ASSIGNED' && (
+            <span>
+              🔬 Participant: <strong>{studyParticipantCode}</strong> · Consent verification: Pending · Scans are not yet included in research analysis.
+            </span>
+          )}
+
+          {studyParticipantCode && studyResearchStatus === 'CONSENT_VERIFIED' && (
+            <span>
+              ✅ Participant: <strong>{studyParticipantCode}</strong> · Research status: Verified · New scans are eligible research observations.
+            </span>
+          )}
+
+          {studyParticipantCode && studyResearchStatus === 'REVOKED' && (
+            <span>⛔ Research participation revoked · New scans excluded.</span>
+          )}
+
+          {studyError && (
+            <div role="alert" style={{ marginTop: '8px', color: '#fca5a5' }}>⚠️ {studyError}</div>
+          )}
+        </div>
+      )}
 
       {/* Main Studio Grid */}
       <div className="insp-grid">
