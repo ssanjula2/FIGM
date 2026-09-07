@@ -4,6 +4,7 @@
  */
 
 import { SourceParser } from '../parser/source-parser.js';
+import { parseVueSfc } from '../parser/vue-sfc-parser.js';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -30,7 +31,33 @@ export class AIPatchValidator {
       return { isValid: false, reason: 'Remediated code is identical to original source code.' };
     }
 
-    // 4. Basic Syntax & AST Parsing Validation
+    // 4. Vue SFC structural check -- a real production incident: a Gemini-generated Vue patch
+    // containing TWO complete <template>/<script setup> blocks (the model appended a full
+    // "corrected" SFC after the original instead of editing it in place) reached this pre-filter
+    // undetected. Step 5 below only ever checked `!parseResult.ast`, and SourceParser.parseSource
+    // degrades gracefully for a structurally-invalid Vue file (always returns a truthy stub `ast`,
+    // recording the real problem in `parseErrors` instead of throwing) -- so this stage silently
+    // passed a candidate that was never valid, relying entirely on the heavier sandbox's own
+    // FRAMEWORK_STRUCTURAL stage (src/ai/sandbox-validation-pipeline.ts) to catch it later, which it
+    // did (this is exactly the safety net that already prevented the bad patch from ever being
+    // applied). This closes the gap at the cheap pre-filter stage too, using the same real
+    // @vue/compiler-sfc-backed parser directly (parseVueSfc) rather than SourceParser's `parseErrors`
+    // bucket, which also mixes in generic React/JS syntax heuristics -- scoping this to `.vue` files
+    // only means it can never affect React/Next.js/Angular patch validation.
+    if (filePath.endsWith('.vue')) {
+      const vueParse = parseVueSfc(remediatedCode, filePath);
+      if (!vueParse) {
+        return { isValid: false, reason: 'Remediated Vue SFC could not be parsed by @vue/compiler-sfc.' };
+      }
+      if (vueParse.errors.length > 0) {
+        return {
+          isValid: false,
+          reason: `Remediated Vue SFC is structurally invalid: ${vueParse.errors.map((e) => e.message).join('; ').slice(0, 300)}`,
+        };
+      }
+    }
+
+    // 5. Basic Syntax & AST Parsing Validation
     try {
       const parseResult = SourceParser.parseSource(remediatedCode, filePath);
       if (!parseResult.ast) {
