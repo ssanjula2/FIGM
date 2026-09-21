@@ -52,13 +52,13 @@ const nextConfig = {
   // source maps and the Fast Refresh websocket both need it) -- never shipped in production.
   async headers() {
     const isDev = process.env.NODE_ENV !== 'production';
-    const scriptSrc = `script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net${isDev ? " 'unsafe-eval'" : ''}`;
-    const connectSrc = `connect-src 'self' https://cdn.jsdelivr.net${isDev ? ' ws://localhost:* ws://127.0.0.1:*' : ''}`;
+    const scriptSrc = `script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ''}`;
+    const connectSrc = `connect-src 'self' https://cdn.jsdelivr.net https://www.google-analytics.com https://region1.google-analytics.com${isDev ? ' ws://localhost:* ws://127.0.0.1:*' : ''}`;
     const csp = [
       "default-src 'self'",
       scriptSrc,
       "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
-      "img-src 'self' data: blob:",
+      "img-src 'self' data: blob: https://www.google-analytics.com",
       "font-src 'self' data: https://cdn.jsdelivr.net",
       connectSrc,
       "worker-src 'self' blob: https://cdn.jsdelivr.net",
