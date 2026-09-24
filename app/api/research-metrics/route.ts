@@ -193,6 +193,36 @@ export async function GET() {
     benchmarkError = 'benchmarks/eval-summary.json not found — run npm run research:evaluate first';
   }
 
+  // ── RQ4: independent expert-review accuracy (Precision/Recall/F1/Accuracy/Cohen's kappa) ──
+  // Deliberately a SEPARATE evidence stream from both `benchmarkMetrics` (the internal controlled
+  // benchmark against FIGM's own ground-truth.json fixtures -- never RQ4 evidence, see
+  // docs/research/FINAL_RQ_RESULTS_SUMMARY.md's RQ3 "Static detection / controlled benchmark"
+  // section) and `userStudy` below (an unrelated developer usability-survey instrument). Read
+  // verbatim from the authoritative, already-computed two-expert comparison artifact -- never
+  // recalculated here, never merged with participant/consent data.
+  const rq4Path = join(process.cwd(), 'docs', 'research', 'rq4-expert-review', 'rq4-inter-rater-agreement.json');
+  let rq4Data: Record<string, any> | null = null;
+  if (existsSync(rq4Path)) {
+    try {
+      rq4Data = JSON.parse(readFileSync(rq4Path, 'utf-8'));
+    } catch {
+      rq4Data = null;
+    }
+  }
+  const rq4Consensus = rq4Data?.figmVsConsensus ?? null;
+  const rq4 = {
+    available: !!rq4Consensus,
+    label: 'Controlled 15-sample blinded expert-review evaluation',
+    sampleCount: rq4Data?.sampleCount ?? null,
+    raterCount: Array.isArray(rq4Data?.interRaterAgreement?.raters) ? rq4Data.interRaterAgreement.raters.length : null,
+    precision: rq4Consensus?.precision ?? null,
+    recall: rq4Consensus?.recall ?? null,
+    f1Score: rq4Consensus?.f1Score ?? null,
+    accuracy: rq4Consensus?.accuracy ?? null,
+    cohensKappa: rq4Data?.interRaterAgreement?.cohensKappa ?? null,
+    generalizationLimitation: rq4Data?.researchIntegrityStatements?.generalizationLimitation ?? null,
+  };
+
   // ── Compute human study status ─────────────────────────────────────────
   // Canonical real-study data flow: raw responses (research/raw/real/responses.csv)
   // -> validation + anonymization + analysis (scripts/import-user-study.ts,
@@ -251,6 +281,11 @@ export async function GET() {
         scope: 'Client-side SPA architectures: React, Next.js App Router, Angular, Vue 3 SFCs',
         outOfScope: ['Backend performance', 'Network latency profiling', 'Cloud orchestration', 'Security vulnerability assessment'],
       },
+
+      // ── RQ4 independent expert-review accuracy ─────────────────────────
+      // See the block above this handler for provenance. Never derived from benchmarkMetrics or
+      // userStudy -- independent of both, always read verbatim from the two-expert artifact.
+      rq4,
 
       // ── Live benchmark metrics (from eval-summary.json) ───────────────
       benchmarkMetrics: benchmarkData

@@ -81,6 +81,21 @@ export interface ResearchMetricsPayload {
     scope: string;
     outOfScope: string[];
   };
+  /** Independent RQ4 expert-review accuracy (two-expert blinded review, n=15). Deliberately
+   *  separate from benchmarkMetrics (the internal controlled benchmark) and from userStudy (the
+   *  unrelated developer usability-survey instrument) -- see app/api/research-metrics/route.ts. */
+  rq4: {
+    available: boolean;
+    label: string;
+    sampleCount: number | null;
+    raterCount: number | null;
+    precision: number | null;
+    recall: number | null;
+    f1Score: number | null;
+    accuracy: number | null;
+    cohensKappa: number | null;
+    generalizationLimitation: string | null;
+  };
   benchmarkMetrics: {
     timestamp: string;
     /** Human-readable description of how TP/FP/FN were computed -- see src/eval/evaluation-runner.ts. */
