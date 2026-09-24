@@ -577,14 +577,42 @@ function AdminDashboard() {
           {research && (
             <>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
-                {statTile('Precision', research.benchmarkMetrics?.precision != null ? `${(research.benchmarkMetrics.precision * 100).toFixed(1)}%` : 'N/A', '#38bdf8')}
-                {statTile('Recall', research.benchmarkMetrics?.recall != null ? `${(research.benchmarkMetrics.recall * 100).toFixed(1)}%` : 'N/A', '#a855f7')}
-                {statTile('F1 Score', research.benchmarkMetrics?.f1Score != null ? `${(research.benchmarkMetrics.f1Score * 100).toFixed(1)}%` : 'N/A', '#22c55e')}
-                {statTile('Human Study Participants', `${research.userStudy?.collectedParticipants ?? 0} / ${research.userStudy?.targetParticipants ?? HUMAN_STUDY_TARGET_PARTICIPANTS}`, '#f59e0b')}
+              {/* RQ4 independent expert evaluation */}
+              <div>
+                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#f8fafc', margin: '0 0 4px 0' }}>
+                  RQ4 ? Independent Expert Evaluation
+                </h3>
+                <p style={{ color: '#94a3b8', fontSize: '12px', margin: '0 0 14px 0' }}>
+                  {research.rq4?.label || 'Controlled 15-sample blinded expert-review evaluation'}
+                  {research.rq4?.available && research.rq4?.raterCount != null ? ` ? ${research.rq4.raterCount} independent expert${research.rq4.raterCount === 1 ? '' : 's'}, n=${research.rq4.sampleCount}.` : ''}
+                  {' '}These figures come from a blinded expert comparison, not from study participants.
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px' }}>
+                  {statTile('RQ4 Expert Precision', research.rq4?.precision != null ? `${(research.rq4.precision * 100).toFixed(1)}%` : 'N/A', '#38bdf8')}
+                  {statTile('RQ4 Expert Recall', research.rq4?.recall != null ? `${(research.rq4.recall * 100).toFixed(1)}%` : 'N/A', '#a855f7')}
+                  {statTile('RQ4 Expert F1 Score', research.rq4?.f1Score != null ? `${(research.rq4.f1Score * 100).toFixed(1)}%` : 'N/A', '#22c55e')}
+                </div>
+              </div>
+              <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
+              {/* Internal fixture benchmark */}
+              <div>
+                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#f8fafc', margin: '0 0 4px 0' }}>
+                  Internal Fixture Benchmark
+                </h3>
+                <p style={{ color: '#94a3b8', fontSize: '12px', margin: '0 0 14px 0' }}>
+                  45 hand-authored fixture files; this benchmark is separate from independent expert validation and does not support a universal accuracy claim.
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px' }}>
+                  {statTile('Fixture Precision', research.benchmarkMetrics?.precision != null ? `${(research.benchmarkMetrics.precision * 100).toFixed(1)}%` : 'N/A', '#38bdf8')}
+                  {statTile('Fixture Recall', research.benchmarkMetrics?.recall != null ? `${(research.benchmarkMetrics.recall * 100).toFixed(1)}%` : 'N/A', '#a855f7')}
+                  {statTile('Fixture F1 Score', research.benchmarkMetrics?.f1Score != null ? `${(research.benchmarkMetrics.f1Score * 100).toFixed(1)}%` : 'N/A', '#22c55e')}
+                </div>
+              </div>
               </div>
               <div style={card}>
-                <h4 style={{ margin: '0 0 8px 0', color: '#f8fafc' }}>Human Study Status</h4>
-                <div style={{ color: '#94a3b8', fontSize: '13px' }}>{research.userStudy?.note}</div>
+                <h4 style={{ margin: '0 0 8px 0', color: '#f8fafc' }}>Supplementary Human Participant Study</h4>
+                <div style={{ color: '#94a3b8', fontSize: '13px' }}>P001?P020 have scan activity as supplementary product-use evidence; this is not SUS/questionnaire evidence.</div>
+                <div style={{ color: '#94a3b8', fontSize: '12px', marginTop: '6px' }}>The system currently reports 0/20 accepted questionnaire/SUS responses.</div>
                 <div style={{ color: research.userStudy?.isRealHumanData ? '#22c55e' : '#f59e0b', fontSize: '12px', fontWeight: 700, marginTop: '8px' }}>
                   {research.userStudy?.collectionStatus}
                 </div>

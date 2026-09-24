@@ -20,11 +20,12 @@ export default function ResearchOverview() {
   // Build Phase 05 description from live API data
   const evalDataset = data?.systemCapabilities?.evaluationDataset;
   const bm = data?.benchmarkMetrics;
+  const rq4 = data?.rq4;
   const us = data?.userStudy;
 
   const phase05Desc = bm
-    ? `Evaluated against ${evalDataset?.sizeTarget ?? 'the hand-labelled ground-truth fixture set'} (P=${(bm.precision * 100).toFixed(1)}%, R=${(bm.recall * 100).toFixed(1)}%, F1=${(bm.f1Score * 100).toFixed(1)}%); human usability study N=${us?.targetParticipants ?? HUMAN_STUDY_TARGET_PARTICIPANTS} — ${us?.collectionStatus === 'COLLECTED' ? 'data collection complete' : 'collection pending'}.`
-    : `Evaluated against the hand-labelled ground-truth fixture set; human usability study N=${HUMAN_STUDY_TARGET_PARTICIPANTS} — collection pending.`;
+    ? `Internal fixture benchmark: ${evalDataset?.sizeTarget ?? '45 hand-authored fixture files'} (P=${(bm.precision * 100).toFixed(1)}%, R=${(bm.recall * 100).toFixed(1)}%, F1=${(bm.f1Score * 100).toFixed(1)}%). ${rq4?.available ? `Separately, RQ4 independent expert evaluation: ${rq4.sampleCount}-sample blinded review (P=${((rq4.precision ?? 0) * 100).toFixed(1)}%, R=${((rq4.recall ?? 0) * 100).toFixed(1)}%, F1=${((rq4.f1Score ?? 0) * 100).toFixed(1)}%, Cohen's kappa=${rq4.cohensKappa?.toFixed(2) ?? '—'}).` : ''} P001–P020 have scan activity as supplementary product-use evidence; this is separate from questionnaire/SUS evidence, which currently has 0/${us?.targetParticipants ?? HUMAN_STUDY_TARGET_PARTICIPANTS} accepted responses.`
+    : `Internal fixture benchmark and RQ4 expert evaluation are loaded separately. P001–P020 have scan activity as supplementary product-use evidence; this is separate from questionnaire/SUS evidence, which currently has 0/${HUMAN_STUDY_TARGET_PARTICIPANTS} accepted responses.`;
 
   const dsrmPhases = DSRM_PHASES.map((p) =>
     p.num === '05' ? { ...p, desc: phase05Desc } : p

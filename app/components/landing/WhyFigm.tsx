@@ -9,7 +9,7 @@ const CAPABILITIES = [
   {
     Icon: FileCode,
     title: 'Real AST analysis',
-    desc: 'Findings come from the TypeScript compiler and framework-native parsers, not regex heuristics.',
+    desc: 'FIGM uses AST/parser-based detection where applicable and pattern-based detection for selected template rules, with rule-level provenance.',
   },
   {
     Icon: Wrench,

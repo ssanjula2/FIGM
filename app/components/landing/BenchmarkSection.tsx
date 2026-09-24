@@ -17,6 +17,7 @@ export default function BenchmarkSection() {
   const { data, loading } = useResearchMetrics();
 
   const bm = data?.benchmarkMetrics;
+  const rq4 = data?.rq4;
   const us = data?.userStudy;
   const perf = bm
     ? (data?.benchmarkMetrics as Record<string, unknown> & { performanceMetrics?: { scanSpeedLOCPerSec?: number } })?.performanceMetrics
@@ -53,7 +54,7 @@ export default function BenchmarkSection() {
           sub:
             us?.collectionStatus === 'COLLECTED'
               ? "Cronbach's α computed"
-              : "Cronbach's α — pending data",
+              : 'Not calculated; no accepted item-level responses available here',
           highlight: us?.collectionStatus !== 'COLLECTED',
         },
       ]
@@ -69,11 +70,11 @@ export default function BenchmarkSection() {
           Controlled benchmark, real-world corpus, reproducible protocol
         </h2>
         <p style={{ color: '#94a3b8', fontSize: '14px', maxWidth: '720px', margin: '0 auto 20px auto', lineHeight: 1.6 }}>
-          The figures below come from FIGM&apos;s <strong style={{ color: '#f1f5f9' }}>controlled benchmark</strong> --
+          The figures below come from FIGM&apos;s <strong style={{ color: '#f1f5f9' }}>internal fixture benchmark</strong> --
           a hand-labelled fixture suite (<code style={{ color: '#38bdf8', fontSize: '13px' }}>benchmarks/eval-summary.json</code>)
           built and labelled by the same team that built the rules. This is a construction-validity
-          check, not an independent real-world accuracy measurement -- that requires expert
-          validation against manual architectural review, which has not yet been collected.
+          check, not an independent real-world accuracy measurement. Separately, RQ4 reports the
+          completed controlled 15-sample blinded expert-review evaluation below.
           Separately, FIGM has been run across a real, pinned-commit 21-repository open-source
           corpus (React, Next.js, Angular, plus Vue and generic JS/TS) under a reproducible
           experiment protocol; no precision/recall is claimed for that corpus without expert review.
@@ -101,6 +102,30 @@ export default function BenchmarkSection() {
                 }}
               />
             ))}
+          </div>
+        )}
+
+        {!loading && rq4?.available && (
+          <div style={{ marginBottom: '60px' }}>
+            <h3 style={{ color: '#f8fafc', fontSize: '18px', fontWeight: 800, margin: '0 0 12px 0' }}>
+              RQ4 Independent Expert Evaluation
+            </h3>
+            <p style={{ color: '#94a3b8', fontSize: '13px', margin: '0 0 16px 0', lineHeight: 1.5 }}>
+              Separate controlled {rq4.sampleCount}-sample blinded dataset; {rq4.raterCount} independent experts. This result applies only to the expert-review set and is not the internal fixture benchmark.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px' }}>
+              {[
+                ['Precision', rq4.precision],
+                ['Recall', rq4.recall],
+                ['F1 Score', rq4.f1Score],
+                ["Cohen's kappa", rq4.cohensKappa],
+              ].map(([label, value]) => (
+                <div key={label} style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 900, color: '#38bdf8' }}>{typeof value === 'number' ? (label === "Cohen's kappa" ? value.toFixed(2) : `${(value * 100).toFixed(1)}%`) : '—'}</div>
+                  <div style={{ color: '#cbd5e1', fontSize: '11px', fontWeight: 700, marginTop: '4px' }}>{label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -147,7 +172,7 @@ export default function BenchmarkSection() {
             <span style={{ fontSize: '20px' }}>⏳</span>
             <span style={{ color: '#fbbf24', fontSize: '13px', lineHeight: 1.5 }}>
               <strong>Human Usability Study ({us.collectedParticipants}/{us.targetParticipants} participants):</strong>{' '}
-              {us.note} Cronbach&apos;s α will be computed once all real survey responses are collected and ingested.
+              {us.note} Scan activity is supplementary product-use evidence, not SUS/questionnaire evidence. There are currently 0 accepted SUS response records in this system (target {us.targetParticipants}).
             </span>
           </div>
         )}

@@ -364,7 +364,7 @@ export default function LiveDashboardContent() {
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
                     <span>⚛️ React JSX / TSX</span>
-                    <span style={{ color: '#38bdf8' }}>{reactCount} Repos</span>
+                    <span style={{ color: '#38bdf8' }}>{reactCount} Analyses</span>
                   </div>
                   <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
                     <div style={{ width: widthPct(reactCount), height: '100%', background: 'linear-gradient(90deg, #38bdf8, #818cf8)', borderRadius: '4px' }} />
@@ -374,7 +374,7 @@ export default function LiveDashboardContent() {
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
                     <span>▲ Next.js App Router</span>
-                    <span style={{ color: '#a855f7' }}>{nextjsCount} Repos</span>
+                    <span style={{ color: '#a855f7' }}>{nextjsCount} Analyses</span>
                   </div>
                   <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
                     <div style={{ width: widthPct(nextjsCount), height: '100%', background: 'linear-gradient(90deg, #a855f7, #c084fc)', borderRadius: '4px' }} />
@@ -384,7 +384,7 @@ export default function LiveDashboardContent() {
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
                     <span>🅰️ Angular Templates</span>
-                    <span style={{ color: '#f43f5e' }}>{angularCount} Repos</span>
+                    <span style={{ color: '#f43f5e' }}>{angularCount} Analyses</span>
                   </div>
                   <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
                     <div style={{ width: widthPct(angularCount), height: '100%', background: 'linear-gradient(90deg, #f43f5e, #fb7185)', borderRadius: '4px' }} />

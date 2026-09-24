@@ -30,6 +30,15 @@ interface ResearchMetricsResponse {
     collectionStatus: string;
     note: string;
   };
+  rq4: {
+    available: boolean;
+    sampleCount: number | null;
+    raterCount: number | null;
+    precision: number | null;
+    recall: number | null;
+    f1Score: number | null;
+    cohensKappa: number | null;
+  };
   _meta: { benchmarkError: string | null };
 }
 
@@ -91,37 +100,59 @@ export default function AnalyticsPage() {
       {/* Top Metric Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '14px' }}>
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #38bdf8', textAlign: 'center' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>F1-Score</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Internal fixture benchmark F1</div>
           <div style={{ fontSize: '26px', fontWeight: 900, color: '#38bdf8', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>{loading ? '…' : pct(bm?.f1Score)}</div>
           <div style={{ fontSize: '10px', color: '#86efac', marginTop: '4px', fontWeight: 600 }}>Harmonic Mean</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #10b981', textAlign: 'center' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Precision</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Internal fixture benchmark Precision</div>
           <div style={{ fontSize: '26px', fontWeight: 900, color: '#10b981', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>{loading ? '…' : pct(bm?.precision)}</div>
           <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>TP / (TP + FP)</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #f59e0b', textAlign: 'center' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Recall</div>
+          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Internal fixture benchmark Recall</div>
           <div style={{ fontSize: '26px', fontWeight: 900, color: '#f59e0b', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>{loading ? '…' : pct(bm?.recall)}</div>
           <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>TP / (TP + FN)</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #ec4899', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>SUS Usability</div>
-          <div style={{ fontSize: '18px', fontWeight: 900, color: '#ec4899', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>Pending Data</div>
+          <div style={{ fontSize: '18px', fontWeight: 900, color: '#ec4899', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>No accepted responses</div>
           <div style={{ fontSize: '10px', color: '#f59e0b', marginTop: '4px', fontWeight: 600 }}>
-            {data ? `${data.userStudy.collectedParticipants}/${data.userStudy.targetParticipants} Real Responses` : `0/${HUMAN_STUDY_TARGET_PARTICIPANTS} Real Responses`}
+            0 accepted SUS response records in this system (target {data?.userStudy.targetParticipants ?? HUMAN_STUDY_TARGET_PARTICIPANTS})
           </div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px 16px', borderTop: '2px solid #06b6d4', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Cronbach α</div>
-          <div style={{ fontSize: '18px', fontWeight: 900, color: '#06b6d4', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>Pending Data</div>
-          <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>Target: N={HUMAN_STUDY_TARGET_PARTICIPANTS}</div>
+          <div style={{ fontSize: '18px', fontWeight: 900, color: '#06b6d4', marginTop: '6px', fontFamily: 'JetBrains Mono' }}>Not calculated</div>
+          <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '4px' }}>Not calculated; no accepted item-level responses available here</div>
         </div>
       </div>
+
+      {data?.rq4?.available && (
+        <div className="glass-panel" style={{ padding: '24px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>RQ4 Independent Expert Evaluation</h2>
+          <p style={{ color: '#94a3b8', fontSize: '12px', margin: '6px 0 16px 0' }}>
+            Separate controlled {data.rq4.sampleCount}-sample blinded dataset with {data.rq4.raterCount} independent experts; these figures do not describe the internal fixture benchmark.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' }}>
+            {([
+              ['Precision', data.rq4.precision],
+              ['Recall', data.rq4.recall],
+              ['F1 Score', data.rq4.f1Score],
+              ["Cohen's kappa", data.rq4.cohensKappa],
+            ] as const).map(([label, value]) => (
+              <div key={label} style={{ padding: '14px', background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '10px', textAlign: 'center' }}>
+                <div style={{ color: '#38bdf8', fontSize: '24px', fontWeight: 900 }}>{typeof value === 'number' ? (label === "Cohen's kappa" ? value.toFixed(2) : `${(value * 100).toFixed(1)}%`) : '—'}</div>
+                <div style={{ color: '#cbd5e1', fontSize: '11px', fontWeight: 700 }}>{label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Confusion counts + rule metrics */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: '24px' }}>
