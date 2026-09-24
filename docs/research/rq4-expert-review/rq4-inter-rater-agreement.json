@@ -1,0 +1,90 @@
+{
+  "evaluationId": "RQ4_TWO_EXPERT_COMPARISON",
+  "computedDate": "2026-09-08",
+  "sourceFiles": {
+    "expertE01": "docs/research/rq4-expert-review/expert-annotation-sheet-completed.csv",
+    "expertE02": "docs/research/rq4-expert-review/expert-annotation-sheet-E02.csv",
+    "figmResearcherReference": "docs/research/rq4-expert-review/researcher-reference.csv",
+    "twoExpertComparison": "docs/research/rq4-expert-review/rq4-two-expert-comparison.csv"
+  },
+  "note": "This track (docs/research/rq4-expert-review/) is separate from, and must not be conflated with, the unrelated research/independent-annotation/ pipeline, which remains PENDING (0 submissions) as of its own last-checked status (research/independent-annotation/results/STATUS.md). This document reports only on the completed E01/E02 blinded-review track.",
+  "sampleSource": "FIGM_CONTROLLED_TESTBED_FIXTURE",
+  "sampleCount": 15,
+  "e01RowCount": 15,
+  "e02RowCount": 15,
+  "matchedSampleCount": 15,
+  "interRaterAgreement": {
+    "raters": ["E01", "E02"],
+    "agreementCount": 15,
+    "disagreementCount": 0,
+    "percentAgreement": 100.0,
+    "cohensKappa": 1.0,
+    "kappaInterpretation": "Landis & Koch (1977) scale: kappa > 0.80 = almost perfect agreement. kappa = 1.0 here means perfect agreement -- observed on this controlled 15-sample set only; this is not asserted as a general property of these two raters or of expert review of FIGM's output beyond this sample.",
+    "contingencyTable": {
+      "rows": "E01",
+      "columns": "E02",
+      "YES_YES": 9,
+      "YES_NO": 0,
+      "NO_YES": 0,
+      "NO_NO": 6
+    },
+    "observedAgreement_po": 1.0,
+    "expectedAgreementByChance_pe": 0.52,
+    "disagreementSampleIds": []
+  },
+  "figmVsE01": {
+    "truePositive": 9,
+    "falsePositive": 0,
+    "falseNegative": 0,
+    "trueNegative": 6,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1Score": 1.0,
+    "accuracy": 1.0,
+    "specificity": 1.0,
+    "n": 15
+  },
+  "figmVsE02": {
+    "truePositive": 9,
+    "falsePositive": 0,
+    "falseNegative": 0,
+    "trueNegative": 6,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1Score": 1.0,
+    "accuracy": 1.0,
+    "specificity": 1.0,
+    "n": 15
+  },
+  "figmVsConsensus": {
+    "consensusSampleN": 15,
+    "excludedDisagreementN": 0,
+    "note": "No sample was excluded because E01 and E02 disagreed on 0 of 15 samples. Consensus label equals both experts' shared label for every sample.",
+    "truePositive": 9,
+    "falsePositive": 0,
+    "falseNegative": 0,
+    "trueNegative": 6,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1Score": 1.0,
+    "accuracy": 1.0,
+    "specificity": 1.0
+  },
+  "frameworkLevelAgreement": {
+    "React": { "agreements": 5, "total": 5 },
+    "Next.js": { "agreements": 5, "total": 5 },
+    "Angular": { "agreements": 5, "total": 5 }
+  },
+  "categoryLevelAgreement": {
+    "Architecture": { "agreements": 8, "total": 8 },
+    "Performance": { "agreements": 5, "total": 5 },
+    "Accessibility": { "agreements": 2, "total": 2 }
+  },
+  "researchIntegrityStatements": {
+    "notUniversalAccuracyClaim": "FIGM achieved perfect agreement with both independent experts (E01 and E02) on this controlled 15-sample blinded-review set. This is not a claim of universal or population-level accuracy.",
+    "notPopulationLevelValidation": "This is a controlled, purposively small (n=15) sample drawn from FIGM's own testbed fixtures, evaluated by two independent human experts. It is not population-level validation and must not be cited as such.",
+    "generalizationLimitation": "These results are limited to the small controlled expert-review sample and should not be generalized as evidence of accuracy across all real-world SPA codebases.",
+    "interRaterReliabilityHonesty": "Cohen's kappa of 1.0 reflects perfect observed agreement between E01 and E02 on this specific 15-sample set. It is reported exactly as measured; no stronger or weaker inter-rater reliability claim is made than what this computation produced.",
+    "pipelineSeparationStatement": "This E01/E02 two-expert comparison is a completed, separate evidence track from the unrelated research/independent-annotation/ pipeline, which remains PENDING (0 submissions). The two must never be conflated or presented as the same evidence."
+  }
+}
