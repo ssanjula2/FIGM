@@ -331,7 +331,7 @@ export async function GET() {
           description: '45 hand-authored, framework-tagged fixture files (React JSX, Next.js, Vue SFC, Angular template, generic ESTree/vanilla JS)',
           scope: 'React, Next.js, Vue, Angular, and framework-agnostic (vanilla JS) SPA code patterns — benchmarks/testbed',
           sizeTarget: 'scored against 65 hand-labelled ground-truth violations across all 50 canonical rules (benchmarks/ground-truth.json)',
-          groundTruthMethod: 'Controlled fixture testbed: manually authored and hand-labelled violations scored automatically by src/eval/evaluation-runner.ts (internal baseline; independent annotation PENDING)',
+          groundTruthMethod: 'Controlled fixture testbed: manually authored and hand-labelled violations scored automatically by src/eval/evaluation-runner.ts (internal baseline; Independent annotation of this internal fixture benchmark remains pending; this is separate from the completed RQ4 expert evaluation.)',
         },
       },
 
@@ -350,7 +350,7 @@ export async function GET() {
         instrument: 'Post-interaction usability feedback survey',
         reliabilityMeasure: "Cronbach's α (computed only after real data is collected)",
         note: !isRealHumanData
-          ? `Participant data collection: NOT YET STARTED. (0/${targetParticipants} valid responses). No real human participant data has been collected yet.`
+          ? `Questionnaire/SUS data collection: 0 accepted response records in this system (target ${targetParticipants}). P001–P020 have scan activity as supplementary product-use evidence; scan activity is not questionnaire/SUS evidence.`
           : `${humanParticipants}/${targetParticipants} real human participants collected.`,
         metrics: isRealHumanData ? usabilityReport!.metrics : null,
         provenance: usabilityReport?.provenance ?? {
