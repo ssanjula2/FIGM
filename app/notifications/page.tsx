@@ -19,27 +19,27 @@ export default function NotificationsPage() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ fontSize: '12px', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
+          <div style={{ fontSize: '12px', color: '#1d4ed8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
             Real-Time Activity Feed
           </div>
-          <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', margin: 0, letterSpacing: '-0.5px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: 0, letterSpacing: '-0.5px' }}>
             Notification Center
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '6px', margin: 0 }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', marginTop: '6px', margin: 0 }}>
             System events, scan achievements, AI remediation completion, and security alerts.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
               style={{
                 padding: '9px 16px',
                 borderRadius: '8px',
-                background: 'rgba(56, 189, 248, 0.15)',
-                border: '1px solid rgba(56, 189, 248, 0.3)',
-                color: '#38bdf8',
+                background: 'rgba(96, 165, 250, 0.15)',
+                border: '1px solid rgba(96, 165, 250, 0.3)',
+                color: '#1d4ed8',
                 fontWeight: 700,
                 fontSize: '13px',
                 cursor: 'pointer',
@@ -54,9 +54,9 @@ export default function NotificationsPage() {
             style={{
               padding: '9px 16px',
               borderRadius: '8px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: '#94a3b8',
+              background: '#b91c1c',
+              border: '1px solid #b91c1c',
+              color: '#ffffff',
               fontWeight: 600,
               fontSize: '13px',
               cursor: 'pointer',
@@ -68,16 +68,16 @@ export default function NotificationsPage() {
       </div>
 
       {loading && (
-        <div role="status" style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+        <div role="status" style={{ padding: '60px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>
           Loading notification feed...
         </div>
       )}
 
       {!loading && notifications.length === 0 && (
-        <div style={{ padding: '60px', textAlign: 'center', background: 'rgba(15, 23, 42, 0.4)', borderRadius: '16px', border: '1px border-dashed rgba(255, 255, 255, 0.1)' }}>
+        <div style={{ padding: '60px', textAlign: 'center', background: '#ffffff', borderRadius: '16px', border: '1px dashed rgba(0, 0, 0, 0.1)' }}>
           <div style={{ fontSize: '40px', marginBottom: '12px' }}>🔔</div>
-          <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>No Notifications</h3>
-          <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '6px' }}>Your notification feed is empty.</p>
+          <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>No Notifications</h3>
+          <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '6px' }}>Your notification feed is empty.</p>
         </div>
       )}
 
@@ -91,9 +91,9 @@ export default function NotificationsPage() {
                 aria-label={`${n.read ? 'Notification' : 'Mark as read'}: ${n.title}. ${n.message}`}
                 style={{
                   width: '100%',
-                  background: n.read ? 'rgba(15, 23, 42, 0.4)' : 'rgba(15, 23, 42, 0.85)',
+                  background: n.read ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.85)',
                   backdropFilter: 'blur(16px)',
-                  border: n.read ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(56, 189, 248, 0.3)',
+                  border: n.read ? '1px solid rgba(0, 0, 0, 0.05)' : '1px solid rgba(96, 165, 250, 0.3)',
                   borderRadius: '14px',
                   padding: '18px 24px',
                   display: 'flex',
@@ -108,16 +108,16 @@ export default function NotificationsPage() {
                 <span style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                   <span style={{ fontSize: '24px' }} aria-hidden="true">{typeIcons[n.type] || '🔔'}</span>
                   <span>
-                    <span style={{ display: 'block', fontSize: '14px', fontWeight: n.read ? 600 : 800, color: n.read ? '#cbd5e1' : '#f8fafc' }}>
-                      {n.title} {!n.read && <span style={{ color: '#38bdf8', fontSize: '10px', marginLeft: '6px' }}>● NEW</span>}
+                    <span style={{ display: 'block', fontSize: '14px', fontWeight: n.read ? 600 : 800, color: n.read ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.82)' }}>
+                      {n.title} {!n.read && <span style={{ color: '#1d4ed8', fontSize: '10px', marginLeft: '6px' }}>● NEW</span>}
                     </span>
-                    <span style={{ display: 'block', fontSize: '13px', color: '#94a3b8', marginTop: '4px' }}>{n.message}</span>
-                    <span style={{ display: 'block', fontSize: '11px', color: '#7c8ba6', marginTop: '4px' }}>{new Date(n.createdAt).toLocaleString()}</span>
+                    <span style={{ display: 'block', fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>{n.message}</span>
+                    <span style={{ display: 'block', fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>{new Date(n.createdAt).toLocaleString()}</span>
                   </span>
                 </span>
 
                 {!n.read && (
-                  <span aria-hidden="true" style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8', flexShrink: 0 }} />
+                  <span aria-hidden="true" style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#60a5fa', boxShadow: '0 0 8px #60a5fa', flexShrink: 0 }} />
                 )}
               </button>
             </li>

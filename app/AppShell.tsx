@@ -55,6 +55,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   // Resumes (or starts) silent access-token refresh for the lifetime of the app -- see
@@ -66,6 +67,36 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   // non-retriable 401 occurred somewhere in the app), redirects to /auth/login -- the same
   // destination Sidebar's own logout handler already uses, so a session ending because it expired
   // looks the same to the user as choosing to log out.
+  useEffect(() => {
+    const applySavedTheme = (selected?: string | null) => {
+      let savedTheme = selected === 'dark' || selected === 'light' ? selected : null;
+      try {
+        savedTheme = savedTheme ?? localStorage.getItem('figm_theme');
+      } catch {
+        savedTheme = 'light';
+      }
+      const next = savedTheme === 'dark' ? 'dark' : 'light';
+      setTheme(next);
+      if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('data-theme', next);
+        document.body?.setAttribute('data-theme', next);
+        if (document.body) {
+          document.body.style.backgroundColor = next === 'dark' ? '#000000' : '#ffffff';
+          document.body.style.color = next === 'dark' ? '#ffffff' : 'rgba(0, 0, 0, 0.82)';
+        }
+      }
+    };
+    applySavedTheme();
+    const handleStorage = () => applySavedTheme();
+    const handleThemeChange = (event: Event) => applySavedTheme((event as CustomEvent<string>).detail);
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('figm-theme-change', handleThemeChange);
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('figm-theme-change', handleThemeChange);
+    };
+  }, []);
+
   useEffect(() => {
     sessionClient.init();
     const handleSessionExpired = () => {
@@ -109,7 +140,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, [sidebarOpen]);
 
   if (isBareRoute(pathname)) {
-    return <>{children}</>;
+    return <div className="theme-root" data-theme={theme} suppressHydrationWarning>{children}</div>;
   }
 
   // The admin/research workspace (see app/admin/layout.tsx, which is the actual server-side
@@ -120,6 +151,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const isAdminWorkspace = pathname?.startsWith('/admin') ?? false;
 
   return (
+    <div className="theme-root" data-theme={theme} suppressHydrationWarning>
     <div className="layout-container">
       {isAdminWorkspace ? (
         <AdminSidebar isOpen={sidebarOpen} onClose={closeSidebar} />
@@ -154,13 +186,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <div>
             Framework Independent Guideline Model (FIGM) &copy; 2026. All rights reserved.
           </div>
-          <div style={{ display: 'flex', gap: '16px', color: '#38bdf8', fontWeight: 600, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '16px', color: '#1d4ed8', fontWeight: 600, flexWrap: 'wrap' }}>
             <span>Next.js App Router</span>
             <span>React 18</span>
             <span>Angular 17</span>
           </div>
         </footer>
       </div>
+    </div>
     </div>
   );
 }

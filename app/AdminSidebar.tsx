@@ -74,25 +74,25 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     {
       groupName: 'RESEARCH & ADMINISTRATION',
       items: [
-        { href: '/admin?tab=OVERVIEW', label: 'Admin Overview', icon: '🧭' },
-        { href: '/admin?tab=USERS', label: 'Users', icon: '👥' },
-        { href: '/admin?tab=PARTICIPANTS', label: 'Participants', icon: '🧪' },
-        { href: '/admin?tab=SCANS', label: 'Global Scan History', icon: '📜' },
-        { href: '/admin?tab=RESEARCH', label: 'Research Metrics', icon: '📊' },
-        { href: '/admin?tab=FRAMEWORKS', label: 'Framework Analytics', icon: '📈' },
-        { href: '/admin?tab=RULES', label: 'Rule Analytics', icon: '📐' },
-        { href: '/admin?tab=WEBSITE_ANALYTICS', label: 'Website Analytics (GA4)', icon: '🌐' },
-        { href: '/admin?tab=AUDIT', label: 'Audit Logs', icon: '🗂️' },
-        { href: '/admin?tab=HEALTH', label: 'System Health', icon: '💚' },
+        { href: '/admin?tab=OVERVIEW', label: 'Admin Overview' },
+        { href: '/admin?tab=USERS', label: 'Users' },
+        { href: '/admin?tab=PARTICIPANTS', label: 'Participants' },
+        { href: '/admin?tab=SCANS', label: 'Global Scan History' },
+        { href: '/admin?tab=RESEARCH', label: 'Research Metrics' },
+        { href: '/admin?tab=FRAMEWORKS', label: 'Framework Analytics' },
+        { href: '/admin?tab=RULES', label: 'Rule Analytics' },
+        { href: '/admin?tab=WEBSITE_ANALYTICS', label: 'Website Analytics (GA4)' },
+        { href: '/admin?tab=AUDIT', label: 'Audit Logs' },
+        { href: '/admin?tab=HEALTH', label: 'System Health' },
       ],
     },
     {
       groupName: 'ACCOUNT',
       items: [
-        { href: '/admin/profile', label: 'Admin Profile', icon: '🛡️' },
-        { href: '/settings', label: 'Admin Settings', icon: '🔧' },
-        { href: '/', label: 'Back to User Workspace', icon: '↩️' },
-        { href: '/auth/login', label: 'Log out', icon: '🚪', isLogout: true },
+        { href: '/admin/profile', label: 'Admin Profile' },
+        { href: '/settings', label: 'Admin Settings' },
+        { href: '/', label: 'Back to User Workspace' },
+        { href: '/auth/login', label: 'Log out', isLogout: true },
       ],
     },
   ];
@@ -116,7 +116,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         // visual cue (per Phase 5/13) that this is a different workspace, not just a page within
         // the normal app. Kept dark/glass to match the rest of the design system, not a jarring
         // color swap.
-        background: 'rgba(30, 12, 12, 0.95)',
+        background: 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(25px)',
         WebkitBackdropFilter: 'blur(25px)',
         borderRight: '1px solid rgba(248, 113, 113, 0.18)',
@@ -138,25 +138,25 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 width: '40px',
                 height: '40px',
                 borderRadius: '12px',
-                background: 'linear-gradient(135deg, #f87171 0%, #a855f7 100%)',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 800,
-                color: '#030712',
+                color: '#ffffff',
                 fontSize: '15px',
                 letterSpacing: '0.5px',
-                boxShadow: '0 0 20px rgba(248, 113, 113, 0.4)',
+                boxShadow: '0 2px 8px rgba(37, 99, 235, 0.18)',
                 flexShrink: 0,
               }}
             >
               FI
             </div>
             <div>
-              <div style={{ fontWeight: 900, fontSize: '15px', color: '#f8fafc', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
+              <div style={{ fontWeight: 900, fontSize: '15px', color: 'rgba(0, 0, 0, 0.82)', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
                 FIGM Code Inspector
               </div>
-              <div style={{ fontSize: '10px', color: '#f87171', fontWeight: 700, lineHeight: 1.2 }}>
+              <div style={{ fontSize: '10px', color: '#1d4ed8', fontWeight: 700, lineHeight: 1.2 }}>
                 Administrative Workspace
               </div>
             </div>
@@ -170,13 +170,13 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             style={{
               display: 'none',
               background: 'rgba(255, 255, 255, 0.06)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(0, 0, 0, 0.1)',
               borderRadius: '8px',
               width: '32px',
               height: '32px',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#f8fafc',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontSize: '16px',
               cursor: 'pointer',
               flexShrink: 0,
@@ -192,9 +192,9 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           style={{
             fontSize: '10px',
             fontWeight: 800,
-            color: '#fca5a5',
-            background: 'rgba(248, 113, 113, 0.1)',
-            border: '1px solid rgba(248, 113, 113, 0.25)',
+            color: '#1d4ed8',
+            background: 'rgba(59, 130, 246, 0.1)',
+            border: '1px solid rgba(59, 130, 246, 0.25)',
             borderRadius: '8px',
             padding: '6px 10px',
             marginBottom: '20px',
@@ -213,7 +213,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                   style={{
                     fontSize: '10px',
                     fontWeight: 800,
-                    color: '#7c8ba6',
+                    color: 'rgba(0, 0, 0, 0.7)',
                     letterSpacing: '1px',
                     marginBottom: '8px',
                     paddingLeft: '10px',
@@ -244,7 +244,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                       borderRadius: '10px',
                       fontSize: '13px',
                       fontWeight: isActive ? 700 : 500,
-                      color: isActive ? '#f87171' : '#94a3b8',
+                      color: isActive ? '#f87171' : 'rgba(0, 0, 0, 0.7)',
                       background: isActive ? 'rgba(248, 113, 113, 0.12)' : 'transparent',
                       border: isActive ? '1px solid rgba(248, 113, 113, 0.3)' : '1px solid transparent',
                       boxShadow: isActive ? '0 0 15px rgba(248, 113, 113, 0.15)' : 'none',
@@ -253,10 +253,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                     };
                     const content = (
                       <>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span aria-hidden="true" style={{ fontSize: '15px' }}>{item.icon}</span>
-                          <span>{item.label}</span>
-                        </div>
+                        <span>{item.label}</span>
 
                         {isActive && (
                           <div aria-hidden="true" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#f87171', boxShadow: '0 0 8px #f87171' }} />
@@ -296,11 +293,11 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         </nav>
       </div>
 
-      <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '14px', paddingLeft: '8px', marginTop: '20px' }}>
-        <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>
+      <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.08)', paddingTop: '14px', paddingLeft: '8px', marginTop: '20px' }}>
+        <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>
           FIGM Code Inspector v3.0
         </div>
-        <div style={{ fontSize: '10px', color: '#f87171', marginTop: '2px', fontWeight: 700 }}>
+        <div style={{ fontSize: '10px', color: '#1d4ed8', marginTop: '2px', fontWeight: 700 }}>
           Administrative / Research Workspace
         </div>
       </div>

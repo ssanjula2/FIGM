@@ -17,6 +17,7 @@ interface HeaderBarProps {
 interface StoredUser {
   fullName?: string;
   email?: string;
+  avatarUrl?: string;
 }
 
 export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: HeaderBarProps) {
@@ -46,7 +47,55 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
     } catch {
       // Corrupt/inaccessible localStorage -- fall back to the generic label below.
     }
+
+    const token = localStorage.getItem('figm_token');
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    fetch('/api/profile', { headers })
+      .then(async (response) => response.ok ? response.json() : null)
+      .then((profile) => {
+        if (profile?.user) setCurrentUser(profile.user);
+      })
+      .catch(() => undefined);
+
+    const handleAvatarUpdated = (event: Event) => {
+      const avatarUrl = (event as CustomEvent<{ avatarUrl: string }>).detail?.avatarUrl;
+      if (typeof avatarUrl === 'string') {
+        setCurrentUser((user) => user ? { ...user, avatarUrl } : user);
+      }
+    };
+    window.addEventListener('figm:avatar-updated', handleAvatarUpdated);
+    return () => window.removeEventListener('figm:avatar-updated', handleAvatarUpdated);
   }, []);
+
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('figm_theme');
+      if (saved === 'dark' || saved === 'light') {
+        setTheme(saved);
+      }
+    } catch {}
+
+    const handleThemeChange = (e: Event) => {
+      const newTheme = (e as CustomEvent<string>).detail;
+      if (newTheme === 'dark' || newTheme === 'light') {
+        setTheme(newTheme);
+      }
+    };
+    window.addEventListener('figm-theme-change', handleThemeChange);
+    return () => window.removeEventListener('figm-theme-change', handleThemeChange);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    try {
+      localStorage.setItem('figm_theme', nextTheme);
+    } catch {}
+    window.dispatchEvent(new CustomEvent('figm-theme-change', { detail: nextTheme }));
+  };
+
   const displayName = currentUser?.fullName || currentUser?.email || 'Account';
   const displayInitial = displayName.trim().charAt(0).toUpperCase() || '?';
 
@@ -118,13 +167,13 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
           aria-label={sidebarOpen ? 'Close navigation menu' : 'Open navigation menu'}
           style={{
             background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
             borderRadius: '8px',
             width: '36px',
             height: '36px',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#f8fafc',
+            color: 'rgba(0, 0, 0, 0.82)',
             fontSize: '18px',
             cursor: 'pointer',
             flexShrink: 0,
@@ -149,7 +198,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
           }}
           style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
         >
-          <span style={{ position: 'absolute', left: '14px', color: '#7c8ba6', fontSize: '14px' }}>🔍</span>
+          <span style={{ position: 'absolute', left: '14px', color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px' }}>🔍</span>
           <input
             type="text"
             readOnly
@@ -157,7 +206,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
             className="search-input"
             style={{ pointerEvents: 'none' }}
           />
-          <div style={{ position: 'absolute', right: '12px', fontSize: '11px', color: '#94a3b8', background: 'rgba(255, 255, 255, 0.06)', padding: '2px 7px', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.1)', fontWeight: 600 }}>
+          <div style={{ position: 'absolute', right: '12px', fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', background: 'rgba(255, 255, 255, 0.06)', padding: '2px 7px', borderRadius: '6px', border: '1px solid rgba(0, 0, 0, 0.1)', fontWeight: 600 }}>
             ⌘K
           </div>
         </div>
@@ -172,18 +221,18 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: dynamicScore === null ? 'rgba(148, 163, 184, 0.12)' : passed ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-              border: dynamicScore === null ? '1px solid rgba(148, 163, 184, 0.3)' : passed ? '1px solid rgba(16, 185, 129, 0.35)' : '1px solid rgba(239, 68, 68, 0.35)',
+              background: dynamicScore === null ? 'rgba(255, 255, 255, 0.12)' : passed ? 'rgba(96, 165, 250, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+              border: dynamicScore === null ? '1px solid rgba(0, 0, 0, 0.3)' : passed ? '1px solid rgba(96, 165, 250, 0.35)' : '1px solid rgba(239, 68, 68, 0.35)',
               padding: '6px 14px',
               borderRadius: '20px',
               fontSize: '12px',
               fontWeight: 700,
-              color: dynamicScore === null ? '#94a3b8' : passed ? '#34d399' : '#f87171',
-              boxShadow: dynamicScore === null ? 'none' : passed ? '0 0 16px rgba(16, 185, 129, 0.2)' : '0 0 16px rgba(239, 68, 68, 0.2)',
+              color: dynamicScore === null ? 'rgba(0, 0, 0, 0.7)' : passed ? '#60a5fa' : '#ef4444',
+              boxShadow: dynamicScore === null ? 'none' : passed ? '0 0 16px rgba(96, 165, 250, 0.2)' : '0 0 16px rgba(239, 68, 68, 0.2)',
               transition: 'all 0.2s ease',
             }}
           >
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: dynamicScore === null ? '#94a3b8' : passed ? '#34d399' : '#f87171', boxShadow: dynamicScore === null ? 'none' : passed ? '0 0 10px #34d399' : '0 0 10px #f87171' }}></span>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: dynamicScore === null ? '#ffffff' : passed ? '#60a5fa' : '#ef4444', boxShadow: dynamicScore === null ? 'none' : passed ? '0 0 10px #60a5fa' : '0 0 10px #ef4444' }}></span>
             {dynamicScore === null ? (
               <span>🛡️ No scans yet</span>
             ) : (
@@ -191,28 +240,30 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
             )}
           </Link>
 
-          {/* Theme Button */}
-          <Link
-            href="/settings"
+          {/* Theme Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleTheme}
             style={{
               background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(0, 0, 0, 0.1)',
               borderRadius: '50%',
               width: '36px',
               height: '36px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '15px',
+              fontSize: '16px',
               cursor: 'pointer',
-              color: '#94a3b8',
-              textDecoration: 'none',
+              color: 'inherit',
+              transition: 'all 0.2s ease',
+              flexShrink: 0,
             }}
-            title="Settings & Theme"
-            aria-label="Settings & Theme"
+            title={theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'}
+            aria-label={theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'}
           >
-            ⚙️
-          </Link>
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
 
           {/* Notification Bell */}
           <div style={{ position: 'relative' }}>
@@ -231,7 +282,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
               }}
               style={{
                 background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(0, 0, 0, 0.1)',
                 borderRadius: '50%',
                 width: '36px',
                 height: '36px',
@@ -239,7 +290,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '15px',
-                color: '#94a3b8',
+                color: 'rgba(0, 0, 0, 0.7)',
                 cursor: 'pointer',
               }}
             >
@@ -277,21 +328,21 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                   position: 'absolute',
                   top: '48px',
                   right: '0',
-                  width: '360px',
-                  background: '#0f172a',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  width: 'min(360px, calc(100vw - 24px))',
+                  background: '#ffffff',
+                  border: '1px solid rgba(0, 0, 0, 0.15)',
                   borderRadius: '16px',
-                  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.7)',
+                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.14)',
                   padding: '16px',
                   zIndex: 50,
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <h4 style={{ fontSize: '14px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>Notifications</h4>
+                  <h4 style={{ fontSize: '14px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>Notifications</h4>
                   {unreadCount > 0 && (
                     <button
                       onClick={markAllAsRead}
-                      style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+                      style={{ background: 'none', border: 'none', color: '#1d4ed8', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
                     >
                       Mark all read
                     </button>
@@ -300,7 +351,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
 
                 <div style={{ maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {notifications.length === 0 ? (
-                    <div style={{ padding: '20px', textAlign: 'center', color: '#7c8ba6', fontSize: '12px' }}>
+                    <div style={{ padding: '20px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px' }}>
                       No notifications
                     </div>
                   ) : (
@@ -317,17 +368,17 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                           }
                         }}
                         style={{
-                          background: n.read ? 'transparent' : 'rgba(56, 189, 248, 0.08)',
+                          background: n.read ? 'transparent' : 'rgba(96, 165, 250, 0.08)',
                           padding: '10px 12px',
                           borderRadius: '8px',
-                          border: '1px solid rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(0, 0, 0, 0.05)',
                           cursor: 'pointer',
                         }}
                       >
-                        <div style={{ fontSize: '12px', fontWeight: n.read ? 600 : 800, color: '#f8fafc' }}>
+                        <div style={{ fontSize: '12px', fontWeight: n.read ? 600 : 800, color: 'rgba(0, 0, 0, 0.82)' }}>
                           {n.title}
                         </div>
-                        <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
+                        <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '2px' }}>
                           {n.message}
                         </div>
                       </div>
@@ -335,11 +386,11 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                   )}
                 </div>
 
-                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '10px', marginTop: '10px', textAlign: 'center' }}>
+                <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.08)', paddingTop: '10px', marginTop: '10px', textAlign: 'center' }}>
                   <Link
                     href="/notifications"
                     onClick={() => setShowNotifDropdown(false)}
-                    style={{ fontSize: '12px', color: '#38bdf8', textDecoration: 'none', fontWeight: 700 }}
+                    style={{ fontSize: '12px', color: '#1d4ed8', textDecoration: 'none', fontWeight: 700 }}
                   >
                     View All Notifications &rarr;
                   </Link>
@@ -355,20 +406,26 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                 width: '38px',
                 height: '38px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #0284c7, #a855f7)',
+                background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
                 color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 800,
                 fontSize: '13px',
-                boxShadow: '0 0 12px rgba(56, 189, 248, 0.4)',
+                boxShadow: '0 0 12px rgba(96, 165, 250, 0.4)',
               }}
             >
-              {displayInitial}
+              {currentUser?.avatarUrl ? (
+                <img
+                  src={currentUser.avatarUrl}
+                  alt=""
+                  style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', display: 'block' }}
+                />
+              ) : displayInitial}
             </div>
-            <div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#f8fafc', lineHeight: 1.2 }}>
+            <div style={{ maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {displayName}
               </div>
             </div>
@@ -384,7 +441,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(3, 7, 18, 0.85)',
+            background: 'rgba(0, 0, 0, 0.35)',
             backdropFilter: 'blur(10px)',
             display: 'flex',
             alignItems: 'flex-start',
@@ -400,18 +457,18 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
             aria-label="Global search"
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: '#0f172a',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: '#ffffff',
+              border: '1px solid rgba(0, 0, 0, 0.15)',
               borderRadius: '20px',
               maxWidth: '650px',
               width: '100%',
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.8)',
+              boxShadow: '0 10px 28px rgba(0, 0, 0, 0.16)',
               overflow: 'hidden',
             }}
           >
             {/* Input Header */}
-            <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '18px', color: '#7c8ba6' }}>🔍</span>
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ fontSize: '18px', color: 'rgba(0, 0, 0, 0.7)' }}>🔍</span>
               <input
                 ref={searchInputRef}
                 type="text"
@@ -422,7 +479,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                   width: '100%',
                   background: 'none',
                   border: 'none',
-                  color: '#f8fafc',
+                  color: 'rgba(0, 0, 0, 0.82)',
                   fontSize: '16px',
                   fontWeight: 600,
                   outline: 'none',
@@ -430,7 +487,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
               />
               <button
                 onClick={() => setIsSearchOpen(false)}
-                style={{ background: 'none', border: 'none', color: '#7c8ba6', fontSize: '16px', cursor: 'pointer' }}
+                style={{ background: 'none', border: 'none', color: 'rgba(0, 0, 0, 0.7)', fontSize: '16px', cursor: 'pointer' }}
               >
                 esc
               </button>
@@ -439,11 +496,11 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
             {/* Results Body */}
             <div style={{ maxHeight: '420px', overflowY: 'auto', padding: '16px 20px' }}>
               {searchLoading && (
-                <div style={{ padding: '20px', textAlign: 'center', color: '#94a3b8' }}>Searching FIGM Code Inspector registry...</div>
+                <div style={{ padding: '20px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>Searching FIGM Code Inspector registry...</div>
               )}
 
               {!searchLoading && query.trim() === '' && (
-                <div style={{ color: '#7c8ba6', fontSize: '13px', textAlign: 'center', padding: '20px' }}>
+                <div style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px', textAlign: 'center', padding: '20px' }}>
                   Search across Projects, Scan Reports, 50 FIGM Guidelines, Repositories, and System Users.
                 </div>
               )}
@@ -453,7 +510,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                   {/* Projects Results */}
                   {results.projects.length > 0 && (
                     <div>
-                      <div style={{ fontSize: '11px', fontWeight: 800, color: '#38bdf8', textTransform: 'uppercase', marginBottom: '8px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: 800, color: '#1d4ed8', textTransform: 'uppercase', marginBottom: '8px' }}>
                         PROJECTS ({results.projects.length})
                       </div>
                       {results.projects.map((p: any) => (
@@ -461,9 +518,9 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                           key={p.id}
                           href="/projects"
                           onClick={() => setIsSearchOpen(false)}
-                          style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.04)', color: '#f8fafc', textDecoration: 'none', marginBottom: '6px' }}
+                          style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.04)', color: 'rgba(0, 0, 0, 0.82)', textDecoration: 'none', marginBottom: '6px' }}
                         >
-                          <strong style={{ fontSize: '13px' }}>{p.name}</strong> &bull; <span style={{ color: '#38bdf8', fontSize: '12px' }}>{p.framework}</span>
+                          <strong style={{ fontSize: '13px' }}>{p.name}</strong> &bull; <span style={{ color: '#1d4ed8', fontSize: '12px' }}>{p.framework}</span>
                         </Link>
                       ))}
                     </div>
@@ -472,7 +529,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                   {/* Scans Results */}
                   {results.scans.length > 0 && (
                     <div>
-                      <div style={{ fontSize: '11px', fontWeight: 800, color: '#a855f7', textTransform: 'uppercase', marginBottom: '8px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: 800, color: '#1d4ed8', textTransform: 'uppercase', marginBottom: '8px' }}>
                         REPORTS & SCANS ({results.scans.length})
                       </div>
                       {results.scans.map((s: any) => (
@@ -480,9 +537,9 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                           key={s.id}
                           href={`/reports/${s.id}`}
                           onClick={() => setIsSearchOpen(false)}
-                          style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.04)', color: '#f8fafc', textDecoration: 'none', marginBottom: '6px' }}
+                          style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.04)', color: 'rgba(0, 0, 0, 0.82)', textDecoration: 'none', marginBottom: '6px' }}
                         >
-                          <strong style={{ fontSize: '13px', fontFamily: 'JetBrains Mono' }}>{s.fileName}</strong> &bull; Score: <span style={{ color: '#22c55e' }}>{s.qualityScore}%</span>
+                          <strong style={{ fontSize: '13px', fontFamily: 'JetBrains Mono' }}>{s.fileName}</strong> &bull; Score: <span style={{ color: '#1d4ed8' }}>{s.qualityScore}%</span>
                         </Link>
                       ))}
                     </div>
@@ -491,7 +548,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                   {/* Rules Results */}
                   {results.rules.length > 0 && (
                     <div>
-                      <div style={{ fontSize: '11px', fontWeight: 800, color: '#22c55e', textTransform: 'uppercase', marginBottom: '8px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: 800, color: '#1d4ed8', textTransform: 'uppercase', marginBottom: '8px' }}>
                         FIGM SPECIFICATION RULES ({results.rules.length})
                       </div>
                       {results.rules.map((r: any) => (
@@ -499,10 +556,10 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                           key={r.ruleId}
                           href="/guidelines"
                           onClick={() => setIsSearchOpen(false)}
-                          style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.04)', color: '#f8fafc', textDecoration: 'none', marginBottom: '6px' }}
+                          style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.04)', color: 'rgba(0, 0, 0, 0.82)', textDecoration: 'none', marginBottom: '6px' }}
                         >
-                          <strong style={{ fontSize: '13px', color: '#38bdf8' }}>[{r.ruleId}] {r.name}</strong>
-                          <div style={{ fontSize: '11px', color: '#94a3b8' }}>{r.description}</div>
+                          <strong style={{ fontSize: '13px', color: '#1d4ed8' }}>[{r.ruleId}] {r.name}</strong>
+                          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)' }}>{r.description}</div>
                         </Link>
                       ))}
                     </div>
@@ -511,7 +568,7 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                   {/* Users Results */}
                   {results.users.length > 0 && (
                     <div>
-                      <div style={{ fontSize: '11px', fontWeight: 800, color: '#ef4444', textTransform: 'uppercase', marginBottom: '8px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: 800, color: '#1d4ed8', textTransform: 'uppercase', marginBottom: '8px' }}>
                         ADMIN USERS REGISTRY ({results.users.length})
                       </div>
                       {results.users.map((u: any) => (
@@ -519,9 +576,9 @@ export default function HeaderBar({ menuButtonRef, sidebarOpen, onMenuToggle }: 
                           key={u.id}
                           href="/admin"
                           onClick={() => setIsSearchOpen(false)}
-                          style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.04)', color: '#f8fafc', textDecoration: 'none', marginBottom: '6px' }}
+                          style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.04)', color: 'rgba(0, 0, 0, 0.82)', textDecoration: 'none', marginBottom: '6px' }}
                         >
-                          <strong style={{ fontSize: '13px' }}>{u.fullName}</strong> ({u.email}) &bull; <span style={{ color: '#ef4444' }}>{u.role}</span>
+                          <strong style={{ fontSize: '13px' }}>{u.fullName}</strong> ({u.email}) &bull; <span style={{ color: '#1d4ed8' }}>{u.role}</span>
                         </Link>
                       ))}
                     </div>

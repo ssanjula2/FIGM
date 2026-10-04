@@ -30,21 +30,21 @@ const CAPABILITIES = [
 
 export default function WhyFigm() {
   return (
-    <section style={{ padding: '56px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+    <section style={{ padding: '56px 0', borderTop: '1px solid rgba(0, 0, 0, 0.08)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
-        <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '10px' }}>
+        <div style={{ fontSize: '11px', color: '#1d4ed8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '10px' }}>
           Why FIGM
         </div>
-        <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#f8fafc', margin: '0 0 24px 0', letterSpacing: '-0.3px' }}>
+        <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 24px 0', letterSpacing: '-0.3px' }}>
           How the engine actually works
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
           {CAPABILITIES.map((c) => (
             <div key={c.title} style={{ display: 'flex', gap: '12px' }}>
-              <c.Icon size={18} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+              <c.Icon size={18} style={{ color: '#1d4ed8', flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
               <div>
-                <div style={{ color: '#f8fafc', fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>{c.title}</div>
-                <div style={{ color: '#94a3b8', fontSize: '12.5px', lineHeight: 1.55 }}>{c.desc}</div>
+                <div style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>{c.title}</div>
+                <div style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '12.5px', lineHeight: 1.55 }}>{c.desc}</div>
               </div>
             </div>
           ))}

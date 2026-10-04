@@ -23,13 +23,13 @@ export default function StaticAnalysisTimingPage() {
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '1400px', margin: '0 auto' }}>
       <div>
-        <div style={{ fontSize: '12px', color: '#eab308', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
+        <div style={{ fontSize: '12px', color: '#1d4ed8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
           Static Analysis Timing (FIGM Scanner Only — Not a Browser Performance Metric)
         </div>
-        <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', letterSpacing: '-0.5px' }}>
           Static Analysis Timing
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '4px' }}>
+        <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', marginTop: '4px' }}>
           How long the FIGM static-analysis engine itself took to scan submitted source code. This is a
           property of the analysis tool, not of a rendered page — it is not First Contentful Paint,
           Time to Interactive, or any other browser Web Vital, and must not be read as one.
@@ -37,18 +37,18 @@ export default function StaticAnalysisTimingPage() {
       </div>
 
       {/* Static analysis timing card */}
-      <div className="glass-panel" style={{ padding: '20px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.08)', maxWidth: 360 }}>
-        <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 600 }}>Average FIGM Scan Duration</div>
-        <div style={{ fontSize: '32px', fontWeight: 900, color: '#10b981', margin: '12px 0 4px 0' }}>{avgDurationMs.toFixed(1)} ms</div>
-        <div style={{ fontSize: '12px', color: '#7c8ba6' }}>Across {records.length} scan{records.length === 1 ? '' : 's'} in this session</div>
+      <div className="glass-panel" style={{ padding: '20px', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.08)', maxWidth: 360 }}>
+        <div style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>Average FIGM Scan Duration</div>
+        <div style={{ fontSize: '32px', fontWeight: 900, color: '#1d4ed8', margin: '12px 0 4px 0' }}>{avgDurationMs.toFixed(1)} ms</div>
+        <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)' }}>Across {records.length} scan{records.length === 1 ? '' : 's'} in this session</div>
       </div>
 
       {/* Runtime FCP/TTI experiment status — explicit, not fabricated */}
-      <div className="glass-panel" style={{ padding: '28px', borderRadius: '16px', border: '1px solid rgba(234, 179, 8, 0.35)' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', marginBottom: '12px' }}>
+      <div className="glass-panel" style={{ padding: '28px', borderRadius: '16px', border: '1px solid rgba(239, 68, 68, 0.35)' }}>
+        <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', marginBottom: '12px' }}>
           Runtime FCP/TTI Experiment: Not Yet Collected
         </h2>
-        <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.6' }}>
+        <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.7)', lineHeight: '1.6' }}>
           RQ1 (<em>How do different SPA render and state-management strategies influence performance
           metrics such as First Contentful Paint (FCP) and Time to Interactive (TTI)?</em>) requires
           real browser measurement of FCP and TTI across controlled rendering/state-management

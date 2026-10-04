@@ -4,6 +4,24 @@ import { UserRepository } from '../../../src/engine/user-repository';
 import { AuditLogger } from '../../../src/auth/audit-logger';
 import { checkRateLimit, getClientIp } from '../../../src/auth/rate-limiter';
 
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
+const MAX_PROFILE_REQUEST_BYTES = 7 * 1024 * 1024;
+
+function isValidAvatarDataUrl(value: unknown): value is string {
+  if (typeof value !== 'string' || value.length > MAX_PROFILE_REQUEST_BYTES) return false;
+  const match = value.match(/^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/]+={0,2})$/);
+  if (!match) return false;
+
+  const payload = match[2];
+  if (payload.length > Math.ceil(MAX_AVATAR_BYTES / 3) * 4) return false;
+  const bytes = Buffer.from(payload, 'base64');
+  if (bytes.length === 0 || bytes.length > MAX_AVATAR_BYTES || bytes.toString('base64') !== payload) return false;
+
+  if (match[1] === 'jpeg') return bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  if (match[1] === 'png') return bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+  return bytes.length >= 12 && bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP';
+}
+
 export async function GET(request: Request) {
   const auth = await authenticateUser(request);
   if (auth.errorResponse || !auth.user) {
@@ -38,6 +56,10 @@ export async function PATCH(request: Request) {
     return auth.errorResponse || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const userId = auth.user.userId;
+  const contentLength = Number(request.headers.get('content-length'));
+  if (Number.isFinite(contentLength) && contentLength > MAX_PROFILE_REQUEST_BYTES) {
+    return NextResponse.json({ error: 'Profile update is too large' }, { status: 413 });
+  }
 
   try {
     const body = await request.json();
@@ -75,7 +97,18 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ message: res.message });
     }
 
-    const updatedUser = await UserRepository.updateProfile(userId, { fullName, avatarUrl });
+    let validatedAvatarUrl: string | undefined;
+    if (avatarUrl !== undefined) {
+      if (avatarUrl === '' || avatarUrl === null) {
+        validatedAvatarUrl = '';
+      } else if (isValidAvatarDataUrl(avatarUrl)) {
+        validatedAvatarUrl = avatarUrl;
+      } else {
+        return NextResponse.json({ error: 'Choose a JPEG, PNG, or WebP image up to 5 MB' }, { status: 400 });
+      }
+    }
+
+    const updatedUser = await UserRepository.updateProfile(userId, { fullName, avatarUrl: validatedAvatarUrl });
     return NextResponse.json({
       message: 'Profile updated successfully',
       user: updatedUser

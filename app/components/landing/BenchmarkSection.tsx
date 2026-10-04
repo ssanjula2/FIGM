@@ -61,17 +61,17 @@ export default function BenchmarkSection() {
     : null;
 
   return (
-    <section id="research-credibility" style={{ padding: '72px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+    <section id="research-credibility" style={{ padding: '72px 0', borderTop: '1px solid rgba(0, 0, 0, 0.08)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: '0 24px' }}>
-        <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '8px' }}>
+        <div style={{ fontSize: '11px', color: '#1d4ed8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '8px' }}>
           Research Credibility
         </div>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', margin: '0 0 16px 0', letterSpacing: '-0.5px' }}>
+        <h2 style={{ fontSize: '28px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 16px 0', letterSpacing: '-0.5px' }}>
           Controlled benchmark, real-world corpus, reproducible protocol
         </h2>
-        <p style={{ color: '#94a3b8', fontSize: '14px', maxWidth: '720px', margin: '0 auto 20px auto', lineHeight: 1.6 }}>
-          The figures below come from FIGM&apos;s <strong style={{ color: '#f1f5f9' }}>internal fixture benchmark</strong> --
-          a hand-labelled fixture suite (<code style={{ color: '#38bdf8', fontSize: '13px' }}>benchmarks/eval-summary.json</code>)
+        <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', maxWidth: '720px', margin: '0 auto 20px auto', lineHeight: 1.6 }}>
+          The figures below come from FIGM&apos;s <strong style={{ color: 'rgba(0, 0, 0, 0.82)' }}>internal fixture benchmark</strong> --
+          a hand-labelled fixture suite (<code style={{ color: '#1d4ed8', fontSize: '13px' }}>benchmarks/eval-summary.json</code>)
           built and labelled by the same team that built the rules. This is a construction-validity
           check, not an independent real-world accuracy measurement. Separately, RQ4 reports the
           completed controlled 15-sample blinded expert-review evaluation below.
@@ -97,7 +97,7 @@ export default function BenchmarkSection() {
                   height: '100px',
                   borderRadius: '16px',
                   background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.07)',
+                  border: '1px solid rgba(0, 0, 0, 0.07)',
                   animation: 'pulse 1.5s ease-in-out infinite',
                 }}
               />
@@ -107,10 +107,10 @@ export default function BenchmarkSection() {
 
         {!loading && rq4?.available && (
           <div style={{ marginBottom: '60px' }}>
-            <h3 style={{ color: '#f8fafc', fontSize: '18px', fontWeight: 800, margin: '0 0 12px 0' }}>
+            <h3 style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '18px', fontWeight: 800, margin: '0 0 12px 0' }}>
               RQ4 Independent Expert Evaluation
             </h3>
-            <p style={{ color: '#94a3b8', fontSize: '13px', margin: '0 0 16px 0', lineHeight: 1.5 }}>
+            <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px', margin: '0 0 16px 0', lineHeight: 1.5 }}>
               Separate controlled {rq4.sampleCount}-sample blinded dataset; {rq4.raterCount} independent experts. This result applies only to the expert-review set and is not the internal fixture benchmark.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px' }}>
@@ -120,9 +120,9 @@ export default function BenchmarkSection() {
                 ['F1 Score', rq4.f1Score],
                 ["Cohen's kappa", rq4.cohensKappa],
               ].map(([label, value]) => (
-                <div key={label} style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '24px', fontWeight: 900, color: '#38bdf8' }}>{typeof value === 'number' ? (label === "Cohen's kappa" ? value.toFixed(2) : `${(value * 100).toFixed(1)}%`) : '—'}</div>
-                  <div style={{ color: '#cbd5e1', fontSize: '11px', fontWeight: 700, marginTop: '4px' }}>{label}</div>
+                <div key={label} style={{ background: 'rgba(255, 255, 255, 0.7)', border: '1px solid rgba(96, 165, 250, 0.2)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 900, color: '#1d4ed8' }}>{typeof value === 'number' ? (label === "Cohen's kappa" ? value.toFixed(2) : `${(value * 100).toFixed(1)}%`) : '—'}</div>
+                  <div style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '11px', fontWeight: 700, marginTop: '4px' }}>{label}</div>
                 </div>
               ))}
             </div>
@@ -136,19 +136,19 @@ export default function BenchmarkSection() {
               <div
                 key={st.label}
                 style={{
-                  background: 'rgba(15, 23, 42, 0.7)',
+                  background: 'rgba(255, 255, 255, 0.7)',
                   backdropFilter: 'blur(16px)',
-                  border: `1px solid ${(st as { highlight?: boolean }).highlight ? 'rgba(245, 158, 11, 0.3)' : 'rgba(255, 255, 255, 0.1)'}`,
+                  border: `1px solid ${(st as { highlight?: boolean }).highlight ? 'rgba(96, 165, 250, 0.35)' : 'rgba(0, 0, 0, 0.1)'}`,
                   borderRadius: '16px',
                   padding: '24px 16px',
                   textAlign: 'center',
                 }}
               >
-                <div style={{ fontSize: '28px', fontWeight: 900, color: (st as { highlight?: boolean }).highlight ? '#f59e0b' : '#38bdf8', letterSpacing: '-0.5px', marginBottom: '4px' }}>
+                <div style={{ fontSize: '28px', fontWeight: 900, color: (st as { highlight?: boolean }).highlight ? '#60a5fa' : '#60a5fa', letterSpacing: '-0.5px', marginBottom: '4px' }}>
                   {st.value}
                 </div>
-                <div style={{ color: '#f8fafc', fontSize: '13px', fontWeight: 700, marginBottom: '2px' }}>{st.label}</div>
-                <div style={{ color: '#7c8ba6', fontSize: '11px' }}>{st.sub}</div>
+                <div style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px', fontWeight: 700, marginBottom: '2px' }}>{st.label}</div>
+                <div style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '11px' }}>{st.sub}</div>
               </div>
             ))}
           </div>
@@ -158,8 +158,8 @@ export default function BenchmarkSection() {
         {!loading && us && us.collectionStatus !== 'COLLECTED' && (
           <div
             style={{
-              background: 'rgba(245, 158, 11, 0.08)',
-              border: '1px solid rgba(245, 158, 11, 0.25)',
+              background: 'rgba(96, 165, 250, 0.08)',
+              border: '1px solid rgba(96, 165, 250, 0.25)',
               borderRadius: '12px',
               padding: '14px 20px',
               marginBottom: '40px',
@@ -170,7 +170,7 @@ export default function BenchmarkSection() {
             }}
           >
             <span style={{ fontSize: '20px' }}>⏳</span>
-            <span style={{ color: '#fbbf24', fontSize: '13px', lineHeight: 1.5 }}>
+            <span style={{ color: '#1d4ed8', fontSize: '13px', lineHeight: 1.5 }}>
               <strong>Human Usability Study ({us.collectedParticipants}/{us.targetParticipants} participants):</strong>{' '}
               {us.note} Scan activity is supplementary product-use evidence, not SUS/questionnaire evidence. There are currently 0 accepted SUS response records in this system (target {us.targetParticipants}).
             </span>
@@ -180,23 +180,23 @@ export default function BenchmarkSection() {
         {/* Tool Comparison Matrix */}
         <div
           style={{
-            background: 'rgba(15, 23, 42, 0.6)',
+            background: 'rgba(255, 255, 255, 0.6)',
             backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
             borderRadius: '16px',
             padding: '28px',
             textAlign: 'left',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <h3 style={{ color: '#f8fafc', fontSize: '18px', fontWeight: 800, margin: 0 }}>
+            <h3 style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '18px', fontWeight: 800, margin: 0 }}>
               Comparative Rule Coverage Matrix (FIGM vs Industrial Tools)
             </h3>
-            <span style={{ color: '#38bdf8', fontSize: '12px', fontWeight: 700, background: 'rgba(56, 189, 248, 0.1)', padding: '4px 12px', borderRadius: '20px' }}>
+            <span style={{ color: '#1d4ed8', fontSize: '12px', fontWeight: 700, background: 'rgba(96, 165, 250, 0.1)', padding: '4px 12px', borderRadius: '20px' }}>
               FIGM Coverage: {data?.systemCapabilities?.totalGuidelineRules ?? '—'}/{data?.systemCapabilities?.totalGuidelineRules ?? '—'} Rules
             </span>
           </div>
-          <p style={{ color: '#f59e0b', fontSize: '12px', margin: '0 0 16px 0', lineHeight: 1.5 }}>
+          <p style={{ color: '#1d4ed8', fontSize: '12px', margin: '0 0 16px 0', lineHeight: 1.5 }}>
             ⚠ Qualitative estimate, not an empirical benchmark: no competitor tool listed below was run against this
             codebase. Percentages reflect a manual judgment of which rule domains each tool&apos;s documented
             capabilities could plausibly cover, not a measured detection rate. Only the stats above (F1-Score,
@@ -206,9 +206,9 @@ export default function BenchmarkSection() {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', color: '#94a3b8' }}>
+                <tr style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.1)', color: 'rgba(0, 0, 0, 0.7)' }}>
                   <th style={{ padding: '12px 16px', fontWeight: 700 }}>Rule Domain</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 700, color: '#38bdf8' }}>FIGM</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, color: '#1d4ed8' }}>FIGM</th>
                   <th style={{ padding: '12px 16px', fontWeight: 700 }}>ESLint</th>
                   <th style={{ padding: '12px 16px', fontWeight: 700 }}>SonarQube</th>
                   <th style={{ padding: '12px 16px', fontWeight: 700 }}>Lighthouse</th>
@@ -216,12 +216,12 @@ export default function BenchmarkSection() {
               </thead>
               <tbody>
                 {TOOLS_COMPARISON.map((row) => (
-                  <tr key={row.domain} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', color: '#cbd5e1' }}>
+                  <tr key={row.domain} style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.05)', color: 'rgba(0, 0, 0, 0.7)' }}>
                     <td style={{ padding: '12px 16px', fontWeight: 600 }}>{row.domain}</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#38bdf8' }}>{row.figm}</td>
-                    <td style={{ padding: '12px 16px', color: '#94a3b8' }}>{row.eslint}</td>
-                    <td style={{ padding: '12px 16px', color: '#94a3b8' }}>{row.sonar}</td>
-                    <td style={{ padding: '12px 16px', color: '#94a3b8' }}>{row.light}</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#1d4ed8' }}>{row.figm}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgba(0, 0, 0, 0.7)' }}>{row.eslint}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgba(0, 0, 0, 0.7)' }}>{row.sonar}</td>
+                    <td style={{ padding: '12px 16px', color: 'rgba(0, 0, 0, 0.7)' }}>{row.light}</td>
                   </tr>
                 ))}
               </tbody>

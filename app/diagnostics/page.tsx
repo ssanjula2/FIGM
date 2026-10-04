@@ -104,15 +104,15 @@ function DiagnosticsContent() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.4px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', letterSpacing: '-0.4px' }}>
             🔍 Issue & Fix Explorer
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '4px' }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', marginTop: '4px' }}>
             Browse detected code issues by filename or severity, see exact line numbers, and learn how to fix them.
           </p>
         </div>
 
-        <div style={{ fontSize: '13px', color: '#94a3b8', background: 'rgba(30, 41, 59, 0.6)', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border)' }}>
+        <div style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', background: 'rgba(255, 255, 255, 0.6)', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border)' }}>
           Showing <strong>{filteredDiagnostics.length}</strong> of {diagnostics.length} issues
         </div>
       </div>
@@ -138,11 +138,11 @@ function DiagnosticsContent() {
               className="input-field"
               style={{ width: '100%', paddingLeft: '34px' }}
             />
-            <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#7c8ba6' }}>🔍</span>
+            <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(0, 0, 0, 0.7)' }}>🔍</span>
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '14px' }}
+                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(0, 0, 0, 0.7)', cursor: 'pointer', fontSize: '14px' }}
               >
                 ✕
               </button>
@@ -166,7 +166,7 @@ function DiagnosticsContent() {
             <button
               onClick={clearAllFilters}
               className="btn-secondary"
-              style={{ padding: '8px 12px', fontSize: '12px', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)' }}
+              style={{ padding: '8px 12px', fontSize: '12px', color: '#1d4ed8', borderColor: 'rgba(239, 68, 68, 0.3)' }}
             >
               Reset Filters ✕
             </button>
@@ -175,7 +175,7 @@ function DiagnosticsContent() {
 
         {/* Severity Filter Pills */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600, marginRight: '4px' }}>Filter by Severity:</span>
+          <span style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600, marginRight: '4px' }}>Filter by Severity:</span>
           {[
             { key: 'ALL', label: 'All Severities' },
             { key: 'CRITICAL', label: '🔴 Critical' },
@@ -199,22 +199,22 @@ function DiagnosticsContent() {
                     ? item.key === 'CRITICAL'
                       ? 'rgba(239, 68, 68, 0.25)'
                       : item.key === 'HIGH'
-                      ? 'rgba(249, 115, 22, 0.25)'
+                      ? 'rgba(239, 68, 68, 0.12)'
                       : item.key === 'MEDIUM'
-                      ? 'rgba(234, 179, 8, 0.25)'
+                      ? 'rgba(59, 130, 246, 0.12)'
                       : item.key === 'LOW'
-                      ? 'rgba(34, 197, 94, 0.25)'
+                      ? 'rgba(59, 130, 246, 0.12)'
                       : 'rgba(56, 189, 248, 0.25)'
-                    : 'rgba(9, 13, 22, 0.6)',
+                    : 'rgba(0, 0, 0, 0.03)',
                   color: item.key === 'CRITICAL'
                     ? '#ef4444'
                     : item.key === 'HIGH'
-                    ? '#f97316'
+                    ? '#b91c1c'
                     : item.key === 'MEDIUM'
-                    ? '#eab308'
+                    ? '#1d4ed8'
                     : item.key === 'LOW'
-                    ? '#22c55e'
-                    : '#38bdf8',
+                    ? '#1d4ed8'
+                    : '#1d4ed8',
                   transition: 'all 0.2s ease',
                 }}
               >
@@ -227,13 +227,13 @@ function DiagnosticsContent() {
 
       {/* Diagnostics List */}
       {loading ? (
-        <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+        <div style={{ padding: '60px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>
           Loading issues...
         </div>
       ) : filteredDiagnostics.length === 0 ? (
-        <div className="glass-panel" style={{ padding: '50px 20px', textAlign: 'center', color: '#94a3b8' }}>
+        <div className="glass-panel" style={{ padding: '50px 20px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>
           <div style={{ fontSize: '32px', marginBottom: '12px' }}>🎯</div>
-          <div style={{ fontSize: '16px', fontWeight: 600, color: '#f8fafc' }}>No matching issues found</div>
+          <div style={{ fontSize: '16px', fontWeight: 600, color: 'rgba(0, 0, 0, 0.82)' }}>No matching issues found</div>
           <div style={{ fontSize: '13px', marginTop: '4px' }}>Try clearing your search term or severity filter.</div>
           {isFilterActive && (
             <button onClick={clearAllFilters} className="btn-secondary" style={{ marginTop: '16px' }}>
@@ -253,10 +253,10 @@ function DiagnosticsContent() {
                   d.severity === 'CRITICAL'
                     ? '#ef4444'
                     : d.severity === 'HIGH'
-                    ? '#f97316'
+                    ? '#b91c1c'
                     : d.severity === 'MEDIUM'
-                    ? '#eab308'
-                    : '#22c55e'
+                    ? '#1d4ed8'
+                    : '#1d4ed8'
                 }`,
               }}
             >
@@ -277,15 +277,15 @@ function DiagnosticsContent() {
                   <span className="badge badge-domain" style={{ fontSize: '10px', opacity: 0.85 }}>
                     {RESEARCH_DOMAIN_LABEL[primaryResearchDomain(d.domain, d.concern)]}
                   </span>
-                  <strong style={{ fontSize: '16px', color: '#f8fafc' }}>{d.ruleName}</strong>
+                  <strong style={{ fontSize: '16px', color: 'rgba(0, 0, 0, 0.82)' }}>{d.ruleName}</strong>
                 </div>
 
                 <div
                   style={{
                     fontSize: '12px',
-                    color: '#38bdf8',
+                    color: '#1d4ed8',
                     fontFamily: 'JetBrains Mono',
-                    background: '#090d16',
+                    background: '#ffffff',
                     padding: '4px 10px',
                     borderRadius: '6px',
                     border: '1px solid var(--border)',
@@ -297,25 +297,25 @@ function DiagnosticsContent() {
               </div>
 
               {/* Concern & Standard Reference */}
-              <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '14px', lineHeight: 1.5 }}>
-                <span style={{ color: '#cbd5e1', fontWeight: 600 }}>Why it matters:</span> {d.concern} &bull;{' '}
-                <span style={{ color: '#cbd5e1', fontWeight: 600 }}>Standard:</span>{' '}
-                <span style={{ color: '#38bdf8', fontWeight: 500 }}>{d.standardReference}</span>
+              <div style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', marginBottom: '14px', lineHeight: 1.5 }}>
+                <span style={{ color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>Why it matters:</span> {d.concern} &bull;{' '}
+                <span style={{ color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>Standard:</span>{' '}
+                <span style={{ color: '#1d4ed8', fontWeight: 500 }}>{d.standardReference}</span>
               </div>
 
               {/* Offending Code Snippet Box */}
               <div
                 style={{
-                  background: '#090d16',
+                  background: '#ffffff',
                   borderRadius: '8px',
                   padding: '14px',
                   marginBottom: '14px',
-                  border: '1px solid #1e293b',
+                  border: '1px solid rgba(0, 0, 0, 0.2)',
                   position: 'relative',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#7c8ba6', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
+                  <span style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
                     Code Line with Issue
                   </span>
                   <button
@@ -324,7 +324,7 @@ function DiagnosticsContent() {
                       background: 'rgba(255, 255, 255, 0.05)',
                       border: '1px solid var(--border)',
                       borderRadius: '4px',
-                      color: copiedIdx === idx ? '#22c55e' : '#94a3b8',
+                      color: copiedIdx === idx ? '#3b82f6' : 'rgba(0, 0, 0, 0.7)',
                       fontSize: '11px',
                       padding: '3px 8px',
                       cursor: 'pointer',
@@ -334,7 +334,7 @@ function DiagnosticsContent() {
                     {copiedIdx === idx ? '✓ Copied' : '📋 Copy Code'}
                   </button>
                 </div>
-                <pre style={{ margin: 0, fontSize: '13px', color: '#f8fafc', fontFamily: 'JetBrains Mono', overflowX: 'auto' }}>
+                <pre style={{ margin: 0, fontSize: '13px', color: 'rgba(0, 0, 0, 0.82)', fontFamily: 'JetBrains Mono', overflowX: 'auto' }}>
                   <code>{d.offendingCodeSnippet}</code>
                 </pre>
               </div>
@@ -345,11 +345,11 @@ function DiagnosticsContent() {
                   style={{
                     flex: 1,
                     fontSize: '13px',
-                    color: '#86efac',
-                    background: 'rgba(34, 197, 94, 0.08)',
+                    color: '#1d4ed8',
+                    background: 'rgba(59, 130, 246, 0.08)',
                     padding: '10px 14px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(34, 197, 94, 0.2)',
+                    border: '1px solid rgba(59, 130, 246, 0.2)',
                   }}
                 >
                   💡 <strong>Recommended Fix:</strong> {d.remediation}
@@ -373,7 +373,7 @@ function DiagnosticsContent() {
 
 export default function DiagnosticsPage() {
   return (
-    <Suspense fallback={<div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>Loading Explorer...</div>}>
+    <Suspense fallback={<div style={{ padding: '60px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>Loading Explorer...</div>}>
       <DiagnosticsContent />
     </Suspense>
   );

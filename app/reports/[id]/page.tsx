@@ -57,7 +57,7 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
 
   if (loading) {
     return (
-      <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+      <div style={{ padding: '60px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>
         <div style={{ fontSize: '32px', marginBottom: '16px' }}>⏳</div>
         <div>Loading Comprehensive Report Diagnostics...</div>
       </div>
@@ -68,9 +68,9 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
     return (
       <div style={{ padding: '60px', textAlign: 'center' }}>
         <div style={{ fontSize: '40px', marginBottom: '16px' }}>⚠️</div>
-        <h2 style={{ color: '#f8fafc', margin: 0 }}>Report Not Found</h2>
-        <p style={{ color: '#94a3b8', marginTop: '8px' }}>{error || 'The requested scan record does not exist.'}</p>
-        <Link href="/history" style={{ display: 'inline-block', marginTop: '16px', color: '#38bdf8', textDecoration: 'none', fontWeight: 700 }}>
+        <h2 style={{ color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>Report Not Found</h2>
+        <p style={{ color: 'rgba(0, 0, 0, 0.7)', marginTop: '8px' }}>{error || 'The requested scan record does not exist.'}</p>
+        <Link href="/history" style={{ display: 'inline-block', marginTop: '16px', color: '#1d4ed8', textDecoration: 'none', fontWeight: 700 }}>
           ← Return to Scan History
         </Link>
       </div>
@@ -92,14 +92,14 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
       {/* Top Action & Breadcrumb */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <Link href="/history" style={{ color: '#38bdf8', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
+          <Link href="/history" style={{ color: '#1d4ed8', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
             ← Back to Scan History
           </Link>
-          <h1 style={{ fontSize: '26px', fontWeight: 900, color: '#f8fafc', margin: '8px 0 0 0', fontFamily: 'JetBrains Mono, monospace' }}>
+          <h1 style={{ fontSize: '26px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: '8px 0 0 0', fontFamily: 'JetBrains Mono, monospace' }}>
             {record.fileName}
           </h1>
-          <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
-            ID: {record.id} &bull; Target Framework: <span style={{ color: '#38bdf8', fontWeight: 700 }}>{record.framework}</span> &bull; Scanned: {new Date(record.createdAt).toLocaleString()}
+          <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>
+            ID: {record.id} &bull; Target Framework: <span style={{ color: '#1d4ed8', fontWeight: 700 }}>{record.framework}</span> &bull; Scanned: {new Date(record.createdAt).toLocaleString()}
           </div>
         </div>
 
@@ -107,31 +107,31 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button
             onClick={() => handleExport('PDF')}
-            style={{ padding: '8px 16px', borderRadius: '8px', background: '#0284c7', color: '#fff', border: 'none', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}
+            style={{ padding: '8px 16px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', border: 'none', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}
           >
             📄 Export PDF
           </button>
           <button
             onClick={() => handleExport('JSON')}
-            style={{ padding: '8px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.08)', color: '#f8fafc', border: '1px solid rgba(255, 255, 255, 0.12)', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}
+            style={{ padding: '8px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.08)', color: 'rgba(0, 0, 0, 0.82)', border: '1px solid rgba(0, 0, 0, 0.12)', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}
           >
             {'{ }'} JSON
           </button>
           <button
             onClick={() => handleExport('CSV')}
-            style={{ padding: '8px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.08)', color: '#f8fafc', border: '1px solid rgba(255, 255, 255, 0.12)', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}
+            style={{ padding: '8px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.08)', color: 'rgba(0, 0, 0, 0.82)', border: '1px solid rgba(0, 0, 0, 0.12)', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}
           >
             📊 CSV
           </button>
           <button
             onClick={() => handleExport('MD')}
-            style={{ padding: '8px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.08)', color: '#f8fafc', border: '1px solid rgba(255, 255, 255, 0.12)', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}
+            style={{ padding: '8px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.08)', color: 'rgba(0, 0, 0, 0.82)', border: '1px solid rgba(0, 0, 0, 0.12)', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}
           >
             📝 Markdown
           </button>
           <button
             onClick={handlePrint}
-            style={{ padding: '8px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.08)', color: '#f8fafc', border: '1px solid rgba(255, 255, 255, 0.12)', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}
+            style={{ padding: '8px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.08)', color: 'rgba(0, 0, 0, 0.82)', border: '1px solid rgba(0, 0, 0, 0.12)', fontWeight: 600, cursor: 'pointer', fontSize: '13px' }}
           >
             🖨️ Print
           </button>
@@ -140,73 +140,73 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
 
       {/* Main Stats Banner Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '32px' }}>
-        <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
-          <div style={{ fontSize: '12px', color: '#7c8ba6', fontWeight: 700 }}>Overall Quality Score</div>
-          <div style={{ fontSize: '36px', fontWeight: 900, color: record.qualityScore >= 90 ? '#22c55e' : record.qualityScore >= 75 ? '#eab308' : '#ef4444', marginTop: '6px' }}>
+        <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
+          <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700 }}>Overall Quality Score</div>
+          <div style={{ fontSize: '36px', fontWeight: 900, color: record.qualityScore >= 90 ? '#3b82f6' : record.qualityScore >= 75 ? '#ef4444' : '#ef4444', marginTop: '6px' }}>
             {record.qualityScore}%
           </div>
-          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>ISO/IEC 25010 Aligned</div>
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>ISO/IEC 25010 Aligned</div>
         </div>
 
-        <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
-          <div style={{ fontSize: '12px', color: '#7c8ba6', fontWeight: 700 }}>Total Defects Detected</div>
-          <div style={{ fontSize: '36px', fontWeight: 900, color: '#f8fafc', marginTop: '6px' }}>
+        <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
+          <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700 }}>Total Defects Detected</div>
+          <div style={{ fontSize: '36px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', marginTop: '6px' }}>
             {record.ruleCount}
           </div>
-          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Across {TOTAL_RULE_COUNT} FIGM Rules</div>
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>Across {TOTAL_RULE_COUNT} FIGM Rules</div>
         </div>
 
-        <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
-          <div style={{ fontSize: '12px', color: '#7c8ba6', fontWeight: 700 }}>Scan Duration</div>
-          <div style={{ fontSize: '36px', fontWeight: 900, color: '#38bdf8', marginTop: '6px' }}>
+        <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
+          <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700 }}>Scan Duration</div>
+          <div style={{ fontSize: '36px', fontWeight: 900, color: '#1d4ed8', marginTop: '6px' }}>
             {formatScanDuration(record.scanTimeMs)}
           </div>
-          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Engine Memory Delta: {formatMemoryDelta(record.memoryUsageMb)}</div>
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>Engine Memory Delta: {formatMemoryDelta(record.memoryUsageMb)}</div>
         </div>
 
-        <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
-          <div style={{ fontSize: '12px', color: '#7c8ba6', fontWeight: 700 }}>AI Patches Generated</div>
-          <div style={{ fontSize: '36px', fontWeight: 900, color: '#a855f7', marginTop: '6px' }}>
+        <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
+          <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700 }}>AI Patches Generated</div>
+          <div style={{ fontSize: '36px', fontWeight: 900, color: '#1d4ed8', marginTop: '6px' }}>
             {record.aiFixCount}
           </div>
-          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Automated Remediation Ready</div>
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>Automated Remediation Ready</div>
         </div>
       </div>
 
       {/* Domain Scores Bar */}
-      <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '20px', marginBottom: '32px' }}>
-        <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#f8fafc', margin: '0 0 16px 0', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+      <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '14px', padding: '20px', marginBottom: '32px' }}>
+        <h3 style={{ fontSize: '14px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 16px 0', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
           Domain Performance & Compliance Ratings
         </h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '6px' }}>
-              <span style={{ color: '#38bdf8' }}>⚡ Performance</span>
-              <span style={{ color: '#f8fafc' }}>{perfScore}%</span>
+              <span style={{ color: '#1d4ed8' }}>⚡ Performance</span>
+              <span style={{ color: 'rgba(0, 0, 0, 0.82)' }}>{perfScore}%</span>
             </div>
             <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ width: `${perfScore}%`, height: '100%', background: '#38bdf8', borderRadius: '4px' }} />
+              <div style={{ width: `${perfScore}%`, height: '100%', background: '#60a5fa', borderRadius: '4px' }} />
             </div>
           </div>
 
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '6px' }}>
-              <span style={{ color: '#a855f7' }}>♿ Accessibility</span>
-              <span style={{ color: '#f8fafc' }}>{a11yScore}%</span>
+              <span style={{ color: '#1d4ed8' }}>♿ Accessibility</span>
+              <span style={{ color: 'rgba(0, 0, 0, 0.82)' }}>{a11yScore}%</span>
             </div>
             <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{ width: `${a11yScore}%`, height: '100%', background: '#a855f7', borderRadius: '4px' }} />
+              <div style={{ width: `${a11yScore}%`, height: '100%', background: '#60a5fa', borderRadius: '4px' }} />
             </div>
           </div>
 
         </div>
-        <div style={{ fontSize: '11px', color: '#7c8ba6', marginTop: '14px' }}>
+        <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '14px' }}>
           Security and Maintainability are not scored here -- the current 50-rule FIGM taxonomy has no rule domain for either, so no real data exists to compute a score from.
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '24px', gap: '24px' }}>
+      <div style={{ display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.08)', marginBottom: '24px', gap: '24px' }}>
         {[
           { id: 'DIAGNOSTICS', label: `Diagnostics (${diagnostics.length})` },
           { id: 'AI_FIXES', label: `Remediation Guidance (${record.aiFixCount})` },
@@ -236,7 +236,7 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
       {activeTab === 'DIAGNOSTICS' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {diagnostics.length === 0 ? (
-            <div style={{ padding: '40px', textAlign: 'center', color: '#22c55e', background: 'rgba(34, 197, 94, 0.05)', borderRadius: '12px', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
+            <div style={{ padding: '40px', textAlign: 'center', color: '#1d4ed8', background: 'rgba(59, 130, 246, 0.05)', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
               🎉 Zero violations detected! File adheres perfectly to FIGM specifications.
             </div>
           ) : (
@@ -258,15 +258,15 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px', flexWrap: 'wrap', gap: '12px' }}>
                     <div>
                       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                        <span style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8', fontFamily: 'JetBrains Mono, monospace' }}>
+                        <span style={{ fontSize: '13px', fontWeight: 800, color: '#1d4ed8', fontFamily: 'JetBrains Mono, monospace' }}>
                           [{d.ruleId}]
                         </span>
-                        <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+                        <h4 style={{ fontSize: '16px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>
                           {d.ruleName}
                         </h4>
                       </div>
-                      <div style={{ fontSize: '12px', color: '#7c8ba6', marginTop: '4px' }}>
-                        Domain: <strong>{d.domain}</strong> &bull; Line {d.location?.start?.line || 1}, Column {d.location?.start?.column || 1} &bull; Confidence: <span style={{ color: '#22c55e', fontWeight: 700 }}>High (98.4%)</span>
+                      <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>
+                        Domain: <strong>{d.domain}</strong> &bull; Line {d.location?.start?.line || 1}, Column {d.location?.start?.column || 1} &bull; Confidence: <span style={{ color: '#1d4ed8', fontWeight: 700 }}>High (98.4%)</span>
                       </div>
                     </div>
 
@@ -288,7 +288,7 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
                   {/* Code Snippet Viewer */}
                   {d.offendingCodeSnippet && (
                     <div style={{ marginTop: '12px', marginBottom: '16px' }}>
-                      <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginBottom: '4px' }}>
+                      <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, marginBottom: '4px' }}>
                         OFFENDING CODE SNIPPET (Line {d.location?.start?.line || 1})
                       </div>
                       <pre
@@ -310,7 +310,7 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
                   )}
 
                   {/* Remediation Advice */}
-                  <div style={{ background: 'rgba(56, 189, 248, 0.08)', borderLeft: '4px solid #38bdf8', padding: '12px 16px', borderRadius: '0 8px 8px 0', fontSize: '13px', color: '#e2e8f0', lineHeight: 1.5 }}>
+                  <div style={{ background: 'rgba(96, 165, 250, 0.08)', borderLeft: '4px solid #60a5fa', padding: '12px 16px', borderRadius: '0 8px 8px 0', fontSize: '13px', color: 'rgba(0, 0, 0, 0.82)', lineHeight: 1.5 }}>
                     <strong>Suggested Remediation:</strong> {d.remediation}
                   </div>
                 </div>
@@ -328,9 +328,9 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
           it only shows the same remediation guidance already computed at scan time. */}
       {activeTab === 'AI_FIXES' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ fontSize: '12px', color: '#94a3b8', background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '8px', padding: '12px 16px' }}>
+          <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', background: 'rgba(96, 165, 250, 0.08)', border: '1px solid rgba(96, 165, 250, 0.2)', borderRadius: '8px', padding: '12px 16px' }}>
             This report is read-only. To generate and apply a verified AI or template fix, re-scan this file on{' '}
-            <Link href="/live-scan" style={{ color: '#38bdf8', fontWeight: 700 }}>Live Scan</Link>.
+            <Link href="/live-scan" style={{ color: '#1d4ed8', fontWeight: 700 }}>Live Scan</Link>.
           </div>
           {diagnostics.map((d: any, idx: number) => (
             <div
@@ -344,18 +344,18 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
               }}
             >
               <div style={{ marginBottom: '14px' }}>
-                <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#a855f7', margin: 0 }}>
+                <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#1d4ed8', margin: 0 }}>
                   Remediation Guidance #{idx + 1} — [{d.ruleId}]
                 </h4>
               </div>
 
-              <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '10px' }}>
+              <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', marginBottom: '10px' }}>
                 Rule: <strong>{d.ruleName}</strong> &bull; Target: Line {d.location?.start?.line || 1}
               </div>
 
-              <div style={{ background: '#090d16', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', padding: '14px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px' }}>
-                <div style={{ color: '#ef4444', marginBottom: '4px' }}>- {d.offendingCodeSnippet || 'Original code'}</div>
-                <div style={{ color: '#94a3b8' }}>{d.remediation || 'No remediation guidance available.'}</div>
+              <div style={{ background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.1)', borderRadius: '8px', padding: '14px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px' }}>
+                <div style={{ color: '#1d4ed8', marginBottom: '4px' }}>- {d.offendingCodeSnippet || 'Original code'}</div>
+                <div style={{ color: 'rgba(0, 0, 0, 0.7)' }}>{d.remediation || 'No remediation guidance available.'}</div>
               </div>
             </div>
           ))}
@@ -364,12 +364,12 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
 
       {/* Tab 3: Timeline */}
       {activeTab === 'TIMELINE' && (
-        <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '24px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '20px' }}>Scan Execution Lifecycle</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', borderLeft: '2px solid #0284c7', paddingLeft: '20px' }}>
+        <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '14px', padding: '24px' }}>
+          <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', marginBottom: '20px' }}>Scan Execution Lifecycle</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', borderLeft: '2px solid #3b82f6', paddingLeft: '20px' }}>
             <div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8' }}>0.00ms — Structural Parsing Initiated</div>
-              <div style={{ fontSize: '12px', color: '#94a3b8' }}>Parsed {record.fileName} into an AST-shaped intermediate representation.</div>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#1d4ed8' }}>0.00ms — Structural Parsing Initiated</div>
+              <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)' }}>Parsed {record.fileName} into an AST-shaped intermediate representation.</div>
             </div>
             <div>
               {/* record.scanTimeMs is the one real, persisted duration measurement for this scan
@@ -379,13 +379,13 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
                   duration, and the real scanTimeMs value was mislabeled two steps down as when the
                   "AI Remediation Engine Finished", even though AI remediation is a separate,
                   often-never-invoked action -- see aiFixCount below). */}
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8' }}>{formatScanDuration(record.scanTimeMs)} — Rule Execution Engine Completed</div>
-              <div style={{ fontSize: '12px', color: '#94a3b8' }}>Executed {TOTAL_RULE_COUNT} FIGM rules against target framework: {record.framework}. Found {record.ruleCount} diagnostic{record.ruleCount === 1 ? '' : 's'}. Overall score: {record.qualityScore}%.</div>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#1d4ed8' }}>{formatScanDuration(record.scanTimeMs)} — Rule Execution Engine Completed</div>
+              <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)' }}>Executed {TOTAL_RULE_COUNT} FIGM rules against target framework: {record.framework}. Found {record.ruleCount} diagnostic{record.ruleCount === 1 ? '' : 's'}. Overall score: {record.qualityScore}%.</div>
             </div>
             {record.aiFixCount > 0 && (
               <div>
-                <div style={{ fontSize: '13px', fontWeight: 800, color: '#a855f7' }}>AI Remediation Engine</div>
-                <div style={{ fontSize: '12px', color: '#94a3b8' }}>Generated {record.aiFixCount} automated patch diff{record.aiFixCount === 1 ? '' : 's'} for this scan.</div>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: '#1d4ed8' }}>AI Remediation Engine</div>
+                <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)' }}>Generated {record.aiFixCount} automated patch diff{record.aiFixCount === 1 ? '' : 's'} for this scan.</div>
               </div>
             )}
           </div>
@@ -394,9 +394,9 @@ export default function ReportViewerPage(props: { params: Promise<{ id: string }
 
       {/* Tab 4: Standards & References */}
       {activeTab === 'METRICS' && (
-        <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '24px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>Research Standards & Compliance Specifications</h3>
-          <ul style={{ color: '#94a3b8', fontSize: '13px', lineHeight: 1.8 }}>
+        <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '14px', padding: '24px' }}>
+          <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', marginBottom: '16px' }}>Research Standards & Compliance Specifications</h3>
+          <ul style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px', lineHeight: 1.8 }}>
             <li><strong>ISO/IEC 25010</strong>: Systems and software Quality Requirements and Evaluation (SQuaRE) framework.</li>
             <li><strong>W3C WCAG 2.2 AA</strong>: Web Content Accessibility Guidelines for perceivable, operable, understandable, and robust UI.</li>
             <li><strong>FIGM Specification v3.0</strong>: 3-stage extraction protocol (parse → normalize → extract) for framework-independent static analysis.</li>

@@ -86,16 +86,16 @@ export default function UserStudyPage() {
   return (
     <div
       className="user-study-container"
-      style={{ padding: '32px 24px', maxWidth: '900px', width: '100%', margin: '0 auto', color: '#f8fafc', fontFamily: 'system-ui, -apple-system, sans-serif', boxSizing: 'border-box' }}
+      style={{ padding: '32px 24px', maxWidth: '900px', width: '100%', margin: '0 auto', color: 'rgba(0, 0, 0, 0.82)', fontFamily: 'system-ui, -apple-system, sans-serif', boxSizing: 'border-box' }}
     >
       <div
         className="user-study-hero"
-        style={{ background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '32px', boxSizing: 'border-box' }}
+        style={{ background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95))', padding: '32px', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.1)', marginBottom: '32px', boxSizing: 'border-box' }}
       >
-        <span style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '9999px', background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', fontSize: '13px', fontWeight: 600, marginBottom: '12px' }}>
+        <span style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '9999px', background: 'rgba(59, 130, 246, 0.2)', color: '#1d4ed8', fontSize: '13px', fontWeight: 600, marginBottom: '12px' }}>
           ACADEMIC RESEARCH USER STUDY — TARGET N={HUMAN_STUDY_TARGET_PARTICIPANTS} PARTICIPANTS
         </span>
-        <h1 style={{ fontSize: '28px', fontWeight: 700, margin: '0 0 8px 0', color: '#ffffff' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: 700, margin: '0 0 8px 0', color: 'rgba(0, 0, 0, 0.82)' }}>
           Join the FIGM Code Inspector Usability Study
         </h1>
         <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', margin: 0 }}>
@@ -104,47 +104,47 @@ export default function UserStudyPage() {
       </div>
 
       {!authChecked || loadingStatus ? (
-        <div role="status" style={{ color: '#94a3b8' }}>Loading…</div>
+        <div role="status" style={{ color: 'rgba(0, 0, 0, 0.7)' }}>Loading…</div>
       ) : !isLoggedIn ? (
-        <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(96, 165, 250, 0.35)' }}>
-          <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: '#60a5fa' }}>Log in to join the study</h3>
-          <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', margin: '0 0 16px 0' }}>
+        <div className="user-study-card" style={{ background: 'rgba(255, 255, 255, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(96, 165, 250, 0.35)' }}>
+          <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: '#1d4ed8' }}>Log in to join the study</h3>
+          <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.7)', lineHeight: '1.6', margin: '0 0 16px 0' }}>
             Study participation now uses your normal FIGM account and the real Live Scan experience —
             register or log in first, then come back to this page to join.
           </p>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <Link href="/auth/login?redirect=%2Fuser-study" style={{ padding: '12px 24px', borderRadius: '8px', background: '#2563eb', color: '#fff', textDecoration: 'none', fontWeight: 600 }}>
+            <Link href="/auth/login?redirect=%2Fuser-study" style={{ padding: '12px 24px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', textDecoration: 'none', fontWeight: 600 }}>
               Log In
             </Link>
-            <Link href="/auth/register" style={{ padding: '12px 24px', borderRadius: '8px', background: 'rgba(255,255,255,0.08)', color: '#e2e8f0', textDecoration: 'none', fontWeight: 600 }}>
+            <Link href="/auth/register" style={{ padding: '12px 24px', borderRadius: '8px', background: 'rgba(255,255,255,0.08)', color: 'rgba(0, 0, 0, 0.82)', textDecoration: 'none', fontWeight: 600 }}>
               Register
             </Link>
           </div>
         </div>
       ) : participantCode ? (
-        <div className="user-study-card" style={{ background: consentVerified ? 'rgba(16, 185, 129, 0.08)' : 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: consentVerified ? '1px solid rgba(52, 211, 153, 0.35)' : '1px solid rgba(96, 165, 250, 0.35)' }}>
-          <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: consentVerified ? '#34d399' : '#60a5fa' }}>
+        <div className="user-study-card" style={{ background: consentVerified ? 'rgba(59, 130, 246, 0.08)' : 'rgba(255, 255, 255, 0.6)', padding: '24px', borderRadius: '12px', border: consentVerified ? '1px solid rgba(96, 165, 250, 0.35)' : '1px solid rgba(96, 165, 250, 0.35)' }}>
+          <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: '#1d4ed8' }}>
             {consentVerified ? '✅ Consent Verified — You are ' : '👤 You are '}
             <span style={{ fontFamily: 'monospace', fontWeight: 800 }}>{participantCode}</span>
           </h3>
-          <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', margin: '0 0 16px 0' }}>
+          <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.7)', lineHeight: '1.6', margin: '0 0 16px 0' }}>
             {consentVerified
               ? 'Your consent has been verified by the research team. Real scans you run on the Live Scan page from now on are eligible research data.'
               : 'Your enrollment and session-level consent have been recorded. A member of the research team must verify your consent before your scans become eligible research data — this can take a little time.'}
           </p>
-          <Link href="/live-scan" style={{ display: 'inline-block', padding: '14px 28px', borderRadius: '8px', background: '#10b981', color: '#fff', textDecoration: 'none', fontWeight: 700 }}>
+          <Link href="/live-scan" style={{ display: 'inline-block', padding: '14px 28px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', textDecoration: 'none', fontWeight: 700 }}>
             ⚡ Go to Live Scan
           </Link>
         </div>
       ) : (
-        <div className="user-study-card" style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(96, 165, 250, 0.35)' }}>
-          <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: '#60a5fa' }}>📋 Informed Consent</h3>
-          <p style={{ fontSize: '14px', color: '#cbd5e1', lineHeight: '1.6', margin: '0 0 12px 0' }}>
+        <div className="user-study-card" style={{ background: 'rgba(255, 255, 255, 0.6)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(96, 165, 250, 0.35)' }}>
+          <h3 style={{ fontSize: '18px', margin: '0 0 12px 0', color: '#1d4ed8' }}>📋 Informed Consent</h3>
+          <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.7)', lineHeight: '1.6', margin: '0 0 12px 0' }}>
             Participation is voluntary. Full details: <code>research/CONSENT_FORM.md</code>. Joining links a
             study participant code to your account and records this consent confirmation; a researcher must
             separately verify your consent before any of your scans count as research data.
           </p>
-          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: '#e2e8f0', marginBottom: '16px', cursor: 'pointer' }}>
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: 'rgba(0, 0, 0, 0.82)', marginBottom: '16px', cursor: 'pointer' }}>
             <input type="checkbox" checked={consentChecked} onChange={(e) => setConsentChecked(e.target.checked)} style={{ marginTop: '3px', width: '18px', height: '18px', flexShrink: 0 }} />
             I have read the study description and voluntarily consent to participate.
           </label>
@@ -152,7 +152,7 @@ export default function UserStudyPage() {
             type="button"
             onClick={handleJoinStudy}
             disabled={!consentChecked || joining}
-            style={{ padding: '12px 24px', borderRadius: '8px', background: !consentChecked || joining ? '#4b5563' : '#2563eb', color: '#fff', border: 'none', fontSize: '15px', fontWeight: 600, cursor: !consentChecked || joining ? 'not-allowed' : 'pointer', minHeight: '44px' }}
+            style={{ padding: '12px 24px', borderRadius: '8px', background: !consentChecked || joining ? '#ffffff' : '#2563eb', color: 'rgba(0, 0, 0, 0.82)', border: 'none', fontSize: '15px', fontWeight: 600, cursor: !consentChecked || joining ? 'not-allowed' : 'pointer', minHeight: '44px' }}
           >
             {joining ? 'Joining…' : 'Join the Study'}
           </button>
@@ -160,7 +160,7 @@ export default function UserStudyPage() {
       )}
 
       {error && (
-        <div role="alert" style={{ marginTop: '16px', background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(248, 113, 113, 0.4)', borderRadius: '10px', padding: '14px 18px', color: '#fca5a5', fontSize: '14px' }}>
+        <div role="alert" style={{ marginTop: '16px', background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '10px', padding: '14px 18px', color: '#1d4ed8', fontSize: '14px' }}>
           ⚠️ {error}
         </div>
       )}

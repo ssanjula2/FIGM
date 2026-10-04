@@ -141,7 +141,7 @@ export default function LiveDashboardContent() {
           <SkeletonLoader height="90px" />
           <SkeletonLoader height="90px" />
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '20px' }}>
           <SkeletonLoader height="280px" />
           <SkeletonLoader height="280px" width="100%" />
           <SkeletonLoader height="280px" />
@@ -167,10 +167,10 @@ export default function LiveDashboardContent() {
         }}
       >
         <span aria-hidden="true" style={{ fontSize: '36px' }}>⚠️</span>
-        <h2 style={{ color: '#fca5a5', fontSize: '20px', fontWeight: 800, margin: '12px 0 6px 0' }}>
+        <h2 style={{ color: '#1d4ed8', fontSize: '20px', fontWeight: 800, margin: '12px 0 6px 0' }}>
           Dashboard Loading Error
         </h2>
-        <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 20px 0' }}>
+        <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', margin: '0 0 20px 0' }}>
           {error}
         </p>
         <button
@@ -189,13 +189,13 @@ export default function LiveDashboardContent() {
       {/* Top Action Bar with Live Refresh */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
+          <div style={{ fontSize: '11px', color: '#1d4ed8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
             PERSISTENT LIVE ANALYTICS ({userRole} ROLE)
           </div>
           <h1 className="gradient-text-blue" style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-0.8px', margin: 0, lineHeight: 1.1 }}>
             Code Inspector Dashboard
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '4px', margin: 0 }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', marginTop: '4px', margin: 0 }}>
             Powered by real backend persistence and 4-Layer Meta-Model AST diagnostics.
           </p>
         </div>
@@ -223,52 +223,52 @@ export default function LiveDashboardContent() {
           developer's personal workspace; removed rather than relabeled, since a per-user scope
           has no honest equivalent of "active developers" to show (platform-wide activity belongs
           on the Admin dashboard only). */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 210px), 1fr))', gap: '16px' }}>
         {/* Card 1: My Projects */}
-        <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #38bdf8' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My Projects</div>
+        <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #60a5fa' }}>
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My Projects</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalProjects ?? 0}</span>
+            <span style={{ fontSize: '32px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', letterSpacing: '-0.5px' }}>{summary?.totalProjects ?? 0}</span>
             {/* Previously a static "Active" status badge implying project activity with no real
                 activity-tracking data behind it — removed for the same reason as the trend
                 badges above. */}
           </div>
-          <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.35) 100%)', borderTop: '1px solid #38bdf8' }} />
+          <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(96, 165, 250, 0.1) 0%, rgba(96, 165, 250, 0.35) 100%)', borderTop: '1px solid #60a5fa' }} />
         </div>
 
         {/* Card 2: My Scans */}
-        <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #10b981' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My Scans</div>
+        <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #3b82f6' }}>
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My Scans</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalScans ?? 0}</span>
+            <span style={{ fontSize: '32px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', letterSpacing: '-0.5px' }}>{summary?.totalScans ?? 0}</span>
             {/* Previously a static "+100%" trend badge with no real historical data behind it —
                 this codebase has no time-series scan history to compute a real trend from, so per
                 the "remove the trend claim rather than fabricate it" rule, it's simply removed
                 rather than replaced with a different unverifiable number. */}
           </div>
-          <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.35) 100%)', borderTop: '1px solid #10b981' }} />
+          <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.35) 100%)', borderTop: '1px solid #3b82f6' }} />
         </div>
 
         {/* Card 3: My Findings */}
-        <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #f59e0b' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My Findings</div>
+        <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #3b82f6' }}>
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My Findings</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalRulesTriggered ?? 0}</span>
+            <span style={{ fontSize: '32px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', letterSpacing: '-0.5px' }}>{summary?.totalRulesTriggered ?? 0}</span>
             <span className="badge-trend-green">{TOTAL_RULE_COUNT} Rules</span>
           </div>
-          <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.35) 100%)', borderTop: '1px solid #f59e0b' }} />
+          <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.25) 100%)', borderTop: '1px solid #3b82f6' }} />
         </div>
 
         {/* Card 4: My AI Fix Suggestions */}
-        <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #a855f7' }}>
-          <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My AI Fix Suggestions</div>
+        <div className="glass-panel" style={{ padding: '20px 20px 0 20px', overflow: 'hidden', borderTop: '2px solid #60a5fa' }}>
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>My AI Fix Suggestions</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginTop: '8px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.5px' }}>{summary?.totalAiSuggestions ?? 0}</span>
+            <span style={{ fontSize: '32px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', letterSpacing: '-0.5px' }}>{summary?.totalAiSuggestions ?? 0}</span>
             {/* Previously a static "100% Valid" badge — no per-suggestion validity tracking
                 exists in the data model to compute a real validity rate from, so the claim is
                 removed rather than presented as if it were measured. */}
           </div>
-          <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0.35) 100%)', borderTop: '1px solid #a855f7' }} />
+          <div style={{ marginTop: '14px', marginLeft: '-20px', marginRight: '-20px', height: '32px', background: 'linear-gradient(180deg, rgba(96, 165, 250, 0.1) 0%, rgba(96, 165, 250, 0.35) 100%)', borderTop: '1px solid #60a5fa' }} />
         </div>
       </div>
 
@@ -277,17 +277,17 @@ export default function LiveDashboardContent() {
         {/* Composite Health Gauge */}
         <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '2px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', marginBottom: '2px' }}>
               My Quality Score
             </h2>
-            <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>
+            <p style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', margin: 0 }}>
               Average across your own persisted scans
             </p>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '20px 0', position: 'relative' }}>
             <svg width="160" height="160" viewBox="0 0 160 160">
-              <circle cx="80" cy="80" r={radius} fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth="12" />
+              <circle cx="80" cy="80" r={radius} fill="none" stroke="rgba(0, 0, 0, 0.12)" strokeWidth="12" />
               {hasQualityScore && (
                 <circle
                   cx="80"
@@ -304,34 +304,34 @@ export default function LiveDashboardContent() {
               )}
               <defs>
                 <linearGradient id="blue-gradient-dash" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#818cf8" />
+                  <stop offset="0%" stopColor="#1d4ed8" />
+                  <stop offset="100%" stopColor="#1d4ed8" />
                 </linearGradient>
               </defs>
             </svg>
             <div style={{ position: 'absolute', textAlign: 'center' }}>
               {hasQualityScore ? (
                 <>
-                  <div style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', lineHeight: 1 }}>{healthScore}%</div>
-                  <div style={{ fontSize: '11px', color: '#10b981', fontWeight: 700, marginTop: '4px' }}>VERIFIED</div>
+                  <div style={{ fontSize: '32px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', lineHeight: 1 }}>{healthScore}%</div>
+                  <div style={{ fontSize: '11px', color: '#1d4ed8', fontWeight: 700, marginTop: '4px' }}>VERIFIED</div>
                 </>
               ) : (
                 <>
-                  <div style={{ fontSize: '15px', fontWeight: 800, color: '#94a3b8', lineHeight: 1.3 }}>No scans yet</div>
-                  <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginTop: '4px' }}>RUN A SCAN TO SEE YOUR SCORE</div>
+                  <div style={{ fontSize: '15px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.7)', lineHeight: 1.3 }}>No scans yet</div>
+                  <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, marginTop: '4px' }}>RUN A SCAN TO SEE YOUR SCORE</div>
                 </>
               )}
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', borderTop: '1px solid rgba(0, 0, 0, 0.08)', paddingTop: '16px' }}>
             <div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>Avg Latency</div>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: '#38bdf8' }}>{summary?.avgScanDurationMs ?? 0} ms</div>
+              <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)' }}>Avg Latency</div>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#1d4ed8' }}>{summary?.avgScanDurationMs ?? 0} ms</div>
             </div>
             <div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>Peak Memory</div>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: '#a855f7' }}>{summary?.avgMemoryUsageMb ?? 0} MB</div>
+              <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)' }}>Peak Memory</div>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#1d4ed8' }}>{summary?.avgMemoryUsageMb ?? 0} MB</div>
             </div>
           </div>
         </div>
@@ -339,10 +339,10 @@ export default function LiveDashboardContent() {
         {/* Framework Distribution Cards -- from summary.frameworkDistribution, already scoped to
             this user's own scans by /api/dashboard/summary */}
         <div className="glass-panel" style={{ padding: '24px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '4px' }}>
+          <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', marginBottom: '4px' }}>
             My Framework Distribution
           </h2>
-          <p style={{ fontSize: '12px', color: '#94a3b8', margin: '0 0 18px 0' }}>
+          <p style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', margin: '0 0 18px 0' }}>
             Your own scanned files, by framework
           </p>
 
@@ -362,32 +362,32 @@ export default function LiveDashboardContent() {
             return (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'rgba(0, 0, 0, 0.82)', fontWeight: 600, marginBottom: '6px' }}>
                     <span>⚛️ React JSX / TSX</span>
-                    <span style={{ color: '#38bdf8' }}>{reactCount} Analyses</span>
+                    <span style={{ color: '#1d4ed8' }}>{reactCount} Analyses</span>
                   </div>
                   <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
-                    <div style={{ width: widthPct(reactCount), height: '100%', background: 'linear-gradient(90deg, #38bdf8, #818cf8)', borderRadius: '4px' }} />
+                    <div style={{ width: widthPct(reactCount), height: '100%', background: 'linear-gradient(90deg, #60a5fa, #60a5fa)', borderRadius: '4px' }} />
                   </div>
                 </div>
 
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'rgba(0, 0, 0, 0.82)', fontWeight: 600, marginBottom: '6px' }}>
                     <span>▲ Next.js App Router</span>
-                    <span style={{ color: '#a855f7' }}>{nextjsCount} Analyses</span>
+                    <span style={{ color: '#1d4ed8' }}>{nextjsCount} Analyses</span>
                   </div>
                   <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
-                    <div style={{ width: widthPct(nextjsCount), height: '100%', background: 'linear-gradient(90deg, #a855f7, #c084fc)', borderRadius: '4px' }} />
+                    <div style={{ width: widthPct(nextjsCount), height: '100%', background: 'linear-gradient(90deg, #60a5fa, #60a5fa)', borderRadius: '4px' }} />
                   </div>
                 </div>
 
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#f8fafc', fontWeight: 600, marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'rgba(0, 0, 0, 0.82)', fontWeight: 600, marginBottom: '6px' }}>
                     <span>🅰️ Angular Templates</span>
-                    <span style={{ color: '#f43f5e' }}>{angularCount} Analyses</span>
+                    <span style={{ color: '#1d4ed8' }}>{angularCount} Analyses</span>
                   </div>
                   <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
-                    <div style={{ width: widthPct(angularCount), height: '100%', background: 'linear-gradient(90deg, #f43f5e, #fb7185)', borderRadius: '4px' }} />
+                    <div style={{ width: widthPct(angularCount), height: '100%', background: 'linear-gradient(90deg, #ef4444, #ef4444)', borderRadius: '4px' }} />
                   </div>
                 </div>
               </div>
@@ -398,15 +398,15 @@ export default function LiveDashboardContent() {
         {/* Activity Timeline Feed -- scoped to this user's own account/scan events only, see
             /api/dashboard/activity */}
         <div className="glass-panel" style={{ padding: '24px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', marginBottom: '4px' }}>
+          <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', marginBottom: '4px' }}>
             My Recent Activity
           </h2>
-          <p style={{ fontSize: '12px', color: '#94a3b8', margin: '0 0 16px 0' }}>
+          <p style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', margin: '0 0 16px 0' }}>
             Your own scans & account events
           </p>
 
           {activity.length === 0 ? (
-            <div style={{ padding: '24px 0', textAlign: 'center', color: '#94a3b8' }}>
+            <div style={{ padding: '24px 0', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>
               <span style={{ fontSize: '22px' }}>🕓</span>
               <p style={{ marginTop: '6px', fontSize: '12px' }}>No recent activity yet.</p>
               <Link href="/live-scan" className="btn-glow" style={{ display: 'inline-flex', marginTop: '14px', fontSize: '12px', padding: '8px 16px' }}>
@@ -422,14 +422,14 @@ export default function LiveDashboardContent() {
                       width: '10px',
                       height: '10px',
                       borderRadius: '50%',
-                      background: act.badgeColor || '#38bdf8',
+                      background: act.badgeColor || '#60a5fa',
                       marginTop: '4px',
                       flexShrink: 0,
                     }}
                   />
                   <div>
-                    <div style={{ fontSize: '13px', color: '#f8fafc', fontWeight: 700 }}>{act.title}</div>
-                    <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{act.description}</div>
+                    <div style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.82)', fontWeight: 700 }}>{act.title}</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '2px' }}>{act.description}</div>
                   </div>
                 </div>
               ))}
@@ -442,20 +442,20 @@ export default function LiveDashboardContent() {
       <div className="glass-panel" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
           <div>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>
               My Recent Scans
             </h2>
-            <p style={{ fontSize: '13px', color: '#94a3b8', margin: '4px 0 0 0' }}>
+            <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', margin: '4px 0 0 0' }}>
               Your own persisted scan output reports
             </p>
           </div>
-          <Link href="/history" style={{ fontSize: '13px', color: '#38bdf8', fontWeight: 700, textDecoration: 'none' }}>
+          <Link href="/history" style={{ fontSize: '13px', color: '#1d4ed8', fontWeight: 700, textDecoration: 'none' }}>
             View All Reports →
           </Link>
         </div>
 
         {reports.length === 0 ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>
             <span style={{ fontSize: '28px' }}>📂</span>
             <p style={{ marginTop: '8px' }}>No scan reports found. Run a new scan to populate reports.</p>
             <Link href="/live-scan" className="btn-glow" style={{ display: 'inline-flex', marginTop: '16px', fontSize: '13px', padding: '10px 20px' }}>
@@ -466,7 +466,7 @@ export default function LiveDashboardContent() {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', color: '#94a3b8' }}>
+                <tr style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.1)', color: 'rgba(0, 0, 0, 0.7)' }}>
                   <th style={{ padding: '12px 16px', fontWeight: 700 }}>Target File</th>
                   <th style={{ padding: '12px 16px', fontWeight: 700 }}>Framework</th>
                   <th style={{ padding: '12px 16px', fontWeight: 700 }}>Quality Score</th>
@@ -477,23 +477,23 @@ export default function LiveDashboardContent() {
               </thead>
               <tbody>
                 {reports.map((rep) => (
-                  <tr key={rep.id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', color: '#cbd5e1' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: 700, color: '#f8fafc' }}>{rep.fileName}</td>
+                  <tr key={rep.id} style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.05)', color: 'rgba(0, 0, 0, 0.7)' }}>
+                    <td style={{ padding: '12px 16px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.82)' }}>{rep.fileName}</td>
                     <td style={{ padding: '12px 16px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', padding: '3px 8px', borderRadius: '4px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#1d4ed8', background: 'rgba(96, 165, 250, 0.1)', padding: '3px 8px', borderRadius: '4px' }}>
                         {rep.framework}
                       </span>
                     </td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: rep.qualityScore >= 80 ? '#10b981' : '#f59e0b' }}>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: rep.qualityScore >= 80 ? '#3b82f6' : '#ef4444' }}>
                       {rep.qualityScore}%
                     </td>
                     <td style={{ padding: '12px 16px' }}>
-                      <span style={{ color: rep.defectsCount > 0 ? '#f43f5e' : '#10b981', fontWeight: 700 }}>
+                      <span style={{ color: rep.defectsCount > 0 ? '#ef4444' : '#3b82f6', fontWeight: 700 }}>
                         {rep.defectsCount} defects
                       </span>
                     </td>
-                    <td style={{ padding: '12px 16px', color: '#94a3b8' }}>{rep.scanTimeMs} ms</td>
-                    <td style={{ padding: '12px 16px', color: '#7c8ba6', fontSize: '12px' }}>
+                    <td style={{ padding: '12px 16px', color: 'rgba(0, 0, 0, 0.7)' }}>{rep.scanTimeMs} ms</td>
+                    <td style={{ padding: '12px 16px', color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px' }}>
                       {new Date(rep.createdAt).toLocaleTimeString()}
                     </td>
                   </tr>

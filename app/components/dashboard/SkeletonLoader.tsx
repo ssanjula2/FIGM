@@ -12,7 +12,7 @@ export default function SkeletonLoader({ height = '120px', width = '100%' }: { h
         backgroundSize: '200% 100%',
         animation: 'skeleton-shimmer 1.5s infinite',
         borderRadius: '12px',
-        border: '1px solid rgba(255, 255, 255, 0.05)',
+        border: '1px solid rgba(0, 0, 0, 0.05)',
       }}
     />
   );

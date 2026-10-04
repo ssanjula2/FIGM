@@ -80,7 +80,7 @@ export default function RegisterPage() {
     <div
       style={{
         minHeight: '100vh',
-        background: '#030712',
+        background: '#ffffff',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -94,22 +94,22 @@ export default function RegisterPage() {
         style={{
           width: '100%',
           maxWidth: '480px',
-          background: 'rgba(15, 23, 42, 0.75)',
+          background: '#ffffff',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          border: '1px solid rgba(0, 0, 0, 0.1)',
           borderRadius: '20px',
           padding: '40px',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+          boxShadow: '0 8px 24px -8px rgba(0, 0, 0, 0.14)',
           position: 'relative',
           zIndex: 10,
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <h1 style={{ color: '#f8fafc', fontSize: '24px', fontWeight: 700, margin: '0 0 8px 0' }}>
+          <h1 style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '24px', fontWeight: 700, margin: '0 0 8px 0' }}>
             Create Account
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', margin: 0 }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', margin: 0 }}>
             Join FIGM Code Inspector workspace
           </p>
         </div>
@@ -122,7 +122,7 @@ export default function RegisterPage() {
             style={{
               background: 'rgba(239, 68, 68, 0.15)',
               border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#fca5a5',
+              color: '#1d4ed8',
               padding: '12px 16px',
               borderRadius: '10px',
               fontSize: '13px',
@@ -136,7 +136,7 @@ export default function RegisterPage() {
 
         <form onSubmit={handleRegister}>
           <div style={{ marginBottom: '18px' }}>
-            <label htmlFor="reg-fullname" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="reg-fullname" style={{ display: 'block', color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               Full Name
             </label>
             <input
@@ -154,7 +154,7 @@ export default function RegisterPage() {
           </div>
 
           <div style={{ marginBottom: '18px' }}>
-            <label htmlFor="reg-email" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="reg-email" style={{ display: 'block', color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               Email Address
             </label>
             <input
@@ -172,7 +172,7 @@ export default function RegisterPage() {
           </div>
 
           <div style={{ marginBottom: '18px' }}>
-            <label htmlFor="reg-role" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
+            <label htmlFor="reg-role" style={{ display: 'block', color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               Account Role
             </label>
             <select
@@ -181,7 +181,7 @@ export default function RegisterPage() {
               value={role}
               onChange={(e) => setRole(e.target.value as 'DEVELOPER' | 'AUDITOR')}
               className="input-field"
-              style={{ width: '100%', color: '#38bdf8', fontWeight: 600 }}
+              style={{ width: '100%', color: '#1d4ed8', fontWeight: 600 }}
             >
               <option value="DEVELOPER">Developer (Scan & Fix)</option>
               <option value="AUDITOR">Auditor (Read-Only Diagnostics)</option>
@@ -216,9 +216,9 @@ export default function RegisterPage() {
               width: '100%',
               padding: '14px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #38bdf8 0%, #818cf8 100%)',
+              background: '#2563eb',
               border: 'none',
-              color: '#0f172a',
+              color: '#ffffff',
               fontSize: '14px',
               fontWeight: 700,
               cursor: loading ? 'not-allowed' : 'pointer',
@@ -229,9 +229,9 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <div style={{ marginTop: '28px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
+        <div style={{ marginTop: '28px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px' }}>
           Already have an account?{' '}
-          <Link href="/auth/login" style={{ color: '#38bdf8', fontWeight: 600, textDecoration: 'none' }}>
+          <Link href="/auth/login" style={{ color: '#1d4ed8', fontWeight: 600, textDecoration: 'none' }}>
             Sign In
           </Link>
         </div>

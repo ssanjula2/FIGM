@@ -17,7 +17,7 @@
 
 import { DiagnosticReport } from '../types/ast-spec.js';
 import { FOUR_LAYER_MAPPINGS } from '../matrix/four-layer-meta-model.js';
-import { decideRemediation } from '../ai/remediation-decision.js';
+import { AIRemediationRouter } from '../ai/ai-remediation-router.js';
 
 export type DiagnosticKind = 'FIGM_RULE' | 'GENERAL_CODE_ERROR';
 
@@ -37,14 +37,11 @@ export function classifyDiagnosticKind(ruleId: string): DiagnosticKind {
 }
 
 /**
- * Derives a pre-attempt fixability classification WITHOUT calling an AI provider or mutating any
- * state -- delegates to decideRemediation(), the SAME rule-ID-routed, per-instance decision
- * AIRemediationPipeline.remediateDefect itself uses to decide what the "Fix" button will actually
- * attempt, so this can never drift from real behavior. Applies uniformly to BOTH diagnostic domains
- * (FIGM_RULE and GENERAL_CODE_ERROR) -- AIRemediationRouter.route() already routes any non-FIGM
- * ruleId (TYPE-TS-<code>, SYNTAX-PARSE-ERROR) to AI_ASSISTED by definition, and decideRemediation()
- * already tries LexicalTypoFixEngine first for exactly that domain -- so no separate handling is
- * needed here.
+ * Derives the pre-attempt fixability classification without attempting a patch or mutating state.
+ * `decideRemediation()` sets `requiresManualReview` only for the router's MANUAL_REVIEW_ONLY route;
+ * every other route remains eligible for either deterministic fixing or AI assistance, even when a
+ * per-instance deterministic attempt would decline. Use that same routing source directly here so
+ * a file with many findings does not reparse its entire source once per diagnostic.
  *
  * Previously this ran an INDEPENDENT dry-run against the legacy, pre-AI RemediationEngine
  * .applyQuickFix -- a second decision path that could (and did) disagree with the real pipeline.
@@ -71,9 +68,9 @@ export function classifyDiagnosticKind(ruleId: string): DiagnosticKind {
  *    no state that maps to it -- every non-MANUAL_REVIEW_ONLY instance either has a verified
  *    deterministic patch or a real AI-assisted attempt path, never an ambiguous preview-only
  *    candidate that can structurally never be applied. */
-export function getFixabilityStatus(code: string, defect: DiagnosticReport): FixabilityStatus {
-  const decision = decideRemediation(code, defect, defect.filePath);
-  return decision.requiresManualReview ? 'NO_SAFE_FIX' : 'AUTO_FIX_AVAILABLE';
+export function getFixabilityStatus(_code: string, defect: DiagnosticReport): FixabilityStatus {
+  const routing = AIRemediationRouter.route(defect.ruleId);
+  return routing.route === 'MANUAL_REVIEW_ONLY' ? 'NO_SAFE_FIX' : 'AUTO_FIX_AVAILABLE';
 }
 
 /**

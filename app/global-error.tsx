@@ -21,8 +21,8 @@ export default function GlobalError({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#030712',
-          color: '#f8fafc',
+          background: '#ffffff',
+          color: 'rgba(0, 0, 0, 0.82)',
           fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
         }}
       >
@@ -33,7 +33,7 @@ export default function GlobalError({
           <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0 0 8px 0' }}>
             FIGM Code Inspector
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 24px 0', lineHeight: 1.5 }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', margin: '0 0 24px 0', lineHeight: 1.5 }}>
             A critical error occurred and the application could not load. Please try again.
           </p>
           <button
@@ -42,8 +42,8 @@ export default function GlobalError({
             style={{
               padding: '12px 24px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #0284c7, #2563eb)',
-              color: '#ffffff',
+              background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontWeight: 700,
               fontSize: '14px',
               border: 'none',

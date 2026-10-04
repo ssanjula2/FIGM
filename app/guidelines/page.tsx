@@ -442,32 +442,32 @@ const RULE_UI_CONTENT: Record<string, RuleUiContent> = {
 
 const TIP_COLOR: Record<FrameworkTip['framework'], string> = {
   'Next.js': '#ffffff',
-  React: '#38bdf8',
-  Angular: '#ef4444',
-  Vue: '#42b883',
-  'JS/TS': '#facc15',
+  React: '#1d4ed8',
+  Angular: '#1d4ed8',
+  Vue: '#1d4ed8',
+  'JS/TS': '#1d4ed8',
 };
 
 const REMEDIATION_STATUS_LABEL: Record<RuleCatalogEntry['remediationStatus'], { label: string; color: string }> = {
-  AUTOMATED_FIX_VERIFIED: { label: '✓ Automated fix, re-scan-verified', color: '#86efac' },
-  AUTOMATED_FIX_WITH_CAVEAT: { label: '⚠ Automated fix, partial coverage', color: '#fde047' },
-  MANUAL_REVIEW_REQUIRED: { label: '✋ Manual review required', color: '#fca5a5' },
+  AUTOMATED_FIX_VERIFIED: { label: '✓ Automated fix, re-scan-verified', color: '#1d4ed8' },
+  AUTOMATED_FIX_WITH_CAVEAT: { label: '⚠ Automated fix, partial coverage', color: '#1d4ed8' },
+  MANUAL_REVIEW_REQUIRED: { label: '✋ Manual review required', color: '#1d4ed8' },
 };
 
 const CATEGORY_BADGE: Record<RuleCatalogEntry['category'], { label: string; bg: string; color: string; border: string }> = {
-  COMMON: { label: '🌐 Cross-Framework Common', bg: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: 'rgba(56, 189, 248, 0.3)' },
-  NEXTJS: { label: '▲ Next.js Specific', bg: '#000000', color: '#ffffff', border: '#334155' },
-  REACT: { label: '⚛️ React Specific', bg: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: 'rgba(56, 189, 248, 0.4)' },
-  ANGULAR: { label: '🅰️ Angular Specific', bg: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: 'rgba(239, 68, 68, 0.4)' },
-  VUE: { label: '🟢 Vue Specific', bg: 'rgba(66, 184, 131, 0.2)', color: '#42b883', border: 'rgba(66, 184, 131, 0.4)' },
+  COMMON: { label: '🌐 Cross-Framework Common', bg: 'rgba(96, 165, 250, 0.15)', color: '#1d4ed8', border: 'rgba(96, 165, 250, 0.3)' },
+  NEXTJS: { label: '▲ Next.js Specific', bg: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', border: 'rgba(0, 0, 0, 0.2)' },
+  REACT: { label: '⚛️ React Specific', bg: 'rgba(96, 165, 250, 0.2)', color: '#1d4ed8', border: 'rgba(96, 165, 250, 0.4)' },
+  ANGULAR: { label: '🅰️ Angular Specific', bg: 'rgba(59, 130, 246, 0.2)', color: '#1d4ed8', border: 'rgba(59, 130, 246, 0.4)' },
+  VUE: { label: '🟢 Vue Specific', bg: 'rgba(59, 130, 246, 0.2)', color: '#1d4ed8', border: 'rgba(59, 130, 246, 0.4)' },
 };
 
 const FRAMEWORK_FILTER_META: { key: FrameworkType; label: string; color: string }[] = [
-  { key: 'REACT_JSX', label: '⚛️ React', color: '#38bdf8' },
-  { key: 'NEXT_JS', label: '▲ Next.js', color: '#ffffff' },
-  { key: 'ANGULAR_TEMPLATE', label: '🅰️ Angular', color: '#ef4444' },
-  { key: 'VUE_SFC', label: '🟢 Vue', color: '#42b883' },
-  { key: 'GENERIC_ESTREE', label: '🟨 JavaScript/TypeScript', color: '#facc15' },
+  { key: 'REACT_JSX', label: '⚛️ React', color: '#1d4ed8' },
+  { key: 'NEXT_JS', label: '▲ Next.js', color: 'rgba(0, 0, 0, 0.82)' },
+  { key: 'ANGULAR_TEMPLATE', label: '🅰️ Angular', color: '#1d4ed8' },
+  { key: 'VUE_SFC', label: '🟢 Vue', color: '#1d4ed8' },
+  { key: 'GENERIC_ESTREE', label: '🟨 JavaScript/TypeScript', color: '#1d4ed8' },
 ];
 
 export default function GuidelinesPage() {
@@ -537,31 +537,31 @@ export default function GuidelinesPage() {
             </span>
           </div>
 
-          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#f8fafc', marginBottom: '8px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.82)', marginBottom: '8px' }}>
             {rule.name}
           </h2>
 
-          <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '10px', lineHeight: 1.5 }}>
+          <div style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', marginBottom: '10px', lineHeight: 1.5 }}>
             {rule.description}
           </div>
 
           {ui && (
-            <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '14px', lineHeight: 1.5 }}>
-              <strong style={{ color: '#cbd5e1' }}>Why it matters:</strong> {ui.concern}
+            <div style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', marginBottom: '14px', lineHeight: 1.5 }}>
+              <strong style={{ color: 'rgba(0, 0, 0, 0.7)' }}>Why it matters:</strong> {ui.concern}
             </div>
           )}
 
           {/* Supported Frameworks */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
             {rule.isFrameworkIndependent && (
-              <span style={{ fontSize: '10px', background: 'rgba(34, 197, 94, 0.1)', color: '#86efac', padding: '2px 8px', borderRadius: '10px', border: '1px solid rgba(34, 197, 94, 0.25)', fontWeight: 700 }}>
+              <span style={{ fontSize: '10px', background: 'rgba(59, 130, 246, 0.1)', color: '#1d4ed8', padding: '2px 8px', borderRadius: '10px', border: '1px solid rgba(59, 130, 246, 0.25)', fontWeight: 700 }}>
                 Framework-independent
               </span>
             )}
             {rule.frameworks
               .filter((fw) => SUPPORTED_FRAMEWORKS.includes(fw))
               .map((fw) => (
-                <span key={fw} style={{ fontSize: '10px', background: 'rgba(148, 163, 184, 0.1)', color: '#cbd5e1', padding: '2px 8px', borderRadius: '10px', border: '1px solid rgba(148, 163, 184, 0.25)', fontWeight: 600 }}>
+                <span key={fw} style={{ fontSize: '10px', background: 'rgba(255, 255, 255, 0.1)', color: 'rgba(0, 0, 0, 0.7)', padding: '2px 8px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.25)', fontWeight: 600 }}>
                   {FRAMEWORK_LABELS[fw]}
                 </span>
               ))}
@@ -571,47 +571,47 @@ export default function GuidelinesPage() {
           {ui && (
             <div
               style={{
-                background: '#090d16',
+                background: '#ffffff',
                 padding: '12px 14px',
                 borderRadius: '8px',
                 fontSize: '12px',
                 fontFamily: 'JetBrains Mono',
-                color: '#38bdf8',
+                color: '#1d4ed8',
                 marginBottom: '14px',
-                border: '1px solid #1e293b',
+                border: '1px solid rgba(0, 0, 0, 0.2)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '6px',
               }}
             >
               <div>
-                <span style={{ color: '#7c8ba6' }}>Target Code Element: </span>
-                <span style={{ color: '#f8fafc' }}>{ui.targetConstruct}</span>
+                <span style={{ color: 'rgba(0, 0, 0, 0.7)' }}>Target Code Element: </span>
+                <span style={{ color: 'rgba(0, 0, 0, 0.82)' }}>{ui.targetConstruct}</span>
               </div>
               <div>
-                <span style={{ color: '#7c8ba6' }}>What is checked: </span>
-                <span style={{ color: '#cbd5e1' }}>{ui.predicate}</span>
+                <span style={{ color: 'rgba(0, 0, 0, 0.7)' }}>What is checked: </span>
+                <span style={{ color: 'rgba(0, 0, 0, 0.7)' }}>{ui.predicate}</span>
               </div>
             </div>
           )}
 
           {/* Code Example */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '14px' }}>
-            <div style={{ fontSize: '11px', color: '#7c8ba6', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
+            <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
               Example:
             </div>
-            <pre style={{ margin: 0, fontSize: '11px', fontFamily: 'JetBrains Mono', background: '#1a0d0d', color: '#fca5a5', padding: '10px 12px', borderRadius: '6px', border: '1px solid rgba(239, 68, 68, 0.25)', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
-              <span style={{ color: '#7c8ba6' }}>{'// Non-compliant\n'}</span>{rule.example.nonCompliant}
+            <pre style={{ margin: 0, fontSize: '11px', fontFamily: 'JetBrains Mono', background: '#ffffff', color: '#1d4ed8', padding: '10px 12px', borderRadius: '6px', border: '1px solid rgba(239, 68, 68, 0.25)', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+              <span style={{ color: 'rgba(0, 0, 0, 0.7)' }}>{'// Non-compliant\n'}</span>{rule.example.nonCompliant}
             </pre>
-            <pre style={{ margin: 0, fontSize: '11px', fontFamily: 'JetBrains Mono', background: '#0d1a10', color: '#86efac', padding: '10px 12px', borderRadius: '6px', border: '1px solid rgba(34, 197, 94, 0.25)', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
-              <span style={{ color: '#7c8ba6' }}>{'// Compliant\n'}</span>{rule.example.compliant}
+            <pre style={{ margin: 0, fontSize: '11px', fontFamily: 'JetBrains Mono', background: '#ffffff', color: '#1d4ed8', padding: '10px 12px', borderRadius: '6px', border: '1px solid rgba(59, 130, 246, 0.25)', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+              <span style={{ color: 'rgba(0, 0, 0, 0.7)' }}>{'// Compliant\n'}</span>{rule.example.compliant}
             </pre>
           </div>
 
           {/* Framework Specific Implementation Tips */}
           {ui && ui.tips.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
-              <div style={{ fontSize: '11px', color: '#7c8ba6', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
+              <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
                 Implementation Guidance:
               </div>
               {ui.tips.map((fw, idx) => (
@@ -623,7 +623,7 @@ export default function GuidelinesPage() {
                     borderRadius: '6px',
                     background: 'rgba(255, 255, 255, 0.03)',
                     border: '1px solid var(--border)',
-                    color: '#cbd5e1',
+                    color: 'rgba(0, 0, 0, 0.7)',
                   }}
                 >
                   <strong style={{ color: TIP_COLOR[fw.framework] }}>[{fw.framework}]</strong> {fw.tip}
@@ -633,23 +633,23 @@ export default function GuidelinesPage() {
           )}
         </div>
 
-        <div style={{ borderTop: '1px solid #1e293b', paddingTop: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div style={{ fontSize: '12px', color: '#86efac', background: 'rgba(34, 197, 94, 0.08)', padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
+        <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.2)', paddingTop: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ fontSize: '12px', color: '#1d4ed8', background: 'rgba(59, 130, 246, 0.08)', padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
             💡 <strong>How to Fix:</strong> {rule.remediation}
           </div>
           <div style={{ fontSize: '12px', color: statusMeta.color, background: 'rgba(255, 255, 255, 0.03)', padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)' }}>
             {statusMeta.label}
           </div>
-          <div style={{ fontSize: '11px', color: '#7c8ba6', lineHeight: 1.5 }}>
-            <strong style={{ color: '#94a3b8' }}>Known limitation:</strong> {rule.knownLimitation}
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', lineHeight: 1.5 }}>
+            <strong style={{ color: 'rgba(0, 0, 0, 0.7)' }}>Known limitation:</strong> {rule.knownLimitation}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '11px', color: '#7c8ba6' }}>
+            <span style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)' }}>
               Standard: {ui?.standard ?? rule.concern}
             </span>
             <Link
               href="/live-scan"
-              style={{ fontSize: '12px', color: '#38bdf8', textDecoration: 'none', fontWeight: 600 }}
+              style={{ fontSize: '12px', color: '#1d4ed8', textDecoration: 'none', fontWeight: 600 }}
             >
               Test in Inspector &rarr;
             </Link>
@@ -664,32 +664,32 @@ export default function GuidelinesPage() {
       {/* Page Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.4px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', letterSpacing: '-0.4px' }}>
             📚 Code Quality Rule Book ({RULE_CATALOG.length} Guidelines)
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '4px' }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', marginTop: '4px' }}>
             Explore universal common guidelines alongside framework-specific rules for <strong>Next.js</strong>, <strong>React</strong>, <strong>Angular</strong>, and <strong>Vue</strong>.
           </p>
         </div>
 
-        <div style={{ fontSize: '13px', color: '#94a3b8', background: 'rgba(30, 41, 59, 0.6)', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border)' }}>
+        <div style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', background: 'rgba(255, 255, 255, 0.6)', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border)' }}>
           Showing <strong>{totalDisplayed}</strong> of {RULE_CATALOG.length} Rules
         </div>
       </div>
 
       {/* Category Filter Buttons */}
       <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-        <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
           Filter Rules by Category:
         </div>
 
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           {[
-            { key: 'ALL', label: `🌐 All Guidelines (${RULE_CATALOG.length})`, color: '#f8fafc' },
-            { key: 'COMMON', label: `🌐 Common Rules (${commonRules.length})`, color: '#38bdf8' },
-            { key: 'NEXTJS', label: `▲ Next.js Rules (${nextRules.length})`, color: '#ffffff' },
-            { key: 'REACT', label: `⚛️ React Rules (${reactRules.length})`, color: '#38bdf8' },
-            { key: 'ANGULAR', label: `🅰️ Angular Rules (${angularRules.length})`, color: '#ef4444' },
+            { key: 'ALL', label: `🌐 All Guidelines (${RULE_CATALOG.length})`, color: 'rgba(0, 0, 0, 0.82)' },
+            { key: 'COMMON', label: `🌐 Common Rules (${commonRules.length})`, color: '#1d4ed8' },
+            { key: 'NEXTJS', label: `▲ Next.js Rules (${nextRules.length})`, color: 'rgba(0, 0, 0, 0.82)' },
+            { key: 'REACT', label: `⚛️ React Rules (${reactRules.length})`, color: '#1d4ed8' },
+            { key: 'ANGULAR', label: `🅰️ Angular Rules (${angularRules.length})`, color: '#1d4ed8' },
           ].map((item) => (
             <button
               key={item.key}
@@ -701,8 +701,8 @@ export default function GuidelinesPage() {
                 fontWeight: 700,
                 cursor: 'pointer',
                 border: selectedCategory === item.key ? `1px solid ${item.color}` : '1px solid var(--border)',
-                background: selectedCategory === item.key ? 'rgba(56, 189, 248, 0.15)' : 'rgba(9, 13, 22, 0.6)',
-                color: selectedCategory === item.key ? item.color : '#94a3b8',
+                background: selectedCategory === item.key ? 'rgba(96, 165, 250, 0.15)' : 'rgba(255, 255, 255, 0.6)',
+                color: selectedCategory === item.key ? item.color : 'rgba(0, 0, 0, 0.7)',
                 transition: 'all 0.2s ease',
               }}
             >
@@ -711,7 +711,7 @@ export default function GuidelinesPage() {
           ))}
         </div>
 
-        <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '4px' }}>
+        <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '4px' }}>
           Filter by Target Framework:
         </div>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
@@ -723,9 +723,9 @@ export default function GuidelinesPage() {
               fontSize: '13px',
               fontWeight: 700,
               cursor: 'pointer',
-              border: selectedFramework === 'ALL' ? '1px solid #f8fafc' : '1px solid var(--border)',
-              background: selectedFramework === 'ALL' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(9, 13, 22, 0.6)',
-              color: selectedFramework === 'ALL' ? '#f8fafc' : '#94a3b8',
+              border: selectedFramework === 'ALL' ? '1px solid rgba(0, 0, 0, 0.2)' : '1px solid var(--border)',
+              background: selectedFramework === 'ALL' ? 'rgba(96, 165, 250, 0.15)' : 'rgba(255, 255, 255, 0.6)',
+              color: selectedFramework === 'ALL' ? 'rgba(0, 0, 0, 0.82)' : 'rgba(0, 0, 0, 0.7)',
             }}
           >
             🌐 All Frameworks
@@ -743,8 +743,8 @@ export default function GuidelinesPage() {
                   fontWeight: 700,
                   cursor: 'pointer',
                   border: selectedFramework === item.key ? `1px solid ${item.color}` : '1px solid var(--border)',
-                  background: selectedFramework === item.key ? 'rgba(56, 189, 248, 0.15)' : 'rgba(9, 13, 22, 0.6)',
-                  color: selectedFramework === item.key ? item.color : '#94a3b8',
+                  background: selectedFramework === item.key ? 'rgba(96, 165, 250, 0.15)' : 'rgba(255, 255, 255, 0.6)',
+                  color: selectedFramework === item.key ? item.color : 'rgba(0, 0, 0, 0.7)',
                 }}
               >
                 {item.label} ({count})
@@ -753,7 +753,7 @@ export default function GuidelinesPage() {
           })}
         </div>
         {selectedFramework === 'VUE_SFC' && (
-          <p style={{ fontSize: '12px', color: '#7c8ba6', margin: 0 }}>
+          <p style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', margin: 0 }}>
             Vue Single-File Components are covered by FIGM&apos;s framework-independent rules (the 12 Common rules above); there are no Vue-exclusive rules in the current catalog, and Vue detection currently runs on legacy text-heuristic matching rather than a dedicated Vue parser.
           </p>
         )}
@@ -771,7 +771,7 @@ export default function GuidelinesPage() {
             className="input-field"
             style={{ width: '100%', paddingLeft: '34px' }}
           />
-          <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#7c8ba6' }}>🔍</span>
+          <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(0, 0, 0, 0.7)' }}>🔍</span>
         </div>
 
         {/* Domain Filter Pills */}
@@ -790,9 +790,9 @@ export default function GuidelinesPage() {
                 fontSize: '12px',
                 fontWeight: 600,
                 cursor: 'pointer',
-                border: selectedDomain === item.key ? '1px solid #38bdf8' : '1px solid var(--border)',
-                background: selectedDomain === item.key ? 'rgba(56, 189, 248, 0.15)' : 'rgba(9, 13, 22, 0.6)',
-                color: selectedDomain === item.key ? '#38bdf8' : '#94a3b8',
+                border: selectedDomain === item.key ? '1px solid #60a5fa' : '1px solid var(--border)',
+                background: selectedDomain === item.key ? 'rgba(96, 165, 250, 0.15)' : 'rgba(255, 255, 255, 0.6)',
+                color: selectedDomain === item.key ? '#60a5fa' : 'rgba(0, 0, 0, 0.7)',
               }}
             >
               {item.label}
@@ -804,13 +804,13 @@ export default function GuidelinesPage() {
       {/* Section 1: Common Cross-Framework Rules */}
       {(selectedCategory === 'ALL' || selectedCategory === 'COMMON') && commonRules.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #1e293b', paddingBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid rgba(0, 0, 0, 0.2)', paddingBottom: '12px' }}>
             <span style={{ fontSize: '22px' }}>🌐</span>
             <div>
-              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#1d4ed8' }}>
                 Universal Common Rules ({commonRules.length} Guidelines)
               </h2>
-              <p style={{ fontSize: '13px', color: '#94a3b8' }}>
+              <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)' }}>
                 Core web quality rules that apply universally across Next.js, React, Angular, and Vue single page applications.
               </p>
             </div>
@@ -825,13 +825,13 @@ export default function GuidelinesPage() {
       {/* Section 2: Next.js Specific Rules */}
       {(selectedCategory === 'ALL' || selectedCategory === 'NEXTJS') && nextRules.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #1e293b', paddingBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid rgba(0, 0, 0, 0.2)', paddingBottom: '12px' }}>
             <span style={{ fontSize: '22px' }}>▲</span>
             <div>
-              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#ffffff' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)' }}>
                 Next.js Specific Guidelines ({nextRules.length} Guidelines)
               </h2>
-              <p style={{ fontSize: '13px', color: '#94a3b8' }}>
+              <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)' }}>
                 Rules dedicated to Next.js App Router, Server Components, SSR hydration, font optimization, and route segment caching.
               </p>
             </div>
@@ -846,13 +846,13 @@ export default function GuidelinesPage() {
       {/* Section 3: React Specific Rules */}
       {(selectedCategory === 'ALL' || selectedCategory === 'REACT') && reactRules.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #1e293b', paddingBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid rgba(0, 0, 0, 0.2)', paddingBottom: '12px' }}>
             <span style={{ fontSize: '22px' }}>⚛️</span>
             <div>
-              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#1d4ed8' }}>
                 React Specific Guidelines ({reactRules.length} Guidelines)
               </h2>
-              <p style={{ fontSize: '13px', color: '#94a3b8' }}>
+              <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)' }}>
                 Rules dedicated to React state immutability, key props, useCallback wrappers, reconciliation performance, and useMemo.
               </p>
             </div>
@@ -867,13 +867,13 @@ export default function GuidelinesPage() {
       {/* Section 4: Angular Specific Rules */}
       {(selectedCategory === 'ALL' || selectedCategory === 'ANGULAR') && angularRules.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #1e293b', paddingBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid rgba(0, 0, 0, 0.2)', paddingBottom: '12px' }}>
             <span style={{ fontSize: '22px' }}>🅰️</span>
             <div>
-              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#ef4444' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#1d4ed8' }}>
                 Angular Specific Guidelines ({angularRules.length} Guidelines)
               </h2>
-              <p style={{ fontSize: '13px', color: '#94a3b8' }}>
+              <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)' }}>
                 Rules dedicated to Angular ChangeDetection Strategy, Renderer2 DOM safety, trackBy DOM reuse, template function calls, and RxJS subscriptions.
               </p>
             </div>

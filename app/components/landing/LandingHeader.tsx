@@ -21,9 +21,9 @@ export default function LandingHeader() {
         position: 'sticky',
         top: 0,
         zIndex: 40,
-        background: 'rgba(3, 7, 18, 0.85)',
+        background: 'rgba(255, 255, 255, 0.85)',
         backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
       }}
     >
       <div
@@ -43,24 +43,24 @@ export default function LandingHeader() {
               width: '30px',
               height: '30px',
               borderRadius: '7px',
-              background: '#38bdf8',
+              background: '#60a5fa',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: '13px',
               fontWeight: 900,
-              color: '#020617',
+              color: '#ffffff',
             }}
           >
             FI
           </div>
-          <span style={{ fontSize: '15px', fontWeight: 800, color: '#f8fafc' }}>FIGM Code Inspector</span>
+          <span style={{ fontSize: '15px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)' }}>FIGM Code Inspector</span>
         </Link>
 
         {/* Desktop nav */}
         <nav aria-label="Landing page sections" style={{ display: 'flex', alignItems: 'center', gap: '28px' }} className="landing-nav-desktop">
           {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href} style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '13px', fontWeight: 600 }}>
+            <a key={l.href} href={l.href} style={{ color: 'rgba(0, 0, 0, 0.7)', textDecoration: 'none', fontSize: '13px', fontWeight: 600 }}>
               {l.label}
             </a>
           ))}
@@ -69,7 +69,7 @@ export default function LandingHeader() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} className="landing-nav-desktop">
           <Link
             href="/auth/login"
-            style={{ padding: '9px 16px', fontSize: '13px', fontWeight: 700, color: '#f8fafc', textDecoration: 'none', borderRadius: '8px' }}
+            style={{ padding: '9px 16px', fontSize: '13px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.82)', textDecoration: 'none', borderRadius: '8px' }}
           >
             Sign In
           </Link>
@@ -79,8 +79,8 @@ export default function LandingHeader() {
               padding: '9px 18px',
               fontSize: '13px',
               fontWeight: 700,
-              color: '#020617',
-              background: '#38bdf8',
+              color: '#ffffff',
+              background: '#2563eb',
               textDecoration: 'none',
               borderRadius: '8px',
             }}
@@ -100,11 +100,11 @@ export default function LandingHeader() {
           style={{
             display: 'none',
             background: 'transparent',
-            border: '1px solid rgba(255,255,255,0.15)',
+            border: '1px solid rgba(0, 0, 0, 0.15)',
             borderRadius: '8px',
             width: '38px',
             height: '38px',
-            color: '#f8fafc',
+            color: 'rgba(0, 0, 0, 0.82)',
             fontSize: '16px',
             cursor: 'pointer',
           }}
@@ -120,7 +120,7 @@ export default function LandingHeader() {
           aria-label="Landing page sections (mobile)"
           className="landing-nav-mobile-panel"
           style={{
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '1px solid rgba(0, 0, 0, 0.08)',
             padding: '16px 24px 20px 24px',
             display: 'none',
             flexDirection: 'column',
@@ -132,7 +132,7 @@ export default function LandingHeader() {
               key={l.href}
               href={l.href}
               onClick={() => setMobileOpen(false)}
-              style={{ color: '#e2e8f0', textDecoration: 'none', fontSize: '15px', fontWeight: 600, padding: '10px 0' }}
+              style={{ color: 'rgba(0, 0, 0, 0.82)', textDecoration: 'none', fontSize: '15px', fontWeight: 600, padding: '10px 0' }}
             >
               {l.label}
             </a>
@@ -140,13 +140,13 @@ export default function LandingHeader() {
           <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
             <Link
               href="/auth/login"
-              style={{ flex: 1, textAlign: 'center', padding: '10px', fontSize: '13px', fontWeight: 700, color: '#f8fafc', border: '1px solid rgba(255,255,255,0.15)', textDecoration: 'none', borderRadius: '8px' }}
+              style={{ flex: 1, textAlign: 'center', padding: '10px', fontSize: '13px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.82)', border: '1px solid rgba(0, 0, 0, 0.15)', textDecoration: 'none', borderRadius: '8px' }}
             >
               Sign In
             </Link>
             <Link
               href="/auth/register"
-              style={{ flex: 1, textAlign: 'center', padding: '10px', fontSize: '13px', fontWeight: 700, color: '#020617', background: '#38bdf8', textDecoration: 'none', borderRadius: '8px' }}
+              style={{ flex: 1, textAlign: 'center', padding: '10px', fontSize: '13px', fontWeight: 700, color: '#ffffff', background: '#2563eb', textDecoration: 'none', borderRadius: '8px' }}
             >
               Get Started
             </Link>

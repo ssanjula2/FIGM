@@ -11,7 +11,7 @@ export default function ReferencesSection() {
   return (
     <section
       id="references"
-      style={{ padding: '80px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}
+      style={{ padding: '80px 0', borderTop: '1px solid rgba(0, 0, 0, 0.08)' }}
     >
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         {/* Section header */}
@@ -19,7 +19,7 @@ export default function ReferencesSection() {
           <div
             style={{
               fontSize: '11px',
-              color: '#38bdf8',
+              color: '#1d4ed8',
               fontWeight: 800,
               textTransform: 'uppercase',
               letterSpacing: '1px',
@@ -46,7 +46,7 @@ export default function ReferencesSection() {
 
         {/* Loading state */}
         {loading && (
-          <div style={{ textAlign: 'center', color: '#7c8ba6', padding: '40px' }}>
+          <div style={{ textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)', padding: '40px' }}>
             Loading references from API…
           </div>
         )}
@@ -59,7 +59,7 @@ export default function ReferencesSection() {
               border: '1px solid rgba(239, 68, 68, 0.3)',
               borderRadius: '12px',
               padding: '20px',
-              color: '#fca5a5',
+              color: '#1d4ed8',
               textAlign: 'center',
             }}
           >
@@ -97,7 +97,7 @@ export default function ReferencesSection() {
                     justifyContent: 'center',
                     fontSize: '11px',
                     fontWeight: 900,
-                    color: '#38bdf8',
+                    color: '#1d4ed8',
                     flexShrink: 0,
                   }}
                 >
@@ -106,10 +106,10 @@ export default function ReferencesSection() {
 
                 {/* Reference text */}
                 <div>
-                  <span style={{ color: '#f1f5f9', fontSize: '14px', lineHeight: 1.6 }}>
-                    <strong style={{ color: '#e2e8f0' }}>{ref.authors}</strong>{', '}
+                  <span style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '14px', lineHeight: 1.6 }}>
+                    <strong style={{ color: 'rgba(0, 0, 0, 0.82)' }}>{ref.authors}</strong>{', '}
                     {ref.year}.{' '}
-                    <em style={{ color: '#c084fc' }}>{ref.title}</em>
+                    <em style={{ color: '#1d4ed8' }}>{ref.title}</em>
                     {ref.venue ? <>. {ref.venue}</> : null}
                     {(ref as { volume?: string }).volume ? <>, {(ref as { volume?: string }).volume}</> : null}
                     {ref.pages ? <>, pp. {ref.pages}</> : null}
@@ -120,7 +120,7 @@ export default function ReferencesSection() {
                           href={(ref as { url?: string }).url}
                           target="_blank"
                           rel="noreferrer"
-                          style={{ color: '#38bdf8', textDecoration: 'underline' }}
+                          style={{ color: '#1d4ed8', textDecoration: 'underline' }}
                         >
                           {(ref as { url?: string }).url}
                         </a>

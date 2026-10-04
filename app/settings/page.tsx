@@ -31,7 +31,7 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+      <div style={{ padding: '60px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>
         <div style={{ fontSize: '32px', marginBottom: '16px' }}>⏳</div>
         <div>Loading FIGM Code Inspector Configurations...</div>
       </div>
@@ -43,13 +43,13 @@ export default function SettingsPage() {
       {/* Header Banner */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ fontSize: '12px', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
+          <div style={{ fontSize: '12px', color: '#1d4ed8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
             Platform Control Panel
           </div>
-          <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', margin: 0, letterSpacing: '-0.5px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: 0, letterSpacing: '-0.5px' }}>
             Application & Engine Settings
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '6px', margin: 0 }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', marginTop: '6px', margin: 0 }}>
             Customize scanner thresholds, AI model parameters, profiler sampling, and export defaults.
           </p>
         </div>
@@ -57,7 +57,7 @@ export default function SettingsPage() {
         <button
           onClick={handleSaveAll}
           style={{
-            background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+            background: '#2563eb',
             color: '#ffffff',
             border: 'none',
             borderRadius: '10px',
@@ -65,7 +65,7 @@ export default function SettingsPage() {
             fontSize: '14px',
             fontWeight: 700,
             cursor: 'pointer',
-            boxShadow: '0 0 20px rgba(56, 189, 248, 0.3)',
+            boxShadow: '0 0 20px rgba(96, 165, 250, 0.3)',
           }}
         >
           {savedNotice ? '✓ Saved!' : '💾 Save Settings'}
@@ -73,38 +73,34 @@ export default function SettingsPage() {
       </div>
 
       {/* 1. Application Settings */}
-      <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '28px', marginBottom: '28px' }}>
-        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: '0 0 20px 0' }}>
+      <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '16px', padding: '28px', marginBottom: '28px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 20px 0' }}>
           ⚙️ General Application Settings
         </h3>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
           <div>
-            <label id="theme-label" style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Theme</label>
-            {/* A prior version of this control offered two additional light-palette and
-                OS-preference-following options alongside the dark one -- every page in this app
-                is hardcoded to the dark palette via inline styles, so selecting either did
-                nothing visually while still persisting the choice, a misleading affordance.
-                Rather than leave a non-functional selector (or silently drop the setting the
-                backend still stores), this is now honest static text: one real theme exists
-                today. */}
-            <div
-              aria-labelledby="theme-label"
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#38bdf8', fontWeight: 700, fontSize: '13px', boxSizing: 'border-box' }}
+            <label htmlFor="settings-theme" style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>Theme</label>
+            <select
+              id="settings-theme"
+              value={settings.theme === 'dark' ? 'dark' : 'light'}
+              onChange={(event) => updateSettings({ theme: event.target.value as 'light' | 'dark' })}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: '#1d4ed8', fontWeight: 700, fontSize: '13px', boxSizing: 'border-box' }}
             >
-              🌙 Dark Glass (Vercel &amp; Linear)
-            </div>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
             <p style={{ fontSize: '11px', color: '#7c8ba6', margin: '6px 0 0 0' }}>
-              Light theme and system-based switching are not implemented yet — every page currently ships in Dark Glass only.
+              Light theme and system-based switching are not implemented yet; every page currently ships in Dark Glass only.
             </p>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Language</label>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>Language</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#f8fafc', fontWeight: 600, fontSize: '13px' }}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', fontWeight: 600, fontSize: '13px' }}
             >
               <option value="English (US)">English (US)</option>
               <option value="Spanish">Spanish (Español)</option>
@@ -115,11 +111,11 @@ export default function SettingsPage() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Timezone</label>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>Timezone</label>
             <select
               value={timezone}
               onChange={(e) => setTimezone(e.target.value)}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#f8fafc', fontWeight: 600, fontSize: '13px' }}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', fontWeight: 600, fontSize: '13px' }}
             >
               <option value="UTC (Coordinated Universal Time)">UTC (Coordinated Universal Time)</option>
               <option value="EST (Eastern Standard Time)">EST (Eastern Standard Time)</option>
@@ -130,22 +126,22 @@ export default function SettingsPage() {
           </div>
 
           <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '24px', marginTop: '8px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px', cursor: 'pointer' }}>
               <input
                 type="checkbox"
                 checked={settings.autoSave}
                 onChange={(e) => updateSettings({ autoSave: e.target.checked })}
-                style={{ width: '18px', height: '18px', accentColor: '#38bdf8' }}
+                style={{ width: '18px', height: '18px', accentColor: '#60a5fa' }}
               />
               <strong>Auto-Save Scan History & Diagnostics</strong>
             </label>
 
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px', cursor: 'pointer' }}>
               <input
                 type="checkbox"
                 checked={settings.autoScan}
                 onChange={(e) => updateSettings({ autoScan: e.target.checked })}
-                style={{ width: '18px', height: '18px', accentColor: '#38bdf8' }}
+                style={{ width: '18px', height: '18px', accentColor: '#60a5fa' }}
               />
               <strong>Auto-Scan on Code Paste / Repository Commit</strong>
             </label>
@@ -154,18 +150,18 @@ export default function SettingsPage() {
       </div>
 
       {/* 2. AI Settings */}
-      <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '28px', marginBottom: '28px' }}>
-        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#a855f7', margin: '0 0 20px 0' }}>
+      <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '16px', padding: '28px', marginBottom: '28px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1d4ed8', margin: '0 0 20px 0' }}>
           🤖 AI Remediation Engine Settings
         </h3>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>AI Model Selection</label>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>AI Model Selection</label>
             <select
               value={settings.aiModel}
               onChange={(e) => updateSettings({ aiModel: e.target.value })}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#a855f7', fontWeight: 700, fontSize: '13px' }}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: '#1d4ed8', fontWeight: 700, fontSize: '13px' }}
             >
               <option value="claude-opus-5">Claude Opus 5 (Deep AST Remediation)</option>
               <option value="claude-sonnet-5">Claude Sonnet 5 (Fast)</option>
@@ -174,7 +170,7 @@ export default function SettingsPage() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>
               Temperature (Creativity): {temperature}
             </label>
             <input
@@ -184,16 +180,16 @@ export default function SettingsPage() {
               step="0.05"
               value={temperature}
               onChange={(e) => setTemperature(parseFloat(e.target.value))}
-              style={{ width: '100%', accentColor: '#a855f7', cursor: 'pointer' }}
+              style={{ width: '100%', accentColor: '#60a5fa', cursor: 'pointer' }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Remediation Style</label>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>Remediation Style</label>
             <select
               value={remediationStyle}
               onChange={(e) => setRemediationStyle(e.target.value)}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#f8fafc', fontWeight: 600, fontSize: '13px' }}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', fontWeight: 600, fontSize: '13px' }}
             >
               <option value="Conservative & ISO Compliant">Conservative & ISO Compliant</option>
               <option value="Aggressive Performance Tuning">Aggressive Performance Tuning</option>
@@ -204,47 +200,47 @@ export default function SettingsPage() {
       </div>
 
       {/* 3. Dynamic Profiler Settings */}
-      <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '28px', marginBottom: '28px' }}>
-        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#38bdf8', margin: '0 0 20px 0' }}>
+      <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '16px', padding: '28px', marginBottom: '28px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1d4ed8', margin: '0 0 20px 0' }}>
           ⏱️ Dynamic Runtime Profiler Settings
         </h3>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Memory Sampling Interval (ms)</label>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>Memory Sampling Interval (ms)</label>
             <input
               type="number"
               value={samplingIntervalMs}
               onChange={(e) => setSamplingIntervalMs(Number(e.target.value))}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#f8fafc', fontSize: '13px', boxSizing: 'border-box' }}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px', boxSizing: 'border-box' }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Maximum Call Stack Depth</label>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>Maximum Call Stack Depth</label>
             <input
               type="number"
               value={maxCallDepth}
               onChange={(e) => setMaxCallDepth(Number(e.target.value))}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#f8fafc', fontSize: '13px', boxSizing: 'border-box' }}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px', boxSizing: 'border-box' }}
             />
           </div>
         </div>
       </div>
 
       {/* 4. Export Engine Defaults */}
-      <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '28px' }}>
-        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#22c55e', margin: '0 0 20px 0' }}>
+      <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '16px', padding: '28px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1d4ed8', margin: '0 0 20px 0' }}>
           📊 Export Engine Defaults
         </h3>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>Default Export Format</label>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>Default Export Format</label>
             <select
               value={settings.exportFormat}
               onChange={(e) => updateSettings({ exportFormat: e.target.value })}
-              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.12)', background: '#090d16', color: '#22c55e', fontWeight: 700, fontSize: '13px' }}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: '#1d4ed8', fontWeight: 700, fontSize: '13px' }}
             >
               <option value="PDF">PDF Document (HTML Print View)</option>
               <option value="JSON">Raw JSON Spec Report</option>
@@ -254,22 +250,22 @@ export default function SettingsPage() {
           </div>
 
           <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '24px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px', cursor: 'pointer' }}>
               <input
                 type="checkbox"
                 checked={includeResearchRefs}
                 onChange={(e) => setIncludeResearchRefs(e.target.checked)}
-                style={{ width: '18px', height: '18px', accentColor: '#22c55e' }}
+                style={{ width: '18px', height: '18px', accentColor: '#3b82f6' }}
               />
               <strong>Include ISO/IEC 25010 & WCAG Research Citations</strong>
             </label>
 
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#f8fafc', fontSize: '13px', cursor: 'pointer' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px', cursor: 'pointer' }}>
               <input
                 type="checkbox"
                 checked={includeCharts}
                 onChange={(e) => setIncludeCharts(e.target.checked)}
-                style={{ width: '18px', height: '18px', accentColor: '#22c55e' }}
+                style={{ width: '18px', height: '18px', accentColor: '#3b82f6' }}
               />
               <strong>Include Graphical Performance Charts</strong>
             </label>

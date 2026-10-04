@@ -32,7 +32,7 @@ export default function Error({
         style={{
           maxWidth: '460px',
           borderRadius: '20px',
-          background: 'rgba(15, 23, 42, 0.85)',
+          background: 'rgba(255, 255, 255, 0.85)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           border: '1px solid rgba(239, 68, 68, 0.25)',
@@ -43,10 +43,10 @@ export default function Error({
         <div style={{ fontSize: '48px', marginBottom: '12px' }} aria-hidden="true">
           ⚠️
         </div>
-        <h1 style={{ color: '#f8fafc', fontSize: '24px', fontWeight: 800, margin: '0 0 8px 0' }}>
+        <h1 style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '24px', fontWeight: 800, margin: '0 0 8px 0' }}>
           Something Went Wrong
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 28px 0', lineHeight: 1.5 }}>
+        <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', margin: '0 0 28px 0', lineHeight: 1.5 }}>
           An unexpected error occurred while loading this page. You can try again, or head back to
           the overview.
         </p>
@@ -57,13 +57,13 @@ export default function Error({
             style={{
               padding: '12px 24px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #0284c7, #2563eb)',
-              color: '#ffffff',
+              background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontWeight: 700,
               fontSize: '14px',
               border: 'none',
               cursor: 'pointer',
-              boxShadow: '0 4px 14px rgba(2, 132, 199, 0.35)',
+              boxShadow: '0 4px 14px rgba(59, 130, 246, 0.35)',
             }}
           >
             Try Again
@@ -74,8 +74,8 @@ export default function Error({
               padding: '12px 24px',
               borderRadius: '10px',
               background: 'rgba(255, 255, 255, 0.06)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              color: '#f8fafc',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontWeight: 700,
               fontSize: '14px',
               textDecoration: 'none',

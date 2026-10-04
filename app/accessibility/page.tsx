@@ -45,18 +45,18 @@ export default function AccessibilityPage() {
       {/* Top Page Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ fontSize: '11px', color: '#a855f7', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
+          <div style={{ fontSize: '11px', color: '#1d4ed8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
             WCAG 2.2-Aligned Static Checks — Not a Conformance Audit
           </div>
           <h1 className="gradient-text-blue" style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-0.8px', margin: 0, lineHeight: 1.1 }}>
             Accessibility Rule Reference
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '4px', margin: 0, maxWidth: 720 }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', marginTop: '4px', margin: 0, maxWidth: 720 }}>
             {ACCESSIBILITY_RULES.length} static-analysis rules, each mapped to a specific WCAG 2.2
             Success Criterion with an honest detectability classification. This is a{' '}
             <strong>statically detectable subset</strong> of WCAG 2.2 — it does not test with real
             assistive technology (no NVDA/JAWS testing is performed) and is not a claim of full
-            WCAG 2.2 Level AA conformance. Run a real scan under <Link href="/live-scan" style={{ color: '#38bdf8' }}>Live Scan</Link> to
+            WCAG 2.2 Level AA conformance. Run a real scan under <Link href="/live-scan" style={{ color: '#1d4ed8' }}>Live Scan</Link> to
             see real findings against your own code.
           </p>
         </div>
@@ -73,7 +73,7 @@ export default function AccessibilityPage() {
         {/* Left: real accessibility rules list, sourced from RULE_CATALOG */}
         <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>
               FIGM Accessibility Guideline Matrix (WCAG 2.2)
             </h2>
             <span className="badge badge-domain" style={{ fontSize: '10px' }}>{ACCESSIBILITY_RULES.length} Active Rules</span>
@@ -98,23 +98,23 @@ export default function AccessibilityPage() {
                   style={{
                     padding: '16px',
                     borderRadius: '10px',
-                    background: selectedRuleId === rule.id ? 'rgba(56, 189, 248, 0.12)' : 'rgba(15, 23, 42, 0.5)',
-                    border: selectedRuleId === rule.id ? '1px solid #38bdf8' : '1px solid rgba(255, 255, 255, 0.08)',
+                    background: selectedRuleId === rule.id ? 'rgba(96, 165, 250, 0.12)' : 'rgba(255, 255, 255, 0.5)',
+                    border: selectedRuleId === rule.id ? '1px solid #60a5fa' : '1px solid rgba(0, 0, 0, 0.08)',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '12px', fontWeight: 800, color: '#38bdf8', fontFamily: 'JetBrains Mono' }}>[{rule.id}]</span>
-                      <span style={{ fontSize: '14px', fontWeight: 700, color: '#f8fafc' }}>{rule.name}</span>
+                      <span style={{ fontSize: '12px', fontWeight: 800, color: '#1d4ed8', fontFamily: 'JetBrains Mono' }}>[{rule.id}]</span>
+                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.82)' }}>{rule.name}</span>
                     </div>
                     {wcag && <span className="badge-trend-green" style={{ fontSize: '11px' }}>{wcag.clause} {wcag.title}</span>}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: 1.4 }}>
+                  <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', lineHeight: 1.4 }}>
                     {rule.description}
                   </div>
-                  <div style={{ display: 'flex', gap: '16px', marginTop: '10px', fontSize: '11px', color: '#cbd5e1', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: '16px', marginTop: '10px', fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', flexWrap: 'wrap' }}>
                     <span>Severity: <strong>{rule.severity}</strong></span>
                     {wcag && <span>Detectability: <strong>{DETECTABILITY_LABEL[wcag.automatedDetectability ?? ''] ?? wcag.automatedDetectability}</strong></span>}
                   </div>
@@ -129,14 +129,14 @@ export default function AccessibilityPage() {
           {/* Rule Detail Panel */}
           {selectedRule && (
             <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: '11px', color: '#1d4ed8', fontWeight: 800, textTransform: 'uppercase' }}>
                 RULE SPECIFICATION
               </div>
-              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>
                 [{selectedRule.id}] {selectedRule.name}
               </h3>
               {selectedWcag && (
-                <div style={{ fontSize: '12px', color: '#94a3b8', background: 'rgba(30, 41, 59, 0.6)', padding: '10px 14px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', background: 'rgba(255, 255, 255, 0.6)', padding: '10px 14px', borderRadius: '8px' }}>
                   <div><strong>Standard Reference</strong>: WCAG 2.2 {selectedWcag.clause} — {selectedWcag.title} (Level {selectedWcag.level})</div>
                   <div style={{ marginTop: '6px' }}><strong>Mapping rationale</strong>: {selectedWcag.mappingRationale}</div>
                   <div style={{ marginTop: '6px' }}><strong>Automated detectability</strong>: {DETECTABILITY_LABEL[selectedWcag.automatedDetectability ?? ''] ?? selectedWcag.automatedDetectability}</div>
@@ -144,15 +144,15 @@ export default function AccessibilityPage() {
               )}
 
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#f8fafc', marginBottom: '4px' }}>Known limitation:</div>
-                <div style={{ fontSize: '12px', color: '#fca5a5', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', padding: '10px 14px', borderRadius: '8px', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.82)', marginBottom: '4px' }}>Known limitation:</div>
+                <div style={{ fontSize: '12px', color: '#1d4ed8', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', padding: '10px 14px', borderRadius: '8px', lineHeight: 1.4 }}>
                   {selectedRule.knownLimitation}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#f8fafc', marginBottom: '4px' }}>Remediation:</div>
-                <div style={{ fontSize: '12px', color: '#86efac', background: 'rgba(34, 197, 94, 0.12)', border: '1px solid rgba(34, 197, 94, 0.3)', padding: '10px 14px', borderRadius: '8px', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.82)', marginBottom: '4px' }}>Remediation:</div>
+                <div style={{ fontSize: '12px', color: '#1d4ed8', background: 'rgba(59, 130, 246, 0.12)', border: '1px solid rgba(59, 130, 246, 0.3)', padding: '10px 14px', borderRadius: '8px', lineHeight: 1.4 }}>
                   {selectedRule.remediation}
                 </div>
               </div>
@@ -163,19 +163,19 @@ export default function AccessibilityPage() {
           {selectedRule && (
             <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>
                   Illustrative Example
                 </h3>
                 <span className="badge badge-domain" style={{ fontSize: '10px' }}>Static example — not a live fix run</span>
               </div>
 
-              <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+              <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)' }}>
                 This toggles between this rule&apos;s documented non-compliant and compliant example code.
                 It does not run FIGM&apos;s real fix pipeline — for a real fix on your own code, use{' '}
-                <Link href="/live-scan" style={{ color: '#38bdf8' }}>Live Scan</Link>.
+                <Link href="/live-scan" style={{ color: '#1d4ed8' }}>Live Scan</Link>.
               </div>
 
-              <div style={{ background: '#090d16', padding: '14px', borderRadius: '8px', border: '1px solid var(--border)', fontFamily: 'JetBrains Mono', fontSize: '12px', color: sandboxFixed ? '#86efac' : '#fca5a5' }}>
+              <div style={{ background: '#ffffff', padding: '14px', borderRadius: '8px', border: '1px solid var(--border)', fontFamily: 'JetBrains Mono', fontSize: '12px', color: sandboxFixed ? '#60a5fa' : '#fca5a5' }}>
                 <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
                   {sandboxFixed ? selectedRule.example.compliant : selectedRule.example.nonCompliant}
                 </pre>

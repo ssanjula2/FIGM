@@ -15,7 +15,7 @@ import PasswordField from '../../components/PasswordField';
 // enough here rather than a full skeleton.
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#030712' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#ffffff' }} />}>
       <LoginForm />
     </Suspense>
   );
@@ -94,7 +94,7 @@ function LoginForm() {
     <div
       style={{
         minHeight: '100vh',
-        background: '#030712',
+        background: '#ffffff',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -112,7 +112,7 @@ function LoginForm() {
           left: '30%',
           width: '600px',
           height: '600px',
-          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(3, 7, 18, 0) 70%)',
+          background: 'radial-gradient(circle, rgba(96, 165, 250, 0.15) 0%, rgba(255, 255, 255, 0) 70%)',
           pointerEvents: 'none',
         }}
       />
@@ -123,7 +123,7 @@ function LoginForm() {
           right: '20%',
           width: '500px',
           height: '500px',
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(3, 7, 18, 0) 70%)',
+          background: 'radial-gradient(circle, rgba(96, 165, 250, 0.12) 0%, rgba(255, 255, 255, 0) 70%)',
           pointerEvents: 'none',
         }}
       />
@@ -132,13 +132,13 @@ function LoginForm() {
         style={{
           width: '100%',
           maxWidth: '440px',
-          background: 'rgba(15, 23, 42, 0.75)',
+          background: '#ffffff',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          border: '1px solid rgba(0, 0, 0, 0.1)',
           borderRadius: '20px',
           padding: '40px',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+          boxShadow: '0 8px 24px -8px rgba(0, 0, 0, 0.14)',
           position: 'relative',
           zIndex: 10,
         }}
@@ -152,18 +152,18 @@ function LoginForm() {
               width: '54px',
               height: '54px',
               borderRadius: '16px',
-              background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(168, 85, 247, 0.2))',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
+              background: 'linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(96, 165, 250, 0.2))',
+              border: '1px solid rgba(96, 165, 250, 0.3)',
               marginBottom: '16px',
               fontSize: '24px',
             }}
           >
             🛡️
           </div>
-          <h1 style={{ color: '#f8fafc', fontSize: '24px', fontWeight: 700, margin: '0 0 8px 0' }}>
+          <h1 style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '24px', fontWeight: 700, margin: '0 0 8px 0' }}>
             Welcome to FIGM
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', margin: 0 }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', margin: 0 }}>
             Sign in to access your code inspector workspace
           </p>
         </div>
@@ -176,7 +176,7 @@ function LoginForm() {
             style={{
               background: 'rgba(239, 68, 68, 0.15)',
               border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#fca5a5',
+              color: '#1d4ed8',
               padding: '12px 16px',
               borderRadius: '10px',
               fontSize: '13px',
@@ -193,7 +193,7 @@ function LoginForm() {
 
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="login-email" style={{ display: 'block', color: '#cbd5e1', fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>
+            <label htmlFor="login-email" style={{ display: 'block', color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>
               Email Address
             </label>
             <input
@@ -218,7 +218,7 @@ function LoginForm() {
               onChange={setPassword}
               autoComplete="current-password"
               labelTrailing={
-                <Link href="/auth/forgot-password" style={{ color: '#38bdf8', fontSize: '12px', textDecoration: 'none', fontWeight: 500 }}>
+                <Link href="/auth/forgot-password" style={{ color: '#1d4ed8', fontSize: '12px', textDecoration: 'none', fontWeight: 500 }}>
                   Forgot Password?
                 </Link>
               }
@@ -232,24 +232,24 @@ function LoginForm() {
               width: '100%',
               padding: '14px',
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, #38bdf8 0%, #818cf8 100%)',
+              background: '#2563eb',
               border: 'none',
-              color: '#0f172a',
+              color: '#ffffff',
               fontSize: '14px',
               fontWeight: 700,
               cursor: loading ? 'not-allowed' : 'pointer',
               opacity: loading ? 0.7 : 1,
               transition: 'all 0.2s ease',
-              boxShadow: '0 4px 12px rgba(56, 189, 248, 0.25)',
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.18)',
             }}
           >
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
 
-        <div style={{ marginTop: '28px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
+        <div style={{ marginTop: '28px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px' }}>
           Don&apos;t have an account?{' '}
-          <Link href="/auth/register" style={{ color: '#38bdf8', fontWeight: 600, textDecoration: 'none' }}>
+          <Link href="/auth/register" style={{ color: '#1d4ed8', fontWeight: 600, textDecoration: 'none' }}>
             Register Now
           </Link>
         </div>

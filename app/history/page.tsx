@@ -35,13 +35,13 @@ export default function HistoryPage() {
     <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
       {/* Header Banner */}
       <div style={{ marginBottom: '28px' }}>
-        <div style={{ fontSize: '12px', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
+        <div style={{ fontSize: '12px', color: '#1d4ed8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
           Persistent Inspection Database
         </div>
-        <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', margin: 0, letterSpacing: '-0.5px' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: 0, letterSpacing: '-0.5px' }}>
           Scan History & Audit Logs
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '6px', margin: 0 }}>
+        <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', marginTop: '6px', margin: 0 }}>
           Filter, search, audit, favorite, and export all recorded framework static analysis scans.
         </p>
       </div>
@@ -49,9 +49,9 @@ export default function HistoryPage() {
       {/* Toolbar Filters */}
       <div
         style={{
-          background: 'rgba(15, 23, 42, 0.65)',
+          background: 'rgba(255, 255, 255, 0.65)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
+          border: '1px solid rgba(0, 0, 0, 0.08)',
           borderRadius: '14px',
           padding: '16px 20px',
           marginBottom: '28px',
@@ -64,7 +64,7 @@ export default function HistoryPage() {
       >
         {/* Search */}
         <div style={{ position: 'relative', flex: 1, minWidth: '260px' }}>
-          <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#7c8ba6' }}>🔍</span>
+          <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(0, 0, 0, 0.7)' }}>🔍</span>
           <input
             type="text"
             placeholder="Search scans by file name, framework, repository..."
@@ -74,9 +74,9 @@ export default function HistoryPage() {
               width: '100%',
               padding: '10px 14px 10px 40px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#f8fafc',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontSize: '13px',
               outline: 'none',
               boxSizing: 'border-box',
@@ -93,20 +93,20 @@ export default function HistoryPage() {
             style={{
               padding: '9px 14px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#38bdf8',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: '#1d4ed8',
               fontSize: '13px',
               fontWeight: 600,
               outline: 'none',
               cursor: 'pointer',
             }}
           >
-            <option value="ALL" style={{ background: '#090d16', color: '#fff' }}>All Frameworks</option>
-            <option value="React" style={{ background: '#090d16', color: '#fff' }}>React</option>
-            <option value="Next.js" style={{ background: '#090d16', color: '#fff' }}>Next.js</option>
-            <option value="Angular" style={{ background: '#090d16', color: '#fff' }}>Angular</option>
-            <option value="Vue" style={{ background: '#090d16', color: '#fff' }}>Vue</option>
+            <option value="ALL" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>All Frameworks</option>
+            <option value="React" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>React</option>
+            <option value="Next.js" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Next.js</option>
+            <option value="Angular" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Angular</option>
+            <option value="Vue" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Vue</option>
           </select>
 
           {/* Favorite Filter Button */}
@@ -115,9 +115,9 @@ export default function HistoryPage() {
             style={{
               padding: '9px 14px',
               borderRadius: '8px',
-              border: onlyFavorites ? '1px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.12)',
-              background: onlyFavorites ? 'rgba(245, 158, 11, 0.15)' : 'rgba(9, 13, 22, 0.8)',
-              color: onlyFavorites ? '#f59e0b' : '#94a3b8',
+              border: onlyFavorites ? '1px solid #ef4444' : '1px solid rgba(0, 0, 0, 0.12)',
+              background: onlyFavorites ? 'rgba(239, 68, 68, 0.15)' : 'rgba(255, 255, 255, 0.8)',
+              color: onlyFavorites ? '#ef4444' : 'rgba(0, 0, 0, 0.7)',
               fontSize: '13px',
               fontWeight: 700,
               cursor: 'pointer',
@@ -133,19 +133,19 @@ export default function HistoryPage() {
             style={{
               padding: '9px 14px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#f8fafc',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontSize: '13px',
               fontWeight: 600,
               outline: 'none',
               cursor: 'pointer',
             }}
           >
-            <option value="createdAt" style={{ background: '#090d16', color: '#fff' }}>Timestamp</option>
-            <option value="qualityScore" style={{ background: '#090d16', color: '#fff' }}>Quality Score</option>
-            <option value="scanTimeMs" style={{ background: '#090d16', color: '#fff' }}>Scan Time</option>
-            <option value="ruleCount" style={{ background: '#090d16', color: '#fff' }}>Violations Count</option>
+            <option value="createdAt" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Timestamp</option>
+            <option value="qualityScore" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Quality Score</option>
+            <option value="scanTimeMs" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Scan Time</option>
+            <option value="ruleCount" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Violations Count</option>
           </select>
 
           {/* Sort Order */}
@@ -154,9 +154,9 @@ export default function HistoryPage() {
             style={{
               padding: '9px 14px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#94a3b8',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 0, 0.7)',
               fontSize: '13px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -175,9 +175,9 @@ export default function HistoryPage() {
             style={{
               padding: '9px 14px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#f8fafc',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontSize: '13px',
               fontWeight: 600,
               outline: 'none',
@@ -185,18 +185,18 @@ export default function HistoryPage() {
             }}
             title="Records Per Page"
           >
-            <option value="10" style={{ background: '#090d16', color: '#fff' }}>10 Per Page</option>
-            <option value="25" style={{ background: '#090d16', color: '#fff' }}>25 Per Page</option>
-            <option value="50" style={{ background: '#090d16', color: '#fff' }}>50 Per Page</option>
-            <option value="100" style={{ background: '#090d16', color: '#fff' }}>100 Per Page (Default)</option>
-            <option value="250" style={{ background: '#090d16', color: '#fff' }}>Show All (250)</option>
+            <option value="10" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>10 Per Page</option>
+            <option value="25" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>25 Per Page</option>
+            <option value="50" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>50 Per Page</option>
+            <option value="100" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>100 Per Page (Default)</option>
+            <option value="250" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Show All (250)</option>
           </select>
         </div>
       </div>
 
       {/* Error state */}
       {error && (
-        <div style={{ padding: '14px 20px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '10px', color: '#f87171', marginBottom: '24px' }}>
+        <div style={{ padding: '14px 20px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '10px', color: '#1d4ed8', marginBottom: '24px' }}>
           {error}
         </div>
       )}
@@ -205,18 +205,18 @@ export default function HistoryPage() {
       {loading && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} style={{ height: '70px', background: 'rgba(15, 23, 42, 0.4)', borderRadius: '12px' }} />
+            <div key={i} style={{ height: '70px', background: 'rgba(255, 255, 255, 0.4)', borderRadius: '12px' }} />
           ))}
         </div>
       )}
 
       {/* Empty State */}
       {!loading && records.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '60px 20px', background: 'rgba(15, 23, 42, 0.4)', borderRadius: '16px', border: '1px border-dashed rgba(255, 255, 255, 0.1)' }}>
+        <div style={{ textAlign: 'center', padding: '60px 20px', background: 'rgba(255, 255, 255, 0.4)', borderRadius: '16px', border: '1px border-dashed rgba(0, 0, 0, 0.1)' }}>
           <div style={{ fontSize: '40px', marginBottom: '12px' }}>📜</div>
-          <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>No Scan Records Found</h3>
-          <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '6px' }}>Run a live scan to generate your first saved report.</p>
-          <Link href="/live-scan" style={{ display: 'inline-block', marginTop: '16px', padding: '10px 20px', background: '#0284c7', color: '#fff', borderRadius: '8px', fontWeight: 700, textDecoration: 'none' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>No Scan Records Found</h3>
+          <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '6px' }}>Run a live scan to generate your first saved report.</p>
+          <Link href="/live-scan" style={{ display: 'inline-block', marginTop: '16px', padding: '10px 20px', background: '#2563eb', color: '#ffffff', borderRadius: '8px', fontWeight: 700, textDecoration: 'none' }}>
             ⚡ Launch Live Scan
           </Link>
         </div>
@@ -224,10 +224,10 @@ export default function HistoryPage() {
 
       {/* Records Table / List */}
       {!loading && records.length > 0 && (
-        <div style={{ background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '12px', overflowX: 'auto' }}>
+        <div style={{ background: 'rgba(255, 255, 255, 0.65)', backdropFilter: 'blur(16px)', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '16px', padding: '12px', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)', color: '#7c8ba6', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
+              <tr style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.08)', color: 'rgba(0, 0, 0, 0.7)', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
                 <th style={{ padding: '14px 16px' }}>User ID</th>
                 <th style={{ padding: '14px 16px' }}>Target File</th>
                 <th style={{ padding: '14px 16px' }}>Framework</th>
@@ -250,7 +250,7 @@ export default function HistoryPage() {
                 const shortUserId = r.userId.length > 12 ? `${r.userId.slice(0, 10)}…` : r.userId;
 
                 return (
-                <tr key={r.id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', transition: 'background 0.2s ease' }}>
+                <tr key={r.id} style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.05)', transition: 'background 0.2s ease' }}>
                   <td style={{ padding: '14px 16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <button
@@ -268,36 +268,36 @@ export default function HistoryPage() {
                           fontSize: '11px',
                           fontWeight: 800,
                           fontFamily: 'JetBrains Mono, monospace',
-                          background: 'rgba(168, 85, 247, 0.15)',
-                          color: '#c084fc',
-                          border: '1px solid rgba(168, 85, 247, 0.35)',
+                          background: 'rgba(96, 165, 250, 0.15)',
+                          color: '#1d4ed8',
+                          border: '1px solid rgba(96, 165, 250, 0.35)',
                           letterSpacing: '0.5px'
                         }}>
                         {shortUserId}
                       </span>
                     </div>
                   </td>
-                  <td style={{ padding: '14px 16px', fontWeight: 700, color: '#f8fafc', fontFamily: 'JetBrains Mono, monospace' }}>
-                    <Link href={`/reports/${r.id}`} style={{ color: '#38bdf8', textDecoration: 'none' }}>
+                  <td style={{ padding: '14px 16px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.82)', fontFamily: 'JetBrains Mono, monospace' }}>
+                    <Link href={`/reports/${r.id}`} style={{ color: '#1d4ed8', textDecoration: 'none' }}>
                       {r.fileName}
                     </Link>
                   </td>
                   <td style={{ padding: '14px 16px' }}>
-                    <span style={{ padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8' }}>
+                    <span style={{ padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, background: 'rgba(96, 165, 250, 0.15)', color: '#1d4ed8' }}>
                       {r.framework}
                     </span>
                   </td>
                   <td style={{ padding: '14px 16px' }}>
-                    <span style={{ fontWeight: 800, color: r.qualityScore >= 90 ? '#22c55e' : r.qualityScore >= 75 ? '#eab308' : '#ef4444' }}>
+                    <span style={{ fontWeight: 800, color: r.qualityScore >= 90 ? '#3b82f6' : r.qualityScore >= 75 ? '#ef4444' : '#ef4444' }}>
                       {r.qualityScore}%
                     </span>
                   </td>
-                  <td style={{ padding: '14px 16px', color: '#94a3b8' }}>
+                  <td style={{ padding: '14px 16px', color: 'rgba(0, 0, 0, 0.7)' }}>
                     {r.ruleCount} violations ({r.aiFixCount} AI fixes)
                   </td>
-                  <td style={{ padding: '14px 16px', color: '#94a3b8' }}>{formatScanDuration(r.scanTimeMs)}</td>
-                  <td style={{ padding: '14px 16px', color: '#94a3b8' }}>{formatMemoryDelta(r.memoryUsageMb)}</td>
-                  <td style={{ padding: '14px 16px', color: '#7c8ba6', fontSize: '12px' }}>
+                  <td style={{ padding: '14px 16px', color: 'rgba(0, 0, 0, 0.7)' }}>{formatScanDuration(r.scanTimeMs)}</td>
+                  <td style={{ padding: '14px 16px', color: 'rgba(0, 0, 0, 0.7)' }}>{formatMemoryDelta(r.memoryUsageMb)}</td>
+                  <td style={{ padding: '14px 16px', color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px' }}>
                     {new Date(r.createdAt).toLocaleString()}
                   </td>
                   <td style={{ padding: '14px 16px', textAlign: 'right' }}>
@@ -307,8 +307,8 @@ export default function HistoryPage() {
                         style={{
                           padding: '6px 12px',
                           borderRadius: '6px',
-                          background: 'rgba(56, 189, 248, 0.12)',
-                          color: '#38bdf8',
+                          background: 'rgba(96, 165, 250, 0.12)',
+                          color: '#1d4ed8',
                           textDecoration: 'none',
                           fontSize: '12px',
                           fontWeight: 700,
@@ -322,9 +322,9 @@ export default function HistoryPage() {
                         style={{
                           padding: '6px 10px',
                           borderRadius: '6px',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          border: '1px solid rgba(0, 0, 0, 0.1)',
                           background: 'rgba(255, 255, 255, 0.05)',
-                          color: '#94a3b8',
+                          color: 'rgba(0, 0, 0, 0.7)',
                           fontSize: '12px',
                           cursor: 'pointer',
                         }}
@@ -342,7 +342,7 @@ export default function HistoryPage() {
                           borderRadius: '6px',
                           border: '1px solid rgba(239, 68, 68, 0.3)',
                           background: 'rgba(239, 68, 68, 0.15)',
-                          color: '#f87171',
+                          color: '#1d4ed8',
                           fontSize: '12px',
                           cursor: 'pointer',
                         }}
@@ -359,8 +359,8 @@ export default function HistoryPage() {
           </table>
 
           {/* Pagination Footer */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 8px 8px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', marginTop: '8px' }}>
-            <div style={{ fontSize: '12px', color: '#7c8ba6' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 8px 8px', borderTop: '1px solid rgba(0, 0, 0, 0.08)', marginTop: '8px' }}>
+            <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)' }}>
               Showing {records.length} of {total} scan records (Page {page} of {totalPages})
             </div>
 
@@ -371,9 +371,9 @@ export default function HistoryPage() {
                 style={{
                   padding: '6px 12px',
                   borderRadius: '6px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
                   background: 'rgba(255, 255, 255, 0.05)',
-                  color: page <= 1 ? '#475569' : '#f8fafc',
+                  color: page <= 1 ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.82)',
                   cursor: page <= 1 ? 'not-allowed' : 'pointer',
                   fontSize: '12px',
                 }}
@@ -387,9 +387,9 @@ export default function HistoryPage() {
                 style={{
                   padding: '6px 12px',
                   borderRadius: '6px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
                   background: 'rgba(255, 255, 255, 0.05)',
-                  color: page >= totalPages ? '#475569' : '#f8fafc',
+                  color: page >= totalPages ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.82)',
                   cursor: page >= totalPages ? 'not-allowed' : 'pointer',
                   fontSize: '12px',
                 }}

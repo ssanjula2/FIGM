@@ -13,7 +13,7 @@ export default function MethodologyPage() {
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px 0 24px', width: '100%' }}>
-        <Link href="/about" style={{ fontSize: '13px', color: '#38bdf8', textDecoration: 'none' }}>
+        <Link href="/about" style={{ fontSize: '13px', color: '#1d4ed8', textDecoration: 'none' }}>
           ← Back to FIGM Code Inspector
         </Link>
       </div>

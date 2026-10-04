@@ -39,15 +39,15 @@ export default function ResearchOverview() {
   ];
 
   return (
-    <section id="methodology" style={{ padding: '60px 0', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+    <section id="methodology" style={{ padding: '60px 0', borderTop: '1px solid rgba(0, 0, 0, 0.08)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: '0 24px' }}>
-        <div style={{ fontSize: '11px', color: '#a855f7', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+        <div style={{ fontSize: '11px', color: '#1d4ed8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
           RESEARCH METHODOLOGY &amp; FRAMEWORK
         </div>
-        <h2 style={{ fontSize: '32px', fontWeight: 900, color: '#f8fafc', margin: '0 0 16px 0', letterSpacing: '-0.5px' }}>
+        <h2 style={{ fontSize: '32px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 16px 0', letterSpacing: '-0.5px' }}>
           Design Science Research Methodology (DSRM)
         </h2>
-        <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '700px', margin: '0 auto 48px auto', lineHeight: 1.6 }}>
+        <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '15px', maxWidth: '700px', margin: '0 auto 48px auto', lineHeight: 1.6 }}>
           Adopting Peffers et al. (2007) canonical 6-phase framework for rigorous software engineering artifact creation.
         </p>
 
@@ -67,16 +67,16 @@ export default function ResearchOverview() {
                 overflow: 'hidden',
               }}
             >
-              <div style={{ position: 'absolute', top: '-10px', right: '16px', fontSize: '48px', fontWeight: 900, color: 'rgba(255, 255, 255, 0.03)', userSelect: 'none' }}>
+              <div style={{ position: 'absolute', top: '-10px', right: '16px', fontSize: '48px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.03)', userSelect: 'none' }}>
                 {phase.num}
               </div>
-              <div style={{ color: '#38bdf8', fontSize: '12px', fontWeight: 800, marginBottom: '8px' }}>
+              <div style={{ color: '#1d4ed8', fontSize: '12px', fontWeight: 800, marginBottom: '8px' }}>
                 PHASE {phase.num}
               </div>
-              <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#f8fafc', margin: '0 0 8px 0' }}>
+              <h3 style={{ fontSize: '17px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 8px 0' }}>
                 {phase.title}
               </h3>
-              <p style={{ color: loading && phase.num === '05' ? '#7c8ba6' : '#94a3b8', fontSize: '13px', margin: 0, lineHeight: 1.5 }}>
+              <p style={{ color: loading && phase.num === '05' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.7)', fontSize: '13px', margin: 0, lineHeight: 1.5 }}>
                 {loading && phase.num === '05' ? 'Loading live metrics…' : phase.desc}
               </p>
             </div>
@@ -88,7 +88,7 @@ export default function ResearchOverview() {
           <div style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
             RESEARCH GAPS IDENTIFIED (IS303.2)
           </div>
-          <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#f8fafc', margin: '0 0 28px 0' }}>
+          <h3 style={{ fontSize: '22px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 28px 0' }}>
             Threefold Literature Gap
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
@@ -103,9 +103,9 @@ export default function ResearchOverview() {
                   textAlign: 'left',
                 }}
               >
-                <div style={{ color: '#f59e0b', fontSize: '11px', fontWeight: 800, marginBottom: '6px' }}>{gap.id}</div>
-                <div style={{ color: '#f8fafc', fontSize: '15px', fontWeight: 800, marginBottom: '8px' }}>{gap.title}</div>
-                <div style={{ color: '#94a3b8', fontSize: '12px', lineHeight: 1.5 }}>{gap.desc}</div>
+                <div style={{ color: '#1d4ed8', fontSize: '11px', fontWeight: 800, marginBottom: '6px' }}>{gap.id}</div>
+                <div style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '15px', fontWeight: 800, marginBottom: '8px' }}>{gap.title}</div>
+                <div style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px', lineHeight: 1.5 }}>{gap.desc}</div>
               </div>
             ))}
           </div>
@@ -123,11 +123,11 @@ export default function ResearchOverview() {
             }}
           >
             {[
-              { label: 'Precision', value: `${(bm.precision * 100).toFixed(1)}%`, color: '#38bdf8' },
-              { label: 'Recall', value: `${(bm.recall * 100).toFixed(1)}%`, color: '#a855f7' },
-              { label: 'F1 Score', value: `${(bm.f1Score * 100).toFixed(1)}%`, color: '#10b981' },
-              { label: 'True Positives', value: String(bm.truePositives), color: '#6ee7b7' },
-              { label: 'False Positives', value: String(bm.falsePositives), color: '#fca5a5' },
+              { label: 'Precision', value: `${(bm.precision * 100).toFixed(1)}%`, color: '#1d4ed8' },
+              { label: 'Recall', value: `${(bm.recall * 100).toFixed(1)}%`, color: '#1d4ed8' },
+              { label: 'F1 Score', value: `${(bm.f1Score * 100).toFixed(1)}%`, color: '#1d4ed8' },
+              { label: 'True Positives', value: String(bm.truePositives), color: '#1d4ed8' },
+              { label: 'False Positives', value: String(bm.falsePositives), color: '#b91c1c' },
             ].map((m) => (
               <div
                 key={m.label}
@@ -141,7 +141,7 @@ export default function ResearchOverview() {
                 }}
               >
                 <div style={{ fontSize: '22px', fontWeight: 900, color: m.color }}>{m.value}</div>
-                <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginTop: '4px' }}>{m.label}</div>
+                <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, marginTop: '4px' }}>{m.label}</div>
               </div>
             ))}
           </div>
@@ -158,13 +158,13 @@ export default function ResearchOverview() {
           }}
         >
           <div>
-            <h3 style={{ color: '#f8fafc', fontSize: '18px', fontWeight: 800, margin: '0 0 6px 0' }}>
+            <h3 style={{ color: 'rgba(0, 0, 0, 0.82)', fontSize: '18px', fontWeight: 800, margin: '0 0 6px 0' }}>
               The Research Problem Statement
             </h3>
-            <p style={{ color: '#94a3b8', fontSize: '14px', margin: 0, lineHeight: 1.6 }}>
+            <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', margin: 0, lineHeight: 1.6 }}>
               Existing static analysis tools (e.g. ESLint, SonarQube) are heavily framework-siloed, requiring duplicate
               custom rule plugins for React, Vue, and Angular. FIGM resolves this by introducing{' '}
-              <strong style={{ color: '#38bdf8' }}>Abstract Language Primitives (ALPs)</strong> that extract canonical
+              <strong style={{ color: '#1d4ed8' }}>Abstract Language Primitives (ALPs)</strong> that extract canonical
               AST behaviours across heterogeneous template syntaxes — addressing all three research gaps identified in
               the IS303.2 literature review.
             </p>

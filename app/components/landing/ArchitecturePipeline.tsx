@@ -37,16 +37,16 @@ export default function ArchitecturePipeline() {
   };
 
   return (
-    <section id="how-it-works" style={{ padding: '72px 0', background: 'rgba(15, 23, 42, 0.35)', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+    <section id="how-it-works" style={{ padding: '72px 0', background: 'rgba(255, 255, 255, 0.35)', borderTop: '1px solid rgba(0, 0, 0, 0.08)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
         <div style={{ marginBottom: '36px' }}>
-          <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '8px' }}>
+          <div style={{ fontSize: '11px', color: '#1d4ed8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '8px' }}>
             How It Works
           </div>
-          <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', margin: '0 0 12px 0', letterSpacing: '-0.5px' }}>
+          <h2 style={{ fontSize: '28px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 12px 0', letterSpacing: '-0.5px' }}>
             Deterministic-first remediation, AI as fallback
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '14px', maxWidth: '680px', lineHeight: 1.6, margin: 0 }}>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', maxWidth: '680px', lineHeight: 1.6, margin: 0 }}>
             FIGM tries an AST-based deterministic fix first. AI-assisted remediation only runs when
             no deterministic fix exists, and every candidate -- deterministic or AI-assisted -- is
             re-scanned before it is ever marked verified.
@@ -71,9 +71,9 @@ export default function ArchitecturePipeline() {
                   minWidth: '110px',
                   padding: '10px 12px',
                   borderRadius: '8px',
-                  border: isSelected ? '1px solid #38bdf8' : '1px solid rgba(255, 255, 255, 0.1)',
-                  background: isSelected ? 'rgba(56, 189, 248, 0.1)' : 'rgba(15, 23, 42, 0.5)',
-                  color: isSelected ? '#38bdf8' : '#94a3b8',
+                  border: isSelected ? '1px solid #60a5fa' : '1px solid rgba(0, 0, 0, 0.1)',
+                  background: isSelected ? 'rgba(96, 165, 250, 0.1)' : 'rgba(255, 255, 255, 0.5)',
+                  color: isSelected ? '#60a5fa' : 'rgba(0, 0, 0, 0.7)',
                   fontSize: '12px',
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -91,15 +91,15 @@ export default function ArchitecturePipeline() {
           id={`pipeline-panel-${active.id}`}
           aria-labelledby={`pipeline-tab-${active.id}`}
           style={{
-            background: 'rgba(15, 23, 42, 0.6)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'rgba(255, 255, 255, 0.6)',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
             borderRadius: '12px',
             padding: '28px',
           }}
         >
-          <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 700, marginBottom: '6px' }}>STAGE {active.id} OF {STAGES.length}</div>
-          <h3 style={{ fontSize: '19px', fontWeight: 800, color: '#f8fafc', margin: '0 0 12px 0' }}>{active.title}</h3>
-          <p style={{ color: '#cbd5e1', fontSize: '14px', lineHeight: 1.6, margin: 0 }}>{active.description}</p>
+          <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700, marginBottom: '6px' }}>STAGE {active.id} OF {STAGES.length}</div>
+          <h3 style={{ fontSize: '19px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 12px 0' }}>{active.title}</h3>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', lineHeight: 1.6, margin: 0 }}>{active.description}</p>
         </div>
       </div>
     </section>

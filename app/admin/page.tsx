@@ -31,7 +31,7 @@ const card: React.CSSProperties = {
 
 const statTile = (label: string, value: React.ReactNode, color: string) => (
   <div style={card} key={label}>
-    <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 700 }}>{label}</div>
+    <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700 }}>{label}</div>
     <div style={{ fontSize: '28px', fontWeight: 900, color, marginTop: '6px' }}>{value}</div>
   </div>
 );
@@ -80,7 +80,7 @@ function isValidTab(value: string | null): value is Tab {
 // this whole route out of static prerendering (same pattern as app/auth/login/page.tsx).
 export default function AdminPage() {
   return (
-    <Suspense fallback={<div style={{ padding: '80px 20px', textAlign: 'center', color: '#94a3b8' }}>Loading Admin Platform...</div>}>
+    <Suspense fallback={<div style={{ padding: '80px 20px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>Loading Admin Platform...</div>}>
       <AdminDashboard />
     </Suspense>
   );
@@ -282,15 +282,15 @@ function AdminDashboard() {
     return (
       <div style={{ padding: '60px 20px', textAlign: 'center' }}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>🛡️</div>
-        <h2 style={{ fontSize: '22px', fontWeight: 900, color: '#f8fafc', margin: 0 }}>Access Restricted</h2>
-        <p style={{ color: '#94a3b8', marginTop: '8px' }}>This area requires an ADMIN role account. Your account role is {clientRole}.</p>
+        <h2 style={{ fontSize: '22px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>Access Restricted</h2>
+        <p style={{ color: 'rgba(0, 0, 0, 0.7)', marginTop: '8px' }}>This area requires an ADMIN role account. Your account role is {clientRole}.</p>
       </div>
     );
   }
 
   if (loading) {
     return (
-      <div style={{ padding: '60px', textAlign: 'center', color: '#94a3b8' }}>
+      <div style={{ padding: '60px', textAlign: 'center', color: 'rgba(0, 0, 0, 0.7)' }}>
         <div style={{ fontSize: '32px', marginBottom: '16px' }}>⚙️</div>
         <div>Loading Admin Platform Control Telemetry...</div>
       </div>
@@ -301,8 +301,8 @@ function AdminDashboard() {
     return (
       <div style={{ padding: '60px 20px', textAlign: 'center' }}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>🛡️</div>
-        <h2 style={{ fontSize: '22px', fontWeight: 900, color: '#f8fafc', margin: 0 }}>Access Restricted</h2>
-        <p style={{ color: '#94a3b8', marginTop: '8px', maxWidth: '500px', margin: '8px auto' }}>{authError}</p>
+        <h2 style={{ fontSize: '22px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>Access Restricted</h2>
+        <p style={{ color: 'rgba(0, 0, 0, 0.7)', marginTop: '8px', maxWidth: '500px', margin: '8px auto' }}>{authError}</p>
       </div>
     );
   }
@@ -319,23 +319,23 @@ function AdminDashboard() {
     <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ fontSize: '12px', color: '#ef4444', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
+          <div style={{ fontSize: '12px', color: '#1d4ed8', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
             ADMIN — RESEARCH &amp; PLATFORM CONTROL
           </div>
-          <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', margin: 0, letterSpacing: '-0.5px' }}>Admin Dashboard</h1>
-          <p style={{ color: '#94a3b8', fontSize: '14px', marginTop: '6px', margin: 0 }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: 0, letterSpacing: '-0.5px' }}>Admin Dashboard</h1>
+          <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '14px', marginTop: '6px', margin: 0 }}>
             Real, database-backed platform telemetry, user management, and research participant records.
           </p>
         </div>
         <button
           onClick={loadCore}
-          style={{ padding: '10px 18px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#f8fafc', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}
+          style={{ padding: '10px 18px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(0, 0, 0, 0.1)', color: 'rgba(0, 0, 0, 0.82)', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}
         >
           🔄 Refresh
         </button>
       </div>
 
-      <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '24px', gap: '4px', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.08)', marginBottom: '24px', gap: '4px', flexWrap: 'wrap' }}>
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -359,11 +359,11 @@ function AdminDashboard() {
 
       {tab === 'OVERVIEW' && systemInfo?.usageStats && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
-          {statTile('Total Registered Users', systemInfo.usageStats.totalUsers, '#38bdf8')}
-          {statTile('Total Projects', systemInfo.usageStats.totalProjects, '#a855f7')}
-          {statTile('Total Scans Recorded', systemInfo.usageStats.totalScans, '#22c55e')}
-          {statTile('Research Participants Registered', participants.length > 0 ? participants.filter((p) => p.status !== 'NOT_REGISTERED').length : '—', '#f59e0b')}
-          {statTile('Storage Provider', systemInfo.storageUsage?.storageProvider?.startsWith('Postgres') ? 'Postgres (Supabase)' : 'JSON fallback', '#f8fafc')}
+          {statTile('Total Registered Users', systemInfo.usageStats.totalUsers, '#3b82f6')}
+          {statTile('Total Projects', systemInfo.usageStats.totalProjects, '#3b82f6')}
+          {statTile('Total Scans Recorded', systemInfo.usageStats.totalScans, '#3b82f6')}
+          {statTile('Research Participants Registered', participants.length > 0 ? participants.filter((p) => p.status !== 'NOT_REGISTERED').length : '—', '#3b82f6')}
+          {statTile('Storage Provider', systemInfo.storageUsage?.storageProvider?.startsWith('Postgres') ? 'Postgres (Supabase)' : 'JSON fallback', '#000000')}
         </div>
       )}
 
@@ -371,7 +371,7 @@ function AdminDashboard() {
         <div style={{ ...card, overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', color: '#7c8ba6', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
+              <tr style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.08)', color: 'rgba(0, 0, 0, 0.7)', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
                 <th style={th}>User Name</th>
                 <th style={th}>Email</th>
                 <th style={th}>Role</th>
@@ -382,27 +382,27 @@ function AdminDashboard() {
             <tbody>
               {users.map((u) => (
                 <tr key={u.id}>
-                  <td style={{ ...td, fontWeight: 700, color: '#f8fafc' }}>{u.fullName}</td>
-                  <td style={{ ...td, color: '#38bdf8' }}>{u.email}</td>
+                  <td style={{ ...td, fontWeight: 700, color: 'rgba(0, 0, 0, 0.82)' }}>{u.fullName}</td>
+                  <td style={{ ...td, color: '#1d4ed8' }}>{u.email}</td>
                   <td style={td}>
                     <select
                       value={u.role}
                       onChange={(e) => handleUpdateRole(u.id, e.target.value)}
                       aria-label={`Role for ${u.fullName}`}
-                      style={{ padding: '4px 8px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.12)', background: '#090d16', color: u.role === 'ADMIN' ? '#ef4444' : u.role === 'AUDITOR' ? '#f59e0b' : '#38bdf8', fontWeight: 700, fontSize: '11px' }}
+                      style={{ padding: '4px 8px', borderRadius: '6px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: u.role === 'ADMIN' ? '#ef4444' : u.role === 'AUDITOR' ? '#ef4444' : '#60a5fa', fontWeight: 700, fontSize: '11px' }}
                     >
                       <option value="DEVELOPER">DEVELOPER</option>
                       <option value="AUDITOR">AUDITOR</option>
                       <option value="ADMIN">ADMIN</option>
                     </select>
                   </td>
-                  <td style={{ ...td, color: '#7c8ba6', fontSize: '12px' }}>{new Date(u.createdAt).toLocaleDateString()}</td>
+                  <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px' }}>{new Date(u.createdAt).toLocaleDateString()}</td>
                   <td style={{ ...td, textAlign: 'right' }}>
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                      <button onClick={() => openResetPassword(u.id, u.fullName || u.email)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', fontSize: '12px', cursor: 'pointer' }}>
+                      <button onClick={() => openResetPassword(u.id, u.fullName || u.email)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid rgba(0, 0, 0, 0.1)', background: 'rgba(255,255,255,0.05)', color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px', cursor: 'pointer' }}>
                         Reset Pass
                       </button>
-                      <button onClick={() => handleDeleteUser(u.id)} style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.15)', color: '#f87171', fontSize: '12px', cursor: 'pointer' }}>
+                      <button onClick={() => handleDeleteUser(u.id)} style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #b91c1c', background: '#b91c1c', color: '#ffffff', fontSize: '12px', cursor: 'pointer' }}>
                         Delete
                       </button>
                     </div>
@@ -423,16 +423,16 @@ function AdminDashboard() {
               value={participantSearch}
               onChange={(e) => setParticipantSearch(e.target.value)}
               aria-label="Search participant ID"
-              style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)', background: '#090d16', color: '#f8fafc', fontSize: '13px', minWidth: '260px' }}
+              style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px', minWidth: '260px' }}
             />
-            <span style={{ color: '#7c8ba6', fontSize: '12px' }}>
+            <span style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px' }}>
               {participants.filter((p) => p.status !== 'NOT_REGISTERED').length} of {participants.length} identifiers have a real record
             </span>
           </div>
           <div style={{ ...card, overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', color: '#7c8ba6', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
+                <tr style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.08)', color: 'rgba(0, 0, 0, 0.7)', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
                   <th style={th}>Participant ID</th>
                   <th style={th}>Status</th>
                   <th style={th}>Total Scans</th>
@@ -447,29 +447,29 @@ function AdminDashboard() {
                   <tr key={p.participantId}>
                     <td style={td}>
                       {p.status === 'NOT_REGISTERED' ? (
-                        <span style={{ color: '#f8fafc', fontWeight: 700 }}>{p.participantId}</span>
+                        <span style={{ color: 'rgba(0, 0, 0, 0.82)', fontWeight: 700 }}>{p.participantId}</span>
                       ) : (
-                        <Link href={`/admin/participants/${p.participantId}`} style={{ color: '#38bdf8', fontWeight: 700, textDecoration: 'none' }}>
+                        <Link href={`/admin/participants/${p.participantId}`} style={{ color: '#1d4ed8', fontWeight: 700, textDecoration: 'none' }}>
                           {p.participantId}
                         </Link>
                       )}
                     </td>
                     <td style={td}>
                       {p.status === 'NOT_REGISTERED' ? (
-                        <span style={badge('#7c8ba6', 'rgba(124,139,166,0.12)')}>Not Recorded</span>
+                        <span style={badge('rgba(0, 0, 0, 0.7)', 'rgba(0, 0, 0, 0.12)')}>Not Recorded</span>
                       ) : p.status === 'SUBMITTED' ? (
-                        <span style={badge('#22c55e', 'rgba(34,197,94,0.12)')}>SUBMITTED</span>
+                        <span style={badge('#3b82f6', 'rgba(59, 130, 246, 0.12)')}>SUBMITTED</span>
                       ) : p.status === 'SCANNED' ? (
-                        <span style={badge('#38bdf8', 'rgba(56,189,248,0.12)')}>SCANNED</span>
+                        <span style={badge('#3b82f6', 'rgba(59, 130, 246, 0.12)')}>SCANNED</span>
                       ) : (
-                        <span style={badge('#f59e0b', 'rgba(245,158,11,0.12)')}>REGISTERED</span>
+                        <span style={badge('#3b82f6', 'rgba(59, 130, 246, 0.12)')}>REGISTERED</span>
                       )}
                     </td>
-                    <td style={{ ...td, color: '#f8fafc' }}>{p.status === 'NOT_REGISTERED' ? '—' : p.totalScans}</td>
-                    <td style={{ ...td, color: '#94a3b8' }}>{p.frameworksUsed.length > 0 ? p.frameworksUsed.join(', ') : '—'}</td>
-                    <td style={{ ...td, color: '#f8fafc' }}>{p.latestQualityScore ?? '—'}</td>
-                    <td style={{ ...td, color: '#f8fafc' }}>{p.status === 'NOT_REGISTERED' ? '—' : p.totalFindings}</td>
-                    <td style={{ ...td, color: '#7c8ba6', fontSize: '12px' }}>{p.lastActivity ? new Date(p.lastActivity).toLocaleString() : 'No Submission'}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.82)' }}>{p.status === 'NOT_REGISTERED' ? '—' : p.totalScans}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)' }}>{p.frameworksUsed.length > 0 ? p.frameworksUsed.join(', ') : '—'}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.82)' }}>{p.latestQualityScore ?? '—'}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.82)' }}>{p.status === 'NOT_REGISTERED' ? '—' : p.totalFindings}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px' }}>{p.lastActivity ? new Date(p.lastActivity).toLocaleString() : 'No Submission'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -486,20 +486,20 @@ function AdminDashboard() {
               placeholder="Search file name..."
               value={scanFilters.search}
               onChange={(e) => setScanFilters((f) => ({ ...f, search: e.target.value, page: 1 }))}
-              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)', background: '#090d16', color: '#f8fafc', fontSize: '13px' }}
+              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px' }}
             />
             <input
               type="text"
               placeholder="Participant/User ID..."
               value={scanFilters.participantId}
               onChange={(e) => setScanFilters((f) => ({ ...f, participantId: e.target.value, page: 1 }))}
-              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)', background: '#090d16', color: '#f8fafc', fontSize: '13px' }}
+              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px' }}
             />
             <select
               value={scanFilters.framework}
               onChange={(e) => setScanFilters((f) => ({ ...f, framework: e.target.value, page: 1 }))}
               aria-label="Framework filter"
-              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)', background: '#090d16', color: '#38bdf8', fontSize: '13px' }}
+              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: '#1d4ed8', fontSize: '13px' }}
             >
               <option value="">All Frameworks</option>
               <option value="React">React</option>
@@ -511,7 +511,7 @@ function AdminDashboard() {
               value={scanFilters.severity}
               onChange={(e) => setScanFilters((f) => ({ ...f, severity: e.target.value, page: 1 }))}
               aria-label="Severity filter"
-              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)', background: '#090d16', color: '#38bdf8', fontSize: '13px' }}
+              style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: '#1d4ed8', fontSize: '13px' }}
             >
               <option value="">All Severities</option>
               <option value="CRITICAL">Has Critical</option>
@@ -523,7 +523,7 @@ function AdminDashboard() {
           <div style={{ ...card, overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', color: '#7c8ba6', fontWeight: 800 }}>
+                <tr style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.08)', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 800 }}>
                   <th style={th}>Owner</th>
                   <th style={th}>File</th>
                   <th style={th}>Framework</th>
@@ -538,32 +538,32 @@ function AdminDashboard() {
                 {(scans.records || []).map((r: any) => (
                   <tr key={r.id}>
                     <td style={td}>
-                      <div style={{ color: '#f8fafc', fontWeight: 700 }}>{r.owner?.fullName || r.userId}</div>
-                      <div style={{ color: '#7c8ba6', fontSize: '11px' }}>{r.owner?.email || ''}</div>
+                      <div style={{ color: 'rgba(0, 0, 0, 0.82)', fontWeight: 700 }}>{r.owner?.fullName || r.userId}</div>
+                      <div style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '11px' }}>{r.owner?.email || ''}</div>
                     </td>
-                    <td style={{ ...td, fontFamily: 'monospace', color: '#38bdf8' }}>{r.fileName}</td>
-                    <td style={{ ...td, color: '#94a3b8' }}>{r.framework}</td>
-                    <td style={{ ...td, color: '#f8fafc' }}>{r.qualityScore}%</td>
-                    <td style={{ ...td, color: '#f8fafc' }}>{r.ruleCount}</td>
+                    <td style={{ ...td, fontFamily: 'monospace', color: '#1d4ed8' }}>{r.fileName}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)' }}>{r.framework}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.82)' }}>{r.qualityScore}%</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.82)' }}>{r.ruleCount}</td>
                     <td style={td}>
                       {r.criticalCount > 0 && <span style={{ ...badge('#ef4444', 'rgba(239,68,68,0.12)'), marginRight: '4px' }}>{r.criticalCount}C</span>}
-                      {r.highCount > 0 && <span style={{ ...badge('#f59e0b', 'rgba(245,158,11,0.12)'), marginRight: '4px' }}>{r.highCount}H</span>}
-                      {r.mediumCount > 0 && <span style={badge('#38bdf8', 'rgba(56,189,248,0.12)')}>{r.mediumCount}M</span>}
+                      {r.highCount > 0 && <span style={{ ...badge('#ef4444', 'rgba(239, 68, 68, 0.12)'), marginRight: '4px' }}>{r.highCount}H</span>}
+                      {r.mediumCount > 0 && <span style={badge('#3b82f6', 'rgba(59, 130, 246, 0.12)')}>{r.mediumCount}M</span>}
                     </td>
-                    <td style={{ ...td, color: '#94a3b8' }}>{r.scanTimeMs?.toFixed(2)} ms</td>
-                    <td style={{ ...td, color: '#7c8ba6' }}>{new Date(r.createdAt).toLocaleString()}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)' }}>{r.scanTimeMs?.toFixed(2)} ms</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)' }}>{new Date(r.createdAt).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', color: '#94a3b8', fontSize: '12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px' }}>
             <span>Showing page {scans.page} of {scans.totalPages} ({scans.total} total records)</span>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <button disabled={scans.page <= 1} onClick={() => setScanFilters((f) => ({ ...f, page: f.page - 1 }))} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#f8fafc', cursor: scans.page <= 1 ? 'not-allowed' : 'pointer', opacity: scans.page <= 1 ? 0.5 : 1 }}>
+              <button disabled={scans.page <= 1} onClick={() => setScanFilters((f) => ({ ...f, page: f.page - 1 }))} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid rgba(0, 0, 0, 0.1)', background: 'rgba(255,255,255,0.05)', color: 'rgba(0, 0, 0, 0.82)', cursor: scans.page <= 1 ? 'not-allowed' : 'pointer', opacity: scans.page <= 1 ? 0.5 : 1 }}>
                 ← Previous
               </button>
-              <button disabled={scans.page >= scans.totalPages} onClick={() => setScanFilters((f) => ({ ...f, page: f.page + 1 }))} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#f8fafc', cursor: scans.page >= scans.totalPages ? 'not-allowed' : 'pointer', opacity: scans.page >= scans.totalPages ? 0.5 : 1 }}>
+              <button disabled={scans.page >= scans.totalPages} onClick={() => setScanFilters((f) => ({ ...f, page: f.page + 1 }))} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid rgba(0, 0, 0, 0.1)', background: 'rgba(255,255,255,0.05)', color: 'rgba(0, 0, 0, 0.82)', cursor: scans.page >= scans.totalPages ? 'not-allowed' : 'pointer', opacity: scans.page >= scans.totalPages ? 0.5 : 1 }}>
                 Next →
               </button>
             </div>
@@ -582,7 +582,7 @@ function AdminDashboard() {
                 <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#f8fafc', margin: '0 0 4px 0' }}>
                   RQ4 ? Independent Expert Evaluation
                 </h3>
-                <p style={{ color: '#94a3b8', fontSize: '12px', margin: '0 0 14px 0' }}>
+                <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px', margin: '0 0 14px 0' }}>
                   {research.rq4?.label || 'Controlled 15-sample blinded expert-review evaluation'}
                   {research.rq4?.available && research.rq4?.raterCount != null ? ` ? ${research.rq4.raterCount} independent expert${research.rq4.raterCount === 1 ? '' : 's'}, n=${research.rq4.sampleCount}.` : ''}
                   {' '}These figures come from a blinded expert comparison, not from study participants.
@@ -596,16 +596,16 @@ function AdminDashboard() {
               <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
               {/* Internal fixture benchmark */}
               <div>
-                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#f8fafc', margin: '0 0 4px 0' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 4px 0' }}>
                   Internal Fixture Benchmark
                 </h3>
                 <p style={{ color: '#94a3b8', fontSize: '12px', margin: '0 0 14px 0' }}>
                   45 hand-authored fixture files; this benchmark is separate from independent expert validation and does not support a universal accuracy claim.
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px' }}>
-                  {statTile('Fixture Precision', research.benchmarkMetrics?.precision != null ? `${(research.benchmarkMetrics.precision * 100).toFixed(1)}%` : 'N/A', '#38bdf8')}
-                  {statTile('Fixture Recall', research.benchmarkMetrics?.recall != null ? `${(research.benchmarkMetrics.recall * 100).toFixed(1)}%` : 'N/A', '#a855f7')}
-                  {statTile('Fixture F1 Score', research.benchmarkMetrics?.f1Score != null ? `${(research.benchmarkMetrics.f1Score * 100).toFixed(1)}%` : 'N/A', '#22c55e')}
+                  {statTile('Fixture Precision', research.benchmarkMetrics?.precision != null ? `${(research.benchmarkMetrics.precision * 100).toFixed(1)}%` : 'N/A', '#3b82f6')}
+                  {statTile('Fixture Recall', research.benchmarkMetrics?.recall != null ? `${(research.benchmarkMetrics.recall * 100).toFixed(1)}%` : 'N/A', '#3b82f6')}
+                  {statTile('Fixture F1 Score', research.benchmarkMetrics?.f1Score != null ? `${(research.benchmarkMetrics.f1Score * 100).toFixed(1)}%` : 'N/A', '#3b82f6')}
                 </div>
               </div>
               </div>
@@ -619,7 +619,7 @@ function AdminDashboard() {
               </div>
               <div style={card}>
                 <h4 style={{ margin: '0 0 8px 0', color: '#f8fafc' }}>Research Dataset Export</h4>
-                <p style={{ color: '#94a3b8', fontSize: '12px', margin: '0 0 14px 0' }}>
+                <p style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '12px', margin: '0 0 14px 0' }}>
                   Exports ParticipantRepository.getResearchDataset() -- only P001..P020 rows past a
                   human-verified consent timestamp, with PRIMARY/SECONDARY attempt classification.
                   REVOKED and pre-consent activity are never included.
@@ -627,12 +627,12 @@ function AdminDashboard() {
                 <button
                   onClick={handleExportResearchDataset}
                   disabled={exportingResearchDataset}
-                  style={{ padding: '10px 18px', borderRadius: '8px', background: exportingResearchDataset ? '#4b5563' : '#0284c7', color: '#ffffff', border: 'none', fontWeight: 700, fontSize: '13px', cursor: exportingResearchDataset ? 'wait' : 'pointer' }}
+                  style={{ padding: '10px 18px', borderRadius: '8px', background: exportingResearchDataset ? '#ffffff' : '#3b82f6', color: 'rgba(0, 0, 0, 0.82)', border: 'none', fontWeight: 700, fontSize: '13px', cursor: exportingResearchDataset ? 'wait' : 'pointer' }}
                 >
                   {exportingResearchDataset ? 'Exporting…' : '⬇ Export Research Dataset (CSV)'}
                 </button>
                 {exportResearchDatasetError && (
-                  <p role="alert" style={{ color: '#f87171', fontSize: '12px', marginTop: '10px' }}>{exportResearchDatasetError}</p>
+                  <p role="alert" style={{ color: '#b91c1c', fontSize: '12px', marginTop: '10px' }}>{exportResearchDatasetError}</p>
                 )}
               </div>
             </>
@@ -650,18 +650,18 @@ function AdminDashboard() {
 
       {tab === 'RULES' && (
         <div>
-          {!ruleStats && <div style={{ color: '#94a3b8' }}>Loading rule analytics...</div>}
+          {!ruleStats && <div style={{ color: 'rgba(0, 0, 0, 0.7)' }}>Loading rule analytics...</div>}
           {ruleStats && (
             <>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-                {statTile('Scans Analyzed', ruleStats.totalScansAnalyzed, '#38bdf8')}
-                {statTile('Total Findings', ruleStats.totalFindings, '#a855f7')}
-                {statTile('Distinct Rules Triggered', ruleStats.ruleStats.length, '#22c55e')}
+                {statTile('Scans Analyzed', ruleStats.totalScansAnalyzed, '#3b82f6')}
+                {statTile('Total Findings', ruleStats.totalFindings, '#3b82f6')}
+                {statTile('Distinct Rules Triggered', ruleStats.ruleStats.length, '#3b82f6')}
               </div>
               <div style={{ ...card, overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
                   <thead>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', color: '#7c8ba6', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
+                    <tr style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.08)', color: 'rgba(0, 0, 0, 0.7)', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
                       <th style={th}>Rule ID</th>
                       <th style={th}>Name</th>
                       <th style={th}>Severity</th>
@@ -679,11 +679,11 @@ function AdminDashboard() {
                     ) : (
                       ruleStats.ruleStats.map((r: any) => (
                         <tr key={r.ruleId}>
-                          <td style={{ ...td, fontFamily: 'monospace', color: '#38bdf8', fontWeight: 700 }}>{r.ruleId}</td>
-                          <td style={{ ...td, color: '#f8fafc' }}>{r.ruleName || '—'}</td>
+                          <td style={{ ...td, fontFamily: 'monospace', color: '#1d4ed8', fontWeight: 700 }}>{r.ruleId}</td>
+                          <td style={{ ...td, color: 'rgba(0, 0, 0, 0.82)' }}>{r.ruleName || '—'}</td>
                           <td style={td}>{r.severity && <span style={badge('#f87171', 'rgba(239,68,68,0.12)')}>{r.severity}</span>}</td>
-                          <td style={{ ...td, color: '#f8fafc' }}>{r.totalOccurrences}</td>
-                          <td style={{ ...td, color: '#94a3b8' }}>{r.scansTriggered}</td>
+                          <td style={{ ...td, color: 'rgba(0, 0, 0, 0.82)' }}>{r.totalOccurrences}</td>
+                          <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)' }}>{r.scansTriggered}</td>
                         </tr>
                       ))
                     )}
@@ -704,12 +704,12 @@ function AdminDashboard() {
             placeholder="Search audit logs by action, email, IP..."
             value={searchLog}
             onChange={(e) => setSearchLog(e.target.value)}
-            style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)', background: '#090d16', color: '#f8fafc', fontSize: '13px', boxSizing: 'border-box', marginBottom: '16px' }}
+            style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)', fontSize: '13px', boxSizing: 'border-box', marginBottom: '16px' }}
           />
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', color: '#7c8ba6', fontWeight: 800 }}>
+                <tr style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.08)', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 800 }}>
                   <th style={th}>Action</th>
                   <th style={th}>User Email</th>
                   <th style={th}>Details</th>
@@ -721,12 +721,12 @@ function AdminDashboard() {
                 {filteredLogs.map((l) => (
                   <tr key={l.id}>
                     <td style={td}>
-                      <span style={{ padding: '2px 6px', borderRadius: '4px', background: 'rgba(56,189,248,0.15)', color: '#38bdf8', fontWeight: 700, fontFamily: 'monospace' }}>{l.action}</span>
+                      <span style={{ padding: '2px 6px', borderRadius: '4px', background: 'rgba(96, 165, 250, 0.15)', color: '#1d4ed8', fontWeight: 700, fontFamily: 'monospace' }}>{l.action}</span>
                     </td>
-                    <td style={{ ...td, color: '#f8fafc' }}>{l.email || 'Anonymous'}</td>
-                    <td style={{ ...td, color: '#94a3b8' }}>{l.details || '-'}</td>
-                    <td style={{ ...td, color: '#7c8ba6', fontFamily: 'monospace' }}>{l.ipAddress}</td>
-                    <td style={{ ...td, color: '#7c8ba6' }}>{new Date(l.createdAt).toLocaleString()}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.82)' }}>{l.email || 'Anonymous'}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)' }}>{l.details || '-'}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)', fontFamily: 'monospace' }}>{l.ipAddress}</td>
+                    <td style={{ ...td, color: 'rgba(0, 0, 0, 0.7)' }}>{new Date(l.createdAt).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -738,9 +738,9 @@ function AdminDashboard() {
       {tab === 'HEALTH' && systemInfo && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
           <div style={card}>
-            <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#22c55e', margin: '0 0 16px 0' }}>💚 Node.js Runtime Status</h4>
-            <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.8 }}>
-              <div><strong>Status:</strong> <span style={{ color: '#22c55e' }}>{systemInfo.systemHealth.status}</span></div>
+            <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#1d4ed8', margin: '0 0 16px 0' }}>💚 Node.js Runtime Status</h4>
+            <div style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', lineHeight: 1.8 }}>
+              <div><strong>Status:</strong> <span style={{ color: '#1d4ed8' }}>{systemInfo.systemHealth.status}</span></div>
               <div><strong>Node Version:</strong> {systemInfo.systemHealth.nodeVersion}</div>
               <div><strong>Uptime:</strong> {systemInfo.systemHealth.uptimeSeconds}s</div>
               <div><strong>Storage Provider:</strong> {systemInfo.storageUsage?.storageProvider}</div>
@@ -748,8 +748,8 @@ function AdminDashboard() {
             </div>
           </div>
           <div style={card}>
-            <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#38bdf8', margin: '0 0 16px 0' }}>🧠 Memory Heap Usage</h4>
-            <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.8 }}>
+            <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#1d4ed8', margin: '0 0 16px 0' }}>🧠 Memory Heap Usage</h4>
+            <div style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', lineHeight: 1.8 }}>
               <div><strong>Heap Used:</strong> {(systemInfo.systemHealth.memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB</div>
               <div><strong>Heap Total:</strong> {(systemInfo.systemHealth.memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB</div>
               <div><strong>RSS:</strong> {(systemInfo.systemHealth.memoryUsage.rss / 1024 / 1024).toFixed(2)} MB</div>
@@ -787,15 +787,15 @@ function AdminDashboard() {
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
             }}
           >
-            <h3 id="reset-password-modal-title" style={{ fontSize: '17px', fontWeight: 800, color: '#f8fafc', margin: '0 0 4px 0' }}>
+            <h3 id="reset-password-modal-title" style={{ fontSize: '17px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 4px 0' }}>
               Reset Password
             </h3>
-            <p style={{ fontSize: '13px', color: '#94a3b8', margin: '0 0 20px 0' }}>
-              For <strong style={{ color: '#38bdf8' }}>{resetPasswordTarget.label}</strong>. This immediately revokes their existing session.
+            <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', margin: '0 0 20px 0' }}>
+              For <strong style={{ color: '#1d4ed8' }}>{resetPasswordTarget.label}</strong>. This immediately revokes their existing session.
             </p>
 
             {resetPasswordError && (
-              <div role="alert" style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
+              <div role="alert" style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#1d4ed8', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
                 ⚠️ {resetPasswordError}
               </div>
             )}
@@ -824,14 +824,14 @@ function AdminDashboard() {
                 <button
                   type="button"
                   onClick={closeResetPassword}
-                  style={{ padding: '10px 18px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: '#94a3b8', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}
+                  style={{ padding: '10px 18px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.12)', background: 'transparent', color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={resetPasswordSubmitting}
-                  style={{ padding: '10px 18px', borderRadius: '8px', border: 'none', background: '#0284c7', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: resetPasswordSubmitting ? 'not-allowed' : 'pointer', opacity: resetPasswordSubmitting ? 0.7 : 1 }}
+                  style={{ padding: '10px 18px', borderRadius: '8px', border: 'none', background: '#2563eb', color: '#ffffff', fontSize: '13px', fontWeight: 700, cursor: resetPasswordSubmitting ? 'not-allowed' : 'pointer', opacity: resetPasswordSubmitting ? 0.7 : 1 }}
                 >
                   {resetPasswordSubmitting ? 'Resetting...' : 'Reset Password'}
                 </button>
@@ -864,42 +864,42 @@ function WebsiteAnalyticsPanel() {
 
   return (
     <div style={card}>
-      <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', margin: '0 0 4px 0' }}>Website Analytics (GA4)</h2>
-      <p style={{ fontSize: '12px', color: '#94a3b8', margin: '0 0 18px 0' }}>
+      <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: '0 0 4px 0' }}>Website Analytics (GA4)</h2>
+      <p style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', margin: '0 0 18px 0' }}>
         Supplementary website-traffic analytics from Google Analytics 4 -- separate from Product Analytics above,
         which is derived from Supabase/Postgres and remains this platform&apos;s canonical source for users, projects,
         scans, and findings.
       </p>
 
-      {error && <div style={{ color: '#f87171', fontSize: '13px' }}>{error}</div>}
+      {error && <div style={{ color: '#b91c1c', fontSize: '13px' }}>{error}</div>}
 
-      {!error && !status && <div style={{ color: '#94a3b8', fontSize: '13px' }}>Loading...</div>}
+      {!error && !status && <div style={{ color: 'rgba(0, 0, 0, 0.7)', fontSize: '13px' }}>Loading...</div>}
 
       {status && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 700 }}>Client tracking:</span>
+            <span style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700 }}>Client tracking:</span>
             {status.clientTrackingConfigured ? (
-              <span style={badge('#34d399', 'rgba(16,185,129,0.12)')}>CONFIGURED</span>
+              <span style={badge('#3b82f6', 'rgba(59, 130, 246, 0.12)')}>CONFIGURED</span>
             ) : (
               <span style={badge('#f87171', 'rgba(239,68,68,0.12)')}>NOT CONFIGURED</span>
             )}
           </div>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 700 }}>Admin reporting (GA4 Data API):</span>
+            <span style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 700 }}>Admin reporting (GA4 Data API):</span>
             {status.configured ? (
-              <span style={badge('#34d399', 'rgba(16,185,129,0.12)')}>CONFIGURED</span>
+              <span style={badge('#3b82f6', 'rgba(59, 130, 246, 0.12)')}>CONFIGURED</span>
             ) : (
-              <span style={badge('#f59e0b', 'rgba(245,158,11,0.12)')}>NOT CONFIGURED</span>
+              <span style={badge('#ef4444', 'rgba(239, 68, 68, 0.12)')}>NOT CONFIGURED</span>
             )}
           </div>
 
           {!status.configured && (
-            <div style={{ ...card, background: 'rgba(245, 158, 11, 0.06)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '16px' }}>
-              <div style={{ color: '#f59e0b', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
+            <div style={{ ...card, background: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '16px' }}>
+              <div style={{ color: '#1d4ed8', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
                 GA4 Website Analytics — Not configured for admin reporting
               </div>
-              <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>{status.reason}</p>
+              <p style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', margin: 0 }}>{status.reason}</p>
             </div>
           )}
         </div>
@@ -920,5 +920,5 @@ function FrameworkTile({ name }: { name: 'react' | 'nextjs' | 'angular' | 'vue' 
       .catch(() => setCount(null));
   }, [name]);
   const labels: Record<string, string> = { react: 'React', nextjs: 'Next.js', angular: 'Angular', vue: 'Vue', generic: 'Generic' };
-  return statTile(labels[name], count ?? '—', '#38bdf8');
+  return statTile(labels[name], count ?? '—', '#3b82f6');
 }

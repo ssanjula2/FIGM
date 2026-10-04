@@ -30,9 +30,9 @@ const rawInputStyle: React.CSSProperties = {
   width: '100%',
   padding: '10px 14px',
   borderRadius: '8px',
-  border: '1px solid rgba(255, 255, 255, 0.12)',
-  background: '#090d16',
-  color: '#f8fafc',
+  border: '1px solid rgba(0, 0, 0, 0.12)',
+  background: '#ffffff',
+  color: 'rgba(0, 0, 0, 0.82)',
   fontSize: '13px',
   boxSizing: 'border-box',
 };
@@ -65,10 +65,10 @@ export default function PasswordField({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
           <label
             htmlFor={id}
-            style={{ display: 'block', color: '#cbd5e1', fontSize: useInputFieldClass ? '13px' : '12px', fontWeight: 700 }}
+            style={{ display: 'block', color: 'rgba(0, 0, 0, 0.7)', fontSize: useInputFieldClass ? '13px' : '12px', fontWeight: 700 }}
           >
             {label}
-            {hint ? <span style={{ fontWeight: 500, color: '#7c8ba6' }}> ({hint})</span> : null}
+            {hint ? <span style={{ fontWeight: 500, color: 'rgba(0, 0, 0, 0.7)' }}> ({hint})</span> : null}
           </label>
           {labelTrailing}
         </div>
@@ -104,7 +104,7 @@ export default function PasswordField({
             transform: 'translateY(-50%)',
             background: 'transparent',
             border: 'none',
-            color: '#7c8ba6',
+            color: 'rgba(0, 0, 0, 0.7)',
             fontSize: '13px',
             cursor: 'pointer',
             padding: '6px 8px',

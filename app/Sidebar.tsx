@@ -96,35 +96,35 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     {
       groupName: 'WORKSPACE',
       items: [
-        { href: '/projects', label: 'Projects Workspace', icon: '📦' },
-        { href: '/', label: 'Overview', icon: '📊' },
-        { href: '/live-scan', label: 'Live Scan', icon: '⚡' },
-        { href: '/diagnostics', label: 'Diagnostics', icon: '🔍' },
-        { href: '/profiler', label: 'Runtime Profiler', icon: '⏱️' },
+        { href: '/projects', label: 'Projects Workspace' },
+        { href: '/', label: 'Overview' },
+        { href: '/live-scan', label: 'Live Scan' },
+        { href: '/diagnostics', label: 'Diagnostics' },
+        { href: '/profiler', label: 'Runtime Profiler' },
       ],
     },
     {
       groupName: 'INSIGHT',
       items: [
-        { href: '/guidelines', label: 'Guidelines', icon: '📚' },
-        { href: '/analytics', label: 'Performance Analytics', icon: '📈' },
-        { href: '/accessibility', label: 'Accessibility', icon: '♿' },
-        { href: '/performance', label: 'Static Analysis Timing', icon: '⚡' },
-        { href: '/history', label: 'Scan History', icon: '📜' },
-        { href: '/notifications', label: 'Notifications', icon: '🔔' },
+        { href: '/guidelines', label: 'Guidelines' },
+        { href: '/analytics', label: 'Performance Analytics' },
+        { href: '/accessibility', label: 'Accessibility' },
+        { href: '/performance', label: 'Static Analysis Timing' },
+        { href: '/history', label: 'Scan History' },
+        { href: '/notifications', label: 'Notifications' },
       ],
     },
     {
       groupName: 'ACCOUNT',
       items: [
-        { href: '/profile', label: 'My Profile', icon: '👤' },
-        { href: '/settings', label: 'Settings', icon: '🔧' },
+        { href: '/profile', label: 'My Profile' },
+        { href: '/settings', label: 'Settings' },
         // Only ever shown to an authenticated ADMIN (see isAdmin above) -- a normal user's own
         // workspace nav must never surface a link into the admin/research workspace at all, per
         // the role-separation requirement this replaces the old unconditional "Admin Panel" link
         // to satisfy: previously every DEVELOPER saw this link regardless of role.
-        ...(isAdmin ? [{ href: '/admin', label: 'Admin Workspace', icon: '🛡️' }] : []),
-        { href: '/auth/login', label: 'Log out', icon: '🚪', isLogout: true },
+        ...(isAdmin ? [{ href: '/admin', label: 'Admin Workspace' }] : []),
+        { href: '/auth/login', label: 'Log out', isLogout: true },
       ],
     },
   ];
@@ -144,10 +144,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         minWidth: '260px',
         maxWidth: '260px',
         height: '100vh',
-        background: 'rgba(9, 13, 22, 0.95)',
+        background: 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(25px)',
         WebkitBackdropFilter: 'blur(25px)',
-        borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRight: '1px solid rgba(0, 0, 0, 0.08)',
         padding: '24px 16px',
         display: 'flex',
         flexDirection: 'column',
@@ -167,25 +167,25 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 width: '40px',
                 height: '40px',
                 borderRadius: '12px',
-                background: 'linear-gradient(135deg, #38bdf8 0%, #a855f7 100%)',
+                background: 'linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 800,
-                color: '#030712',
+                color: '#000000',
                 fontSize: '15px',
                 letterSpacing: '0.5px',
-                boxShadow: '0 0 20px rgba(56, 189, 248, 0.4)',
+                boxShadow: '0 0 20px rgba(96, 165, 250, 0.4)',
                 flexShrink: 0,
               }}
             >
               FI
             </div>
             <div>
-              <div style={{ fontWeight: 900, fontSize: '15px', color: '#f8fafc', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
+              <div style={{ fontWeight: 900, fontSize: '15px', color: 'rgba(0, 0, 0, 0.82)', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
                 FIGM Code Inspector
               </div>
-              <div style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600, lineHeight: 1.2 }}>
+              <div style={{ fontSize: '10px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600, lineHeight: 1.2 }}>
                 Research & Developer Tool
               </div>
             </div>
@@ -202,13 +202,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             style={{
               display: 'none',
               background: 'rgba(255, 255, 255, 0.06)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(0, 0, 0, 0.1)',
               borderRadius: '8px',
               width: '32px',
               height: '32px',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#f8fafc',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontSize: '16px',
               cursor: 'pointer',
               flexShrink: 0,
@@ -224,9 +224,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           style={{
             fontSize: '10px',
             fontWeight: 800,
-            color: '#7dd3fc',
-            background: 'rgba(56, 189, 248, 0.1)',
-            border: '1px solid rgba(56, 189, 248, 0.25)',
+            color: '#1d4ed8',
+            background: 'rgba(96, 165, 250, 0.1)',
+            border: '1px solid rgba(96, 165, 250, 0.25)',
             borderRadius: '8px',
             padding: '6px 10px',
             marginBottom: '20px',
@@ -246,7 +246,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   style={{
                     fontSize: '10px',
                     fontWeight: 800,
-                    color: '#7c8ba6',
+                    color: 'rgba(0, 0, 0, 0.7)',
                     letterSpacing: '1px',
                     marginBottom: '8px',
                     paddingLeft: '10px',
@@ -269,22 +269,19 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                       borderRadius: '10px',
                       fontSize: '13px',
                       fontWeight: isActive ? 700 : 500,
-                      color: isActive ? '#38bdf8' : '#94a3b8',
-                      background: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
-                      border: isActive ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid transparent',
-                      boxShadow: isActive ? '0 0 15px rgba(56, 189, 248, 0.15)' : 'none',
+                      color: isActive ? '#60a5fa' : 'rgba(0, 0, 0, 0.7)',
+                      background: isActive ? 'rgba(96, 165, 250, 0.12)' : 'transparent',
+                      border: isActive ? '1px solid rgba(96, 165, 250, 0.3)' : '1px solid transparent',
+                      boxShadow: isActive ? '0 0 15px rgba(96, 165, 250, 0.15)' : 'none',
                       textDecoration: 'none',
                       transition: 'all 0.2s ease',
                     };
                     const content = (
                       <>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span aria-hidden="true" style={{ fontSize: '15px' }}>{item.icon}</span>
-                          <span>{item.label}</span>
-                        </div>
+                        <span>{item.label}</span>
 
                         {isActive && (
-                          <div aria-hidden="true" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8' }} />
+                          <div aria-hidden="true" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#60a5fa', boxShadow: '0 0 8px #60a5fa' }} />
                         )}
                       </>
                     );
@@ -322,11 +319,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       </div>
 
       {/* Footer System Badge */}
-      <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '14px', paddingLeft: '8px', marginTop: '20px' }}>
-        <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>
+      <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.08)', paddingTop: '14px', paddingLeft: '8px', marginTop: '20px' }}>
+        <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>
           FIGM Code Inspector v3.0
         </div>
-        <div style={{ fontSize: '10px', color: '#38bdf8', marginTop: '2px', fontWeight: 700 }}>
+        <div style={{ fontSize: '10px', color: '#1d4ed8', marginTop: '2px', fontWeight: 700 }}>
           ISO/IEC 25010 Aligned &bull; WCAG 2.2 AA Designed
         </div>
       </div>

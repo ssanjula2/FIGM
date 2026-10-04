@@ -61,11 +61,11 @@ export default function ProjectsPage() {
   };
 
   const frameworkBadges: Record<string, { bg: string; color: string; label: string }> = {
-    'React': { bg: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', label: 'React' },
-    'Next.js': { bg: 'rgba(248, 250, 252, 0.15)', color: '#f8fafc', label: 'Next.js' },
-    'Angular': { bg: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', label: 'Angular' },
-    'Vue': { bg: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', label: 'Vue.js' },
-    'Svelte': { bg: 'rgba(249, 115, 22, 0.15)', color: '#f97316', label: 'Svelte' },
+    'React': { bg: 'rgba(96, 165, 250, 0.15)', color: '#1d4ed8', label: 'React' },
+    'Next.js': { bg: 'rgba(255, 255, 255, 0.15)', color: 'rgba(0, 0, 0, 0.82)', label: 'Next.js' },
+    'Angular': { bg: 'rgba(59, 130, 246, 0.15)', color: '#1d4ed8', label: 'Angular' },
+    'Vue': { bg: 'rgba(59, 130, 246, 0.15)', color: '#1d4ed8', label: 'Vue.js' },
+    'Svelte': { bg: 'rgba(59, 130, 246, 0.15)', color: '#1d4ed8', label: 'Svelte' },
   };
 
   return (
@@ -82,10 +82,10 @@ export default function ProjectsPage() {
         }}
       >
         <div>
-          <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#f8fafc', margin: 0, letterSpacing: '-0.5px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: 0, letterSpacing: '-0.5px' }}>
             Project Workspace
           </h1>
-          <p style={{ fontSize: '14px', color: '#94a3b8', marginTop: '6px', margin: 0 }}>
+          <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '6px', margin: 0 }}>
             Manage, scan, duplicate, and monitor quality metrics across all software repositories.
           </p>
         </div>
@@ -93,15 +93,15 @@ export default function ProjectsPage() {
         <button
           onClick={() => setIsModalOpen(true)}
           style={{
-            background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
-            color: '#ffffff',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+            color: 'rgba(0, 0, 0, 0.82)',
             border: 'none',
             borderRadius: '10px',
             padding: '12px 22px',
             fontSize: '14px',
             fontWeight: 700,
             cursor: 'pointer',
-            boxShadow: '0 0 20px rgba(56, 189, 248, 0.3)',
+            boxShadow: '0 0 20px rgba(96, 165, 250, 0.3)',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
@@ -124,54 +124,54 @@ export default function ProjectsPage() {
         >
           <div
             style={{
-              background: 'rgba(15, 23, 42, 0.65)',
+              background: 'rgba(255, 255, 255, 0.65)',
               backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(0, 0, 0, 0.08)',
               borderRadius: '14px',
               padding: '20px',
             }}
           >
-            <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600 }}>Total Projects</div>
-            <div style={{ fontSize: '28px', fontWeight: 900, color: '#38bdf8', marginTop: '8px' }}>
+            <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>Total Projects</div>
+            <div style={{ fontSize: '28px', fontWeight: 900, color: '#1d4ed8', marginTop: '8px' }}>
               {stats.totalProjects}
             </div>
-            <div style={{ fontSize: '11px', color: '#7c8ba6', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>
               {stats.activeProjects} active &bull; {stats.archivedProjects} archived
             </div>
           </div>
 
           <div
             style={{
-              background: 'rgba(15, 23, 42, 0.65)',
+              background: 'rgba(255, 255, 255, 0.65)',
               backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(0, 0, 0, 0.08)',
               borderRadius: '14px',
               padding: '20px',
             }}
           >
-            <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600 }}>Average Quality Score</div>
-            <div style={{ fontSize: '28px', fontWeight: 900, color: '#22c55e', marginTop: '8px' }}>
+            <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>Average Quality Score</div>
+            <div style={{ fontSize: '28px', fontWeight: 900, color: '#1d4ed8', marginTop: '8px' }}>
               {stats.averageQualityScore}%
             </div>
-            <div style={{ fontSize: '11px', color: '#7c8ba6', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>
               ISO/IEC 25010 Aligned
             </div>
           </div>
 
           <div
             style={{
-              background: 'rgba(15, 23, 42, 0.65)',
+              background: 'rgba(255, 255, 255, 0.65)',
               backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(0, 0, 0, 0.08)',
               borderRadius: '14px',
               padding: '20px',
             }}
           >
-            <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600 }}>Total Scans Executed</div>
-            <div style={{ fontSize: '28px', fontWeight: 900, color: '#a855f7', marginTop: '8px' }}>
+            <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>Total Scans Executed</div>
+            <div style={{ fontSize: '28px', fontWeight: 900, color: '#1d4ed8', marginTop: '8px' }}>
               {stats.totalScansAcrossProjects}
             </div>
-            <div style={{ fontSize: '11px', color: '#7c8ba6', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '4px' }}>
               Across active projects
             </div>
           </div>
@@ -181,9 +181,9 @@ export default function ProjectsPage() {
       {/* Filter and Controls Toolbar */}
       <div
         style={{
-          background: 'rgba(15, 23, 42, 0.65)',
+          background: 'rgba(255, 255, 255, 0.65)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
+          border: '1px solid rgba(0, 0, 0, 0.08)',
           borderRadius: '14px',
           padding: '16px 20px',
           marginBottom: '28px',
@@ -196,7 +196,7 @@ export default function ProjectsPage() {
       >
         {/* Search input */}
         <div style={{ position: 'relative', flex: 1, minWidth: '260px' }}>
-          <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#7c8ba6' }}>🔍</span>
+          <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(0, 0, 0, 0.7)' }}>🔍</span>
           <input
             type="text"
             placeholder="Search projects by name, description, repo URL..."
@@ -206,9 +206,9 @@ export default function ProjectsPage() {
               width: '100%',
               padding: '10px 14px 10px 40px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#f8fafc',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontSize: '13px',
               outline: 'none',
               boxSizing: 'border-box',
@@ -225,21 +225,21 @@ export default function ProjectsPage() {
             style={{
               padding: '9px 14px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#38bdf8',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: '#1d4ed8',
               fontSize: '13px',
               fontWeight: 600,
               outline: 'none',
               cursor: 'pointer',
             }}
           >
-            <option value="ALL" style={{ background: '#090d16', color: '#fff' }}>All Frameworks</option>
-            <option value="React" style={{ background: '#090d16', color: '#fff' }}>React</option>
-            <option value="Next.js" style={{ background: '#090d16', color: '#fff' }}>Next.js</option>
-            <option value="Angular" style={{ background: '#090d16', color: '#fff' }}>Angular</option>
-            <option value="Vue" style={{ background: '#090d16', color: '#fff' }}>Vue.js</option>
-            <option value="Svelte" style={{ background: '#090d16', color: '#fff' }}>Svelte</option>
+            <option value="ALL" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>All Frameworks</option>
+            <option value="React" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>React</option>
+            <option value="Next.js" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Next.js</option>
+            <option value="Angular" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Angular</option>
+            <option value="Vue" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Vue.js</option>
+            <option value="Svelte" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Svelte</option>
           </select>
 
           {/* Status dropdown */}
@@ -249,18 +249,18 @@ export default function ProjectsPage() {
             style={{
               padding: '9px 14px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#f8fafc',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontSize: '13px',
               fontWeight: 600,
               outline: 'none',
               cursor: 'pointer',
             }}
           >
-            <option value="ALL" style={{ background: '#090d16', color: '#fff' }}>All Status</option>
-            <option value="ACTIVE" style={{ background: '#090d16', color: '#fff' }}>Active Only</option>
-            <option value="ARCHIVED" style={{ background: '#090d16', color: '#fff' }}>Archived Only</option>
+            <option value="ALL" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>All Status</option>
+            <option value="ACTIVE" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Active Only</option>
+            <option value="ARCHIVED" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Archived Only</option>
           </select>
 
           {/* Sort By dropdown */}
@@ -270,19 +270,19 @@ export default function ProjectsPage() {
             style={{
               padding: '9px 14px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#f8fafc',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 0, 0.82)',
               fontSize: '13px',
               fontWeight: 600,
               outline: 'none',
               cursor: 'pointer',
             }}
           >
-            <option value="createdAt" style={{ background: '#090d16', color: '#fff' }}>Sort by Date</option>
-            <option value="name" style={{ background: '#090d16', color: '#fff' }}>Sort by Name</option>
-            <option value="qualityScore" style={{ background: '#090d16', color: '#fff' }}>Sort by Score</option>
-            <option value="totalScans" style={{ background: '#090d16', color: '#fff' }}>Sort by Scans</option>
+            <option value="createdAt" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Sort by Date</option>
+            <option value="name" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Sort by Name</option>
+            <option value="qualityScore" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Sort by Score</option>
+            <option value="totalScans" style={{ background: '#ffffff', color: 'rgba(0, 0, 0, 0.82)' }}>Sort by Scans</option>
           </select>
 
           {/* Order Toggle */}
@@ -291,9 +291,9 @@ export default function ProjectsPage() {
             style={{
               padding: '9px 14px',
               borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(9, 13, 22, 0.8)',
-              color: '#94a3b8',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              background: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(0, 0, 0, 0.7)',
               fontSize: '13px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -306,7 +306,7 @@ export default function ProjectsPage() {
 
       {/* Error state */}
       {error && (
-        <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '10px', color: '#f87171', marginBottom: '24px', fontSize: '14px' }}>
+        <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '10px', color: '#1d4ed8', marginBottom: '24px', fontSize: '14px' }}>
           {error}
         </div>
       )}
@@ -319,9 +319,9 @@ export default function ProjectsPage() {
               key={idx}
               style={{
                 height: '200px',
-                background: 'rgba(15, 23, 42, 0.4)',
+                background: 'rgba(255, 255, 255, 0.4)',
                 borderRadius: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(0, 0, 0, 0.05)',
                 animation: 'pulse 1.5s infinite',
               }}
             />
@@ -335,21 +335,21 @@ export default function ProjectsPage() {
           style={{
             textAlign: 'center',
             padding: '60px 20px',
-            background: 'rgba(15, 23, 42, 0.4)',
+            background: 'rgba(255, 255, 255, 0.4)',
             borderRadius: '16px',
-            border: '1px border-dashed rgba(255, 255, 255, 0.1)',
+            border: '1px border-dashed rgba(0, 0, 0, 0.1)',
           }}
         >
           <div style={{ fontSize: '48px', marginBottom: '16px' }}>📦</div>
-          <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0 }}>No Projects Found</h3>
-          <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '6px', maxWidth: '400px', margin: '6px auto 20px' }}>
+          <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>No Projects Found</h3>
+          <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', marginTop: '6px', maxWidth: '400px', margin: '6px auto 20px' }}>
             {search ? 'No projects matched your search criteria.' : 'Create your first project workspace to start auditing quality and security.'}
           </p>
           <button
             onClick={() => setIsModalOpen(true)}
             style={{
-              background: '#0284c7',
-              color: '#fff',
+              background: '#3b82f6',
+              color: 'rgba(0, 0, 0, 0.82)',
               border: 'none',
               padding: '10px 20px',
               borderRadius: '8px',
@@ -366,16 +366,16 @@ export default function ProjectsPage() {
       {!loading && projects.length > 0 && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '24px' }}>
           {projects.map((proj) => {
-            const badge = frameworkBadges[proj.framework] || { bg: 'rgba(148, 163, 184, 0.15)', color: '#94a3b8', label: proj.framework };
+            const badge = frameworkBadges[proj.framework] || { bg: 'rgba(255, 255, 255, 0.15)', color: 'rgba(0, 0, 0, 0.7)', label: proj.framework };
             const isArchived = proj.status === 'ARCHIVED';
 
             return (
               <div
                 key={proj.id}
                 style={{
-                  background: isArchived ? 'rgba(15, 23, 42, 0.4)' : 'rgba(15, 23, 42, 0.75)',
+                  background: isArchived ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.75)',
                   backdropFilter: 'blur(16px)',
-                  border: isArchived ? '1px dashed rgba(255, 255, 255, 0.08)' : '1px solid rgba(255, 255, 255, 0.1)',
+                  border: isArchived ? '1px dashed rgba(0, 0, 0, 0.08)' : '1px solid rgba(0, 0, 0, 0.1)',
                   borderRadius: '16px',
                   padding: '24px',
                   display: 'flex',
@@ -406,8 +406,8 @@ export default function ProjectsPage() {
                       style={{
                         fontSize: '11px',
                         fontWeight: 700,
-                        color: isArchived ? '#f59e0b' : '#22c55e',
-                        background: isArchived ? 'rgba(245, 158, 11, 0.15)' : 'rgba(34, 197, 94, 0.15)',
+                        color: isArchived ? '#ef4444' : '#3b82f6',
+                        background: isArchived ? 'rgba(239, 68, 68, 0.15)' : 'rgba(59, 130, 246, 0.15)',
                         padding: '3px 8px',
                         borderRadius: '6px',
                       }}
@@ -417,32 +417,32 @@ export default function ProjectsPage() {
                   </div>
 
                   {/* Project Name & Description */}
-                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc', margin: 0, marginBottom: '6px' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)', margin: 0, marginBottom: '6px' }}>
                     {proj.name}
                   </h3>
-                  <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0, lineHeight: 1.4, height: '36px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <p style={{ fontSize: '13px', color: 'rgba(0, 0, 0, 0.7)', margin: 0, lineHeight: 1.4, height: '36px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {proj.description || 'No description provided.'}
                   </p>
 
                   {proj.repoUrl && (
-                    <div style={{ marginTop: '10px', fontSize: '12px', color: '#38bdf8', wordBreak: 'break-all' }}>
-                      🔗 <a href={proj.repoUrl} target="_blank" rel="noreferrer" style={{ color: '#38bdf8', textDecoration: 'none' }}>{proj.repoUrl}</a>
+                    <div style={{ marginTop: '10px', fontSize: '12px', color: '#1d4ed8', wordBreak: 'break-all' }}>
+                      🔗 <a href={proj.repoUrl} target="_blank" rel="noreferrer" style={{ color: '#1d4ed8', textDecoration: 'none' }}>{proj.repoUrl}</a>
                     </div>
                   )}
                 </div>
 
                 {/* Bottom Stats & Action Bar */}
-                <div style={{ marginTop: '20px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '16px' }}>
+                <div style={{ marginTop: '20px', borderTop: '1px solid rgba(0, 0, 0, 0.08)', paddingTop: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                     <div>
-                      <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 600 }}>Quality Score</div>
-                      <div style={{ fontSize: '20px', fontWeight: 900, color: proj.qualityScore >= 90 ? '#22c55e' : proj.qualityScore >= 75 ? '#eab308' : '#ef4444' }}>
+                      <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>Quality Score</div>
+                      <div style={{ fontSize: '20px', fontWeight: 900, color: proj.qualityScore >= 90 ? '#3b82f6' : proj.qualityScore >= 75 ? '#ef4444' : '#ef4444' }}>
                         {proj.qualityScore}%
                       </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '11px', color: '#7c8ba6', fontWeight: 600 }}>Total Scans</div>
-                      <div style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc' }}>
+                      <div style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.7)', fontWeight: 600 }}>Total Scans</div>
+                      <div style={{ fontSize: '16px', fontWeight: 800, color: 'rgba(0, 0, 0, 0.82)' }}>
                         {proj.totalScans}
                       </div>
                     </div>
@@ -454,9 +454,9 @@ export default function ProjectsPage() {
                       href={`/live-scan?projectId=${proj.id}`}
                       style={{
                         flex: 1,
-                        background: 'rgba(56, 189, 248, 0.15)',
-                        color: '#38bdf8',
-                        border: '1px solid rgba(56, 189, 248, 0.3)',
+                        background: 'rgba(96, 165, 250, 0.15)',
+                        color: '#1d4ed8',
+                        border: '1px solid rgba(96, 165, 250, 0.3)',
                         borderRadius: '8px',
                         padding: '8px 12px',
                         fontSize: '12px',
@@ -473,8 +473,8 @@ export default function ProjectsPage() {
                       title="Duplicate Project"
                       style={{
                         background: 'rgba(255, 255, 255, 0.05)',
-                        color: '#94a3b8',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        color: 'rgba(0, 0, 0, 0.7)',
+                        border: '1px solid rgba(0, 0, 0, 0.1)',
                         borderRadius: '8px',
                         padding: '8px 12px',
                         fontSize: '12px',
@@ -489,8 +489,8 @@ export default function ProjectsPage() {
                       title={isArchived ? 'Unarchive Project' : 'Archive Project'}
                       style={{
                         background: 'rgba(255, 255, 255, 0.05)',
-                        color: '#94a3b8',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        color: 'rgba(0, 0, 0, 0.7)',
+                        border: '1px solid rgba(0, 0, 0, 0.1)',
                         borderRadius: '8px',
                         padding: '8px 12px',
                         fontSize: '12px',
@@ -509,7 +509,7 @@ export default function ProjectsPage() {
                       title="Delete Project"
                       style={{
                         background: 'rgba(239, 68, 68, 0.15)',
-                        color: '#f87171',
+                        color: '#1d4ed8',
                         border: '1px solid rgba(239, 68, 68, 0.3)',
                         borderRadius: '8px',
                         padding: '8px 12px',
@@ -533,7 +533,7 @@ export default function ProjectsPage() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(3, 7, 18, 0.8)',
+            background: 'rgba(255, 255, 255, 0.8)',
             backdropFilter: 'blur(10px)',
             display: 'flex',
             alignItems: 'center',
@@ -544,34 +544,34 @@ export default function ProjectsPage() {
         >
           <div
             style={{
-              background: '#0f172a',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: '#ffffff',
+              border: '1px solid rgba(0, 0, 0, 0.15)',
               borderRadius: '20px',
               padding: '32px',
               maxWidth: '520px',
               width: '100%',
-              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.8)',
+              boxShadow: '0 10px 28px rgba(0, 0, 0, 0.16)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '20px', fontWeight: 900, color: '#f8fafc', margin: 0 }}>Create New Project</h2>
+              <h2 style={{ fontSize: '20px', fontWeight: 900, color: 'rgba(0, 0, 0, 0.82)', margin: 0 }}>Create New Project</h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '20px', cursor: 'pointer' }}
+                style={{ background: 'none', border: 'none', color: 'rgba(0, 0, 0, 0.7)', fontSize: '20px', cursor: 'pointer' }}
               >
                 ✕
               </button>
             </div>
 
             {formError && (
-              <div style={{ padding: '10px', background: 'rgba(239, 68, 68, 0.15)', color: '#f87171', borderRadius: '8px', marginBottom: '16px', fontSize: '13px' }}>
+              <div style={{ padding: '10px', background: 'rgba(239, 68, 68, 0.15)', color: '#1d4ed8', borderRadius: '8px', marginBottom: '16px', fontSize: '13px' }}>
                 {formError}
               </div>
             )}
 
             <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>
                   Project Name *
                 </label>
                 <input
@@ -583,9 +583,9 @@ export default function ProjectsPage() {
                     width: '100%',
                     padding: '10px 14px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    background: '#090d16',
-                    color: '#f8fafc',
+                    border: '1px solid rgba(0, 0, 0, 0.15)',
+                    background: '#ffffff',
+                    color: 'rgba(0, 0, 0, 0.82)',
                     fontSize: '14px',
                     outline: 'none',
                     boxSizing: 'border-box',
@@ -594,7 +594,7 @@ export default function ProjectsPage() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>
                   Framework
                 </label>
                 <select
@@ -604,9 +604,9 @@ export default function ProjectsPage() {
                     width: '100%',
                     padding: '10px 14px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    background: '#090d16',
-                    color: '#f8fafc',
+                    border: '1px solid rgba(0, 0, 0, 0.15)',
+                    background: '#ffffff',
+                    color: 'rgba(0, 0, 0, 0.82)',
                     fontSize: '14px',
                     outline: 'none',
                     boxSizing: 'border-box',
@@ -621,7 +621,7 @@ export default function ProjectsPage() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>
                   Repository URL
                 </label>
                 <input
@@ -633,9 +633,9 @@ export default function ProjectsPage() {
                     width: '100%',
                     padding: '10px 14px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    background: '#090d16',
-                    color: '#f8fafc',
+                    border: '1px solid rgba(0, 0, 0, 0.15)',
+                    background: '#ffffff',
+                    color: 'rgba(0, 0, 0, 0.82)',
                     fontSize: '14px',
                     outline: 'none',
                     boxSizing: 'border-box',
@@ -644,7 +644,7 @@ export default function ProjectsPage() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'rgba(0, 0, 0, 0.7)', marginBottom: '6px' }}>
                   Description
                 </label>
                 <textarea
@@ -656,9 +656,9 @@ export default function ProjectsPage() {
                     width: '100%',
                     padding: '10px 14px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    background: '#090d16',
-                    color: '#f8fafc',
+                    border: '1px solid rgba(0, 0, 0, 0.15)',
+                    background: '#ffffff',
+                    color: 'rgba(0, 0, 0, 0.82)',
                     fontSize: '14px',
                     outline: 'none',
                     resize: 'none',
@@ -674,9 +674,9 @@ export default function ProjectsPage() {
                   style={{
                     padding: '10px 18px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
                     background: 'transparent',
-                    color: '#94a3b8',
+                    color: 'rgba(0, 0, 0, 0.7)',
                     fontWeight: 600,
                     cursor: 'pointer',
                   }}
@@ -690,8 +690,8 @@ export default function ProjectsPage() {
                     padding: '10px 22px',
                     borderRadius: '8px',
                     border: 'none',
-                    background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
-                    color: '#fff',
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                    color: 'rgba(0, 0, 0, 0.82)',
                     fontWeight: 700,
                     cursor: 'pointer',
                     opacity: submitting ? 0.6 : 1,
